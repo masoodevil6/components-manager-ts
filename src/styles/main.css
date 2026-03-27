@@ -1,0 +1,71 @@
+:root{
+
+
+    /* [Colors] */
+    --primaryColor1:   #15244b;
+    --primaryColor2:   #334783;
+    --primaryColor3:   #7887b2;
+    --primaryColor4:   #e4e9ed;
+    --primaryColor5:   #ededef;
+
+    --secondaryColor1: #fab01b;
+    --secondaryColor2: #f5bf53;
+    --secondaryColor3: #f6d086;
+    --secondaryColor4: #efdcb3;
+
+    --errorColor1:     #691d21;
+    --errorColor2:     #ab5258;
+    --errorColor3:     #f6b1b7;
+    --errorColor4:     #f8d7da;
+
+    --warningColor1:   #b4500c;
+    --warningColor2:   #f47920;
+    --warningColor3:   #eca574;
+    --warningColor4:   #ffe4d0;
+
+    --infoColor1:      #077af1;
+    --infoColor2:      #1988fd;
+    --infoColor3:      #4ba2fd;
+    --infoColor4:      #74b8ff;
+
+    --successColor1:   #06502d;
+    --successColor2:   #2e9f6b;
+    --successColor3:   #64c598;
+    --successColor4:   #ceefe0;
+
+    --shadowColor1:    #41414180;
+    --shadowColor2:    #79787880;
+    --shadowColor3:    #9F9E9E80;
+    --shadowColor4:    #CCCCCC80;
+
+    --darkColor1:      #414141;
+    --darkColor2:      #797878;
+    --darkColor3:      #9f9e9e;
+    --darkColor4:      #cccccc;
+
+    --shanColor1:      #ffffff;
+    --shanColor2:      #f4f4f4;
+    --shanColor3:      #f1f1f1;
+    --shanColor4:      #e8e8e8;
+
+
+
+    /* [Border-Width] */
+    --borderWidthXSmall:   1px;
+    --borderWidthSmall:    2px;
+    --borderWidthMedium:   3px;
+    --borderWidthLarge:    4px;
+    --borderWidthXLarge:   5px;
+    --borderWidthXXLarge:  6px;
+
+
+    /* [Border-Radius] */
+    --borderRadiusXSmall:  2.5px;
+    --borderRadiusSmall:   5px;
+    --borderRadiusMedium:  7.5px;
+    --borderRadiusLarge:   10px;
+    --borderRadiusXLarge:  12.5px;
+    --borderRadiusXXLarge: 15px;
+
+
+}
