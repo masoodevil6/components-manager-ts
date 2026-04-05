@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconEmpty(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -30,6 +31,6 @@ export function IconEmpty(
   <title>empty</title>
   <circle cx="12" cy="12" r="9" stroke="${primaryColor}" stroke-width="${strokeWidth}" fill="${secondaryColor}"/>
   <path d="M8 16L16 8" stroke="${primaryColor}" stroke-width="${strokeWidth}" stroke-linecap="round"/>
-</svg>`;
+</svg>` as IconString
 
 }

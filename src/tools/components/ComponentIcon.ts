@@ -2,43 +2,50 @@ import {
     ComponentBase,
     defineComponentMethods,
     defineComponentPatterns,
-    defineComponentProps,
+    defineComponentSchema,
     defineComponentTemplate,
-    extractPropNames,
-    GOG_ComponentConfigBasicKey,
-    GOG_ComponentConfigBasicPattern, GOG_ComponentConfigBasicProps,
     GOG_ExtractName,
     GOG_ExtractNameValue,
     GOG_SetValue,
     GOG_ValueOf
 } from "../../core/ComponentBase";
 import {ReactiveElement} from "../../core/ReactiveElement";
-
-import {GOG_ComponentConfigBasicType} from "../../core/ComponentBase";
+import {ToolsCss} from "../../utils/ToolsCss";
+import {ToolsComponents} from "./index";
 import {ComponentCallBackType} from "../../core/ComponentBase";
 import {Language} from "../../core/Language";
+import {AppConfig} from "../../core/AppConfig";
 import {
     Color,
     COLORS_GRAD,
     COLORS_MAIN,
-    IconsType,
-    SIZES,
+    IconsType, SizeCalc,
+    SIZES, SizesType, SizeUnit,
     ToolsComponents_BorderRadius,
-    ToolsComponents_BorderWidth
+    ToolsComponents_BorderWidth, UNITS
 } from "../../utils/ToolsConsts";
+import {TOOLS} from "../tools";
 import {
-    ComponentMessagesPropsType,
-    ComponentMessagesSchemaType,
-    ComponentMessagesTemplatesType
-} from "./ComponentMessages";
+    GOG_ComponentBasicConfigs_component_keys,
+    GOG_ComponentBasicConfigs_component_parts,
+    GOG_ComponentBasicConfigs_component_Pattern, GOG_ComponentBasicConfigs_component_Schema,
+    GOG_ComponentBasicConfigs_structure_keys,
+    GOG_ComponentBasicConfigs_structure_parts,
+    GOG_ComponentBasicConfigs_structure_Pattern, GOG_ComponentBasicConfigs_structure_Schema,
+    GOG_ComponentBasicProps_component,
+    GOG_ComponentBasicProps_structure
+} from "../../core/component/SetupComponent";
+import {ToolsIcons} from "../icons";
+
 
 
 
 
 export const ComponentIconProps = {
-    ...GOG_ComponentConfigBasicProps ,
+    ... GOG_ComponentBasicProps_component,
+    ... GOG_ComponentBasicProps_structure,
     prop_icon :                          "prop_icon" ,
-    prop_title :                         "prop_title" ,
+    prop_iconTitle :                     "prop_iconTitle" ,
     prop_iconClass :                     "prop_iconClass" ,
     prop_iconStyles :                    "prop_iconStyles" ,
 } as const;
@@ -47,14 +54,15 @@ export const ComponentIconProps = {
 
 const ComponentIconConfigs  =  {
     keys: {
-        ...GOG_ComponentConfigBasicKey ,
+        ...GOG_ComponentBasicConfigs_component_keys ,
+        ...GOG_ComponentBasicConfigs_structure_keys ,
         ///----------------------
         [ComponentIconProps.prop_icon]: {
             name:               ComponentIconProps.prop_icon,
-            value:              GOG_SetValue<IconsType|null>( null) ,
+            value:              GOG_SetValue<IconsType |null>(null) ,
         } ,
-        [ComponentIconProps.prop_title]: {
-            name:               ComponentIconProps.prop_title,
+        [ComponentIconProps.prop_iconTitle]: {
+            name:               ComponentIconProps.prop_iconTitle,
             value:              GOG_SetValue<string>( "") ,
         } ,
         [ComponentIconProps.prop_iconClass]: {
@@ -67,12 +75,8 @@ const ComponentIconConfigs  =  {
         } ,
     } ,
     schemas:   {
-        COMPONENT: {
-            name:               "part_component"
-        } ,
-        STRUCTURE: {
-            name:               "part_structure"
-        } ,
+        ...GOG_ComponentBasicConfigs_component_parts ,
+        ...GOG_ComponentBasicConfigs_structure_parts ,
         ICON: {
             name:               "part_icon"
         } ,
@@ -114,7 +118,7 @@ const ComponentIconConfigs  =  {
 } as const
 
 
-export type ComponentIconPropsType =                      GOG_ComponentConfigBasicType & GOG_ExtractNameValue<typeof ComponentIconConfigs.keys>
+export type ComponentIconPropsType =                      GOG_ExtractNameValue<typeof ComponentIconConfigs.keys>
 export type ComponentIconSchemaType =                     GOG_ExtractName<typeof ComponentIconConfigs.schemas>
 export type ComponentIconTemplatesType =                  GOG_ExtractName<typeof ComponentIconConfigs.templates>
 
@@ -156,30 +160,31 @@ export class ComponentIconBase extends ComponentBase<
     --------------------------------------------- */
     _COMPONENT_PATTERN=  defineComponentPatterns<ComponentIconPropsType>(
         {
-            ...GOG_ComponentConfigBasicPattern ,
+            ...GOG_ComponentBasicConfigs_component_Pattern(this) ,
+            ...GOG_ComponentBasicConfigs_structure_Pattern(this) ,
             [ComponentIconConfigs.keys.prop_icon.name]: {
                 prop:                                             ComponentIconConfigs.keys.prop_icon.name,
                 default:                                          ComponentIconConfigs.keys.prop_icon.value,
-                title:                                            Language.translate("components.icon.prop_icon.title"),
-                description:                                      Language.translate("components.icon.prop_icon.description"),
+                title:                                            Language.translate("components.icon.props.prop_icon.title"),
+                description:                                      Language.translate("components.icon.props.prop_icon.description"),
             } ,
-            [ComponentIconConfigs.keys.prop_title.name]: {
-                prop:                                             ComponentIconConfigs.keys.prop_title.name,
-                default:                                          ComponentIconConfigs.keys.prop_title.value,
-                title:                                            Language.translate("components.icon.prop_title.title"),
-                description:                                      Language.translate("components.icon.prop_title.description"),
+            [ComponentIconConfigs.keys.prop_iconTitle.name]: {
+                prop:                                             ComponentIconConfigs.keys.prop_iconTitle.name,
+                default:                                          ComponentIconConfigs.keys.prop_iconTitle.value,
+                title:                                            Language.translate("components.icon.props.prop_iconTitle.title"),
+                description:                                      Language.translate("components.icon.props.prop_iconTitle.description"),
             } ,
             [ComponentIconConfigs.keys.prop_iconClass.name]: {
                 prop:                                             ComponentIconConfigs.keys.prop_iconClass.name,
                 default:                                          ComponentIconConfigs.keys.prop_iconClass.value,
-                title:                                            Language.translate("components.icon.prop_iconClass.title"),
-                description:                                      Language.translate("components.icon.prop_iconClass.description"),
+                title:                                            Language.translate("components.icon.props.prop_iconClass.title"),
+                description:                                      Language.translate("components.icon.props.prop_iconClass.description"),
             } ,
             [ComponentIconConfigs.keys.prop_iconStyles.name]: {
                 prop:                                             ComponentIconConfigs.keys.prop_iconStyles.name,
                 default:                                          ComponentIconConfigs.keys.prop_iconStyles.value,
-                title:                                            Language.translate("components.icon.prop_iconStyles.title"),
-                description:                                      Language.translate("components.icon.prop_iconStyles.description"),
+                title:                                            Language.translate("components.icon.props.prop_iconStyles.title"),
+                description:                                      Language.translate("components.icon.props.prop_iconStyles.description"),
             } ,
         }
     );
@@ -189,19 +194,20 @@ export class ComponentIconBase extends ComponentBase<
     /* ---------------------------------------------
         PROPERTYs Props
     --------------------------------------------- */
-    _COMPONENT_PROPS = defineComponentProps<ComponentIconSchemaType  , ComponentIconPropsType>( {
-        [ComponentIconConfigs.schemas.COMPONENT.name]: [
-
-        ],
-        [ComponentIconConfigs.schemas.STRUCTURE.name]: [
-
-        ],
-        [ComponentIconConfigs.schemas.ICON.name]: [
-            this._COMPONENT_PATTERN[ComponentIconConfigs.keys.prop_icon.name] ,
-            this._COMPONENT_PATTERN[ComponentIconConfigs.keys.prop_title.name] ,
-            this._COMPONENT_PATTERN[ComponentIconConfigs.keys.prop_iconClass.name] ,
-            this._COMPONENT_PATTERN[ComponentIconConfigs.keys.prop_iconStyles.name] ,
-        ],
+    _COMPONENT_SCHEMA = defineComponentSchema<ComponentIconSchemaType  , ComponentIconPropsType>( {
+        ...GOG_ComponentBasicConfigs_component_Schema(this) ,
+        ...GOG_ComponentBasicConfigs_structure_Schema(this) ,
+        [ComponentIconConfigs.schemas.ICON.name]: {
+            part:               ComponentIconConfigs.schemas.ICON.name ,
+            title:              Language.translate("components.icon.schema.icon.title") ,
+            description:        Language.translate("components.icon.schema.icon.description") ,
+            props: [
+                this._COMPONENT_PATTERN[ComponentIconConfigs.keys.prop_icon.name] ,
+                this._COMPONENT_PATTERN[ComponentIconConfigs.keys.prop_iconTitle.name] ,
+                this._COMPONENT_PATTERN[ComponentIconConfigs.keys.prop_iconClass.name] ,
+                this._COMPONENT_PATTERN[ComponentIconConfigs.keys.prop_iconStyles.name] ,
+            ]
+        } ,
     });
 
 
@@ -211,8 +217,8 @@ export class ComponentIconBase extends ComponentBase<
      --------------------------------------------- */
     _COMPONENT_TEMPLATES= defineComponentTemplate<ComponentIconTemplatesType , ComponentIconPropsType>({
         [ComponentIconConfigs.templates.BODY.name]: {
-            title:                                            Language.translate("components.icon.template_body.title"),
-            description:                                      Language.translate("components.icon.template_body.description"),
+            title:                                            Language.translate("components.icon.template.body.title"),
+            description:                                      Language.translate("components.icon.template.body.description"),
             reference:                                        this._COMPONENT_PATTERN[ComponentIconConfigs.keys.prop_icon.name]
         } ,
     });
@@ -224,8 +230,8 @@ export class ComponentIconBase extends ComponentBase<
     --------------------------------------------- */
     _COMPONENT_METHODS = defineComponentMethods<ComponentIconMethodsType , ComponentIconPropsType>({
         [ComponentIconConfigs.methods.CLICK.name]: {
-            title:                                            Language.translate("components.icon.fn_onClick.title"),
-            description:                                      Language.translate("components.icon.fn_onClick.description"),
+            title:                                            Language.translate("components.icon.methods.fn_onClick.title"),
+            description:                                      Language.translate("components.icon.methods.fn_onClick.description"),
             args: {
                 [ComponentIconConfigs.methods.CLICK.componentArgs.ICON.name]:      this._COMPONENT_PATTERN[ComponentIconConfigs.keys.prop_icon.name]
             }
@@ -247,43 +253,70 @@ export class ComponentIconBase extends ComponentBase<
     });
 
 
+
+    /* ---------------------------------------------
+        Example
+     --------------------------------------------- */
+    static override renderExampleComponent(): HTMLElement {
+        return new ComponentIcon(
+            <ComponentIconPropsType>{
+                classList: ["col-md-3" , "col-12" , "border" , "p-2"]  ,
+                styles: {
+                    color: "red"
+                }  ,
+
+                prop_show :   true ,
+                prop_icon:    TOOLS.ICON.icon_application({size: 80 }) ,
+            } ,
+            <ComponentIconMethodsType>{
+                fn_onClickIcon: function (event, dataArgs:ComponentIcon_Methods_HOVER_DataArgs, componentArgs : ComponentIcon_Methods_CLICK_ComponentArgs){
+                    this.set(ComponentIconProps.prop_icon ,  TOOLS.ICON.icon_qrcode({size: 80}) )
+                    console.log(event , dataArgs , componentArgs)
+                } ,
+            }
+        ).getElement();
+    }
+
 }
 
 
 export class ComponentIcon extends ComponentIconBase {
 
+    /* ---------------------------------------------
+        SETUP
+    --------------------------------------------- */
     constructor(
         config: ComponentIconPropsType ,
         methods: ComponentIconMethodsType
     ) {
-        super("component-icon" , null);
+        super("icon" , null);
         super.renderComponent(config , methods);
     }
 
 
-    /* TEMPLATE */
-    override template_render_structure() {
-        const partName = ComponentIconConfigs.schemas.STRUCTURE.name ;
 
-        return this.templateBasic_render_structure(
-            ReactiveElement.section({
-                children: [
-                    this.#templateFn_render_icon(),
-                ]
-            })
-        );
-
+    /* ---------------------------------------------
+       TEMPLATEs
+    --------------------------------------------- */
+    override renderContentComponent() {
+        return this.executeSchemaPart(ComponentIconConfigs.schemas.ICON.name)
     }
+
+    override renderManagerComponent(partName , data , extra) :  ReactiveElement  {
+        switch (partName){
+            case ComponentIconConfigs.schemas.ICON.name:
+                return  this.templateFn_render_icon(partName , data , extra);
+        }
+    }
+
     
-    #templateFn_render_icon() {
-        const partName = ComponentIconConfigs.schemas.ICON.name;
-        const data = this.getPartProps(partName);
+    private templateFn_render_icon(partName , data , extra) : ReactiveElement {
 
         if (data != null) {
-            const prop_title     = data[ComponentIconConfigs.keys.prop_title.name];
-            const prop_icon      = data[ComponentIconConfigs.keys.prop_icon.name];
-            const prop_iconClass = data[ComponentIconConfigs.keys.prop_iconClass.name];
-            const prop_iconStyles= data[ComponentIconConfigs.keys.prop_iconStyles.name];
+            const prop_icon                = data[ComponentIconConfigs.keys.prop_icon.name];
+            const prop_iconTitle           = data[ComponentIconConfigs.keys.prop_iconTitle.name];
+            const prop_iconClass           = data[ComponentIconConfigs.keys.prop_iconClass.name];
+            const prop_iconStyles          = data[ComponentIconConfigs.keys.prop_iconStyles.name];
 
             return ReactiveElement.i({
                 attrs: {
@@ -291,7 +324,7 @@ export class ComponentIcon extends ComponentIconBase {
                     "id":                `component-icon-icon-${this._COMPONENT_RANDOM_ID}`,
                 },
                 attrsBind: {
-                    title:  prop_title,
+                    title:  prop_iconTitle,
                 } ,
                 styles: {
 

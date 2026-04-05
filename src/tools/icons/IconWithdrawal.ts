@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconWithdrawal(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -65,5 +66,5 @@ export function IconWithdrawal(
 <g id="Layer_3">
 	<path fill="none" stroke="${primaryColor}" stroke-width="${strokeWidth}" d="M118.2,46.96l-39.24,5.29l12.54,4.15c0,0-44.13,14.12-59.45,66.77c-7.22,24.81-7.12,53.12-7.04,58.14 c-4.24,1.8-7.22,6-7.22,10.89c0,6.53,5.29,11.83,11.83,11.83s11.83-5.29,11.83-11.83c0-5.6-3.89-10.27-9.11-11.5 c-0.01-7.72,0.56-26.88,5.53-50.12c11.28-52.75,58.74-68.04,58.74-68.04l-0.35,12.38L118.2,46.96z"/>
 </g>
-</svg>`;
+</svg>` as IconString
 }

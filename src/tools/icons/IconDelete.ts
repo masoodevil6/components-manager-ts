@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconDelete(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -31,6 +32,6 @@ export function IconDelete(
   <path fill="${secondaryColor}" stroke="${primaryColor}" stroke-width="${strokeWidth}" stroke-linejoin="round"  d="M9 3h6l1 2h4v2H4V5h4l1-2z" />
   <path fill="${secondaryColor}" stroke="${primaryColor}" stroke-width="${strokeWidth}" stroke-linejoin="round"  d="M6 7h12l-1 13H7L6 7z"/>
   <path fill="${secondaryColor}" stroke="${primaryColor}" stroke-width="${strokeWidth}" stroke-linecap="round" d="M10 10v8M14 10v8"/>
-</svg>`;
+</svg>` as IconString;
 
 }

@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconTransition(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -65,5 +66,5 @@ export function IconTransition(
 <g id="Layer_3">
 	<path  fill="none" stroke="${primaryColor}" stroke-width="${strokeWidth}" d="M202.57,315.81l39.42,3.73l-11.27-6.88c0,0,46.18-3.76,73.03-51.57c12.66-22.53,18.97-50.12,20.03-55.03 c4.54-0.79,8.39-4.21,9.5-8.98c1.48-6.36-2.48-12.72-8.84-14.2s-12.72,2.48-14.2,8.84c-1.27,5.45,1.46,10.89,6.27,13.27 c-1.74,7.52-6.64,26.05-16.74,47.56c-22.94,48.82-72.63,52.96-72.63,52.96l3.15-11.98L202.57,315.81z"/>
 </g>
-</svg>`;
+</svg>` as IconString
 }

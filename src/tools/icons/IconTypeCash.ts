@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconTypeCash(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -31,6 +32,6 @@ export function IconTypeCash(
 <path fill="${secondaryColor}" opacity="0.6" d="M70.6,258.28C94.44,280.44,126.39,294,161.5,294c73.73,0,133.5-59.77,133.5-133.5S235.23,27,161.5,27 S28,86.77,28,160.5c0,16.4,2.96,32.11,8.37,46.62"/>
 <path fill="none" stroke="${primaryColor}" stroke-width="${strokeWidth}"  d="M70.6,258.28C94.44,280.44,126.39,294,161.5,294c73.73,0,133.5-59.77,133.5-133.5S235.23,27,161.5,27 S28,86.77,28,160.5c0,16.4,2.96,32.11,8.37,46.62"/>
 <polygon fill="${primaryColor}" points="42,217 49,302 122,234 "/>
-</svg>`;
+</svg>` as IconString
 
 }

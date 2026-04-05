@@ -101,6 +101,7 @@ import { IconAccountReference } from './IconAccountReference'
 import { IconDestination } from './IconDestination'
 import { IconAccountGroupAdd } from './IconAccountGroupAdd'
 import {Observable} from "../../core/Observable";
+import {Brand} from "../../utils/ToolsConsts";
 
 
 
@@ -112,6 +113,8 @@ export type IconOptions = {
     primaryColor?:    string | Observable<string>
     secondaryColor?:  string | Observable<string>
 }
+
+export type IconString = Brand<string , "icon">
 
 export const ToolsIcons = {
 

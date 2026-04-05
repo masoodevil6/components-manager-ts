@@ -342,6 +342,9 @@ export class ReactiveElement {
 
         if (o.children != null) this._setChildren(o.children);
 
+        if (o.attrs) this._applyAttrs(o.attrs);
+        if (o.attrsBind) this._applyAttrsBind(o.attrsBind);
+
         if (o.className) this._applyClassName(o.className);
 
         if (o.classBind) {
@@ -369,10 +372,11 @@ export class ReactiveElement {
 
         }
 
-        if (o.attrs) this._applyAttrs(o.attrs);
-        if (o.attrsBind) this._applyAttrsBind(o.attrsBind);
-
         if (o.on) this._setEvents();
+    }
+
+    getReactiveElement(): ReactiveElement {
+        return this;
     }
 
     getElement(): HTMLElement {
@@ -387,6 +391,7 @@ export class ReactiveElement {
         return new ReactiveElement(tagName, options);
     }
 
+    static component(componentName: string ,o?: Options) { return new ReactiveElement(`component-${componentName}`, o) }
     static div(o?: Options) { return new ReactiveElement("div", o) }
     static button(o?: Options) { return new ReactiveElement("button", o) }
     static b(o?: Options) { return new ReactiveElement("b", o) }

@@ -1,0 +1,364 @@
+import {
+    ComponentBase,
+    defineComponentMethods,
+    defineComponentPatterns,
+    defineComponentSchema,
+    defineComponentTemplate,
+    GOG_ExtractName,
+    GOG_ExtractNameValue,
+    GOG_SetValue,
+    GOG_ValueOf
+} from "../../core/ComponentBase";
+import {ReactiveElement} from "../../core/ReactiveElement";
+import {ToolsCss} from "../../utils/ToolsCss";
+import {ToolsComponents} from "./index";
+import {ComponentCallBackType} from "../../core/ComponentBase";
+import {Language} from "../../core/Language";
+import {AppConfig} from "../../core/AppConfig";
+import {
+    Color,
+    COLORS_GRAD,
+    COLORS_MAIN,
+    IconsType, OPERATION, SizeCalc,
+    SIZES, SizesType, SizeUnit,
+    ToolsComponents_BorderRadius,
+    ToolsComponents_BorderWidth, UNITS
+} from "../../utils/ToolsConsts";
+import {TOOLS} from "../tools";
+import {
+    GOG_ComponentBasicConfigs_component_keys,
+    GOG_ComponentBasicConfigs_component_parts,
+    GOG_ComponentBasicConfigs_component_Pattern, GOG_ComponentBasicConfigs_component_Schema,
+    GOG_ComponentBasicConfigs_structure_keys,
+    GOG_ComponentBasicConfigs_structure_parts,
+    GOG_ComponentBasicConfigs_structure_Pattern, GOG_ComponentBasicConfigs_structure_Schema,
+    GOG_ComponentBasicProps_component,
+    GOG_ComponentBasicProps_structure
+} from "../../core/component/SetupComponent";
+import {ToolsIcons} from "../icons";
+import {
+    ComponentRecyclerView,
+    ComponentRecyclerViewMethodsType,
+    ComponentRecyclerViewPropsType
+} from "./ComponentRecyclerView";
+import {ComponentIconMethodsType, ComponentIconPropsType} from "./ComponentIcon";
+import {
+    ComponentFloatMenu_ShowTypes,
+    ComponentFloatMenuMethodsType,
+    ComponentFloatMenuPropsType
+} from "./ComponentFloatMenu";
+
+
+
+
+
+
+export const ComponentTooltipDescriptionProps = {
+    ... GOG_ComponentBasicProps_component,
+    ... GOG_ComponentBasicProps_structure,
+    prop_icon :             "prop_icon" ,
+    prop_iconTitle :        "prop_iconTitle" ,
+    prop_iconPosition :     "prop_iconPosition" ,
+    prop_arrowPosition :    "prop_arrowPosition" ,
+
+    prop_description :      "prop_description" ,
+    prop_direction :        "prop_direction" ,
+
+} as const;
+
+
+export enum ComponentTooltipDescription_PositionTypes{
+    TOP=       "top",
+    BOTTOM=    "bottom",
+}
+
+
+const ComponentTooltipDescriptionConfigs  =  {
+    keys: {
+        ...GOG_ComponentBasicConfigs_component_keys ,
+        ...GOG_ComponentBasicConfigs_structure_keys ,
+        ///----------------------
+        [ComponentTooltipDescriptionProps.prop_icon] : {
+            name:                ComponentTooltipDescriptionProps.prop_icon ,
+            value:               GOG_SetValue<IconsType |null>(ToolsIcons.icon_exclamation_square({size: SIZES.M})) ,
+        } ,
+        [ComponentTooltipDescriptionProps.prop_iconTitle]: {
+            name:                ComponentTooltipDescriptionProps.prop_iconTitle,
+            value:               GOG_SetValue<string>( "") ,
+        } ,
+        [ComponentTooltipDescriptionProps.prop_iconPosition]: {
+            name:                ComponentTooltipDescriptionProps.prop_iconPosition,
+            value:               GOG_SetValue<SizeUnit | SizeCalc | null>( SizeUnit(2.5 , UNITS.PERCENT)) ,
+        } ,
+        [ComponentTooltipDescriptionProps.prop_description]: {
+            name:                ComponentTooltipDescriptionProps.prop_description,
+            value:               GOG_SetValue<string>( "") ,
+        } ,
+        [ComponentTooltipDescriptionProps.prop_direction]: {
+            name:                ComponentTooltipDescriptionProps.prop_direction,
+            value:               GOG_SetValue<GOG_ValueOf<typeof ComponentTooltipDescription_PositionTypes>>(ComponentTooltipDescription_PositionTypes.TOP),
+        } ,
+    } ,
+    schemas:   {
+        ...GOG_ComponentBasicConfigs_component_parts ,
+        ...GOG_ComponentBasicConfigs_structure_parts ,
+        FLOAT_MENU: {
+            name:               "part_float_menu"
+        } ,
+        ICON: {
+            name:               "part_float_menu_icon"
+        } ,
+    } ,
+    templates: {
+        BODY: {
+            name:                "body" ,
+        } ,
+    } ,
+    methods: {
+
+    }
+} as const
+
+export type ComponentTooltipDescriptionPropsType =                      GOG_ExtractNameValue<typeof ComponentTooltipDescriptionConfigs.keys>
+export type ComponentTooltipDescriptionSchemaType =                     GOG_ExtractName<typeof ComponentTooltipDescriptionConfigs.schemas>
+export type ComponentTooltipDescriptionTemplatesType =                  GOG_ExtractName<typeof ComponentTooltipDescriptionConfigs.templates>
+
+export type ComponentTooltipDescriptionMethodsType = {
+
+}
+
+
+export class ComponentTooltipDescriptionBase extends ComponentBase<
+    ComponentTooltipDescriptionPropsType ,
+    ComponentTooltipDescriptionSchemaType ,
+    ComponentTooltipDescriptionTemplatesType ,
+    ComponentTooltipDescriptionMethodsType
+>{
+
+
+    /* ---------------------------------------------
+        PROPERTYs Pattern
+    --------------------------------------------- */
+    _COMPONENT_PATTERN=  defineComponentPatterns<ComponentTooltipDescriptionPropsType>(
+        {
+            ...GOG_ComponentBasicConfigs_component_Pattern(this) ,
+            ...GOG_ComponentBasicConfigs_structure_Pattern(this) ,
+            [ComponentTooltipDescriptionConfigs.keys.prop_icon.name]: {
+                prop:                                             ComponentTooltipDescriptionConfigs.keys.prop_icon.name,
+                default:                                          ComponentTooltipDescriptionConfigs.keys.prop_icon.value,
+                title:                                            Language.translate("components.tooltip_description.props.prop_icon.title"),
+                description:                                      Language.translate("components.tooltip_description.props.prop_icon.description"),
+            } ,
+            [ComponentTooltipDescriptionConfigs.keys.prop_iconTitle.name]: {
+                prop:                                             ComponentTooltipDescriptionConfigs.keys.prop_iconTitle.name,
+                default:                                          ComponentTooltipDescriptionConfigs.keys.prop_iconTitle.value,
+                title:                                            Language.translate("components.tooltip_description.props.prop_iconTitle.title"),
+                description:                                      Language.translate("components.tooltip_description.props.prop_iconTitle.description"),
+            } ,
+            [ComponentTooltipDescriptionConfigs.keys.prop_iconPosition.name]: {
+                prop:                                             ComponentTooltipDescriptionConfigs.keys.prop_iconPosition.name,
+                default:                                          ComponentTooltipDescriptionConfigs.keys.prop_iconPosition.value,
+                title:                                            Language.translate("components.tooltip_description.props.prop_iconPosition.title"),
+                description:                                      Language.translate("components.tooltip_description.props.prop_iconPosition.description"),
+            } ,
+            [ComponentTooltipDescriptionConfigs.keys.prop_description.name]: {
+                prop:                                             ComponentTooltipDescriptionConfigs.keys.prop_description.name,
+                default:                                          ComponentTooltipDescriptionConfigs.keys.prop_description.value,
+                title:                                            Language.translate("components.tooltip_description.props.prop_description.title"),
+                description:                                      Language.translate("components.tooltip_description.props.prop_description.description"),
+            } ,
+            [ComponentTooltipDescriptionConfigs.keys.prop_direction.name]: {
+                prop:                                             ComponentTooltipDescriptionConfigs.keys.prop_direction.name,
+                default:                                          ComponentTooltipDescriptionConfigs.keys.prop_direction.value,
+                title:                                            Language.translate("components.tooltip_description.props.prop_direction.title"),
+                description:                                      Language.translate("components.tooltip_description.props.prop_direction.description"),
+            } ,
+        }
+    );
+
+
+    /* ---------------------------------------------
+       PROPERTYs Props
+   --------------------------------------------- */
+    _COMPONENT_SCHEMA = defineComponentSchema<ComponentTooltipDescriptionSchemaType  , ComponentTooltipDescriptionPropsType>( {
+        ...GOG_ComponentBasicConfigs_component_Schema(this) ,
+        ...GOG_ComponentBasicConfigs_structure_Schema(this) ,
+        [ComponentTooltipDescriptionConfigs.schemas.FLOAT_MENU.name]: {
+            part:                                                   ComponentTooltipDescriptionConfigs.schemas.FLOAT_MENU.name ,
+            title:                                                  Language.translate("components.tooltip_description.schema.float_menu.title") ,
+            description:                                            Language.translate("components.tooltip_description.schema.float_menu.description") ,
+            props: [
+                this._COMPONENT_PATTERN[ComponentTooltipDescriptionConfigs.keys.prop_iconPosition.name] ,
+                this._COMPONENT_PATTERN[ComponentTooltipDescriptionConfigs.keys.prop_direction.name] ,
+                this._COMPONENT_PATTERN[ComponentTooltipDescriptionConfigs.keys.prop_description.name] ,
+            ]
+        } ,
+        [ComponentTooltipDescriptionConfigs.schemas.ICON.name]: {
+            part:                                                   ComponentTooltipDescriptionConfigs.schemas.ICON.name ,
+            title:                                                  Language.translate("components.tooltip_description.schema.icon.title") ,
+            description:                                            Language.translate("components.tooltip_description.schema.icon.description") ,
+            props: [
+                this._COMPONENT_PATTERN[ComponentTooltipDescriptionConfigs.keys.prop_icon.name] ,
+                this._COMPONENT_PATTERN[ComponentTooltipDescriptionConfigs.keys.prop_iconTitle.name] ,
+                this._COMPONENT_PATTERN[ComponentTooltipDescriptionConfigs.keys.prop_iconPosition.name] ,
+            ]
+        } ,
+
+    });
+
+
+
+
+    /* ---------------------------------------------
+        PROPERTYs Pattern
+     --------------------------------------------- */
+    _COMPONENT_TEMPLATES= defineComponentTemplate<ComponentTooltipDescriptionTemplatesType , ComponentTooltipDescriptionPropsType>({
+        [ComponentTooltipDescriptionConfigs.templates.BODY.name]: {
+            title:                                                   Language.translate("components.tooltip_description.template.body.title"),
+            description:                                             Language.translate("components.tooltip_description.template.body.description"),
+            reference:                                               this._COMPONENT_PATTERN[ComponentTooltipDescriptionConfigs.keys.prop_icon.name]
+        } ,
+    });
+
+
+
+
+    /* ---------------------------------------------
+        PROPERTYs Methods
+    --------------------------------------------- */
+    _COMPONENT_METHODS = defineComponentMethods<ComponentTooltipDescriptionMethodsType , ComponentTooltipDescriptionPropsType>({
+
+    });
+
+
+
+
+    /* ---------------------------------------------
+        Example
+     --------------------------------------------- */
+    static override renderExampleComponent(): HTMLElement {
+        return new TOOLS.COMPONENT.ComponentTooltipDescription(
+            <ComponentTooltipDescriptionPropsType>{
+                classList: ["col-md-3" , "col-12" , "border" , "p-2"]  ,
+                styles: {}  ,
+
+                prop_show :               true ,
+                prop_description: "this is a description tooltip" ,
+                prop_direction: "top"
+
+            },
+            <ComponentTooltipDescriptionMethodsType>{
+
+            }
+        ).getElement();
+    }
+
+}
+
+export class ComponentTooltipDescription extends ComponentTooltipDescriptionBase {
+
+    /* ---------------------------------------------
+       SETUP
+    --------------------------------------------- */
+    constructor(
+        config: ComponentTooltipDescriptionPropsType ,
+        methods: ComponentTooltipDescriptionMethodsType
+    ) {
+        super("icon" , null);
+        super.renderComponent(config , methods);
+    }
+
+
+
+    /* ---------------------------------------------
+       TEMPLATEs
+    --------------------------------------------- */
+    override renderContentComponent() {
+        return this.executeSchemaPart(ComponentTooltipDescriptionConfigs.schemas.FLOAT_MENU.name)
+    }
+
+    override renderManagerComponent(partName, data , extra) :  ReactiveElement  {
+        switch (partName){
+            case ComponentTooltipDescriptionConfigs.schemas.FLOAT_MENU.name:
+                return  this.templateFn_render_floatMenu(partName , data , extra);
+            case ComponentTooltipDescriptionConfigs.schemas.ICON.name:
+                return  this.templateFn_render_floatMenu_icon(partName , data , extra);
+        }
+    }
+
+
+    private templateFn_render_floatMenu(partName , data , extra) : ReactiveElement{
+
+        if (data != null) {
+            const prop_iconPosition        = data[ComponentTooltipDescriptionConfigs.keys.prop_iconPosition.name];
+            const prop_direction           = data[ComponentTooltipDescriptionConfigs.keys.prop_direction.name];
+            const prop_description         = data[ComponentTooltipDescriptionConfigs.keys.prop_description.name];
+
+            const iconSize = ToolsCss.getIconSize(AppConfig.observable("sizeName"))
+
+            return new ToolsComponents.ComponentFloatMenu(
+                <ComponentFloatMenuPropsType>{
+                    classList: []  ,
+                    styles: {}  ,
+                    prop_floatClass:            ["mt-2" , "w-100"] ,
+                    prop_floatMinWidth:         SizeUnit(100 , UNITS.PERCENT) ,
+                    prop_floatArrowPosition:    SizeCalc( prop_iconPosition.get() , OPERATION.ADD, SizeUnit(iconSize/2 , UNITS.PEXEL) ) ,
+                    prop_selectorContent :      this.executeSchemaPart(ComponentTooltipDescriptionConfigs.schemas.ICON.name),
+                    prop_selectorShowType:      ComponentFloatMenu_ShowTypes.HOVER ,
+                    prop_floatDirectionType:    prop_direction ,
+                    prop_floatContent:          prop_description
+                } ,
+                <ComponentFloatMenuMethodsType>{
+
+                }
+            ).getReactiveElement();
+        }
+
+        return ReactiveElement.section({
+            attrs: {
+                "data-part-name": partName
+            }
+        });
+
+    }
+
+    private templateFn_render_floatMenu_icon(partName , data , extra) : ReactiveElement{
+        if (data != null) {
+            const prop_icon                = data[ComponentTooltipDescriptionConfigs.keys.prop_icon.name];
+            const prop_iconTitle           = data[ComponentTooltipDescriptionConfigs.keys.prop_iconTitle.name];
+            const prop_iconPosition        = data[ComponentTooltipDescriptionConfigs.keys.prop_iconPosition.name];
+
+            const directionRtl = AppConfig.get("directionRtl");
+            let styles = {};
+            if (directionRtl){
+                styles["right"] = prop_iconPosition.get()
+            }
+            else{
+                styles["left"] = prop_iconPosition.get()
+            }
+
+            return new ToolsComponents.ComponentIcon(
+                <ComponentIconPropsType>{
+                    classList: []  ,
+                    styles: {}  ,
+
+                    prop_iconClass :    ["position-absolute"] ,
+                    prop_iconStyles :   styles ,
+                    prop_icon:          prop_icon ,
+                    prop_iconTitle:     prop_iconTitle ,
+                } ,
+                <ComponentIconMethodsType>{
+
+                }
+            ).getReactiveElement();
+        }
+
+        return ReactiveElement.section({
+            attrs: {
+                "data-part-name": partName
+            }
+        });
+
+    }
+
+}

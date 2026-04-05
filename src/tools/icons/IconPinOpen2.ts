@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconPinOpen2(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -36,5 +37,5 @@ export function IconPinOpen2(
     <path fill=${primaryColor} d="M100.19,81.29l17.54,11c0.94,0.59,2.17,0.3,2.76-0.63l18.36-29.27c0.59-0.94,0.3-2.17-0.63-2.76l-17.54-11L100.19,81.29z"/>
     <path fill="${primaryColor}" d="M83.19,126.75l17.57,11.02c4.68,2.93,10.85,1.52,13.79-3.16l9.4-14.99c3.23-5.15,1.67-11.94-3.47-15.16l-16.73-10.49L83.19,126.75z"/>
     <polygon fill="${primaryColor}" points="21.91,205.13 68.29,131.28 73.99,134.49 35.68,195.88 "/>
-</svg>`;
+</svg>` as IconString
 }

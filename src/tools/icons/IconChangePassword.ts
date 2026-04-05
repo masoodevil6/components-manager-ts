@@ -4,11 +4,12 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 
 export function IconChangePassword(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -40,5 +41,5 @@ export function IconChangePassword(
 <line fill="none" stroke="${primaryColor}" stroke-width="${strokeWidth}" x1="192.13" y1="173.8" x2="254.78" y2="235.45"/>
 <line fill="none" stroke="${primaryColor}" stroke-width="${strokeWidth}" x1="211.33" y1="200.34" x2="193.32" y2="218.27"/>
 <line fill="none" stroke="${primaryColor}" stroke-width="${strokeWidth}" x1="237.25" y1="223.31" x2="219.24" y2="241.24"/>
-</svg>`;
+</svg>`as IconString;
 }

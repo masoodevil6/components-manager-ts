@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconPrint(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -35,5 +36,5 @@ export function IconPrint(
   <line fill="${secondaryColor}" stroke="${primaryColor}"  stroke-width="${strokeWidth}"  x1="236.19" y1="258.44" x2="116.97" y2="258.44"/>
   <line fill="${secondaryColor}" stroke="${primaryColor}"  stroke-width="${strokeWidth}"  x1="223.59" y1="240.75" x2="127.31" y2="240.75"/>
   <line fill="${secondaryColor}" stroke="${primaryColor}"  stroke-width="${strokeWidth}"  x1="212.98" y1="225.47" x2="136.18" y2="225.47"/>
-</svg>`;
+</svg>` as IconString
 }

@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconCurrency(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -40,6 +41,6 @@ export function IconCurrency(
 <line fill="${secondaryColor}" stroke="${primaryColor}" stroke-width="2"  x1="73.35" y1="27.76" x2="73.31" y2="29.49"/>
 <ellipse fill="${primaryColor}"  cx="37.21" cy="20.15" rx="6" ry="3.48"/>
 <ellipse fill="${primaryColor}"  cx="114.19" cy="20.15" rx="6" ry="3.48"/>
-</svg>`;
+</svg>` as IconString;
 
 }

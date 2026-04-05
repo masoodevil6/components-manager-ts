@@ -1,38 +1,41 @@
 import {
-    GOG_ComponentConfigBasicKey,
-    GOG_ComponentConfigBasicType,
     ComponentBase,
-    ComponentCallBackType,
-    IComponentProp,
-    defineComponentProps,
-    defineComponentPatterns,
-    defineComponentTemplate,
-    GOG_ComponentConfigBasicPattern,
     defineComponentMethods,
+    defineComponentPatterns,
+    defineComponentSchema,
+    defineComponentTemplate,
+    GOG_ExtractName,
+    GOG_ExtractNameValue,
     GOG_SetValue,
-    GOG_ValueOf,
-    GOG_ExtractNameValue, GOG_ExtractName, extractPropNames, GOG_ComponentConfigBasicProps,
+    GOG_ValueOf
 } from "../../core/ComponentBase";
 import {ReactiveElement} from "../../core/ReactiveElement";
-
 import {ToolsCss} from "../../utils/ToolsCss";
-
 import {ToolsComponents} from "./index";
-import {ToolsIcons} from "../icons";
-
+import {ComponentCallBackType} from "../../core/ComponentBase";
 import {Language} from "../../core/Language";
 import {AppConfig} from "../../core/AppConfig";
 import {
     Color,
     COLORS_GRAD,
     COLORS_MAIN,
-    IconsType,
-    SIZES,
+    IconsType, SizeCalc,
+    SIZES, SizesType, SizeUnit,
     ToolsComponents_BorderRadius,
-    ToolsComponents_BorderWidth
+    ToolsComponents_BorderWidth, UNITS
 } from "../../utils/ToolsConsts";
-import {type} from "node:os";
-import {en} from "../../langs/En";
+import {TOOLS} from "../tools";
+import {
+    GOG_ComponentBasicConfigs_component_keys,
+    GOG_ComponentBasicConfigs_component_parts,
+    GOG_ComponentBasicConfigs_component_Pattern, GOG_ComponentBasicConfigs_component_Schema,
+    GOG_ComponentBasicConfigs_structure_keys,
+    GOG_ComponentBasicConfigs_structure_parts,
+    GOG_ComponentBasicConfigs_structure_Pattern, GOG_ComponentBasicConfigs_structure_Schema,
+    GOG_ComponentBasicProps_component,
+    GOG_ComponentBasicProps_structure
+} from "../../core/component/SetupComponent";
+import {ToolsIcons} from "../icons";
 
 
 
@@ -41,7 +44,8 @@ import {en} from "../../langs/En";
 
 
 export const ComponentRecyclerViewProps = {
-    ...GOG_ComponentConfigBasicProps ,
+    ... GOG_ComponentBasicProps_component,
+    ... GOG_ComponentBasicProps_structure,
     prop_formClass :                        "prop_formClass" ,
     prop_formStyles :                       "prop_formStyles" ,
     prop_formDirection :                    "prop_formDirection" ,
@@ -63,7 +67,8 @@ enum ComponentRecyclerView_DirectionTypes{
 
 const ComponentRecyclerViewConfigs  =  {
     keys: {
-        ...GOG_ComponentConfigBasicKey ,
+        ...GOG_ComponentBasicConfigs_component_keys ,
+        ...GOG_ComponentBasicConfigs_structure_keys ,
         ///----------------------
         [ComponentRecyclerViewProps.prop_formClass]: {
             name:                     ComponentRecyclerViewProps.prop_formClass  ,
@@ -83,12 +88,8 @@ const ComponentRecyclerViewConfigs  =  {
         } ,
     } ,
     schemas:   {
-        COMPONENT: {
-            name:               "part_component"
-        } ,
-        STRUCTURE: {
-            name:                     "part_structure"
-        } ,
+        ...GOG_ComponentBasicConfigs_component_parts ,
+        ...GOG_ComponentBasicConfigs_structure_parts ,
         COMPONENTS: {
             name:                     "part_components"
         } ,
@@ -102,7 +103,7 @@ const ComponentRecyclerViewConfigs  =  {
 } as const
 
 
-export type ComponentRecyclerViewPropsType =     GOG_ComponentConfigBasicType & GOG_ExtractNameValue<typeof ComponentRecyclerViewConfigs.keys>
+export type ComponentRecyclerViewPropsType =     GOG_ExtractNameValue<typeof ComponentRecyclerViewConfigs.keys>
 export type ComponentRecyclerViewSchemaType =    GOG_ExtractName<typeof ComponentRecyclerViewConfigs.schemas>
 export type ComponentRecyclerViewTemplatesType = GOG_ExtractName<typeof ComponentRecyclerViewConfigs.templates>
 
@@ -129,30 +130,31 @@ export class ComponentRecyclerViewBase extends ComponentBase<
      --------------------------------------------- */
     _COMPONENT_PATTERN=  defineComponentPatterns<ComponentRecyclerViewPropsType>(
         {
-            ...GOG_ComponentConfigBasicPattern ,
+            ...GOG_ComponentBasicConfigs_component_Pattern(this) ,
+            ...GOG_ComponentBasicConfigs_structure_Pattern(this) ,
             [ComponentRecyclerViewConfigs.keys.prop_formClass.name]: {
                 prop:                                             ComponentRecyclerViewConfigs.keys.prop_formClass.name,
                 default:                                          ComponentRecyclerViewConfigs.keys.prop_formClass.value,
-                title:                                            Language.translate("components.recyclerView.prop_formClass.title"),
-                description:                                      Language.translate("components.recyclerView.prop_formClass.description"),
+                title:                                            Language.translate("components.recycler_view.props.prop_formClass.title"),
+                description:                                      Language.translate("components.recycler_view.props.prop_formClass.description"),
             } ,
             [ComponentRecyclerViewConfigs.keys.prop_formStyles.name] : {
                 prop:                                             ComponentRecyclerViewConfigs.keys.prop_formStyles.name,
                 default:                                          ComponentRecyclerViewConfigs.keys.prop_formStyles.value,
-                title:                                            Language.translate("components.recyclerView.prop_formStyles.title"),
-                description:                                      Language.translate("components.recyclerView.prop_formStyles.description"),
+                title:                                            Language.translate("components.recycler_view.props.prop_formStyles.title"),
+                description:                                      Language.translate("components.recycler_view.props.prop_formStyles.description"),
             } ,
             [ComponentRecyclerViewConfigs.keys.prop_formComponents.name]: {
                 prop:                                             ComponentRecyclerViewConfigs.keys.prop_formComponents.name,
                 default:                                          ComponentRecyclerViewConfigs.keys.prop_formComponents.value,
-                title:                                            Language.translate("components.recyclerView.prop_formComponents.title"),
-                description:                                      Language.translate("components.recyclerView.prop_formComponents.description"),
+                title:                                            Language.translate("components.recycler_view.props.prop_formComponents.title"),
+                description:                                      Language.translate("components.recycler_view.props.prop_formComponents.description"),
             },
             [ComponentRecyclerViewConfigs.keys.prop_formDirection.name]: {
                 prop:                                             ComponentRecyclerViewConfigs.keys.prop_formDirection.name ,
                 default:                                          ComponentRecyclerViewConfigs.keys.prop_formDirection.value,
-                title:                                            Language.translate("components.recyclerView.prop_formDirection.title"),
-                description:                                      Language.translate("components.recyclerView.prop_formDirection.description"),
+                title:                                            Language.translate("components.recycler_view.props.prop_formDirection.title"),
+                description:                                      Language.translate("components.recycler_view.props.prop_formDirection.description"),
             },
         }
     )
@@ -161,19 +163,20 @@ export class ComponentRecyclerViewBase extends ComponentBase<
     /* ---------------------------------------------
            PROPERTYs Props
     --------------------------------------------- */
-    _COMPONENT_PROPS = defineComponentProps<ComponentRecyclerViewSchemaType  , ComponentRecyclerViewPropsType>( {
-        [ComponentRecyclerViewConfigs.schemas.COMPONENT.name]: [
-
-        ],
-        [ComponentRecyclerViewConfigs.schemas.STRUCTURE.name]: [
-
-        ],
-        [ComponentRecyclerViewConfigs.schemas.COMPONENTS.name]: [
-            this._COMPONENT_PATTERN[ComponentRecyclerViewConfigs.keys.prop_formClass.name] ,
-            this._COMPONENT_PATTERN[ComponentRecyclerViewConfigs.keys.prop_formStyles.name]  ,
-            this._COMPONENT_PATTERN[ComponentRecyclerViewConfigs.keys.prop_formDirection.name] ,
-            this._COMPONENT_PATTERN[ComponentRecyclerViewConfigs.keys.prop_formComponents.name] ,
-        ],
+    _COMPONENT_SCHEMA = defineComponentSchema<ComponentRecyclerViewSchemaType  , ComponentRecyclerViewPropsType>( {
+        ...GOG_ComponentBasicConfigs_component_Schema(this) ,
+        ...GOG_ComponentBasicConfigs_structure_Schema(this) ,
+        [ComponentRecyclerViewConfigs.schemas.COMPONENTS.name]: {
+            part:                                                  ComponentRecyclerViewConfigs.schemas.COMPONENTS.name ,
+            title:                                                 Language.translate("components.recycler_view.schema.components.title") ,
+            description:                                           Language.translate("components.recycler_view.schema.components.description") ,
+            props: [
+                this._COMPONENT_PATTERN[ComponentRecyclerViewConfigs.keys.prop_formClass.name] ,
+                this._COMPONENT_PATTERN[ComponentRecyclerViewConfigs.keys.prop_formStyles.name]  ,
+                this._COMPONENT_PATTERN[ComponentRecyclerViewConfigs.keys.prop_formDirection.name] ,
+                this._COMPONENT_PATTERN[ComponentRecyclerViewConfigs.keys.prop_formComponents.name] ,
+            ]
+        } ,
     });
 
 
@@ -193,6 +196,48 @@ export class ComponentRecyclerViewBase extends ComponentBase<
     });
 
 
+
+
+    /* ---------------------------------------------
+        Example
+     --------------------------------------------- */
+    static override renderExampleComponent(): HTMLElement {
+        return new ComponentRecyclerView(
+            <ComponentRecyclerViewPropsType>{
+
+                classList: ["col-md-3" , "col-12" , "border" , "p-2"]  ,
+                // styles: {} ,
+                // prop_show: 0 ,
+
+                prop_formClass: ["aaa"],
+                prop_formStyles: {},
+                prop_formDirection: "horizontal" ,
+                prop_formComponents: [
+                    ReactiveElement.section({
+                        className:[
+                            "border-end" , "border-dark" , "px-2"
+                        ] ,
+                        children: [
+                            "item1"
+                        ]
+                    }) ,
+                    ReactiveElement.section({
+                        className:[
+                            "border-end" , "border-dark" , "px-2"
+                        ] ,
+                        children: [
+                            "item2"
+                        ]
+                    })
+                ]
+            } ,
+            <ComponentRecyclerViewMethodsType>{
+
+            }
+        ).getElement();
+    }
+
+
 }
 export class ComponentRecyclerView extends ComponentRecyclerViewBase{
 
@@ -204,7 +249,7 @@ export class ComponentRecyclerView extends ComponentRecyclerViewBase{
         methods: ComponentRecyclerViewMethodsType
     ) {
 
-        super("component-recycler-view" , null);
+        super("recycler-view" , null);
         super.renderComponent(config , methods);
     }
 
@@ -213,23 +258,19 @@ export class ComponentRecyclerView extends ComponentRecyclerViewBase{
     /* ---------------------------------------------
        TEMPLATEs
     --------------------------------------------- */
-
-    override template_render_structure() {
-        const partName = ComponentRecyclerViewConfigs.schemas.STRUCTURE.name;
-        const data = this.getPartProps(partName);
-
-        return this.templateBasic_render_structure(
-            ReactiveElement.section({
-                children: [
-                    this.#template_render_components() ,
-                ]
-            })
-        );
+    override renderContentComponent() {
+        return this.executeSchemaPart(ComponentRecyclerViewConfigs.schemas.COMPONENTS.name)
     }
 
-    #template_render_components() {
-        const partName = ComponentRecyclerViewConfigs.schemas.COMPONENTS.name;
-        const data = this.getPartProps(partName)
+    override renderManagerComponent(partName, data , extra) :  ReactiveElement  {
+        switch (partName){
+            case ComponentRecyclerViewConfigs.schemas.COMPONENTS.name:
+                return  this.template_render_components(partName , data , extra);
+        }
+    }
+
+
+    private template_render_components(partName , data , extra) : ReactiveElement {
 
         if (data != null){
             const prop_formClass        =   data[ComponentRecyclerViewConfigs.keys.prop_formClass.name] ;

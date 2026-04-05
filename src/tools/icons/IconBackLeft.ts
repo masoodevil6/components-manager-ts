@@ -3,11 +3,12 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 
 export function IconBackLeft(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -31,5 +32,5 @@ export function IconBackLeft(
   <title>arrow left</title>
   <path d="M14 6 L8 12 L14 18 Z" fill="${primaryColor}"/>
   <line x1="16" y1="12" x2="22" y2="12" stroke="${primaryColor}" stroke-width="${strokeWidth}" stroke-linecap="round"/>
-</svg>`;
+</svg>` as IconString;
 }

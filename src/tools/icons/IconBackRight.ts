@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconBackRight(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -30,5 +31,5 @@ export function IconBackRight(
   <title>arrow right</title>
   <path d="M10 6 L16 12 L10 18 Z" fill="${primaryColor}"/>
   <line x1="2" y1="12" x2="8" y2="12" stroke="${primaryColor}" stroke-width="${strokeWidth}" stroke-linecap="round"/>
-</svg>`;
+</svg>` as IconString;
 }

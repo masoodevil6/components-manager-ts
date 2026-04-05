@@ -1,10 +1,13 @@
+export type Brand<T , B> = T & {__brand: B};
+
+
 
 export const COLORS_GRAD = {
     GRADE_1:       1 ,
     GRADE_2:       2 ,
     GRADE_3:       3 ,
     GRADE_4:       4 ,
-}
+} as const
 
 
 export const COLORS_MAIN = {
@@ -17,13 +20,52 @@ export const COLORS_MAIN = {
     SHADOW:         "shadow" ,
     DARK:           "dark" ,
     SHAN:           "shan" ,
-}
+} as const
 
 type ColorsMainType = typeof COLORS_MAIN[keyof typeof COLORS_MAIN];
 type colorsGradeType = typeof COLORS_GRAD[keyof typeof COLORS_GRAD];
-type CssColorVar = `--${ColorsMainType}Color${colorsGradeType}`
-export const Color = (color: ColorsMainType = COLORS_MAIN.PRIMARY , grade: colorsGradeType= COLORS_GRAD.GRADE_1) : `var(${CssColorVar})`=> {
-    return `var(--${color}Color${grade})`
+type CssColorVar = `var(--${ColorsMainType}Color${colorsGradeType})`
+export const Color = (color: ColorsMainType = COLORS_MAIN.PRIMARY , grade: colorsGradeType= COLORS_GRAD.GRADE_1) : CssColorVar => {
+    return `var(--${color}Color${grade})` as CssColorVar
+}
+
+
+
+
+
+export const OPERATION = {
+    ADD:    "+" ,
+    SUM:    "-" ,
+    MUL:    "*" ,
+    DIV:    "/" ,
+}
+type OperationType = typeof OPERATION[keyof typeof OPERATION];
+
+export const UNITS = {
+    PERCENT:        "%" ,
+    PEXEL:          "px" ,
+} as const
+type UnitsType = typeof UNITS[keyof typeof UNITS];
+
+type SizeUnitVar = `${number}${UnitsType}`
+export const SizeUnit = (number: number  , unit: UnitsType= UNITS.PEXEL) : SizeUnitVar=> {
+    return `${number}${unit}` as SizeUnitVar
+}
+
+
+type CalcSizeUnitVar = `calc(${string})`
+type CalcSizeParts = OperationType | SizeUnitVar
+export const SizeCalc = (...parts : CalcSizeParts[]) : CalcSizeUnitVar=> {
+    let partStr = ""
+    if (parts){
+        for (let i = 0; i < parts.length; i++) {
+            const itemPart = parts[i];
+            if (itemPart){
+                partStr += ` ${itemPart} `
+            }
+        }
+    }
+    return `calc(${partStr})` as CalcSizeUnitVar
 }
 
 
@@ -32,10 +74,8 @@ export const Color = (color: ColorsMainType = COLORS_MAIN.PRIMARY , grade: color
 
 
 
-
-
-import {ToolsIcons} from "../tools/icons/index";
-export type IconsType = typeof ToolsIcons[keyof typeof ToolsIcons];
+import {IconString} from "../tools/icons/index";
+export type IconsType = IconString //ReturnType<typeof ToolsIcons[keyof typeof ToolsIcons]>;
 
 
 

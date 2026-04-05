@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconInputAcl(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -33,5 +34,5 @@ export function IconInputAcl(
   <path d="M9 10l3 3 3-3" stroke="${primaryColor}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
   <circle cx="17" cy="15" r="2" stroke="${primaryColor}" stroke-width="1.3"/>
   <line x1="18.5" y1="16.5" x2="20" y2="18" stroke="${primaryColor}" stroke-width="1.3" stroke-linecap="round"/>
-</svg>`;
+</svg>` as IconString
 }

@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconLeverage2(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -42,5 +43,5 @@ export function IconLeverage2(
 	<circle fill="${secondaryColor}" cx="32.66" cy="93.91" r="3.98"/>
 	<circle fill="${secondaryColor}" cx="304.81" cy="16.53" r="3.98"/>
 	<path fill="${primaryColor}" d="M168.43,40.76c-8.28,0-15,6.72-15,15c0,8.28,6.72,15,15,15s15-6.72,15-15 C183.43,47.47,176.72,40.76,168.43,40.76z M168.43,60.92c-2.85,0-5.16-2.31-5.16-5.16c0-2.85,2.31-5.16,5.16-5.16 s5.16,2.31,5.16,5.16C173.59,58.61,171.28,60.92,168.43,60.92z"/>
-</svg>`;
+</svg>` as IconString
 }

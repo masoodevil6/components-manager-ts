@@ -2,24 +2,16 @@ import {
     ComponentBase,
     defineComponentMethods,
     defineComponentPatterns,
-    defineComponentProps,
+    defineComponentSchema,
     defineComponentTemplate,
-    extractPropNames,
-    GOG_ComponentConfigBasicKey,
-    GOG_ComponentConfigBasicPattern, GOG_ComponentConfigBasicProps,
     GOG_ExtractName,
     GOG_ExtractNameValue,
     GOG_SetValue,
     GOG_ValueOf
 } from "../../core/ComponentBase";
 import {ReactiveElement} from "../../core/ReactiveElement";
-
 import {ToolsCss} from "../../utils/ToolsCss";
-
 import {ToolsComponents} from "./index";
-import {ToolsIcons} from "../icons";
-
-import {GOG_ComponentConfigBasicType} from "../../core/ComponentBase";
 import {ComponentCallBackType} from "../../core/ComponentBase";
 import {Language} from "../../core/Language";
 import {AppConfig} from "../../core/AppConfig";
@@ -27,23 +19,34 @@ import {
     Color,
     COLORS_GRAD,
     COLORS_MAIN,
-    IconsType,
-    SIZES,
+    IconsType, SizeCalc,
+    SIZES, SizesType, SizeUnit,
     ToolsComponents_BorderRadius,
-    ToolsComponents_BorderWidth
+    ToolsComponents_BorderWidth, UNITS
 } from "../../utils/ToolsConsts";
+import {TOOLS} from "../tools";
 import {
-    ComponentRecyclerViewMethodsType,
-    ComponentRecyclerViewPropsType,
-    ComponentRecyclerViewSchemaType, ComponentRecyclerViewTemplatesType
-} from "./ComponentRecyclerView";
-import {ComponentIconMethodsType, ComponentIconPropsType} from "./ComponentIcon";
+    GOG_ComponentBasicConfigs_component_keys,
+    GOG_ComponentBasicConfigs_component_parts,
+    GOG_ComponentBasicConfigs_component_Pattern, GOG_ComponentBasicConfigs_component_Schema,
+    GOG_ComponentBasicConfigs_structure_keys,
+    GOG_ComponentBasicConfigs_structure_parts,
+    GOG_ComponentBasicConfigs_structure_Pattern, GOG_ComponentBasicConfigs_structure_Schema,
+    GOG_ComponentBasicProps_component,
+    GOG_ComponentBasicProps_structure
+} from "../../core/component/SetupComponent";
+import {ToolsIcons} from "../icons";
+import {
+    ComponentIconMethodsType,
+    ComponentIconPropsType
+} from "./ComponentIcon";
 
 
 
 
 export const ComponentMessagesProps = {
-    ...GOG_ComponentConfigBasicProps ,
+    ... GOG_ComponentBasicProps_component,
+    ... GOG_ComponentBasicProps_structure,
     prop_type :                         "prop_type" ,
     prop_messages :                     "prop_messages" ,
     prop_borderWidth :                  "prop_borderWidth" ,
@@ -65,7 +68,8 @@ export enum ComponentMessages_MessageTypes{
 
 const ComponentMessagesConfigs  =  {
     keys: {
-        ...GOG_ComponentConfigBasicKey ,
+        ...GOG_ComponentBasicConfigs_component_keys ,
+        ...GOG_ComponentBasicConfigs_structure_keys ,
         ///----------------------
         [ComponentMessagesProps.prop_type] : {
             name:               ComponentMessagesProps.prop_type,
@@ -77,7 +81,7 @@ const ComponentMessagesConfigs  =  {
         } ,
         [ComponentMessagesProps.prop_borderWidth]: {
             name:               ComponentMessagesProps.prop_borderWidth,
-            value:              GOG_SetValue<GOG_ValueOf<typeof SIZES> | number>(SIZES.XS),
+            value:              GOG_SetValue<SizesType| number>(SIZES.XS),
         } ,
         [ComponentMessagesProps.prop_iconColor]:{
             name:               ComponentMessagesProps.prop_iconColor,
@@ -97,12 +101,8 @@ const ComponentMessagesConfigs  =  {
         }
     } ,
     schemas:   {
-        COMPONENT: {
-            name:               "part_component"
-        } ,
-        STRUCTURE: {
-            name:               "part_structure"
-        } ,
+        ...GOG_ComponentBasicConfigs_component_parts ,
+        ...GOG_ComponentBasicConfigs_structure_parts ,
         MESSAGE: {
             name:               "part_message"
         } ,
@@ -138,7 +138,7 @@ const ComponentMessagesConfigs  =  {
 } as const
 
 
-export type ComponentMessagesPropsType =             GOG_ComponentConfigBasicType & GOG_ExtractNameValue<typeof ComponentMessagesConfigs.keys>
+export type ComponentMessagesPropsType =             GOG_ExtractNameValue<typeof ComponentMessagesConfigs.keys>
 export type ComponentMessagesSchemaType =            GOG_ExtractName<typeof ComponentMessagesConfigs.schemas>
 export type ComponentMessagesTemplatesType =         GOG_ExtractName<typeof ComponentMessagesConfigs.templates>
 
@@ -169,50 +169,51 @@ export class ComponentMessagesBase extends ComponentBase<
     --------------------------------------------- */
     _COMPONENT_PATTERN=  defineComponentPatterns<ComponentMessagesPropsType>(
         {
-            ...GOG_ComponentConfigBasicPattern ,
+            ...GOG_ComponentBasicConfigs_component_Pattern(this) ,
+            ...GOG_ComponentBasicConfigs_structure_Pattern(this) ,
             [ComponentMessagesConfigs.keys.prop_type.name]: {
                 prop:                                             ComponentMessagesConfigs.keys.prop_type.name,
                 default:                                          ComponentMessagesConfigs.keys.prop_type.value,
-                title:                                            Language.translate("components.messages.prop_type.title"),
-                description:                                      Language.translate("components.messages.prop_type.description"),
+                title:                                            Language.translate("components.messages.props.prop_type.title"),
+                description:                                      Language.translate("components.messages.props.prop_type.description"),
             } ,
             [ComponentMessagesConfigs.keys.prop_messages.name]: {
                 prop:                                             ComponentMessagesConfigs.keys.prop_messages.name,
                 default:                                          ComponentMessagesConfigs.keys.prop_messages.value,
                 hasMultiTemplate:                                 false,
-                title:                                            Language.translate("components.messages.prop_messages.title"),
-                description:                                      Language.translate("components.messages.prop_messages.description"),
+                title:                                            Language.translate("components.messages.props.prop_messages.title"),
+                description:                                      Language.translate("components.messages.props.prop_messages.description"),
             } ,
             [ComponentMessagesConfigs.keys.prop_borderWidth.name]: {
                 prop:                                             ComponentMessagesConfigs.keys.prop_borderWidth.name,
                 default:                                          ComponentMessagesConfigs.keys.prop_borderWidth.value,
                 hasMultiTemplate:                                 false,
-                title:                                            Language.translate("components.messages.prop_borderWidth.title"),
-                description:                                      Language.translate("components.messages.prop_borderWidth.description"),
+                title:                                            Language.translate("components.messages.props.prop_borderWidth.title"),
+                description:                                      Language.translate("components.messages.props.prop_borderWidth.description"),
             } ,
             [ComponentMessagesConfigs.keys.prop_iconColor.name]: {
                 prop:                                             ComponentMessagesConfigs.keys.prop_iconColor.name,
                 default:                                          ComponentMessagesConfigs.keys.prop_iconColor.value,
-                title:                                            Language.translate("components.messages.prop_iconColor.title"),
-                description:                                      Language.translate("components.messages.prop_iconColor.description"),
+                title:                                            Language.translate("components.messages.props.prop_iconColor.title"),
+                description:                                      Language.translate("components.messages.props.prop_iconColor.description"),
             } ,
             [ComponentMessagesConfigs.keys.prop_borderColor.name]: {
                 prop:                                             ComponentMessagesConfigs.keys.prop_borderColor.name,
                 default:                                          ComponentMessagesConfigs.keys.prop_borderColor.value,
-                title:                                            Language.translate("components.messages.prop_borderColor.title"),
-                description:                                      Language.translate("components.messages.prop_borderColor.description"),
+                title:                                            Language.translate("components.messages.props.prop_borderColor.title"),
+                description:                                      Language.translate("components.messages.props.prop_borderColor.description"),
             } ,
             [ComponentMessagesConfigs.keys.prop_backgroundColor.name]: {
                 prop:                                             ComponentMessagesConfigs.keys.prop_backgroundColor.name,
                 default:                                          ComponentMessagesConfigs.keys.prop_backgroundColor.value,
-                title:                                            Language.translate("components.messages.prop_backgroundColor.title"),
-                description:                                      Language.translate("components.messages.prop_backgroundColor.description"),
+                title:                                            Language.translate("components.messages.props.prop_backgroundColor.title"),
+                description:                                      Language.translate("components.messages.props.prop_backgroundColor.description"),
             } ,
             [ComponentMessagesConfigs.keys.prop_textColor.name]: {
                 prop:                                             ComponentMessagesConfigs.keys.prop_textColor.name,
                 default:                                          ComponentMessagesConfigs.keys.prop_textColor.value,
-                title:                                            Language.translate("components.messages.prop_textColor.title"),
-                description:                                      Language.translate("components.messages.prop_textColor.description"),
+                title:                                            Language.translate("components.messages.props.prop_textColor.title"),
+                description:                                      Language.translate("components.messages.props.prop_textColor.description"),
             } ,
         }
     );
@@ -222,28 +223,46 @@ export class ComponentMessagesBase extends ComponentBase<
     /* ---------------------------------------------
              PROPERTYs Props
       --------------------------------------------- */
-    _COMPONENT_PROPS = defineComponentProps<ComponentMessagesSchemaType  , ComponentMessagesPropsType>( {
-        [ComponentMessagesConfigs.schemas.COMPONENT.name]: [
+    _COMPONENT_SCHEMA = defineComponentSchema<ComponentMessagesSchemaType  , ComponentMessagesPropsType>( {
+        ...GOG_ComponentBasicConfigs_component_Schema(this) ,
+        ...GOG_ComponentBasicConfigs_structure_Schema(this) ,
+        [ComponentMessagesConfigs.schemas.MESSAGE.name]: {
+            part:               ComponentMessagesConfigs.schemas.MESSAGE.name ,
+            title:              Language.translate("components.messages.schema.messages.title") ,
+            description:        Language.translate("components.messages.schema.messages.description") ,
+            props: [
+                this._COMPONENT_PATTERN[ComponentMessagesConfigs.keys.prop_type.name]  ,
+                this._COMPONENT_PATTERN[ComponentMessagesConfigs.keys.prop_messages.name]  ,
+                this._COMPONENT_PATTERN[ComponentMessagesConfigs.keys.prop_borderWidth.name]  ,
+                this._COMPONENT_PATTERN[ComponentMessagesConfigs.keys.prop_backgroundColor.name]  ,
+                this._COMPONENT_PATTERN[ComponentMessagesConfigs.keys.prop_textColor.name]  ,
+                this._COMPONENT_PATTERN[ComponentMessagesConfigs.keys.prop_borderColor.name]  ,
+            ]
+        } ,
+        [ComponentMessagesConfigs.schemas.ICON.name]: {
+            part:               ComponentMessagesConfigs.schemas.ICON.name ,
+            title:              Language.translate("components.messages.schema.icon.title") ,
+            description:        Language.translate("components.messages.schema.icon.description") ,
+            props: [
+                this._COMPONENT_PATTERN[ComponentMessagesConfigs.keys.prop_messages.name]  ,
+                this._COMPONENT_PATTERN[ComponentMessagesConfigs.keys.prop_iconColor.name]  ,
+                this._COMPONENT_PATTERN[ComponentMessagesConfigs.keys.prop_type.name]  ,
+            ]
+        } ,
 
-        ],
-        [ComponentMessagesConfigs.schemas.STRUCTURE.name]: [
-
-        ],
-        [ComponentMessagesConfigs.schemas.MESSAGE.name]: [
-            this._COMPONENT_PATTERN[ComponentMessagesConfigs.keys.prop_type.name]  ,
-            this._COMPONENT_PATTERN[ComponentMessagesConfigs.keys.prop_messages.name]  ,
-            this._COMPONENT_PATTERN[ComponentMessagesConfigs.keys.prop_borderWidth.name]  ,
-            this._COMPONENT_PATTERN[ComponentMessagesConfigs.keys.prop_backgroundColor.name]  ,
-            this._COMPONENT_PATTERN[ComponentMessagesConfigs.keys.prop_textColor.name]  ,
-            this._COMPONENT_PATTERN[ComponentMessagesConfigs.keys.prop_borderColor.name]  ,
-        ],
-        [ComponentMessagesConfigs.schemas.ICON.name]: [
-            this._COMPONENT_PATTERN[ComponentMessagesConfigs.keys.prop_messages.name]  ,
-            this._COMPONENT_PATTERN[ComponentMessagesConfigs.keys.prop_iconColor.name]  ,
-            this._COMPONENT_PATTERN[ComponentMessagesConfigs.keys.prop_type.name]  ,
-        ],
     });
 
+
+    /* ---------------------------------------------
+        PROPERTYs template
+     --------------------------------------------- */
+    _COMPONENT_TEMPLATES= defineComponentTemplate<ComponentMessagesTemplatesType , ComponentMessagesPropsType>({
+        [ComponentMessagesConfigs.templates.BODY.name]: {
+            title:                                            Language.translate("components.messages.template.body.title"),
+            description:                                      Language.translate("components.messages.template.body.description"),
+            reference:                                        this._COMPONENT_PATTERN[ComponentMessagesConfigs.keys.prop_messages.name]
+        } ,
+    });
 
 
     /* ---------------------------------------------
@@ -251,38 +270,48 @@ export class ComponentMessagesBase extends ComponentBase<
      --------------------------------------------- */
     _COMPONENT_METHODS = defineComponentMethods<ComponentMessageMethodsType , ComponentMessagesPropsType>({
         [ComponentMessagesConfigs.methods.CLOSE_MESSAGE.name]: {
-            title:                                            Language.translate("components.messages.CLOSE_MESSAGE.title"),
-            description:                                      Language.translate("components.messages.CLOSE_MESSAGE.description"),
+            title:                                            Language.translate("components.messages.methods.fn_onCloseMessage.title"),
+            description:                                      Language.translate("components.messages.methods.fn_onCloseMessage.description"),
             args: {}
         }
     });
 
 
-
     /* ---------------------------------------------
-        PROPERTYs Pattern
+        Example
      --------------------------------------------- */
-    _COMPONENT_TEMPLATES= defineComponentTemplate<ComponentMessagesTemplatesType , ComponentMessagesPropsType>({
-        [ComponentMessagesConfigs.templates.BODY.name]: {
-            title:                                            Language.translate("components.messages.BODY.title"),
-            description:                                      Language.translate("components.messages.BODY.description"),
-            reference:                                        this._COMPONENT_PATTERN[ComponentMessagesConfigs.keys.prop_messages]
-        } ,
-    });
+    static override renderExampleComponent(): HTMLElement {
 
+        return new ComponentMessages(
+            <ComponentMessagesPropsType> {
+                classList: ["col-md-3" , "col-12" , "border" , "p-2"]  ,
+                styles: {
+                    color: "red"
+                }  ,
+                prop_show : true ,
+                prop_type: "warning",
+                prop_messages: ["error1" , "error2" , "error3"] ,
+            } ,
+            <ComponentMessageMethodsType>{
+                fn_onCloseMessage: (event, dataArgs: ComponentMessages_Methods_CLOSE_MESSAGE_DataArgs, componentArgs: ComponentMessages_Methods_CLOSE_MESSAGE_ComponentArgs) => {
+                    console.log(event , dataArgs.index , dataArgs.message , dataArgs.type)
+                }
+            }
+        ).getElement();
+    }
 
 
 }
 export class ComponentMessages extends ComponentMessagesBase{
 
     /* ---------------------------------------------
-       SETUP
-   --------------------------------------------- */
+        SETUP
+    --------------------------------------------- */
     constructor(
         config: ComponentMessagesPropsType ,
         methods: ComponentMessageMethodsType
     ) {
-        super("component-message" , null);
+        super("message" , null);
         super.renderComponent(config , methods);
     }
 
@@ -290,21 +319,20 @@ export class ComponentMessages extends ComponentMessagesBase{
     /* ---------------------------------------------
        TEMPLATEs
     --------------------------------------------- */
-    override template_render_structure() {
-        const partName = ComponentMessagesConfigs.schemas.STRUCTURE.name;
-
-        return this.templateBasic_render_structure(
-            ReactiveElement.section({
-                children: [
-                    this.#template_render_messages() ,
-                ]
-            })
-        );
+    override renderContentComponent() {
+        return this.executeSchemaPart(ComponentMessagesConfigs.schemas.MESSAGE.name)
     }
 
-    #template_render_messages() {
-        const partName = ComponentMessagesConfigs.schemas.MESSAGE.name;
-        const data = this.getPartProps(partName)
+    override renderManagerComponent(partName, data , extra) :  ReactiveElement  {
+        switch (partName){
+            case ComponentMessagesConfigs.schemas.MESSAGE.name:
+                return  this.template_render_messages(partName , data , extra);
+            case ComponentMessagesConfigs.schemas.ICON.name:
+                return  this.componentFn_render_icon(partName , data , extra);
+        }
+    }
+
+    private template_render_messages(partName , data , extra) : ReactiveElement {
 
         if (data != null){
 
@@ -400,7 +428,8 @@ export class ComponentMessages extends ComponentMessagesBase{
                                                                     ] ,
                                                                 }
                                                             ),
-                                                            this.#componentFn_render_icon(el , i , msg)
+
+                                                            this.executeSchemaPart(ComponentMessagesConfigs.schemas.ICON.name , {el , index: i , message: msg})
                                                         ]
                                                     })
                                             ]
@@ -431,10 +460,7 @@ export class ComponentMessages extends ComponentMessagesBase{
         });
     }
 
-    #componentFn_render_icon (el , index , message) {
-        const partName = ComponentMessagesConfigs.schemas.ICON.name;
-        const data = this.getPartProps(partName)
-
+    private componentFn_render_icon (partName , data , extra) : ReactiveElement {
         if (data != null){
             const prop_type    =    data[ComponentMessagesConfigs.keys.prop_type.name];
 
@@ -462,20 +488,22 @@ export class ComponentMessages extends ComponentMessagesBase{
                     prop_iconStyles : {
                         "cursor" : "pointer"
                     } ,
-                    prop_icon: ToolsIcons.icon_close({size: elHeight , primaryColor: prop_type.mapList(prop_colorIcon) }) ,
+                    prop_icon: ToolsIcons.icon_close({size: elHeight , primaryColor: prop_type.mapList(prop_colorIcon) })
                 },
                 <ComponentIconMethodsType>{
                     fn_onClickIcon: function (event , args)  {
-                        el.remove()
-                        const params: ComponentMessages_Methods_CLOSE_MESSAGE_DataArgs = {
-                            [ComponentMessagesConfigs.methods.CLOSE_MESSAGE.dataArgs.MESSAGES_INDEX.name]:  index ,
-                            [ComponentMessagesConfigs.methods.CLOSE_MESSAGE.dataArgs.MESSAGE_TEXT.name]:    message ,
-                            [ComponentMessagesConfigs.methods.CLOSE_MESSAGE.dataArgs.MESSAGE_TYPE.name]:    prop_type.get()
+                        if (extra && extra.hasOwnProperty("el")){
+                            extra.el.remove()
+                            const params: ComponentMessages_Methods_CLOSE_MESSAGE_DataArgs = {
+                                [ComponentMessagesConfigs.methods.CLOSE_MESSAGE.dataArgs.MESSAGES_INDEX.name]:  extra?.index ?? null,
+                                [ComponentMessagesConfigs.methods.CLOSE_MESSAGE.dataArgs.MESSAGE_TEXT.name]:    extra?.message ?? null ,
+                                [ComponentMessagesConfigs.methods.CLOSE_MESSAGE.dataArgs.MESSAGE_TYPE.name]:    prop_type.get()
+                            }
+                            this.executeMethod(ComponentMessagesConfigs.methods.CLOSE_MESSAGE.name  , event , params);
                         }
-                        this.executeMethod(ComponentMessagesConfigs.methods.CLOSE_MESSAGE.name  , event , params);
                     }.bind(this) ,
                 }
-            ).getSchema();
+            ).getReactiveElement();
 
         }
 

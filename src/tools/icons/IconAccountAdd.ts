@@ -4,10 +4,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconAccountAdd(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -37,7 +38,7 @@ export function IconAccountAdd(
 <circle  fill="none" stroke="${primaryColor}" stroke-width="${strokeWidth}" cx="234.26" cy="226.26" r="61.74"/>
 <path    fill="${primaryColor}" d="M200.48,235h65c5.52,0,10-4.48,10-10v0c0-5.52-4.48-10-10-10h-65c-5.52,0-10,4.48-10,10v0 C190.48,230.52,194.96,235,200.48,235z"/>
 <path    fill="${primaryColor}" d="M224.26,193.76v65c0,5.52,4.48,10,10,10h0c5.52,0,10-4.48,10-10v-65c0-5.52-4.48-10-10-10h0 C228.74,183.76,224.26,188.24,224.26,193.76z"/>
-</svg>`;
+</svg>` as IconString;
 }
 
 

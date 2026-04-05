@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconEmail(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -31,5 +32,5 @@ export function IconEmail(
   <rect x="2" y="5" width="20" height="14" rx="2" fop stroke="${primaryColor}" stroke-width="${strokeWidth}" fill="${secondaryColor}"/>
   <path d="M3 7.5L12 13L21 7.5"  stroke="${primaryColor}"  stroke-width="${strokeWidth}"  stroke-linecap="round"  stroke-linejoin="round"/>
 </svg>
-`;
+` as IconString
 }

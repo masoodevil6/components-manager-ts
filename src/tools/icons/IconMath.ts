@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconMath(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -29,5 +30,5 @@ export function IconMath(
   <title>math</title>
   <rect x="3" y="3" width="18" height="18" rx="3" stroke="${primaryColor}" stroke-width="${strokeWidth}" fill="${secondaryColor}"/>
   <path d="M8 8l8 8M16 8l-8 8M12 6v4M12 14v4" stroke="${primaryColor}" stroke-width="${strokeWidth}" stroke-linecap="round"/>
-</svg>`;
+</svg>` as IconString
 }

@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconInputColor(
     options: IconOptions = {}
-): string {
+): IconString {
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
     const size = ToolsCss.getIconSize(sizeName, sizeName)
@@ -28,5 +29,5 @@ export function IconInputColor(
   <title>input color</title>
   <rect x="3" y="7" width="18" height="10" rx="2" stroke="${primaryColor}" stroke-width="${strokeWidth}" fill="${secondaryColor}"/>
   <circle cx="12" cy="12" r="3" fill="${primaryColor}"/>
-</svg>`;
+</svg>` as IconString
 }

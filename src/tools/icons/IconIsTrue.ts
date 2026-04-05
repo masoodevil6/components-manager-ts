@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconIsTrue(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -29,5 +30,5 @@ export function IconIsTrue(
   <title>is true</title>
   <path stroke-linecap="round"   stroke-linejoin="round"   stroke-width="${strokeWidth}"  stroke="${primaryColor}"    d="M5 13l4 4L19 7" />
 </svg>
-`;
+` as IconString
 }

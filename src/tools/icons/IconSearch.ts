@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconSearch(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -30,5 +31,5 @@ export function IconSearch(
     <title>search</title>
     <circle cx="11" cy="11" r="7" stroke="${primaryColor}" stroke-width="${strokeWidth}"  fill="${secondaryColor}" stroke-linecap="round" stroke-linejoin="round"/>
     <line x1="16.65" y1="16.65" x2="21" y2="21" stroke="${primaryColor}" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>`;
+</svg>` as IconString
 }

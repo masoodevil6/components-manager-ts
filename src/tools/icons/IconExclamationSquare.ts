@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconExclamationSquare(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -30,5 +31,5 @@ export function IconExclamationSquare(
   <title>exclamation square</title>
   <rect x="3" y="3" width="18" height="18" rx="3" ry="3"  stroke="${primaryColor}" stroke-width="${strokeWidth}" fill="${secondaryColor}"/>
   <path d="M12 7v6M12 17h0"  stroke="${primaryColor}" stroke-width="${strokeWidth}"/>
-</svg>`;
+</svg>` as IconString
 }

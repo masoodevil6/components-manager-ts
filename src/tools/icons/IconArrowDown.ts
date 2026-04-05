@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconArrowDown(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -29,6 +30,6 @@ export function IconArrowDown(
     width="${size}" height="${size}" viewBox="0 0 24 24" fill="none">
     <title>arrow right</title>
     <path d="M9 6l6 6-6 6" stroke="${primaryColor}" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>`;
+</svg>` as IconString;
 
 }

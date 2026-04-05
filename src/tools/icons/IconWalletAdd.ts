@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconWalletAdd(
     options: IconOptions = {}
-): string {
+): IconString {
 
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
@@ -41,7 +42,7 @@ export function IconWalletAdd(
 	<path fill="${primaryColor}" d="M18.87,67.42h27.89c2.76,0,5-2.24,5-5v-2.18c0-2.76-2.24-5-5-5H18.87c-2.76,0-5,2.24-5,5v2.18 C13.87,65.18,16.11,67.42,18.87,67.42z"/>
 	<path fill="${primaryColor}" d="M26.73,47.97v27.89c0,2.76,2.24,5,5,5h2.18c2.76,0,5-2.24,5-5V47.97c0-2.76-2.24-5-5-5h-2.18 C28.96,42.97,26.73,45.21,26.73,47.97z"/>
 </g>
-</svg>`
+</svg>` as IconString
     }
 
     return `
@@ -69,5 +70,5 @@ export function IconWalletAdd(
 	<path fill="${secondaryColor}" stroke="${primaryColor}" stroke-width="${strokeWidth}" d="M151.39,79.07L162,66.69c0,0-5.99-5.32-6.23-9.29c-0.37-6,3.65-8.72,3.65-8.72l-19.4-14.96 c0,0-2.21,4.41-8.07,5.82c-6.34,1.52-11.19-1.95-11.87-2.44c0,0-21.74,25.57-35.11,41.86C108.79,77.76,151.39,79.07,151.39,79.07z" />
 	<path fill="none" stroke="${primaryColor}" stroke-width="${strokeWidth/2}"  d="M110.6,74.61c0,6.49,5.26,4.75,11.75,4.75s11.75,1.74,11.75-4.75s-5.26-11.75-11.75-11.75 S110.6,68.12,110.6,74.61z"/>
 </g>
-</svg>`
+</svg>` as IconString
 }

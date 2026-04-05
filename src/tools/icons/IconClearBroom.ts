@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconClearBroom(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -32,5 +33,5 @@ export function IconClearBroom(
     <path d="M15 2L9 14" stroke="${primaryColor}" stroke-width="${strokeWidth}" stroke-linecap="round"/>
     <path d="M8 14c-1 2-2 4-2 6h12c0-2-1-4-2-6H8z" stroke="${primaryColor}" stroke-width="${strokeWidth}" fill="${secondaryColor}" stroke-linejoin="round"/>
     <path d="M7 20h10" stroke="${primaryColor}" stroke-width="${strokeWidth}" stroke-linecap="round"/>
-</svg>`;
+</svg>` as IconString;
 }

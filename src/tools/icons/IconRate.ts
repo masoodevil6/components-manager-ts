@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconRate(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -34,6 +35,6 @@ export function IconRate(
 <circle fill="none" stroke="${primaryColor}" stroke-width="${strokeWidth}"  cx="107.39" cy="100.2" r="25"/>
 <path fill="${primaryColor}" d="M87.68,209.33l6.11,3.77c2.35,1.45,5.43,0.72,6.88-1.63l84.79-137.48c1.45-2.35,0.72-5.43-1.63-6.88l-6.11-3.77c-2.35-1.45-5.43-0.72-6.88,1.63L86.05,202.45C84.6,204.8,85.33,207.88,87.68,209.33z"/>
 <circle fill="none" stroke="${primaryColor}" stroke-width="${strokeWidth}"  cx="164.87" cy="174.98" r="25"/>
-</svg>`;
+</svg>` as IconString
 
 }

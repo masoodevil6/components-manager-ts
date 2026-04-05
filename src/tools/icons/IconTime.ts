@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconTime(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -35,7 +36,7 @@ export function IconTime(
 <path fill="${primaryColor}"  d="M127.07,35.45C119.06,18.52,101.83,6.8,81.85,6.8c-27.61,0-50,22.39-50,50c0,12.53,4.62,23.97,12.23,32.75 C63.91,62.51,93.19,42.85,127.07,35.45z"/>
 <path fill="${primaryColor}"  d="M272.49,92.96c9.54-9.11,15.49-21.94,15.49-36.16c0-27.61-22.39-50-50-50c-20.45,0-38.02,12.28-45.77,29.86 C225.3,45.22,253.64,65.57,272.49,92.96z"/>
 <path fill="${primaryColor}"  d="M218.87,296.44c-17.72,6.99-37.88,10.95-59.26,10.95s-41.54-3.96-59.26-10.95c-39.08,3.8-65.63,11.25-65.63,19.82 c0,12.43,55.91,22.51,124.89,22.51s124.89-10.08,124.89-22.51C284.49,307.7,257.94,300.25,218.87,296.44z"/>
-</svg>`;
+</svg>` as IconString
 
 }
 

@@ -1,8 +1,8 @@
 import {Observable} from "./Observable";
 import {ReactiveElement} from "./ReactiveElement";
 import {AppConfig} from "./AppConfig";
-import {Language} from "./Language";
-
+import {ConnectorComponent} from "./component/ConnectorComponent";
+import {GOG_ComponentBasicConfigs_component_parts} from "./component/SetupComponent";
 
 export type GOG_TypeOf<T> = T;
 export type GOG_ValueOf<T> = T[keyof T]
@@ -10,137 +10,12 @@ export function GOG_SetValue<T>(value: T): GOG_TypeOf<T>{
     return value as any
 }
 
-
 export type GOG_ExtractNameValue<T> = {
     [k in keyof T as T[k]["name"]] : T[k]["value"] extends GOG_TypeOf<infer U> ? U : never
 }
 export type GOG_ExtractName<T> = {
     [k in keyof T] : T[k]["name"]
 }
-
-
-
-
-/*export function extractPropNames<
-    T extends Record<string, { readonly name:string}>
-    >(keys: T){
-    const result = {} as {
-        [K in keyof T as T[K]["name"]]: T[K]["name"]
-    };
-    for (const k in keys){
-        const name = keys[k]["name"];
-        (result as any)[name] = name;
-    }
-    return result
-}*/
-export function extractPropNames<
-    T extends Record<string, any>
-    >(keys: T){
-    const result = {} as {
-        [K in keyof T as T[K] extends {name: infer N}
-            ? N extends string
-                ? N
-                : never
-            : never]: T[K] extends {name: infer N}
-            ? N extends string
-                ?N
-                :never
-            :never;
-    };
-    for (const k in keys){
-        const name = keys[k]["name"];
-        (result as any)[name] = name;
-    }
-    return result
-}
-
-
-
-
-
-
-/// ----------------------------------------------------
-/// COMPONENT BASIC PROP
-/// ----------------------------------------------------
-export const GOG_ComponentConfigBasicProps = {
-    prop_show:             "prop_show" ,
-
-    classList:             "classList" ,
-    styles:                "styles" ,
-
-    prop_structureClass:   "prop_structureClass" ,
-    prop_structureStyles:  "prop_structureStyles" ,
-} as const
-
-
-export const GOG_ComponentConfigBasicKey = {
-    [GOG_ComponentConfigBasicProps.prop_show]:{
-        name:                     GOG_ComponentConfigBasicProps.prop_show  ,
-        value:                    GOG_SetValue<boolean>(true),
-    },
-
-    [GOG_ComponentConfigBasicProps.classList]:{
-        name:                     GOG_ComponentConfigBasicProps.classList  ,
-        value:                    GOG_SetValue<string[]>([]),
-    } ,
-    [GOG_ComponentConfigBasicProps.styles]:{
-        name:                     GOG_ComponentConfigBasicProps.styles  ,
-        value:                    GOG_SetValue<Record<string, string>>({}),
-    } ,
-
-    [GOG_ComponentConfigBasicProps.prop_structureClass]:{
-        name:                     GOG_ComponentConfigBasicProps.prop_structureClass  ,
-        value:                    GOG_SetValue<string[]>([]),
-    } ,
-    [GOG_ComponentConfigBasicProps.prop_structureStyles]:{
-        name:                     GOG_ComponentConfigBasicProps.prop_structureStyles  ,
-        value:                    GOG_SetValue<Record<string, string>>({}),
-    } ,
-} as const
-
-export type GOG_ComponentConfigBasicType =  GOG_ExtractNameValue<typeof GOG_ComponentConfigBasicKey>
-
-export const GOG_ComponentConfigBasicPattern = {
-
-    [GOG_ComponentConfigBasicKey.prop_show.name]: {
-        prop:                                             GOG_ComponentConfigBasicKey.prop_show.name,
-        default:                                          GOG_ComponentConfigBasicKey.prop_show.value,
-        title:                                            Language.translate("components.public.prop_show.title"),
-        description:                                      Language.translate("components.public.prop_show.description"),
-    } ,
-
-    [GOG_ComponentConfigBasicKey.classList.name]: {
-        prop:                                             GOG_ComponentConfigBasicKey.classList.name,
-        default:                                          GOG_ComponentConfigBasicKey.classList.value,
-        title:                                            Language.translate("components.public.classList.title"),
-        description:                                      Language.translate("components.public.classList.description"),
-    } ,
-    [GOG_ComponentConfigBasicKey.styles.name]: {
-        prop:                                             GOG_ComponentConfigBasicKey.styles.name,
-        default:                                          GOG_ComponentConfigBasicKey.styles.value,
-        title:                                            Language.translate("components.public.styles.title"),
-        description:                                      Language.translate("components.public.styles.description"),
-    } ,
-
-    [GOG_ComponentConfigBasicKey.prop_structureClass.name]: {
-        prop:                                             GOG_ComponentConfigBasicKey.prop_structureClass.name,
-        default:                                          GOG_ComponentConfigBasicKey.prop_structureClass.value,
-        title:                                            Language.translate("components.public.prop_structureClass.title"),
-        description:                                      Language.translate("components.public.prop_structureClass.description"),
-    } ,
-    [GOG_ComponentConfigBasicKey.prop_structureStyles.name]: {
-        prop:                                             GOG_ComponentConfigBasicKey.prop_structureStyles.name,
-        default:                                          GOG_ComponentConfigBasicKey.prop_structureStyles.value,
-        title:                                            Language.translate("components.public.prop_structureStyles.title"),
-        description:                                      Language.translate("components.public.prop_structureStyles.description"),
-    } ,
-};
-
-
-
-
-
-
 
 
 
@@ -155,6 +30,7 @@ type ComponentPropKeys<TPropTypes> = keyof TPropTypes
 export interface IComponentProp<TPropTypes> {
     prop:              string;
     default:           TPropTypes;
+    value?:             null;
     hasMultiTemplate?: boolean;
     title?:            Observable<string> ,
     description?:      Observable<string> ,
@@ -171,12 +47,16 @@ export function defineComponentPatterns<TPropTypes>(patterns: { [K in ComponentP
 /// COMPONENT SCHEMA
 /// ----------------------------------------------------
 type ComponentSchemaKeys<TSchema> = TSchema[keyof TSchema]
-export function defineComponentProps<TSchema , TPropTypes>(props: { [K in  ComponentSchemaKeys<TSchema>]: IComponentProp<TPropTypes[keyof TPropTypes]>[] }) :  { [K in  ComponentSchemaKeys<TSchema>]: IComponentProp<TPropTypes[keyof TPropTypes]>[] }{
+export interface IComponentSchema<TSchema , TPropTypes> {
+    part:              TSchema ,
+    method?:           (partName: TSchema , data: Record<string, Observable<any>>) => ReactiveElement,
+    props?:            IComponentProp<TPropTypes[keyof TPropTypes]>[] ,
+    title?:            Observable<string> ,
+    description?:      Observable<string> ,
+}
+export function defineComponentSchema<TSchema , TPropTypes>(props: { [K in  ComponentSchemaKeys<TSchema>]: IComponentSchema<TSchema[K] , TPropTypes[K]> }) :  { [K in  ComponentSchemaKeys<TSchema>]: IComponentSchema<TSchema[K] , TPropTypes[K]> } {
     return props ;
 }
-
-
-
 
 
 
@@ -232,31 +112,16 @@ export function defineComponentTemplate<TTemplatesTypes , TPropTypes>(templates:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export class ComponentBase<
     TProp ,
     TSchemas ,
     TTemplate ,
     TMethods
-    > {
+    > extends ConnectorComponent{
 
     _COMPONENT_PATTERN : { [K in  ComponentPropKeys<TProp>]?:           IComponentProp<TProp[K]> }
+
+    _COMPONENT_SCHEMA:   { [K in  ComponentSchemaKeys<TSchemas>]: IComponentSchema<TSchemas[K] , TProp[K]> }
 
     _COMPONENT_PROPS:    { [K in  ComponentSchemaKeys<TSchemas>]:       IComponentProp<TProp[keyof TProp]>[] }
 
@@ -271,11 +136,11 @@ export class ComponentBase<
 
     _COMPONENT_RANDOM_ID: number = 0;
     _COMPONENT_ID: string | null = null;
-    _COMPONENT_NAME: string | null = null;
-    _COMPONENT_SELECTOR: string | null = null;
-    _COMPONENT_ELEMENT: HTMLElement | null = null;
-    _COMPONENT_CONTENT: any = "";
-    _COMPONENT_SLOTS: any[] = [];
+    _COMPONENT_NAME: string;
+    //_COMPONENT_SELECTOR: string | null = null;
+    //_COMPONENT_ELEMENT: HTMLElement | null = null;
+    _COMPONENT_CONTENT: ReactiveElement;
+    //_COMPONENT_SLOTS: any[] = [];
 
     _unsubscribeDirection: any;
 
@@ -287,13 +152,15 @@ export class ComponentBase<
         componentName:   string,
         elId:            string|null
     ) {
-       // this._COMPONENT_CONFIG = componentConfig;
+        super();
+
+        // this._COMPONENT_CONFIG = componentConfig;
         this._COMPONENT_NAME = componentName;
         this._COMPONENT_ID = elId;
 
         this._COMPONENT_RANDOM_ID = Math.floor(Math.random() * 10000);
-        this._COMPONENT_SELECTOR = this._COMPONENT_NAME + "#" + this._COMPONENT_ID;
-        this._COMPONENT_ELEMENT = this.#getComponentElement();
+        //this._COMPONENT_SELECTOR = this._COMPONENT_NAME + "#" + this._COMPONENT_ID;
+        //this._COMPONENT_ELEMENT = this.#getComponentElement();
     }
 
     renderComponent(config: TProp , methods: TMethods) {
@@ -304,11 +171,14 @@ export class ComponentBase<
         //this.#getReadyTemplates();
 
         // GET Ready ==> _COMPONENT_PROPS_BIND
-        this.#getReadyComponentParamsWithDefault();
+        //this.#getReadyComponentParamsWithDefault();
 
-        let realConfig = this.#getReadyRealProps();
-        realConfig = this.#getReadyUserConfigAndDefaultConfig(config, realConfig);
-        this.#getReadyParamsBinding(realConfig);
+
+        //let realConfig = this._COMPONENT_PATTERN;
+
+        //let realConfig = this.#getReadyRealProps();
+        this.#getReadyUserConfigAndDefaultConfig(config);
+        //this.#getReadyParamsBinding(realConfig);
 
 
         // GET Ready ==> _COMPONENT_METHODS
@@ -316,7 +186,8 @@ export class ComponentBase<
 
 
         // GET Ready ==> _COMPONENT_ELEMENT
-        return this.#getReadyTemplateSchema();
+        this._COMPONENT_CONTENT = this.executeSchemaPart(GOG_ComponentBasicConfigs_component_parts.COMPONENT.name);
+
     }
 
     connectedCallback() {
@@ -437,31 +308,31 @@ export class ComponentBase<
     //--------------------------------------------------
     // GET Ready ==> _COMPONENT_PROPS_BIND
     //--------------------------------------------------
-    #getReadyComponentParamsWithDefault() {
+   /* #getReadyComponentParamsWithDefault() {
 
-        if (this._COMPONENT_PROPS.hasOwnProperty("part_component")) {
+      /!*  if (this._COMPONENT_SCHEMA.hasOwnProperty("part_component")) {
             if (this._COMPONENT_PATTERN.hasOwnProperty("classList")){
-                this._COMPONENT_PROPS["part_component"].push(this._COMPONENT_PATTERN["classList"]);
+                this._COMPONENT_SCHEMA["part_component"].props.push(this._COMPONENT_PATTERN["classList"]);
             }
             if (this._COMPONENT_PATTERN.hasOwnProperty("styles")){
-                this._COMPONENT_PROPS["part_component"].push(this._COMPONENT_PATTERN["styles"]);
+                this._COMPONENT_SCHEMA["part_component"].props.push(this._COMPONENT_PATTERN["styles"]);
             }
         }
 
-        if (this._COMPONENT_PROPS.hasOwnProperty("part_structure")) {
+        if (this._COMPONENT_SCHEMA.hasOwnProperty("part_structure")) {
             if (this._COMPONENT_PATTERN.hasOwnProperty("prop_show")){
-                this._COMPONENT_PROPS["part_structure"].push(this._COMPONENT_PATTERN["prop_show"]);
+                this._COMPONENT_SCHEMA["part_structure"].props.push(this._COMPONENT_PATTERN["prop_show"]);
             }
             if (this._COMPONENT_PATTERN.hasOwnProperty("prop_structureClass")){
-                this._COMPONENT_PROPS["part_structure"].push(this._COMPONENT_PATTERN["prop_structureClass"]);
+                this._COMPONENT_SCHEMA["part_structure"].props.push(this._COMPONENT_PATTERN["prop_structureClass"]);
             }
             if (this._COMPONENT_PATTERN.hasOwnProperty("prop_structureStyles")){
-                this._COMPONENT_PROPS["part_structure"].push(this._COMPONENT_PATTERN["prop_structureStyles"]);
+                this._COMPONENT_SCHEMA["part_structure"].props.push(this._COMPONENT_PATTERN["prop_structureStyles"]);
             }
         }
+*!/
 
-
-        /*if (this._COMPONENT_PROPS.hasOwnProperty("part_label")) {
+        /!*if (this._COMPONENT_PROPS.hasOwnProperty("part_label")) {
             const labelProps = [
                 { prop: "prop_title",                     default: null },
                 { prop: "prop_labelShow",                 default: true },
@@ -477,87 +348,109 @@ export class ComponentBase<
                     this._COMPONENT_PROPS["part_label"].push(p);
                 }
             });
-        }*/
-    }
+        }*!/
+    }*/
 
-    #getReadyRealProps(): IComponentProp<TProp>[] {
+    /*#getReadyRealProps(): IComponentProp<TProp>[] {
         const props: ComponentPropKeys<TProp>[] = [];
         //const props: ComponentPartitionType[] = [];
-        if (!this._COMPONENT_PROPS) return props;
 
-        Object.entries(this._COMPONENT_PROPS).forEach(([partName, partParams]) => {
+
+
+        Object.entries(this._COMPONENT_PATTERN).forEach(([partName, partParams]) => {
+
+
             for (const param of partParams) {
                 if (param != null) props.push(param);
             }
         });
 
         return props;
-    }
+    }*/
 
-    #getReadyUserConfigAndDefaultConfig(config: Record<string, any>, props: IComponentProp<TProp>[]): IComponentProp<TProp>[] {
-        if (props != null && config != null) {
+    #getReadyUserConfigAndDefaultConfig(config: Record<string, any>): IComponentProp<TProp>[] {
+        const props = this._COMPONENT_PATTERN;
+        if (config) {
 
-            for (let i = 0; i < props.length; i++) {
-                const itemProp = props[i];
+            Object.keys(props).forEach(key => {
+                const itemProp = props[key];
                 if (itemProp.hasOwnProperty("prop")) {
                     const propName = itemProp.prop;
+
+                    let exist = false;
+                    let value = null;
                     if (config.hasOwnProperty(propName)) {
-                        props[i].default = config[itemProp.prop];
+                        value = config[itemProp.prop];
+                        exist = true;
                     } else {
                         if (this._COMPONENT_TEMPLATES != null) {
                             Object.keys(this._COMPONENT_TEMPLATES).forEach(templateName => {
                                 const data = this._COMPONENT_TEMPLATES[templateName];
                                 const reference = data.reference;
                                 if (reference?.prop == propName && data.hasOwnProperty("value")) {
-                                    props[i].default = data.value;
+                                    value = data.value;
+                                    exist = true;
                                 }
                             });
                         }
                     }
-                }
-            }
-        }
 
+                    if (!exist && itemProp.hasOwnProperty("default")){
+                        value = itemProp.default;
+                    }
+
+                    props[key].value = value;
+                    if (Observable.isObservable(value)){
+                        this._COMPONENT_PROPS_BIND[propName] = value;
+                    }
+                    else {
+                        this._COMPONENT_PROPS_BIND[propName] = new Observable(value);
+                    }
+                }
+            })
+        }
         return props;
     }
 
-    #getReadyParamsBinding(props: IComponentProp<TProp>[]) {
+    /*#getReadyParamsBinding(props: IComponentProp<TProp>[]) {
+
         for (const param of props) {
             if (param != null && param.hasOwnProperty("prop")) {
-                const defaultValue = param?.default ?? null;
-                this._COMPONENT_PROPS_BIND[param.prop] = new Observable(defaultValue);
+                const defaultValue = param?.value ?? null;
+                if (Observable.isObservable(defaultValue)){
+                    this._COMPONENT_PROPS_BIND[param.prop] = defaultValue;
+                }
+                else {
+                    this._COMPONENT_PROPS_BIND[param.prop] = new Observable(defaultValue);
+                }
+
             }
         }
-    }
+
+    }*/
 
 
 
 
-
-    //--------------------------------------------------
+    /*//--------------------------------------------------
     // GET Ready ==> _COMPONENT_ELEMENT
     //--------------------------------------------------
     #getReadyTemplateSchema() {
-        this._COMPONENT_CONTENT = this.templateBasic_render();
-
+        this._COMPONENT_CONTENT = this.executeSchemaPart("part_component");
         if (this._COMPONENT_ELEMENT != null) {
-            const classList = this.get("classList");
-            const styles = this.get("styles");
-            //this._COMPONENT_ELEMENT.className = tools_public.renderListClass(classList);
-            //Object.assign(this._COMPONENT_ELEMENT.style, tools_public.renderListStyle(styles));
             this._COMPONENT_ELEMENT.appendChild(this.getSchema());
         }
-    }
+    }*/
 
 
 
 
-    //--------------------------------------------------
+    /*//--------------------------------------------------
     // GET Ready ==> _COMPONENT_SELECTOR
     //--------------------------------------------------
     #getComponentElement(): HTMLElement | null {
         return document.querySelector(this._COMPONENT_SELECTOR!);
-    }
+    }*/
 
 
 
@@ -583,27 +476,72 @@ export class ComponentBase<
     //--------------------------------------------------
     // Template Reader
     //--------------------------------------------------
-    templateBasic_render(moreClass: string[] = ["mb-1"]) {
-        const partName = "part_component";
-        const data = this.getPartProps(partName);
+    executeSchemaPart(partName , extra=null) {
+        let result;
+
+        if (this._COMPONENT_SCHEMA ){
+            Object.keys(this._COMPONENT_SCHEMA).forEach(key=> {
+                const itemPart = this._COMPONENT_SCHEMA[key];
+                if (itemPart && itemPart.hasOwnProperty("part") && itemPart.part == partName){
+                    if (itemPart.hasOwnProperty("props")){
+                        const props  = itemPart.props;
+                        const data = this.getSchemaPropsInPart(props);
+                        if (itemPart.hasOwnProperty('method') && typeof itemPart.method == "function"){
+                            result = itemPart.method.call(this , itemPart.part , data , extra);
+                        }
+                        else {
+                            result = this.renderManagerComponent(itemPart.part , data , extra);
+                        }
+                    }
+                }
+            })
+        }
+
+        return result;
+    }
+
+    getSchemaPropsInPart(props){
+        let resultExp: Record<string, Observable<any>>  = {};
+        for (const param of props) {
+            if (param != null && param.hasOwnProperty("prop")) {
+                resultExp[param.prop] = this._COMPONENT_PROPS_BIND[param.prop];
+            }
+        }
+        return resultExp;
+    }
+
+
+
+
+
+    templateBasic_render(
+        partName ,
+        data
+        //moreClass: string[] = ["mb-1"]
+    ) :ReactiveElement {
+        //const partName = "part_component";
+        //const data = this.getPartProps(partName);
 
         if (data != null) {
 
             const rtl = AppConfig.observable("directionRtl")
-            let classList: Observable<any> | any[] = [];
-            let styles: Record<string, any> = {};
-            if (this._COMPONENT_ELEMENT == null) {
+            let classList =  data?.classList ?? [];
+            let styles = data?.styles ?? {};
+            /*if (this._COMPONENT_ELEMENT == null) {
                 classList = data?.classList ?? [];
                 styles = data?.styles ?? {};
-            }
+            }*/
 
-            return ReactiveElement.section({
+             return  ReactiveElement.component( this._COMPONENT_NAME ,{
+                attrs: {
+                    "component-id":    `${this._COMPONENT_RANDOM_ID}`,
+                },
                 className: [
-                    ...moreClass ,
+                    //...moreClass ,
                     "component-element-structure",
                 ],
                 classBind: [
-                   classList
+                    classList
                 ] ,
                 styles: {
 
@@ -613,9 +551,10 @@ export class ComponentBase<
                     styles
                 },
                 children: [
-                    this.template_render_structure()
+                    this.executeSchemaPart("part_structure") ,
+                    //this.template_render_structure()
                 ]
-            });
+            })
         }
 
         return ReactiveElement.section({
@@ -625,9 +564,10 @@ export class ComponentBase<
         });
     }
 
-    templateBasic_render_structure(content: any = null, moreClass: string = "") {
-        const partName = "part_structure";
-        const data = this.getPartProps(partName);
+    templateBasic_render_structure(
+        partName ,
+        data
+    ) : ReactiveElement {
 
         if (data != null) {
             const prop_show = data.prop_show;
@@ -636,6 +576,7 @@ export class ComponentBase<
 
             return ReactiveElement.section({
                 className: [
+                    //...moreClass ,
                     "position-relative",
                 ],
                 classBind: [
@@ -651,7 +592,8 @@ export class ComponentBase<
                     prop_structureStyles
                 },
                 children: [
-                    content
+                    this.renderContentComponent()
+
                 ]
             });
         }
@@ -688,7 +630,10 @@ export class ComponentBase<
         return resultExp;
     }
 
-    getSchema() {
+    getReactiveElement() {
+        return this._COMPONENT_CONTENT.getReactiveElement();
+    }
+    getElement() {
         return this._COMPONENT_CONTENT.getElement();
     }
 
@@ -746,11 +691,7 @@ export class ComponentBase<
         return argsExp;
     }
 
-    template_render_structure():  ReactiveElement {
-        return ReactiveElement.section({
-            children: [
-                `<div class="not-exist-body"></div>`
-            ]
-        });
-    }
+
+
+
 }

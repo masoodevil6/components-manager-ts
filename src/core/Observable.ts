@@ -5,6 +5,13 @@ export class Observable<T> {
     private _value: T;
     private _subscribers: Set<Subscriber<T>>;
 
+    __isObservable = true;
+
+    static isObservable(obj: any): obj is Observable<any>{
+        return obj && obj.__isObservable;
+    }
+
+
     constructor(value: T) {
         this._value = value;
         this._subscribers = new Set();

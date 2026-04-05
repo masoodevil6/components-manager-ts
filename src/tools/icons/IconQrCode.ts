@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconQrCode(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -40,5 +41,5 @@ export function IconQrCode(
 <rect fill="${primaryColor}" x="221.06" y="259.28" width="56.44" height="18.81"/>
 <rect fill="${primaryColor}" x="165.5" y="203.25" width="18.81" height="37.62"/>
 <rect fill="${primaryColor}" x="58.5" y="200.4" width="37.62" height="37.62"/>
-</svg>`;
+</svg>` as IconString
 }

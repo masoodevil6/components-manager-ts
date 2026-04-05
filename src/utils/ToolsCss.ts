@@ -1,6 +1,7 @@
 import {SIZES} from "./ToolsConsts";
 import {Z_INDEXES} from "./ToolsConsts";
 import {fa} from "../langs/Fa";
+import {Observable} from "../core/Observable";
 
 
 type SizeProps = {
@@ -54,7 +55,7 @@ export class ToolsCss {
         return this.STANDARDS.SIZES[sizeName]?.fontSize ?? 10
     }
 
-    static getIconSize(sizeName: SizeKey, defaultSize = 16): number {
+    static getIconSize(sizeName: SizeKey|Observable<SizeKey>, defaultSize = 16): number {
         return this.STANDARDS.SIZES[sizeName]?.icon ?? defaultSize
     }
 

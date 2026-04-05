@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconSelectColumn(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -36,5 +37,5 @@ export function IconSelectColumn(
   
   <rect x="17" y="4" width="4" height="16" rx="0.8" fill="${secondaryColor}" opacity="0.25" />
   <rect x="17" y="4" width="4" height="16" rx="0.8" stroke-width="${strokeWidth}" stroke="${primaryColor}" fill="none"/>
-</svg>`;
+</svg>` as IconString
 }

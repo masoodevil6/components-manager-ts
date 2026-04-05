@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconCalender(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -32,5 +33,5 @@ export function IconCalender(
   <line x1="16" y1="2" x2="16" y2="6"  stroke="${primaryColor}" stroke-width="${strokeWidth}" stroke-linecap="round"/>
   <line x1="8" y1="2" x2="8" y2="6"  stroke="${primaryColor}" stroke-width="${strokeWidth}" stroke-linecap="round"/>
   <line x1="3" y1="10" x2="21" y2="10"  stroke="${primaryColor}" stroke-width="${strokeWidth}" stroke-linecap="round"/>
-</svg>`;
+</svg>`as IconString;
 }

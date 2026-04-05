@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconPhone(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -36,5 +37,5 @@ export function IconPhone(
 <path fill="none" stroke-width="${strokeWidth}" stroke="${primaryColor}" d="M108.34,121.82c6.92-8.64,11.01-19.31,11.01-30.85c0-28.84-25.54-52.22-57.04-52.22"/>
 <path fill="none" stroke-width="${strokeWidth}" stroke="${primaryColor}" d="M120.56,130.06c8.76-10.97,13.94-24.52,13.94-39.17c0-36.62-32.32-66.31-72.2-66.31"/>
 <path fill="none" stroke-width="${strokeWidth}" stroke="${primaryColor}" d="M133.1,137.17c10.65-13.26,16.93-29.61,16.93-47.31c0-44.23-39.28-80.09-87.73-80.09"/>
-</svg>`;
+</svg>` as IconString
 }

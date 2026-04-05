@@ -4,11 +4,12 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 
 export function IconClear(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -31,5 +32,5 @@ export function IconClear(
     width="${size}" height="${size}" viewBox="0 0 24 24" fill="none">
     <title>clear</title>
     <path d="M6 6l12 12M6 18L18 6" stroke="${primaryColor}" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>`;
+</svg>` as IconString;
 }

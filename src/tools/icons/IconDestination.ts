@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconDestination(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -37,7 +38,7 @@ export function IconDestination(
 <path    fill="#000" d="M144.98,196.56L144.98,196.56c2.04,0,3.7,1.65,3.7,3.7v54.83c0,2.04-1.65,3.7-3.7,3.7l0,0c-2.04,0-3.7-1.65-3.7-3.7v-54.83 C141.28,198.21,142.94,196.56,144.98,196.56z"/>
 <path    fill="none" stroke="#000" stroke-width="${strokeWidth}"  d="M144.08,213.47c0.02,5.73-2.96,12.33,1.66,13.72c6.08,1.83,21.06-5.1,21.06-13.83 c0-12.19-17.63-14.86-21.06-13.83C141.03,200.95,144.06,207.76,144.08,213.47z"/>
 <path    fill="none" stroke="#000" stroke-width="${strokeWidth}"  d="M144.08,242.41c0.02,5.49-2.96,11.83,1.66,13.16c6.08,1.76,21.06-4.9,21.06-13.27 c0-8.37-14.97-15.03-21.06-13.27C141.03,230.39,144.06,236.93,144.08,242.41z"/>
-</svg>`;
+</svg>` as IconString;
 
 }
 

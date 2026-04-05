@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconWarning(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -51,6 +52,6 @@ export function IconWarning(
 	<path   fill="${primaryColor}" d="M18.07,37.68l-6.54,9.85c-1.39,2.1-0.66,4.95,1.58,6.17l55.62,30.23c1.97,1.07,4.42,0.48,5.65-1.37v0 c1.22-1.83,0.83-4.3-0.9-5.71L24.4,36.77C22.42,35.15,19.48,35.57,18.07,37.68z"/>
 	<path   fill="${primaryColor}" d="M27.78,89.75L23.92,95c-0.82,1.12-0.54,2.67,0.6,3.36l28.39,17c1.01,0.6,2.33,0.31,3.05-0.67l0,0 c0.72-0.98,0.61-2.32-0.26-3.1L31.17,89.33C30.18,88.43,28.6,88.62,27.78,89.75z"/>
 </g>
-</svg>`;
+</svg>` as IconString
 
 }

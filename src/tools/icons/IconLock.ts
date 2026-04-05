@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconLock(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -31,5 +32,5 @@ export function IconLock(
   <rect x="5" y="10" width="14" height="10" rx="2" stroke="${primaryColor}" stroke-width="${strokeWidth}" fill="${secondaryColor}"/>
   <path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="${primaryColor}" stroke-width="${strokeWidth}" stroke-linecap="round"/>
 </svg>
-`;
+` as IconString
 }

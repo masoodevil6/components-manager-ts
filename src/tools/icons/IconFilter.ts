@@ -3,10 +3,11 @@ import {ToolsCss} from "../../utils/ToolsCss";
 import {AppConfig} from "../../core/AppConfig";
 import {Observable} from "../../core/Observable";
 import {Color, COLORS_GRAD, COLORS_MAIN} from "../../utils/ToolsConsts";
+import {IconString} from "./index";
 
 export function IconFilter(
     options: IconOptions = {}
-): string {
+): IconString {
 
     const sizeName = options.size ?? AppConfig.observable("sizeName")
 
@@ -29,6 +30,6 @@ export function IconFilter(
      width="${size}" height="${size}" viewBox="0 0 24 24" fill="none">
   <title>filter</title>
   <path d="M4 4h16l-6 7v6l-4 3v-9L4 4z" stroke="${primaryColor}" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round" fill="${secondaryColor}"/>
-</svg>`;
+</svg>` as IconString
 
 }
