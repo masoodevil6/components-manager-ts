@@ -262,15 +262,15 @@ export class ComponentRecyclerView extends ComponentRecyclerViewBase{
         return this.executeSchemaPart(ComponentRecyclerViewConfigs.schemas.COMPONENTS.name)
     }
 
-    override renderManagerComponent(partName, data , extra) :  ReactiveElement  {
+    override renderManagerComponent(partName , attrsDefault , data , extra) :  ReactiveElement {
         switch (partName){
             case ComponentRecyclerViewConfigs.schemas.COMPONENTS.name:
-                return  this.template_render_components(partName , data , extra);
+                return  this.template_render_components(attrsDefault , data , extra);
         }
     }
 
 
-    private template_render_components(partName , data , extra) : ReactiveElement {
+    private template_render_components(attrsDefault , data , extra) : ReactiveElement {
 
         if (data != null){
             const prop_formClass        =   data[ComponentRecyclerViewConfigs.keys.prop_formClass.name] ;
@@ -284,10 +284,9 @@ export class ComponentRecyclerView extends ComponentRecyclerViewBase{
             classDirection[ComponentRecyclerView_DirectionTypes.VERTICAL] =             [ "flex-column" ];
             classDirection[ComponentRecyclerView_DirectionTypes.VERTICAL_REVERSE] =     [ "flex-column-reverse"];
 
-            return ReactiveElement.section({
+           return  ReactiveElement.part(  "section" ,{
                 attrs: {
-                    "data-part-name":     partName,
-                    "id":                `component-recycler-view-components-${this._COMPONENT_RANDOM_ID}`,
+                    ...attrsDefault
                 },
                 stylesBind: {
                     prop_formStyles ,
@@ -310,9 +309,9 @@ export class ComponentRecyclerView extends ComponentRecyclerViewBase{
         }
 
 
-        return ReactiveElement.section({
+        return ReactiveElement.part(  "section" ,{
             attrs: {
-                "data-part-name":  partName
+                ...attrsDefault
             }
         });
     }

@@ -323,16 +323,16 @@ export class ComponentMessages extends ComponentMessagesBase{
         return this.executeSchemaPart(ComponentMessagesConfigs.schemas.MESSAGE.name)
     }
 
-    override renderManagerComponent(partName, data , extra) :  ReactiveElement  {
+    override renderManagerComponent(partName , attrsDefault, data , extra) : ReactiveElement {
         switch (partName){
             case ComponentMessagesConfigs.schemas.MESSAGE.name:
-                return  this.template_render_messages(partName , data , extra);
+                return  this.template_render_messages(attrsDefault , data , extra);
             case ComponentMessagesConfigs.schemas.ICON.name:
-                return  this.componentFn_render_icon(partName , data , extra);
+                return  this.componentFn_render_icon(attrsDefault , data , extra);
         }
     }
 
-    private template_render_messages(partName , data , extra) : ReactiveElement {
+    private template_render_messages(attrsDefault , data , extra) : ReactiveElement {
 
         if (data != null){
 
@@ -442,10 +442,10 @@ export class ComponentMessages extends ComponentMessagesBase{
 
 
 
-            return ReactiveElement.section(
+           return  ReactiveElement.part(  "section" ,
                 {
                     attrs: {
-                        "id":  `component-messages-${this._COMPONENT_RANDOM_ID}`,
+                        ...attrsDefault
                     },
                     children: [
                         ...messagesEl
@@ -453,14 +453,14 @@ export class ComponentMessages extends ComponentMessagesBase{
                 });
         }
 
-        return ReactiveElement.section({
+        return ReactiveElement.part(  "section" ,{
             attrs: {
-                "data-part-name":  partName
+                ...attrsDefault
             }
         });
     }
 
-    private componentFn_render_icon (partName , data , extra) : ReactiveElement {
+    private componentFn_render_icon (attrsDefault , data , extra) : ReactiveElement {
         if (data != null){
             const prop_type    =    data[ComponentMessagesConfigs.keys.prop_type.name];
 
@@ -507,9 +507,9 @@ export class ComponentMessages extends ComponentMessagesBase{
 
         }
 
-        return ReactiveElement.section({
+        return ReactiveElement.part(  "section" ,{
             attrs: {
-                "data-part-name":  partName
+                ...attrsDefault
             }
         });
     }

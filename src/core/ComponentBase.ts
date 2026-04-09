@@ -1,8 +1,12 @@
 import {Observable} from "./Observable";
 import {ReactiveElement} from "./ReactiveElement";
 import {AppConfig} from "./AppConfig";
-import {ConnectorComponent} from "./component/ConnectorComponent";
-import {GOG_ComponentBasicConfigs_component_parts} from "./component/SetupComponent";
+import {ComponentAttrsDefault, ConnectorComponent} from "./component/ConnectorComponent";
+import {
+    GOG_ComponentBasicConfigs_component_parts, GOG_ComponentBasicConfigs_structure_parts,
+    GOG_ComponentBasicConfigs_structure_Schema,
+    GOG_ComponentBasicProps_component
+} from "./component/SetupComponent";
 
 export type GOG_TypeOf<T> = T;
 export type GOG_ValueOf<T> = T[keyof T]
@@ -49,7 +53,7 @@ export function defineComponentPatterns<TPropTypes>(patterns: { [K in ComponentP
 type ComponentSchemaKeys<TSchema> = TSchema[keyof TSchema]
 export interface IComponentSchema<TSchema , TPropTypes> {
     part:              TSchema ,
-    method?:           (partName: TSchema , data: Record<string, Observable<any>>) => ReactiveElement,
+    method?:           (attrsDefault:  ComponentAttrsDefault , data: Record<string, Observable<any>> , extra: Record<string, any>) => ReactiveElement,
     props?:            IComponentProp<TPropTypes[keyof TPropTypes]>[] ,
     title?:            Observable<string> ,
     description?:      Observable<string> ,
@@ -57,6 +61,7 @@ export interface IComponentSchema<TSchema , TPropTypes> {
 export function defineComponentSchema<TSchema , TPropTypes>(props: { [K in  ComponentSchemaKeys<TSchema>]: IComponentSchema<TSchema[K] , TPropTypes[K]> }) :  { [K in  ComponentSchemaKeys<TSchema>]: IComponentSchema<TSchema[K] , TPropTypes[K]> } {
     return props ;
 }
+
 
 
 
@@ -123,8 +128,6 @@ export class ComponentBase<
 
     _COMPONENT_SCHEMA:   { [K in  ComponentSchemaKeys<TSchemas>]: IComponentSchema<TSchemas[K] , TProp[K]> }
 
-    _COMPONENT_PROPS:    { [K in  ComponentSchemaKeys<TSchemas>]:       IComponentProp<TProp[keyof TProp]>[] }
-
     _COMPONENT_METHODS:   { [K in ComponentMethodKeys<TMethods>]:       ComponentMethodType<TProp> }
 
     _COMPONENT_TEMPLATES: { [K in  ComponentTemplateKeys<TTemplate>]?:  ComponentTemplateType<TProp> } ;
@@ -186,8 +189,7 @@ export class ComponentBase<
 
 
         // GET Ready ==> _COMPONENT_ELEMENT
-        this._COMPONENT_CONTENT = this.executeSchemaPart(GOG_ComponentBasicConfigs_component_parts.COMPONENT.name);
-
+        this.createComponentElement();
     }
 
     connectedCallback() {
@@ -473,6 +475,33 @@ export class ComponentBase<
 
 
 
+
+    //--------------------------------------------------
+    // create element
+    //--------------------------------------------------
+
+    private createComponentElement(){
+        this._COMPONENT_CONTENT = this.executeSchemaPart(GOG_ComponentBasicConfigs_component_parts.COMPONENT.name);
+
+        const selector = this.get(GOG_ComponentBasicProps_component.selector);
+        if (selector){
+            const el = document.querySelector(selector)
+            if (el){
+                const append = this.get(GOG_ComponentBasicProps_component.append);
+                if (append){
+                    el.append(this._COMPONENT_CONTENT.getElement())
+                }
+                else {
+                    el.replaceChildren(this._COMPONENT_CONTENT.getElement())
+                }
+            }
+        }
+    }
+
+
+
+
+
     //--------------------------------------------------
     // Template Reader
     //--------------------------------------------------
@@ -486,16 +515,24 @@ export class ComponentBase<
                     if (itemPart.hasOwnProperty("props")){
                         const props  = itemPart.props;
                         const data = this.getSchemaPropsInPart(props);
+
+                        const attrsDefault : ComponentAttrsDefault = {
+                            "data-part-name":     partName,
+                            "id":                 this.getPartId(partName),
+                        }
+
                         if (itemPart.hasOwnProperty('method') && typeof itemPart.method == "function"){
-                            result = itemPart.method.call(this , itemPart.part , data , extra);
+                            result = itemPart.method.call(this , attrsDefault , data , extra);
                         }
                         else {
-                            result = this.renderManagerComponent(itemPart.part , data , extra);
+                            result = this.renderManagerComponent(partName , attrsDefault , data , extra);
                         }
                     }
                 }
             })
         }
+
+
 
         return result;
     }
@@ -513,10 +550,13 @@ export class ComponentBase<
 
 
 
-
+    //--------------------------------------------------
+    // template parts
+    //--------------------------------------------------
     templateBasic_render(
-        partName ,
-        data
+        attrsDefault ,
+        data ,
+        extra
         //moreClass: string[] = ["mb-1"]
     ) :ReactiveElement {
         //const partName = "part_component";
@@ -534,11 +574,11 @@ export class ComponentBase<
 
              return  ReactiveElement.component( this._COMPONENT_NAME ,{
                 attrs: {
-                    "component-id":    `${this._COMPONENT_RANDOM_ID}`,
+                    ...attrsDefault
                 },
                 className: [
                     //...moreClass ,
-                    "component-element-structure",
+                    //"position-relative" ,
                 ],
                 classBind: [
                     classList
@@ -551,22 +591,23 @@ export class ComponentBase<
                     styles
                 },
                 children: [
-                    this.executeSchemaPart("part_structure") ,
-                    //this.template_render_structure()
+                    this.executeSchemaPart(GOG_ComponentBasicConfigs_structure_parts.STRUCTURE.name) ,
                 ]
             })
         }
 
-        return ReactiveElement.section({
-            className: [
-                "component-element-structure"
-            ]
+        return  ReactiveElement.part(  "section" ,{
+            attrs: {
+                ...attrsDefault
+            }
         });
     }
 
+
     templateBasic_render_structure(
-        partName ,
-        data
+        attrsDefault ,
+        data ,
+        extra
     ) : ReactiveElement {
 
         if (data != null) {
@@ -574,18 +615,17 @@ export class ComponentBase<
             const prop_structureClass = data.prop_structureClass;
             const prop_structureStyles = data.prop_structureStyles;
 
-            return ReactiveElement.section({
+            return  ReactiveElement.part(  "section" ,{
                 className: [
                     //...moreClass ,
-                    "position-relative",
+                    //"position-relative",
                 ],
                 classBind: [
                     prop_structureClass ,
                     prop_show.mapBoolean("show" , "d-none")
                 ],
                 attrs: {
-                    "data-part-name":  partName,
-                    "id":              `component-${this._COMPONENT_NAME}-structure-${this._COMPONENT_RANDOM_ID}`,
+                    ...attrsDefault
                 },
                 styles: {},
                 stylesBind: {
@@ -598,9 +638,9 @@ export class ComponentBase<
             });
         }
 
-        return ReactiveElement.section({
+        return  ReactiveElement.part(  "section" ,{
             attrs: {
-                "data-part-name": partName,
+                ...attrsDefault
             },
         });
     }
@@ -610,7 +650,7 @@ export class ComponentBase<
     //--------------------------------------------------
     // part Props
     //--------------------------------------------------
-    getPartProps(partName: string): Record<string, Observable<any>> | null {
+    /*getPartProps(partName: string): Record<string, Observable<any>> | null {
         let resultExp: Record<string, Observable<any>> | null = null;
         if (this._COMPONENT_PROPS != null) {
             Object.keys(this._COMPONENT_PROPS).forEach(key => {
@@ -628,7 +668,7 @@ export class ComponentBase<
             });
         }
         return resultExp;
-    }
+    }*/
 
     getReactiveElement() {
         return this._COMPONENT_CONTENT.getReactiveElement();
@@ -651,6 +691,10 @@ export class ComponentBase<
             return this._COMPONENT_PROPS_BIND[propName].get();
         }
         return null;
+    }
+
+    getPartId(partName) : string{
+        return `__component-${this._COMPONENT_NAME}__${partName}__${this._COMPONENT_RANDOM_ID}`
     }
 
 
@@ -680,7 +724,6 @@ export class ComponentBase<
     }
 
     #executeMethod_getMethodData_getArgs(args: Record< string,   IComponentProp<TProp> >): Record<string, any> {
-    //#executeMethod_getMethodData_getArgs(args: Record< string, ComponentPartitionType >): Record<string, any> {
         const argsExp: Record<string, any> = {};
         Object.keys(args).forEach(keyArg => {
             const argProp   = args[keyArg];

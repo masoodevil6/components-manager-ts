@@ -57,12 +57,16 @@ export const ComponentTooltipDescriptionProps = {
     ... GOG_ComponentBasicProps_component,
     ... GOG_ComponentBasicProps_structure,
     prop_icon :             "prop_icon" ,
+    prop_iconClass :        "prop_iconClass" ,
+    prop_iconStyles :       "prop_iconStyles" ,
     prop_iconTitle :        "prop_iconTitle" ,
     prop_iconPosition :     "prop_iconPosition" ,
-    prop_arrowPosition :    "prop_arrowPosition" ,
 
     prop_description :      "prop_description" ,
     prop_direction :        "prop_direction" ,
+
+    prop_borderBackground : "prop_borderBackground" ,
+    prop_borderColor :      "prop_borderColor" ,
 
 } as const;
 
@@ -78,6 +82,14 @@ const ComponentTooltipDescriptionConfigs  =  {
         ...GOG_ComponentBasicConfigs_component_keys ,
         ...GOG_ComponentBasicConfigs_structure_keys ,
         ///----------------------
+        [ComponentTooltipDescriptionProps.prop_iconClass] : {
+            name:                ComponentTooltipDescriptionProps.prop_iconClass ,
+            value:              GOG_SetValue<string[]>( ["position-relative"]) ,
+        } ,
+        [ComponentTooltipDescriptionProps.prop_iconStyles] : {
+            name:                ComponentTooltipDescriptionProps.prop_iconStyles ,
+            value:              GOG_SetValue<Record<string, string>>({}) ,
+        } ,
         [ComponentTooltipDescriptionProps.prop_icon] : {
             name:                ComponentTooltipDescriptionProps.prop_icon ,
             value:               GOG_SetValue<IconsType |null>(ToolsIcons.icon_exclamation_square({size: SIZES.M})) ,
@@ -97,6 +109,14 @@ const ComponentTooltipDescriptionConfigs  =  {
         [ComponentTooltipDescriptionProps.prop_direction]: {
             name:                ComponentTooltipDescriptionProps.prop_direction,
             value:               GOG_SetValue<GOG_ValueOf<typeof ComponentTooltipDescription_PositionTypes>>(ComponentTooltipDescription_PositionTypes.TOP),
+        } ,
+        [ComponentTooltipDescriptionProps.prop_borderBackground]: {
+            name:                ComponentTooltipDescriptionProps.prop_borderBackground,
+            value:              GOG_SetValue<Color | null>( Color(COLORS_MAIN.SECONDARY , COLORS_GRAD.GRADE_1 )),
+        } ,
+        [ComponentTooltipDescriptionProps.prop_borderColor]: {
+            name:                ComponentTooltipDescriptionProps.prop_borderColor,
+            value:              GOG_SetValue<Color | null>( Color(COLORS_MAIN.SECONDARY , COLORS_GRAD.GRADE_1 )),
         } ,
     } ,
     schemas:   {
@@ -149,6 +169,18 @@ export class ComponentTooltipDescriptionBase extends ComponentBase<
                 title:                                            Language.translate("components.tooltip_description.props.prop_icon.title"),
                 description:                                      Language.translate("components.tooltip_description.props.prop_icon.description"),
             } ,
+            [ComponentTooltipDescriptionConfigs.keys.prop_iconClass.name]: {
+                prop:                                             ComponentTooltipDescriptionConfigs.keys.prop_iconClass.name,
+                default:                                          ComponentTooltipDescriptionConfigs.keys.prop_iconClass.value,
+                title:                                            Language.translate("components.tooltip_description.props.prop_iconClass.title"),
+                description:                                      Language.translate("components.tooltip_description.props.prop_iconClass.description"),
+            } ,
+            [ComponentTooltipDescriptionConfigs.keys.prop_iconStyles.name]: {
+                prop:                                             ComponentTooltipDescriptionConfigs.keys.prop_iconStyles.name,
+                default:                                          ComponentTooltipDescriptionConfigs.keys.prop_iconStyles.value,
+                title:                                            Language.translate("components.tooltip_description.props.prop_iconStyles.title"),
+                description:                                      Language.translate("components.tooltip_description.props.prop_iconStyles.description"),
+            } ,
             [ComponentTooltipDescriptionConfigs.keys.prop_iconTitle.name]: {
                 prop:                                             ComponentTooltipDescriptionConfigs.keys.prop_iconTitle.name,
                 default:                                          ComponentTooltipDescriptionConfigs.keys.prop_iconTitle.value,
@@ -173,6 +205,18 @@ export class ComponentTooltipDescriptionBase extends ComponentBase<
                 title:                                            Language.translate("components.tooltip_description.props.prop_direction.title"),
                 description:                                      Language.translate("components.tooltip_description.props.prop_direction.description"),
             } ,
+            [ComponentTooltipDescriptionConfigs.keys.prop_borderBackground.name]: {
+                prop:                                             ComponentTooltipDescriptionConfigs.keys.prop_borderBackground.name,
+                default:                                          ComponentTooltipDescriptionConfigs.keys.prop_borderBackground.value,
+                title:                                            Language.translate("components.tooltip_description.props.prop_borderBackground.title"),
+                description:                                      Language.translate("components.tooltip_description.props.prop_borderBackground.description"),
+            } ,
+            [ComponentTooltipDescriptionConfigs.keys.prop_borderColor.name]: {
+                prop:                                             ComponentTooltipDescriptionConfigs.keys.prop_borderColor.name,
+                default:                                          ComponentTooltipDescriptionConfigs.keys.prop_borderColor.value,
+                title:                                            Language.translate("components.tooltip_description.props.prop_borderColor.title"),
+                description:                                      Language.translate("components.tooltip_description.props.prop_borderColor.description"),
+            } ,
         }
     );
 
@@ -189,8 +233,12 @@ export class ComponentTooltipDescriptionBase extends ComponentBase<
             description:                                            Language.translate("components.tooltip_description.schema.float_menu.description") ,
             props: [
                 this._COMPONENT_PATTERN[ComponentTooltipDescriptionConfigs.keys.prop_iconPosition.name] ,
+                this._COMPONENT_PATTERN[ComponentTooltipDescriptionConfigs.keys.prop_iconClass.name] ,
+                this._COMPONENT_PATTERN[ComponentTooltipDescriptionConfigs.keys.prop_iconStyles.name] ,
                 this._COMPONENT_PATTERN[ComponentTooltipDescriptionConfigs.keys.prop_direction.name] ,
                 this._COMPONENT_PATTERN[ComponentTooltipDescriptionConfigs.keys.prop_description.name] ,
+                this._COMPONENT_PATTERN[ComponentTooltipDescriptionConfigs.keys.prop_borderBackground.name] ,
+                this._COMPONENT_PATTERN[ComponentTooltipDescriptionConfigs.keys.prop_borderColor.name] ,
             ]
         } ,
         [ComponentTooltipDescriptionConfigs.schemas.ICON.name]: {
@@ -237,14 +285,14 @@ export class ComponentTooltipDescriptionBase extends ComponentBase<
         Example
      --------------------------------------------- */
     static override renderExampleComponent(): HTMLElement {
-        return new TOOLS.COMPONENT.ComponentTooltipDescription(
+        return new ComponentTooltipDescription(
             <ComponentTooltipDescriptionPropsType>{
-                classList: ["col-md-3" , "col-12" , "border" , "p-2"]  ,
-                styles: {}  ,
+                classList:                ["col-md-3" , "col-12" , "border" , "p-2"]  ,
+                styles:                   {}  ,
 
                 prop_show :               true ,
-                prop_description: "this is a description tooltip" ,
-                prop_direction: "top"
+                prop_description:         "this is a description tooltip" ,
+                prop_direction:           "top"
 
             },
             <ComponentTooltipDescriptionMethodsType>{
@@ -264,7 +312,7 @@ export class ComponentTooltipDescription extends ComponentTooltipDescriptionBase
         config: ComponentTooltipDescriptionPropsType ,
         methods: ComponentTooltipDescriptionMethodsType
     ) {
-        super("icon" , null);
+        super("tooltip-description" , null);
         super.renderComponent(config , methods);
     }
 
@@ -277,22 +325,27 @@ export class ComponentTooltipDescription extends ComponentTooltipDescriptionBase
         return this.executeSchemaPart(ComponentTooltipDescriptionConfigs.schemas.FLOAT_MENU.name)
     }
 
-    override renderManagerComponent(partName, data , extra) :  ReactiveElement  {
+    override renderManagerComponent(partName , attrsDefault , data , extra) :  ReactiveElement {
         switch (partName){
             case ComponentTooltipDescriptionConfigs.schemas.FLOAT_MENU.name:
-                return  this.templateFn_render_floatMenu(partName , data , extra);
+                return  this.templateFn_render_floatMenu(attrsDefault , data , extra);
             case ComponentTooltipDescriptionConfigs.schemas.ICON.name:
-                return  this.templateFn_render_floatMenu_icon(partName , data , extra);
+                return  this.templateFn_render_floatMenu_icon(attrsDefault , data , extra);
         }
     }
 
 
-    private templateFn_render_floatMenu(partName , data , extra) : ReactiveElement{
+    private templateFn_render_floatMenu(attrsDefault , data , extra) : ReactiveElement{
 
         if (data != null) {
             const prop_iconPosition        = data[ComponentTooltipDescriptionConfigs.keys.prop_iconPosition.name];
+            const prop_iconClass           = data[ComponentTooltipDescriptionConfigs.keys.prop_iconClass.name];
+            const prop_iconStyles          = data[ComponentTooltipDescriptionConfigs.keys.prop_iconStyles.name];
             const prop_direction           = data[ComponentTooltipDescriptionConfigs.keys.prop_direction.name];
             const prop_description         = data[ComponentTooltipDescriptionConfigs.keys.prop_description.name];
+            const prop_borderBackground    = data[ComponentTooltipDescriptionConfigs.keys.prop_borderBackground.name];
+            const prop_borderColor         = data[ComponentTooltipDescriptionConfigs.keys.prop_borderColor.name];
+
 
             const iconSize = ToolsCss.getIconSize(AppConfig.observable("sizeName"))
 
@@ -300,13 +353,18 @@ export class ComponentTooltipDescription extends ComponentTooltipDescriptionBase
                 <ComponentFloatMenuPropsType>{
                     classList: []  ,
                     styles: {}  ,
-                    prop_floatClass:            ["mt-2" , "w-100"] ,
+                    prop_selectorClass:         prop_iconClass ,
+                    prop_selectorStyles:        prop_iconStyles ,
+                    prop_floatClass:            ["mt-2" , "w-100" , "position-absolute"] ,
                     prop_floatMinWidth:         SizeUnit(100 , UNITS.PERCENT) ,
-                    prop_floatArrowPosition:    SizeCalc( prop_iconPosition.get() , OPERATION.ADD, SizeUnit(iconSize/2 , UNITS.PEXEL) ) ,
+                    prop_floatArrowPosition:    SizeCalc(SizeUnit(100 , UNITS.PERCENT) , OPERATION.MINUS, prop_iconPosition.get() , OPERATION.MINUS, SizeUnit(iconSize/2 , UNITS.PEXEL) ) ,
                     prop_selectorContent :      this.executeSchemaPart(ComponentTooltipDescriptionConfigs.schemas.ICON.name),
                     prop_selectorShowType:      ComponentFloatMenu_ShowTypes.HOVER ,
                     prop_floatDirectionType:    prop_direction ,
-                    prop_floatContent:          prop_description
+                    prop_floatContent:          prop_description ,
+                    prop_floatBackground:       prop_borderBackground,
+                    prop_floatColor:            prop_borderColor
+
                 } ,
                 <ComponentFloatMenuMethodsType>{
 
@@ -316,31 +374,31 @@ export class ComponentTooltipDescription extends ComponentTooltipDescriptionBase
 
         return ReactiveElement.section({
             attrs: {
-                "data-part-name": partName
+                ...attrsDefault
             }
         });
 
     }
 
-    private templateFn_render_floatMenu_icon(partName , data , extra) : ReactiveElement{
+    private templateFn_render_floatMenu_icon(attrsDefault , data , extra) : ReactiveElement{
         if (data != null) {
             const prop_icon                = data[ComponentTooltipDescriptionConfigs.keys.prop_icon.name];
             const prop_iconTitle           = data[ComponentTooltipDescriptionConfigs.keys.prop_iconTitle.name];
             const prop_iconPosition        = data[ComponentTooltipDescriptionConfigs.keys.prop_iconPosition.name];
 
             const directionRtl = AppConfig.get("directionRtl");
-            let styles = {};
+            let styles = {top: "0"};
             if (directionRtl){
-                styles["right"] = prop_iconPosition.get()
+                styles["left"] = prop_iconPosition.get()
             }
             else{
-                styles["left"] = prop_iconPosition.get()
+                styles["right"] = prop_iconPosition.get()
             }
 
             return new ToolsComponents.ComponentIcon(
                 <ComponentIconPropsType>{
-                    classList: []  ,
-                    styles: {}  ,
+                    classList:          []  ,
+                    styles:             {}  ,
 
                     prop_iconClass :    ["position-absolute"] ,
                     prop_iconStyles :   styles ,
@@ -355,7 +413,7 @@ export class ComponentTooltipDescription extends ComponentTooltipDescriptionBase
 
         return ReactiveElement.section({
             attrs: {
-                "data-part-name": partName
+               ...attrsDefault
             }
         });
 

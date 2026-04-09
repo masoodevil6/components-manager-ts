@@ -452,23 +452,23 @@ export class ComponentErrorIsEmpty extends ComponentErrorIsEmptyBase {
     }
 
 
-    override renderManagerComponent(partName, data , extra) :  ReactiveElement  {
+    override renderManagerComponent(partName , attrsDefault , data , extra) :  ReactiveElement {
         switch (partName){
             case ComponentErrorIsEmptyConfigs.schemas.BORDER.name:
-                return  this.template_render_border(partName , data , extra);
+                return  this.template_render_border(attrsDefault , data , extra);
             case ComponentErrorIsEmptyConfigs.schemas.BORDER_CONTENT.name:
-                return  this.template_render_borderContent(partName , data , extra);
+                return  this.template_render_borderContent(attrsDefault , data , extra);
             case ComponentErrorIsEmptyConfigs.schemas.BORDER_CONTENT_ICON.name:
-                return  this.template_render_borderContentIcon(partName , data , extra);
+                return  this.template_render_borderContentIcon(attrsDefault , data , extra);
             case ComponentErrorIsEmptyConfigs.schemas.BORDER_CONTENT_TITLE.name:
-                return  this.template_render_borderContentTitle(partName , data , extra);
+                return  this.template_render_borderContentTitle(attrsDefault , data , extra);
             case ComponentErrorIsEmptyConfigs.schemas.BORDER_CONTENT_BTN_RETRY.name:
-                return  this.template_render_borderContentBtnRetry(partName , data , extra);
+                return  this.template_render_borderContentBtnRetry(attrsDefault , data , extra);
         }
     }
 
 
-    private template_render_border(partName , data , extra) : ReactiveElement {
+    private template_render_border(attrsDefault , data , extra) : ReactiveElement {
 
         if (data != null){
 
@@ -494,19 +494,19 @@ export class ComponentErrorIsEmpty extends ComponentErrorIsEmptyBase {
 
         return ReactiveElement.section({
             attrs: {
-                "data-part-name":  partName
+                ...attrsDefault
             }
         });
     }
 
-    private template_render_borderContent(partName , data , extra) : ReactiveElement {
+    private template_render_borderContent(attrsDefault , data , extra) : ReactiveElement {
 
         if (data != null) {
 
-            return ReactiveElement.section(
+            return ReactiveElement.part(  "section" ,
                 {
                     attrs: {
-                        "id":      `component-error-is-empty-border-content-${this._COMPONENT_RANDOM_ID}`,
+                        ...attrsDefault
                     },
 
                     children: [
@@ -519,12 +519,12 @@ export class ComponentErrorIsEmpty extends ComponentErrorIsEmptyBase {
 
         return ReactiveElement.section({
             attrs: {
-                "data-part-name":  partName
+                ...attrsDefault
             }
         });
     }
 
-    private template_render_borderContentIcon(partName , data , extra) : ReactiveElement {
+    private template_render_borderContentIcon(attrsDefault , data , extra) : ReactiveElement {
 
         if (data != null){
 
@@ -550,12 +550,12 @@ export class ComponentErrorIsEmpty extends ComponentErrorIsEmptyBase {
 
         return ReactiveElement.section({
             attrs: {
-                "data-part-name":  partName
+                ...attrsDefault
             }
         });
     }
 
-    private template_render_borderContentTitle(partName , data , extra) : ReactiveElement {
+    private template_render_borderContentTitle(attrsDefault , data , extra) : ReactiveElement {
 
         if (data != null){
 
@@ -567,10 +567,10 @@ export class ComponentErrorIsEmpty extends ComponentErrorIsEmptyBase {
             const elFontSize = ToolsCss.getFontSize(AppConfig.get("sizeNameLarge"));
             const elHeight = ToolsCss.getIconSize(AppConfig.get("sizeNameLarge"));
 
-            return ReactiveElement.section(
+            return ReactiveElement.part(  "section" ,
                 {
                     attrs: {
-                        "id":      `component-error-is-empty-border-content-title-${this._COMPONENT_RANDOM_ID}`,
+                        ...attrsDefault
                     },
                     styles: {
                         lineHeight:   `${elHeight}px` ,
@@ -594,14 +594,14 @@ export class ComponentErrorIsEmpty extends ComponentErrorIsEmptyBase {
                 })
         }
 
-        return ReactiveElement.section({
+        return ReactiveElement.part(  "section" ,{
             attrs: {
-                "data-part-name":  partName
+                ...attrsDefault
             }
         });
     }
 
-    private template_render_borderContentBtnRetry(partName , data , extra) : ReactiveElement {
+    private template_render_borderContentBtnRetry(attrsDefault , data , extra) : ReactiveElement {
 
         if (data != null) {
 
@@ -633,9 +633,9 @@ export class ComponentErrorIsEmpty extends ComponentErrorIsEmptyBase {
 
         }
 
-        return ReactiveElement.section({
+        return ReactiveElement.part(  "section" ,{
             attrs: {
-                "data-part-name":  partName
+                ...attrsDefault
             }
         });
     }

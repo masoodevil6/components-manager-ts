@@ -49,8 +49,10 @@ export class Router {
         const pageInstance = new route.template()
 
         const pageElement = pageInstance.render(this.#getParamsQuery() , route.data)
-
         this.root.appendChild(pageElement)
+
+        pageInstance.onLoad(pageElement)
+
 
         this.#setTitlePage(route);
     }

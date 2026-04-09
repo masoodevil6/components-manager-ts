@@ -34,4 +34,7 @@ export class IconPage implements ITemplate{
         return container
     }
 
+    onLoad(pageElement: HTMLElement): void {
+    }
+
 }

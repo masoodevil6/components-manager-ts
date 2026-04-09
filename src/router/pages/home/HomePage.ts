@@ -10,4 +10,7 @@ export class HomePage implements ITemplate{
         return container
     }
 
+    onLoad(pageElement: HTMLElement): void {
+    }
+
 }

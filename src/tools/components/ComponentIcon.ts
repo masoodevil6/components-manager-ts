@@ -35,7 +35,6 @@ import {
     GOG_ComponentBasicProps_component,
     GOG_ComponentBasicProps_structure
 } from "../../core/component/SetupComponent";
-import {ToolsIcons} from "../icons";
 
 
 
@@ -302,15 +301,15 @@ export class ComponentIcon extends ComponentIconBase {
         return this.executeSchemaPart(ComponentIconConfigs.schemas.ICON.name)
     }
 
-    override renderManagerComponent(partName , data , extra) :  ReactiveElement  {
+    override renderManagerComponent(partName , attrsDefault , data , extra) :  ReactiveElement {
         switch (partName){
             case ComponentIconConfigs.schemas.ICON.name:
-                return  this.templateFn_render_icon(partName , data , extra);
+                return  this.templateFn_render_icon(attrsDefault , data , extra);
         }
     }
 
     
-    private templateFn_render_icon(partName , data , extra) : ReactiveElement {
+    private templateFn_render_icon(attrsDefault , data , extra) : ReactiveElement {
 
         if (data != null) {
             const prop_icon                = data[ComponentIconConfigs.keys.prop_icon.name];
@@ -318,10 +317,9 @@ export class ComponentIcon extends ComponentIconBase {
             const prop_iconClass           = data[ComponentIconConfigs.keys.prop_iconClass.name];
             const prop_iconStyles          = data[ComponentIconConfigs.keys.prop_iconStyles.name];
 
-            return ReactiveElement.i({
+            return ReactiveElement.part(  "i" ,{
                 attrs: {
-                    "data-part-name":     partName,
-                    "id":                `component-icon-icon-${this._COMPONENT_RANDOM_ID}`,
+                    ...attrsDefault
                 },
                 attrsBind: {
                     title:  prop_iconTitle,
@@ -362,9 +360,9 @@ export class ComponentIcon extends ComponentIconBase {
 
         }
 
-        return ReactiveElement.section({
+        return ReactiveElement.part(  "section" ,{
             attrs: {
-                "data-part-name": partName
+                ...attrsDefault
             }
         });
 

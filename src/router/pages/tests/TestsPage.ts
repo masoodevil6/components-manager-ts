@@ -79,13 +79,34 @@ export class TestsPage implements ITemplate{
                     "row" , "p-0" , "m-0"
                 ],
                 children:[
+                    ReactiveElement.section({
+                        className: [
+                            "col-md-3" , "col-12" , "border" , "p-2" ,
+                        ],
+                        children: [
+                            ReactiveElement.section({
+                                attrs: {
+                                    id: "test-element"
+                                },
+                                className: [
+                                    "position-relative"
+                                ],
+                                children: [
+                                    "main"
+                                ],
+                            }) ,
+                        ],
+                    }) ,
+
 
                     TOOLS.COMPONENT.ComponentMessages.renderExampleComponent() ,
                     TOOLS.COMPONENT.ComponentErrorIsEmpty.renderExampleComponent() ,
 
+                    TOOLS.COMPONENT.ComponentLabel.renderExampleComponent() ,
                     TOOLS.COMPONENT.ComponentButton.renderExampleComponent() ,
 
                     TOOLS.COMPONENT.ComponentIcon.renderExampleComponent() ,
+
                     TOOLS.COMPONENT.ComponentBorder.renderExampleComponent() ,
 
                     TOOLS.COMPONENT.ComponentRecyclerView.renderExampleComponent() ,
@@ -96,7 +117,18 @@ export class TestsPage implements ITemplate{
                 ]
             })
 
+
+
         return content.getElement();
+    }
+
+
+
+    onLoad(pageElement: HTMLElement): void {
+
+         TOOLS.COMPONENT.ComponentSelector.renderExampleComponent({selector: "#test-element"})
+         TOOLS.COMPONENT.ComponentSelector.renderExampleComponent({selector: "component-error-is-empty section[data-part-name=part_border_content_title]"})
+
     }
 
 

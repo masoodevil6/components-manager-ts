@@ -35,7 +35,7 @@ export const Color = (color: ColorsMainType = COLORS_MAIN.PRIMARY , grade: color
 
 export const OPERATION = {
     ADD:    "+" ,
-    SUM:    "-" ,
+    MINUS:  "-" ,
     MUL:    "*" ,
     DIV:    "/" ,
 }
@@ -144,5 +144,7 @@ export const Z_INDEXES = {
     new_page:       'new_page',
     blur_popup:     'blur_popup',
     popup:          'popup',
+
+    SELECTOR:       'selector',
 }
 export type ZIndexType = typeof Z_INDEXES[keyof typeof Z_INDEXES];

@@ -1,5 +1,6 @@
 import {GOG_SetValue} from "../ComponentBase";
 import {Language} from "../Language";
+import {fa} from "../../langs/Fa";
 
 
 
@@ -10,29 +11,51 @@ import {Language} from "../Language";
 /// PART: Component
 /// ----------------------------------------------------
 export const GOG_ComponentBasicProps_component = {
+    selector:                                                 "selector" ,
+    append:                                                   "append" ,
     classList:                                                "classList" ,
     styles:                                                   "styles"
 } as const
 
 export const GOG_ComponentBasicConfigs_component_keys = {
+    [GOG_ComponentBasicProps_component.selector]:{
+        name:                                                 GOG_ComponentBasicProps_component.selector  ,
+        value:                                                GOG_SetValue<string | null>(null),
+    } ,
+    [GOG_ComponentBasicProps_component.append]:{
+        name:                                                 GOG_ComponentBasicProps_component.append  ,
+        value:                                                GOG_SetValue<boolean>(false),
+    } ,
     [GOG_ComponentBasicProps_component.classList]:{
         name:                                                 GOG_ComponentBasicProps_component.classList  ,
         value:                                                GOG_SetValue<string[]>([]),
     } ,
     [GOG_ComponentBasicProps_component.styles]:{
         name:                                                 GOG_ComponentBasicProps_component.styles  ,
-        value:                                                GOG_SetValue<Record<string, string>>({}),
+        value:                                                GOG_SetValue<Record<string, any>>({}),
     } ,
 } as const
 
 export const GOG_ComponentBasicConfigs_component_parts = {
     COMPONENT: {
-        name:                                                 "part_component"
+        name:                                                 "part-component"
     } ,
 } as const
 
 export function GOG_ComponentBasicConfigs_component_Pattern(ctx){
     return {
+        [GOG_ComponentBasicConfigs_component_keys.append.name]: {
+            prop:                                             GOG_ComponentBasicConfigs_component_keys.append.name,
+            default:                                          GOG_ComponentBasicConfigs_component_keys.append.value,
+            title:                                            Language.translate("components.public.props.append.title"),
+            description:                                      Language.translate("components.public.props.append.description"),
+        } ,
+        [GOG_ComponentBasicConfigs_component_keys.selector.name]: {
+            prop:                                             GOG_ComponentBasicConfigs_component_keys.selector.name,
+            default:                                          GOG_ComponentBasicConfigs_component_keys.selector.value,
+            title:                                            Language.translate("components.public.props.selector.title"),
+            description:                                      Language.translate("components.public.props.selector.description"),
+        } ,
         [GOG_ComponentBasicConfigs_component_keys.classList.name]: {
             prop:                                             GOG_ComponentBasicConfigs_component_keys.classList.name,
             default:                                          GOG_ComponentBasicConfigs_component_keys.classList.value,
@@ -52,7 +75,7 @@ export function GOG_ComponentBasicConfigs_component_Schema(ctx){
     return {
         [GOG_ComponentBasicConfigs_component_parts.COMPONENT.name]: {
             part:                                             GOG_ComponentBasicConfigs_component_parts.COMPONENT.name ,
-            method:                                           ctx.templateBasic_render,
+            method:                                           ctx.templateBasic_render ,
             title:                                            Language.translate("components.public.schema.part_component.title"),
             description:                                      Language.translate("components.public.schema.part_component.description"),
             props:                                            [
@@ -90,13 +113,13 @@ export const GOG_ComponentBasicConfigs_structure_keys = {
     } ,
     [GOG_ComponentBasicProps_structure.prop_structureStyles]:{
         name:                     GOG_ComponentBasicProps_structure.prop_structureStyles  ,
-        value:                    GOG_SetValue<Record<string, string>>({}),
+        value:                    GOG_SetValue<Record<string, any>>({}),
     }
 } as const
 
 export const GOG_ComponentBasicConfigs_structure_parts = {
     STRUCTURE: {
-        name:               "part_structure"
+        name:               "part-structure"
     } ,
 } as const
 

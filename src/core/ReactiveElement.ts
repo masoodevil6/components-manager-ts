@@ -392,12 +392,32 @@ export class ReactiveElement {
     }
 
     static component(componentName: string ,o?: Options) { return new ReactiveElement(`component-${componentName}`, o) }
+    static part(el: string = "section" ,o?: Options) {
+        /*const className = ["position-relative"]
+        if (o == null){
+            o = {
+                className: className
+            }
+        }
+        else{
+            if (o.hasOwnProperty("className")){
+                o["className"] = [...className , ...o.className];
+            }
+            else {
+                o["className"] = className;
+            }
+        }*/
+
+        return new ReactiveElement(el, o)
+    }
+
     static div(o?: Options) { return new ReactiveElement("div", o) }
     static button(o?: Options) { return new ReactiveElement("button", o) }
     static b(o?: Options) { return new ReactiveElement("b", o) }
     static span(o?: Options) { return new ReactiveElement("span", o) }
     static section(o?: Options) { return new ReactiveElement("section", o) }
     static a(o?: Options) { return new ReactiveElement("a", o) }
+    static label(o?: Options) { return new ReactiveElement("label", o) }
     static input(o?: Options) { return new ReactiveElement("input", o) }
     static h1(o?: Options) { return new ReactiveElement("h1", o) }
     static h2(o?: Options) { return new ReactiveElement("h2", o) }

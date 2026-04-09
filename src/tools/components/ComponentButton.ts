@@ -360,16 +360,16 @@ export class ComponentButton extends ComponentButtonBase{
         return this.executeSchemaPart(ComponentButtonConfigs.schemas.BUTTON.name)
     }
 
-    override renderManagerComponent(partName , data , extra) :  ReactiveElement {
+    override renderManagerComponent(partName , attrsDefault , data , extra) :  ReactiveElement {
         switch (partName){
             case ComponentButtonConfigs.schemas.BUTTON.name:
-                return  this.template_render_button(partName , data , extra);
+                return  this.template_render_button(attrsDefault , data , extra);
             case ComponentButtonConfigs.schemas.ICON.name:
-                return  this.template_render_buttonIcon(partName , data , extra);
+                return  this.template_render_buttonIcon(attrsDefault , data , extra);
         }
     }
 
-    private template_render_button(partName , data , extra) : ReactiveElement{
+    private template_render_button(attrsDefault , data , extra) : ReactiveElement{
 
         if (data != null){
 
@@ -401,11 +401,10 @@ export class ComponentButton extends ComponentButtonBase{
             const btnHeight   = ToolsCss.getHeightSize(AppConfig.get("sizeName"));
             const btnFontSize = ToolsCss.getFontSize(AppConfig.get("sizeName"));
 
-            return ReactiveElement.section(
+            return ReactiveElement.part(  "section" ,
                 {
                     attrs: {
-                        "data-part-name":     partName,
-                        "id":                `component-buttn-form-${this._COMPONENT_RANDOM_ID}`,
+                        ...attrsDefault
                     },
                     attrsBind: {
                         "type":               prop_btnType
@@ -461,14 +460,14 @@ export class ComponentButton extends ComponentButtonBase{
                 });
         }
 
-        return ReactiveElement.section({
+        return ReactiveElement.part(  "section" ,{
             attrs: {
-                "data-part-name":  partName
+                ...attrsDefault
             }
         });
     }
 
-    private template_render_buttonIcon(partName , data , extra) : ReactiveElement {
+    private template_render_buttonIcon(attrsDefault , data , extra) : ReactiveElement {
 
         if (data != null) {
 
@@ -493,7 +492,7 @@ export class ComponentButton extends ComponentButtonBase{
 
         return ReactiveElement.section({
             attrs: {
-                "data-part-name":  partName
+                ...attrsDefault
             }
         });
     }

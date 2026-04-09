@@ -43,6 +43,7 @@ export const ComponentBorderProps = {
     ... GOG_ComponentBasicProps_component,
     ... GOG_ComponentBasicProps_structure,
     prop_content :                        "prop_content" ,
+    prop_contentSize :                    "prop_contentSize" ,
     prop_contentColor :                   "prop_contentColor" ,
     prop_contentBackgroundColor :         "prop_contentBackgroundColor" ,
     prop_borderClass :                    "prop_borderClass" ,
@@ -50,6 +51,7 @@ export const ComponentBorderProps = {
     prop_borderColor :                    "prop_borderColor" ,
     prop_borderWidth :                    "prop_borderWidth" ,
     prop_borderRadius :                   "prop_borderRadius" ,
+    prop_borderOpacity :                  "prop_borderOpacity" ,
     prop_borderArrowType :                "prop_borderArrowType" ,
     prop_borderArrowWidth :               "prop_borderArrowWidth" ,
     prop_borderArrowPosition :            "prop_borderArrowPosition" ,
@@ -75,6 +77,10 @@ const ComponentBorderConfigs  =  {
         [ComponentBorderProps.prop_content]: {
             name:               ComponentBorderProps.prop_content ,
             value:              GOG_SetValue<string | ReactiveElement[]>( "") ,
+        } ,
+        [ComponentBorderProps.prop_contentSize]: {
+            name:               ComponentBorderProps.prop_contentSize ,
+            value:              GOG_SetValue<typeof SIZES>( SIZES.M) ,
         } ,
         [ComponentBorderProps.prop_contentColor]: {
             name:               ComponentBorderProps.prop_contentColor ,
@@ -103,6 +109,10 @@ const ComponentBorderConfigs  =  {
         [ComponentBorderProps.prop_borderRadius]: {
             name:               ComponentBorderProps.prop_borderRadius ,
             value:              GOG_SetValue<GOG_ValueOf<typeof SIZES> | number>(SIZES.M),
+        } ,
+        [ComponentBorderProps.prop_borderOpacity]: {
+            name:               ComponentBorderProps.prop_borderOpacity ,
+            value:              GOG_SetValue<number|null>(100),
         } ,
         [ComponentBorderProps.prop_borderArrowType]: {
             name:               ComponentBorderProps.prop_borderArrowType ,
@@ -185,6 +195,12 @@ export abstract class ComponentBorderBase extends ComponentBase<
             title:                                            Language.translate("components.border.prop.prop_content.title"),
             description:                                      Language.translate("components.border.prop.prop_content.description"),
         } ,
+        [ComponentBorderConfigs.keys.prop_contentSize.name]: {
+            prop:                                             ComponentBorderConfigs.keys.prop_contentSize.name,
+            default:                                          ComponentBorderConfigs.keys.prop_contentSize.value,
+            title:                                            Language.translate("components.border.prop.prop_contentSize.title"),
+            description:                                      Language.translate("components.border.prop.prop_contentSize.description"),
+        } ,
         [ComponentBorderConfigs.keys.prop_contentColor.name]: {
             prop:                                             ComponentBorderConfigs.keys.prop_contentColor.name,
             default:                                          ComponentBorderConfigs.keys.prop_contentColor.value,
@@ -226,6 +242,12 @@ export abstract class ComponentBorderBase extends ComponentBase<
             default:                                          ComponentBorderConfigs.keys.prop_borderRadius.value,
             title:                                            Language.translate("components.border.prop.prop_borderRadius.title"),
             description:                                      Language.translate("components.border.prop.prop_borderRadius.description"),
+        } ,
+        [ComponentBorderConfigs.keys.prop_borderOpacity.name]: {
+            prop:                                             ComponentBorderConfigs.keys.prop_borderOpacity.name,
+            default:                                          ComponentBorderConfigs.keys.prop_borderOpacity.value,
+            title:                                            Language.translate("components.border.prop.prop_borderOpacity.title"),
+            description:                                      Language.translate("components.border.prop.prop_borderOpacity.description"),
         } ,
         [ComponentBorderConfigs.keys.prop_borderArrowType.name]: {
             prop:                                             ComponentBorderConfigs.keys.prop_borderArrowType.name,
@@ -270,11 +292,13 @@ export abstract class ComponentBorderBase extends ComponentBase<
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_borderArrowWidth.name] ,
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_borderArrowPosition.name] ,
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_borderRadius.name] ,
+                this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_borderOpacity.name] ,
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_borderWidth.name] ,
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_borderColor.name] ,
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_borderClass.name] ,
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_borderStyles.name] ,
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_content.name] ,
+                this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_contentSize.name] ,
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_contentColor.name] ,
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_contentBackgroundColor.name] ,
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_minWidth.name] ,
@@ -370,38 +394,43 @@ export class ComponentBorder extends ComponentBorderBase{
         return this.executeSchemaPart(ComponentBorderConfigs.schemas.BORDER.name)
     }
 
-    override renderManagerComponent(partName , data , extra) : ReactiveElement {
+    override renderManagerComponent(partName , attrsDefault, data , extra) : ReactiveElement {
         switch (partName){
             case this._COMPONENT_SCHEMA.part_border.part:
-               return  this.template_render_border(partName , data , extra);
+               return  this.template_render_border(attrsDefault , data , extra);
         }
     }
 
 
-    override template_render_border(partName , data , extra) : ReactiveElement {
+    override template_render_border(attrsDefault , data , extra) : ReactiveElement {
+
         if (data != null){
             const prop_borderArrowType=                 data[ComponentBorderConfigs.keys.prop_borderArrowType.name];
             const prop_borderArrowWidth=                data[ComponentBorderConfigs.keys.prop_borderArrowWidth.name];
             const prop_borderArrowPosition=             data[ComponentBorderConfigs.keys.prop_borderArrowPosition.name];
             const prop_borderRadius =                   data[ComponentBorderConfigs.keys.prop_borderRadius.name];
+            const prop_borderOpacity =                  data[ComponentBorderConfigs.keys.prop_borderOpacity.name];
             const prop_borderColor =                    data[ComponentBorderConfigs.keys.prop_borderColor.name];
             const prop_borderWidth =                    data[ComponentBorderConfigs.keys.prop_borderWidth.name];
             const prop_borderClass=                     data[ComponentBorderConfigs.keys.prop_borderClass.name];
             const prop_borderStyles=                    data[ComponentBorderConfigs.keys.prop_borderStyles.name];
             const prop_content=                         data[ComponentBorderConfigs.keys.prop_content.name];
+            const prop_contentSize=                     data[ComponentBorderConfigs.keys.prop_contentSize.name];
             const prop_contentColor=                    data[ComponentBorderConfigs.keys.prop_contentColor.name];
             const prop_contentBackgroundColor=          data[ComponentBorderConfigs.keys.prop_contentBackgroundColor.name];
             const prop_minWidth =                       data[ComponentBorderConfigs.keys.prop_minWidth.name];
 
             const directionRtl = AppConfig.get("directionRtl");
-            const elFontSize =   ToolsCss.getFontSize(AppConfig.get("sizeName"));
-            const elHeight =     ToolsCss.getIconSize(AppConfig.get("sizeName"));
+            const elFontSize =   ToolsCss.getFontSize(prop_contentSize.get());
+            const elHeight =     ToolsCss.getHeightSize(prop_contentSize.get());
+
+            console.log(elFontSize , elHeight)
 
             let borderArrow = "";
             switch (prop_borderArrowType.get()){
                 case ComponentBorder_ArrowTypes.TOP:
                     borderArrow = `
-#component-border-border-${this._COMPONENT_RANDOM_ID}:after{
+#${attrsDefault?.id}:after{
    content:                                    "";
    position:                                   absolute;
    ${directionRtl? "right" : "left"}:          ${prop_borderArrowPosition.get()};
@@ -417,7 +446,7 @@ export class ComponentBorder extends ComponentBorderBase{
                     break;
                 case ComponentBorder_ArrowTypes.BOTTOM:
                     borderArrow = `
-#component-border-border-${this._COMPONENT_RANDOM_ID}:after{
+#${attrsDefault?.id}:after{
    content:                                    "";
    position:                                   absolute;
    ${directionRtl? "right" : "left"}:          ${prop_borderArrowPosition.get()};
@@ -433,7 +462,7 @@ export class ComponentBorder extends ComponentBorderBase{
                     break;
                 case ((directionRtl && ComponentBorder_ArrowTypes.LEFT) || (!directionRtl && ComponentBorder_ArrowTypes.RIGHT)):
                     borderArrow = `
-#component-border-border-${this._COMPONENT_RANDOM_ID}:after{
+#${attrsDefault?.id}:after{
    content:                                   "";
    position:                                  absolute;
    top:                                       ${prop_borderArrowPosition.get()};
@@ -449,7 +478,7 @@ export class ComponentBorder extends ComponentBorderBase{
                     break;
                 case ((directionRtl && ComponentBorder_ArrowTypes.RIGHT) || (!directionRtl && ComponentBorder_ArrowTypes.LEFT)):
                     borderArrow = `
-#component-border-border-${this._COMPONENT_RANDOM_ID}:after{
+#${attrsDefault?.id}:after{
    content:                                    "";
    position:                                   absolute;
    top:                                        ${prop_borderArrowPosition.get()};
@@ -465,11 +494,11 @@ export class ComponentBorder extends ComponentBorderBase{
                     break;
             }
 
-            return ReactiveElement.section(
+            return ReactiveElement.part(
+                "section" ,
                 {
                     attrs: {
-                        "data-part-name":     partName,
-                        "id":                `component-border-border-${this._COMPONENT_RANDOM_ID}`,
+                       ...attrsDefault
                     },
                     stylesCustom: borderArrow ,
                     styles: {
@@ -509,6 +538,11 @@ export class ComponentBorder extends ComponentBorderBase{
                                 return null;
                             }
                         ) ,
+                        opacity:         prop_borderOpacity.map(
+                            v=>{
+                                return v/100
+                            }
+                        ) ,
                         borderColor:      prop_borderColor ,
                         color:            prop_contentColor ,
                         backgroundColor:  prop_contentBackgroundColor
@@ -529,9 +563,9 @@ export class ComponentBorder extends ComponentBorderBase{
                 })
         }
 
-        return ReactiveElement.section({
+        return ReactiveElement.part(  "section" ,{
             attrs: {
-                "data-part-name":  partName
+                ...attrsDefault
             }
         });
     }
