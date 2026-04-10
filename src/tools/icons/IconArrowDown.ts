@@ -26,10 +26,10 @@ export function IconArrowDown(
     }*/
 
     return `
-<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="arrow right"
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="arrow down"
     width="${size}" height="${size}" viewBox="0 0 24 24" fill="none">
-    <title>arrow right</title>
-    <path d="M9 6l6 6-6 6" stroke="${primaryColor}" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round"/>
+    <title>arrow down</title>
+    <path d="M6 9l6 6 6-6" stroke="${primaryColor}" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>` as IconString;
 
 }

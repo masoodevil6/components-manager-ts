@@ -424,8 +424,6 @@ export class ComponentBorder extends ComponentBorderBase{
             const elFontSize =   ToolsCss.getFontSize(prop_contentSize.get());
             const elHeight =     ToolsCss.getHeightSize(prop_contentSize.get());
 
-            console.log(elFontSize , elHeight)
-
             let borderArrow = "";
             switch (prop_borderArrowType.get()){
                 case ComponentBorder_ArrowTypes.TOP:

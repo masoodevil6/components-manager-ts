@@ -117,7 +117,7 @@ const ComponentErrorIsEmptyConfigs  =  {
         } ,
         [ComponentErrorIsEmptyProps.prop_titleColor]: {
             name:               ComponentErrorIsEmptyProps.prop_titleColor,
-            value:              GOG_SetValue<Color | null>(Color(COLORS_MAIN.ERROR , COLORS_GRAD.GRADE_1)),
+            value:              GOG_SetValue<Color | null>(Color(COLORS_MAIN.DARK , COLORS_GRAD.GRADE_1)),
         } ,
         [ComponentErrorIsEmptyProps.prop_titleClass]: {
             name:               ComponentErrorIsEmptyProps.prop_titleClass,
@@ -619,7 +619,7 @@ export class ComponentErrorIsEmpty extends ComponentErrorIsEmptyBase {
                         prop_btnStyles:   prop_btnStyles  ,
                         prop_title:       prop_btnTitle   ,
                         prop_btnIcon:     prop_btnIcon   ,
-                        prop_type:       "cancel" ,
+                        prop_type:       "submit" ,
                         prop_btnType:    "button"
                     } ,
                     <ComponentButtonMethodsType>{

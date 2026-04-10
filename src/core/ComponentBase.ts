@@ -680,13 +680,13 @@ export class ComponentBase<
     //--------------------------------------------------
     // Prop
     //--------------------------------------------------
-    set(propName: TProp, propValue: any) {
+    set(propName: string, propValue: any) {
         //console.log(propName)
         if (this._COMPONENT_PROPS_BIND.hasOwnProperty(propName)) {
             this._COMPONENT_PROPS_BIND[propName].set(propValue);
         }
     }
-    get(propName: TProp) {
+    get(propName: string) {
         if (this._COMPONENT_PROPS_BIND.hasOwnProperty(propName)) {
             return this._COMPONENT_PROPS_BIND[propName].get();
         }

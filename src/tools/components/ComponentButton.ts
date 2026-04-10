@@ -354,8 +354,6 @@ export class ComponentButton extends ComponentButtonBase{
     /* ---------------------------------------------
        TEMPLATEs
     --------------------------------------------- */
-
-
     override renderContentComponent() {
         return this.executeSchemaPart(ComponentButtonConfigs.schemas.BUTTON.name)
     }

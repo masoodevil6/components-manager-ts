@@ -21,7 +21,7 @@ export class ToolsCss {
         SIZES: {
             [SIZES.XS] : { fontSize: 6    , height: 12   , icon: 14   , max: 576   },
             [SIZES.S]  : { fontSize: 10   , height: 16   , icon: 16   , min: 576   , max: 768 },
-            [SIZES.M]  : { fontSize: 14   , height: 22   , icon: 18   , min: 768   , max: 992 },
+            [SIZES.M]  : { fontSize: 13   , height: 22   , icon: 18   , min: 768   , max: 992 },
             [SIZES.L]  : { fontSize: 16   , height: 26   , icon: 20   , min: 992   , max: 1200 },
             [SIZES.XL] : { fontSize: 18   , height: 30   , icon: 22   , min: 1200  , max: 1450 },
             [SIZES.XXL]: { fontSize: 20   , height: 36   , icon: 24   , min: 1450  },
@@ -40,7 +40,7 @@ export class ToolsCss {
             [Z_INDEXES.blur_popup]  :     19,
             [Z_INDEXES.popup] :           20,
 
-            [Z_INDEXES.SELECTOR] :        9999,
+            [Z_INDEXES.SELECTOR] :        100,
         } as Record<ZIndexKey, number>
     }
 

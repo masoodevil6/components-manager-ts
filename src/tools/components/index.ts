@@ -16,6 +16,8 @@
 
  import {ComponentTooltipDescription} from "./ComponentTooltipDescription";
 
+ import {ComponentCollapse} from "./ComponentCollapse";
+
 
 export const ToolsComponents = {
     ComponentMessages ,
@@ -33,5 +35,7 @@ export const ToolsComponents = {
     ComponentFloatMenu ,
 
     ComponentTooltipDescription ,
+
+    ComponentCollapse ,
 
 }

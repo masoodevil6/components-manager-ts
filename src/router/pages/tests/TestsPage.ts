@@ -114,6 +114,8 @@ export class TestsPage implements ITemplate{
                     TOOLS.COMPONENT.ComponentFloatMenu.renderExampleComponent() ,
 
                     TOOLS.COMPONENT.ComponentTooltipDescription.renderExampleComponent() ,
+
+                    TOOLS.COMPONENT.ComponentCollapse.renderExampleComponent() ,
                 ]
             })
 
