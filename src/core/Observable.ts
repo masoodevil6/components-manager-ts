@@ -56,6 +56,37 @@ export class Observable<T> {
         return derived;
     }
 
+    mapArray<U>(
+        mapper: (
+            item: T extends (infer R)[] ? R : never ,
+            index: number
+        ) => U
+    ): Observable<U[]>{
+
+        const initial = (this.get() as any[]).map((item , index) => mapper(item , index));
+        const derived = new Observable(initial);
+
+        this.subscribe(arr => {
+            derived.set(arr.map( (item , index) => mapper(item, index)))
+        })
+
+        return derived;
+    }
+
+    static computed(fn , observables){
+        const getValues = () => observables.map(o => o.get());
+        const derived = new Observable(fn(...getValues()));
+
+        const update = () => {
+            derived.set(fn(...getValues()));
+        }
+
+        observables.forEach(o=> o.subscribe(update));
+
+        return derived;
+    }
+
+
     link(mapper) {
         const derived = new Observable(
             this.get().map(mapper)
@@ -72,12 +103,15 @@ export class Observable<T> {
         if (typeof mapping === 'function') {
             return mapping(value);
         } else if (typeof mapping === 'object' && mapping !== null) {
-            if (value in mapping) {
-                const mapped = mapping[value];
-                return this._unwrapObservable(mapped);
-            } else if ('default' in mapping) {
-                return this._unwrapObservable(mapping.default!);
+
+            const hasKey = value in mapping;
+            const mapped = hasKey ? mapping[value] : mapping.default;
+
+            if (mapped === null || mapped === undefined){
+                return this._unwrapObservable(mapping.default as any);
             }
+
+            return this._unwrapObservable(mapped)
         }
         return value as unknown as U;
     }

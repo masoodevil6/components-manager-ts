@@ -17,6 +17,14 @@
  import {ComponentTooltipDescription} from "./ComponentTooltipDescription";
 
  import {ComponentCollapse} from "./ComponentCollapse";
+ import {ComponentTabs} from "./ComponentTabs";
+
+ import {ComponentInputListSelector} from "./ComponentInputListSelector";
+ import {ComponentInputCheckBox} from "./ComponentInputCheckBox";
+ import {ComponentInputAgreementCheckBox} from "./ComponentInputAgreementCheckBox";
+
+ import {ComponentElementPosition} from "./ComponentElementPosition";
+ import {ComponentDraggableOrders} from "./ComponentDraggableOrders";
 
 
 export const ToolsComponents = {
@@ -37,5 +45,13 @@ export const ToolsComponents = {
     ComponentTooltipDescription ,
 
     ComponentCollapse ,
+    ComponentTabs ,
+
+    ComponentInputListSelector ,
+    ComponentInputCheckBox ,
+    ComponentInputAgreementCheckBox ,
+
+    ComponentElementPosition ,
+    ComponentDraggableOrders ,
 
 }

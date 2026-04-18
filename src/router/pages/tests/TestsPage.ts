@@ -99,11 +99,12 @@ export class TestsPage implements ITemplate{
                     }) ,
 
 
+                    TOOLS.COMPONENT.ComponentElementPosition.renderExampleComponent() ,
+                    TOOLS.COMPONENT.ComponentDraggableOrders.renderExampleComponent() ,
+
                     TOOLS.COMPONENT.ComponentMessages.renderExampleComponent() ,
                     TOOLS.COMPONENT.ComponentErrorIsEmpty.renderExampleComponent() ,
 
-                    TOOLS.COMPONENT.ComponentLabel.renderExampleComponent() ,
-                    TOOLS.COMPONENT.ComponentButton.renderExampleComponent() ,
 
                     TOOLS.COMPONENT.ComponentIcon.renderExampleComponent() ,
 
@@ -115,7 +116,15 @@ export class TestsPage implements ITemplate{
 
                     TOOLS.COMPONENT.ComponentTooltipDescription.renderExampleComponent() ,
 
+                    TOOLS.COMPONENT.ComponentButton.renderExampleComponent() ,
+                    TOOLS.COMPONENT.ComponentLabel.renderExampleComponent() ,
+
                     TOOLS.COMPONENT.ComponentCollapse.renderExampleComponent() ,
+                    TOOLS.COMPONENT.ComponentTabs.renderExampleComponent() ,
+
+                    TOOLS.COMPONENT.ComponentInputListSelector.renderExampleComponent() ,
+                    TOOLS.COMPONENT.ComponentInputCheckBox.renderExampleComponent() ,
+                    TOOLS.COMPONENT.ComponentInputAgreementCheckBox.renderExampleComponent() ,
                 ]
             })
 

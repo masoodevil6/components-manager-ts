@@ -26,22 +26,17 @@ import {
 } from "../../utils/ToolsConsts";
 import {TOOLS} from "../tools";
 import {
-    GOG_ComponentBasicConfigs_component_keys,
-    GOG_ComponentBasicConfigs_component_parts,
-    GOG_ComponentBasicConfigs_component_Pattern, GOG_ComponentBasicConfigs_component_Schema,
-    GOG_ComponentBasicConfigs_structure_keys,
-    GOG_ComponentBasicConfigs_structure_parts,
-    GOG_ComponentBasicConfigs_structure_Pattern, GOG_ComponentBasicConfigs_structure_Schema,
-    GOG_ComponentBasicProps_component,
-    GOG_ComponentBasicProps_structure
+    GOG_ComponentBasicConfigs_Component_keys,
+    GOG_ComponentBasicConfigs_Component_parts,
+    GOG_ComponentBasicConfigs_Component_Pattern,
+    GOG_ComponentBasicConfigs_Component_Schema,
+    GOG_ComponentBasicConfigs_Component_Structure_keys,
+    GOG_ComponentBasicConfigs_Component_Structure_parts,
+    GOG_ComponentBasicConfigs_Component_Structure_Pattern, GOG_ComponentBasicConfigs_Component_Structure_Schema,
+    GOG_ComponentBasicProps_Component,
+    GOG_ComponentBasicProps_Component_Structure,
 } from "../../core/component/SetupComponent";
 import {ToolsIcons} from "../icons";
-import {
-    ComponentTooltipDescription_PositionTypes, ComponentTooltipDescriptionMethodsType,
-    ComponentTooltipDescriptionPropsType,
-    ComponentTooltipDescriptionSchemaType,
-    ComponentTooltipDescriptionTemplatesType
-} from "./ComponentTooltipDescription";
 import {ComponentBorderMethodsType, ComponentBorderProps, ComponentBorderPropsType} from "./ComponentBorder";
 
 
@@ -49,8 +44,8 @@ import {ComponentBorderMethodsType, ComponentBorderProps, ComponentBorderPropsTy
 
 
 export const ComponentSelectorProps = {
-    ... GOG_ComponentBasicProps_component,
-    ... GOG_ComponentBasicProps_structure,
+    ... GOG_ComponentBasicProps_Component,
+    ... GOG_ComponentBasicProps_Component_Structure,
     prop_selectorColor :                 "prop_selectorColor" ,
     prop_selectorBorderColor :           "prop_selectorBorderColor" ,
     prop_selectorBorderWidth :           "prop_selectorBorderWidth" ,
@@ -60,8 +55,8 @@ export const ComponentSelectorProps = {
 
 const ComponentSelectorConfigs  =  {
     keys: {
-        ...GOG_ComponentBasicConfigs_component_keys ,
-        ...GOG_ComponentBasicConfigs_structure_keys ,
+        ...GOG_ComponentBasicConfigs_Component_keys ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_keys ,
         ///----------------------
         [ComponentSelectorProps.prop_selectorColor]: {
             name:               ComponentSelectorProps.prop_selectorColor ,
@@ -85,8 +80,8 @@ const ComponentSelectorConfigs  =  {
         } ,
     } ,
     schemas:   {
-        ...GOG_ComponentBasicConfigs_component_parts ,
-        ...GOG_ComponentBasicConfigs_structure_parts ,
+        ...GOG_ComponentBasicConfigs_Component_parts ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_parts ,
         FIX: {
             name:                "part_fix" ,
         } ,
@@ -127,8 +122,8 @@ export class ComponentSelectorBase extends ComponentBase<
     --------------------------------------------- */
     _COMPONENT_PATTERN=  defineComponentPatterns<ComponentSelectorPropsType>(
         {
-            ...GOG_ComponentBasicConfigs_component_Pattern(this) ,
-            ...GOG_ComponentBasicConfigs_structure_Pattern(this) ,
+            ...GOG_ComponentBasicConfigs_Component_Pattern(this) ,
+            ...GOG_ComponentBasicConfigs_Component_Structure_Pattern(this) ,
             [ComponentSelectorConfigs.keys.prop_selectorColor.name]: {
                 prop:                                             ComponentSelectorConfigs.keys.prop_selectorColor.name,
                 default:                                          ComponentSelectorConfigs.keys.prop_selectorColor.value,
@@ -167,14 +162,14 @@ export class ComponentSelectorBase extends ComponentBase<
      PROPERTYs Props
     --------------------------------------------- */
     _COMPONENT_SCHEMA = defineComponentSchema<ComponentSelectorSchemaType  , ComponentSelectorPropsType>( {
-        ...GOG_ComponentBasicConfigs_component_Schema(this) ,
-        ...GOG_ComponentBasicConfigs_structure_Schema(this) ,
+        ...GOG_ComponentBasicConfigs_Component_Schema(this) ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_Schema(this) ,
         [ComponentSelectorConfigs.schemas.FIX.name]: {
             part:                                                   ComponentSelectorConfigs.schemas.FIX.name ,
             title:                                                  Language.translate("components.selector.schema.fix.title") ,
             description:                                            Language.translate("components.selector.schema.fix.description") ,
             props: [
-                this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_component_keys.selector.name] ,
+                this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_keys.selector.name] ,
             ]
         } ,
         [ComponentSelectorConfigs.schemas.SELECTOR.name]: {
@@ -268,7 +263,7 @@ export class ComponentSelector extends ComponentSelectorBase{
     private template_render_fix(attrsDefault , data , extra) : ReactiveElement {
 
         if (data != null) {
-            const selector              =   data[GOG_ComponentBasicConfigs_component_keys.selector.name] ;
+            const selector              =   data[GOG_ComponentBasicConfigs_Component_keys.selector.name] ;
             const selectorValue = selector.get();
 
             if (selectorValue){

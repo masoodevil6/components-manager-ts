@@ -26,29 +26,40 @@ import {
 } from "../../utils/ToolsConsts";
 import {TOOLS} from "../tools";
 import {
-    GOG_ComponentBasicConfigs_component_keys,
-    GOG_ComponentBasicConfigs_component_parts,
-    GOG_ComponentBasicConfigs_component_Pattern, GOG_ComponentBasicConfigs_component_Schema,
-    GOG_ComponentBasicConfigs_structure_keys,
-    GOG_ComponentBasicConfigs_structure_parts,
-    GOG_ComponentBasicConfigs_structure_Pattern, GOG_ComponentBasicConfigs_structure_Schema,
-    GOG_ComponentBasicProps_component,
-    GOG_ComponentBasicProps_structure
+    GOG_ComponentBasicConfigs_Component_keys,
+    GOG_ComponentBasicConfigs_Component_parts,
+    GOG_ComponentBasicConfigs_Component_Pattern,
+    GOG_ComponentBasicConfigs_Component_Schema,
+    GOG_ComponentBasicConfigs_Component_Structure_keys,
+    GOG_ComponentBasicConfigs_Component_Structure_parts,
+    GOG_ComponentBasicConfigs_Component_Structure_Pattern, GOG_ComponentBasicConfigs_Component_Structure_Schema,
+    GOG_ComponentBasicProps_Component,
+    GOG_ComponentBasicProps_Component_Structure,
 } from "../../core/component/SetupComponent";
+import {Observable} from "../../core/Observable";
 
 
 
 
 export const ComponentBorderProps = {
-    ... GOG_ComponentBasicProps_component,
-    ... GOG_ComponentBasicProps_structure,
+    ... GOG_ComponentBasicProps_Component,
+    ... GOG_ComponentBasicProps_Component_Structure,
+
     prop_content :                        "prop_content" ,
     prop_contentSize :                    "prop_contentSize" ,
+
     prop_contentColor :                   "prop_contentColor" ,
+    prop_contentColor_hover :             "prop_contentColor_hover" ,
+
     prop_contentBackgroundColor :         "prop_contentBackgroundColor" ,
+    prop_contentBackgroundColor_hover :   "prop_contentBackgroundColor_hover" ,
+
+    prop_borderColor :                    "prop_borderColor" ,
+    prop_borderColor_hover :              "prop_borderColor_hover" ,
+
     prop_borderClass :                    "prop_borderClass" ,
     prop_borderStyles :                   "prop_borderStyles" ,
-    prop_borderColor :                    "prop_borderColor" ,
+    prop_borderType :                     "prop_borderType" ,
     prop_borderWidth :                    "prop_borderWidth" ,
     prop_borderRadius :                   "prop_borderRadius" ,
     prop_borderOpacity :                  "prop_borderOpacity" ,
@@ -67,12 +78,17 @@ export enum ComponentBorder_ArrowTypes{
     LEFT=    "left"
 }
 
+export enum ComponentBorder_BorderTypes{
+    SOLID=      "solid",
+    DASHED=     "dashed",
+}
+
 
 
 const ComponentBorderConfigs  =  {
     keys: {
-        ...GOG_ComponentBasicConfigs_component_keys ,
-        ...GOG_ComponentBasicConfigs_structure_keys ,
+        ...GOG_ComponentBasicConfigs_Component_keys ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_keys ,
         ///----------------------
         [ComponentBorderProps.prop_content]: {
             name:               ComponentBorderProps.prop_content ,
@@ -82,25 +98,45 @@ const ComponentBorderConfigs  =  {
             name:               ComponentBorderProps.prop_contentSize ,
             value:              GOG_SetValue<typeof SIZES>( SIZES.M) ,
         } ,
+
         [ComponentBorderProps.prop_contentColor]: {
             name:               ComponentBorderProps.prop_contentColor ,
             value:              GOG_SetValue<Color | null>(null),
         } ,
+        [ComponentBorderProps.prop_contentColor_hover]: {
+            name:               ComponentBorderProps.prop_contentColor_hover ,
+            value:              GOG_SetValue<Color | null>(null),
+        } ,
+
         [ComponentBorderProps.prop_contentBackgroundColor]: {
             name:               ComponentBorderProps.prop_contentBackgroundColor ,
             value:              GOG_SetValue<Color | null>( Color(COLORS_MAIN.SHAN , COLORS_GRAD.GRADE_1)),
         } ,
+        [ComponentBorderProps.prop_contentBackgroundColor_hover]: {
+            name:               ComponentBorderProps.prop_contentBackgroundColor_hover ,
+            value:              GOG_SetValue<Color | null>(null),
+        } ,
+
+        [ComponentBorderProps.prop_borderColor]: {
+            name:               ComponentBorderProps.prop_borderColor ,
+            value:              GOG_SetValue<Color | null>( Color(COLORS_MAIN.PRIMARY , COLORS_GRAD.GRADE_1)) ,
+        } ,
+        [ComponentBorderProps.prop_borderColor_hover]: {
+            name:               ComponentBorderProps.prop_borderColor_hover ,
+            value:              GOG_SetValue<Color | null>(null) ,
+        } ,
+
         [ComponentBorderProps.prop_borderClass]: {
             name:               ComponentBorderProps.prop_borderClass ,
-            value:              GOG_SetValue<string[]>( [ "shadow-sm" , "position-relative" , "p-2"] ) ,
+            value:              GOG_SetValue<string[]>( [ "shadow-sm" , "position-relative" , "px-2"] ) ,
         } ,
         [ComponentBorderProps.prop_borderStyles]: {
             name:               ComponentBorderProps.prop_borderStyles ,
             value:              GOG_SetValue<Record<string, string>>( {"display" : "flow-root"}) ,
         } ,
-        [ComponentBorderProps.prop_borderColor]: {
-            name:               ComponentBorderProps.prop_borderColor ,
-            value:              GOG_SetValue<Color | null>( Color(COLORS_MAIN.PRIMARY , COLORS_GRAD.GRADE_1)) ,
+        [ComponentBorderProps.prop_borderType]: {
+            name:               ComponentBorderProps.prop_borderType ,
+            value:              GOG_SetValue<GOG_ValueOf<typeof ComponentBorder_BorderTypes>>(ComponentBorder_BorderTypes.SOLID),
         } ,
         [ComponentBorderProps.prop_borderWidth]: {
             name:               ComponentBorderProps.prop_borderWidth ,
@@ -132,15 +168,15 @@ const ComponentBorderConfigs  =  {
         } ,
     } ,
     schemas:   {
-        ...GOG_ComponentBasicConfigs_component_parts ,
-        ...GOG_ComponentBasicConfigs_structure_parts ,
+        ...GOG_ComponentBasicConfigs_Component_parts ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_parts ,
         BORDER: {
-            name:               "part_border"
+            name:                      "part-border"
         } ,
     } ,
     templates: {
         BODY: {
-            name:                "body"
+            name:                      "body"
         } ,
     } ,
     methods: {
@@ -187,8 +223,8 @@ export abstract class ComponentBorderBase extends ComponentBase<
         PROPERTYs Pattern
     --------------------------------------------- */
     _COMPONENT_PATTERN=  defineComponentPatterns<ComponentBorderPropsType>({
-        ...GOG_ComponentBasicConfigs_component_Pattern(this) ,
-        ...GOG_ComponentBasicConfigs_structure_Pattern(this) ,
+        ...GOG_ComponentBasicConfigs_Component_Pattern(this) ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_Pattern(this) ,
         [ComponentBorderConfigs.keys.prop_content.name]: {
             prop:                                             ComponentBorderConfigs.keys.prop_content.name,
             default:                                          ComponentBorderConfigs.keys.prop_content.value,
@@ -207,12 +243,38 @@ export abstract class ComponentBorderBase extends ComponentBase<
             title:                                            Language.translate("components.border.prop.prop_contentColor.title"),
             description:                                      Language.translate("components.border.prop.prop_contentColor.description"),
         } ,
+        [ComponentBorderConfigs.keys.prop_contentColor_hover.name]: {
+            prop:                                             ComponentBorderConfigs.keys.prop_contentColor_hover.name,
+            default:                                          ComponentBorderConfigs.keys.prop_contentColor_hover.value,
+            title:                                            Language.translate("components.border.prop.prop_contentColor_hover.title"),
+            description:                                      Language.translate("components.border.prop.prop_contentColor_hover.description"),
+        } ,
         [ComponentBorderConfigs.keys.prop_contentBackgroundColor.name]: {
             prop:                                             ComponentBorderConfigs.keys.prop_contentBackgroundColor.name,
             default:                                          ComponentBorderConfigs.keys.prop_contentBackgroundColor.value,
             title:                                            Language.translate("components.border.prop.prop_contentBackgroundColor.title"),
             description:                                      Language.translate("components.border.prop.prop_contentBackgroundColor.description"),
         } ,
+        [ComponentBorderConfigs.keys.prop_contentBackgroundColor_hover.name]: {
+            prop:                                             ComponentBorderConfigs.keys.prop_contentBackgroundColor_hover.name,
+            default:                                          ComponentBorderConfigs.keys.prop_contentBackgroundColor_hover.value,
+            title:                                            Language.translate("components.border.prop.prop_contentBackgroundColor.title"),
+            description:                                      Language.translate("components.border.prop.prop_contentBackgroundColor.description"),
+        } ,
+
+        [ComponentBorderConfigs.keys.prop_borderColor.name]: {
+            prop:                                             ComponentBorderConfigs.keys.prop_borderColor.name,
+            default:                                          ComponentBorderConfigs.keys.prop_borderColor.value,
+            title:                                            Language.translate("components.border.prop.prop_borderColor.title"),
+            description:                                      Language.translate("components.border.prop.prop_borderColor.description"),
+        } ,
+        [ComponentBorderConfigs.keys.prop_borderColor_hover.name]: {
+            prop:                                             ComponentBorderConfigs.keys.prop_borderColor_hover.name,
+            default:                                          ComponentBorderConfigs.keys.prop_borderColor_hover.value,
+            title:                                            Language.translate("components.border.prop.prop_borderColor_hover.title"),
+            description:                                      Language.translate("components.border.prop.prop_borderColor_hover.description"),
+        } ,
+
         [ComponentBorderConfigs.keys.prop_borderClass.name]: {
             prop:                                             ComponentBorderConfigs.keys.prop_borderClass.name,
             default:                                          ComponentBorderConfigs.keys.prop_borderClass.value,
@@ -225,11 +287,12 @@ export abstract class ComponentBorderBase extends ComponentBase<
             title:                                            Language.translate("components.border.prop.prop_borderStyles.title"),
             description:                                      Language.translate("components.border.prop.prop_borderStyles.description"),
         } ,
-        [ComponentBorderConfigs.keys.prop_borderColor.name]: {
-            prop:                                             ComponentBorderConfigs.keys.prop_borderColor.name,
-            default:                                          ComponentBorderConfigs.keys.prop_borderColor.value,
-            title:                                            Language.translate("components.border.prop.prop_borderColor.title"),
-            description:                                      Language.translate("components.border.prop.prop_borderColor.description"),
+
+        [ComponentBorderConfigs.keys.prop_borderType.name]: {
+            prop:                                             ComponentBorderConfigs.keys.prop_borderType.name,
+            default:                                          ComponentBorderConfigs.keys.prop_borderType.value,
+            title:                                            Language.translate("components.border.prop.prop_borderType.title"),
+            description:                                      Language.translate("components.border.prop.prop_borderType.description"),
         } ,
         [ComponentBorderConfigs.keys.prop_borderWidth.name]: {
             prop:                                             ComponentBorderConfigs.keys.prop_borderWidth.name,
@@ -281,8 +344,8 @@ export abstract class ComponentBorderBase extends ComponentBase<
         PROPERTYs Schema
     --------------------------------------------- */
     _COMPONENT_SCHEMA = defineComponentSchema<ComponentBorderSchemaType , ComponentBorderPropsType>({
-        ...GOG_ComponentBasicConfigs_component_Schema(this) ,
-        ...GOG_ComponentBasicConfigs_structure_Schema(this) ,
+        ...GOG_ComponentBasicConfigs_Component_Schema(this) ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_Schema(this) ,
         [ComponentBorderConfigs.schemas.BORDER.name]: {
             part:               ComponentBorderConfigs.schemas.BORDER.name ,
             title:              Language.translate("components.border.schema.border.title") ,
@@ -295,12 +358,16 @@ export abstract class ComponentBorderBase extends ComponentBase<
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_borderOpacity.name] ,
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_borderWidth.name] ,
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_borderColor.name] ,
+                this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_borderColor_hover.name] ,
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_borderClass.name] ,
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_borderStyles.name] ,
+                this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_borderType.name] ,
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_content.name] ,
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_contentSize.name] ,
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_contentColor.name] ,
+                this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_contentColor_hover.name] ,
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_contentBackgroundColor.name] ,
+                this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_contentBackgroundColor_hover.name] ,
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_minWidth.name] ,
             ]
         } ,
@@ -346,12 +413,15 @@ export abstract class ComponentBorderBase extends ComponentBase<
                 styles: {}  ,
 
                 prop_show :               true ,
-                prop_content:             "content test" ,
-                prop_borderArrowType:     "bottom" ,
+                prop_content:             "content test  " ,
+                prop_borderArrowType:     "top" ,
                 //prop_borderArrowPosition: 50 ,
                 prop_borderArrowWidth:    10 ,
                 //prop_borderWidth:        SIZES.XXL ,
-                prop_borderColor:         Color(COLORS_MAIN.WARNING , COLORS_GRAD.GRADE_1) ,
+                prop_borderColor:                    Color(COLORS_MAIN.WARNING , COLORS_GRAD.GRADE_1) ,
+                prop_borderColor_hover:              Color(COLORS_MAIN.DARK , COLORS_GRAD.GRADE_1) ,
+                prop_contentBackgroundColor_hover:   Color(COLORS_MAIN.WARNING , COLORS_GRAD.GRADE_4) ,
+                prop_contentColor_hover:             Color(COLORS_MAIN.WARNING , COLORS_GRAD.GRADE_1) ,
             },
             <ComponentBorderMethodsType>{
                 fn_onClickBorder: function (event, dataArgs:ComponentBorder_Methods_CLICK_BORDER_DataArgs, componentArgs:ComponentBorder_Methods_CLICK_BORDER_ComponentArgs) {
@@ -362,10 +432,6 @@ export abstract class ComponentBorderBase extends ComponentBase<
     }
 
 
-
-    /* ---------------------------------------------
-       templates
-    --------------------------------------------- */
 }
 
 
@@ -396,7 +462,7 @@ export class ComponentBorder extends ComponentBorderBase{
 
     override renderManagerComponent(partName , attrsDefault, data , extra) : ReactiveElement {
         switch (partName){
-            case this._COMPONENT_SCHEMA.part_border.part:
+            case ComponentBorderConfigs.schemas.BORDER.name:
                return  this.template_render_border(attrsDefault , data , extra);
         }
     }
@@ -411,21 +477,43 @@ export class ComponentBorder extends ComponentBorderBase{
             const prop_borderRadius =                   data[ComponentBorderConfigs.keys.prop_borderRadius.name];
             const prop_borderOpacity =                  data[ComponentBorderConfigs.keys.prop_borderOpacity.name];
             const prop_borderColor =                    data[ComponentBorderConfigs.keys.prop_borderColor.name];
+            const prop_borderColor_hover =              data[ComponentBorderConfigs.keys.prop_borderColor_hover.name];
             const prop_borderWidth =                    data[ComponentBorderConfigs.keys.prop_borderWidth.name];
             const prop_borderClass=                     data[ComponentBorderConfigs.keys.prop_borderClass.name];
             const prop_borderStyles=                    data[ComponentBorderConfigs.keys.prop_borderStyles.name];
+            const prop_borderType=                      data[ComponentBorderConfigs.keys.prop_borderType.name];
             const prop_content=                         data[ComponentBorderConfigs.keys.prop_content.name];
             const prop_contentSize=                     data[ComponentBorderConfigs.keys.prop_contentSize.name];
             const prop_contentColor=                    data[ComponentBorderConfigs.keys.prop_contentColor.name];
+            const prop_contentColor_hover=              data[ComponentBorderConfigs.keys.prop_contentColor_hover.name];
             const prop_contentBackgroundColor=          data[ComponentBorderConfigs.keys.prop_contentBackgroundColor.name];
+            const prop_contentBackgroundColor_hover=    data[ComponentBorderConfigs.keys.prop_contentBackgroundColor_hover.name];
             const prop_minWidth =                       data[ComponentBorderConfigs.keys.prop_minWidth.name];
 
-            const directionRtl = AppConfig.get("directionRtl");
-            const elFontSize =   ToolsCss.getFontSize(prop_contentSize.get());
-            const elHeight =     ToolsCss.getHeightSize(prop_contentSize.get());
+            const directionRtl =     AppConfig.get("directionRtl");
+            const elFontSize =       ToolsCss.getFontSize(prop_contentSize.get());
+            const elHeight =         ToolsCss.getHeightSize(prop_contentSize.get());
+            const elLineHeight =     ToolsCss.getLineHeightSize(prop_contentSize.get());
 
-            let borderArrow = "";
-            switch (prop_borderArrowType.get()){
+            let borderArrow = `
+#${attrsDefault?.id}:after{
+   content:                                    var(--arrow-content);
+   position:                                   absolute;
+   width:                                      0px;
+   height:                                     0px;
+   border-style:                               solid;
+   
+   left:                                       var(--arrow-left);
+   right:                                      var(--arrow-right);
+   top:                                        var(--arrow-top);
+   bottom:                                     var(--arrow-bottom);
+   
+   border-width:                               var(--arrow-border-width);
+   border-color:                               var(--arrow-border-color);
+   transform:                                  var(--arrow-transform);
+}
+            `;
+           /* switch (prop_borderArrowType.get()){
                 case ComponentBorder_ArrowTypes.TOP:
                     borderArrow = `
 #${attrsDefault?.id}:after{
@@ -490,7 +578,7 @@ export class ComponentBorder extends ComponentBorderBase{
 }
                     `
                     break;
-            }
+            }*/
 
             return ReactiveElement.part(
                 "section" ,
@@ -500,20 +588,160 @@ export class ComponentBorder extends ComponentBorderBase{
                     },
                     stylesCustom: borderArrow ,
                     styles: {
-                        lineHeight:   `${elHeight}px` ,
+
+                        transition: "background-color 1000ms ease , color 1000ms ease , border-color 1000ms ease",
+
+                    //    height:       `${elHeight}px` ,
+                        lineHeight:   `${elLineHeight}px` ,
                         fontSize:     `${elFontSize}px`
                     } ,
-                    stylesBind: {
+                    stylesBind: (el) => ({
+                        "--arrow-content" :
+                            Observable.computed(( arrowType) => {
+                                    if (arrowType != null){
+                                        return "''"
+                                    }
+                                    return null;
+                                },
+                                [ prop_borderArrowType]
+                            ) ,
+
+                        "--arrow-left" :
+                            Observable.computed(( type , arrowPosition , arrowWith) => {
+                                    if (!directionRtl && (type == ComponentBorder_ArrowTypes.TOP || type == ComponentBorder_ArrowTypes.BOTTOM) ){
+                                        return arrowPosition
+                                    }
+                                    else if (directionRtl && type == ComponentBorder_ArrowTypes.LEFT){
+                                        return SizeUnit(-arrowWith , UNITS.PEXEL)
+                                    }
+                                    else if (!directionRtl && type == ComponentBorder_ArrowTypes.LEFT) {
+                                        return SizeUnit(-arrowWith , UNITS.PEXEL)
+                                    }
+
+                                    return null;
+                                },
+                                [prop_borderArrowType , prop_borderArrowPosition ,  prop_borderArrowWidth]
+                            ) ,
+
+                        "--arrow-right" :
+                            Observable.computed(( type , arrowPosition , arrowWith) => {
+                                    if (directionRtl && (type == ComponentBorder_ArrowTypes.TOP || type == ComponentBorder_ArrowTypes.BOTTOM) ){
+                                        return arrowPosition
+                                    }
+                                    else if (!directionRtl && type == ComponentBorder_ArrowTypes.RIGHT){
+                                        return SizeUnit(-arrowWith , UNITS.PEXEL)
+                                    }
+                                    else if (directionRtl && type == ComponentBorder_ArrowTypes.RIGHT){
+                                        return SizeUnit(-arrowWith , UNITS.PEXEL)
+                                    }
+                                    return null;
+                                },
+                                [prop_borderArrowType , prop_borderArrowPosition ,  prop_borderArrowWidth]
+                            ) ,
+
+                        "--arrow-top" :
+                            Observable.computed(( type , arrowPosition , arrowWith) => {
+                                    if ( type == ComponentBorder_ArrowTypes.TOP ){
+                                        return SizeUnit(-arrowWith , UNITS.PEXEL)
+                                    }
+                                    else if (type == ComponentBorder_ArrowTypes.LEFT){
+                                        return arrowPosition
+                                    }
+                                    else if (type == ComponentBorder_ArrowTypes.RIGHT){
+                                        return arrowPosition
+                                    }
+
+                                    return null;
+                                },
+                                [prop_borderArrowType , prop_borderArrowPosition ,  prop_borderArrowWidth]
+                            ) ,
+
+                        "--arrow-bottom" :
+                            Observable.computed(( type  , arrowWith) => {
+                                    if ( type == ComponentBorder_ArrowTypes.BOTTOM ){
+                                        return SizeUnit(-arrowWith , UNITS.PEXEL)
+                                    }
+                                    return null;
+                                },
+                                [prop_borderArrowType  ,  prop_borderArrowWidth]
+                            ) ,
+
+                        "--arrow-border-width" :
+                            Observable.computed(( type  , arrowWith) => {
+                                    if ( type == ComponentBorder_ArrowTypes.TOP || type == ComponentBorder_ArrowTypes.BOTTOM){
+                                        return `${SizeUnit(arrowWith , UNITS.PEXEL)}  ${SizeUnit(arrowWith*(2/3) , UNITS.PEXEL)}  0  ${SizeUnit(arrowWith*(2/3) , UNITS.PEXEL)}`;
+                                    }
+                                    else if ( (directionRtl && type == ComponentBorder_ArrowTypes.LEFT) || (!directionRtl && type == ComponentBorder_ArrowTypes.RIGHT) ){
+                                        return `${SizeUnit(arrowWith*(2/3) , UNITS.PEXEL)}   0   ${SizeUnit(arrowWith*(2/3) , UNITS.PEXEL)}   ${SizeUnit(arrowWith , UNITS.PEXEL)}`;
+                                    }
+                                    else if ((directionRtl && type == ComponentBorder_ArrowTypes.RIGHT) || (!directionRtl && type == ComponentBorder_ArrowTypes.LEFT) ){
+                                        return `${SizeUnit(arrowWith*(2/3) , UNITS.PEXEL)}  ${SizeUnit(arrowWith , UNITS.PEXEL)}  ${SizeUnit(arrowWith*(2/3) , UNITS.PEXEL)}  0`;
+                                    }
+                                    return null;
+                                },
+                                [prop_borderArrowType  ,  prop_borderArrowWidth]
+                            ) ,
+
+                        "--arrow-border-color" : el.hover.mapList({
+                            true:           Observable.computed(( type  , borderColor) => {
+                                    if ( type == ComponentBorder_ArrowTypes.TOP || type == ComponentBorder_ArrowTypes.BOTTOM){
+                                        return `${borderColor} transparent transparent transparent`;
+                                    }
+                                    else if ( (directionRtl && type == ComponentBorder_ArrowTypes.LEFT) || (!directionRtl && type == ComponentBorder_ArrowTypes.RIGHT) ){
+                                        return `transparent transparent transparent ${borderColor}`;
+                                    }
+                                    else if ((directionRtl && type == ComponentBorder_ArrowTypes.RIGHT) || (!directionRtl && type == ComponentBorder_ArrowTypes.LEFT) ){
+                                        return `transparent ${borderColor} transparent transparent`;
+                                    }
+                                    return null;
+                                },
+                                [prop_borderArrowType  ,  prop_borderColor_hover]
+                            ),
+                            false:          Observable.computed(( type  , borderColor) => {
+                                    if ( type == ComponentBorder_ArrowTypes.TOP || type == ComponentBorder_ArrowTypes.BOTTOM){
+                                        return `${borderColor} transparent transparent transparent`;
+                                    }
+                                    else if ( (directionRtl && type == ComponentBorder_ArrowTypes.LEFT) || (!directionRtl && type == ComponentBorder_ArrowTypes.RIGHT) ){
+                                        return `transparent transparent transparent ${borderColor}`;
+                                    }
+                                    else if ((directionRtl && type == ComponentBorder_ArrowTypes.RIGHT) || (!directionRtl && type == ComponentBorder_ArrowTypes.LEFT) ){
+                                        return `transparent ${borderColor} transparent transparent`;
+                                    }
+                                    return null;
+                                },
+                                [prop_borderArrowType  ,  prop_borderColor]
+                            )
+                        }) ,
+
+
+
+
+                        "--arrow-transform" :
+                            Observable.computed(( type  ) => {
+                                    if ( type == ComponentBorder_ArrowTypes.TOP){
+                                        return `translate(${directionRtl ? "50%" : "-50%"} , 0) rotate(180deg)`;
+                                    }
+                                    if ( type == ComponentBorder_ArrowTypes.BOTTOM){
+                                        return `translate(${directionRtl ? "50%" : "-50%"} , 0) rotate(0deg)`;
+                                    }
+                                    else if ( (directionRtl && type == ComponentBorder_ArrowTypes.LEFT) || (!directionRtl && type == ComponentBorder_ArrowTypes.RIGHT) ){
+                                        return `translate(0 , -50%)  ${directionRtl ? "rotate(180deg)" : ""}`;
+                                    }
+                                    else if ((directionRtl && type == ComponentBorder_ArrowTypes.RIGHT) || (!directionRtl && type == ComponentBorder_ArrowTypes.LEFT) ){
+                                        return `translate(0 , -50%) ${directionRtl ? "rotate(180deg)" : ""}`;
+                                    }
+                                    return null;
+                                },
+                                [prop_borderArrowType  ]
+                            ) ,
+
+
+
+
+
                         prop_borderStyles ,
                         minWidth:         prop_minWidth ,
-                        borderStyle:      prop_borderWidth.map(
-                            v=>{
-                                if ((typeof v == "string" && ToolsCss.checkExistSizeSelected(v)) || (typeof v == "number")){
-                                    return "solid";
-                                }
-                                return null;
-                            }
-                        ) ,
+                        borderStyle:      prop_borderType ,
                         borderWidth:      prop_borderWidth.map(
                             v=>{
                                 if (typeof v == "string" && ToolsCss.checkExistSizeSelected(v)){
@@ -525,6 +753,8 @@ export class ComponentBorder extends ComponentBorderBase{
                                 return null;
                             }
                         ) ,
+
+
                         borderRadius: prop_borderRadius.map(
                             v=>{
                                 if (typeof v == "string" && ToolsCss.checkExistSizeSelected(v)){
@@ -536,16 +766,51 @@ export class ComponentBorder extends ComponentBorderBase{
                                 return null;
                             }
                         ) ,
+
+
                         opacity:         prop_borderOpacity.map(
                             v=>{
                                 return v/100
                             }
                         ) ,
-                        borderColor:      prop_borderColor ,
-                        color:            prop_contentColor ,
-                        backgroundColor:  prop_contentBackgroundColor
-                    } ,
-                    className: [] ,
+
+
+                        borderColor:
+                            Observable.computed(( color , colorHover) => {
+
+                                const hoverValue = el.hover.get();
+                                if (colorHover){
+                                    return hoverValue ? colorHover : color
+                                }
+
+                                return color;
+                            }, [ prop_borderColor , prop_borderColor_hover , el.hover]),
+
+                        color:
+                            Observable.computed(( color , colorHover) => {
+
+                                const hoverValue = el.hover.get();
+                                if (colorHover){
+                                    return hoverValue ? colorHover : color
+                                }
+
+                                return color;
+                            }, [ prop_contentColor , prop_contentColor_hover , el.hover]),
+
+                        backgroundColor:
+                            Observable.computed(( color , colorHover) => {
+
+                                const hoverValue = el.hover.get();
+                                if (colorHover){
+                                    return hoverValue ? colorHover : color
+                                }
+
+                                return color;
+                            }, [ prop_contentBackgroundColor , prop_contentBackgroundColor_hover , el.hover]),
+
+
+                    }) ,
+                    className: ["p-0"] ,
                     classBind: [
                         prop_borderClass
                     ] ,

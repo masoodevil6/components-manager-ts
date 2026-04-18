@@ -3,9 +3,8 @@ import {ReactiveElement} from "./ReactiveElement";
 import {AppConfig} from "./AppConfig";
 import {ComponentAttrsDefault, ConnectorComponent} from "./component/ConnectorComponent";
 import {
-    GOG_ComponentBasicConfigs_component_parts, GOG_ComponentBasicConfigs_structure_parts,
-    GOG_ComponentBasicConfigs_structure_Schema,
-    GOG_ComponentBasicProps_component
+    GOG_ComponentBasicConfigs_Component_parts, GOG_ComponentBasicProps_Component
+
 } from "./component/SetupComponent";
 
 export type GOG_TypeOf<T> = T;
@@ -481,13 +480,13 @@ export class ComponentBase<
     //--------------------------------------------------
 
     private createComponentElement(){
-        this._COMPONENT_CONTENT = this.executeSchemaPart(GOG_ComponentBasicConfigs_component_parts.COMPONENT.name);
+        this._COMPONENT_CONTENT = this.executeSchemaPart(GOG_ComponentBasicConfigs_Component_parts.Component.name);
 
-        const selector = this.get(GOG_ComponentBasicProps_component.selector);
+        const selector = this.get(GOG_ComponentBasicProps_Component.selector);
         if (selector){
             const el = document.querySelector(selector)
             if (el){
-                const append = this.get(GOG_ComponentBasicProps_component.append);
+                const append = this.get(GOG_ComponentBasicProps_Component.append);
                 if (append){
                     el.append(this._COMPONENT_CONTENT.getElement())
                 }
@@ -506,7 +505,7 @@ export class ComponentBase<
     // Template Reader
     //--------------------------------------------------
     executeSchemaPart(partName , extra=null) {
-        let result;
+        let result = null;
 
         if (this._COMPONENT_SCHEMA ){
             Object.keys(this._COMPONENT_SCHEMA).forEach(key=> {
@@ -553,7 +552,7 @@ export class ComponentBase<
     //--------------------------------------------------
     // template parts
     //--------------------------------------------------
-    templateBasic_render(
+    /*templateBasic_render(
         attrsDefault ,
         data ,
         extra
@@ -567,10 +566,10 @@ export class ComponentBase<
             const rtl = AppConfig.observable("directionRtl")
             let classList =  data?.classList ?? [];
             let styles = data?.styles ?? {};
-            /*if (this._COMPONENT_ELEMENT == null) {
+            /!*if (this._COMPONENT_ELEMENT == null) {
                 classList = data?.classList ?? [];
                 styles = data?.styles ?? {};
-            }*/
+            }*!/
 
              return  ReactiveElement.component( this._COMPONENT_NAME ,{
                 attrs: {
@@ -601,10 +600,10 @@ export class ComponentBase<
                 ...attrsDefault
             }
         });
-    }
+    }*/
 
 
-    templateBasic_render_structure(
+   /* templateBasic_render_structure(
         attrsDefault ,
         data ,
         extra
@@ -643,7 +642,7 @@ export class ComponentBase<
                 ...attrsDefault
             },
         });
-    }
+    }*/
 
 
 

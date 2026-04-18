@@ -1,12 +1,8 @@
+
+import {components} from "./lang_en/components";
+import {pages} from "./lang_en/pages";
+
 export const en={
-    pages:{
-        home:      "Home" ,
-        icons:     "Icons" ,
-        tests:     "Show Tests" ,
-    } ,
-
-
-    test: {
-        login: "hi {{name}}"
-    },
+    pages:       pages,
+    components:  components,
 }

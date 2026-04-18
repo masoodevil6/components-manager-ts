@@ -26,14 +26,15 @@ import {
 } from "../../utils/ToolsConsts";
 import {TOOLS} from "../tools";
 import {
-    GOG_ComponentBasicConfigs_component_keys,
-    GOG_ComponentBasicConfigs_component_parts,
-    GOG_ComponentBasicConfigs_component_Pattern, GOG_ComponentBasicConfigs_component_Schema,
-    GOG_ComponentBasicConfigs_structure_keys,
-    GOG_ComponentBasicConfigs_structure_parts,
-    GOG_ComponentBasicConfigs_structure_Pattern, GOG_ComponentBasicConfigs_structure_Schema,
-    GOG_ComponentBasicProps_component,
-    GOG_ComponentBasicProps_structure
+    GOG_ComponentBasicConfigs_Component_keys,
+    GOG_ComponentBasicConfigs_Component_parts,
+    GOG_ComponentBasicConfigs_Component_Pattern,
+    GOG_ComponentBasicConfigs_Component_Schema,
+    GOG_ComponentBasicConfigs_Component_Structure_keys,
+    GOG_ComponentBasicConfigs_Component_Structure_parts,
+    GOG_ComponentBasicConfigs_Component_Structure_Pattern, GOG_ComponentBasicConfigs_Component_Structure_Schema,
+    GOG_ComponentBasicProps_Component,
+    GOG_ComponentBasicProps_Component_Structure,
 } from "../../core/component/SetupComponent";
 import {ToolsIcons} from "../icons";
 
@@ -44,8 +45,8 @@ import {ToolsIcons} from "../icons";
 
 
 export const ComponentRecyclerViewProps = {
-    ... GOG_ComponentBasicProps_component,
-    ... GOG_ComponentBasicProps_structure,
+    ... GOG_ComponentBasicProps_Component,
+    ... GOG_ComponentBasicProps_Component_Structure,
     prop_formClass :                        "prop_formClass" ,
     prop_formStyles :                       "prop_formStyles" ,
     prop_formDirection :                    "prop_formDirection" ,
@@ -67,8 +68,8 @@ enum ComponentRecyclerView_DirectionTypes{
 
 const ComponentRecyclerViewConfigs  =  {
     keys: {
-        ...GOG_ComponentBasicConfigs_component_keys ,
-        ...GOG_ComponentBasicConfigs_structure_keys ,
+        ...GOG_ComponentBasicConfigs_Component_keys ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_keys ,
         ///----------------------
         [ComponentRecyclerViewProps.prop_formClass]: {
             name:                     ComponentRecyclerViewProps.prop_formClass  ,
@@ -88,8 +89,8 @@ const ComponentRecyclerViewConfigs  =  {
         } ,
     } ,
     schemas:   {
-        ...GOG_ComponentBasicConfigs_component_parts ,
-        ...GOG_ComponentBasicConfigs_structure_parts ,
+        ...GOG_ComponentBasicConfigs_Component_parts ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_parts ,
         COMPONENTS: {
             name:                     "part_components"
         } ,
@@ -130,8 +131,8 @@ export class ComponentRecyclerViewBase extends ComponentBase<
      --------------------------------------------- */
     _COMPONENT_PATTERN=  defineComponentPatterns<ComponentRecyclerViewPropsType>(
         {
-            ...GOG_ComponentBasicConfigs_component_Pattern(this) ,
-            ...GOG_ComponentBasicConfigs_structure_Pattern(this) ,
+            ...GOG_ComponentBasicConfigs_Component_Pattern(this) ,
+            ...GOG_ComponentBasicConfigs_Component_Structure_Pattern(this) ,
             [ComponentRecyclerViewConfigs.keys.prop_formClass.name]: {
                 prop:                                             ComponentRecyclerViewConfigs.keys.prop_formClass.name,
                 default:                                          ComponentRecyclerViewConfigs.keys.prop_formClass.value,
@@ -164,8 +165,8 @@ export class ComponentRecyclerViewBase extends ComponentBase<
            PROPERTYs Props
     --------------------------------------------- */
     _COMPONENT_SCHEMA = defineComponentSchema<ComponentRecyclerViewSchemaType  , ComponentRecyclerViewPropsType>( {
-        ...GOG_ComponentBasicConfigs_component_Schema(this) ,
-        ...GOG_ComponentBasicConfigs_structure_Schema(this) ,
+        ...GOG_ComponentBasicConfigs_Component_Schema(this) ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_Schema(this) ,
         [ComponentRecyclerViewConfigs.schemas.COMPONENTS.name]: {
             part:                                                  ComponentRecyclerViewConfigs.schemas.COMPONENTS.name ,
             title:                                                 Language.translate("components.recycler_view.schema.components.title") ,

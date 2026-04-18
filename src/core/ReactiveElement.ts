@@ -151,7 +151,17 @@ export class ReactiveElement {
 
                 } else {
 
-                    (this.element.style as any)[key] = value;
+                    if(key.startsWith("--")){
+                        if (value == null){
+                            this.element.style.removeProperty(key);
+                        }
+                        else{
+                            this.element.style.setProperty(key , value);
+                        }
+                    }
+                    else{
+                        (this.element.style as any)[key] = value;
+                    }
 
                 }
 
@@ -346,7 +356,6 @@ export class ReactiveElement {
         if (o.attrsBind) this._applyAttrsBind(o.attrsBind);
 
         if (o.className) this._applyClassName(o.className);
-
         if (o.classBind) {
 
             if (typeof o.classBind === "function") {
@@ -360,7 +369,6 @@ export class ReactiveElement {
 
         if (o.styles) this._applyStyles(o.styles);
         if (o.stylesCustom) this._applyCustomStyle(o.stylesCustom);
-
         if (o.stylesBind) {
 
             if (typeof o.stylesBind === "function") {

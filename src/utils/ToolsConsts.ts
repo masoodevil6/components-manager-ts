@@ -7,6 +7,7 @@ export const COLORS_GRAD = {
     GRADE_2:       2 ,
     GRADE_3:       3 ,
     GRADE_4:       4 ,
+    GRADE_5:       5 ,
 } as const
 
 
@@ -44,6 +45,7 @@ type OperationType = typeof OPERATION[keyof typeof OPERATION];
 export const UNITS = {
     PERCENT:        "%" ,
     PEXEL:          "px" ,
+    POINT:          "pt" ,
 } as const
 type UnitsType = typeof UNITS[keyof typeof UNITS];
 
@@ -66,6 +68,12 @@ export const SizeCalc = (...parts : CalcSizeParts[]) : CalcSizeUnitVar=> {
         }
     }
     return `calc(${partStr})` as CalcSizeUnitVar
+}
+
+
+type TransformUnitVar = `translate(${SizeUnitVar} , ${SizeUnitVar})`
+export const TranslateUnit = (transitionX: SizeUnitVar, transitionY: SizeUnitVar) : TransformUnitVar=> {
+    return `translate(${transitionX} , ${transitionY})` as TransformUnitVar
 }
 
 
@@ -142,6 +150,9 @@ export const Z_INDEXES = {
     tools_btn:      'tools_btn',
     tools_position: 'tools_position',
     new_page:       'new_page',
+
+    notify:         'notify',
+
     blur_popup:     'blur_popup',
     popup:          'popup',
 

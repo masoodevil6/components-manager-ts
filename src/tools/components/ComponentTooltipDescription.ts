@@ -26,14 +26,15 @@ import {
 } from "../../utils/ToolsConsts";
 import {TOOLS} from "../tools";
 import {
-    GOG_ComponentBasicConfigs_component_keys,
-    GOG_ComponentBasicConfigs_component_parts,
-    GOG_ComponentBasicConfigs_component_Pattern, GOG_ComponentBasicConfigs_component_Schema,
-    GOG_ComponentBasicConfigs_structure_keys,
-    GOG_ComponentBasicConfigs_structure_parts,
-    GOG_ComponentBasicConfigs_structure_Pattern, GOG_ComponentBasicConfigs_structure_Schema,
-    GOG_ComponentBasicProps_component,
-    GOG_ComponentBasicProps_structure
+    GOG_ComponentBasicConfigs_Component_keys,
+    GOG_ComponentBasicConfigs_Component_parts,
+    GOG_ComponentBasicConfigs_Component_Pattern,
+    GOG_ComponentBasicConfigs_Component_Schema,
+    GOG_ComponentBasicConfigs_Component_Structure_keys,
+    GOG_ComponentBasicConfigs_Component_Structure_parts,
+    GOG_ComponentBasicConfigs_Component_Structure_Pattern, GOG_ComponentBasicConfigs_Component_Structure_Schema,
+    GOG_ComponentBasicProps_Component,
+    GOG_ComponentBasicProps_Component_Structure,
 } from "../../core/component/SetupComponent";
 import {ToolsIcons} from "../icons";
 import {
@@ -54,8 +55,9 @@ import {
 
 
 export const ComponentTooltipDescriptionProps = {
-    ... GOG_ComponentBasicProps_component,
-    ... GOG_ComponentBasicProps_structure,
+    ... GOG_ComponentBasicProps_Component,
+    ... GOG_ComponentBasicProps_Component_Structure,
+
     prop_icon :             "prop_icon" ,
     prop_iconClass :        "prop_iconClass" ,
     prop_iconStyles :       "prop_iconStyles" ,
@@ -79,8 +81,8 @@ export enum ComponentTooltipDescription_PositionTypes{
 
 const ComponentTooltipDescriptionConfigs  =  {
     keys: {
-        ...GOG_ComponentBasicConfigs_component_keys ,
-        ...GOG_ComponentBasicConfigs_structure_keys ,
+        ...GOG_ComponentBasicConfigs_Component_keys ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_keys ,
         ///----------------------
         [ComponentTooltipDescriptionProps.prop_iconClass] : {
             name:                ComponentTooltipDescriptionProps.prop_iconClass ,
@@ -120,8 +122,8 @@ const ComponentTooltipDescriptionConfigs  =  {
         } ,
     } ,
     schemas:   {
-        ...GOG_ComponentBasicConfigs_component_parts ,
-        ...GOG_ComponentBasicConfigs_structure_parts ,
+        ...GOG_ComponentBasicConfigs_Component_parts ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_parts ,
         FLOAT_MENU: {
             name:               "part_float_menu"
         } ,
@@ -161,8 +163,8 @@ export class ComponentTooltipDescriptionBase extends ComponentBase<
     --------------------------------------------- */
     _COMPONENT_PATTERN=  defineComponentPatterns<ComponentTooltipDescriptionPropsType>(
         {
-            ...GOG_ComponentBasicConfigs_component_Pattern(this) ,
-            ...GOG_ComponentBasicConfigs_structure_Pattern(this) ,
+            ...GOG_ComponentBasicConfigs_Component_Pattern(this) ,
+            ...GOG_ComponentBasicConfigs_Component_Structure_Pattern(this) ,
             [ComponentTooltipDescriptionConfigs.keys.prop_icon.name]: {
                 prop:                                             ComponentTooltipDescriptionConfigs.keys.prop_icon.name,
                 default:                                          ComponentTooltipDescriptionConfigs.keys.prop_icon.value,
@@ -225,8 +227,8 @@ export class ComponentTooltipDescriptionBase extends ComponentBase<
        PROPERTYs Props
    --------------------------------------------- */
     _COMPONENT_SCHEMA = defineComponentSchema<ComponentTooltipDescriptionSchemaType  , ComponentTooltipDescriptionPropsType>( {
-        ...GOG_ComponentBasicConfigs_component_Schema(this) ,
-        ...GOG_ComponentBasicConfigs_structure_Schema(this) ,
+        ...GOG_ComponentBasicConfigs_Component_Schema(this) ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_Schema(this) ,
         [ComponentTooltipDescriptionConfigs.schemas.FLOAT_MENU.name]: {
             part:                                                   ComponentTooltipDescriptionConfigs.schemas.FLOAT_MENU.name ,
             title:                                                  Language.translate("components.tooltip_description.schema.float_menu.title") ,
@@ -292,7 +294,7 @@ export class ComponentTooltipDescriptionBase extends ComponentBase<
 
                 prop_show :               true ,
                 prop_description:         "this is a description tooltip" ,
-                prop_direction:           "top"
+                prop_direction:           "bottom"
 
             },
             <ComponentTooltipDescriptionMethodsType>{
@@ -351,11 +353,11 @@ export class ComponentTooltipDescription extends ComponentTooltipDescriptionBase
 
             return new ToolsComponents.ComponentFloatMenu(
                 <ComponentFloatMenuPropsType>{
-                    classList: []  ,
-                    styles: {}  ,
+                    classList:                  []  ,
+                    styles:                     {}  ,
                     prop_selectorClass:         prop_iconClass ,
                     prop_selectorStyles:        prop_iconStyles ,
-                    prop_floatClass:            ["mt-2" , "w-100" , "position-absolute"] ,
+                    prop_floatClass:            ["mt-2" , "w-100" , "position-relative"] ,
                     prop_floatMinWidth:         SizeUnit(100 , UNITS.PERCENT) ,
                     prop_floatArrowPosition:    SizeCalc(SizeUnit(100 , UNITS.PERCENT) , OPERATION.MINUS, prop_iconPosition.get() , OPERATION.MINUS, SizeUnit(iconSize/2 , UNITS.PEXEL) ) ,
                     prop_selectorContent :      this.executeSchemaPart(ComponentTooltipDescriptionConfigs.schemas.ICON.name),

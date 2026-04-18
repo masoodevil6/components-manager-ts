@@ -26,14 +26,15 @@ import {
 } from "../../utils/ToolsConsts";
 import {TOOLS} from "../tools";
 import {
-    GOG_ComponentBasicConfigs_component_keys,
-    GOG_ComponentBasicConfigs_component_parts,
-    GOG_ComponentBasicConfigs_component_Pattern, GOG_ComponentBasicConfigs_component_Schema,
-    GOG_ComponentBasicConfigs_structure_keys,
-    GOG_ComponentBasicConfigs_structure_parts,
-    GOG_ComponentBasicConfigs_structure_Pattern, GOG_ComponentBasicConfigs_structure_Schema,
-    GOG_ComponentBasicProps_component,
-    GOG_ComponentBasicProps_structure
+    GOG_ComponentBasicConfigs_Component_keys,
+    GOG_ComponentBasicConfigs_Component_parts,
+    GOG_ComponentBasicConfigs_Component_Pattern,
+    GOG_ComponentBasicConfigs_Component_Schema,
+    GOG_ComponentBasicConfigs_Component_Structure_keys,
+    GOG_ComponentBasicConfigs_Component_Structure_parts,
+    GOG_ComponentBasicConfigs_Component_Structure_Pattern, GOG_ComponentBasicConfigs_Component_Structure_Schema,
+    GOG_ComponentBasicProps_Component,
+    GOG_ComponentBasicProps_Component_Structure,
 } from "../../core/component/SetupComponent";
 
 
@@ -41,8 +42,8 @@ import {
 
 
 export const ComponentIconProps = {
-    ... GOG_ComponentBasicProps_component,
-    ... GOG_ComponentBasicProps_structure,
+    ... GOG_ComponentBasicProps_Component,
+    ... GOG_ComponentBasicProps_Component_Structure,
     prop_icon :                          "prop_icon" ,
     prop_iconTitle :                     "prop_iconTitle" ,
     prop_iconClass :                     "prop_iconClass" ,
@@ -53,8 +54,8 @@ export const ComponentIconProps = {
 
 const ComponentIconConfigs  =  {
     keys: {
-        ...GOG_ComponentBasicConfigs_component_keys ,
-        ...GOG_ComponentBasicConfigs_structure_keys ,
+        ...GOG_ComponentBasicConfigs_Component_keys ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_keys ,
         ///----------------------
         [ComponentIconProps.prop_icon]: {
             name:               ComponentIconProps.prop_icon,
@@ -74,8 +75,8 @@ const ComponentIconConfigs  =  {
         } ,
     } ,
     schemas:   {
-        ...GOG_ComponentBasicConfigs_component_parts ,
-        ...GOG_ComponentBasicConfigs_structure_parts ,
+        ...GOG_ComponentBasicConfigs_Component_parts ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_parts ,
         ICON: {
             name:               "part_icon"
         } ,
@@ -159,8 +160,8 @@ export class ComponentIconBase extends ComponentBase<
     --------------------------------------------- */
     _COMPONENT_PATTERN=  defineComponentPatterns<ComponentIconPropsType>(
         {
-            ...GOG_ComponentBasicConfigs_component_Pattern(this) ,
-            ...GOG_ComponentBasicConfigs_structure_Pattern(this) ,
+            ...GOG_ComponentBasicConfigs_Component_Pattern(this) ,
+            ...GOG_ComponentBasicConfigs_Component_Structure_Pattern(this) ,
             [ComponentIconConfigs.keys.prop_icon.name]: {
                 prop:                                             ComponentIconConfigs.keys.prop_icon.name,
                 default:                                          ComponentIconConfigs.keys.prop_icon.value,
@@ -194,8 +195,8 @@ export class ComponentIconBase extends ComponentBase<
         PROPERTYs Props
     --------------------------------------------- */
     _COMPONENT_SCHEMA = defineComponentSchema<ComponentIconSchemaType  , ComponentIconPropsType>( {
-        ...GOG_ComponentBasicConfigs_component_Schema(this) ,
-        ...GOG_ComponentBasicConfigs_structure_Schema(this) ,
+        ...GOG_ComponentBasicConfigs_Component_Schema(this) ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_Schema(this) ,
         [ComponentIconConfigs.schemas.ICON.name]: {
             part:               ComponentIconConfigs.schemas.ICON.name ,
             title:              Language.translate("components.icon.schema.icon.title") ,

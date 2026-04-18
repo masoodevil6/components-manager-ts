@@ -26,14 +26,15 @@ import {
 } from "../../utils/ToolsConsts";
 import {TOOLS} from "../tools";
 import {
-    GOG_ComponentBasicConfigs_component_keys,
-    GOG_ComponentBasicConfigs_component_parts,
-    GOG_ComponentBasicConfigs_component_Pattern, GOG_ComponentBasicConfigs_component_Schema,
-    GOG_ComponentBasicConfigs_structure_keys,
-    GOG_ComponentBasicConfigs_structure_parts,
-    GOG_ComponentBasicConfigs_structure_Pattern, GOG_ComponentBasicConfigs_structure_Schema,
-    GOG_ComponentBasicProps_component,
-    GOG_ComponentBasicProps_structure
+    GOG_ComponentBasicConfigs_Component_keys,
+    GOG_ComponentBasicConfigs_Component_parts,
+    GOG_ComponentBasicConfigs_Component_Pattern,
+    GOG_ComponentBasicConfigs_Component_Schema,
+    GOG_ComponentBasicConfigs_Component_Structure_keys,
+    GOG_ComponentBasicConfigs_Component_Structure_parts,
+    GOG_ComponentBasicConfigs_Component_Structure_Pattern, GOG_ComponentBasicConfigs_Component_Structure_Schema,
+    GOG_ComponentBasicProps_Component,
+    GOG_ComponentBasicProps_Component_Structure,
 } from "../../core/component/SetupComponent";
 import {ToolsIcons} from "../icons";
 import {
@@ -55,8 +56,8 @@ import {
 
 
 export const ComponentErrorIsEmptyProps = {
-    ... GOG_ComponentBasicProps_component,
-    ... GOG_ComponentBasicProps_structure,
+    ... GOG_ComponentBasicProps_Component,
+    ... GOG_ComponentBasicProps_Component_Structure,
     prop_borderClass :                  "prop_borderClass" ,
     prop_borderStyles :                 "prop_borderStyles" ,
     prop_borderColor :                  "prop_borderColor" ,
@@ -80,8 +81,8 @@ export const ComponentErrorIsEmptyProps = {
 
 const ComponentErrorIsEmptyConfigs  =  {
     keys: {
-        ...GOG_ComponentBasicConfigs_component_keys ,
-        ...GOG_ComponentBasicConfigs_structure_keys ,
+        ...GOG_ComponentBasicConfigs_Component_keys ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_keys ,
         ///----------------------
         [ComponentErrorIsEmptyProps.prop_borderClass]: {
             name:               ComponentErrorIsEmptyProps.prop_borderClass,
@@ -107,7 +108,7 @@ const ComponentErrorIsEmptyConfigs  =  {
         } ,
         [ComponentErrorIsEmptyProps.prop_iconStyles]: {
             name:               ComponentErrorIsEmptyProps.prop_iconStyles,
-            value:              GOG_SetValue<Record<string, string>>( { "font-size" : "30px" , "display" : "block" ,  "text-align" : "center" , } ),
+            value:              GOG_SetValue<Record<string, string>>( {  "display" : "block" ,  "text-align" : "center" , } ),
         } ,
 
 
@@ -117,7 +118,7 @@ const ComponentErrorIsEmptyConfigs  =  {
         } ,
         [ComponentErrorIsEmptyProps.prop_titleColor]: {
             name:               ComponentErrorIsEmptyProps.prop_titleColor,
-            value:              GOG_SetValue<Color | null>(Color(COLORS_MAIN.DARK , COLORS_GRAD.GRADE_1)),
+            value:              GOG_SetValue<Color | null>(Color(COLORS_MAIN.PRIMARY , COLORS_GRAD.GRADE_1)),
         } ,
         [ComponentErrorIsEmptyProps.prop_titleClass]: {
             name:               ComponentErrorIsEmptyProps.prop_titleClass,
@@ -139,7 +140,7 @@ const ComponentErrorIsEmptyConfigs  =  {
         } ,
         [ComponentErrorIsEmptyProps.prop_btnStyles]: {
             name:               ComponentErrorIsEmptyProps.prop_btnStyles,
-            value:              GOG_SetValue<Record<string, string>>( {"cursor" : "pointer" , "width" : "100%" , "height" : "32px" , "text-align" : "center!important" ,} ),
+            value:              GOG_SetValue<Record<string, string>>( {"cursor" : "pointer" , "width" : "100%"  , "text-align" : "center!important" ,} ),
         } ,
         [ComponentErrorIsEmptyProps.prop_btnTitle]: {
             name:               ComponentErrorIsEmptyProps.prop_btnTitle,
@@ -151,8 +152,8 @@ const ComponentErrorIsEmptyConfigs  =  {
         } ,
     } ,
     schemas:   {
-        ...GOG_ComponentBasicConfigs_component_parts ,
-        ...GOG_ComponentBasicConfigs_structure_parts ,
+        ...GOG_ComponentBasicConfigs_Component_parts ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_parts ,
         BORDER: {
             name:               "part_border"
         } ,
@@ -215,8 +216,8 @@ export class ComponentErrorIsEmptyBase extends ComponentBase<
     --------------------------------------------- */
     _COMPONENT_PATTERN=  defineComponentPatterns<ComponentErrorIsEmptyPropsType>(
         {
-            ...GOG_ComponentBasicConfigs_component_Pattern(this) ,
-            ...GOG_ComponentBasicConfigs_structure_Pattern(this) ,
+            ...GOG_ComponentBasicConfigs_Component_Pattern(this) ,
+            ...GOG_ComponentBasicConfigs_Component_Structure_Pattern(this) ,
             [ComponentErrorIsEmptyConfigs.keys.prop_borderClass.name]: {
                 prop:                                             ComponentErrorIsEmptyConfigs.keys.prop_borderClass.name,
                 default:                                          ComponentErrorIsEmptyConfigs.keys.prop_borderClass.value,
@@ -318,8 +319,8 @@ export class ComponentErrorIsEmptyBase extends ComponentBase<
              PROPERTYs Props
       --------------------------------------------- */
     _COMPONENT_SCHEMA = defineComponentSchema<ComponentErrorIsEmptySchemaType  , ComponentErrorIsEmptyPropsType>( {
-        ...GOG_ComponentBasicConfigs_component_Schema(this) ,
-        ...GOG_ComponentBasicConfigs_structure_Schema(this) ,
+        ...GOG_ComponentBasicConfigs_Component_Schema(this) ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_Schema(this) ,
         [ComponentErrorIsEmptyConfigs.schemas.BORDER.name]: {
             part:                                                 ComponentErrorIsEmptyConfigs.schemas.BORDER.name ,
             title:                                                Language.translate("components.error_is_empty.schema.border.title") ,
@@ -617,7 +618,7 @@ export class ComponentErrorIsEmpty extends ComponentErrorIsEmptyBase {
                         classList:        ["mt-2"] ,
                         prop_btnClass:    prop_btnClass  ,
                         prop_btnStyles:   prop_btnStyles  ,
-                        prop_title:       prop_btnTitle   ,
+                        prop_btnTitle:    prop_btnTitle   ,
                         prop_btnIcon:     prop_btnIcon   ,
                         prop_type:       "submit" ,
                         prop_btnType:    "button"

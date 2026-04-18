@@ -1,7 +1,8 @@
 
 // styles
-import './styles/main.css';
+import './styles/app.css';
 import './styles/bootstrap.css';
+import './styles/main.css';
 
 import {Router} from "./router/core/router";
 import {ROUTES_MAP} from "./router/core/routes";

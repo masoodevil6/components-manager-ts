@@ -26,14 +26,15 @@ import {
 } from "../../utils/ToolsConsts";
 import {TOOLS} from "../tools";
 import {
-    GOG_ComponentBasicConfigs_component_keys,
-    GOG_ComponentBasicConfigs_component_parts,
-    GOG_ComponentBasicConfigs_component_Pattern, GOG_ComponentBasicConfigs_component_Schema,
-    GOG_ComponentBasicConfigs_structure_keys,
-    GOG_ComponentBasicConfigs_structure_parts,
-    GOG_ComponentBasicConfigs_structure_Pattern, GOG_ComponentBasicConfigs_structure_Schema,
-    GOG_ComponentBasicProps_component,
-    GOG_ComponentBasicProps_structure
+    GOG_ComponentBasicConfigs_Component_keys,
+    GOG_ComponentBasicConfigs_Component_parts,
+    GOG_ComponentBasicConfigs_Component_Pattern,
+    GOG_ComponentBasicConfigs_Component_Schema,
+    GOG_ComponentBasicConfigs_Component_Structure_keys,
+    GOG_ComponentBasicConfigs_Component_Structure_parts,
+    GOG_ComponentBasicConfigs_Component_Structure_Pattern, GOG_ComponentBasicConfigs_Component_Structure_Schema,
+    GOG_ComponentBasicProps_Component,
+    GOG_ComponentBasicProps_Component_Structure,
 } from "../../core/component/SetupComponent";
 import {ToolsIcons} from "../icons";
 import {ComponentIconMethodsType, ComponentIconPropsType} from "./ComponentIcon";
@@ -44,9 +45,9 @@ import {ComponentIconMethodsType, ComponentIconPropsType} from "./ComponentIcon"
 
 
 export const ComponentButtonProps = {
-    ... GOG_ComponentBasicProps_component,
-    ... GOG_ComponentBasicProps_structure,
-    prop_title :                           "prop_title" ,
+    ... GOG_ComponentBasicProps_Component,
+    ... GOG_ComponentBasicProps_Component_Structure,
+
     prop_type :                            "prop_type" ,
 
     prop_btnType :                         "prop_btnType" ,
@@ -54,7 +55,12 @@ export const ComponentButtonProps = {
     prop_btnStyles :                       "prop_btnStyles" ,
     prop_btnBackgroundColor :              "prop_btnBackgroundColor" ,
     prop_btnBackgroundColor_hover :        "prop_btnBackgroundColor_hover" ,
-    prop_btnColor :                        "prop_btnColor" ,
+
+    prop_btnTitle :                        "prop_btnTitle" ,
+    prop_btnTitleStyles :                  "prop_btnTitleStyles" ,
+    prop_btnTitleClass :                   "prop_btnTitleClass" ,
+    prop_btnTitleColor :                   "prop_btnTitleColor" ,
+    prop_btnTitleColor_hover :             "prop_btnTitleColor_hover" ,
 
     prop_btnIcon :                         "prop_btnIcon" ,
     prop_btnIconStyles :                   "prop_btnIconStyles" ,
@@ -80,13 +86,10 @@ export enum ComponentButton_ButtonTypes{
 
 const ComponentButtonConfigs  =  {
     keys: {
-        ...GOG_ComponentBasicConfigs_component_keys ,
-        ...GOG_ComponentBasicConfigs_structure_keys ,
+        ...GOG_ComponentBasicConfigs_Component_keys ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_keys ,
         ///----------------------
-        [ComponentButtonProps.prop_title]: {
-            name:               ComponentButtonProps.prop_title,
-            value:              GOG_SetValue<string>( "") ,
-        } ,
+
         [ComponentButtonProps.prop_type]: {
             name:               ComponentButtonProps.prop_type,
             value:              GOG_SetValue<GOG_ValueOf<typeof ComponentButton_Types>>(ComponentButton_Types.SUBMIT),
@@ -112,10 +115,29 @@ const ComponentButtonConfigs  =  {
             name:               ComponentButtonProps.prop_btnBackgroundColor_hover,
             value:              GOG_SetValue<Color | null>(null),
         } ,
-        [ComponentButtonProps.prop_btnColor]: {
-            name:               ComponentButtonProps.prop_btnColor,
+
+
+        [ComponentButtonProps.prop_btnTitle]: {
+            name:               ComponentButtonProps.prop_btnTitle,
+            value:              GOG_SetValue<string>( "") ,
+        } ,
+        [ComponentButtonProps.prop_btnTitleStyles]: {
+            name:               ComponentButtonProps.prop_btnTitleStyles,
+            value:              GOG_SetValue<Record<string, string>>( {}) ,
+        } ,
+        [ComponentButtonProps.prop_btnTitleClass]: {
+            name:               ComponentButtonProps.prop_btnTitleClass,
+            value:              GOG_SetValue<string[]>( []) ,
+        } ,
+        [ComponentButtonProps.prop_btnTitleColor]: {
+            name:               ComponentButtonProps.prop_btnTitleColor,
             value:              GOG_SetValue<Color | null>(null),
         } ,
+        [ComponentButtonProps.prop_btnTitleColor_hover]: {
+            name:               ComponentButtonProps.prop_btnTitleColor_hover,
+            value:              GOG_SetValue<Color | null>(null),
+        } ,
+
 
         [ComponentButtonProps.prop_btnIcon]: {
             name:               ComponentButtonProps.prop_btnIcon,
@@ -132,13 +154,19 @@ const ComponentButtonConfigs  =  {
 
     } ,
     schemas:   {
-        ...GOG_ComponentBasicConfigs_component_parts ,
-        ...GOG_ComponentBasicConfigs_structure_parts ,
-        BUTTON: {
-            name:               "part_button"
+        ...GOG_ComponentBasicConfigs_Component_parts ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_parts ,
+        FORM: {
+            name:               "part-form"
         } ,
-        ICON: {
-            name:               "part_icon"
+        FORM_BUTTON: {
+            name:               "part-form-button"
+        } ,
+        FORM_BUTTON_TITLE: {
+            name:               "part-form-button_title"
+        } ,
+        FORM_BUTTON_ICON: {
+            name:               "part-form-button_icon"
         } ,
     } ,
     templates: {
@@ -185,14 +213,9 @@ export class ComponentButtonBase extends ComponentBase<
     --------------------------------------------- */
     _COMPONENT_PATTERN=  defineComponentPatterns<ComponentButtonPropsType>(
         {
-            ...GOG_ComponentBasicConfigs_component_Pattern(this) ,
-            ...GOG_ComponentBasicConfigs_structure_Pattern(this) ,
-            [ComponentButtonConfigs.keys.prop_title.name]: {
-                prop:                                             ComponentButtonConfigs.keys.prop_title.name,
-                default:                                          ComponentButtonConfigs.keys.prop_title.value,
-                title:                                            Language.translate("components.button.props.prop_title.title"),
-                description:                                      Language.translate("components.button.props.prop_title.description"),
-            } ,
+            ...GOG_ComponentBasicConfigs_Component_Pattern(this) ,
+            ...GOG_ComponentBasicConfigs_Component_Structure_Pattern(this) ,
+
             [ComponentButtonConfigs.keys.prop_type.name]: {
                 prop:                                             ComponentButtonConfigs.keys.prop_type.name,
                 default:                                          ComponentButtonConfigs.keys.prop_type.value,
@@ -230,12 +253,39 @@ export class ComponentButtonBase extends ComponentBase<
                 title:                                            Language.translate("components.button.props.prop_btnBackgroundColor_hover.title"),
                 description:                                      Language.translate("components.button.props.prop_btnBackgroundColor_hover.description"),
             } ,
-            [ComponentButtonConfigs.keys.prop_btnColor.name]: {
-                prop:                                             ComponentButtonConfigs.keys.prop_btnColor.name,
-                default:                                          ComponentButtonConfigs.keys.prop_btnColor.value,
-                title:                                            Language.translate("components.button.props.prop_btnColor.title"),
-                description:                                      Language.translate("components.button.props.prop_btnColor.description"),
+
+
+            [ComponentButtonConfigs.keys.prop_btnTitle.name]: {
+                prop:                                             ComponentButtonConfigs.keys.prop_btnTitle.name,
+                default:                                          ComponentButtonConfigs.keys.prop_btnTitle.value,
+                title:                                            Language.translate("components.button.props.prop_btnTitle.title"),
+                description:                                      Language.translate("components.button.props.prop_btnTitle.description"),
             } ,
+            [ComponentButtonConfigs.keys.prop_btnTitleStyles.name]: {
+                prop:                                             ComponentButtonConfigs.keys.prop_btnTitleStyles.name,
+                default:                                          ComponentButtonConfigs.keys.prop_btnTitleStyles.value,
+                title:                                            Language.translate("components.button.props.prop_btnTitleStyles.title"),
+                description:                                      Language.translate("components.button.props.prop_btnTitleStyles.description"),
+            } ,
+            [ComponentButtonConfigs.keys.prop_btnTitleClass.name]: {
+                prop:                                             ComponentButtonConfigs.keys.prop_btnTitleClass.name,
+                default:                                          ComponentButtonConfigs.keys.prop_btnTitleClass.value,
+                title:                                            Language.translate("components.button.props.prop_btnTitleClass.title"),
+                description:                                      Language.translate("components.button.props.prop_btnTitleClass.description"),
+            } ,
+            [ComponentButtonConfigs.keys.prop_btnTitleColor.name]: {
+                prop:                                             ComponentButtonConfigs.keys.prop_btnTitleColor.name,
+                default:                                          ComponentButtonConfigs.keys.prop_btnTitleColor.value,
+                title:                                            Language.translate("components.button.props.prop_btnTitleColor.title"),
+                description:                                      Language.translate("components.button.props.prop_btnTitleColor.description"),
+            } ,
+            [ComponentButtonConfigs.keys.prop_btnTitleColor_hover.name]: {
+                prop:                                             ComponentButtonConfigs.keys.prop_btnTitleColor_hover.name,
+                default:                                          ComponentButtonConfigs.keys.prop_btnTitleColor_hover.value,
+                title:                                            Language.translate("components.button.props.prop_btnTitleColor_hover.title"),
+                description:                                      Language.translate("components.button.props.prop_btnTitleColor_hover.description"),
+            } ,
+
 
             [ComponentButtonConfigs.keys.prop_btnIcon.name]: {
                 prop:                                             ComponentButtonConfigs.keys.prop_btnIcon.name,
@@ -262,27 +312,46 @@ export class ComponentButtonBase extends ComponentBase<
         PROPERTYs Props
     --------------------------------------------- */
     _COMPONENT_SCHEMA = defineComponentSchema<ComponentButtonSchemaType  , ComponentButtonPropsType>( {
-        ...GOG_ComponentBasicConfigs_component_Schema(this) ,
-        ...GOG_ComponentBasicConfigs_structure_Schema(this) ,
-        [ComponentButtonConfigs.schemas.BUTTON.name]: {
-            part:               ComponentButtonConfigs.schemas.BUTTON.name ,
-            title:              Language.translate("components.button.schema.button.title") ,
-            description:        Language.translate("components.button.schema.button.description") ,
+        ...GOG_ComponentBasicConfigs_Component_Schema(this) ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_Schema(this) ,
+        [ComponentButtonConfigs.schemas.FORM.name]: {
+            part:               ComponentButtonConfigs.schemas.FORM.name ,
+            title:              Language.translate("components.button.schema.form.title") ,
+            description:        Language.translate("components.button.schema.form.description") ,
             props: [
-                this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_title.name] ,
+
+            ]
+        } ,
+        [ComponentButtonConfigs.schemas.FORM_BUTTON.name]: {
+            part:               ComponentButtonConfigs.schemas.FORM_BUTTON.name ,
+            title:              Language.translate("components.button.schema.form_button.title") ,
+            description:        Language.translate("components.button.schema.form_button.description") ,
+            props: [
                 this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_type.name] ,
                 this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnType.name] ,
                 this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnClass.name] ,
                 this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnStyles.name] ,
                 this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnBackgroundColor.name] ,
                 this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnBackgroundColor_hover.name] ,
-                this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnColor.name] ,
             ]
         } ,
-        [ComponentButtonConfigs.schemas.ICON.name]: {
-            part:               ComponentButtonConfigs.schemas.ICON.name ,
-            title:              Language.translate("components.button.schema.icon.title") ,
-            description:        Language.translate("components.button.schema.icon.description") ,
+        [ComponentButtonConfigs.schemas.FORM_BUTTON_TITLE.name]: {
+            part:               ComponentButtonConfigs.schemas.FORM_BUTTON_TITLE.name ,
+            title:              Language.translate("components.button.schema.form_button_title.title") ,
+            description:        Language.translate("components.button.schema.form_button_title.description") ,
+            props: [
+                this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_type.name] ,
+                this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnTitle.name] ,
+                this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnTitleStyles.name] ,
+                this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnTitleClass.name] ,
+                this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnTitleColor.name] ,
+                this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnTitleColor_hover.name] ,
+            ]
+        } ,
+        [ComponentButtonConfigs.schemas.FORM_BUTTON_ICON.name]: {
+            part:               ComponentButtonConfigs.schemas.FORM_BUTTON_ICON.name ,
+            title:              Language.translate("components.button.schema.form_button_icon.title") ,
+            description:        Language.translate("components.button.schema.form_button_icon.description") ,
             props: [
                 this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnIcon.name] ,
                 this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnIconStyles.name] ,
@@ -298,7 +367,7 @@ export class ComponentButtonBase extends ComponentBase<
         [ComponentButtonConfigs.templates.BODY.name]: {
             title:                                            Language.translate("components.button.template.body.title"),
             description:                                      Language.translate("components.button.template.body.description"),
-            reference:                                        this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_title.name]
+            reference:                                        this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnTitle.name]
         } ,
     });
 
@@ -323,7 +392,7 @@ export class ComponentButtonBase extends ComponentBase<
         return new ComponentButton(
             <ComponentButtonPropsType>{
                 classList: ["col-md-3" , "col-12" , "border" , "p-2"]  ,
-                prop_title: "asd" ,
+                prop_btnTitle: "asd" ,
                 prop_type: "submit" ,
                 prop_btnIcon: ToolsIcons.icon_reload({size: SIZES.M , primaryColor:Color(COLORS_MAIN.SHAN ,COLORS_GRAD.GRADE_1), secondaryColor:Color(COLORS_MAIN.INFO ,COLORS_GRAD.GRADE_4)})
             } ,
@@ -355,25 +424,60 @@ export class ComponentButton extends ComponentButtonBase{
        TEMPLATEs
     --------------------------------------------- */
     override renderContentComponent() {
-        return this.executeSchemaPart(ComponentButtonConfigs.schemas.BUTTON.name)
+        return this.executeSchemaPart(ComponentButtonConfigs.schemas.FORM.name)
     }
 
     override renderManagerComponent(partName , attrsDefault , data , extra) :  ReactiveElement {
         switch (partName){
-            case ComponentButtonConfigs.schemas.BUTTON.name:
-                return  this.template_render_button(attrsDefault , data , extra);
-            case ComponentButtonConfigs.schemas.ICON.name:
-                return  this.template_render_buttonIcon(attrsDefault , data , extra);
+            case ComponentButtonConfigs.schemas.FORM.name:
+                return  this.template_render_form(attrsDefault , data , extra);
+            case ComponentButtonConfigs.schemas.FORM_BUTTON.name:
+                return  this.template_render_formButton(attrsDefault , data , extra);
+            case ComponentButtonConfigs.schemas.FORM_BUTTON_TITLE.name:
+                return  this.template_render_formBtnTitle(attrsDefault , data , extra);
+            case ComponentButtonConfigs.schemas.FORM_BUTTON_ICON.name:
+                return  this.template_render_formBtnIcon(attrsDefault , data , extra);
         }
     }
 
-    private template_render_button(attrsDefault , data , extra) : ReactiveElement{
+    private template_render_form(attrsDefault , data , extra) : ReactiveElement {
+
+        if (data != null) {
+
+            const btnHeight   =     ToolsCss.getHeightSize(AppConfig.get("sizeName"));
+            const btnLineHeight =   ToolsCss.getLineHeightSize(AppConfig.get("sizeName"));
+            const btnFontSize =     ToolsCss.getFontSize(AppConfig.get("sizeName"));
+
+            return ReactiveElement.part(  "section" ,{
+                attrs: {
+                    ...attrsDefault
+                },
+                styles: {
+                   // height :            `${btnHeight}px` ,
+                    lineHeight :        `${btnLineHeight}px` ,
+                    fontSize :          `${btnFontSize}pt` ,
+                },
+                children: [
+                    this.executeSchemaPart(ComponentButtonConfigs.schemas.FORM_BUTTON.name) ,
+                ]
+
+            });
+        }
+
+        return ReactiveElement.part(  "section" ,{
+            attrs: {
+                ...attrsDefault
+            }
+        });
+
+    }
+
+    private template_render_formButton(attrsDefault , data , extra) : ReactiveElement{
 
         if (data != null){
 
             const prop_type        =   data[ComponentButtonConfigs.keys.prop_type.name];
             const prop_btnType     =   data[ComponentButtonConfigs.keys.prop_btnType.name];
-            const prop_title       =   data[ComponentButtonConfigs.keys.prop_title.name];
 
             const prop_btnClass    =   data[ComponentButtonConfigs.keys.prop_btnClass.name];
             const prop_btnStyles   =   data[ComponentButtonConfigs.keys.prop_btnStyles.name];
@@ -390,71 +494,46 @@ export class ComponentButton extends ComponentButtonBase{
             btnBackgroundColor_hover[ComponentButton_Types.CANCEL] =   "var(--errorColor2)";
             btnBackgroundColor_hover[ComponentButton_Types.CUSTOM] =   data[ComponentButtonConfigs.keys.prop_btnBackgroundColor_hover.name];
 
-            let btnColor = {};
-            btnColor[ComponentButton_Types.SUBMIT] =                  "var(--shanColor1)";
-            btnColor[ComponentButton_Types.BACK] =                    "var(--darkColor1)";
-            btnColor[ComponentButton_Types.CANCEL] =                  "var(--shanColor1)";
-            btnColor[ComponentButton_Types.CUSTOM] =                  data[ComponentButtonConfigs.keys.prop_btnColor.name];
 
-            const btnHeight   = ToolsCss.getHeightSize(AppConfig.get("sizeName"));
-            const btnFontSize = ToolsCss.getFontSize(AppConfig.get("sizeName"));
-
-            return ReactiveElement.part(  "section" ,
+            return ReactiveElement.part(  "button" ,
                 {
                     attrs: {
-                        ...attrsDefault
+                        "id":     `component-button-${this._COMPONENT_RANDOM_ID}`,
                     },
-                    attrsBind: {
-                        "type":               prop_btnType
-                    },
+                    className: [
+                        "shadow-sm" , "border-0" , "rounded" ,
+                    ] ,
+                    classBind: [
+                        prop_btnClass
+                    ] ,
+
+                    stylesBind: (el) => ({
+                        backgroundColor: el.hover.mapList({
+                            true:           prop_type.mapList(btnBackgroundColor_hover),
+                            false:          prop_type.mapList(btnBackgroundColor)
+                        }) ,
+                        transition: el.hover.mapList({
+                            true:           "background-color 1000ms ease" ,
+                            false:          "background-color 200ms ease"
+                        }) ,
+                        prop_btnStyles ,
+                    }) ,
                     children: [
-                        ReactiveElement.button(
+                        ReactiveElement.b(
                             {
-                                attrs: {
-                                    "id":     `component-button-${this._COMPONENT_RANDOM_ID}`,
-                                },
-                                className: [
-                                    "shadow-sm" , "border-0" , "rounded" , "py-1"
-                                ] ,
-                                classBind: [
-                                    prop_btnClass
-                                ] ,
-                                styles: {
-                                    //height :            `${btnHeight}px` ,
-                                    lineHeight :        `${btnHeight}px` ,
-                                    fontSize :          `${btnFontSize}pt` ,
-                                },
-                                stylesBind: (el) => ({
-                                    backgroundColor: el.hover.mapList({
-                                        true:           prop_type.mapList(btnBackgroundColor_hover),
-                                        false:          prop_type.mapList(btnBackgroundColor)
-                                    }) ,
-                                    transition: el.hover.mapList({
-                                        true:           "background-color 1000ms ease" ,
-                                        false:          "background-color 200ms ease"
-                                    }) ,
-                                    color:              prop_type.mapList(btnColor) ,
-                                    prop_btnStyles ,
-                                }) ,
                                 children: [
-                                    ReactiveElement.b(
-                                        {
-                                            children: [
-                                                prop_title ,
-                                                this.executeSchemaPart(ComponentButtonConfigs.schemas.ICON.name)
-                                            ]
-                                        }
-                                    )
-                                ] ,
-                                on: {
-                                    click: (event) => {
-                                        const params: ComponentButton_Methods_CLICK_DataArgs = {}
-                                        this.executeMethod(ComponentButtonConfigs.methods.CLICK.name , event , params);
-                                    },
-                                }
+                                    this.executeSchemaPart(ComponentButtonConfigs.schemas.FORM_BUTTON_TITLE.name) ,
+                                    this.executeSchemaPart(ComponentButtonConfigs.schemas.FORM_BUTTON_ICON.name)
+                                ]
                             }
                         )
-                    ]
+                    ] ,
+                    on: {
+                        click: (event) => {
+                            const params: ComponentButton_Methods_CLICK_DataArgs = {}
+                            this.executeMethod(ComponentButtonConfigs.methods.CLICK.name , event , params);
+                        },
+                    }
                 });
         }
 
@@ -465,7 +544,72 @@ export class ComponentButton extends ComponentButtonBase{
         });
     }
 
-    private template_render_buttonIcon(attrsDefault , data , extra) : ReactiveElement {
+
+    private template_render_formBtnTitle(attrsDefault , data , extra) : ReactiveElement {
+
+        if (data != null) {
+            const prop_type =               data[ComponentButtonConfigs.keys.prop_type.name];
+            const prop_btnTitle =           data[ComponentButtonConfigs.keys.prop_btnTitle.name];
+            const prop_btnTitleStyles =     data[ComponentButtonConfigs.keys.prop_btnTitleStyles.name];
+            const prop_btnTitleClass =      data[ComponentButtonConfigs.keys.prop_btnTitleClass.name];
+
+            let btnColor = {};
+            btnColor[ComponentButton_Types.SUBMIT] =         "var(--shanColor1)";
+            btnColor[ComponentButton_Types.BACK] =           "var(--darkColor1)";
+            btnColor[ComponentButton_Types.CANCEL] =         "var(--shanColor1)";
+            btnColor[ComponentButton_Types.CUSTOM] =         data[ComponentButtonConfigs.keys.prop_btnTitleColor.name];
+
+            let btnColor_hover = {};
+            btnColor_hover[ComponentButton_Types.SUBMIT] =   "var(--shanColor2)";
+            btnColor_hover[ComponentButton_Types.BACK] =     "var(--darkColor2)";
+            btnColor_hover[ComponentButton_Types.CANCEL] =   "var(--shanColor2)";
+            btnColor_hover[ComponentButton_Types.CUSTOM] =   data[ComponentButtonConfigs.keys.prop_btnTitleColor_hover.name];
+
+            const btnHeight   =     ToolsCss.getHeightSize(AppConfig.get("sizeName"));
+            const btnLineHeight =   ToolsCss.getLineHeightSize(AppConfig.get("sizeName"));
+            const btnFontSize =     ToolsCss.getFontSize(AppConfig.get("sizeName"));
+
+            return ReactiveElement.part(  "b" ,{
+                attrs: {
+                    ...attrsDefault
+                },
+                styles: {
+                    height:     `${btnHeight}px` ,
+                    lineHeight: `${btnLineHeight}px` ,
+                    fontSize:   `${btnFontSize}px`
+                },
+                stylesBind: (el) => ({
+                    color: el.hover.mapList({
+                        true:           prop_type.mapList(btnColor_hover),
+                        false:          prop_type.mapList(btnColor)
+                    }) ,
+                    transition: el.hover.mapList({
+                        true:           "background-color 1000ms ease" ,
+                        false:          "background-color 200ms ease"
+                    }) ,
+                    prop_btnTitleStyles ,
+                }) ,
+                classBind: [
+                    prop_btnTitleClass
+                ],
+                children: [
+                    prop_btnTitle
+                ]
+            });
+
+
+        }
+
+        return ReactiveElement.part(  "section" ,{
+            attrs: {
+                ...attrsDefault
+            }
+        });
+
+    }
+
+
+    private template_render_formBtnIcon(attrsDefault , data , extra) : ReactiveElement {
 
         if (data != null) {
 

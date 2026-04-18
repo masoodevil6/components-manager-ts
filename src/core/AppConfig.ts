@@ -6,17 +6,18 @@ import {fa} from "../langs/Fa";
 export class AppConfig {
     static _state = {
         directionRtl:      false,
-        language:          "fa",
+        language:          "en",
         sizeNameSmall:     SIZES.S,
         sizeName:          SIZES.M,
         sizeNameLarge:     SIZES.L,
+        stdHeight:         25,
         //font:       "IRANSans"
     };
 
     static _subscribers = new Map();
 
-    static get(key) {
-        return this._state[key];
+    static get(key , defaultValue = null) {
+        return this._state?.[key] ?? defaultValue;
     }
 
     static set(key, value) {

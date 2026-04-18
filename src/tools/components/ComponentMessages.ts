@@ -26,14 +26,15 @@ import {
 } from "../../utils/ToolsConsts";
 import {TOOLS} from "../tools";
 import {
-    GOG_ComponentBasicConfigs_component_keys,
-    GOG_ComponentBasicConfigs_component_parts,
-    GOG_ComponentBasicConfigs_component_Pattern, GOG_ComponentBasicConfigs_component_Schema,
-    GOG_ComponentBasicConfigs_structure_keys,
-    GOG_ComponentBasicConfigs_structure_parts,
-    GOG_ComponentBasicConfigs_structure_Pattern, GOG_ComponentBasicConfigs_structure_Schema,
-    GOG_ComponentBasicProps_component,
-    GOG_ComponentBasicProps_structure
+    GOG_ComponentBasicConfigs_Component_keys,
+    GOG_ComponentBasicConfigs_Component_parts,
+    GOG_ComponentBasicConfigs_Component_Pattern,
+    GOG_ComponentBasicConfigs_Component_Schema,
+    GOG_ComponentBasicConfigs_Component_Structure_keys,
+    GOG_ComponentBasicConfigs_Component_Structure_parts,
+    GOG_ComponentBasicConfigs_Component_Structure_Pattern, GOG_ComponentBasicConfigs_Component_Structure_Schema,
+    GOG_ComponentBasicProps_Component,
+    GOG_ComponentBasicProps_Component_Structure,
 } from "../../core/component/SetupComponent";
 import {ToolsIcons} from "../icons";
 import {
@@ -45,8 +46,8 @@ import {
 
 
 export const ComponentMessagesProps = {
-    ... GOG_ComponentBasicProps_component,
-    ... GOG_ComponentBasicProps_structure,
+    ... GOG_ComponentBasicProps_Component,
+    ... GOG_ComponentBasicProps_Component_Structure,
     prop_type :                         "prop_type" ,
     prop_messages :                     "prop_messages" ,
     prop_borderWidth :                  "prop_borderWidth" ,
@@ -68,8 +69,8 @@ export enum ComponentMessages_MessageTypes{
 
 const ComponentMessagesConfigs  =  {
     keys: {
-        ...GOG_ComponentBasicConfigs_component_keys ,
-        ...GOG_ComponentBasicConfigs_structure_keys ,
+        ...GOG_ComponentBasicConfigs_Component_keys ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_keys ,
         ///----------------------
         [ComponentMessagesProps.prop_type] : {
             name:               ComponentMessagesProps.prop_type,
@@ -101,8 +102,8 @@ const ComponentMessagesConfigs  =  {
         }
     } ,
     schemas:   {
-        ...GOG_ComponentBasicConfigs_component_parts ,
-        ...GOG_ComponentBasicConfigs_structure_parts ,
+        ...GOG_ComponentBasicConfigs_Component_parts ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_parts ,
         MESSAGE: {
             name:               "part_message"
         } ,
@@ -169,8 +170,8 @@ export class ComponentMessagesBase extends ComponentBase<
     --------------------------------------------- */
     _COMPONENT_PATTERN=  defineComponentPatterns<ComponentMessagesPropsType>(
         {
-            ...GOG_ComponentBasicConfigs_component_Pattern(this) ,
-            ...GOG_ComponentBasicConfigs_structure_Pattern(this) ,
+            ...GOG_ComponentBasicConfigs_Component_Pattern(this) ,
+            ...GOG_ComponentBasicConfigs_Component_Structure_Pattern(this) ,
             [ComponentMessagesConfigs.keys.prop_type.name]: {
                 prop:                                             ComponentMessagesConfigs.keys.prop_type.name,
                 default:                                          ComponentMessagesConfigs.keys.prop_type.value,
@@ -224,8 +225,8 @@ export class ComponentMessagesBase extends ComponentBase<
              PROPERTYs Props
       --------------------------------------------- */
     _COMPONENT_SCHEMA = defineComponentSchema<ComponentMessagesSchemaType  , ComponentMessagesPropsType>( {
-        ...GOG_ComponentBasicConfigs_component_Schema(this) ,
-        ...GOG_ComponentBasicConfigs_structure_Schema(this) ,
+        ...GOG_ComponentBasicConfigs_Component_Schema(this) ,
+        ...GOG_ComponentBasicConfigs_Component_Structure_Schema(this) ,
         [ComponentMessagesConfigs.schemas.MESSAGE.name]: {
             part:               ComponentMessagesConfigs.schemas.MESSAGE.name ,
             title:              Language.translate("components.messages.schema.messages.title") ,
@@ -447,9 +448,78 @@ export class ComponentMessages extends ComponentMessagesBase{
                     attrs: {
                         ...attrsDefault
                     },
-                    children: [
-                        ...messagesEl
-                    ]
+                    children: prop_messages.mapArray((itemMessage , index)=> {
+                        return  ReactiveElement.section(
+                            {
+                                attrs: {
+                                    "id":      `component-messages-item-${this._COMPONENT_RANDOM_ID}-${index}`,
+                                    "role" :   "alert"
+                                },
+                                styles: {} ,
+                                className: [] ,
+                                children: (el) => [
+                                    ReactiveElement.div(
+                                        {
+                                            attrs: {
+                                                "id":  `component-messages-item-${this._COMPONENT_RANDOM_ID}-body-${index}`,
+                                            },
+                                            styles: {
+                                                fontSize :        `${elFontSize}pt` ,
+                                            } ,
+                                            stylesBind: {
+                                                borderStyle:      prop_borderWidth.map(
+                                                    v=>{
+                                                        if ((typeof v == "string" && ToolsCss.checkExistSizeSelected(v)) || (typeof v == "number")){
+                                                            return "solid";
+                                                        }
+                                                        return null;
+                                                    }
+                                                ) ,
+                                                borderWidth:      prop_borderWidth.map(
+                                                    v=>{
+                                                        if (typeof v == "string" && ToolsCss.checkExistSizeSelected(v)){
+                                                            return ToolsComponents_BorderWidth[v];
+                                                        }
+                                                        else if (typeof v == "number"){
+                                                            return v + "px";
+                                                        }
+                                                        return null;
+                                                    }
+                                                ) ,
+                                                backgroundColor:  prop_type.mapList(msgBackgroundColor) ,
+                                                borderColor:      prop_type.mapList(msgBorderColor) ,
+                                                color:            prop_type.mapList(msgColor) ,
+                                            } ,
+                                            className: [
+                                                "mb-2" , "mt-2" , "rounded" , "shadow-sm"
+                                            ] ,
+                                            children: [
+                                                ReactiveElement.div(
+                                                    {
+                                                        attrs: {
+                                                            "id":  `component-messages-item-${this._COMPONENT_RANDOM_ID}-body-message-${index}`,
+                                                        },
+                                                        className: [
+                                                            "alert" ,
+                                                        ] ,
+
+                                                        children: [
+                                                            ReactiveElement.b(
+                                                                {
+                                                                    children:[
+                                                                        itemMessage
+                                                                    ] ,
+                                                                }
+                                                            ),
+
+                                                            this.executeSchemaPart(ComponentMessagesConfigs.schemas.ICON.name , {el , index: index , message: itemMessage})
+                                                        ]
+                                                    })
+                                            ]
+                                        })
+                                ]
+                            })
+                    })
                 });
         }
 

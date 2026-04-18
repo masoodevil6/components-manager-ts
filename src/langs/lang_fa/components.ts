@@ -1,5 +1,17 @@
 export const components = {
 
+    input_agreement_check_box: {
+        prop: {
+            prop_checkBoxAllTitle: {
+                value: "انتخاب همه"
+            }
+        }
+        ////-------------------
+    } ,
+
+
+
+
     messages: {
         ////-------------------
         prop_type: {
