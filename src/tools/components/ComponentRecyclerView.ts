@@ -247,11 +247,12 @@ export class ComponentRecyclerView extends ComponentRecyclerViewBase{
     --------------------------------------------- */
     constructor( 
         config: ComponentRecyclerViewPropsType ,
-        methods: ComponentRecyclerViewMethodsType
+        methods: ComponentRecyclerViewMethodsType ,
+        events = null
     ) {
 
         super("recycler-view" , null);
-        super.renderComponent(config , methods);
+        super.renderComponent(config , methods , events);
     }
 
 

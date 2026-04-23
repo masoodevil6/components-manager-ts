@@ -551,10 +551,11 @@ export class ComponentInputCheckBox extends ComponentInputCheckBoxBase {
     --------------------------------------------- */
     constructor(
         config: ComponentInputCheckBoxPropsType,
-        methods: ComponentInputCheckBoxMethodsType
+        methods: ComponentInputCheckBoxMethodsType ,
+        events = null
     ) {
         super("input-checkbox", null);
-        super.renderComponent(config, methods);
+        super.renderComponent(config, methods , events);
     }
 
 

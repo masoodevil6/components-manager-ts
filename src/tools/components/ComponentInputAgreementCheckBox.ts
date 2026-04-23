@@ -356,10 +356,11 @@ export class ComponentInputAgreementCheckBox extends ComponentInputAgreementChec
     --------------------------------------------- */
     constructor(
         config: ComponentInputAgreementCheckBoxPropsType,
-        methods: ComponentInputAgreementCheckBoxMethodsType
+        methods: ComponentInputAgreementCheckBoxMethodsType ,
+        events = null
     ) {
         super("input-agreement-checkbox", null);
-        super.renderComponent(config, methods);
+        super.renderComponent(config, methods , events);
     }
 
     /* ---------------------------------------------

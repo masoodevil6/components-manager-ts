@@ -433,13 +433,14 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
     --------------------------------------------- */
     constructor(
         config: ComponentFloatMenuPropsType ,
-        methods: ComponentFloatMenuMethodsType
+        methods: ComponentFloatMenuMethodsType ,
+        events = null
     ) {
         super(
             "float-menu" ,
             null
         );
-        super.renderComponent(config , methods);
+        super.renderComponent(config , methods , events);
     }
 
 

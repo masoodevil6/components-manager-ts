@@ -312,10 +312,11 @@ export class ComponentTooltipDescription extends ComponentTooltipDescriptionBase
     --------------------------------------------- */
     constructor(
         config: ComponentTooltipDescriptionPropsType ,
-        methods: ComponentTooltipDescriptionMethodsType
+        methods: ComponentTooltipDescriptionMethodsType ,
+        events = null
     ) {
         super("tooltip-description" , null);
-        super.renderComponent(config , methods);
+        super.renderComponent(config , methods , events);
     }
 
 

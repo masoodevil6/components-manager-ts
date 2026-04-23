@@ -211,10 +211,11 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
     --------------------------------------------- */
     constructor(
         config: ComponentInputListSelectorPropsType,
-        methods: ComponentInputListSelectorMethodsType
+        methods: ComponentInputListSelectorMethodsType ,
+        events = null
     ) {
         super("input-list-selector", null);
-        super.renderComponent(config, methods);
+        super.renderComponent(config, methods , events);
     }
 
 

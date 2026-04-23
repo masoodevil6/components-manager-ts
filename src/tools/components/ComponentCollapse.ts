@@ -566,10 +566,11 @@ export class ComponentCollapse extends ComponentCollapseBase{
     --------------------------------------------- */
     constructor(
         config: ComponentCollapsePropsType ,
-        methods : ComponentCollapseMethodsType
+        methods : ComponentCollapseMethodsType ,
+        events = null
     ) {
         super("collapse" , null);
-        super.renderComponent(config , methods);
+        super.renderComponent(config , methods , events);
     }
 
 

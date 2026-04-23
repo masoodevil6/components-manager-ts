@@ -287,10 +287,11 @@ export class ComponentIcon extends ComponentIconBase {
     --------------------------------------------- */
     constructor(
         config: ComponentIconPropsType ,
-        methods: ComponentIconMethodsType
+        methods: ComponentIconMethodsType ,
+        events = null
     ) {
         super("icon" , null);
-        super.renderComponent(config , methods);
+        super.renderComponent(config , methods , events);
     }
 
 

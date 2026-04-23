@@ -278,10 +278,11 @@ export class ComponentLabel extends ComponentLabelBase {
   --------------------------------------------- */
     constructor(
         config: ComponentLabelPropsType ,
-        methods: ComponentLabelMethodsType
+        methods: ComponentLabelMethodsType ,
+        events = null
     ) {
         super("label" , null);
-        super.renderComponent(config , methods);
+        super.renderComponent(config , methods , events);
     }
 
 

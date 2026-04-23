@@ -413,10 +413,11 @@ export class ComponentButton extends ComponentButtonBase{
     --------------------------------------------- */
     constructor(
         config: ComponentButtonPropsType ,
-        methods : ComponentButtonMethodsType
+        methods : ComponentButtonMethodsType ,
+        events = null
     ) {
         super("button" , null);
-        super.renderComponent(config , methods);
+        super.renderComponent(config , methods , events);
     }
 
 

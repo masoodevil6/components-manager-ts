@@ -346,6 +346,42 @@ export class ReactiveElement {
         });
     }
 
+    _addEvent(event , handler){
+        const wrappedHandler = (e) => {
+            if (this._states.has("disabled") && event !== "mouseenter" && event !== "mouseleave"){
+                e.preventDefault();
+                e.stopPropagation();
+                return;
+            }
+            handler?.call(this , e);
+        }
+
+        this.element.addEventListener(event , wrappedHandler);
+        this._eventListeners.push({event , handler: wrappedHandler});
+
+        return this;
+    }
+
+    _removeEvent(event , handler=null){
+        this._eventListeners = this._eventListeners.filter(item=>{
+            if (item.event !== event) return true;
+            if (handler && item.handler !== handler) return true;
+            this.element.removeEventListener(item.event , item.handler);
+            return false;
+        })
+        return this;
+    }
+
+    on(event , handler){
+        return this._addEvent(event , handler);
+    }
+
+    off(event , handler){
+        return this._removeEvent(event , handler);
+    }
+
+
+
     private _applyOptions() {
 
         const o = this._options;

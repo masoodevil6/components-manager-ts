@@ -234,10 +234,11 @@ export class ComponentSelector extends ComponentSelectorBase{
   --------------------------------------------- */
     constructor(
         config: ComponentSelectorPropsType ,
-        methods: ComponentSelectorMethodsType
+        methods: ComponentSelectorMethodsType ,
+        events = null
     ) {
         super("selector" , null);
-        super.renderComponent(config , methods);
+        super.renderComponent(config , methods , events);
     }
 
 

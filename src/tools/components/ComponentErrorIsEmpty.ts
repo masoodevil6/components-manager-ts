@@ -438,10 +438,11 @@ export class ComponentErrorIsEmpty extends ComponentErrorIsEmptyBase {
      --------------------------------------------- */
     constructor(
         config: ComponentErrorIsEmptyPropsType,
-        methods: ComponentErrorIsEmptyMethodsType
+        methods: ComponentErrorIsEmptyMethodsType ,
+        events = null
     ) {
         super("error-is-empty", null);
-        super.renderComponent(config, methods);
+        super.renderComponent(config, methods , events);
     }
 
 

@@ -36,6 +36,8 @@ import {
     GOG_ComponentBasicProps_Component,
     GOG_ComponentBasicProps_Component_Structure,
 } from "../../core/component/SetupComponent";
+import {Observable} from "../../core/Observable";
+import {ComponentBorder_ArrowTypes} from "./ComponentBorder";
 
 
 
@@ -52,9 +54,11 @@ export const ComponentElementPositionProps = {
 
     prop_positionType :                   "prop_positionType" ,
     prop_positionTop :                    "prop_positionTop" ,
-    prop_positionRight :                  "prop_positionRight" ,
     prop_positionBottom :                 "prop_positionBottom" ,
+    prop_positionRight :                  "prop_positionRight" ,
     prop_positionLeft :                   "prop_positionLeft" ,
+    prop_positionStart :                  "prop_positionStart" ,
+    prop_positionEnd :                    "prop_positionEnd" ,
 
     prop_positionTranslate :              "prop_positionTranslate" ,
     prop_positionZIndex :                 "prop_positionZIndex" ,
@@ -101,16 +105,24 @@ const ComponentElementPositionConfigs  =  {
             name:                        ComponentElementPositionProps.prop_positionTop,
             value:                       GOG_SetValue<SizeUnit | SizeCalc | null>(null),
         } ,
-        [ComponentElementPositionProps.prop_positionRight] : {
-            name:                        ComponentElementPositionProps.prop_positionRight,
-            value:                       GOG_SetValue<SizeUnit | SizeCalc | null>(null),
-        } ,
         [ComponentElementPositionProps.prop_positionBottom] : {
             name:                        ComponentElementPositionProps.prop_positionBottom,
             value:                       GOG_SetValue<SizeUnit | SizeCalc | null>(null),
         } ,
+        [ComponentElementPositionProps.prop_positionRight] : {
+            name:                        ComponentElementPositionProps.prop_positionRight,
+            value:                       GOG_SetValue<SizeUnit | SizeCalc | null>(null),
+        } ,
         [ComponentElementPositionProps.prop_positionLeft] : {
             name:                        ComponentElementPositionProps.prop_positionLeft,
+            value:                       GOG_SetValue<SizeUnit | SizeCalc | null>(null),
+        } ,
+        [ComponentElementPositionProps.prop_positionStart] : {
+            name:                        ComponentElementPositionProps.prop_positionStart,
+            value:                       GOG_SetValue<SizeUnit | SizeCalc | null>(null),
+        } ,
+        [ComponentElementPositionProps.prop_positionEnd] : {
+            name:                        ComponentElementPositionProps.prop_positionEnd,
             value:                       GOG_SetValue<SizeUnit | SizeCalc | null>(null),
         } ,
 
@@ -218,17 +230,17 @@ export abstract class ComponentElementPositionBase extends ComponentBase<
                 title:                                            Language.translate("components.element_position.props.prop_positionTop.title"),
                 description:                                      Language.translate("components.element_position.props.prop_positionTop.description"),
             } ,
-            [ComponentElementPositionConfigs.keys.prop_positionRight.name]: {
-                prop:                                             ComponentElementPositionConfigs.keys.prop_positionRight.name,
-                default:                                          ComponentElementPositionConfigs.keys.prop_positionRight.value,
-                title:                                            Language.translate("components.element_position.props.prop_positionRight.title"),
-                description:                                      Language.translate("components.element_position.props.prop_positionRight.description"),
-            } ,
             [ComponentElementPositionConfigs.keys.prop_positionBottom.name]: {
                 prop:                                             ComponentElementPositionConfigs.keys.prop_positionBottom.name,
                 default:                                          ComponentElementPositionConfigs.keys.prop_positionBottom.value,
                 title:                                            Language.translate("components.element_position.props.prop_positionBottom.title"),
                 description:                                      Language.translate("components.element_position.props.prop_positionBottom.description"),
+            } ,
+            [ComponentElementPositionConfigs.keys.prop_positionRight.name]: {
+                prop:                                             ComponentElementPositionConfigs.keys.prop_positionRight.name,
+                default:                                          ComponentElementPositionConfigs.keys.prop_positionRight.value,
+                title:                                            Language.translate("components.element_position.props.prop_positionRight.title"),
+                description:                                      Language.translate("components.element_position.props.prop_positionRight.description"),
             } ,
             [ComponentElementPositionConfigs.keys.prop_positionLeft.name]: {
                 prop:                                             ComponentElementPositionConfigs.keys.prop_positionLeft.name,
@@ -236,6 +248,19 @@ export abstract class ComponentElementPositionBase extends ComponentBase<
                 title:                                            Language.translate("components.element_position.props.prop_positionLeft.title"),
                 description:                                      Language.translate("components.element_position.props.prop_positionLeft.description"),
             } ,
+            [ComponentElementPositionConfigs.keys.prop_positionStart.name]: {
+                prop:                                             ComponentElementPositionConfigs.keys.prop_positionStart.name,
+                default:                                          ComponentElementPositionConfigs.keys.prop_positionStart.value,
+                title:                                            Language.translate("components.element_position.props.prop_positionStart.title"),
+                description:                                      Language.translate("components.element_position.props.prop_positionStart.description"),
+            } ,
+            [ComponentElementPositionConfigs.keys.prop_positionEnd.name]: {
+                prop:                                             ComponentElementPositionConfigs.keys.prop_positionEnd.name,
+                default:                                          ComponentElementPositionConfigs.keys.prop_positionEnd.value,
+                title:                                            Language.translate("components.element_position.props.prop_positionEnd.title"),
+                description:                                      Language.translate("components.element_position.props.prop_positionEnd.description"),
+            } ,
+
 
             [ComponentElementPositionConfigs.keys.prop_positionTranslate.name]: {
                 prop:                                             ComponentElementPositionConfigs.keys.prop_positionTranslate.name,
@@ -273,9 +298,11 @@ export abstract class ComponentElementPositionBase extends ComponentBase<
 
                 this._COMPONENT_PATTERN[ComponentElementPositionConfigs.keys.prop_positionType.name] ,
                 this._COMPONENT_PATTERN[ComponentElementPositionConfigs.keys.prop_positionTop.name] ,
-                this._COMPONENT_PATTERN[ComponentElementPositionConfigs.keys.prop_positionRight.name] ,
                 this._COMPONENT_PATTERN[ComponentElementPositionConfigs.keys.prop_positionBottom.name] ,
+                this._COMPONENT_PATTERN[ComponentElementPositionConfigs.keys.prop_positionRight.name] ,
                 this._COMPONENT_PATTERN[ComponentElementPositionConfigs.keys.prop_positionLeft.name] ,
+                this._COMPONENT_PATTERN[ComponentElementPositionConfigs.keys.prop_positionStart.name] ,
+                this._COMPONENT_PATTERN[ComponentElementPositionConfigs.keys.prop_positionEnd.name] ,
 
                 this._COMPONENT_PATTERN[ComponentElementPositionConfigs.keys.prop_positionTranslate.name] ,
                 this._COMPONENT_PATTERN[ComponentElementPositionConfigs.keys.prop_positionZIndex.name] ,
@@ -352,10 +379,11 @@ export class ComponentElementPosition extends ComponentElementPositionBase {
     --------------------------------------------- */
     constructor(
         config: ComponentElementPositionPropsType,
-        methods: ComponentElementPositionMethodsType
+        methods: ComponentElementPositionMethodsType ,
+        events = null
     ) {
         super("element-position", null);
-        super.renderComponent(config, methods);
+        super.renderComponent(config, methods , events);
     }
 
 
@@ -388,13 +416,16 @@ export class ComponentElementPosition extends ComponentElementPositionBase {
 
             const prop_positionType =            data[ComponentElementPositionConfigs.keys.prop_positionType.name];
             const prop_positionTop =             data[ComponentElementPositionConfigs.keys.prop_positionTop.name];
-            const prop_positionRight =           data[ComponentElementPositionConfigs.keys.prop_positionRight.name];
             const prop_positionBottom =          data[ComponentElementPositionConfigs.keys.prop_positionBottom.name];
+            const prop_positionRight =           data[ComponentElementPositionConfigs.keys.prop_positionRight.name];
             const prop_positionLeft =            data[ComponentElementPositionConfigs.keys.prop_positionLeft.name];
+            const prop_positionStart =           data[ComponentElementPositionConfigs.keys.prop_positionStart.name];
+            const prop_positionEnd =             data[ComponentElementPositionConfigs.keys.prop_positionEnd.name];
 
             const prop_positionTranslate =       data[ComponentElementPositionConfigs.keys.prop_positionTranslate.name];
             const prop_positionZIndex =          data[ComponentElementPositionConfigs.keys.prop_positionZIndex.name];
 
+            const directionRtl =     AppConfig.get("directionRtl");
 
             return ReactiveElement.part(  "section" ,{
                 attrs: {
@@ -408,12 +439,41 @@ export class ComponentElementPosition extends ComponentElementPositionBase {
                     height:           prop_positionHeight ,
 
                     position:         prop_positionType ,
-                    top:              prop_positionTop ,
-                    right:            prop_positionRight ,
-                    bottom:           prop_positionBottom ,
-                    left:             prop_positionLeft ,
+
                     transform:        prop_positionTranslate ,
                     "z-index":        prop_positionZIndex ,
+
+                    top:              prop_positionTop ,
+                    bottom:           prop_positionBottom ,
+                    left:         Observable.computed(( positionLeft , positionStart , positionEnd) => {
+                            if (positionLeft != null){
+                                return positionLeft;
+                            }
+                            else if (directionRtl && positionEnd != null){
+                                return positionEnd;
+                            }
+                            else if (!directionRtl && positionStart != null){
+                                return positionStart;
+                            }
+                            return null;
+                        },
+                        [prop_positionLeft , prop_positionStart ,  prop_positionEnd]
+                    ) ,
+                    right:         Observable.computed(( positionRight , positionStart , positionEnd) => {
+                            if (positionRight != null){
+                                return positionRight;
+                            }
+                            else if (directionRtl && positionStart != null){
+                                return positionStart;
+                            }
+                            else if (!directionRtl && positionEnd != null){
+                                return positionEnd;
+                            }
+                            return null;
+                        },
+                        [prop_positionRight , prop_positionStart ,  prop_positionEnd]
+                    ) ,
+
                     prop_positionStyles
                 } ,
                 classBind: [

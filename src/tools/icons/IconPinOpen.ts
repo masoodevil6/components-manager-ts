@@ -26,10 +26,9 @@ export function IconPinOpen(
     }*/
 
     return `
-<svg xmlns="http://www.w3.org/2000/svg" aria-label="pin open"
+<svg xmlns="http://www.w3.org/2000/svg" aria-label="pin closed"
      width="${size}" height="${size}" viewBox="0 0 24 24" fill="none"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <title>pin open</title>
+  <title>pin closed</title>
   <path d="M16 3v4l2 2-4 4 2 2v4H8v-4l2-2-4-4 2-2V3h8z" stroke="${primaryColor}" fill="${secondaryColor}"/>
-  <line x1="4" y1="20" x2="20" y2="4"  stroke="${primaryColor}"/>
 </svg>` as IconString
 }

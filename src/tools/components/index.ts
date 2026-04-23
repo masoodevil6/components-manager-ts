@@ -24,7 +24,7 @@
  import {ComponentInputAgreementCheckBox} from "./ComponentInputAgreementCheckBox";
 
  import {ComponentElementPosition} from "./ComponentElementPosition";
- import {ComponentDraggableOrders} from "./ComponentDraggableOrders";
+ import {ComponentDraggableOrdersY} from "./ComponentDraggableOrdersY";
 
 
 export const ToolsComponents = {
@@ -52,6 +52,6 @@ export const ToolsComponents = {
     ComponentInputAgreementCheckBox ,
 
     ComponentElementPosition ,
-    ComponentDraggableOrders ,
+    ComponentDraggableOrdersY ,
 
 }

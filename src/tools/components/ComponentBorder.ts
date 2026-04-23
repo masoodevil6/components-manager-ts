@@ -185,8 +185,18 @@ const ComponentBorderConfigs  =  {
             dataArgs: {},
             componentArgs: {}
         },
-        CLICK_OPTION: {
-            name:                      "fn_onClickOption" ,
+        MOUSE_UP_BORDER: {
+            name:                      "fn_onMouseUpBorder" ,
+            dataArgs: {},
+            componentArgs: {}
+        },
+        MOUSE_DOWN_BORDER: {
+            name:                      "fn_onMouseDownBorder" ,
+            dataArgs: {},
+            componentArgs: {}
+        },
+        MOUSE_MOVE_BORDER: {
+            name:                      "fn_onMouseMoveBorder" ,
             dataArgs: {},
             componentArgs: {}
         },
@@ -201,12 +211,20 @@ export type ComponentBorderTemplatesType =                         GOG_ExtractNa
 export type ComponentBorder_Methods_CLICK_BORDER_ComponentArgs =   GOG_ExtractName<typeof ComponentBorderConfigs.methods.CLICK_BORDER.componentArgs>
 export type ComponentBorder_Methods_CLICK_BORDER_DataArgs =        GOG_ExtractNameValue<typeof ComponentBorderConfigs.methods.CLICK_BORDER.dataArgs>
 
-export type ComponentBorder_Methods_Click_OPTION_ComponentArgs =   GOG_ExtractName<typeof ComponentBorderConfigs.methods.CLICK_OPTION.componentArgs>
-export type ComponentBorder_Methods_Click_OPTION_DataArgs =        GOG_ExtractNameValue<typeof ComponentBorderConfigs.methods.CLICK_OPTION.dataArgs>
+export type ComponentBorder_Methods_MOUSE_UP_BORDER_ComponentArgs =   GOG_ExtractName<typeof ComponentBorderConfigs.methods.MOUSE_UP_BORDER.componentArgs>
+export type ComponentBorder_Methods_MOUSE_UP_BORDER_DataArgs =        GOG_ExtractNameValue<typeof ComponentBorderConfigs.methods.MOUSE_UP_BORDER.dataArgs>
+
+export type ComponentBorder_Methods_MOUSE_DOWN_BORDER_ComponentArgs =   GOG_ExtractName<typeof ComponentBorderConfigs.methods.MOUSE_DOWN_BORDER.componentArgs>
+export type ComponentBorder_Methods_MOUSE_DOWN_BORDER_DataArgs =        GOG_ExtractNameValue<typeof ComponentBorderConfigs.methods.MOUSE_DOWN_BORDER.dataArgs>
+
+export type ComponentBorder_Methods_MOUSE_MOVE_BORDER_ComponentArgs =   GOG_ExtractName<typeof ComponentBorderConfigs.methods.MOUSE_UP_BORDER.componentArgs>
+export type ComponentBorder_Methods_MOUSE_MOVE_BORDER_DataArgs =        GOG_ExtractNameValue<typeof ComponentBorderConfigs.methods.MOUSE_UP_BORDER.dataArgs>
 
 export type ComponentBorderMethodsType = {
-    [ComponentBorderConfigs.methods.CLICK_BORDER.name]: ComponentCallBackType<ComponentBorder_Methods_CLICK_BORDER_ComponentArgs , ComponentBorder_Methods_CLICK_BORDER_DataArgs>
-    [ComponentBorderConfigs.methods.CLICK_OPTION.name]: ComponentCallBackType<ComponentBorder_Methods_Click_OPTION_ComponentArgs , ComponentBorder_Methods_Click_OPTION_DataArgs>
+    [ComponentBorderConfigs.methods.CLICK_BORDER.name]:      ComponentCallBackType<ComponentBorder_Methods_CLICK_BORDER_ComponentArgs , ComponentBorder_Methods_CLICK_BORDER_DataArgs>
+    [ComponentBorderConfigs.methods.MOUSE_UP_BORDER.name]:   ComponentCallBackType<ComponentBorder_Methods_MOUSE_UP_BORDER_ComponentArgs , ComponentBorder_Methods_MOUSE_UP_BORDER_DataArgs>
+    [ComponentBorderConfigs.methods.MOUSE_DOWN_BORDER.name]:   ComponentCallBackType<ComponentBorder_Methods_MOUSE_DOWN_BORDER_ComponentArgs , ComponentBorder_Methods_MOUSE_DOWN_BORDER_DataArgs>
+    [ComponentBorderConfigs.methods.MOUSE_MOVE_BORDER.name]: ComponentCallBackType<ComponentBorder_Methods_MOUSE_MOVE_BORDER_ComponentArgs , ComponentBorder_Methods_MOUSE_MOVE_BORDER_DataArgs>
 }
 
 
@@ -395,9 +413,19 @@ export abstract class ComponentBorderBase extends ComponentBase<
             description:                                      Language.translate("components.border.methods.fn_onClickBorder.description"),
             args: {}
         } ,
-        [ComponentBorderConfigs.methods.CLICK_OPTION.name]: {
-            title:                                            Language.translate("components.border.methods.fn_onClickOption.title"),
-            description:                                      Language.translate("components.border.methods.fn_onClickOption.description"),
+        [ComponentBorderConfigs.methods.MOUSE_UP_BORDER.name]: {
+            title:                                            Language.translate("components.border.methods.fn_onMouseUpBorder.title"),
+            description:                                      Language.translate("components.border.methods.fn_onMouseUpBorder.description"),
+            args: {}
+        } ,
+        [ComponentBorderConfigs.methods.MOUSE_DOWN_BORDER.name]: {
+            title:                                            Language.translate("components.border.methods.fn_onMouseDownBorder.title"),
+            description:                                      Language.translate("components.border.methods.fn_onMouseDownBorder.description"),
+            args: {}
+        } ,
+        [ComponentBorderConfigs.methods.MOUSE_MOVE_BORDER.name]: {
+            title:                                            Language.translate("components.border.methods.fn_onMouseMoveBorder.title"),
+            description:                                      Language.translate("components.border.methods.fn_onMouseMoveBorder.description"),
             args: {}
         } ,
     });
@@ -444,10 +472,11 @@ export class ComponentBorder extends ComponentBorderBase{
     --------------------------------------------- */
     constructor(
         config: ComponentBorderPropsType ,
-        methods: ComponentBorderMethodsType
+        methods: ComponentBorderMethodsType ,
+        events = null
     ) {
         super("border" , null);
-        super.renderComponent(config , methods);
+        super.renderComponent(config , methods , events);
     }
 
 
@@ -513,72 +542,6 @@ export class ComponentBorder extends ComponentBorderBase{
    transform:                                  var(--arrow-transform);
 }
             `;
-           /* switch (prop_borderArrowType.get()){
-                case ComponentBorder_ArrowTypes.TOP:
-                    borderArrow = `
-#${attrsDefault?.id}:after{
-   content:                                    "";
-   position:                                   absolute;
-   ${directionRtl? "right" : "left"}:          ${prop_borderArrowPosition.get()};
-   top:                                        -${prop_borderArrowWidth.get()}px;
-   width:                                      0px;
-   height:                                     0px;
-   border-style:                               solid;
-   border-width:                               ${prop_borderArrowWidth.get()}px ${(2/3)*prop_borderArrowWidth.get()}px 0 ${(2/3)*prop_borderArrowWidth.get()}px;
-   border-color:                               ${prop_borderColor.get()} transparent transparent transparent;
-   transform:                                  translate(${directionRtl ? "50%" : "-50%"} , 0) rotate(180deg);
-}
-                    `
-                    break;
-                case ComponentBorder_ArrowTypes.BOTTOM:
-                    borderArrow = `
-#${attrsDefault?.id}:after{
-   content:                                    "";
-   position:                                   absolute;
-   ${directionRtl? "right" : "left"}:          ${prop_borderArrowPosition.get()};
-   bottom:                                     -${prop_borderArrowWidth.get()}px;
-   width:                                      0px;
-   height:                                     0px;
-   border-style:                               solid;
-   border-width:                               ${prop_borderArrowWidth.get()}px ${(2/3)*prop_borderArrowWidth.get()}px 0 ${(2/3)*prop_borderArrowWidth.get()}px;
-   border-color:                               ${prop_borderColor.get()} transparent transparent transparent;
-   transform:                                  translate(${directionRtl ? "50%" : "-50%"} , 0) rotate(0deg);
-}
-                    `
-                    break;
-                case ((directionRtl && ComponentBorder_ArrowTypes.LEFT) || (!directionRtl && ComponentBorder_ArrowTypes.RIGHT)):
-                    borderArrow = `
-#${attrsDefault?.id}:after{
-   content:                                   "";
-   position:                                  absolute;
-   top:                                       ${prop_borderArrowPosition.get()};
-   ${directionRtl? "left" : "right"}:         -${prop_borderArrowWidth.get()}px;
-   width:                                     0;
-   height:                                    0;
-   border-style:                              solid;
-   border-width:                               ${(2/3)*prop_borderArrowWidth.get()}px 0 ${(2/3)*prop_borderArrowWidth.get()}px ${prop_borderArrowWidth.get()}px;
-   border-color:                               transparent transparent transparent ${prop_borderColor.get()};
-   transform:                                  translate(0 , -50%)  ${directionRtl ? "rotate(180deg)" : ""};
-}
-                    `
-                    break;
-                case ((directionRtl && ComponentBorder_ArrowTypes.RIGHT) || (!directionRtl && ComponentBorder_ArrowTypes.LEFT)):
-                    borderArrow = `
-#${attrsDefault?.id}:after{
-   content:                                    "";
-   position:                                   absolute;
-   top:                                        ${prop_borderArrowPosition.get()};
-   ${directionRtl? "right" : "left"}:          -${prop_borderArrowWidth.get()}px;
-   width:                                      0;
-   height:                                     0;
-   border-style:                               solid;
-   border-width:                              ${(2/3)*prop_borderArrowWidth.get()}px ${prop_borderArrowWidth.get()}px ${(2/3)*prop_borderArrowWidth.get()}px 0;
-   border-color:                              transparent ${prop_borderColor.get()} transparent transparent;
-   transform:                                 translate(0 , -50%) ${directionRtl ? "rotate(180deg)" : ""};
-}
-                    `
-                    break;
-            }*/
 
             return ReactiveElement.part(
                 "section" ,
@@ -603,8 +566,8 @@ export class ComponentBorder extends ComponentBorderBase{
                                     }
                                     return null;
                                 },
-                                [ prop_borderArrowType]
-                            ) ,
+                                [ prop_borderArrowType], this.getScope()
+                            ),
 
                         "--arrow-left" :
                             Observable.computed(( type , arrowPosition , arrowWith) => {
@@ -620,8 +583,9 @@ export class ComponentBorder extends ComponentBorderBase{
 
                                     return null;
                                 },
-                                [prop_borderArrowType , prop_borderArrowPosition ,  prop_borderArrowWidth]
-                            ) ,
+                                [prop_borderArrowType , prop_borderArrowPosition ,  prop_borderArrowWidth],
+                                this.getScope()
+                            ),
 
                         "--arrow-right" :
                             Observable.computed(( type , arrowPosition , arrowWith) => {
@@ -636,8 +600,8 @@ export class ComponentBorder extends ComponentBorderBase{
                                     }
                                     return null;
                                 },
-                                [prop_borderArrowType , prop_borderArrowPosition ,  prop_borderArrowWidth]
-                            ) ,
+                                [prop_borderArrowType , prop_borderArrowPosition ,  prop_borderArrowWidth], this.getScope()
+                            ),
 
                         "--arrow-top" :
                             Observable.computed(( type , arrowPosition , arrowWith) => {
@@ -653,8 +617,8 @@ export class ComponentBorder extends ComponentBorderBase{
 
                                     return null;
                                 },
-                                [prop_borderArrowType , prop_borderArrowPosition ,  prop_borderArrowWidth]
-                            ) ,
+                                [prop_borderArrowType , prop_borderArrowPosition ,  prop_borderArrowWidth], this.getScope()
+                            ),
 
                         "--arrow-bottom" :
                             Observable.computed(( type  , arrowWith) => {
@@ -664,7 +628,8 @@ export class ComponentBorder extends ComponentBorderBase{
                                     return null;
                                 },
                                 [prop_borderArrowType  ,  prop_borderArrowWidth]
-                            ) ,
+                                , this.getScope()
+                            ),
 
                         "--arrow-border-width" :
                             Observable.computed(( type  , arrowWith) => {
@@ -680,7 +645,8 @@ export class ComponentBorder extends ComponentBorderBase{
                                     return null;
                                 },
                                 [prop_borderArrowType  ,  prop_borderArrowWidth]
-                            ) ,
+                                , this.getScope()
+                            ),
 
                         "--arrow-border-color" : el.hover.mapList({
                             true:           Observable.computed(( type  , borderColor) => {
@@ -711,7 +677,8 @@ export class ComponentBorder extends ComponentBorderBase{
                                 },
                                 [prop_borderArrowType  ,  prop_borderColor]
                             )
-                        }) ,
+                        }, this.getScope()
+                        ),
 
 
 
@@ -732,8 +699,8 @@ export class ComponentBorder extends ComponentBorderBase{
                                     }
                                     return null;
                                 },
-                                [prop_borderArrowType  ]
-                            ) ,
+                                [prop_borderArrowType], this.getScope()
+                            ),
 
 
 
@@ -752,7 +719,8 @@ export class ComponentBorder extends ComponentBorderBase{
                                 }
                                 return null;
                             }
-                        ) ,
+                            , this.getScope()
+                        ),
 
 
                         borderRadius: prop_borderRadius.map(
@@ -764,49 +732,45 @@ export class ComponentBorder extends ComponentBorderBase{
                                     return v + "px";
                                 }
                                 return null;
-                            }
-                        ) ,
+                            }, this.getScope()
+                        ),
 
 
                         opacity:         prop_borderOpacity.map(
                             v=>{
                                 return v/100
-                            }
-                        ) ,
+                            }, this.getScope()
+                        ),
 
 
                         borderColor:
-                            Observable.computed(( color , colorHover) => {
+                            Observable.computed(( color , colorHover , hover) => {
 
-                                const hoverValue = el.hover.get();
                                 if (colorHover){
-                                    return hoverValue ? colorHover : color
+                                    return hover ? colorHover : color
                                 }
 
                                 return color;
-                            }, [ prop_borderColor , prop_borderColor_hover , el.hover]),
+                            }, [ prop_borderColor , prop_borderColor_hover , el.hover], this.getScope()),
 
                         color:
-                            Observable.computed(( color , colorHover) => {
+                            Observable.computed(( color , colorHover , hover) => {
 
-                                const hoverValue = el.hover.get();
                                 if (colorHover){
-                                    return hoverValue ? colorHover : color
+                                    return hover ? colorHover : color
                                 }
 
                                 return color;
-                            }, [ prop_contentColor , prop_contentColor_hover , el.hover]),
+                            }, [ prop_contentColor , prop_contentColor_hover , el.hover], this.getScope()),
 
                         backgroundColor:
-                            Observable.computed(( color , colorHover) => {
-
-                                const hoverValue = el.hover.get();
+                            Observable.computed(( color , colorHover , hover) => {
                                 if (colorHover){
-                                    return hoverValue ? colorHover : color
+                                    return hover ? colorHover : color
                                 }
 
                                 return color;
-                            }, [ prop_contentBackgroundColor , prop_contentBackgroundColor_hover , el.hover]),
+                            }, [ prop_contentBackgroundColor , prop_contentBackgroundColor_hover , el.hover], this.getScope()),
 
 
                     }) ,
@@ -818,6 +782,18 @@ export class ComponentBorder extends ComponentBorderBase{
                         click: (event: Event) => {
                             const params : ComponentBorder_Methods_CLICK_BORDER_DataArgs = {}
                             this.executeMethod(ComponentBorderConfigs.methods.CLICK_BORDER.name  , event , params);
+                        },
+                        mousemove: (event: Event) => {
+                            const params : ComponentBorder_Methods_MOUSE_MOVE_BORDER_DataArgs = {}
+                            this.executeMethod(ComponentBorderConfigs.methods.MOUSE_MOVE_BORDER.name  , event , params);
+                        },
+                        mousedown: (event: Event) => {
+                            const params : ComponentBorder_Methods_MOUSE_DOWN_BORDER_DataArgs = {}
+                            this.executeMethod(ComponentBorderConfigs.methods.MOUSE_DOWN_BORDER.name  , event , params);
+                        },
+                        mouseup: (event: Event) => {
+                            const params : ComponentBorder_Methods_MOUSE_UP_BORDER_DataArgs = {}
+                            this.executeMethod(ComponentBorderConfigs.methods.MOUSE_UP_BORDER.name  , event , params);
                         },
                     },
                     children: [

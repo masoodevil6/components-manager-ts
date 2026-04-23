@@ -109,11 +109,11 @@ const ComponentTabsConfigs  =  {
         } ,
         [ComponentTabsProps.prop_borderBackgroundUnselected]: {
             name:                      ComponentTabsProps.prop_borderBackgroundUnselected ,
-            value:                     GOG_SetValue<Color | null>( Color(COLORS_MAIN.SHADOW , COLORS_GRAD.GRADE_2)),
+            value:                     GOG_SetValue<Color | null>( Color(COLORS_MAIN.SECONDARY , COLORS_GRAD.GRADE_3)),
         } ,
         [ComponentTabsProps.prop_borderBackgroundBefore]: {
             name:                      ComponentTabsProps.prop_borderBackgroundBefore ,
-            value:                     GOG_SetValue<Color | null>( Color(COLORS_MAIN.SHADOW , COLORS_GRAD.GRADE_3)),
+            value:                     GOG_SetValue<Color | null>( Color(COLORS_MAIN.SHADOW , COLORS_GRAD.GRADE_2)),
         } ,
         [ComponentTabsProps.prop_borderBackgroundAfter]: {
             name:                      ComponentTabsProps.prop_borderBackgroundAfter ,
@@ -629,10 +629,11 @@ export class ComponentTabs extends ComponentTabsBase{
     --------------------------------------------- */
     constructor(
         config: ComponentTabsPropsType ,
-        methods: ComponentTabsMethodsType
+        methods: ComponentTabsMethodsType ,
+        events = null
     ) {
         super("tabs" , null);
-        super.renderComponent(config , methods);
+        super.renderComponent(config , methods , events);
     }
 
 

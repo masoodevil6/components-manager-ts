@@ -12,21 +12,25 @@
     --secondaryColor2: #f5bf53;
     --secondaryColor3: #f6d086;
     --secondaryColor4: #efdcb3;
+    --secondaryColor5: #fcf5e7;
 
     --errorColor1:     #691d21;
     --errorColor2:     #ab5258;
     --errorColor3:     #f6b1b7;
     --errorColor4:     #f8d7da;
+    --errorColor5:     #ffedee;
 
     --warningColor1:   #b4500c;
     --warningColor2:   #f47920;
     --warningColor3:   #eca574;
     --warningColor4:   #ffe4d0;
+    --warningColor5:   #fff1e7;
 
     --infoColor1:      #077af1;
-    --infoColor2:      #1988fd;
-    --infoColor3:      #4ba2fd;
-    --infoColor4:      #74b8ff;
+    --infoColor2:      #268efc;
+    --infoColor3:      #66afff;
+    --infoColor4:      #afd2f8;
+    --infoColor5:      #dbecff;
 
     --successColor1:   #06502d;
     --successColor2:   #2e9f6b;

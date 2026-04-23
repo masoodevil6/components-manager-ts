@@ -1,4 +1,4 @@
-import {Observable} from "./Observable";
+import {Observable, Scope} from "./Observable";
 import {ReactiveElement} from "./ReactiveElement";
 import {AppConfig} from "./AppConfig";
 import {ComponentAttrsDefault, ConnectorComponent} from "./component/ConnectorComponent";
@@ -123,6 +123,8 @@ export class ComponentBase<
     TMethods
     > extends ConnectorComponent{
 
+    private _renderScope = new Scope();
+
     _COMPONENT_PATTERN : { [K in  ComponentPropKeys<TProp>]?:           IComponentProp<TProp[K]> }
 
     _COMPONENT_SCHEMA:   { [K in  ComponentSchemaKeys<TSchemas>]: IComponentSchema<TSchemas[K] , TProp[K]> }
@@ -165,7 +167,7 @@ export class ComponentBase<
         //this._COMPONENT_ELEMENT = this.#getComponentElement();
     }
 
-    renderComponent(config: TProp , methods: TMethods) {
+    renderComponent(config: TProp , methods: TMethods , events = null) {
 
         this.connectedCallback();
 
@@ -189,6 +191,12 @@ export class ComponentBase<
 
         // GET Ready ==> _COMPONENT_ELEMENT
         this.createComponentElement();
+
+        if (events){
+            Object.keys(events).forEach(key=> {
+                this._COMPONENT_CONTENT.on(key , events[key])
+            })
+        }
     }
 
     connectedCallback() {
@@ -198,176 +206,6 @@ export class ComponentBase<
                 this.set("directionRtl", value);
             });
     }
-
-    //--------------------------------------------------
-    // GET Ready ==> _COMPONENT_TEMPLATES
-    //--------------------------------------------------
-    /*#getReadyTemplates() {
-        const listTemplates = this.#getListTemplates();
-        if (this._COMPONENT_TEMPLATES != null) {
-            Object.keys(this._COMPONENT_TEMPLATES).forEach(templateName => {
-                const value = this.#getReadyTemplateValueSelected(listTemplates, templateName, this._COMPONENT_TEMPLATES[templateName]);
-                if (value != null) {
-                    this._COMPONENT_TEMPLATES[templateName].value = value;
-                }
-            });
-        }
-    }
-
-    #getListTemplates(): Record<string, ComponentTemplateType<TProp>[]> {
-        const resultExp: Record<string, ComponentTemplateType<TProp>[]> = {};
-        const component = this.#getComponentElement();
-
-        if (!component) return resultExp;
-
-        let children = component.children;
-        let childReal: Element[] = Array.from(children);
-        let hasTemplate = children.length > 0 && children[0].tagName === "TEMPLATE";
-
-        if (hasTemplate) {
-            childReal = Array.from((children[0] as HTMLTemplateElement).content.children);
-        }
-
-        const componentSlotNames = Object.values(
-            childReal
-                .filter(el => (el as HTMLElement).tagName.toLowerCase().startsWith('component-'))
-                .reduce((acc, el) => {
-                    const tag = (el as HTMLElement).tagName.toLowerCase();
-                    if (!acc[tag]) acc[tag] = { el, list: [] };
-                    acc[tag].list.push(el);
-                    return acc;
-                }, {} as Record<string, { el: Element, list: Element[] }>)
-        );
-
-        if (hasTemplate) {
-            (children[0] as HTMLTemplateElement).remove();
-        }
-
-        if (Array.isArray(componentSlotNames)) {
-            for (const componentTag of componentSlotNames) {
-                if (componentTag.hasOwnProperty("list") && componentTag.hasOwnProperty("el")) {
-                    const list = componentTag.list;
-                    if (Array.isArray(list)) {
-                        const listExp: ComponentTemplateType<TProp>[] = [];
-                        for (const itemComponent of list) {
-                            listExp.push(this.#getListTemplates_templateData(itemComponent));
-                        }
-                        resultExp[componentTag.el.tagName.toLowerCase().replace(/^component-/, '')] = listExp;
-                    }
-                }
-            }
-        }
-
-        return resultExp;
-    }
-
-    #getListTemplates_templateData(el: Element): ComponentTemplateType<TProp> {
-        return {
-            reference:   "" ,
-            html:        el.innerHTML,
-            attrs:       Object.fromEntries([...el.attributes].map(a => [a.name, a.value]))
-        };
-    }
-
-    #getReadyTemplateValueSelected(listTemplates: Record<string, ComponentTemplateType<TProp>[]>, templateName: string, templateData: any) {
-        let resultExp: any = null;
-        if (listTemplates != null) {
-            Object.keys(listTemplates).forEach(temp => {
-                if (temp === templateName) {
-                    const itemTemplate = listTemplates[templateName];
-                    const reference = templateData.reference;
-                    const isMulti = this.#getReadyTemplateValueSelected_hasMultiTemplate(reference);
-
-                    if (isMulti) {
-                        resultExp = itemTemplate;
-                    } else {
-                        if (itemTemplate.length > 0 && itemTemplate[0] != null && itemTemplate[0].hasOwnProperty("html")) {
-                            resultExp = itemTemplate[0].html;
-                        }
-                    }
-                }
-            });
-        }
-        return resultExp;
-    }
-
-    #getReadyTemplateValueSelected_hasMultiTemplate(reference: any): boolean {
-        let resultExp = false;
-        if (this._COMPONENT_PATTERN != null) {
-            Object.keys(this._COMPONENT_PATTERN).forEach(key => {
-                if (key === reference) {
-                    const refData = this._COMPONENT_PATTERN[key];
-                    resultExp = refData.hasOwnProperty("hasMultiTemplate") ? refData.hasMultiTemplate : false;
-                }
-            });
-        }
-        return resultExp;
-    }*/
-
-
-
-    //--------------------------------------------------
-    // GET Ready ==> _COMPONENT_PROPS_BIND
-    //--------------------------------------------------
-   /* #getReadyComponentParamsWithDefault() {
-
-      /!*  if (this._COMPONENT_SCHEMA.hasOwnProperty("part_component")) {
-            if (this._COMPONENT_PATTERN.hasOwnProperty("classList")){
-                this._COMPONENT_SCHEMA["part_component"].props.push(this._COMPONENT_PATTERN["classList"]);
-            }
-            if (this._COMPONENT_PATTERN.hasOwnProperty("styles")){
-                this._COMPONENT_SCHEMA["part_component"].props.push(this._COMPONENT_PATTERN["styles"]);
-            }
-        }
-
-        if (this._COMPONENT_SCHEMA.hasOwnProperty("part_structure")) {
-            if (this._COMPONENT_PATTERN.hasOwnProperty("prop_show")){
-                this._COMPONENT_SCHEMA["part_structure"].props.push(this._COMPONENT_PATTERN["prop_show"]);
-            }
-            if (this._COMPONENT_PATTERN.hasOwnProperty("prop_structureClass")){
-                this._COMPONENT_SCHEMA["part_structure"].props.push(this._COMPONENT_PATTERN["prop_structureClass"]);
-            }
-            if (this._COMPONENT_PATTERN.hasOwnProperty("prop_structureStyles")){
-                this._COMPONENT_SCHEMA["part_structure"].props.push(this._COMPONENT_PATTERN["prop_structureStyles"]);
-            }
-        }
-*!/
-
-        /!*if (this._COMPONENT_PROPS.hasOwnProperty("part_label")) {
-            const labelProps = [
-                { prop: "prop_title",                     default: null },
-                { prop: "prop_labelShow",                 default: true },
-                { prop: "prop_labelTooltipDescription",   default: null },
-                { prop: "prop_labelClass",                default: ["shadow-sm", "px-2", "d-block", "rounded"] },
-                { prop: "prop_labelStyles",               default: { "font-size": "10pt" } },
-                { prop: "prop_labelHoverStyles",          default: null },
-                //{ prop: "prop_labelSize",                 default: tools_css.standardSizes.m.name }
-            ];
-
-            labelProps.forEach(p => {
-                if (this._COMPONENT_PROPS &&!this._COMPONENT_PROPS.part_label.hasOwnProperty(p.prop)) {
-                    this._COMPONENT_PROPS["part_label"].push(p);
-                }
-            });
-        }*!/
-    }*/
-
-    /*#getReadyRealProps(): IComponentProp<TProp>[] {
-        const props: ComponentPropKeys<TProp>[] = [];
-        //const props: ComponentPartitionType[] = [];
-
-
-
-        Object.entries(this._COMPONENT_PATTERN).forEach(([partName, partParams]) => {
-
-
-            for (const param of partParams) {
-                if (param != null) props.push(param);
-            }
-        });
-
-        return props;
-    }*/
 
     #getReadyUserConfigAndDefaultConfig(config: Record<string, any>): IComponentProp<TProp>[] {
         const props = this._COMPONENT_PATTERN;
@@ -413,48 +251,6 @@ export class ComponentBase<
         return props;
     }
 
-    /*#getReadyParamsBinding(props: IComponentProp<TProp>[]) {
-
-        for (const param of props) {
-            if (param != null && param.hasOwnProperty("prop")) {
-                const defaultValue = param?.value ?? null;
-                if (Observable.isObservable(defaultValue)){
-                    this._COMPONENT_PROPS_BIND[param.prop] = defaultValue;
-                }
-                else {
-                    this._COMPONENT_PROPS_BIND[param.prop] = new Observable(defaultValue);
-                }
-
-            }
-        }
-
-    }*/
-
-
-
-
-    /*//--------------------------------------------------
-    // GET Ready ==> _COMPONENT_ELEMENT
-    //--------------------------------------------------
-    #getReadyTemplateSchema() {
-        this._COMPONENT_CONTENT = this.executeSchemaPart("part_component");
-        if (this._COMPONENT_ELEMENT != null) {
-            this._COMPONENT_ELEMENT.appendChild(this.getSchema());
-        }
-    }*/
-
-
-
-
-    /*//--------------------------------------------------
-    // GET Ready ==> _COMPONENT_SELECTOR
-    //--------------------------------------------------
-    #getComponentElement(): HTMLElement | null {
-        return document.querySelector(this._COMPONENT_SELECTOR!);
-    }*/
-
-
-
 
     //--------------------------------------------------
     // GET Ready ==> _COMPONENT_METHODS
@@ -480,6 +276,9 @@ export class ComponentBase<
     //--------------------------------------------------
 
     private createComponentElement(){
+        this._renderScope.dispose();
+        this._renderScope = new Scope();
+
         this._COMPONENT_CONTENT = this.executeSchemaPart(GOG_ComponentBasicConfigs_Component_parts.Component.name);
 
         const selector = this.get(GOG_ComponentBasicProps_Component.selector);
@@ -531,8 +330,6 @@ export class ComponentBase<
             })
         }
 
-
-
         return result;
     }
 
@@ -546,128 +343,6 @@ export class ComponentBase<
         return resultExp;
     }
 
-
-
-
-    //--------------------------------------------------
-    // template parts
-    //--------------------------------------------------
-    /*templateBasic_render(
-        attrsDefault ,
-        data ,
-        extra
-        //moreClass: string[] = ["mb-1"]
-    ) :ReactiveElement {
-        //const partName = "part_component";
-        //const data = this.getPartProps(partName);
-
-        if (data != null) {
-
-            const rtl = AppConfig.observable("directionRtl")
-            let classList =  data?.classList ?? [];
-            let styles = data?.styles ?? {};
-            /!*if (this._COMPONENT_ELEMENT == null) {
-                classList = data?.classList ?? [];
-                styles = data?.styles ?? {};
-            }*!/
-
-             return  ReactiveElement.component( this._COMPONENT_NAME ,{
-                attrs: {
-                    ...attrsDefault
-                },
-                className: [
-                    //...moreClass ,
-                    //"position-relative" ,
-                ],
-                classBind: [
-                    classList
-                ] ,
-                styles: {
-
-                },
-                stylesBind: {
-                    direction: rtl.mapBoolean("rtl" , "ltr") ,
-                    styles
-                },
-                children: [
-                    this.executeSchemaPart(GOG_ComponentBasicConfigs_structure_parts.STRUCTURE.name) ,
-                ]
-            })
-        }
-
-        return  ReactiveElement.part(  "section" ,{
-            attrs: {
-                ...attrsDefault
-            }
-        });
-    }*/
-
-
-   /* templateBasic_render_structure(
-        attrsDefault ,
-        data ,
-        extra
-    ) : ReactiveElement {
-
-        if (data != null) {
-            const prop_show = data.prop_show;
-            const prop_structureClass = data.prop_structureClass;
-            const prop_structureStyles = data.prop_structureStyles;
-
-            return  ReactiveElement.part(  "section" ,{
-                className: [
-                    //...moreClass ,
-                    //"position-relative",
-                ],
-                classBind: [
-                    prop_structureClass ,
-                    prop_show.mapBoolean("show" , "d-none")
-                ],
-                attrs: {
-                    ...attrsDefault
-                },
-                styles: {},
-                stylesBind: {
-                    prop_structureStyles
-                },
-                children: [
-                    this.renderContentComponent()
-
-                ]
-            });
-        }
-
-        return  ReactiveElement.part(  "section" ,{
-            attrs: {
-                ...attrsDefault
-            },
-        });
-    }*/
-
-
-
-    //--------------------------------------------------
-    // part Props
-    //--------------------------------------------------
-    /*getPartProps(partName: string): Record<string, Observable<any>> | null {
-        let resultExp: Record<string, Observable<any>> | null = null;
-        if (this._COMPONENT_PROPS != null) {
-            Object.keys(this._COMPONENT_PROPS).forEach(key => {
-                if (key === partName) {
-                    resultExp = {};
-                    if (this._COMPONENT_PROPS) {
-                        const props = this._COMPONENT_PROPS[key];
-                        for (const param of props) {
-                            if (param != null && param.hasOwnProperty("prop")) {
-                                resultExp[param.prop] = this._COMPONENT_PROPS_BIND[param.prop];
-                            }
-                        }
-                    }
-                }
-            });
-        }
-        return resultExp;
-    }*/
 
     getReactiveElement() {
         return this._COMPONENT_CONTENT.getReactiveElement();
@@ -690,6 +365,16 @@ export class ComponentBase<
             return this._COMPONENT_PROPS_BIND[propName].get();
         }
         return null;
+    }
+    getObservable(propName: string) {
+        if (this._COMPONENT_PROPS_BIND.hasOwnProperty(propName)) {
+            return this._COMPONENT_PROPS_BIND[propName];
+        }
+        return null;
+    }
+
+    getScope(): Scope{
+        return this._renderScope;
     }
 
     getPartId(partName) : string{
@@ -732,8 +417,5 @@ export class ComponentBase<
         });
         return argsExp;
     }
-
-
-
 
 }

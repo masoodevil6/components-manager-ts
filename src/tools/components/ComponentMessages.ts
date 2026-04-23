@@ -310,10 +310,11 @@ export class ComponentMessages extends ComponentMessagesBase{
     --------------------------------------------- */
     constructor(
         config: ComponentMessagesPropsType ,
-        methods: ComponentMessageMethodsType
+        methods: ComponentMessageMethodsType ,
+        events = null
     ) {
         super("message" , null);
-        super.renderComponent(config , methods);
+        super.renderComponent(config , methods , events);
     }
 
 

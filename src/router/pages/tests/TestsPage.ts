@@ -100,7 +100,7 @@ export class TestsPage implements ITemplate{
 
 
                     TOOLS.COMPONENT.ComponentElementPosition.renderExampleComponent() ,
-                    TOOLS.COMPONENT.ComponentDraggableOrders.renderExampleComponent() ,
+                    TOOLS.COMPONENT.ComponentDraggableOrdersY.renderExampleComponent() ,
 
                     TOOLS.COMPONENT.ComponentMessages.renderExampleComponent() ,
                     TOOLS.COMPONENT.ComponentErrorIsEmpty.renderExampleComponent() ,
