@@ -121,15 +121,15 @@ const ComponentMessagesConfigs  =  {
             name:                      "fn_onCloseMessage" ,
             dataArgs: {
                 MESSAGES_INDEX: {
-                    name:              "index" ,
+                    name:              "MESSAGES_INDEX" ,
                     value:             GOG_SetValue<number>(0) ,
                 } ,
                 MESSAGE_TEXT: {
-                    name:              "message" ,
+                    name:              "MESSAGE_TEXT" ,
                     value:             GOG_SetValue<string>("") ,
                 },
                 MESSAGE_TYPE : {
-                    name:              "type" ,
+                    name:              "MESSAGE_TYPE" ,
                     value:              GOG_SetValue<GOG_ValueOf<typeof ComponentMessages_MessageTypes>>(ComponentMessages_MessageTypes.SUCCESS),
                 }
             },
@@ -295,7 +295,7 @@ export class ComponentMessagesBase extends ComponentBase<
             } ,
             <ComponentMessageMethodsType>{
                 fn_onCloseMessage: (event, dataArgs: ComponentMessages_Methods_CLOSE_MESSAGE_DataArgs, componentArgs: ComponentMessages_Methods_CLOSE_MESSAGE_ComponentArgs) => {
-                    console.log(event , dataArgs.index , dataArgs.message , dataArgs.type)
+                    console.log(event , dataArgs.MESSAGES_INDEX , dataArgs.MESSAGE_TEXT , dataArgs.MESSAGE_TYPE)
                 }
             }
         ).getElement();

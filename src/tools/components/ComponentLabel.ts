@@ -108,13 +108,13 @@ const ComponentLabelConfigs  =  {
             name:                      "fn_onClickLabel" ,
             dataArgs: {
                 IS_DISABLE: {
-                    name:              "isDisable" ,
+                    name:              "IS_DISABLE" ,
                     value:             GOG_SetValue<boolean>(false) ,
                 } ,
             },
             componentArgs: {
                 FOR : {
-                    name:              "for"
+                    name:              "FOR"
                 }
             }
         },
@@ -329,7 +329,7 @@ export class ComponentLabel extends ComponentLabelBase {
                 <ComponentBorderMethodsType>{
                     fn_onClickBorder: function (event, dataArgs:ComponentBorder_Methods_CLICK_BORDER_DataArgs, componentArgs:ComponentBorder_Methods_CLICK_BORDER_ComponentArgs) {
                         const params : ComponentLabel_Methods_CLICK_DataArgs = {
-                            isDisable: false
+                            IS_DISABLE: false
                         }
                         this.executeMethod(ComponentLabelConfigs.methods.CLICK.name  , event , params);
                     }.bind(this)

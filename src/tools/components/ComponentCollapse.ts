@@ -228,7 +228,7 @@ const ComponentCollapseConfigs  =  {
             dataArgs: {},
             componentArgs: {
                 IS_OPEN : {
-                    name:                 "isOpen"
+                    name:                 "IS_OPEN"
                 }
             }
         },

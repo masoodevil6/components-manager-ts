@@ -246,7 +246,7 @@ const ComponentTabsConfigs  =  {
             dataArgs: {},
             componentArgs: {
                 TAB_SELECTED : {
-                    name:                 "tabSelected"
+                    name:                 "TAB_SELECTED"
                 }
             }
         },
@@ -255,7 +255,7 @@ const ComponentTabsConfigs  =  {
             dataArgs: {},
             componentArgs: {
                 TAB_SELECTED : {
-                    name:                 "tabSelected"
+                    name:                 "TAB_SELECTED"
                 }
             }
         },

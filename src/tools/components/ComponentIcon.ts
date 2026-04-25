@@ -110,7 +110,7 @@ const ComponentIconConfigs  =  {
             dataArgs: {},
             componentArgs: {
                 ICON : {
-                    name:              "icon"
+                    name:              "ICON"
                 }
             }
         },

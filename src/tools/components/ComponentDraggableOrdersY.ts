@@ -188,7 +188,7 @@ const ComponentDraggableOrdersYConfigs  =  {
 
         [ComponentDraggableOrdersYProps.prop_draggableBorderWidth]: {
             name:               ComponentDraggableOrdersYProps.prop_draggableBorderWidth ,
-            value:              GOG_SetValue<GOG_ValueOf<typeof SIZES> | number>(SIZES.S),
+            value:              GOG_SetValue<GOG_ValueOf<typeof SIZES> | number>(SIZES.XS),
         } ,
         [ComponentDraggableOrdersYProps.prop_draggableBorderRadius]: {
             name:               ComponentDraggableOrdersYProps.prop_draggableBorderRadius ,
@@ -199,20 +199,20 @@ const ComponentDraggableOrdersYConfigs  =  {
 
         [ComponentDraggableOrdersYProps.prop_draggablePinedBackgroundColor]: {
             name:               ComponentDraggableOrdersYProps.prop_draggablePinedBackgroundColor ,
-            value:              GOG_SetValue<Color | null>(Color(COLORS_MAIN.WARNING , COLORS_GRAD.GRADE_5)),
+            value:              GOG_SetValue<Color | null>(Color(COLORS_MAIN.SUCCESS , COLORS_GRAD.GRADE_5)),
         } ,
         [ComponentDraggableOrdersYProps.prop_draggablePinedBackgroundColor_hover]: {
             name:               ComponentDraggableOrdersYProps.prop_draggablePinedBackgroundColor_hover ,
-            value:              GOG_SetValue<Color | null>(Color(COLORS_MAIN.WARNING , COLORS_GRAD.GRADE_4)),
+            value:              GOG_SetValue<Color | null>(Color(COLORS_MAIN.SUCCESS , COLORS_GRAD.GRADE_4)),
         } ,
 
         [ComponentDraggableOrdersYProps.prop_draggablePinedBorderColor]: {
             name:               ComponentDraggableOrdersYProps.prop_draggablePinedBorderColor ,
-            value:              GOG_SetValue<Color | null>( Color(COLORS_MAIN.WARNING , COLORS_GRAD.GRADE_3)) ,
+            value:              GOG_SetValue<Color | null>( Color(COLORS_MAIN.SUCCESS , COLORS_GRAD.GRADE_3)) ,
         } ,
         [ComponentDraggableOrdersYProps.prop_draggablePinedBorderColor_hover]: {
             name:               ComponentDraggableOrdersYProps.prop_draggablePinedBorderColor_hover ,
-            value:              GOG_SetValue<Color | null>(Color(COLORS_MAIN.WARNING , COLORS_GRAD.GRADE_2)) ,
+            value:              GOG_SetValue<Color | null>(Color(COLORS_MAIN.SUCCESS , COLORS_GRAD.GRADE_2)) ,
         } ,
 
 
@@ -299,10 +299,10 @@ const ComponentDraggableOrdersYConfigs  =  {
             dataArgs: {},
             componentArgs: {
                 ORDER : {
-                    name:              "order"
+                    name:              "ORDER"
                 } ,
                 LIST : {
-                    name:              "list"
+                    name:              "LIST"
                 }
             }
         },
@@ -717,6 +717,11 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
 
     _DRAG_ELEMENT_ID_ACTIVE =    null;
     _dragHoveredId =             new Observable<number | null>(null)
+
+    _dragStartTimer=             null;
+    _dragStartY=                 null;
+    _dragStarted=                null;
+
     _onMouseMove;
     _onMouseUp;
 
@@ -946,7 +951,6 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
 
 
 
-
                     prop_contentBackgroundColor:               Observable.computed((bgDefault , bgPined , bgHovered , idHovered) => {
                         if (extra?.draggableItem?.isPin){
                             return bgPined;
@@ -967,9 +971,6 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
                             return bgDefault
                         }
                     }, [ prop_draggableBackgroundColor_hover , prop_draggablePinedBackgroundColor_hover  , this._dragHoveredId ], this.getScope()),
-
-
-
 
                 } ,
                 <ComponentBorderMethodsType>{
@@ -1088,7 +1089,6 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
                 } ,
                 <ComponentIconMethodsType>{
                     fn_onClickIcon: function (event, dataArgs : ComponentIcon_Methods_CLICK_DataArgs, componentArgs: ComponentIcon_Methods_CLICK_ComponentArgs) {
-                        console.log("a")
                         event.preventDefault();
                         event.stopPropagation();
                         this.pr_setStatusSourceIconPin(extra?.draggableItem?.id ?? null);
@@ -1195,6 +1195,24 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
     //// for element border
     private pr_setBorderStarted(itemBorderId , event){
 
+        this._dragStartY=    event.clientY;
+        this._dragStarted=   false;
+        this._dragStartTimer = setTimeout(()=> {
+            if (!this._dragStarted){
+                this._dragStarted = true;
+                this.pr_startDrag(itemBorderId , event)
+            }
+        } , 200)
+
+
+        this._onMouseMove = this.pr_handleMouseMove.bind(this , itemBorderId)
+        document.addEventListener('mousemove', this._onMouseMove)
+
+        this._onMouseUp = this.pr_handleMouseUp.bind(this , itemBorderId)
+        document.addEventListener('mouseup', this._onMouseUp)
+    }
+
+    private pr_startDrag(itemBorderId , event){
         this._DRAG_ELEMENT_ID_ACTIVE = itemBorderId;
 
         const elPlaceHolder = this.pr_getElementFromListElements(itemBorderId, this._KEY_ELEMENT_PLACE_HOLDER);
@@ -1203,14 +1221,26 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
         const mouseY = event?.clientY ?? null;
         this.pr_setPositionBorder(mouseY, itemBorderId)
 
-        this._onMouseMove = this.pr_setBorderContinue.bind(this , itemBorderId)
-        document.addEventListener('mousemove', this._onMouseMove)
-
-        this._onMouseUp = this.pr_seBorderEnd.bind(this , itemBorderId)
-        document.addEventListener('mouseup', this._onMouseUp)
     }
 
-    pr_setBorderContinue( itemBorderId , event){
+
+    private pr_handleMouseMove(itemBorderId , event){
+        if (this._dragStartY == null) return;
+
+        const delta = Math.abs(event.clientY - this._dragStartY)
+
+        if (delta>5 && !this._dragStarted){
+            clearTimeout(this._dragStartTimer);
+            this._dragStarted = true;
+            this.pr_startDrag(itemBorderId , event);
+        }
+
+        if (this._dragStarted){
+            this.pr_setBorderContinue(itemBorderId , event)
+        }
+    }
+
+    private pr_setBorderContinue( itemBorderId , event){
 
         if (this._DRAG_ELEMENT_ID_ACTIVE  == null) return;
 
@@ -1226,9 +1256,29 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
         }
     }
 
+    private pr_handleMouseUp(itemBorderId , event){
+        clearTimeout(this._dragStartTimer);
 
-    private pr_seBorderEnd(itemBorderId , event){
+        if (this._dragStarted) {
+            this.pr_setBorderEnd(itemBorderId, event)
+        };
+
+        this._dragStartY=    null;
+        this._dragStarted=   false;
+
+        document.removeEventListener('mousemove', this._onMouseMove);
+        document.removeEventListener('mouseup', this._onMouseUp);
+    }
+
+    private pr_setBorderEnd(itemBorderId , event){
+
+        if (this._dragStartTimer){
+            clearTimeout(this._dragStartTimer);
+            this._dragStartTimer = null;
+        }
+
         if (this._DRAG_ELEMENT_ID_ACTIVE  == null) return;
+
         this._DRAG_ELEMENT_ID_ACTIVE = null;
         document.removeEventListener('mousemove', this._onMouseMove);
         document.removeEventListener('mouseup', this._onMouseUp);

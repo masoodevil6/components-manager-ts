@@ -240,10 +240,10 @@ export const ComponentInputCheckBoxConfigs  =  {
             dataArgs: {},
             componentArgs: {
                 IS_DISABLE : {
-                    name:                 "isDisable"
+                    name:                 "IS_DISABLE"
                 } ,
                 VALUE : {
-                    name:                 "value"
+                    name:                 "VALUE"
                 }
             }
         },
