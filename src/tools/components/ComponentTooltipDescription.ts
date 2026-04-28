@@ -366,7 +366,7 @@ export class ComponentTooltipDescription extends ComponentTooltipDescriptionBase
                     prop_floatDirectionType:    prop_direction ,
                     prop_floatContent:          prop_description ,
                     prop_floatBackground:       prop_borderBackground,
-                    prop_floatColor:            prop_borderColor
+                    prop_floatBorderColor:      prop_borderColor
 
                 } ,
                 <ComponentFloatMenuMethodsType>{

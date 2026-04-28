@@ -113,6 +113,7 @@ export class TestsPage implements ITemplate{
                     TOOLS.COMPONENT.ComponentRecyclerView.renderExampleComponent() ,
 
                     TOOLS.COMPONENT.ComponentFloatMenu.renderExampleComponent() ,
+                    TOOLS.COMPONENT.ComponentPositionMenu.renderExampleComponent() ,
 
                     TOOLS.COMPONENT.ComponentTooltipDescription.renderExampleComponent() ,
 

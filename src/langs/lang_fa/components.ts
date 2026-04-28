@@ -296,6 +296,22 @@ export const components = {
             description:       "با این تمپلیت متن  منو شناور  را وارد می کنید." ,
         }  ,
 
+    } ,
+
+
+    position_menu: {
+        props: {
+
+            prop_menuBtnRejectTitle: {
+                value: "لغو"
+            } ,
+
+            prop_menuBtnAcceptTitle: {
+                value: "تایید"
+            }
+
+        }
     }
+
 
 }

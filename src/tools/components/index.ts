@@ -13,6 +13,7 @@
 
  import {ComponentRecyclerView} from "./ComponentRecyclerView";
  import {ComponentFloatMenu} from "./ComponentFloatMenu";
+ import {ComponentPositionMenu} from "./ComponentPositionMenu";
 
  import {ComponentTooltipDescription} from "./ComponentTooltipDescription";
 
@@ -41,6 +42,7 @@ export const ToolsComponents = {
 
     ComponentRecyclerView ,
     ComponentFloatMenu ,
+    ComponentPositionMenu ,
 
     ComponentTooltipDescription ,
 

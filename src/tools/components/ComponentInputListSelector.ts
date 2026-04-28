@@ -48,6 +48,34 @@ import {
     GOG_ComponentBasicProps_Component_Structure_FormInput_Label,
 } from "../../core/component/SetupComponent";
 import {Observable} from "../../core/Observable";
+import {
+    ComponentIcon_Methods_CLICK_ComponentArgs,
+    ComponentIcon_Methods_CLICK_DataArgs,
+    ComponentIconMethodsType,
+    ComponentIconPropsType
+} from "./ComponentIcon";
+import {ComponentMessages_Methods_CLOSE_MESSAGE_DataArgs} from "./ComponentMessages";
+import {ToolsIcons} from "../icons";
+import {
+    ComponentInputAgreementCheckBox,
+    ComponentInputAgreementCheckBox_Methods_CLICK_ALL_ComponentArgs,
+    ComponentInputAgreementCheckBox_Methods_CLICK_ALL_DataArgs,
+    ComponentInputAgreementCheckBox_Methods_CLICK_ITEM_ComponentArgs,
+    ComponentInputAgreementCheckBox_Methods_CLICK_ITEM_DataArgs,
+    ComponentInputAgreementCheckBoxMethodsType,
+    ComponentInputAgreementCheckBoxPropsType
+} from "./ComponentInputAgreementCheckBox";
+import {
+    ComponentPositionMenu,
+    ComponentPositionMenu_Methods_CLICK_ACCEPT_ComponentArgs,
+    ComponentPositionMenu_Methods_CLICK_ACCEPT_DataArgs,
+    ComponentPositionMenu_Methods_CLICK_OPEN_ComponentArgs,
+    ComponentPositionMenu_Methods_CLICK_OPEN_DataArgs,
+    ComponentPositionMenu_Methods_CLICK_REJECT_ComponentArgs,
+    ComponentPositionMenu_Methods_CLICK_REJECT_DataArgs,
+    ComponentPositionMenuMethodsType,
+    ComponentPositionMenuPropsType
+} from "./ComponentPositionMenu";
 
 
 
@@ -59,8 +87,9 @@ export const ComponentInputListSelectorProps = {
     ...GOG_ComponentBasicProps_Component_Structure_FormInput_Label ,
 
     ///----------------------
+    prop_menuBackgroundColor :            "prop_menuBackgroundColor" ,
+    prop_menuBorderColor :                "prop_menuBorderColor" ,
 } as const;
-
 
 
 const ComponentInputListSelectorConfigs  =  {
@@ -71,6 +100,15 @@ const ComponentInputListSelectorConfigs  =  {
         ...GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_keys ,
 
         ///----------------------
+
+        [ComponentInputListSelectorProps.prop_menuBackgroundColor]: {
+            name:                ComponentInputListSelectorProps.prop_menuBackgroundColor,
+            value:               GOG_SetValue<Color | null>( Color(COLORS_MAIN.SHAN , COLORS_GRAD.GRADE_1 )),
+        } ,
+        [ComponentInputListSelectorProps.prop_menuBorderColor]: {
+            name:                ComponentInputListSelectorProps.prop_menuBorderColor,
+            value:               GOG_SetValue<Color | null>(   Color(COLORS_MAIN.SHAN , COLORS_GRAD.GRADE_1 )),
+        } ,
     } ,
     schemas:   {
         ...GOG_ComponentBasicConfigs_Component_parts ,
@@ -82,11 +120,17 @@ const ComponentInputListSelectorConfigs  =  {
         Main: {
             name:                      "part-main"
         } ,
-        Main_FormIcon: {
-            name:                      "part-main-formIcon"
+        Main_FormFloatMenu: {
+            name:                      "part-main-formFloutMenu"
         } ,
-        Main_FormList: {
-            name:                      "part-main-formList"
+        Main_FormFloatMenu_IconList: {
+            name:                      "part-main-formFloutMenu-iconList"
+        } ,
+        Main_FormFloatMenu_CheckBoxes: {
+            name:                      "part-main-formFloutMenu-checkBoxes"
+        } ,
+        Main_FormListSelected: {
+            name:                      "part-main-formListSelected"
         } ,
     } ,
     templates: {
@@ -123,8 +167,19 @@ export abstract class ComponentInputListSelectorBase extends ComponentBase<
         ...GOG_ComponentBasicConfigs_Component_Structure_Pattern(this) ,
         ...GOG_ComponentBasicConfigs_Component_Structure_FormInput_Pattern(this) ,
         ...GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_Pattern(this) ,
-
         ///----------------------
+        [ComponentInputListSelectorConfigs.keys.prop_menuBackgroundColor.name]: {
+            prop:                                             ComponentInputListSelectorConfigs.keys.prop_menuBackgroundColor.name,
+            default:                                          ComponentInputListSelectorConfigs.keys.prop_menuBackgroundColor.value,
+            title:                                            Language.translate("components.input_list_selector.props.prop_menuBackgroundColor.title"),
+            description:                                      Language.translate("components.input_list_selector.props.prop_menuBackgroundColor.description"),
+        } ,
+        [ComponentInputListSelectorConfigs.keys.prop_menuBorderColor.name]: {
+            prop:                                             ComponentInputListSelectorConfigs.keys.prop_menuBorderColor.name,
+            default:                                          ComponentInputListSelectorConfigs.keys.prop_menuBorderColor.value,
+            title:                                            Language.translate("components.input_list_selector.props.prop_menuBorderColor.title"),
+            description:                                      Language.translate("components.input_list_selector.props.prop_menuBorderColor.description"),
+        } ,
     });
 
 
@@ -147,18 +202,35 @@ export abstract class ComponentInputListSelectorBase extends ComponentBase<
 
             ]
         } ,
-        [ComponentInputListSelectorConfigs.schemas.Main_FormIcon.name]: {
-            part:               ComponentInputListSelectorConfigs.schemas.Main_FormIcon.name ,
-            title:              Language.translate("components.input_list_selector.schema.main_formIcon.title") ,
-            description:        Language.translate("components.input_list_selector.schema.main_formIcon.description") ,
+        [ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu.name]: {
+            part:               ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu.name ,
+            title:              Language.translate("components.input_list_selector.schema.main_formFloatMenu.title") ,
+            description:        Language.translate("components.input_list_selector.schema.main_formFloatMenu.description") ,
+            props: [
+                this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_menuBackgroundColor.name] ,
+                this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_menuBorderColor.name] ,
+            ]
+        } ,
+        [ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu_IconList.name]: {
+            part:               ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu_IconList.name ,
+            title:              Language.translate("components.input_list_selector.schema.main_formFloatMenu_iconList.title") ,
+            description:        Language.translate("components.input_list_selector.schema.main_formFloatMenu_iconList.description") ,
             props: [
 
             ]
         } ,
-        [ComponentInputListSelectorConfigs.schemas.Main_FormList.name]: {
-            part:               ComponentInputListSelectorConfigs.schemas.Main_FormList.name ,
-            title:              Language.translate("components.input_list_selector.schema.main_formList.title") ,
-            description:        Language.translate("components.input_list_selector.schema.main_formList.description") ,
+        [ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu_CheckBoxes.name]: {
+            part:               ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu_CheckBoxes.name ,
+            title:              Language.translate("components.input_list_selector.schema.main_formFloatMenu_body_checkBoxes.title") ,
+            description:        Language.translate("components.input_list_selector.schema.main_formFloatMenu_body_checkBoxes.description") ,
+            props: [
+
+            ]
+        } ,
+        [ComponentInputListSelectorConfigs.schemas.Main_FormListSelected.name]: {
+            part:               ComponentInputListSelectorConfigs.schemas.Main_FormListSelected.name ,
+            title:              Language.translate("components.input_list_selector.schema.main_formListSelected.title") ,
+            description:        Language.translate("components.input_list_selector.schema.main_formListSelected.description") ,
             props: [
 
             ]
@@ -192,7 +264,7 @@ export abstract class ComponentInputListSelectorBase extends ComponentBase<
                 styles: {}  ,
 
                 prop_labelTitle: "Input List Selector" ,
-                prop_labelTooltipDescription: "this is input-list-selector"
+                prop_labelTooltipDescription: "this is for [input-list-selector]"
             },
             <ComponentInputListSelectorMethodsType>{
 
@@ -205,6 +277,9 @@ export abstract class ComponentInputListSelectorBase extends ComponentBase<
 
 
 export class ComponentInputListSelector extends ComponentInputListSelectorBase {
+
+    _FLOAT_MENU ;
+    _STATUS_SHOW_FLOAT_MENU = new Observable(false);
 
     /* ---------------------------------------------
        SETUP
@@ -231,10 +306,14 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
         switch (partName){
             case ComponentInputListSelectorConfigs.schemas.Main.name:
                 return  this.template_render_main(attrsDefault , data , extra);
-            case ComponentInputListSelectorConfigs.schemas.Main_FormList.name:
-                return  this.template_render_main_formList(attrsDefault , data , extra);
-            case ComponentInputListSelectorConfigs.schemas.Main_FormIcon.name:
-                return  this.template_render_main_formIcon(attrsDefault , data , extra);
+            case ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu.name:
+                return  this.template_render_main_formFloatMenu(attrsDefault , data , extra);
+            case ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu_IconList.name:
+                return  this.template_render_main_formFloatMenu_iconList(attrsDefault , data , extra);
+            case ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu_CheckBoxes.name:
+                return  this.template_render_main_formFloatMenu_checkBoxes(attrsDefault , data , extra);
+            case ComponentInputListSelectorConfigs.schemas.Main_FormListSelected.name:
+                return  this.template_render_main_formListSelected(attrsDefault , data , extra);
         }
     }
 
@@ -250,8 +329,8 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
                     "row" , "p-0" , "m-0"
                 ] ,
                 children: [
-                    this.executeSchemaPart(ComponentInputListSelectorConfigs.schemas.Main_FormList.name) ,
-                    this.executeSchemaPart(ComponentInputListSelectorConfigs.schemas.Main_FormIcon.name)
+                    this.executeSchemaPart(ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu.name) ,
+                    this.executeSchemaPart(ComponentInputListSelectorConfigs.schemas.Main_FormListSelected.name) ,
                 ]
             });
 
@@ -260,7 +339,131 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
         return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
     }
 
-    private template_render_main_formList(attrsDefault , data , extra) : ReactiveElement {
+
+
+    private template_render_main_formFloatMenu(attrsDefault , data , extra) : ReactiveElement {
+
+        if (data != null) {
+
+            const prop_menuBackgroundColor =       data[ComponentInputListSelectorConfigs.keys.prop_menuBackgroundColor.name];
+            const prop_menuBorderColor =           data[ComponentInputListSelectorConfigs.keys.prop_menuBorderColor.name];
+
+            return new ComponentPositionMenu(
+                <ComponentPositionMenuPropsType>{
+                    classList: ["col-md-3" , "col-12" , "border" , "p-2"]  ,
+                    styles: {}  ,
+
+                    prop_menuBackgroundColor:   prop_menuBackgroundColor ,
+                    prop_menuBorderColor:       prop_menuBorderColor ,
+                    prop_menuSelector:          this.executeSchemaPart(ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu_IconList.name)  ,
+                    prop_menuBody:              this.executeSchemaPart(ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu_CheckBoxes.name) ,
+                    prop_menuBodyWidth:         SizeUnit(350 , UNITS.PEXEL)
+                },
+                <ComponentPositionMenuMethodsType>{
+                    fn_onClickOpen: function (event, dataArgs:ComponentPositionMenu_Methods_CLICK_OPEN_DataArgs, componentArgs:ComponentPositionMenu_Methods_CLICK_OPEN_ComponentArgs){
+                        console.log("position open")
+                    } ,
+                    fn_onClickAccept: function (event, dataArgs:ComponentPositionMenu_Methods_CLICK_ACCEPT_DataArgs, componentArgs:ComponentPositionMenu_Methods_CLICK_ACCEPT_ComponentArgs){
+                        console.log("position accept")
+                        return true;
+                    } ,
+                    fn_onClickReject: function (event, dataArgs:ComponentPositionMenu_Methods_CLICK_REJECT_DataArgs, componentArgs:ComponentPositionMenu_Methods_CLICK_REJECT_ComponentArgs){
+                        console.log("position reject")
+                    }
+                }
+            ).getReactiveElement();
+
+        }
+
+        return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
+    }
+
+
+    private template_render_main_formFloatMenu_iconList(attrsDefault , data , extra) : ReactiveElement {
+
+        if (data != null) {
+
+            return new ToolsComponents.ComponentIcon(
+                <ComponentIconPropsType>{
+                    classList:  [
+
+                    ]  ,
+                    styles:     {
+
+                    },
+                    prop_iconClass : [
+
+                    ] ,
+                    prop_iconStyles : {
+                        "cursor" : "pointer"
+                    } ,
+                    prop_icon: ToolsIcons.icon_select_columns({size: SIZES.L})
+                },
+                <ComponentIconMethodsType>{
+                    fn_onClickIcon: function (event, dataArgs : ComponentIcon_Methods_CLICK_DataArgs, componentArgs: ComponentIcon_Methods_CLICK_ComponentArgs)  {
+
+                    }.bind(this) ,
+                }
+            ).getReactiveElement();
+
+        }
+
+        return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
+    }
+
+
+    private template_render_main_formFloatMenu_checkBoxes(attrsDefault , data , extra) : ReactiveElement {
+
+        if (data != null) {
+
+            return new ComponentInputAgreementCheckBox(
+                <ComponentInputAgreementCheckBoxPropsType>{
+                    classList: []  ,
+                    styles: {}  ,
+
+
+                    prop_name: "agreement-checkbox" ,
+                    prop_checkBoxOrderStatus: true ,
+                    prop_checkBoxList: [
+                        {
+                            id:          1 ,
+                            title:      "item A" ,
+                        } ,
+                        {
+                            id:          2 ,
+                            title:      "item B" ,
+                            isPin:      true
+                        } ,
+                        {
+                            id:          3 ,
+                            title:      "item C" ,
+                        } ,
+                        {
+                            id:          4 ,
+                            title:      "item D" ,
+                        }
+                    ] ,
+                    prop_value: [1 , 2 , 3] ,
+                    prop_checkBoxOrder: [3]
+
+                },
+                <ComponentInputAgreementCheckBoxMethodsType>{
+                    fn_onClickAll: function (event, dataArgs : ComponentInputAgreementCheckBox_Methods_CLICK_ALL_DataArgs, componentArgs: ComponentInputAgreementCheckBox_Methods_CLICK_ALL_ComponentArgs) {
+                        console.log("checkbox All" , dataArgs , componentArgs);
+                    } ,
+                    fn_onClickItem: function (event, dataArgs : ComponentInputAgreementCheckBox_Methods_CLICK_ITEM_DataArgs, componentArgs: ComponentInputAgreementCheckBox_Methods_CLICK_ITEM_ComponentArgs) {
+                        console.log("checkbox All" , dataArgs , componentArgs);
+                    }
+                }
+            ).getReactiveElement();
+
+        }
+
+        return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
+    }
+
+
+    private template_render_main_formListSelected(attrsDefault , data , extra) : ReactiveElement {
 
         if (data != null) {
 
@@ -280,29 +483,5 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
 
         return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
     }
-
-
-    private template_render_main_formIcon(attrsDefault , data , extra) : ReactiveElement {
-
-        if (data != null) {
-
-            return ReactiveElement.part(  "section" ,{
-                attrs: {
-                    ...attrsDefault
-                },
-                className: [
-                    "col-12" , "col-md-2"
-                ] ,
-                children: [
-                    "HI"
-                ]
-            });
-
-        }
-
-        return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
-    }
-
-
 
 }

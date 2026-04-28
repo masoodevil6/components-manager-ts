@@ -67,6 +67,7 @@ export const ComponentBorderProps = {
     prop_borderArrowWidth :               "prop_borderArrowWidth" ,
     prop_borderArrowPosition :            "prop_borderArrowPosition" ,
     prop_minWidth :                       "prop_minWidth" ,
+    prop_width :                          "prop_width" ,
 } as const;
 
 
@@ -164,6 +165,10 @@ const ComponentBorderConfigs  =  {
         } ,
         [ComponentBorderProps.prop_minWidth]: {
             name:               ComponentBorderProps.prop_minWidth ,
+            value:              GOG_SetValue<SizeUnit | SizeCalc |null>(null),
+        } ,
+        [ComponentBorderProps.prop_width]: {
+            name:               ComponentBorderProps.prop_width ,
             value:              GOG_SetValue<SizeUnit | SizeCalc |null>(null),
         } ,
     } ,
@@ -354,6 +359,12 @@ export abstract class ComponentBorderBase extends ComponentBase<
             title:                                            Language.translate("components.border.prop.prop_minWidth.title"),
             description:                                      Language.translate("components.border.prop.prop_minWidth.description"),
         } ,
+        [ComponentBorderConfigs.keys.prop_width.name]: {
+            prop:                                             ComponentBorderConfigs.keys.prop_width.name,
+            default:                                          ComponentBorderConfigs.keys.prop_width.value,
+            title:                                            Language.translate("components.border.prop.prop_width.title"),
+            description:                                      Language.translate("components.border.prop.prop_width.description"),
+        } ,
 
     });
 
@@ -386,6 +397,7 @@ export abstract class ComponentBorderBase extends ComponentBase<
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_contentColor_hover.name] ,
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_contentBackgroundColor.name] ,
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_contentBackgroundColor_hover.name] ,
+                this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_width.name] ,
                 this._COMPONENT_PATTERN[ComponentBorderConfigs.keys.prop_minWidth.name] ,
             ]
         } ,
@@ -517,6 +529,7 @@ export class ComponentBorder extends ComponentBorderBase{
             const prop_contentColor_hover=              data[ComponentBorderConfigs.keys.prop_contentColor_hover.name];
             const prop_contentBackgroundColor=          data[ComponentBorderConfigs.keys.prop_contentBackgroundColor.name];
             const prop_contentBackgroundColor_hover=    data[ComponentBorderConfigs.keys.prop_contentBackgroundColor_hover.name];
+            const prop_width =                          data[ComponentBorderConfigs.keys.prop_width.name];
             const prop_minWidth =                       data[ComponentBorderConfigs.keys.prop_minWidth.name];
 
             const directionRtl =     AppConfig.get("directionRtl");
@@ -708,6 +721,7 @@ export class ComponentBorder extends ComponentBorderBase{
 
                         prop_borderStyles ,
                         minWidth:         prop_minWidth ,
+                        width:         prop_width ,
                         borderStyle:      prop_borderType ,
                         borderWidth:      prop_borderWidth.map(
                             v=>{

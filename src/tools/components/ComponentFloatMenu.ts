@@ -47,6 +47,8 @@ import {
     ComponentElementPosition_Methods_CLICK_DataArgs, ComponentElementPositionMethodsType,
     ComponentElementPositionPropsType
 } from "./ComponentElementPosition";
+import {Observable} from "../../core/Observable";
+import {fa} from "../../langs/Fa";
 
 
 
@@ -54,23 +56,28 @@ import {
 export const ComponentFloatMenuProps = {
     ... GOG_ComponentBasicProps_Component,
     ... GOG_ComponentBasicProps_Component_Structure,
-    prop_selectorContent :        "prop_selectorContent" ,
-    prop_selectorClass :          "prop_selectorClass" ,
-    prop_selectorStyles :         "prop_selectorStyles" ,
-    prop_selectorShowType :       "prop_selectorShowType" ,
+    prop_selectorContent :            "prop_selectorContent" ,
+    prop_selectorClass :              "prop_selectorClass" ,
+    prop_selectorStyles :             "prop_selectorStyles" ,
+    prop_selectorShowType :           "prop_selectorShowType" ,
 
-    prop_floatClass :             "prop_floatClass" ,
-    prop_floatStyles :            "prop_floatStyles" ,
-    prop_floatContent :           "prop_floatContent" ,
-    prop_floatDirectionType :     "prop_floatDirectionType" ,
-    prop_floatArrowWidth :        "prop_floatArrowWidth" ,
-    prop_floatBorderWidth :       "prop_floatBorderWidth" ,
-    prop_floatBorderRadius :      "prop_floatBorderRadius" ,
-    prop_floatMinWidth :          "prop_floatMinWidth" ,
-    prop_floatPosition :          "prop_floatPosition" ,
-    prop_floatArrowPosition :     "prop_floatArrowPosition" ,
-    prop_floatBackground :        "prop_floatBackground" ,
-    prop_floatColor :             "prop_floatColor" ,
+    prop_floatClass :                 "prop_floatClass" ,
+    prop_floatStyles :                "prop_floatStyles" ,
+    prop_floatContent :               "prop_floatContent" ,
+    prop_floatDirectionType :         "prop_floatDirectionType" ,
+    prop_floatArrowWidth :            "prop_floatArrowWidth" ,
+    prop_floatBorderColor :           "prop_floatBorderColor" ,
+    prop_floatBorderWidth :           "prop_floatBorderWidth" ,
+    prop_floatBorderRadius :          "prop_floatBorderRadius" ,
+    prop_floatWidth :                 "prop_floatWidth" ,
+    prop_floatMinWidth :              "prop_floatMinWidth" ,
+    prop_floatPosition :              "prop_floatPosition" ,
+    prop_floatArrowPosition :         "prop_floatArrowPosition" ,
+    prop_floatBackground :            "prop_floatBackground" ,
+    prop_floatColor :                 "prop_floatColor" ,
+
+    prop_floatShowControlWithSelf :   "prop_floatShowControlWithSelf" ,
+    prop_floatIsShow :                "prop_floatIsShow" ,
 
 } as const;
 
@@ -138,9 +145,17 @@ const ComponentFloatMenuConfigs  =  {
             name:               ComponentFloatMenuProps.prop_floatBorderWidth,
             value:              GOG_SetValue<GOG_ValueOf<typeof SIZES> | number>(SIZES.M),
         } ,
+        [ComponentFloatMenuProps.prop_floatBorderColor] : {
+            name:               ComponentFloatMenuProps.prop_floatBorderColor,
+            value:              GOG_SetValue<Color | null>>( Color(COLORS_MAIN.SECONDARY , COLORS_GRAD.GRADE_1 )),
+        } ,
         [ComponentFloatMenuProps.prop_floatBorderRadius] : {
             name:               ComponentFloatMenuProps.prop_floatBorderRadius,
             value:              GOG_SetValue<GOG_ValueOf<typeof SIZES> | number>(SIZES.M),
+        } ,
+        [ComponentFloatMenuProps.prop_floatWidth] : {
+            name:               ComponentFloatMenuProps.prop_floatWidth,
+            value:              GOG_SetValue<SizeUnit | SizeCalc | null>(null),
         } ,
         [ComponentFloatMenuProps.prop_floatMinWidth] : {
             name:               ComponentFloatMenuProps.prop_floatMinWidth,
@@ -160,7 +175,16 @@ const ComponentFloatMenuConfigs  =  {
         } ,
         [ComponentFloatMenuProps.prop_floatColor]: {
             name:                ComponentFloatMenuProps.prop_floatColor,
-            value:               GOG_SetValue<Color | null>( Color(COLORS_MAIN.SECONDARY , COLORS_GRAD.GRADE_1 )),
+            value:               GOG_SetValue<Color | null>( null),
+        } ,
+
+        [ComponentFloatMenuProps.prop_floatShowControlWithSelf]: {
+            name:                ComponentFloatMenuProps.prop_floatShowControlWithSelf,
+            value:               GOG_SetValue<boolean>(false),
+        } ,
+        [ComponentFloatMenuProps.prop_floatIsShow]: {
+            name:                ComponentFloatMenuProps.prop_floatIsShow,
+            value:               GOG_SetValue<boolean>(false),
         } ,
     } ,
     schemas:   {
@@ -282,11 +306,23 @@ export class ComponentFloatMenuBase extends ComponentBase<
                 title:                                            Language.translate("components.float_menu.props.prop_floatBorderWidth.title"),
                 description:                                      Language.translate("components.float_menu.props.prop_floatBorderWidth.description"),
             } ,
+            [ComponentFloatMenuConfigs.keys.prop_floatBorderColor.name]: {
+                prop:                                             ComponentFloatMenuConfigs.keys.prop_floatBorderColor.name,
+                default:                                          ComponentFloatMenuConfigs.keys.prop_floatBorderColor.value,
+                title:                                            Language.translate("components.float_menu.props.prop_floatBorderColor.title"),
+                description:                                      Language.translate("components.float_menu.props.prop_floatBorderColor.description"),
+            } ,
             [ComponentFloatMenuConfigs.keys.prop_floatBorderRadius.name]: {
                 prop:                                             ComponentFloatMenuConfigs.keys.prop_floatBorderRadius.name,
                 default:                                          ComponentFloatMenuConfigs.keys.prop_floatBorderRadius.value,
                 title:                                            Language.translate("components.float_menu.props.prop_floatBorderRadius.title"),
                 description:                                      Language.translate("components.float_menu.props.prop_floatBorderRadius.description"),
+            } ,
+            [ComponentFloatMenuConfigs.keys.prop_floatWidth.name]: {
+                prop:                                             ComponentFloatMenuConfigs.keys.prop_floatWidth.name,
+                default:                                          ComponentFloatMenuConfigs.keys.prop_floatWidth.value,
+                title:                                            Language.translate("components.float_menu.props.prop_floatWidth.title"),
+                description:                                      Language.translate("components.float_menu.props.prop_floatWidth.description"),
             } ,
             [ComponentFloatMenuConfigs.keys.prop_floatMinWidth.name]: {
                 prop:                                             ComponentFloatMenuConfigs.keys.prop_floatMinWidth.name,
@@ -319,6 +355,19 @@ export class ComponentFloatMenuBase extends ComponentBase<
                 description:                                      Language.translate("components.float_menu.props.prop_floatColor.description"),
             } ,
 
+            [ComponentFloatMenuConfigs.keys.prop_floatShowControlWithSelf.name]: {
+                prop:                                             ComponentFloatMenuConfigs.keys.prop_floatShowControlWithSelf.name,
+                default:                                          ComponentFloatMenuConfigs.keys.prop_floatShowControlWithSelf.value,
+                title:                                            Language.translate("components.float_menu.props.prop_floatShowControlWithSelf.title"),
+                description:                                      Language.translate("components.float_menu.props.prop_floatShowControlWithSelf.description"),
+            } ,
+            [ComponentFloatMenuConfigs.keys.prop_floatIsShow.name]: {
+                prop:                                             ComponentFloatMenuConfigs.keys.prop_floatIsShow.name,
+                default:                                          ComponentFloatMenuConfigs.keys.prop_floatIsShow.value,
+                title:                                            Language.translate("components.float_menu.props.prop_floatIsShow.title"),
+                description:                                      Language.translate("components.float_menu.props.prop_floatIsShow.description"),
+            } ,
+
         }
     );
 
@@ -338,6 +387,8 @@ export class ComponentFloatMenuBase extends ComponentBase<
                 this._COMPONENT_PATTERN[ComponentFloatMenuConfigs.keys.prop_selectorClass.name] ,
                 this._COMPONENT_PATTERN[ComponentFloatMenuConfigs.keys.prop_selectorStyles.name] ,
                 this._COMPONENT_PATTERN[ComponentFloatMenuConfigs.keys.prop_selectorShowType.name] ,
+
+                this._COMPONENT_PATTERN[ComponentFloatMenuConfigs.keys.prop_floatShowControlWithSelf.name] ,
             ]
         } ,
         [ComponentFloatMenuConfigs.schemas.SELECTOR_POSITION.name]: {
@@ -349,6 +400,9 @@ export class ComponentFloatMenuBase extends ComponentBase<
                 this._COMPONENT_PATTERN[ComponentFloatMenuConfigs.keys.prop_floatDirectionType.name] ,
                 this._COMPONENT_PATTERN[ComponentFloatMenuConfigs.keys.prop_floatArrowWidth.name] ,
                 this._COMPONENT_PATTERN[ComponentFloatMenuConfigs.keys.prop_floatPosition.name] ,
+
+                this._COMPONENT_PATTERN[ComponentFloatMenuConfigs.keys.prop_floatShowControlWithSelf.name] ,
+                this._COMPONENT_PATTERN[ComponentFloatMenuConfigs.keys.prop_floatIsShow.name] ,
             ]
         } ,
         [ComponentFloatMenuConfigs.schemas.SELECTOR_POSITION_BORDER.name]: {
@@ -362,7 +416,9 @@ export class ComponentFloatMenuBase extends ComponentBase<
                 this._COMPONENT_PATTERN[ComponentFloatMenuConfigs.keys.prop_floatDirectionType.name] ,
                 this._COMPONENT_PATTERN[ComponentFloatMenuConfigs.keys.prop_floatArrowWidth.name] ,
                 this._COMPONENT_PATTERN[ComponentFloatMenuConfigs.keys.prop_floatBorderWidth.name] ,
+                this._COMPONENT_PATTERN[ComponentFloatMenuConfigs.keys.prop_floatBorderColor.name] ,
                 this._COMPONENT_PATTERN[ComponentFloatMenuConfigs.keys.prop_floatBorderRadius.name] ,
+                this._COMPONENT_PATTERN[ComponentFloatMenuConfigs.keys.prop_floatWidth.name] ,
                 this._COMPONENT_PATTERN[ComponentFloatMenuConfigs.keys.prop_floatMinWidth.name] ,
                 this._COMPONENT_PATTERN[ComponentFloatMenuConfigs.keys.prop_floatArrowPosition.name] ,
                 this._COMPONENT_PATTERN[ComponentFloatMenuConfigs.keys.prop_floatBackground.name] ,
@@ -407,14 +463,15 @@ export class ComponentFloatMenuBase extends ComponentBase<
     static override renderExampleComponent(): HTMLElement {
         return new ComponentFloatMenu(
             <ComponentFloatMenuPropsType>{
-                classList: ["col-md-3" , "col-12" , "border" , "p-2" , "position-relative"]  ,
-                prop_selectorContent: "selector" ,
-                prop_selectorClass: ["text-center"] ,
-                prop_floatContent: "content" ,
-                prop_selectorShowType: "hover" ,
-                prop_floatDirectionType: "top" ,
-                prop_floatArrowWidth: 10 ,
-                prop_floatMinWidth:   SizeUnit(230 , UNITS.PEXEL) ,
+                classList:                ["col-md-3" , "col-12" , "border" , "p-2" , "position-relative"]  ,
+                prop_selectorContent:     "selector" ,
+                prop_selectorClass:       ["text-center"] ,
+                prop_floatContent:        "content" ,
+                prop_selectorShowType:    "hover" ,
+                prop_floatDirectionType:  "top" ,
+                prop_floatArrowWidth:      10 ,
+                prop_floatBorderColor:     Color(COLORS_MAIN.PRIMARY , COLORS_GRAD.GRADE_1 ) ,
+                prop_floatMinWidth:        SizeUnit(230 , UNITS.PEXEL) ,
             } ,
             <ComponentFloatMenuMethodsType>{
 
@@ -472,10 +529,12 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
             const contentHeight   = ToolsCss.getHeightSize(AppConfig.get("sizeName"));
             const contentFontSize = ToolsCss.getFontSize(AppConfig.get("sizeName"));
 
-            const prop_selectorContent =    data[ComponentFloatMenuConfigs.keys.prop_selectorContent.name];
-            const prop_selectorClass  =     data[ComponentFloatMenuConfigs.keys.prop_selectorClass.name];
-            const prop_selectorStyles =     data[ComponentFloatMenuConfigs.keys.prop_selectorStyles.name];
-            const prop_selectorTypeShow=    data[ComponentFloatMenuConfigs.keys.prop_selectorShowType.name];
+            const prop_selectorContent =            data[ComponentFloatMenuConfigs.keys.prop_selectorContent.name];
+            const prop_selectorClass  =             data[ComponentFloatMenuConfigs.keys.prop_selectorClass.name];
+            const prop_selectorStyles =             data[ComponentFloatMenuConfigs.keys.prop_selectorStyles.name];
+            const prop_selectorTypeShow=            data[ComponentFloatMenuConfigs.keys.prop_selectorShowType.name];
+
+            const prop_floatShowControlWithSelf=    data[ComponentFloatMenuConfigs.keys.prop_floatShowControlWithSelf.name];
 
             return ReactiveElement.part(  "section" ,{
                 attrs: {
@@ -498,22 +557,36 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                 on: {
 
                     click: (event: Event) => {
-                        if (prop_selectorTypeShow.get() == ComponentFloatMenu_ShowTypes.CLICK && this._COMPONENT_POSITION){
-                            const propShow = this._COMPONENT_POSITION.get(ComponentBorderProps.prop_show);
-                            this._COMPONENT_POSITION.set("prop_show" , !propShow);
-                        }
+                        Observable.computed(
+                            (selectorTypeShow , floatShowControlWithSelf ) => {
+                                if (! floatShowControlWithSelf){
+                                    if (selectorTypeShow == ComponentFloatMenu_ShowTypes.CLICK && this._COMPONENT_POSITION){
+                                        const propShow = this._COMPONENT_POSITION.get(ComponentBorderProps.prop_show);
+                                        this._COMPONENT_POSITION.set("prop_show" , !propShow);
+                                    }
+                                }
+                            } , [prop_selectorTypeShow , prop_floatShowControlWithSelf ] , this.getScope()
+                        )
                     },
 
                     mouseenter: (event: Event) => {
-                        if (prop_selectorTypeShow.get() == ComponentFloatMenu_ShowTypes.HOVER && this._COMPONENT_POSITION){
-                            this._COMPONENT_POSITION.set(ComponentBorderProps.prop_show , true);
-                        }
+                        Observable.computed(
+                            (selectorTypeShow) => {
+                                if (selectorTypeShow == ComponentFloatMenu_ShowTypes.HOVER && this._COMPONENT_POSITION){
+                                    this._COMPONENT_POSITION.set(ComponentBorderProps.prop_show , true);
+                                }
+                            } , [prop_selectorTypeShow ] , this.getScope()
+                        )
                     },
 
                     mouseleave: (event: Event) => {
-                        if (prop_selectorTypeShow.get() == ComponentFloatMenu_ShowTypes.HOVER && this._COMPONENT_POSITION){
-                            this._COMPONENT_POSITION.set(ComponentBorderProps.prop_show , false);
-                        }
+                        Observable.computed(
+                            (selectorTypeShow) => {
+                                if (selectorTypeShow == ComponentFloatMenu_ShowTypes.HOVER && this._COMPONENT_POSITION){
+                                    this._COMPONENT_POSITION.set(ComponentBorderProps.prop_show , false);
+                                }
+                            } , [prop_selectorTypeShow ] , this.getScope()
+                        )
                     }
                 },
                 children: [
@@ -538,9 +611,12 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
 
         if (data != null) {
 
-            const prop_floatDirection  =      data[ComponentFloatMenuConfigs.keys.prop_floatDirectionType.name];
-            const prop_floatArrowWidth  =     data[ComponentFloatMenuConfigs.keys.prop_floatArrowWidth.name];
-            const prop_floatPosition  =       data[ComponentFloatMenuConfigs.keys.prop_floatPosition.name];
+            const prop_floatDirection  =            data[ComponentFloatMenuConfigs.keys.prop_floatDirectionType.name];
+            const prop_floatArrowWidth  =           data[ComponentFloatMenuConfigs.keys.prop_floatArrowWidth.name];
+            const prop_floatPosition  =             data[ComponentFloatMenuConfigs.keys.prop_floatPosition.name];
+
+            const prop_floatShowControlWithSelf=    data[ComponentFloatMenuConfigs.keys.prop_floatShowControlWithSelf.name];
+            const prop_floatIsShow=                 data[ComponentFloatMenuConfigs.keys.prop_floatIsShow.name];
 
             const directionRtl = AppConfig.get("directionRtl");
 
@@ -622,19 +698,28 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                 <ComponentElementPositionPropsType>{
                     classList:               []  ,
 
+                    prop_show :              Observable.computed(
+                        (floatShowControlWithSelf , floatIsShow) => {
+                            if (floatShowControlWithSelf){
+                                return floatIsShow;
+                            }
+                            return false
+                        } , [prop_floatShowControlWithSelf , prop_floatIsShow] , this.getScope()
+                    ) ,
+
+
                     prop_positionTop:        prop_positionTop ,
                     prop_positionRight:      prop_positionRight ,
                     prop_positionBottom:     prop_positionBottom ,
                     prop_positionLeft:       prop_positionLeft ,
                     prop_positionTranslate:  prop_positionTranslate ,
                     prop_positionZIndex:     ToolsCss.getZIndex(Z_INDEXES.notify) ,
-                    prop_show :              false ,
                     prop_positionHeight:     null ,
                     prop_content:            this.executeSchemaPart(ComponentFloatMenuConfigs.schemas.SELECTOR_POSITION_BORDER.name)
                 } ,
                 <ComponentElementPositionMethodsType>{
                     fn_onClick: function (event, dataArgs : ComponentElementPosition_Methods_CLICK_DataArgs, componentArgs: ComponentElementPosition_Methods_CLICK_ComponentArgs) {
-                        alert("asd");
+
                     }
                 }
             );
@@ -656,17 +741,20 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
     private templateFn_render_selectorPositionBorder(attrsDefault , data , extra) : ReactiveElement {
 
         if (data != null) {
-            const prop_floatClass =           data[ComponentFloatMenuConfigs.keys.prop_floatClass.name];
-            const prop_floatStyles =          data[ComponentFloatMenuConfigs.keys.prop_floatStyles.name];
-            const prop_floatContent =         data[ComponentFloatMenuConfigs.keys.prop_floatContent.name];
-            const prop_floatDirection  =      data[ComponentFloatMenuConfigs.keys.prop_floatDirectionType.name];
-            const prop_floatArrowWidth  =     data[ComponentFloatMenuConfigs.keys.prop_floatArrowWidth.name];
-            const prop_floatBorderWidth  =    data[ComponentFloatMenuConfigs.keys.prop_floatBorderWidth.name];
-            const prop_floatBorderRadius  =   data[ComponentFloatMenuConfigs.keys.prop_floatBorderRadius.name];
-            const prop_floatMinWidth  =       data[ComponentFloatMenuConfigs.keys.prop_floatMinWidth.name];
-            const prop_floatArrowPosition =   data[ComponentFloatMenuConfigs.keys.prop_floatArrowPosition.name];
-            const prop_floatBackground =      data[ComponentFloatMenuConfigs.keys.prop_floatBackground.name];
-            const prop_floatColor =           data[ComponentFloatMenuConfigs.keys.prop_floatColor.name];
+            const prop_floatClass =                  data[ComponentFloatMenuConfigs.keys.prop_floatClass.name];
+            const prop_floatStyles =                 data[ComponentFloatMenuConfigs.keys.prop_floatStyles.name];
+            const prop_floatContent =                data[ComponentFloatMenuConfigs.keys.prop_floatContent.name];
+            const prop_floatDirection  =             data[ComponentFloatMenuConfigs.keys.prop_floatDirectionType.name];
+            const prop_floatArrowWidth  =            data[ComponentFloatMenuConfigs.keys.prop_floatArrowWidth.name];
+            const prop_floatBorderWidth  =           data[ComponentFloatMenuConfigs.keys.prop_floatBorderWidth.name];
+            const prop_floatBorderColor  =           data[ComponentFloatMenuConfigs.keys.prop_floatBorderColor.name];
+            const prop_floatBorderRadius  =          data[ComponentFloatMenuConfigs.keys.prop_floatBorderRadius.name];
+            const prop_floatWidth  =                 data[ComponentFloatMenuConfigs.keys.prop_floatWidth.name];
+            const prop_floatMinWidth  =              data[ComponentFloatMenuConfigs.keys.prop_floatMinWidth.name];
+            const prop_floatArrowPosition =          data[ComponentFloatMenuConfigs.keys.prop_floatArrowPosition.name];
+            const prop_floatBackground =             data[ComponentFloatMenuConfigs.keys.prop_floatBackground.name];
+            const prop_floatColor =                  data[ComponentFloatMenuConfigs.keys.prop_floatColor.name];
+
 
             let borderDirection:typeof ComponentBorder_ArrowTypes[keyof typeof ComponentBorder_ArrowTypes];
             switch (prop_floatDirection.get()){
@@ -696,9 +784,11 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                     prop_content:                 prop_floatContent ,
                     prop_borderRadius:            prop_floatBorderRadius ,
                     prop_borderWidth:             prop_floatBorderWidth ,
+                    prop_width:                   prop_floatWidth ,
                     prop_minWidth:                prop_floatMinWidth ,
                     prop_contentBackgroundColor:  prop_floatBackground ,
-                    prop_borderColor:             prop_floatColor
+                    prop_borderColor:             prop_floatBorderColor ,
+                    prop_contentColor:            prop_floatColor
                 } ,
                 <ComponentBorderMethodsType>{
 

@@ -10,5 +10,18 @@ export const components = {
     } ,
 
 
+    position_menu: {
+        props: {
+
+            prop_menuBtnRejectTitle: {
+                value: "cancel"
+            } ,
+
+            prop_menuBtnAcceptTitle: {
+                value: "accept"
+            }
+
+        }
+    }
 
 }

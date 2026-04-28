@@ -388,8 +388,9 @@ export class ComponentBase<
     executeMethod(methodName: string, event: Event , dataArgs: Record<string, any>|null = null) {
         const [fn, componentArgs] = this.#executeMethod_getMethodData(methodName);
         if (typeof fn === "function") {
-            fn.call(this, event, dataArgs , componentArgs);
+            return fn.call(this, event, dataArgs , componentArgs);
         }
+        return null;
     }
 
     #executeMethod_getMethodData(methodName: string): [Function | null, Record<string, any>] {
