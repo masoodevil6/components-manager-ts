@@ -606,7 +606,6 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
     }
 
 
-
     private templateFn_render_selectorPosition(attrsDefault , data , extra) : ReactiveElement {
 
         if (data != null) {
@@ -734,8 +733,6 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
         });
 
     }
-
-
 
 
     private templateFn_render_selectorPositionBorder(attrsDefault , data , extra) : ReactiveElement {

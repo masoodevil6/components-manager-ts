@@ -7,6 +7,8 @@ type AttrMap = Record<string, string | boolean | null | undefined>;
 type EventMap = Record<string, (e: Event) => void>;
 
 type Options = {
+    props?: any;
+    propsBind?: any;
     children?: any;
     className?: ClassValue;
     classBind?: any;
@@ -22,13 +24,6 @@ type EventListenerRecord = {
     event: string;
     handler: EventListener;
 };
-
-declare class Observable<T = any> {
-    constructor(v: T);
-    get(): T;
-    set(v: T): void;
-    subscribe(fn: (v: T) => void): () => void;
-}
 
 export class ReactiveElement {
 
@@ -75,6 +70,25 @@ export class ReactiveElement {
         callback(observable.get());
         const unsub = observable.subscribe(callback);
         this._bindings.push(unsub);
+    }
+
+    // props
+    _applyProps(props) {
+        if (!props) return;
+
+        Object.entries(props).forEach(([key, value]) => {
+            this.element[key] = value;
+        });
+    }
+
+    _applyPropsBind(propsBind) {
+        if (!propsBind) return;
+
+        Object.entries(propsBind).forEach(([key, observable]) => {
+            this._bindObservable(observable, value => {
+                this.element[key] = value;
+            });
+        });
     }
 
     // className
@@ -135,11 +149,36 @@ export class ReactiveElement {
         });
     }
 
-    private _applyStylesBind(stylesBind: Record<string, Observable<any>>) {
+    private _applyStylesBind(stylesBind: Record<string, Observable<any>> | Observable<Record<string, any>>) {
 
         if (!stylesBind) return;
 
+        // Handle single Observable containing a style object
+        if (Observable.isObservable(stylesBind)) {
+            this._bindObservable(stylesBind, value => {
+                if (value && typeof value === "object") {
+                    Object.entries(value).forEach(([styleKey, styleValue]) => {
+                        if (styleKey.startsWith("--")) {
+                            if (styleValue == null) {
+                                this.element.style.removeProperty(styleKey);
+                            } else {
+                                this.element.style.setProperty(styleKey, String(styleValue));
+                            }
+                        } else {
+                            (this.element.style as any)[styleKey] = styleValue;
+                        }
+                    });
+                }
+            });
+            return;
+        }
+
+        // Handle Record<string, Observable<any>>
         Object.entries(stylesBind).forEach(([key, observable]) => {
+            // Skip if not an Observable instance
+            if (!Observable.isObservable(observable)) {
+                return;
+            }
 
             this._bindObservable(observable, value => {
 
@@ -239,7 +278,7 @@ export class ReactiveElement {
                 this.element.appendChild(start);
                 this.element.appendChild(end);
 
-                const render = (value) => {
+                const render = (value: any) => {
                     // پاک کردن فقط محدوده خود observable
                     let node = start.nextSibling;
                     while (node && node !== end) {
@@ -249,7 +288,7 @@ export class ReactiveElement {
                     }
 
                     // 👇 این مهمه
-                    const insert = (v) => {
+                    const insert = (v: any) => {
                         if (v === null || v === undefined || v === false || v === true) return;
 
                         if (Array.isArray(v)) {
@@ -346,8 +385,8 @@ export class ReactiveElement {
         });
     }
 
-    _addEvent(event , handler){
-        const wrappedHandler = (e) => {
+    _addEvent(event: string, handler: (e: Event) => void){
+        const wrappedHandler = (e: Event) => {
             if (this._states.has("disabled") && event !== "mouseenter" && event !== "mouseleave"){
                 e.preventDefault();
                 e.stopPropagation();
@@ -362,7 +401,7 @@ export class ReactiveElement {
         return this;
     }
 
-    _removeEvent(event , handler=null){
+    _removeEvent(event: string, handler: EventListener | null = null){
         this._eventListeners = this._eventListeners.filter(item=>{
             if (item.event !== event) return true;
             if (handler && item.handler !== handler) return true;
@@ -372,11 +411,11 @@ export class ReactiveElement {
         return this;
     }
 
-    on(event , handler){
+    on(event: string, handler: (e: Event) => void){
         return this._addEvent(event , handler);
     }
 
-    off(event , handler){
+    off(event: string, handler: EventListener | null = null){
         return this._removeEvent(event , handler);
     }
 
@@ -387,6 +426,9 @@ export class ReactiveElement {
         const o = this._options;
 
         if (o.children != null) this._setChildren(o.children);
+
+        if (o.props) this._applyProps(o.props);
+        if (o.propsBind) this._applyPropsBind(o.propsBind);
 
         if (o.attrs) this._applyAttrs(o.attrs);
         if (o.attrsBind) this._applyAttrsBind(o.attrsBind);

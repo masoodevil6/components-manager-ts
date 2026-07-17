@@ -79,8 +79,8 @@ export const ComponentInputCheckBoxProps = {
     ... GOG_ComponentBasicProps_Component,
     ... GOG_ComponentBasicProps_Component_Structure,
     ... GOG_ComponentBasicProps_Component_Structure_FormInput,
-    ...GOG_ComponentBasicProps_Component_Structure_FormInput_Value ,
-    ...GOG_ComponentBasicProps_Component_Structure_FormInput_Label ,
+    ... GOG_ComponentBasicProps_Component_Structure_FormInput_Value ,
+    ... GOG_ComponentBasicProps_Component_Structure_FormInput_Label ,
     ///----------------------
     prop_borderIconClass :                   "prop_borderIconClass" ,
     prop_borderIconStyles :                  "prop_borderIconStyles" ,

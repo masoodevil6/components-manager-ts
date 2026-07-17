@@ -56,8 +56,8 @@ export class Language {
     ): Observable<string> {
 
         return AppConfig
-            .observable("language")
-            .map(lang => {
+            .observable("language" as const)
+            .map((lang: string) => {
 
                 const text =
                     this._resolve(this._dict[lang], key)

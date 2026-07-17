@@ -1,4 +1,8 @@
 import {ROUTES_MAP} from "./routes";
+import {ITemplate} from "../interfaces/ITemplate";
+import {Observable} from "../../core/Observable";
+
+type Route = {template:new () => ITemplate, data?:any, headerTitle: Observable<string>};
 
 export class Router {
     root: HTMLElement
@@ -29,7 +33,7 @@ export class Router {
 
 
 
-    #setTitlePage(route){
+    #setTitlePage(route: Route){
         if(route.headerTitle){
             const headerTitle = document.querySelector("head title") as HTMLElement
             headerTitle.textContent = route.headerTitle.get()
@@ -43,7 +47,7 @@ export class Router {
         return query;
     }
 
-    #renderPage(route){
+    #renderPage(route: Route){
         this.root.innerHTML = ""
 
         const pageInstance = new route.template()

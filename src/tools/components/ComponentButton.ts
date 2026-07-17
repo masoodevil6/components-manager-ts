@@ -38,6 +38,8 @@ import {
 } from "../../core/component/SetupComponent";
 import {ToolsIcons} from "../icons";
 import {ComponentIconMethodsType, ComponentIconPropsType} from "./ComponentIcon";
+import {Observable} from "../../core/Observable";
+import {ComponentSidebarProps} from "./ComponentSidebar";
 
 
 
@@ -53,6 +55,10 @@ export const ComponentButtonProps = {
     prop_btnType :                         "prop_btnType" ,
     prop_btnClass :                        "prop_btnClass" ,
     prop_btnStyles :                       "prop_btnStyles" ,
+    prop_btnWidth :                        "prop_btnWidth" ,
+    prop_btnHeight :                       "prop_btnHeight" ,
+    prop_btnBorderColor :                  "prop_btnBorderColor" ,
+    prop_btnBorderWidth :                  "prop_btnBorderWidth" ,
     prop_btnBackgroundColor :              "prop_btnBackgroundColor" ,
     prop_btnBackgroundColor_hover :        "prop_btnBackgroundColor_hover" ,
 
@@ -65,6 +71,8 @@ export const ComponentButtonProps = {
     prop_btnIcon :                         "prop_btnIcon" ,
     prop_btnIconStyles :                   "prop_btnIconStyles" ,
     prop_btnIconClass :                    "prop_btnIconClass" ,
+    prop_btnBorderRadius :                 "prop_btnBorderRadius" ,
+    prop_variant :                         "prop_variant" ,
 } as const;
 
 
@@ -75,6 +83,13 @@ export enum ComponentButton_Types{
     SUBMIT=    "submit",
     CANCEL=    "cancel",
     BACK=      "back"
+}
+
+export enum ComponentButton_Variants{
+    PRIMARY=   "primary",
+    SECONDARY= "secondary",
+    GHOST=     "ghost",
+    ICON=      "icon",
 }
 
 export enum ComponentButton_ButtonTypes{
@@ -91,65 +106,89 @@ const ComponentButtonConfigs  =  {
         ///----------------------
 
         [ComponentButtonProps.prop_type]: {
-            name:               ComponentButtonProps.prop_type,
-            value:              GOG_SetValue<GOG_ValueOf<typeof ComponentButton_Types>>(ComponentButton_Types.SUBMIT),
+            name:                      ComponentButtonProps.prop_type,
+            value:                     GOG_SetValue<GOG_ValueOf<typeof ComponentButton_Types>>(ComponentButton_Types.SUBMIT),
         } ,
 
         [ComponentButtonProps.prop_btnType]: {
-            name:               ComponentButtonProps.prop_btnType,
-            value:              GOG_SetValue<GOG_ValueOf<typeof ComponentButton_ButtonTypes>>(ComponentButton_ButtonTypes.BUTTON),
+            name:                      ComponentButtonProps.prop_btnType,
+            value:                     GOG_SetValue<GOG_ValueOf<typeof ComponentButton_ButtonTypes>>(ComponentButton_ButtonTypes.BUTTON),
         } ,
         [ComponentButtonProps.prop_btnClass]: {
-            name:               ComponentButtonProps.prop_btnClass,
-            value:              GOG_SetValue<string[]>( ["w-100"]) ,
+            name:                      ComponentButtonProps.prop_btnClass,
+            value:                     GOG_SetValue<string[]>( ["w-100"]) ,
         } ,
         [ComponentButtonProps.prop_btnStyles]: {
-            name:               ComponentButtonProps.prop_btnStyles,
-            value:              GOG_SetValue<Record<string, string>>( {}) ,
+            name:                      ComponentButtonProps.prop_btnStyles,
+            value:                     GOG_SetValue<Record<string, string>>( {}) ,
+        } ,
+        [ComponentButtonProps.prop_btnWidth]: {
+            name:                      ComponentButtonProps.prop_btnWidth ,
+            value:                     GOG_SetValue<SizeUnit | SizeCalc |null>(null),
+        } ,
+        [ComponentButtonProps.prop_btnHeight]: {
+            name:                      ComponentButtonProps.prop_btnHeight ,
+            value:                     GOG_SetValue<SizeUnit | SizeCalc |null>(null),
+        } ,
+        [ComponentButtonProps.prop_btnBorderColor]: {
+            name:                      ComponentButtonProps.prop_btnBorderColor        ,
+            value:                     GOG_SetValue<Color | null>(null),
+        } ,
+        [ComponentButtonProps.prop_btnBorderWidth]: {
+            name:                      ComponentButtonProps.prop_btnBorderWidth        ,
+            value:                     GOG_SetValue<typeof SIZES | number |  null>( SIZES.M) ,
         } ,
         [ComponentButtonProps.prop_btnBackgroundColor]: {
-            name:               ComponentButtonProps.prop_btnBackgroundColor,
-            value:              GOG_SetValue<Color | null>(null),
+            name:                      ComponentButtonProps.prop_btnBackgroundColor,
+            value:                     GOG_SetValue<Color | null>(null),
         } ,
         [ComponentButtonProps.prop_btnBackgroundColor_hover]: {
-            name:               ComponentButtonProps.prop_btnBackgroundColor_hover,
-            value:              GOG_SetValue<Color | null>(null),
+            name:                      ComponentButtonProps.prop_btnBackgroundColor_hover,
+            value:                     GOG_SetValue<Color | null>(null),
         } ,
 
 
         [ComponentButtonProps.prop_btnTitle]: {
-            name:               ComponentButtonProps.prop_btnTitle,
-            value:              GOG_SetValue<string>( "") ,
+            name:                      ComponentButtonProps.prop_btnTitle,
+            value:                     GOG_SetValue<string>( "") ,
         } ,
         [ComponentButtonProps.prop_btnTitleStyles]: {
-            name:               ComponentButtonProps.prop_btnTitleStyles,
-            value:              GOG_SetValue<Record<string, string>>( {}) ,
+            name:                      ComponentButtonProps.prop_btnTitleStyles,
+            value:                     GOG_SetValue<Record<string, string>>( {}) ,
         } ,
         [ComponentButtonProps.prop_btnTitleClass]: {
-            name:               ComponentButtonProps.prop_btnTitleClass,
-            value:              GOG_SetValue<string[]>( []) ,
+            name:                     ComponentButtonProps.prop_btnTitleClass,
+            value:                    GOG_SetValue<string[]>( []) ,
         } ,
         [ComponentButtonProps.prop_btnTitleColor]: {
-            name:               ComponentButtonProps.prop_btnTitleColor,
-            value:              GOG_SetValue<Color | null>(null),
+            name:                     ComponentButtonProps.prop_btnTitleColor,
+            value:                    GOG_SetValue<Color | null>(null),
         } ,
         [ComponentButtonProps.prop_btnTitleColor_hover]: {
-            name:               ComponentButtonProps.prop_btnTitleColor_hover,
-            value:              GOG_SetValue<Color | null>(null),
+            name:                     ComponentButtonProps.prop_btnTitleColor_hover,
+            value:                    GOG_SetValue<Color | null>(null),
         } ,
 
 
         [ComponentButtonProps.prop_btnIcon]: {
-            name:               ComponentButtonProps.prop_btnIcon,
-            value:              GOG_SetValue<IconsType|null>(null),
+            name:                     ComponentButtonProps.prop_btnIcon,
+            value:                    GOG_SetValue<IconsType|null>(null),
         } ,
         [ComponentButtonProps.prop_btnIconStyles]: {
-            name:               ComponentButtonProps.prop_btnIconStyles,
-            value:              GOG_SetValue<Record<string, string>>( {}) ,
+            name:                     ComponentButtonProps.prop_btnIconStyles,
+            value:                    GOG_SetValue<Record<string, string>>( {}) ,
         } ,
         [ComponentButtonProps.prop_btnIconClass]: {
-            name:               ComponentButtonProps.prop_btnIconClass,
-            value:              GOG_SetValue<string[]>( ["w-100"]) ,
+            name:                     ComponentButtonProps.prop_btnIconClass,
+            value:                    GOG_SetValue<string[]>( ["w-100"]) ,
+        } ,
+        [ComponentButtonProps.prop_btnBorderRadius]: {
+            name:                     ComponentButtonProps.prop_btnBorderRadius,
+            value:                    GOG_SetValue<GOG_ValueOf<typeof SIZES>>(SIZES.M),
+        } ,
+        [ComponentButtonProps.prop_variant]: {
+            name:                     ComponentButtonProps.prop_variant,
+            value:                    GOG_SetValue<GOG_ValueOf<typeof ComponentButton_Variants>>(ComponentButton_Variants.SECONDARY),
         } ,
 
     } ,
@@ -241,6 +280,30 @@ export class ComponentButtonBase extends ComponentBase<
                 title:                                            Language.translate("components.button.props.prop_btnStyles.title"),
                 description:                                      Language.translate("components.button.props.prop_btnStyles.description"),
             } ,
+            [ComponentButtonConfigs.keys.prop_btnWidth.name]: {
+                prop:                                             ComponentButtonConfigs.keys.prop_btnWidth.name,
+                default:                                          ComponentButtonConfigs.keys.prop_btnWidth.value,
+                title:                                            Language.translate("components.button.props.prop_btnWidth.title"),
+                description:                                      Language.translate("components.button.props.prop_btnWidth.description"),
+            } ,
+            [ComponentButtonConfigs.keys.prop_btnHeight.name]: {
+                prop:                                             ComponentButtonConfigs.keys.prop_btnHeight.name,
+                default:                                          ComponentButtonConfigs.keys.prop_btnHeight.value,
+                title:                                            Language.translate("components.button.props.prop_btnHeight.title"),
+                description:                                      Language.translate("components.button.props.prop_btnHeight.description"),
+            } ,
+            [ComponentButtonConfigs.keys.prop_btnBorderColor.name]: {
+                prop:                                             ComponentButtonConfigs.keys.prop_btnBorderColor.name,
+                default:                                          ComponentButtonConfigs.keys.prop_btnBorderColor.value,
+                title:                                            Language.translate("components.button.props.prop_btnBorderColor.title"),
+                description:                                      Language.translate("components.button.props.prop_btnBorderColor.description"),
+            } ,
+            [ComponentButtonConfigs.keys.prop_btnBorderWidth.name]: {
+                prop:                                             ComponentButtonConfigs.keys.prop_btnBorderWidth.name,
+                default:                                          ComponentButtonConfigs.keys.prop_btnBorderWidth.value,
+                title:                                            Language.translate("components.button.props.prop_btnBorderWidth.title"),
+                description:                                      Language.translate("components.button.props.prop_btnBorderWidth.description"),
+            } ,
             [ComponentButtonConfigs.keys.prop_btnBackgroundColor.name]: {
                 prop:                                             ComponentButtonConfigs.keys.prop_btnBackgroundColor.name,
                 default:                                          ComponentButtonConfigs.keys.prop_btnBackgroundColor.value,
@@ -253,7 +316,6 @@ export class ComponentButtonBase extends ComponentBase<
                 title:                                            Language.translate("components.button.props.prop_btnBackgroundColor_hover.title"),
                 description:                                      Language.translate("components.button.props.prop_btnBackgroundColor_hover.description"),
             } ,
-
 
             [ComponentButtonConfigs.keys.prop_btnTitle.name]: {
                 prop:                                             ComponentButtonConfigs.keys.prop_btnTitle.name,
@@ -305,6 +367,18 @@ export class ComponentButtonBase extends ComponentBase<
                 title:                                            Language.translate("components.button.props.prop_btnIconClass.title"),
                 description:                                      Language.translate("components.button.props.prop_btnIconClass.description"),
             } ,
+            [ComponentButtonConfigs.keys.prop_btnBorderRadius.name]: {
+                prop:                                             ComponentButtonConfigs.keys.prop_btnBorderRadius.name,
+                default:                                          ComponentButtonConfigs.keys.prop_btnBorderRadius.value,
+                title:                                            Language.translate("components.button.props.prop_btnBorderRadius.title"),
+                description:                                      Language.translate("components.button.props.prop_btnBorderRadius.description"),
+            } ,
+            [ComponentButtonConfigs.keys.prop_variant.name]: {
+                prop:                                             ComponentButtonConfigs.keys.prop_variant.name,
+                default:                                          ComponentButtonConfigs.keys.prop_variant.value,
+                title:                                            Language.translate("components.button.props.prop_variant.title"),
+                description:                                      Language.translate("components.button.props.prop_variant.description"),
+            } ,
         }
     );
 
@@ -331,8 +405,14 @@ export class ComponentButtonBase extends ComponentBase<
                 this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnType.name] ,
                 this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnClass.name] ,
                 this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnStyles.name] ,
+                this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnWidth.name] ,
+                this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnHeight.name] ,
                 this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnBackgroundColor.name] ,
                 this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnBackgroundColor_hover.name] ,
+                this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnBorderRadius.name] ,
+                this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnBorderColor.name] ,
+                this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnBorderWidth.name] ,
+                this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnIcon.name] ,
             ]
         } ,
         [ComponentButtonConfigs.schemas.FORM_BUTTON_TITLE.name]: {
@@ -477,11 +557,16 @@ export class ComponentButton extends ComponentButtonBase{
 
         if (data != null){
 
-            const prop_type        =   data[ComponentButtonConfigs.keys.prop_type.name];
-            const prop_btnType     =   data[ComponentButtonConfigs.keys.prop_btnType.name];
+            const prop_type        =     data[ComponentButtonConfigs.keys.prop_type.name];
+            const prop_btnType     =     data[ComponentButtonConfigs.keys.prop_btnType.name];
 
-            const prop_btnClass    =   data[ComponentButtonConfigs.keys.prop_btnClass.name];
-            const prop_btnStyles   =   data[ComponentButtonConfigs.keys.prop_btnStyles.name];
+            const prop_btnClass    =     data[ComponentButtonConfigs.keys.prop_btnClass.name];
+            const prop_btnStyles   =     data[ComponentButtonConfigs.keys.prop_btnStyles.name];
+            const prop_btnWidth   =      data[ComponentButtonConfigs.keys.prop_btnWidth.name];
+            const prop_btnHeight   =     data[ComponentButtonConfigs.keys.prop_btnHeight.name];
+            const prop_btnBorderRadius = data[ComponentButtonConfigs.keys.prop_btnBorderRadius.name];
+            const prop_btnBorderWidth =  data[ComponentButtonConfigs.keys.prop_btnBorderWidth.name];
+            const prop_btnIcon        =   data[ComponentButtonConfigs.keys.prop_btnIcon.name];
 
             let btnBackgroundColor = {};
             btnBackgroundColor[ComponentButton_Types.SUBMIT] =          "var(--primaryColor1)";
@@ -495,6 +580,11 @@ export class ComponentButton extends ComponentButtonBase{
             btnBackgroundColor_hover[ComponentButton_Types.CANCEL] =   "var(--errorColor2)";
             btnBackgroundColor_hover[ComponentButton_Types.CUSTOM] =   data[ComponentButtonConfigs.keys.prop_btnBackgroundColor_hover.name];
 
+            let btnBorderColor = {};
+            btnBorderColor[ComponentButton_Types.SUBMIT] =          "var(--primaryColor2)";
+            btnBorderColor[ComponentButton_Types.BACK] =            "var(--secondaryColor1)";
+            btnBorderColor[ComponentButton_Types.CANCEL] =          "var(--errorColor1)";
+            btnBorderColor[ComponentButton_Types.CUSTOM] =          data[ComponentButtonConfigs.keys.prop_btnBorderColor.name];
 
             return ReactiveElement.part(  "button" ,
                 {
@@ -502,13 +592,18 @@ export class ComponentButton extends ComponentButtonBase{
                         "id":     `component-button-${this._COMPONENT_RANDOM_ID}`,
                     },
                     className: [
-                        "shadow-sm" , "border-0" , "rounded" ,
+                        "shadow-sm" , // "border-0" ,
                     ] ,
                     classBind: [
                         prop_btnClass
                     ] ,
 
                     stylesBind: (el) => ({
+                        width:               prop_btnWidth ,
+                        height:              prop_btnHeight ,
+                        borderWidth:         prop_btnBorderWidth ,
+                        borderColor:         prop_type.mapList(btnBorderColor) ,
+
                         backgroundColor: el.hover.mapList({
                             true:           prop_type.mapList(btnBackgroundColor_hover),
                             false:          prop_type.mapList(btnBackgroundColor)
@@ -517,18 +612,31 @@ export class ComponentButton extends ComponentButtonBase{
                             true:           "background-color 1000ms ease" ,
                             false:          "background-color 200ms ease"
                         }) ,
+                        borderRadius: prop_btnBorderRadius instanceof Observable
+                            ? prop_btnBorderRadius.map((s: any) => s == null ? "0 !important" : `${ToolsComponents_BorderRadius[s ?? SIZES.M]} !important`)
+                            : (prop_btnBorderRadius == null ? "0 !important" : `${ToolsComponents_BorderRadius[prop_btnBorderRadius ?? SIZES.M]} !important`),
                         prop_btnStyles ,
                     }) ,
-                    children: [
-                        ReactiveElement.b(
-                            {
-                                children: [
-                                    this.executeSchemaPart(ComponentButtonConfigs.schemas.FORM_BUTTON_TITLE.name) ,
-                                    this.executeSchemaPart(ComponentButtonConfigs.schemas.FORM_BUTTON_ICON.name)
-                                ]
-                            }
-                        )
-                    ] ,
+                    // children: [
+                    //     this.executeSchemaPart(ComponentButtonConfigs.schemas.FORM_BUTTON_TITLE.name) ,
+                    //     this.executeSchemaPart(ComponentButtonConfigs.schemas.FORM_BUTTON_ICON.name)
+                    // ] ,
+                    children: Observable.conditionWhen(
+                        prop_btnIcon ,
+                        icon => icon != null ,
+                        () => ReactiveElement.div({
+                            children: [
+                                this.executeSchemaPart(ComponentButtonConfigs.schemas.FORM_BUTTON_TITLE.name) ,
+                                this.executeSchemaPart(ComponentButtonConfigs.schemas.FORM_BUTTON_ICON.name)
+                            ]
+                        }) ,
+                        () => ReactiveElement.div({
+                            children: [
+                                this.executeSchemaPart(ComponentButtonConfigs.schemas.FORM_BUTTON_TITLE.name)
+                            ]
+                        }) ,
+                        this.getScope()
+                    ),
                     on: {
                         click: (event) => {
                             const params: ComponentButton_Methods_CLICK_DataArgs = {}

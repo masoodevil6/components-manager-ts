@@ -25,7 +25,7 @@ export const COLORS_MAIN = {
 
 type ColorsMainType = typeof COLORS_MAIN[keyof typeof COLORS_MAIN];
 type colorsGradeType = typeof COLORS_GRAD[keyof typeof COLORS_GRAD];
-type CssColorVar = `var(--${ColorsMainType}Color${colorsGradeType})`
+export type CssColorVar = `var(--${ColorsMainType}Color${colorsGradeType})`
 export const Color = (color: ColorsMainType = COLORS_MAIN.PRIMARY , grade: colorsGradeType= COLORS_GRAD.GRADE_1) : CssColorVar => {
     return `var(--${color}Color${grade})` as CssColorVar
 }
@@ -49,13 +49,13 @@ export const UNITS = {
 } as const
 type UnitsType = typeof UNITS[keyof typeof UNITS];
 
-type SizeUnitVar = `${number}${UnitsType}`
+export type SizeUnitVar = `${number}${UnitsType}`
 export const SizeUnit = (number: number  , unit: UnitsType= UNITS.PEXEL) : SizeUnitVar=> {
     return `${number}${unit}` as SizeUnitVar
 }
 
 
-type CalcSizeUnitVar = `calc(${string})`
+export type CalcSizeUnitVar = `calc(${string})`
 type CalcSizeParts = OperationType | SizeUnitVar
 export const SizeCalc = (...parts : CalcSizeParts[]) : CalcSizeUnitVar=> {
     let partStr = ""
@@ -71,7 +71,7 @@ export const SizeCalc = (...parts : CalcSizeParts[]) : CalcSizeUnitVar=> {
 }
 
 
-type TransformUnitVar = `translate(${SizeUnitVar} , ${SizeUnitVar})`
+export type TransformUnitVar = `translate(${SizeUnitVar} , ${SizeUnitVar})`
 export const TranslateUnit = (transitionX: SizeUnitVar, transitionY: SizeUnitVar) : TransformUnitVar=> {
     return `translate(${transitionX} , ${transitionY})` as TransformUnitVar
 }
@@ -146,6 +146,8 @@ export const Z_INDEXES = {
     basic:          'basic',
     menu_main:      'menu_main',
     icon_attach:    'icon_attach',
+
+    tools_blur:     'tools_blur',
     tools:          'tools',
     tools_btn:      'tools_btn',
     tools_position: 'tools_position',

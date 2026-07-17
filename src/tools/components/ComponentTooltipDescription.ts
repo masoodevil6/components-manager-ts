@@ -37,11 +37,6 @@ import {
     GOG_ComponentBasicProps_Component_Structure,
 } from "../../core/component/SetupComponent";
 import {ToolsIcons} from "../icons";
-import {
-    ComponentRecyclerView,
-    ComponentRecyclerViewMethodsType,
-    ComponentRecyclerViewPropsType
-} from "./ComponentRecyclerView";
 import {ComponentIconMethodsType, ComponentIconPropsType} from "./ComponentIcon";
 import {
     ComponentFloatMenu_ShowTypes,

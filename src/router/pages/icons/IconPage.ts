@@ -10,7 +10,7 @@ export class IconPage implements ITemplate{
         const container = document.createElement("div")
 
         Object.keys(TOOLS.ICON).forEach(key=>{
-            let iconSvg = TOOLS.ICON[key]({
+            let iconSvg = TOOLS.ICON[key as keyof typeof TOOLS.ICON]({
                 size : 100
             })
 

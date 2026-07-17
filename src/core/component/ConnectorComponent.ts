@@ -1,15 +1,10 @@
 import {ReactiveElement} from "../ReactiveElement";
 
-
 export type ComponentAttrsDefault = { "data-part-name" : string  , id: string}
 
 export abstract class ConnectorComponent {
 
-    //--------------------------------------------------
-    // Template Reader
-    //--------------------------------------------------
-
-    renderManagerComponent(partName , attrsDefault : ComponentAttrsDefault , data , extra): ReactiveElement{
+    renderManagerComponent(partName: string, attrsDefault: ComponentAttrsDefault, data: any, extra: any): ReactiveElement{
         throw new Error("not override method Manager Component")
     }
 
@@ -21,11 +16,7 @@ export abstract class ConnectorComponent {
         });
     }
 
-
-    //--------------------------------------------------
-    // render example
-    //--------------------------------------------------
-    static renderExampleComponent(extraData):  HTMLElement {
+    static renderExampleComponent(extraData: any):  HTMLElement {
         return ReactiveElement.section({
             children: [
                 `<div class="not-exist-example"> NOT EXIST REGISTER</div>`

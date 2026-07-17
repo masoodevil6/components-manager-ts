@@ -87,6 +87,7 @@ export const ComponentInputAgreementCheckBoxProps = {
     prop_checkBoxList :                      "prop_checkBoxList" ,
     prop_checkBoxOrderStatus :               "prop_checkBoxOrderStatus" ,
     prop_checkBoxOrder :                     "prop_checkBoxOrder" ,
+    prop_maxHeightItems :                    "prop_maxHeightItems" ,
 
 } as const;
 
@@ -121,6 +122,10 @@ const ComponentInputAgreementCheckBoxConfigs  =  {
         [ComponentInputAgreementCheckBoxProps.prop_checkBoxOrder]: {
             name:                      ComponentInputAgreementCheckBoxProps.prop_checkBoxOrder ,
             value:                     GOG_SetValue<(string|number)[]>([]),
+        } ,
+        [ComponentInputAgreementCheckBoxProps.prop_maxHeightItems]: {
+            name:                      ComponentInputAgreementCheckBoxProps.prop_maxHeightItems ,
+            value:                     GOG_SetValue<SizeUnit | SizeCalc | null>( SizeUnit(200 , UNITS.PEXEL)) ,
         } ,
 
     } ,
@@ -201,6 +206,10 @@ export type ComponentInputAgreementCheckBoxMethodsType = {
     [ComponentInputAgreementCheckBoxConfigs.methods.CLICK_ITEM.name]: ComponentCallBackType<ComponentInputAgreementCheckBox_Methods_CLICK_ITEM_ComponentArgs , ComponentInputAgreementCheckBox_Methods_CLICK_ITEM_DataArgs>
 }
 
+
+
+
+
 export abstract class ComponentInputAgreementCheckBoxBase extends ComponentBase<
     ComponentInputAgreementCheckBoxPropsType ,
     ComponentInputAgreementCheckBoxSchemaType ,
@@ -241,6 +250,12 @@ export abstract class ComponentInputAgreementCheckBoxBase extends ComponentBase<
             default:                                          ComponentInputAgreementCheckBoxConfigs.keys.prop_checkBoxOrder.value,
             title:                                            Language.translate("components.input_agreement_check_box.prop.prop_checkBoxOrder.title"),
             description:                                      Language.translate("components.input_agreement_check_box.prop.prop_checkBoxOrder.description"),
+        } ,
+        [ComponentInputAgreementCheckBoxConfigs.keys.prop_maxHeightItems.name]: {
+            prop:                                             ComponentInputAgreementCheckBoxConfigs.keys.prop_maxHeightItems.name,
+            default:                                          ComponentInputAgreementCheckBoxConfigs.keys.prop_maxHeightItems.value,
+            title:                                            Language.translate("components.input_agreement_check_box.prop.prop_maxHeightItems.title"),
+            description:                                      Language.translate("components.input_agreement_check_box.prop.prop_maxHeightItems.description"),
         } ,
     });
 
@@ -292,6 +307,7 @@ export abstract class ComponentInputAgreementCheckBoxBase extends ComponentBase<
                 this._COMPONENT_PATTERN[ComponentInputAgreementCheckBoxConfigs.keys.prop_checkBoxList.name] ,
                 this._COMPONENT_PATTERN[ComponentInputAgreementCheckBoxConfigs.keys.prop_checkBoxOrderStatus.name] ,
                 this._COMPONENT_PATTERN[ComponentInputAgreementCheckBoxConfigs.keys.prop_checkBoxOrder.name] ,
+                this._COMPONENT_PATTERN[ComponentInputAgreementCheckBoxConfigs.keys.prop_maxHeightItems.name] ,
             ]
         } ,
         [ComponentInputAgreementCheckBoxConfigs.schemas.Main_CheckBoxList_CheckBoxItem.name]: {
@@ -367,10 +383,14 @@ export abstract class ComponentInputAgreementCheckBoxBase extends ComponentBase<
                     } ,
                     {
                         id:          3 ,
+                        title:      "item C" ,
+                    } ,
+                    {
+                        id:          4 ,
                         title:      "item D" ,
                     }
                 ] ,
-                prop_value: [1 , 2 , 3] ,
+                prop_value: [1 , 2 , 3 , 4] ,
                 prop_checkBoxOrder: [3]
 
                // prop_isDisable: true
@@ -522,6 +542,7 @@ export class ComponentInputAgreementCheckBox extends ComponentInputAgreementChec
             const prop_checkBoxList=           data[ComponentInputAgreementCheckBoxConfigs.keys.prop_checkBoxList.name];
             const prop_checkBoxOrderStatus=    data[ComponentInputAgreementCheckBoxConfigs.keys.prop_checkBoxOrderStatus.name];
             const prop_checkBoxOrder=          data[ComponentInputAgreementCheckBoxConfigs.keys.prop_checkBoxOrder.name];
+            const prop_maxHeightItems=         data[ComponentInputAgreementCheckBoxConfigs.keys.prop_maxHeightItems.name];
 
             return  ReactiveElement.part(  "section" ,
                 {
@@ -531,6 +552,12 @@ export class ComponentInputAgreementCheckBox extends ComponentInputAgreementChec
                     className: [
                         "col-12" , "border-top" , "pt-1"
                     ] ,
+                    stylesBind: {
+                        maxHeight:    prop_maxHeightItems
+                    },
+                    styles:{
+                        overflowY:     "auto"
+                    } ,
                     children:    Observable.computed(( orderStatus , listCheckBox , order) => {
 
                             const newList =  this.pr_getListOrdered(listCheckBox , order);
@@ -597,8 +624,8 @@ export class ComponentInputAgreementCheckBox extends ComponentInputAgreementChec
 
         if (data != null && extra?.itemCheckBox) {
             const itemCheckBox: propAgreementCheckBoxType = extra.itemCheckBox;
-            const prop_isDisable=     data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
-            const prop_value=         data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name];
+            const prop_isDisable=        data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
+            const prop_value=            data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name];
 
             if (itemCheckBox  && itemCheckBox?.id ){
 

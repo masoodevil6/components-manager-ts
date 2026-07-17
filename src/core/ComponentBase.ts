@@ -2,10 +2,12 @@ import {Observable, Scope} from "./Observable";
 import {ReactiveElement} from "./ReactiveElement";
 import {AppConfig} from "./AppConfig";
 import {ComponentAttrsDefault, ConnectorComponent} from "./component/ConnectorComponent";
+
 import {
     GOG_ComponentBasicConfigs_Component_parts, GOG_ComponentBasicProps_Component
 
 } from "./component/SetupComponent";
+import {SizeUnit, UNITS} from "../utils/ToolsConsts";
 
 export type GOG_TypeOf<T> = T;
 export type GOG_ValueOf<T> = T[keyof T]
@@ -13,11 +15,18 @@ export function GOG_SetValue<T>(value: T): GOG_TypeOf<T>{
     return value as any
 }
 
-export type GOG_ExtractNameValue<T> = {
-    [k in keyof T as T[k]["name"]] : T[k]["value"] extends GOG_TypeOf<infer U> ? U : never
+export type GOG_ExtractNameValue<T extends Record<PropertyKey, { readonly name: PropertyKey; readonly value: any }>> = {
+    [k in keyof T as T[k]["name"]]: T[k]["value"] extends GOG_TypeOf<infer U> ? U : never
 }
-export type GOG_ExtractName<T> = {
+export type GOG_ExtractName<T extends Record<PropertyKey, { readonly name: PropertyKey }>> = {
     [k in keyof T] : T[k]["name"]
+}
+
+export type ComponentConfigBasicType = {
+    selector?: string | null;
+    append?: boolean;
+    classList?: string[];
+    styles?: Record<string, string>;
 }
 
 
@@ -29,7 +38,7 @@ export type GOG_ExtractName<T> = {
 /// ----------------------------------------------------
 /// COMPONENT PATTERN
 /// ----------------------------------------------------
-type ComponentPropKeys<TPropTypes> = keyof TPropTypes
+export type ComponentPropKeys<TPropTypes> = keyof TPropTypes
 export interface IComponentProp<TPropTypes> {
     prop:              string;
     default:           TPropTypes;
@@ -38,6 +47,7 @@ export interface IComponentProp<TPropTypes> {
     title?:            Observable<string> ,
     description?:      Observable<string> ,
 }
+export type ComponentPropType = IComponentProp<any>;
 export function defineComponentPatterns<TPropTypes>(patterns: { [K in ComponentPropKeys<TPropTypes>]: IComponentProp<TPropTypes[K]> } ) : { [K in ComponentPropKeys<TPropTypes>]: IComponentProp<TPropTypes[K]> } {
     return patterns;
 }
@@ -49,7 +59,7 @@ export function defineComponentPatterns<TPropTypes>(patterns: { [K in ComponentP
 /// ----------------------------------------------------
 /// COMPONENT SCHEMA
 /// ----------------------------------------------------
-type ComponentSchemaKeys<TSchema> = TSchema[keyof TSchema]
+export type ComponentSchemaKeys<TSchema> = keyof TSchema
 export interface IComponentSchema<TSchema , TPropTypes> {
     part:              TSchema ,
     method?:           (attrsDefault:  ComponentAttrsDefault , data: Record<string, Observable<any>> , extra: Record<string, any>) => ReactiveElement,
@@ -57,7 +67,7 @@ export interface IComponentSchema<TSchema , TPropTypes> {
     title?:            Observable<string> ,
     description?:      Observable<string> ,
 }
-export function defineComponentSchema<TSchema , TPropTypes>(props: { [K in  ComponentSchemaKeys<TSchema>]: IComponentSchema<TSchema[K] , TPropTypes[K]> }) :  { [K in  ComponentSchemaKeys<TSchema>]: IComponentSchema<TSchema[K] , TPropTypes[K]> } {
+export function defineComponentSchema<TSchema , TPropTypes>(props: { [K in  ComponentSchemaKeys<TSchema>]: IComponentSchema<TSchema[K] , TPropTypes> }) :  { [K in  ComponentSchemaKeys<TSchema>]: IComponentSchema<TSchema[K] , TPropTypes> } {
     return props ;
 }
 
@@ -93,7 +103,7 @@ export function defineComponentMethods<TMethod , TPropTypes>(methods: { [K in Co
 /// ----------------------------------------------------
 /// COMPONENT TEMPLATE
 /// ----------------------------------------------------
-type ComponentTemplateKeys<TSchema> = TSchema[keyof TSchema]
+type ComponentTemplateKeys<TSchema> = keyof TSchema
 export type ComponentTemplateType<TPropTypes> = {
     reference:         IComponentProp<TPropTypes[keyof TPropTypes]>;
     html?:             string;
@@ -117,25 +127,25 @@ export function defineComponentTemplate<TTemplatesTypes , TPropTypes>(templates:
 
 
 export class ComponentBase<
-    TProp ,
+    TProp extends Record<string, any> ,
     TSchemas ,
     TTemplate ,
-    TMethods
+    TMethods extends Record<string, ComponentCallBackType<any , any>>
     > extends ConnectorComponent{
 
     private _renderScope = new Scope();
 
-    _COMPONENT_PATTERN : { [K in  ComponentPropKeys<TProp>]?:           IComponentProp<TProp[K]> }
+    _COMPONENT_PATTERN! : { [K in  ComponentPropKeys<TProp>]?:           IComponentProp<TProp[K]> }
 
-    _COMPONENT_SCHEMA:   { [K in  ComponentSchemaKeys<TSchemas>]: IComponentSchema<TSchemas[K] , TProp[K]> }
+    _COMPONENT_SCHEMA! :   { [K in  ComponentSchemaKeys<TSchemas>]: IComponentSchema<TSchemas[K] , TProp> }
 
-    _COMPONENT_METHODS:   { [K in ComponentMethodKeys<TMethods>]:       ComponentMethodType<TProp> }
+    _COMPONENT_METHODS! :   { [K in ComponentMethodKeys<TMethods>]:       ComponentMethodType<TProp> }
 
-    _COMPONENT_TEMPLATES: { [K in  ComponentTemplateKeys<TTemplate>]?:  ComponentTemplateType<TProp> } ;
+    _COMPONENT_TEMPLATES! : { [K in  ComponentTemplateKeys<TTemplate>]?:  ComponentTemplateType<TProp> } ;
 
     _COMPONENT_PROPS_BIND: Record<string, Observable<any>> = {};
 
-    _COMPONENT_CONFIG;
+    _COMPONENT_CONFIG!: Record<string, any>;
 
 
     _COMPONENT_RANDOM_ID: number = 0;
@@ -143,7 +153,7 @@ export class ComponentBase<
     _COMPONENT_NAME: string;
     //_COMPONENT_SELECTOR: string | null = null;
     //_COMPONENT_ELEMENT: HTMLElement | null = null;
-    _COMPONENT_CONTENT: ReactiveElement;
+    _COMPONENT_CONTENT!: ReactiveElement;
     //_COMPONENT_SLOTS: any[] = [];
 
     _unsubscribeDirection: any;
@@ -201,10 +211,15 @@ export class ComponentBase<
 
     connectedCallback() {
         this.set("directionRtl", AppConfig.get("directionRtl"));
+        // this._unsubscribeDirection =
+        //     AppConfig.subscribe("directionRtl", (value: any) => {
+        //         this.set("directionRtl", value);
+        //     });
         this._unsubscribeDirection =
-            AppConfig.subscribe("directionRtl", (value: any) => {
-                this.set("directionRtl", value);
-            });
+            Observable.computed(( dir) => {
+                this.set("directionRtl", dir);
+            }, [ AppConfig.observable("directionRtl")], this.getScope());
+
     }
 
     #getReadyUserConfigAndDefaultConfig(config: Record<string, any>): IComponentProp<TProp>[] {
@@ -213,7 +228,7 @@ export class ComponentBase<
 
             Object.keys(props).forEach(key => {
                 const itemProp = props[key];
-                if (itemProp.hasOwnProperty("prop")) {
+                if (itemProp && itemProp.hasOwnProperty("prop")) {
                     const propName = itemProp.prop;
 
                     let exist = false;
@@ -224,7 +239,8 @@ export class ComponentBase<
                     } else {
                         if (this._COMPONENT_TEMPLATES != null) {
                             Object.keys(this._COMPONENT_TEMPLATES).forEach(templateName => {
-                                const data = this._COMPONENT_TEMPLATES[templateName];
+                                const data = this._COMPONENT_TEMPLATES[templateName as keyof typeof this._COMPONENT_TEMPLATES];
+                                if (!data) return;
                                 const reference = data.reference;
                                 if (reference?.prop == propName && data.hasOwnProperty("value")) {
                                     value = data.value;
@@ -238,7 +254,7 @@ export class ComponentBase<
                         value = itemProp.default;
                     }
 
-                    props[key].value = value;
+                    itemProp.value = value;
                     if (Observable.isObservable(value)){
                         this._COMPONENT_PROPS_BIND[propName] = value;
                     }
@@ -248,7 +264,7 @@ export class ComponentBase<
                 }
             })
         }
-        return props;
+        return Object.values(props);
     }
 
 
@@ -256,7 +272,7 @@ export class ComponentBase<
     // GET Ready ==> _COMPONENT_METHODS
     //--------------------------------------------------
     #getReadyComponentMethods(methods: Record<string, ComponentCallBackType<any , any>>) {
-        for (const keyMethod: ComponentMethodKeys<TMethods> in this._COMPONENT_METHODS){
+        for (const keyMethod in this._COMPONENT_METHODS){
             for (const methodName in  methods){
                 const fn = methods[keyMethod];
                 if (keyMethod == methodName && fn != null && typeof fn === "function"){
@@ -279,7 +295,7 @@ export class ComponentBase<
         this._renderScope.dispose();
         this._renderScope = new Scope();
 
-        this._COMPONENT_CONTENT = this.executeSchemaPart(GOG_ComponentBasicConfigs_Component_parts.Component.name);
+        this._COMPONENT_CONTENT = this.executeSchemaPart(GOG_ComponentBasicConfigs_Component_parts.Component.name)!;
 
         const selector = this.get(GOG_ComponentBasicProps_Component.selector);
         if (selector){
@@ -303,12 +319,12 @@ export class ComponentBase<
     //--------------------------------------------------
     // Template Reader
     //--------------------------------------------------
-    executeSchemaPart(partName , extra=null) {
+    executeSchemaPart(partName: string, extra: any = null) {
         let result = null;
 
         if (this._COMPONENT_SCHEMA ){
             Object.keys(this._COMPONENT_SCHEMA).forEach(key=> {
-                const itemPart = this._COMPONENT_SCHEMA[key];
+                const itemPart = this._COMPONENT_SCHEMA[key as keyof typeof this._COMPONENT_SCHEMA];
                 if (itemPart && itemPart.hasOwnProperty("part") && itemPart.part == partName){
                     if (itemPart.hasOwnProperty("props")){
                         const props  = itemPart.props;
@@ -333,7 +349,7 @@ export class ComponentBase<
         return result;
     }
 
-    getSchemaPropsInPart(props){
+    getSchemaPropsInPart(props: IComponentProp<any>[]){
         let resultExp: Record<string, Observable<any>>  = {};
         for (const param of props) {
             if (param != null && param.hasOwnProperty("prop")) {
@@ -345,17 +361,22 @@ export class ComponentBase<
 
 
     getReactiveElement() {
-        return this._COMPONENT_CONTENT.getReactiveElement();
+        if (this._COMPONENT_CONTENT && typeof this._COMPONENT_CONTENT.getReactiveElement === 'function') {
+            return this._COMPONENT_CONTENT.getReactiveElement();
+        }
+        return this._COMPONENT_CONTENT;
     }
     getElement() {
-        return this._COMPONENT_CONTENT.getElement();
+        if (this._COMPONENT_CONTENT && typeof this._COMPONENT_CONTENT.getElement === 'function') {
+            return this._COMPONENT_CONTENT.getElement();
+        }
+        return this._COMPONENT_CONTENT;
     }
 
     //--------------------------------------------------
     // Prop
     //--------------------------------------------------
     set(propName: string, propValue: any) {
-        //console.log(propName)
         if (this._COMPONENT_PROPS_BIND.hasOwnProperty(propName)) {
             this._COMPONENT_PROPS_BIND[propName].set(propValue);
         }
@@ -377,7 +398,7 @@ export class ComponentBase<
         return this._renderScope;
     }
 
-    getPartId(partName) : string{
+    getPartId(partName: string) : string{
         return `__component-${this._COMPONENT_NAME}__${partName}__${this._COMPONENT_RANDOM_ID}`
     }
 

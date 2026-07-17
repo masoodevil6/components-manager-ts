@@ -709,18 +709,18 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
 
 
     _MAIN_ELEMENT;
-    _LIST_ELEMENTS =            [];
-    _KEY_ID =                   "id";
-    _KEY_ELEMENT_BORDER =       "el_border";
-    _KEY_ELEMENT_PLACE_HOLDER = "el_place_holder";
-    _KEY_ELEMENT_PIN =          "el_pin";
+    _LIST_ELEMENTS =               [];
+    _KEY_ID =                     "id";
+    _KEY_ELEMENT_BORDER =         "el_border";
+    _KEY_ELEMENT_PLACE_HOLDER =   "el_place_holder";
+    _KEY_ELEMENT_PIN =            "el_pin";
 
-    _DRAG_ELEMENT_ID_ACTIVE =    null;
-    _dragHoveredId =             new Observable<number | null>(null)
+    _DRAG_ELEMENT_ID_ACTIVE =      null;
+    _dragHoveredId =  new Observable<number | null>(null)
 
-    _dragStartTimer=             null;
-    _dragStartY=                 null;
-    _dragStarted=                null;
+    _dragStartTimer=               null;
+    _dragStartY=                   null;
+    _dragStarted=                  null;
 
     _onMouseMove;
     _onMouseUp;

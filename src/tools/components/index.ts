@@ -1,5 +1,6 @@
 
  import {ComponentMessages} from "./ComponentMessages";
+ import {ComponentValidate} from "./ComponentValidate";
  import {ComponentErrorIsEmpty} from "./ComponentErrorIsEmpty";
 
  import {ComponentLabel} from "./ComponentLabel";
@@ -20,16 +21,36 @@
  import {ComponentCollapse} from "./ComponentCollapse";
  import {ComponentTabs} from "./ComponentTabs";
 
+ import {ComponentInput} from "./ComponentInput";
+ import {ComponentInputPrice} from "./ComponentInputPrice";
  import {ComponentInputListSelector} from "./ComponentInputListSelector";
  import {ComponentInputCheckBox} from "./ComponentInputCheckBox";
  import {ComponentInputAgreementCheckBox} from "./ComponentInputAgreementCheckBox";
+ import {ComponentInputRadioBox} from "./ComponentInputRadioBox";
+ import {ComponentInputFile} from "./ComponentInputFile";
+import {ComponentInputPassword} from "./ComponentInputPassword";
+import {ComponentInputEmail} from "./ComponentInputEmail";
+import {ComponentInputPhone} from "./ComponentInputPhone";
 
  import {ComponentElementPosition} from "./ComponentElementPosition";
  import {ComponentDraggableOrdersY} from "./ComponentDraggableOrdersY";
+ import {ComponentListSelectedScroller} from "./ComponentListSelectedScroller";
 
+ import {ComponentWindow} from "./ComponentWindow";
+ import {ComponentWindowConfirm} from "./ComponentWindowConfirm";
+
+ import {ComponentLoading} from "./ComponentLoading";
+ import {ComponentWebCode} from "./ComponentWebCode";
+
+ import {ComponentSidebar} from "./ComponentSidebar";
+
+
+
+ import {ComponentMouseScroller} from "./ComponentMouseScroller";
 
 export const ToolsComponents = {
     ComponentMessages ,
+    ComponentValidate ,
     ComponentErrorIsEmpty ,
 
     ComponentLabel ,
@@ -49,11 +70,28 @@ export const ToolsComponents = {
     ComponentCollapse ,
     ComponentTabs ,
 
+    ComponentInput ,
+    ComponentInputPrice ,
     ComponentInputListSelector ,
     ComponentInputCheckBox ,
     ComponentInputAgreementCheckBox ,
+    ComponentInputRadioBox ,
+    ComponentInputFile ,
+    ComponentInputPassword ,
+    ComponentInputEmail ,
+    ComponentInputPhone ,
 
     ComponentElementPosition ,
     ComponentDraggableOrdersY ,
+    ComponentListSelectedScroller ,
+
+    ComponentWindow ,
+    ComponentWindowConfirm ,
+
+    ComponentLoading ,
+    ComponentWebCode ,
+
+    ComponentSidebar ,
+    ComponentMouseScroller ,
 
 }

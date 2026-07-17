@@ -52,6 +52,8 @@ export const ComponentElementPositionProps = {
     prop_positionWidth :                  "prop_positionWidth" ,
     prop_positionHeight :                 "prop_positionHeight" ,
 
+    prop_positionBackgroundColor :        "prop_positionBackgroundColor" ,
+
     prop_positionType :                   "prop_positionType" ,
     prop_positionTop :                    "prop_positionTop" ,
     prop_positionBottom :                 "prop_positionBottom" ,
@@ -95,6 +97,11 @@ const ComponentElementPositionConfigs  =  {
         [ComponentElementPositionProps.prop_positionHeight] : {
             name:                        ComponentElementPositionProps.prop_positionHeight,
             value:                       GOG_SetValue<SizeUnit | SizeCalc | null>(SizeUnit(200 , UNITS.PEXEL)),
+        } ,
+
+        [ComponentElementPositionProps.prop_positionBackgroundColor] : {
+            name:                        ComponentElementPositionProps.prop_positionBackgroundColor,
+            value:                       GOG_SetValue<Color | null>( null ),
         } ,
 
         [ComponentElementPositionProps.prop_positionType]:{
@@ -218,6 +225,13 @@ export abstract class ComponentElementPositionBase extends ComponentBase<
                 description:                                      Language.translate("components.element_position.props.prop_positionHeight.description"),
             } ,
 
+            [ComponentElementPositionConfigs.keys.prop_positionBackgroundColor.name]: {
+                prop:                                             ComponentElementPositionConfigs.keys.prop_positionBackgroundColor.name,
+                default:                                          ComponentElementPositionConfigs.keys.prop_positionBackgroundColor.value,
+                title:                                            Language.translate("components.element_position.props.prop_positionBackgroundColor.title"),
+                description:                                      Language.translate("components.element_position.props.prop_positionBackgroundColor.description"),
+            } ,
+
             [ComponentElementPositionConfigs.keys.prop_positionType.name]: {
                 prop:                                             ComponentElementPositionConfigs.keys.prop_positionType.name,
                 default:                                          ComponentElementPositionConfigs.keys.prop_positionType.value,
@@ -295,6 +309,8 @@ export abstract class ComponentElementPositionBase extends ComponentBase<
                 this._COMPONENT_PATTERN[ComponentElementPositionConfigs.keys.prop_positionStyles.name] ,
                 this._COMPONENT_PATTERN[ComponentElementPositionConfigs.keys.prop_positionWidth.name] ,
                 this._COMPONENT_PATTERN[ComponentElementPositionConfigs.keys.prop_positionHeight.name] ,
+
+                this._COMPONENT_PATTERN[ComponentElementPositionConfigs.keys.prop_positionBackgroundColor.name] ,
 
                 this._COMPONENT_PATTERN[ComponentElementPositionConfigs.keys.prop_positionType.name] ,
                 this._COMPONENT_PATTERN[ComponentElementPositionConfigs.keys.prop_positionTop.name] ,
@@ -414,6 +430,8 @@ export class ComponentElementPosition extends ComponentElementPositionBase {
             const prop_positionWidth =           data[ComponentElementPositionConfigs.keys.prop_positionWidth.name];
             const prop_positionHeight =          data[ComponentElementPositionConfigs.keys.prop_positionHeight.name];
 
+            const prop_positionBackgroundColor = data[ComponentElementPositionConfigs.keys.prop_positionBackgroundColor.name];
+
             const prop_positionType =            data[ComponentElementPositionConfigs.keys.prop_positionType.name];
             const prop_positionTop =             data[ComponentElementPositionConfigs.keys.prop_positionTop.name];
             const prop_positionBottom =          data[ComponentElementPositionConfigs.keys.prop_positionBottom.name];
@@ -442,6 +460,8 @@ export class ComponentElementPosition extends ComponentElementPositionBase {
 
                     transform:        prop_positionTranslate ,
                     "z-index":        prop_positionZIndex ,
+
+                    backgroundColor:  prop_positionBackgroundColor ,
 
                     top:              prop_positionTop ,
                     bottom:           prop_positionBottom ,

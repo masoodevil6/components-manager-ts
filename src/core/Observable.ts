@@ -1,5 +1,13 @@
 type Subscriber<T> = (value: T) => void;
 type Mapping<T, U> = ((value: T) => U) | { [key: string]: U | Observable<U>; default?: U | Observable<U> };
+type DisposeFm = () => void;
+
+
+type ChooseMap<TKey extends PropertyKey, TResult> = {
+    [K in TKey]?: () => TResult;
+} & {
+    else?: () => TResult;
+};
 
 export class Scope{
     private disposables: (() => void)[] = [];
@@ -70,6 +78,45 @@ export class Observable<T> {
         this._notify();
     }
 
+    /*update(fn: (current: T, observable: Observable<T>) => T): void {
+        this.set(fn(this._value, this));
+    }*/
+
+    update<TMap extends Record<string, Observable<any>>>(
+        fn: (
+            current: T,
+            observable: Observable<T>,
+            values: {
+                [K in keyof TMap]: TMap[K] extends Observable<infer U> ? U : never;
+            }
+        ) => T,
+        observables: TMap
+    ): void {
+
+        const values = {} as any;
+
+        for (const key in observables) {
+            values[key] = observables[key].get();
+        }
+
+        this.set(
+            fn(this._value, this, values)
+        );
+
+    }
+
+    /*duplicate(scope?: Scope): Observable<T> {
+        const derived = new Observable(this.get());
+
+        const unsub = this.subscribe(v => {
+            derived.set(v);
+        });
+
+        this._bindToScope(unsub, scope);
+
+        return derived;
+    }*/
+
     subscribe(fn: Subscriber<T> , scope?: Scope): () => void {
         this._subscribers.add(fn);
 
@@ -115,27 +162,23 @@ export class Observable<T> {
         return derived;
     }
 
-    mapArray<U>(
-        mapper: (
-            item: T extends (infer R)[] ? R : never ,
-            index: number
-        ) => U ,
+    mapArray<U, R>(
+        mapper: (item: R, index: number) => U,
         scope?: Scope
     ): Observable<U[]>{
-
-        const initial = (this.get() as any[]).map((item , index) => mapper(item , index));
+        const initial = (this.get() as R[]).map((item, index) => mapper(item, index));
         const derived = new Observable(initial);
 
         const unsub = this.subscribe(arr => {
-            derived.set(arr.map( (item , index) => mapper(item, index)))
+            derived.set((arr as R[]).map((item, index) => mapper(item, index)))
         })
 
-        this._bindToScope(unsub , scope)
+        this._bindToScope(unsub, scope)
 
         return derived;
     }
 
-    static computed(fn , observables , scope?: Scope){
+    static computed<T>(fn: (...args: any[]) => T, observables: Observable<any>[], scope?: Scope): Observable<T>{
         const getValues = () => observables.map(o => o.get());
         const derived = new Observable(fn(...getValues()));
 
@@ -154,13 +197,72 @@ export class Observable<T> {
         return derived;
     }
 
+
+
+    static conditionSwitch<TKey extends PropertyKey, TResult>(
+        observable: Observable<TKey>,
+        map: ChooseMap<TKey, TResult>,
+        scope?: Scope
+    ): Observable<TResult | null> {
+
+        const evaluate = (): TResult | null => {
+
+            const value = observable.get();
+
+            if (value != null && value in map) {
+                return map[value]!();
+            }
+
+            return map.else ? map.else() : null;
+        };
+
+        const derived = new Observable<TResult | null>(evaluate());
+
+        const unsub = observable.subscribe(() => {
+            derived.set(evaluate());
+        });
+
+        scope?.track(unsub);
+
+        return derived;
+    }
+
+    static conditionWhen<T, TResult>(
+        observable: Observable<T>,
+        condition: (value: T) => boolean,
+        onTrue: () => TResult,
+        onFalse?: () => TResult,
+        scope?: Scope
+    ): Observable<TResult | null> {
+
+        const evaluate = (): TResult | null => {
+
+            if (condition(observable.get())) {
+                return onTrue();
+            }
+
+            return onFalse ? onFalse() : null;
+        };
+
+        const derived = new Observable<TResult | null>(evaluate());
+
+        const unsub = observable.subscribe(() => {
+            derived.set(evaluate());
+        });
+
+        scope?.track(unsub);
+
+        return derived;
+    }
+
+
     private _mapValue<U>(value: T, mapping: Mapping<T, U>): U {
         if (typeof mapping === 'function') {
             return mapping(value);
         } else if (typeof mapping === 'object' && mapping !== null) {
 
-            const hasKey = value in mapping;
-            const mapped = hasKey ? mapping[value] : mapping.default;
+            const hasKey = (value as string | number | symbol) in mapping;
+            const mapped = hasKey ? mapping[value as string] : mapping.default;
 
             if (mapped === null || mapped === undefined){
                 return this._unwrapObservable(mapping.default as any);

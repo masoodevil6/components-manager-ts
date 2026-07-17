@@ -31,11 +31,13 @@ export class ToolsCss {
             [Z_INDEXES.basic] :           1,
             [Z_INDEXES.menu_main] :       2,
             [Z_INDEXES.icon_attach] :     3,
-            [Z_INDEXES.tools] :           4,
-            [Z_INDEXES.tools_btn]  :      5,
-            [Z_INDEXES.tools_position] :  6,
 
-            [Z_INDEXES.new_page]  :       10,
+            [Z_INDEXES.tools_blur] :      10,
+            [Z_INDEXES.tools] :           11,
+            [Z_INDEXES.tools_btn]  :      12,
+            [Z_INDEXES.tools_position] :  13,
+
+            [Z_INDEXES.new_page]  :       21,
 
             [Z_INDEXES.notify]  :         80,
 
@@ -64,7 +66,8 @@ export class ToolsCss {
     }
 
     static getIconSize(sizeName: SizeKey|Observable<SizeKey>, defaultSize = 16): number {
-        return this.STANDARDS.SIZES[sizeName]?.icon ?? defaultSize
+        const key = (Observable.isObservable(sizeName) ? sizeName.get() : sizeName) as SizeKey;
+        return this.STANDARDS.SIZES[key]?.icon ?? defaultSize
     }
 
     static getScreenWidth(element: Window | null = null): SizeKey | "" {

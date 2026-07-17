@@ -60,6 +60,8 @@ import { IconClip } from './IconClip'
 import { IconStatus } from './IconStatus'
 
 import { IconClose } from './IconClose'
+import { IconMenu } from './IconMenu'
+import { IconResize } from './IconResize'
 import { IconTik } from './IconTik'
 
 import { IconIsFalse } from './IconIsFalse'
@@ -100,6 +102,23 @@ import { IconAccountAdd } from './IconAccountAdd'
 import { IconAccountReference } from './IconAccountReference'
 import { IconDestination } from './IconDestination'
 import { IconAccountGroupAdd } from './IconAccountGroupAdd'
+
+import { IconMoon } from './IconMoon'
+import { IconSun } from './IconSun'
+import { IconZoomIn } from './IconZoomIn'
+import { IconZoomOut } from './IconZoomOut'
+import { IconZoomRefresh } from './IconZoomRefresh'
+
+import { IconLoading } from './IconLoading'
+import { IconLoadingDots } from './IconLoadingDots'
+import { IconLoadingPulse } from './IconLoadingPulse'
+import { IconLoadingBars } from './IconLoadingBars'
+import { IconLoadingOrbit } from './IconLoadingOrbit'
+import { IconWebCode404 } from './IconWebCode404'
+import { IconWebCode500 } from './IconWebCode500'
+import { IconWebCode504 } from './IconWebCode504'
+import { IconWebCode401 } from './IconWebCode401'
+
 import {Observable} from "../../core/Observable";
 import {Brand} from "../../utils/ToolsConsts";
 
@@ -179,6 +198,8 @@ export const ToolsIcons = {
      icon_status :                     IconStatus ,
 
      icon_close :                      IconClose ,
+     icon_menu :                       IconMenu ,
+     icon_resize :                     IconResize ,
      icon_tik :                        IconTik ,
 
      icon_is_false :                   IconIsFalse ,
@@ -219,5 +240,22 @@ export const ToolsIcons = {
      icon_account_reference :          IconAccountReference ,
      icon_account_destination :        IconDestination ,
      icon_account_group_add :          IconAccountGroupAdd ,
+
+     icon_moon :                       IconMoon ,
+     icon_sun :                        IconSun ,
+     icon_zoom_in :                    IconZoomIn ,
+     icon_zoom_out :                   IconZoomOut ,
+     icon_zoom_refresh :               IconZoomRefresh ,
+
+     icon_loading :                    IconLoading ,
+     icon_loading_dots :               IconLoadingDots ,
+     icon_loading_pulse :              IconLoadingPulse ,
+     icon_loading_bars :               IconLoadingBars ,
+     icon_loading_orbit :              IconLoadingOrbit ,
+
+     icon_web_code_404 :               IconWebCode404 ,
+     icon_web_code_500 :               IconWebCode500 ,
+     icon_web_code_504 :               IconWebCode504 ,
+     icon_web_code_401 :               IconWebCode401 ,
 
 }

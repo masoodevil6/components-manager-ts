@@ -79,7 +79,7 @@ export class TestsPage implements ITemplate{
                     "row" , "p-0" , "m-0"
                 ],
                 children:[
-                    ReactiveElement.section({
+                    /*ReactiveElement.section({
                         className: [
                             "col-md-3" , "col-12" , "border" , "p-2" ,
                         ],
@@ -96,36 +96,52 @@ export class TestsPage implements ITemplate{
                                 ],
                             }) ,
                         ],
-                    }) ,
+                    }) ,*/
 
 
-                    TOOLS.COMPONENT.ComponentElementPosition.renderExampleComponent() ,
-                    TOOLS.COMPONENT.ComponentDraggableOrdersY.renderExampleComponent() ,
+                    // TOOLS.COMPONENT.ComponentElementPosition.renderExampleComponent() ,
+                    // TOOLS.COMPONENT.ComponentDraggableOrdersY.renderExampleComponent() ,
+                    // TOOLS.COMPONENT.ComponentListSelectedScroller.renderExampleComponent() ,
+                    //
+                    // TOOLS.COMPONENT.ComponentMessages.renderExampleComponent() ,
+                    // TOOLS.COMPONENT.ComponentErrorIsEmpty.renderExampleComponent() ,
+                    //
+                    //
+                    // TOOLS.COMPONENT.ComponentIcon.renderExampleComponent() ,
+                    //
+                    // TOOLS.COMPONENT.ComponentBorder.renderExampleComponent() ,
+                    //
+                    // TOOLS.COMPONENT.ComponentRecyclerView.renderExampleComponent() ,
+                    //
+                    // TOOLS.COMPONENT.ComponentFloatMenu.renderExampleComponent() ,
+                    // TOOLS.COMPONENT.ComponentPositionMenu.renderExampleComponent() ,
+                    //
+                    // TOOLS.COMPONENT.ComponentTooltipDescription.renderExampleComponent() ,
+                    //
+                    // TOOLS.COMPONENT.ComponentButton.renderExampleComponent() ,
+                    // TOOLS.COMPONENT.ComponentLabel.renderExampleComponent() ,
+                    //
+                    // TOOLS.COMPONENT.ComponentCollapse.renderExampleComponent() ,
+                    // TOOLS.COMPONENT.ComponentTabs.renderExampleComponent() ,
+                    //
+                    // TOOLS.COMPONENT.ComponentInputListSelector.renderExampleComponent() ,
+                    // TOOLS.COMPONENT.ComponentInputCheckBox.renderExampleComponent() ,
+                    // TOOLS.COMPONENT.ComponentInputAgreementCheckBox.renderExampleComponent() ,
+                    // TOOLS.COMPONENT.ComponentInput.renderExampleComponent() ,
+                    // TOOLS.COMPONENT.ComponentValidate.renderExampleComponent() ,
+                    //
+                    // TOOLS.COMPONENT.ComponentWindow.renderExampleComponent() ,
+                    // TOOLS.COMPONENT.ComponentWindowConfirm.renderExampleComponent() ,
+                    // TOOLS.COMPONENT.ComponentLoading.renderExampleComponent() ,
+                    // TOOLS.COMPONENT.ComponentWebCode.renderExampleComponent() ,
 
-                    TOOLS.COMPONENT.ComponentMessages.renderExampleComponent() ,
-                    TOOLS.COMPONENT.ComponentErrorIsEmpty.renderExampleComponent() ,
+                    TOOLS.COMPONENT.ComponentInput.renderExampleComponent() ,
+                    TOOLS.COMPONENT.ComponentInputPassword.renderExampleComponent() ,
+                    TOOLS.COMPONENT.ComponentInputEmail.renderExampleComponent() ,
+                    TOOLS.COMPONENT.ComponentInputPhone.renderExampleComponent() ,
 
-
-                    TOOLS.COMPONENT.ComponentIcon.renderExampleComponent() ,
-
-                    TOOLS.COMPONENT.ComponentBorder.renderExampleComponent() ,
-
-                    TOOLS.COMPONENT.ComponentRecyclerView.renderExampleComponent() ,
-
-                    TOOLS.COMPONENT.ComponentFloatMenu.renderExampleComponent() ,
-                    TOOLS.COMPONENT.ComponentPositionMenu.renderExampleComponent() ,
-
-                    TOOLS.COMPONENT.ComponentTooltipDescription.renderExampleComponent() ,
-
-                    TOOLS.COMPONENT.ComponentButton.renderExampleComponent() ,
-                    TOOLS.COMPONENT.ComponentLabel.renderExampleComponent() ,
-
-                    TOOLS.COMPONENT.ComponentCollapse.renderExampleComponent() ,
-                    TOOLS.COMPONENT.ComponentTabs.renderExampleComponent() ,
-
-                    TOOLS.COMPONENT.ComponentInputListSelector.renderExampleComponent() ,
-                    TOOLS.COMPONENT.ComponentInputCheckBox.renderExampleComponent() ,
-                    TOOLS.COMPONENT.ComponentInputAgreementCheckBox.renderExampleComponent() ,
+                    TOOLS.COMPONENT.ComponentMouseScroller.renderExampleComponent() ,
+                    TOOLS.COMPONENT.ComponentSidebar.renderExampleComponent() ,
                 ]
             })
 

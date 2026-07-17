@@ -27,6 +27,7 @@
     "vitest": "^4.0.18"
   },
   "dependencies": {
+    "jalaali-js": "^2.0.0",
     "mitt": "^3.0.1",
     "nanoid": "^5.1.6"
   }

@@ -1,25 +1,17 @@
-import {GOG_SetValue, GOG_ValueOf} from "../ComponentBase";
+import {GOG_SetValue, GOG_ValueOf, ComponentBase, IComponentProp} from "../ComponentBase";
 import {Language} from "../Language";
 import {fa} from "../../langs/Fa";
-import {Color, COLORS_GRAD, COLORS_MAIN, IconsType, SizeCalc, SIZES, SizeUnit, UNITS} from "../../utils/ToolsConsts";
-import {
-    ComponentLabel_Methods_CLICK_ComponentArgs,
-    ComponentLabel_Methods_CLICK_DataArgs,
-     ComponentLabelMethodsType, ComponentLabelPropsType,
-} from "../../tools/components/ComponentLabel";
+import {CalcSizeUnitVar, Color, COLORS_GRAD, COLORS_MAIN, CssColorVar, IconsType, SizeCalc, SIZES, SizeUnit, SizeUnitVar, UNITS} from "../../utils/ToolsConsts";
 import {ToolsIcons} from "../../tools/icons";
 import {ReactiveElement} from "../ReactiveElement";
 import {ToolsComponents} from "../../tools/components";
 import {AppConfig} from "../AppConfig";
-import {
-    ComponentInputCheckBoxConfigs,
-    ComponentInputCheckBoxProps
-} from "../../tools/components/ComponentInputCheckBox";
 import {ToolsCss} from "../../utils/ToolsCss";
+import {ComponentAttrsDefault} from "./ConnectorComponent";
 
 
 
-function GOG_ComponentBasicConfigs_checkExecutePart(context ,partName ,replace=true){
+function GOG_ComponentBasicConfigs_checkExecutePart(context: any, partName: string | null, replace: boolean = true){
     let child = context.executeSchemaPart(partName);
     if(!child && replace){
         child = context.renderContentComponent()
@@ -27,7 +19,7 @@ function GOG_ComponentBasicConfigs_checkExecutePart(context ,partName ,replace=t
     return child
 }
 
-export function GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault) : ReactiveElement{
+export function GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault: ComponentAttrsDefault) : ReactiveElement{
     return ReactiveElement.part(  "section" ,{
         attrs: {
             ...attrsDefault
@@ -77,7 +69,7 @@ export const GOG_ComponentBasicConfigs_Component_parts = {
     } ,
 } as const
 
-export function GOG_ComponentBasicConfigs_Component_Pattern(ctx){
+export function GOG_ComponentBasicConfigs_Component_Pattern(ctx: ComponentBase<any, any, any, any>){
     return {
         [GOG_ComponentBasicConfigs_Component_keys.append.name]: {
             prop:                                             GOG_ComponentBasicConfigs_Component_keys.append.name,
@@ -106,22 +98,25 @@ export function GOG_ComponentBasicConfigs_Component_Pattern(ctx){
     }
 };
 
-export function GOG_ComponentBasicConfigs_Component_Schema(ctx){
+export function GOG_ComponentBasicConfigs_Component_Schema(ctx: ComponentBase<any, any, any, any>){
+    const classListProp = ctx._COMPONENT_PATTERN?.[GOG_ComponentBasicConfigs_Component_keys.classList.name];
+    const stylesProp = ctx._COMPONENT_PATTERN?.[GOG_ComponentBasicConfigs_Component_keys.styles.name];
+    
     return {
-        [GOG_ComponentBasicConfigs_Component_parts.Component.name]: {
+        Component: {
             part:                                             GOG_ComponentBasicConfigs_Component_parts.Component.name ,
             method:                                           GOG_ComponentBasicConfigs_Component_render ,
             title:                                            Language.translate("components.public.schema.component.title"),
             description:                                      Language.translate("components.public.schema.component.description"),
             props:                                            [
-                ctx._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_keys.classList.name] ,
-                ctx._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_keys.styles.name] ,
-            ] ,
+                classListProp ,
+                stylesProp ,
+            ].filter((prop): prop is IComponentProp<any> => prop !== undefined) ,
         } ,
     }
 }
 
-export function GOG_ComponentBasicConfigs_Component_render(attrsDefault , data , extra) : ReactiveElement{
+export function GOG_ComponentBasicConfigs_Component_render(this: ComponentBase<any, any, any, any>, attrsDefault: ComponentAttrsDefault, data: any, extra: any) : ReactiveElement{
     if (data != null) {
 
         const rtl = AppConfig.observable("directionRtl")
@@ -192,7 +187,7 @@ export const GOG_ComponentBasicConfigs_Component_Structure_parts = {
     } ,
 } as const
 
-export function GOG_ComponentBasicConfigs_Component_Structure_Pattern(ctx){
+export function GOG_ComponentBasicConfigs_Component_Structure_Pattern(ctx: ComponentBase<any, any, any, any>){
     return {
         [GOG_ComponentBasicConfigs_Component_Structure_keys.prop_structureClass.name]: {
             prop:                                             GOG_ComponentBasicConfigs_Component_Structure_keys.prop_structureClass.name,
@@ -215,23 +210,27 @@ export function GOG_ComponentBasicConfigs_Component_Structure_Pattern(ctx){
     }
 };
 
-export function GOG_ComponentBasicConfigs_Component_Structure_Schema(ctx){
+export function GOG_ComponentBasicConfigs_Component_Structure_Schema(ctx: ComponentBase<any, any, any, any>){
+    const prop_structureClass = ctx._COMPONENT_PATTERN?.[GOG_ComponentBasicConfigs_Component_Structure_keys.prop_structureClass.name];
+    const prop_structureStyles = ctx._COMPONENT_PATTERN?.[GOG_ComponentBasicConfigs_Component_Structure_keys.prop_structureStyles.name];
+    const prop_show = ctx._COMPONENT_PATTERN?.[GOG_ComponentBasicConfigs_Component_Structure_keys.prop_show.name];
+    
     return {
-        [GOG_ComponentBasicConfigs_Component_Structure_parts.STRUCTURE.name]: {
+        STRUCTURE: {
             part:                                             GOG_ComponentBasicConfigs_Component_Structure_parts.STRUCTURE.name ,
             method:                                           GOG_ComponentBasicConfigs_Component_Structure_render,
             title:                                            Language.translate("components.public.schema.component_structure.title"),
             description:                                      Language.translate("components.public.schema.component_structure.description"),
             props:                                            [
-                 ctx._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_keys.prop_structureClass.name] ,
-                 ctx._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_keys.prop_structureStyles.name] ,
-                 ctx._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_keys.prop_show.name] ,
-            ] ,
+                 prop_structureClass ,
+                 prop_structureStyles ,
+                 prop_show ,
+            ].filter((prop): prop is IComponentProp<any> => prop !== undefined) ,
         }
     }
 }
 
-export function GOG_ComponentBasicConfigs_Component_Structure_render(attrsDefault , data , extra) : ReactiveElement{
+export function GOG_ComponentBasicConfigs_Component_Structure_render(this: ComponentBase<any, any, any, any>, attrsDefault: ComponentAttrsDefault, data: any, extra: any) : ReactiveElement{
 
     if (data != null) {
         const prop_show =            data.prop_show;
@@ -290,15 +289,15 @@ export const GOG_ComponentBasicConfigs_Component_Structure_FormInput_parts = {
     } ,
 } as const
 
-export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Pattern(ctx){
+export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Pattern(ctx: ComponentBase<any, any, any, any>){
     return {
 
     }
 };
 
-export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Schema(ctx){
+export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Schema(ctx: ComponentBase<any, any, any, any>){
     return {
-        [GOG_ComponentBasicConfigs_Component_Structure_FormInput_parts.FormInput.name]: {
+        FormInput: {
             part:                                             GOG_ComponentBasicConfigs_Component_Structure_FormInput_parts.FormInput.name ,
             method:                                           GOG_ComponentBasicConfigs_Component_Structure_FormInput_render,
             title:                                            Language.translate("components.public.schema.component_structure_formInput.title"),
@@ -310,7 +309,7 @@ export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Schema(c
     }
 }
 
-export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_render(attrsDefault , data , extra) : ReactiveElement{
+export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_render(this: ComponentBase<any, any, any, any>, attrsDefault: ComponentAttrsDefault, data: any, extra: any) : ReactiveElement{
 
     if (data != null) {
 
@@ -373,7 +372,7 @@ export const GOG_ComponentBasicConfigs_Component_Structure_FormInput_value_parts
     } ,
 } as const
 
-export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_Pattern(ctx){
+export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_Pattern(ctx: ComponentBase<any, any, any, any>){
     return {
         [GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_name.name]: {
             prop:                                             GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_name.name,
@@ -396,9 +395,9 @@ export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_Pa
     }
 };
 
-export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_Schema(ctx){
+export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_Schema(ctx: ComponentBase<any, any, any, any>){
     return {
-        [GOG_ComponentBasicConfigs_Component_Structure_FormInput_value_parts.Value.name]: {
+        Value: {
             part:                                             GOG_ComponentBasicConfigs_Component_Structure_FormInput_value_parts.Value.name ,
             method:                                           GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_render,
             title:                                            Language.translate("components.public.schema.component_structure_formInput_value.title"),
@@ -407,12 +406,12 @@ export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_Sc
                 ctx._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_name.name] ,
                 ctx._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name] ,
                 ctx._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name] ,
-            ] ,
+            ].filter((prop): prop is IComponentProp<any> => prop !== undefined) ,
         }
     }
 }
 
-export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_render(attrsDefault , data , extra) : ReactiveElement{
+export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_render(attrsDefault: ComponentAttrsDefault, data: any, extra: any) : ReactiveElement{
 
     if (data != null) {
 
@@ -430,7 +429,7 @@ export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_re
                 attrsBind: {
                     name:   prop_name ,
                     value:  prop_value.map(
-                        v=>{
+                        (v: string | boolean | number | null | Object)=>{
                             if (typeof v == "string"){
 
                             }
@@ -507,7 +506,7 @@ export const GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_keys 
 
     [GOG_ComponentBasicProps_Component_Structure_FormInput_Label.prop_labelBackground]: {
         name:               GOG_ComponentBasicProps_Component_Structure_FormInput_Label.prop_labelBackground,
-        value:              GOG_SetValue<Color | null>( Color(COLORS_MAIN.PRIMARY , COLORS_GRAD.GRADE_1)),
+        value:              GOG_SetValue<CssColorVar | null>( Color(COLORS_MAIN.PRIMARY , COLORS_GRAD.GRADE_1)),
     } ,
     [GOG_ComponentBasicProps_Component_Structure_FormInput_Label.prop_labelRadius]: {
         name:               GOG_ComponentBasicProps_Component_Structure_FormInput_Label.prop_labelRadius,
@@ -515,7 +514,7 @@ export const GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_keys 
     } ,
     [GOG_ComponentBasicProps_Component_Structure_FormInput_Label.prop_labelMinWidth]: {
         name:               GOG_ComponentBasicProps_Component_Structure_FormInput_Label.prop_labelMinWidth,
-        value:              GOG_SetValue<SizeUnit | SizeCalc |null>(null),
+        value:              GOG_SetValue<SizeUnitVar | CalcSizeUnitVar |null>(null),
     } ,
 
     [GOG_ComponentBasicProps_Component_Structure_FormInput_Label.prop_labelTitle]: {
@@ -536,7 +535,7 @@ export const GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_keys 
     } ,
     [GOG_ComponentBasicProps_Component_Structure_FormInput_Label.prop_labelColor]: {
         name:               GOG_ComponentBasicProps_Component_Structure_FormInput_Label.prop_labelColor,
-        value:              GOG_SetValue<Color | null>( Color(COLORS_MAIN.SHAN , COLORS_GRAD.GRADE_1 )),
+        value:              GOG_SetValue<CssColorVar | null>( Color(COLORS_MAIN.SHAN , COLORS_GRAD.GRADE_1 )),
     } ,
 
 
@@ -550,15 +549,15 @@ export const GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_keys 
     } ,
     [GOG_ComponentBasicProps_Component_Structure_FormInput_Label.prop_labelTooltipBackground]: {
         name:               GOG_ComponentBasicProps_Component_Structure_FormInput_Label.prop_labelTooltipBackground,
-        value:              GOG_SetValue<Color | null>( Color(COLORS_MAIN.SECONDARY , COLORS_GRAD.GRADE_1 )),
+        value:              GOG_SetValue<CssColorVar | null>( Color(COLORS_MAIN.SECONDARY , COLORS_GRAD.GRADE_1 )),
     } ,
     [GOG_ComponentBasicProps_Component_Structure_FormInput_Label.prop_labelTooltipColor]: {
         name:               GOG_ComponentBasicProps_Component_Structure_FormInput_Label.prop_labelTooltipColor,
-        value:              GOG_SetValue<Color | null>( Color(COLORS_MAIN.SECONDARY , COLORS_GRAD.GRADE_1 )),
+        value:              GOG_SetValue<CssColorVar | null>( Color(COLORS_MAIN.SECONDARY , COLORS_GRAD.GRADE_1 )),
     } ,
     [GOG_ComponentBasicProps_Component_Structure_FormInput_Label.prop_labelTooltipPosition]: {
         name:               GOG_ComponentBasicProps_Component_Structure_FormInput_Label.prop_labelTooltipPosition,
-        value:              GOG_SetValue<SizeUnit | SizeCalc | null>( SizeUnit(2.5 , UNITS.PERCENT)) ,
+        value:              GOG_SetValue<SizeUnitVar | CalcSizeUnitVar | null>( SizeUnit(2.5 , UNITS.PERCENT)) ,
     } ,
     [GOG_ComponentBasicProps_Component_Structure_FormInput_Label.prop_labelTooltipDirection]: {
         name:                GOG_ComponentBasicProps_Component_Structure_FormInput_Label.prop_labelTooltipDirection,
@@ -572,7 +571,7 @@ export const GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_parts
     } ,
 } as const
 
-export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_Pattern(ctx){
+export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_Pattern(ctx: ComponentBase<any, any, any, any>){
     return {
         [GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_keys.prop_labelShow.name]: {
             prop:                                             GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_keys.prop_labelShow.name,
@@ -671,9 +670,9 @@ export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_Pa
     }
 };
 
-export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_Schema(ctx){
+export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_Schema(ctx: ComponentBase<any, any, any, any>){
     return {
-        [GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_parts.LABEL.name]: {
+        LABEL: {
             part:                                             GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_parts.LABEL.name ,
             method:                                           GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_render,
             title:                                            Language.translate("components.public.schema.label.title"),
@@ -694,12 +693,12 @@ export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_Sc
                 ctx._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_keys.prop_labelTooltipColor.name] ,
                 ctx._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_keys.prop_labelTooltipPosition.name] ,
                 ctx._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_keys.prop_labelTooltipDirection.name] ,
-            ] ,
+            ].filter((prop): prop is IComponentProp<any> => prop !== undefined) ,
         }
     }
 }
 
-export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_render(attrsDefault , data , extra) : ReactiveElement{
+export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_render(attrsDefault: ComponentAttrsDefault, data: any, extra: any) : ReactiveElement{
     if (data != null) {
 
         const prop_labelShow =           data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_keys.prop_labelShow.name];
@@ -707,22 +706,106 @@ export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_re
 
         if (prop_labelShow && prop_labelTitle.get()){
             return  new ToolsComponents.ComponentLabel(
-                <ComponentLabelPropsType>{
+                <any>{
                     classList: []  ,
                     styles: {}  ,
                     ...data
                 } ,
-                <ComponentLabelMethodsType>{
-                    fn_onClickLabel:  function (event, dataArgs:ComponentLabel_Methods_CLICK_DataArgs, componentArgs:ComponentLabel_Methods_CLICK_ComponentArgs){
-                        dataArgs.isDisable = this.get(GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name , false);
-                        if (typeof this.pr_onClickLabel == "function") this.pr_onClickLabel(event , dataArgs , componentArgs)
-                    }.bind(this)
+                <any>{
+                    fn_onClickLabel: function(this: ComponentBase<any, any, any, any>, event: Event, dataArgs:any, componentArgs:any) {
+                        (dataArgs as any).IS_DISABLE = this.get(GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name);
+                        if (typeof (this as any).pr_onClickLabel == "function") (this as any).pr_onClickLabel(event , dataArgs , componentArgs)
+                    }
                 }
             ).getReactiveElement();
         }
 
     }
 
+    return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
+}
+
+
+
+
+
+
+
+/// ----------------------------------------------------
+/// PART: component > Structure > FromInput > icon
+/// ----------------------------------------------------
+export const GOG_ComponentBasicProps_Component_Structure_FormInput_Icon = {
+
+} as const
+
+export const GOG_ComponentBasicConfigs_Component_Structure_FormInput_Icon_keys = {
+
+} as const
+
+export const GOG_ComponentBasicConfigs_Component_Structure_FormInput_Icon_parts = {
+
+} as const
+
+export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Icon_Pattern(ctx: ComponentBase<any, any, any, any>){
+    return {
+
+    }
+};
+
+export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Icon_Schema(ctx: ComponentBase<any, any, any, any>){
+    return {
+
+    }
+}
+
+export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Icon_render(attrsDefault: ComponentAttrsDefault, data: any, extra: any) : ReactiveElement{
+
+    if (data != null) {
+
+    }
+
+    return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
+}
+
+
+
+
+
+
+
+
+/// ----------------------------------------------------
+/// PART: component > Structure > FromInput > input
+/// ----------------------------------------------------
+export const GOG_ComponentBasicProps_Component_Structure_FormInput_Input = {
+
+} as const
+
+export const GOG_ComponentBasicConfigs_Component_Structure_FormInput_Input_keys = {
+
+} as const
+
+export const GOG_ComponentBasicConfigs_Component_Structure_FormInput_Input_parts = {
+
+} as const
+
+export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Input_Pattern(ctx: ComponentBase<any, any, any, any>){
+    return {
+
+    }
+};
+
+export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Input_Schema(ctx: ComponentBase<any, any, any, any>){
+    return {
+
+    }
+}
+
+export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Input_render(attrsDefault: ComponentAttrsDefault, data: any, extra: any) : ReactiveElement{
+
+    if (data != null) {
+
+    }
 
     return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
 }
