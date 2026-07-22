@@ -696,6 +696,10 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
             this._COMPONENT_POSITION = new ComponentElementPosition(
                 <ComponentElementPositionPropsType>{
                     classList:               []  ,
+                    styles: {
+                        "min-width" : "350px" ,
+                        "display" : "block"
+                    },
 
                     prop_show :              Observable.computed(
                         (floatShowControlWithSelf , floatIsShow) => {

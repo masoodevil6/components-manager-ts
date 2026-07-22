@@ -513,4 +513,5 @@ export class ReactiveElement {
     static li(o?: Options) { return new ReactiveElement("li", o) }
     static img(o?: Options) { return new ReactiveElement("img", o) }
     static i(o?: Options) { return new ReactiveElement("i", o) }
+    static style(o?: Options) { return new ReactiveElement("style", o) }
 }

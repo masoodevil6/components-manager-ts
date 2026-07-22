@@ -31,6 +31,10 @@
 import {ComponentInputPassword} from "./ComponentInputPassword";
 import {ComponentInputEmail} from "./ComponentInputEmail";
 import {ComponentInputPhone} from "./ComponentInputPhone";
+import {ComponentTimerDown} from "./ComponentTimerDown";
+import {ComponentInputOtp} from "./ComponentInputOtp";
+import {ComponentInputSize} from "./ComponentInputSize";
+import {ComponentInputColor} from "./ComponentInputColor";
 
  import {ComponentElementPosition} from "./ComponentElementPosition";
  import {ComponentDraggableOrdersY} from "./ComponentDraggableOrdersY";
@@ -80,6 +84,10 @@ export const ToolsComponents = {
     ComponentInputPassword ,
     ComponentInputEmail ,
     ComponentInputPhone ,
+    ComponentTimerDown ,
+    ComponentInputOtp ,
+    ComponentInputSize ,
+    ComponentInputColor ,
 
     ComponentElementPosition ,
     ComponentDraggableOrdersY ,

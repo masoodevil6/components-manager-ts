@@ -114,7 +114,7 @@ export class TestsPage implements ITemplate{
                     // TOOLS.COMPONENT.ComponentRecyclerView.renderExampleComponent() ,
                     //
                     // TOOLS.COMPONENT.ComponentFloatMenu.renderExampleComponent() ,
-                    // TOOLS.COMPONENT.ComponentPositionMenu.renderExampleComponent() ,
+                    //TOOLS.COMPONENT.ComponentPositionMenu.renderExampleComponent() ,
                     //
                     // TOOLS.COMPONENT.ComponentTooltipDescription.renderExampleComponent() ,
                     //
@@ -140,8 +140,16 @@ export class TestsPage implements ITemplate{
                     TOOLS.COMPONENT.ComponentInputEmail.renderExampleComponent() ,
                     TOOLS.COMPONENT.ComponentInputPhone.renderExampleComponent() ,
 
-                    TOOLS.COMPONENT.ComponentMouseScroller.renderExampleComponent() ,
-                    TOOLS.COMPONENT.ComponentSidebar.renderExampleComponent() ,
+                    TOOLS.COMPONENT.ComponentTimerDown.renderExampleComponent() ,
+
+                    TOOLS.COMPONENT.ComponentInputOtp.renderExampleComponent() ,
+
+                    TOOLS.COMPONENT.ComponentInputSize.renderExampleComponent() ,
+
+                    TOOLS.COMPONENT.ComponentInputColor.renderExampleComponent() ,
+
+                    //TOOLS.COMPONENT.ComponentMouseScroller.renderExampleComponent() ,
+                    //TOOLS.COMPONENT.ComponentSidebar.renderExampleComponent() ,
                 ]
             })
 

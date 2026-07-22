@@ -10,6 +10,7 @@ import {
     GOG_ValueOf
 } from "../../core/ComponentBase";
 import {ReactiveElement} from "../../core/ReactiveElement";
+import {Observable} from "../../core/Observable";
 import {ToolsCss} from "../../utils/ToolsCss";
 import {ToolsComponents} from "./index";
 import {ComponentCallBackType} from "../../core/ComponentBase";
@@ -440,28 +441,42 @@ export class ComponentLabel extends ComponentLabelBase {
             const prop_labelTooltipPosition =       data[ComponentLabelConfigs.keys.prop_labelTooltipPosition.name];
             const prop_labelTooltipDirection =       data[ComponentLabelConfigs.keys.prop_labelTooltipDirection.name];
 
-            if (prop_labelTooltipDescription.get()){
+            const descValue  = prop_labelTooltipDescription instanceof Observable ? prop_labelTooltipDescription : new Observable(prop_labelTooltipDescription);
+            const iconValue  = prop_labelTooltipIcon instanceof Observable ? prop_labelTooltipIcon : new Observable(prop_labelTooltipIcon);
+            const bgValue    = prop_labelTooltipBackground instanceof Observable ? prop_labelTooltipBackground : new Observable(prop_labelTooltipBackground);
+            const colorValue = prop_labelTooltipColor instanceof Observable ? prop_labelTooltipColor : new Observable(prop_labelTooltipColor);
+            const posValue   = prop_labelTooltipPosition instanceof Observable ? prop_labelTooltipPosition : new Observable(prop_labelTooltipPosition);
+            const dirValue   = prop_labelTooltipDirection instanceof Observable ? prop_labelTooltipDirection : new Observable(prop_labelTooltipDirection);
 
-                return new ComponentTooltipDescription(
-                    <ComponentTooltipDescriptionPropsType>{
-                        classList:                []  ,
-                        styles:                   {}  ,
+            return ReactiveElement.part("section", {
+                attrs: { ...attrsDefault },
+                children: Observable.computed(
+                    (desc, icon, bg, color, pos, dir) => {
+                        if (desc == null) return null;
 
-                        prop_description:         prop_labelTooltipDescription ,
-                        prop_icon:                prop_labelTooltipIcon ,
-                        prop_iconClass:           [] ,
-                        prop_iconStyles:          {top: "0"} ,
-                        prop_iconPosition:        prop_labelTooltipPosition ,
-                        prop_direction:           prop_labelTooltipDirection ,
-                        prop_borderBackground:    prop_labelTooltipBackground,
-                        prop_borderColor:         prop_labelTooltipColor
+                        const tooltipEl = new ToolsComponents.ComponentTooltipDescription(
+                            {
+                                classList:             [] ,
+                                styles:                {} ,
 
+                                prop_description:      desc ,
+                                prop_icon:             icon ,
+                                prop_iconClass:        [] ,
+                                prop_iconStyles:       {top: "0"} ,
+                                prop_iconPosition:     pos ,
+                                prop_direction:        dir ,
+                                prop_borderBackground: bg ,
+                                prop_borderColor:      color ,
+                            } as unknown as ComponentTooltipDescriptionPropsType,
+                            <ComponentTooltipDescriptionMethodsType>{}
+                        );
+
+                        return tooltipEl.getReactiveElement();
                     },
-                    <ComponentTooltipDescriptionMethodsType>{
-
-                    }
-                ).getReactiveElement();
-            }
+                    [descValue, iconValue, bgValue, colorValue, posValue, dirValue],
+                    this.getScope()
+                ),
+            });
 
         }
         return ReactiveElement.part(  "section" ,{

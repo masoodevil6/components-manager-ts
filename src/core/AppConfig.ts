@@ -38,6 +38,16 @@ export class AppConfig {
 
 
 
+    static get_directionRtl() : Observable<any> {
+        return this.observable("directionRtl");
+    }
+    static get_language() : Observable<any> {
+        return this.observable("language");
+    }
+    static get_sizeName() : Observable<any> {
+        return this.observable("sizeName");
+    }
+
 
     //static _subscribers = new Map();
 

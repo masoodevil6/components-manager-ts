@@ -96,7 +96,8 @@ const ComponentElementPositionConfigs  =  {
         } ,
         [ComponentElementPositionProps.prop_positionHeight] : {
             name:                        ComponentElementPositionProps.prop_positionHeight,
-            value:                       GOG_SetValue<SizeUnit | SizeCalc | null>(SizeUnit(200 , UNITS.PEXEL)),
+           // value:                       GOG_SetValue<SizeUnit | SizeCalc | null>(SizeUnit(200 , UNITS.PEXEL)),
+            value:                       GOG_SetValue<SizeUnit | SizeCalc | null>(null),
         } ,
 
         [ComponentElementPositionProps.prop_positionBackgroundColor] : {

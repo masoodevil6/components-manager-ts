@@ -42,13 +42,9 @@ import {
     GOG_ComponentBasicProps_Component_Structure, GOG_ComponentBasicProps_Component_Structure_FormInput,
 } from "../../core/component/SetupComponent";
 import {
-    ComponentBorder, ComponentBorder_ArrowTypes,
-    ComponentBorder_BorderTypes,
+    ComponentBorder,
     ComponentBorder_Methods_CLICK_BORDER_ComponentArgs, ComponentBorder_Methods_CLICK_BORDER_DataArgs,
-    ComponentBorder_Methods_MOUSE_DOWN_BORDER_DataArgs,
-    ComponentBorder_Methods_MOUSE_MOVE_BORDER_DataArgs, ComponentBorder_Methods_MOUSE_UP_BORDER_DataArgs,
     ComponentBorderMethodsType,
-    ComponentBorderProps,
     ComponentBorderPropsType
 } from "./ComponentBorder";
 import {Observable} from "../../core/Observable";
@@ -60,20 +56,12 @@ import {
 } from "./ComponentSidebar";
 import {ToolsIcons} from "../icons";
 import {
-    ComponentButton, ComponentButton_Methods_CLICK_ComponentArgs,
-    ComponentButton_Methods_CLICK_DataArgs,
-    ComponentButtonMethodsType,
-    ComponentButtonPropsType
-} from "./ComponentButton";
-import {
     ComponentIcon, ComponentIcon_Methods_CLICK_ComponentArgs,
     ComponentIcon_Methods_HOVER_DataArgs,
-    ComponentIconMethodsType, ComponentIconProps,
+    ComponentIconMethodsType,
     ComponentIconPropsType
 } from "./ComponentIcon";
 import {ComponentElementPositionMethodsType, ComponentElementPositionPropsType} from "./ComponentElementPosition";
-import {ComponentInputCheckBoxConfigs} from "./ComponentInputCheckBox";
-import {fa} from "../../langs/Fa";
 
 
 
@@ -572,7 +560,8 @@ export abstract class ComponentMouseScrollerBase extends ComponentBase<
             title:              Language.translate("components.mouse_scroller.schema.border_content.title") ,
             description:        Language.translate("components.mouse_scroller.schema.border_content.description") ,
             props: [
-
+                this._COMPONENT_PATTERN[ComponentMouseScrollerConfigs.keys.prop_scrollLeft.name] ,
+                this._COMPONENT_PATTERN[ComponentMouseScrollerConfigs.keys.prop_scrollTop.name] ,
             ]
         } ,
         [ComponentMouseScrollerConfigs.schemas.BORDER_CONTENT_VIEW.name]: {
@@ -792,34 +781,21 @@ export abstract class ComponentMouseScrollerBase extends ComponentBase<
 
 export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
-    _DEFAULT_OPACITY = null;
+    _DEFAULT_OPACITY = new Observable(100);
 
     _ELEMENT_SCROLLER = null;
-    _ELEMENT_VIEW = null;
+    _ELEMENT_CONTAINER = null;
 
-    _SCROLL_CENTER_X = 0 ;
-    _SCROLL_CENTER_Y = 0;
-
-    _START_X=null;
-    _START_Y=null;
 
     _START_CLIENT_X = 0;
     _START_CLIENT_Y = 0;
-    _SCROLL_TOP=null;
-    _SCROLL_LEFT=null;
-    _bound_scrollerMove= null;
-    _bound_scrollerUp= null;
+    _SCROLL_LEFT = 0;
+    _SCROLL_TOP = 0;
 
+    _SCROLL_IS_DOWN = new Observable(false);
+    _POINTER_CAPTURED = false;
+    _DRAG_THRESHOLD = 5;
 
-    _IS_DOWN= new Observable(false);
-
-
-    dragState = {
-        dragging:      new Observable(false),
-        sourceIndex:   new Observable(-1),
-        targetIndex:   new Observable(-1),
-        mouseY:        new Observable(0),
-    }
 
     /* ---------------------------------------------
        SETUP
@@ -979,51 +955,76 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
     private template_render_border_content(attrsDefault , data , extra) : ReactiveElement {
 
         if (data != null) {
+            //const prop_scrollLeft =   data[ComponentMouseScrollerConfigs.keys.prop_scrollLeft.name] ?? new Observable(0);
+            //const prop_scrollTop =    data[ComponentMouseScrollerConfigs.keys.prop_scrollTop.name]  ?? new Observable(0);
 
-            return ReactiveElement.part(
+            this._ELEMENT_CONTAINER = ReactiveElement.part(
                 "section" ,
                 {
                     attrs: {
                         ...attrsDefault
                     },
+                    className: [
+                        "position-relative"
+                    ] ,
                     styles: {
                         "height" :                  SizeUnit(100 , UNITS.PERCENT)  ,
                         "overflow" :               "hidden" ,
                         "cursor":                  "all-scroll",
+                        "scroll-behavior":         "smooth" ,
                     } ,
-                    className: [
-                        "position-relative"
-                    ] ,
+                    
                     on: {
                         wheel: function(event){
                             this.fn_scrollerWheel(event);
                         }.bind(this) ,
 
-                        mousedown: function(event){
+                        pointerdown: function(event){
                             this.fn_scrollerMouseDown(event);
                         }.bind(this) ,
 
-                        mousemove: function(event){
+                        pointermove: function(event){
                             this.fn_scrollerMouseMove(event);
                         }.bind(this) ,
 
-                        mouseleave: function(event){
-                            this.fn_scrollerMouseLeave(event);
-                        }.bind(this) ,
-
-                        mouseup: function(event){
+                        pointerup: function(event){
                             this.fn_scrollerMouseUp(event);
                         }.bind(this) ,
+
+                        pointerleave: function(event){
+                          //  this.fn_scrollerMouseLeave(event);
+                        }.bind(this) ,
+
                     },
                     children: [
-                        this.executeSchemaPart(ComponentMouseScrollerConfigs.schemas.BORDER_CONTENT_VIEW.name) ,
+                        ReactiveElement.div({
+                            className: [
+                                "ms-scroller-hidden"
+                            ],
+                            styles: {
+                                width:    "100%",
+                                height:   "100%",
+                                overflow: "scroll",
+                                "scrollbar-width":   "none",
+                                "-ms-overflow-style": "none",
+                            },
+                            propsBind: {
+                                scrollTop:   this._COMPONENT_PROPS_BIND?.[ComponentMouseScrollerConfigs.keys.prop_scrollTop.name]  ?? new Observable(0),
+                                scrollLeft:  this._COMPONENT_PROPS_BIND?.[ComponentMouseScrollerConfigs.keys.prop_scrollLeft.name] ?? new Observable(0),
+                            } ,
+                             children: [
+                                 this.executeSchemaPart(ComponentMouseScrollerConfigs.schemas.BORDER_CONTENT_VIEW.name) ,
+                             ]
+                        }),
                         this.executeSchemaPart(ComponentMouseScrollerConfigs.schemas.BORDER_CONTENT_SIDEBARTOP.name) ,
                         this.executeSchemaPart(ComponentMouseScrollerConfigs.schemas.BORDER_CONTENT_SIDEBARBOTTOM.name) ,
                         this.executeSchemaPart(ComponentMouseScrollerConfigs.schemas.BORDER_CONTENT_SIDEBAR.name) ,
                         this.executeSchemaPart(ComponentMouseScrollerConfigs.schemas.BORDER_CONTENT_TOOLS.name) ,
                         this.executeSchemaPart(ComponentMouseScrollerConfigs.schemas.BORDER_CONTENT_POSITIONZOOM.name) ,
                     ]
-                })
+                });
+
+            return this._ELEMENT_CONTAINER;
 
         }
 
@@ -1040,25 +1041,22 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
         if (data != null) {
             const prop_content=       data[ComponentMouseScrollerConfigs.keys.prop_content.name];
             const prop_zoom =         data[ComponentMouseScrollerConfigs.keys.prop_zoom.name];
-            const prop_scrollLeft =   data[ComponentMouseScrollerConfigs.keys.prop_scrollLeft.name];
-            const prop_scrollTop =    data[ComponentMouseScrollerConfigs.keys.prop_scrollTop.name];
 
-            this._ELEMENT_VIEW = prop_content;
             this._ELEMENT_SCROLLER = ReactiveElement.part(
                 "section" ,
                 {
                     attrs: {
-                        ...attrsDefault
+                        ...attrsDefault,
                     },
                     styles: {
-                        width:          "100%" ,
-                        height:         "100%" ,
-                        zIndex:         "0" ,
-                        position:       "relative" ,
-                        "transition" :  "transform 500ms" ,
-                        "overflow":     "unset",
-                        "user-select":  "none",
-
+                        width:              "100%" ,
+                        height:             "100%" ,
+                        zIndex:             "0" ,
+                        position:           "relative" ,
+                        "transition" :      "transform 500ms" ,
+                        "transform-origin": "0 0" ,
+                        "overflow":         "unset",
+                        "user-select":      "none",
                     },
                     stylesBind: {
                         transform: Observable.computed(( zoomNumber) =>
@@ -1067,18 +1065,11 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
                             },
                             [prop_zoom ],
                             this.getScope()
-                        )
+                        ) ,
                     } ,
-                    on: {
-
-                    },
                     children: [
                         ReactiveElement.div({
-                            propsBind: {
-                                scrollTop:  prop_scrollTop,
-                                scrollLeft: prop_scrollLeft
-                            } ,
-                            children: this._ELEMENT_VIEW
+                            children: prop_content
                         })
 
                     ]
@@ -1156,7 +1147,9 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
                     prop_sidebarBtnOpenHas:      prop_sideBarBtnOpenHas ,
                     prop_sidebarIsOpen:          true ,
 
-                    prop_show:                   prop_sideBarHas ,
+                    prop_show:   Observable.computed(( sideBarHas , isDown) => {
+                        return sideBarHas && !isDown
+                    }, [ prop_sideBarHas , this._SCROLL_IS_DOWN], this.getScope()),
 
                     prop_sidebarDirection: Observable.computed(( dir) => {
                         return dir ?  ComponentSidebar_directionTypes.RTL : ComponentSidebar_directionTypes.LTR
@@ -1215,7 +1208,9 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
                             prop_sideBarTopWidth
                         ], this.getScope()),
 
-                    prop_show:                   prop_sideBarTopHas ,
+                    prop_show:   Observable.computed(( sideBarTopHas , isDown) => {
+                        return sideBarTopHas && !isDown
+                    }, [ prop_sideBarTopHas ,  this._SCROLL_IS_DOWN], this.getScope()),
 
                     prop_blurHas:                false ,
                     prop_sidebarBtnOpenHas:      false ,
@@ -1277,7 +1272,10 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
                             prop_sideBarBottomWidth
                         ], this.getScope()),
 
-                    prop_show:                   prop_sideBarBottomHas ,
+                    prop_show:   Observable.computed(( sideBarBottomHas , isDown) => {
+                        return sideBarBottomHas && !isDown
+                    }, [ prop_sideBarBottomHas ,  this._SCROLL_IS_DOWN], this.getScope()),
+
                     prop_blurHas:                false ,
                     prop_sidebarBtnOpenHas:      false ,
                     prop_sidebarIsOpen:          true ,
@@ -1347,6 +1345,10 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
                     prop_positionHeight:   SizeUnit( 30, UNITS.PEXEL) ,
 
                     prop_content:          this.executeSchemaPart(ComponentMouseScrollerConfigs.schemas.BORDER_CONTENT_POSITIONZOOM_BORDER.name) ,
+
+                    prop_show:   Observable.computed((  isDown) => {
+                        return !isDown
+                    }, [ this._SCROLL_IS_DOWN], this.getScope()),
 
                     prop_positionStyles:   Observable.computed((  toolsOpacity) => {
                         let transition = "opacity 500ms, ";
@@ -1477,6 +1479,9 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
                     prop_blurHas:                false ,
                     prop_sidebarBtnOpenHas:      false ,
                     prop_sidebarIsOpen:          true ,
+                    prop_show:   Observable.computed(( isDown) => {
+                        return !isDown
+                    }, [  this._SCROLL_IS_DOWN], this.getScope()),
 
                     prop_sidebarDirection: Observable.computed(( dir) => {
                         return dir ? ComponentSidebar_directionTypes.LTR : ComponentSidebar_directionTypes.RTL
@@ -1786,160 +1791,49 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     private fn_scrollerMouseDown(event){
-        //this._IS_DOWN.set(true);
-
-        //const clientX = event.clientX;
-        //const clientY = event.clientY;
-
-        // if (typeof scroller.setPointerCapture === 'function' && event.pointerId != null) {
-        //     try { scroller.setPointerCapture(event.pointerId); } catch(e){/* ignore */ }
-        // }
-
-       // event.preventDefault();
-
-        // const scroller = this._ELEMENT_SCROLLER?.getElement();
-        // this._IS_DOWN = true;
-        //
-        // // مختصات شروع client
-        // this._START_CLIENT_X = event.clientX;
-        // this._START_CLIENT_Y = event.clientY;
-        //
-        // this._SCROLL_LEFT = scroller.scrollLeft;
-        // this._SCROLL_TOP  = scroller.scrollTop;
-        //
-        // // pointer capture (برای درگ حتی خارج از المنت)
-        // if (typeof scroller.setPointerCapture === 'function' && event.pointerId != null) {
-        //     try { scroller.setPointerCapture(event.pointerId); } catch(e){/* ignore */ }
-        // }
-        //
-        // // listener های document برای move و up
-        // this._bound_scrollerMove = this.fn_scrollerModusMove.bind(this);
-        // this._bound_scrollerUp   = this.fn_scrollerModusUp.bind(this);
-        //
-        // document.addEventListener('pointermove', this._bound_scrollerMove, {passive:false});
-        // document.addEventListener('pointerup', this._bound_scrollerUp);
-        //
-        // document.body.style.cursor = 'grabbing';
-        //
-        // event.preventDefault();
-
-
-        dragState.dragging.set(true);
-        dragState.sourceIndex.set(index);
-
-        document.addEventListener("mousemove", move);
-        document.addEventListener("mouseup", up);
+        this._SCROLL_IS_DOWN.set(true);
+        this._POINTER_CAPTURED = false;
+        this._START_CLIENT_X = event.clientX;
+        this._START_CLIENT_Y = event.clientY;
+        this._SCROLL_LEFT = this._COMPONENT_PROPS_BIND[ComponentMouseScrollerConfigs.keys.prop_scrollLeft.name]?.get() ?? 0;
+        this._SCROLL_TOP  = this._COMPONENT_PROPS_BIND[ComponentMouseScrollerConfigs.keys.prop_scrollTop.name]?.get() ?? 0;
     }
 
     private fn_scrollerMouseMove(event){
+        if (!this._SCROLL_IS_DOWN.get()) return;
+        const dx = event.clientX - this._START_CLIENT_X;
+        const dy = event.clientY - this._START_CLIENT_Y;
 
-        this._COMPONENT_PROPS_BIND[ComponentMouseScrollerConfigs.keys.prop_scrollLeft.name].update(
-            function(scrollLeft, self , {isDown , zoomNumber}){
-                if (!isDown) return;
-                const scroller = this._ELEMENT_SCROLLER?.getElement()
-                const content  = this._ELEMENT_VIEW//?.getElement();
-
-                 const dx = event.clientX - this._START_CLIENT_X;
-
-                 let newLeft = this._SCROLL_LEFT - dx;
-
-                //const contentWidth  = content.offsetWidth * zoomNumber;
-
-                const maxLeft = Math.max(0, newLeft - scroller.clientWidth);
-
-                return  Math.max(0, Math.min(maxLeft, newLeft));
-            }.bind(this) ,
-            {
-                isDown:      this._IS_DOWN ,
-                zoomNumber:  this._COMPONENT_PROPS_BIND[ComponentMouseScrollerConfigs.keys.prop_zoom.name]
+        if (!this._POINTER_CAPTURED && (Math.abs(dx) > this._DRAG_THRESHOLD || Math.abs(dy) > this._DRAG_THRESHOLD)) {
+            this._POINTER_CAPTURED = true;
+            const el = this._ELEMENT_CONTAINER?.getElement();
+            if (el && event.pointerId != null) {
+                try { el.setPointerCapture(event.pointerId); } catch(e) {}
             }
-        );
+        }
 
-        this._COMPONENT_PROPS_BIND[ComponentMouseScrollerConfigs.keys.prop_scrollTop.name].update(
-            function(scrollTop, self , {isDown , zoomNumber}){
-                if (!isDown) return;
-
-                //console.log(scrollTop , isDown)
-
-                const scroller = this._ELEMENT_SCROLLER?.getElement()
-                const content  = this._ELEMENT_VIEW;
-
-                const dy = event.clientY - this._START_CLIENT_Y;
-
-                let newTop  = this._SCROLL_TOP  - dy;
-
-                const contentHeight = content.offsetHeight * zoomNumber;
-
-                const maxTop  = Math.max(0, contentHeight - scroller.clientHeight);
-
-                return Math.max(0, Math.min(maxTop,  newTop));
-            }.bind(this) ,
-            {
-                isDown:      this._IS_DOWN ,
-                zoomNumber:  this._COMPONENT_PROPS_BIND[ComponentMouseScrollerConfigs.keys.prop_zoom.name]
-            }
-        );
-
-        // if (!this._IS_DOWN) return;
-        // event.preventDefault();
-        //
-        // const scroller = this._ELEMENT_SCROLLER?.getElement()
-        // const content  = this._ELEMENT_VIEW;
-        //
-        // if (content != null){
-        //     // فاصله موس از شروع
-        //     const dx = event.clientX - this._START_CLIENT_X;
-        //     const dy = event.clientY - this._START_CLIENT_Y;
-        //
-        //     let newLeft = this._SCROLL_LEFT - dx;
-        //     let newTop  = this._SCROLL_TOP  - dy;
-        //
-        //     // محاسبه max scroll با در نظر گرفتن scale
-        //     const contentWidth  = content.offsetWidth * this._SCALE;
-        //     const contentHeight = content.offsetHeight * this._SCALE;
-        //
-        //     const maxLeft = Math.max(0, contentWidth - scroller.clientWidth);
-        //     const maxTop  = Math.max(0, contentHeight - scroller.clientHeight);
-        //
-        //     // clamp
-        //     newLeft = Math.max(0, Math.min(maxLeft, newLeft));
-        //     newTop  = Math.max(0, Math.min(maxTop,  newTop));
-        //
-        //     scroller.scrollLeft = newLeft ;
-        //     scroller.scrollTop  = newTop  ;
-        // }
-
-    }
-
-    private fn_scrollerMouseUp(event){
-        // if (!this._IS_DOWN) return;
-        // this._IS_DOWN = false;
-        //
-        // const scroller = this._ELEMENT_SCROLLER?.getElement()
-        //
-        // if (typeof scroller.releasePointerCapture === 'function' && event.pointerId != null) {
-        //     try { scroller.releasePointerCapture(event.pointerId); } catch(e){/* ignore */ }
-        // }
-        //
-        // if (this._bound_scrollerMove) {
-        //     document.removeEventListener('pointermove', this._bound_scrollerMove, {passive:false});
-        //     this._bound_scrollerMove = null;
-        // }
-        // if (this._bound_scrollerUp) {
-        //     document.removeEventListener('pointerup', this._bound_scrollerUp);
-        //     this._bound_scrollerUp = null;
-        // }
-        //
-        // document.body.style.cursor = '';
+        if (this._POINTER_CAPTURED) {
+            this._COMPONENT_PROPS_BIND[ComponentMouseScrollerConfigs.keys.prop_scrollLeft.name]?.set(this._SCROLL_LEFT - dx);
+            this._COMPONENT_PROPS_BIND[ComponentMouseScrollerConfigs.keys.prop_scrollTop.name]?.set(this._SCROLL_TOP - dy);
+        }
     }
 
     private fn_scrollerMouseLeave(event){
-        this._IS_DOWN.set(false);
+        this._SCROLL_IS_DOWN.set(false);
     }
 
     private fn_scrollerMouseUp(event){
-        this._IS_DOWN.set(false);
+        this._SCROLL_IS_DOWN.set(false);
+
+        if (this._POINTER_CAPTURED) {
+            this._POINTER_CAPTURED = false;
+            const el = this._ELEMENT_CONTAINER?.getElement();
+            if (el && event.pointerId != null) {
+                try { el.releasePointerCapture(event.pointerId); } catch(e) {}
+            }
+        }
     }
+
 
 
     private fn_scrollerWheel(event){
@@ -1950,14 +1844,13 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
     private fn_scrollerScaleProgress(x , y , zoomStep=null){
 
+        const container = this._ELEMENT_CONTAINER?.getElement();
+        const rect = container?.getBoundingClientRect();
+        const mouseX = rect ? x - rect.left : 0;
+        const mouseY = rect ? y - rect.top : 0;
+
         this._COMPONENT_PROPS_BIND[ComponentMouseScrollerConfigs.keys.prop_zoom.name].update(
-            function(scale, self , {min , max , step}){
-               // const scroller = this._ELEMENT_SCROLLER?.getElement();
-
-                //const rect = scroller.getBoundingClientRect();
-                //const mouseX = x - rect.left;
-                //const mouseY = y - rect.top;
-
+            function(scale, self , {min , max , step , scrollLeft , scrollTop }){
                 let newScale = 1;
                 if (zoomStep != null){
                     newScale = Math.min(Math.max(scale * Math.pow(step, -zoomStep), min), max);
@@ -1965,31 +1858,24 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
                 }
 
                 const scaleRatio = newScale / scale;
-                /*this.call_applyScroll(
-                    (scroller.scrollLeft + mouseX) * scaleRatio - mouseX ,
-                    (scroller.scrollTop + mouseY)  * scaleRatio - mouseY
-                );*/
+
+                const newScrollLeft = (scrollLeft + mouseX) * scaleRatio - mouseX;
+                const newScrollTop  = (scrollTop + mouseY)  * scaleRatio - mouseY;
+
+                this._COMPONENT_PROPS_BIND[ComponentMouseScrollerConfigs.keys.prop_scrollLeft.name]?.set(newScrollLeft);
+                this._COMPONENT_PROPS_BIND[ComponentMouseScrollerConfigs.keys.prop_scrollTop.name]?.set(newScrollTop);
 
                 return newScale;
             }.bind(this) ,
             {
-                min:  this._COMPONENT_PROPS_BIND?.[ComponentMouseScrollerConfigs.keys.prop_zoomMin.name]  || 0.4  ,
-                max:  this._COMPONENT_PROPS_BIND?.[ComponentMouseScrollerConfigs.keys.prop_zoomMax.name]  || 3.0  ,
-                step: this._COMPONENT_PROPS_BIND?.[ComponentMouseScrollerConfigs.keys.prop_zoomStep.name] || 1.0015  ,
+                min:        this._COMPONENT_PROPS_BIND?.[ComponentMouseScrollerConfigs.keys.prop_zoomMin.name]    ?? new Observable(0.4)  ,
+                max:        this._COMPONENT_PROPS_BIND?.[ComponentMouseScrollerConfigs.keys.prop_zoomMax.name]    ?? new Observable(3.0)  ,
+                step:       this._COMPONENT_PROPS_BIND?.[ComponentMouseScrollerConfigs.keys.prop_zoomStep.name]   ?? new Observable(1.0015)  ,
+                scrollLeft: this._COMPONENT_PROPS_BIND?.[ComponentMouseScrollerConfigs.keys.prop_scrollLeft.name] ?? new Observable(0) ,
+                scrollTop:  this._COMPONENT_PROPS_BIND?.[ComponentMouseScrollerConfigs.keys.prop_scrollTop.name]  ?? new Observable(0) ,
             }
         ) ;
     }
-
-
-
-
-
-
-    /*private  call_applyScroll(positionX=null , positionY=null){
-        const scroller = this._ELEMENT_SCROLLER?.getElement();
-        scroller.scrollLeft = positionX != null ? positionX : this._SCROLL_CENTER_X;
-        scroller.scrollTop  = positionY != null ? positionY : this._SCROLL_CENTER_Y;
-    }*/
 
 
 

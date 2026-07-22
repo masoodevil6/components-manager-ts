@@ -166,7 +166,11 @@ const ComponentInputPhoneConfigs = {
         },
         [ComponentInputPhoneProps.prop_icon]: {
             name:               ComponentInputPhoneProps.prop_icon,
-            value:              GOG_SetValue<IconsType | null>(ToolsIcons.icon_phone()),
+            value:              GOG_SetValue<IconsType | null>(null),
+        },
+        [ComponentInputPhoneProps.prop_iconPhone]: {
+            name:               ComponentInputPhoneProps.prop_iconPhone,
+            value:              GOG_SetValue<IconsType | null>(ToolsIcons.icon_phone({})),
         },
         [ComponentInputPhoneProps.prop_hasRules]: {
             name:               ComponentInputPhoneProps.prop_hasRules,
@@ -453,6 +457,12 @@ export abstract class ComponentInputPhoneBase extends ComponentBase<
                 title:                                            Language.translate("components.input.props.prop_icon.title"),
                 description:                                      Language.translate("components.input.props.prop_icon.description"),
             },
+            [ComponentInputPhoneConfigs.keys.prop_iconPhone.name]: {
+                prop:                                             ComponentInputPhoneConfigs.keys.prop_iconPhone.name,
+                default:                                          ComponentInputPhoneConfigs.keys.prop_iconPhone.value,
+                title:                                            Language.translate("components.input.props.prop_icon.title"),
+                description:                                      Language.translate("components.input.props.prop_icon.description"),
+            },
             [ComponentInputPhoneConfigs.keys.prop_inputClass.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_inputClass.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_inputClass.value,
@@ -508,7 +518,6 @@ export abstract class ComponentInputPhoneBase extends ComponentBase<
             title:              Language.translate("components.input.schema.form.title"),
             description:        Language.translate("components.input.schema.form.description"),
             props: [
-                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_icon.name],
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_size.name],
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_backgroundColorForm.name],
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_formBorderRadius.name],
@@ -557,6 +566,7 @@ export abstract class ComponentInputPhoneBase extends ComponentBase<
             description:        Language.translate("components.input.schema.icon.description"),
             props: [
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_icon.name],
+                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_iconPhone.name],
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_size.name],
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_colorIcon.name],
             ]
@@ -757,9 +767,8 @@ export class ComponentInputPhone extends ComponentInputPhoneBase {
     private template_render_form(attrsDefault, data, extra): ReactiveElement {
         if (data != null) {
             const prop_backgroundColorForm = data[ComponentInputPhoneConfigs.keys.prop_backgroundColorForm.name];
-            const prop_formBorderRadius =    data[ComponentInputPhoneConfigs.keys.prop_formBorderRadius.name];
-            const prop_selectWidth =         data[ComponentInputPhoneConfigs.keys.prop_selectWidth.name];
-            const prop_icon =                data[ComponentInputPhoneConfigs.keys.prop_icon.name];
+            const prop_formBorderRadius = data[ComponentInputPhoneConfigs.keys.prop_formBorderRadius.name];
+            const prop_selectWidth = data[ComponentInputPhoneConfigs.keys.prop_selectWidth.name];
 
             const directionRtl = AppConfig.get("directionRtl");
 
@@ -788,30 +797,6 @@ export class ComponentInputPhone extends ComponentInputPhoneBase {
                             ReactiveElement.part("div", {
                                 styles: {
                                     flexShrink: "0",
-                                    //width:  "35px",
-                                    // [directionRtl ? "marginRight" : "marginLeft"]: prop_icon instanceof Observable
-                                    //     ? prop_icon.map((v: any) => v ? "35px" : "0")
-                                    //     : (prop_icon ? "35px" : "0"),
-                                },
-                                stylesBind: {
-                                    width: Observable.computed(
-                                        (icon) => {
-                                            if (icon != null){
-                                                return "35px";
-                                            }
-                                            return null;
-                                        } ,
-                                        [prop_icon] ,
-                                        this.getScope()
-                                    )
-                                } ,
-                                children: [
-                                    this.executeSchemaPart(ComponentInputPhoneConfigs.schemas.ICON.name),
-                                ]
-                            }),
-                            ReactiveElement.part("div", {
-                                styles: {
-                                    flexShrink: "0",
                                     width: prop_selectWidth ?? "140px",
                                 },
                                 children: [
@@ -827,6 +812,7 @@ export class ComponentInputPhone extends ComponentInputPhoneBase {
                                 },
                                 children: [
                                     this.executeSchemaPart(ComponentInputPhoneConfigs.schemas.INPUT.name),
+                                    this.executeSchemaPart(ComponentInputPhoneConfigs.schemas.ICON.name),
                                     this.executeSchemaPart(ComponentInputPhoneConfigs.schemas.ICON_CLEAR.name),
                                 ]
                             }),
@@ -885,16 +871,17 @@ export class ComponentInputPhone extends ComponentInputPhoneBase {
                 },
                 className: ["form-control", "d-block"],
                 styles: {
-                    lineHeight:      `${ToolsCss.getHeightSize(sizeName)}px`,
-                    fontSize:        `${ToolsCss.getFontSize(sizeName)}px`,
-                    outline:         "none",
-                    boxShadow:       "none",
-                    width:           "100%",
-                    paddingTop:      "1px",
-                    paddingBottom:   "1px",
-                    borderWidth:     `${ToolsComponents_BorderWidth[SIZES.M]} !important`,
-                    borderStyle:     "solid",
-                    borderColor:      Color(COLORS_MAIN.PRIMARY , COLORS_GRAD.GRADE_1) ,
+                    lineHeight: `${ToolsCss.getHeightSize(sizeName)}px`,
+                    fontSize: `${ToolsCss.getFontSize(sizeName)}px`,
+                    outline: "none",
+                    boxShadow: "none",
+                    width: "100%",
+                    paddingTop: "1px",
+                    paddingBottom: "1px",
+                    borderWidth: `${ToolsComponents_BorderWidth[SIZES.M]} !important`,
+                    borderStyle: "solid",
+                    borderColor: "var(--primaryColor1) !important",
+                    backgroundColor: "var(--secondaryColor1)",
                     [directionRtl ? "borderTopLeftRadius" : "borderTopRightRadius"]: "0 !important",
                     [directionRtl ? "borderBottomLeftRadius" : "borderBottomRightRadius"]: "0 !important",
                 },
@@ -1011,6 +998,12 @@ export class ComponentInputPhone extends ComponentInputPhoneBase {
                     fontSize: prop_size instanceof Observable
                         ? prop_size.map((s: any) => `${ToolsCss.getFontSize(s ?? SIZES.M)}px`)
                         : `${ToolsCss.getFontSize(prop_size ?? SIZES.M)}px`,
+                    [directionRtl ? "marginRight" : "marginLeft"]: prop_icon instanceof Observable
+                        ? prop_icon.map((v: any) => v ? "35px" : "0")
+                        : (prop_icon ? "35px" : "0"),
+                    width: prop_icon instanceof Observable
+                        ? prop_icon.map((v: any) => v ? "calc(100% - 35px)" : "calc(100% - 35px)")
+                        : (prop_icon ? "calc(100% - 35px)" : "calc(100% - 35px)"),
                     ...(directionRtl
                         ? { borderTopRightRadius: prop_icon instanceof Observable
                                 ? prop_icon.mapBoolean("0 !important", null as any)
@@ -1069,18 +1062,18 @@ export class ComponentInputPhone extends ComponentInputPhoneBase {
     private template_render_icon(attrsDefault, data, extra): ReactiveElement {
         if (data != null) {
             const prop_icon = data[ComponentInputPhoneConfigs.keys.prop_icon.name];
+            const prop_iconPhone = data[ComponentInputPhoneConfigs.keys.prop_iconPhone.name];
             const prop_size = data[ComponentInputPhoneConfigs.keys.prop_size.name];
             const prop_colorIcon = data[ComponentInputPhoneConfigs.keys.prop_colorIcon.name];
 
             const directionRtl = AppConfig.get("directionRtl");
 
+            const iconValue = prop_icon ?? prop_iconPhone;
+
             return ReactiveElement.part("section", {
                 attrs: { ...attrsDefault },
                 children: Observable.computed(
                     (iconVal: any, size: any, colorIcon: any) => {
-
-                        console.log(iconVal)
-
                         if (!iconVal) return null;
 
                         const sizeName = size ?? SIZES.M;
@@ -1136,7 +1129,7 @@ export class ComponentInputPhone extends ComponentInputPhoneBase {
                             <ComponentElementPositionMethodsType>{}
                         ).getReactiveElement();
                     },
-                    [prop_icon , prop_size, prop_colorIcon],
+                    [iconValue instanceof Observable ? iconValue : new Observable(iconValue), prop_size, prop_colorIcon],
                     this.getScope()
                 ),
             });

@@ -82,8 +82,9 @@ export const TranslateUnit = (transitionX: SizeUnitVar, transitionY: SizeUnitVar
 
 
 
-import {IconString} from "../tools/icons/index";
+import {IconString, ToolsIcons} from "../tools/icons/index";
 export type IconsType = IconString //ReturnType<typeof ToolsIcons[keyof typeof ToolsIcons]>;
+export type IconsSourceType = typeof ToolsIcons[keyof typeof ToolsIcons];
 
 
 
