@@ -11,7 +11,7 @@ import {
 } from "../../core/ComponentBase";
 import {ReactiveElement} from "../../core/ReactiveElement";
 import {ToolsCss} from "../../utils/ToolsCss";
-import {ToolsComponents} from "./index";
+import {ComponentIcon} from "./ComponentIcon";
 import {ComponentCallBackType} from "../../core/ComponentBase";
 import {Language} from "../../core/Language";
 import {AppConfig} from "../../core/AppConfig";
@@ -543,7 +543,7 @@ export class ComponentMessages extends ComponentMessagesBase{
 
             const elHeight = ToolsCss.getIconSize(AppConfig.get("sizeNameSmall"));
 
-            return new ToolsComponents.ComponentIcon(
+            return new ComponentIcon(
                 <ComponentIconPropsType>{
                     classList:  [
                         "position-absolute"

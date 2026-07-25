@@ -113,8 +113,8 @@ export class TestsPage implements ITemplate{
                     //
                     // TOOLS.COMPONENT.ComponentRecyclerView.renderExampleComponent() ,
                     //
-                    // TOOLS.COMPONENT.ComponentFloatMenu.renderExampleComponent() ,
-                    //TOOLS.COMPONENT.ComponentPositionMenu.renderExampleComponent() ,
+                     //TOOLS.COMPONENT.ComponentFloatMenu.renderExampleComponent() ,
+                    TOOLS.COMPONENT.ComponentPositionMenu.renderExampleComponent() ,
                     //
                     // TOOLS.COMPONENT.ComponentTooltipDescription.renderExampleComponent() ,
                     //
@@ -124,7 +124,7 @@ export class TestsPage implements ITemplate{
                     // TOOLS.COMPONENT.ComponentCollapse.renderExampleComponent() ,
                     // TOOLS.COMPONENT.ComponentTabs.renderExampleComponent() ,
                     //
-                    // TOOLS.COMPONENT.ComponentInputListSelector.renderExampleComponent() ,
+                    TOOLS.COMPONENT.ComponentInputListSelector.renderExampleComponent() ,
                     // TOOLS.COMPONENT.ComponentInputCheckBox.renderExampleComponent() ,
                     // TOOLS.COMPONENT.ComponentInputAgreementCheckBox.renderExampleComponent() ,
                     // TOOLS.COMPONENT.ComponentInput.renderExampleComponent() ,

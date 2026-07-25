@@ -19,10 +19,10 @@ import {
     Color,
     COLORS_GRAD,
     COLORS_MAIN,
-    IconsType, SizeCalc,
+    IconsType, OPERATION, SizeCalc,
     SIZES, SizesType, SizeUnit,
     ToolsComponents_BorderRadius,
-    ToolsComponents_BorderWidth, UNITS
+    ToolsComponents_BorderWidth, ToolsComponents_MarginWidth, UNITS
 } from "../../utils/ToolsConsts";
 import {TOOLS} from "../tools";
 import {
@@ -31,6 +31,7 @@ import {
     GOG_ComponentBasicConfigs_Component_Pattern,
     GOG_ComponentBasicConfigs_Component_Schema,
     GOG_ComponentBasicConfigs_Component_Structure_FormInput_keys,
+    GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys,
     GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_keys,
     GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_parts,
     GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_Pattern,
@@ -54,7 +55,6 @@ import {
     ComponentIconMethodsType,
     ComponentIconPropsType
 } from "./ComponentIcon";
-import {ComponentMessages_Methods_CLOSE_MESSAGE_DataArgs} from "./ComponentMessages";
 import {ToolsIcons} from "../icons";
 import {
     ComponentInputAgreementCheckBox,
@@ -76,6 +76,14 @@ import {
     ComponentPositionMenuMethodsType,
     ComponentPositionMenuPropsType
 } from "./ComponentPositionMenu";
+import {
+    ComponentListSelectedScroller,
+    ComponentListSelectedScroller_Methods_DELETE_ITEM_ComponentArgs,
+    ComponentListSelectedScroller_Methods_DELETE_ITEM_DataArgs,
+    ComponentListSelectedScrollerMethodsType,
+    ComponentListSelectedScrollerPropsType,
+    propListSelectedScroller_List
+} from "./ComponentListSelectedScroller";
 
 
 
@@ -89,7 +97,25 @@ export const ComponentInputListSelectorProps = {
     ///----------------------
     prop_menuBackgroundColor :            "prop_menuBackgroundColor" ,
     prop_menuBorderColor :                "prop_menuBorderColor" ,
+
+    prop_columns :                        "prop_columns" ,
+    prop_icon :                           "prop_icon" ,
+    prop_showListSelected :               "prop_showListSelected" ,
+    prop_labelShow :                      "prop_labelShow" ,
+    prop_widthBody :                      "prop_widthBody" ,
+    prop_heightBody :                     "prop_heightBody" ,
+    prop_heightItems :                    "prop_heightItems" ,
+    prop_titleAll :                       "prop_titleAll" ,
+    prop_draggable :                      "prop_draggable" ,
+    prop_backgroundColorIcon :            "prop_backgroundColorIcon" ,
+    prop_colorIcon :                      "prop_colorIcon" ,
 } as const;
+
+export type ColumnItem = {
+    id:       string | number;
+    title:    Observable<string> | string | null;
+    selected: boolean;
+};
 
 
 const ComponentInputListSelectorConfigs  =  {
@@ -108,6 +134,51 @@ const ComponentInputListSelectorConfigs  =  {
         [ComponentInputListSelectorProps.prop_menuBorderColor]: {
             name:                ComponentInputListSelectorProps.prop_menuBorderColor,
             value:               GOG_SetValue<Color | null>(   Color(COLORS_MAIN.SHAN , COLORS_GRAD.GRADE_1 )),
+        } ,
+
+        [ComponentInputListSelectorProps.prop_columns]: {
+            name:                ComponentInputListSelectorProps.prop_columns,
+            value:               GOG_SetValue<ColumnItem[]>( [] ),
+        } ,
+        [ComponentInputListSelectorProps.prop_icon]: {
+            name:                ComponentInputListSelectorProps.prop_icon,
+            value:               GOG_SetValue<IconsType | null>( ToolsIcons.icon_select_columns({size: SIZES.L}) ),
+        } ,
+        [ComponentInputListSelectorProps.prop_showListSelected]: {
+            name:                ComponentInputListSelectorProps.prop_showListSelected,
+            value:               GOG_SetValue<boolean>( true ),
+        } ,
+        [ComponentInputListSelectorProps.prop_labelShow]: {
+            name:                ComponentInputListSelectorProps.prop_labelShow,
+            value:               GOG_SetValue<boolean>( true ),
+        } ,
+        [ComponentInputListSelectorProps.prop_widthBody]: {
+            name:                ComponentInputListSelectorProps.prop_widthBody,
+            value:               GOG_SetValue<SizeUnit>( SizeUnit(300 , UNITS.PEXEL) ),
+        } ,
+        [ComponentInputListSelectorProps.prop_heightBody]: {
+            name:                ComponentInputListSelectorProps.prop_heightBody,
+            value:               GOG_SetValue<SizeUnit>( SizeUnit(300 , UNITS.PEXEL) ),
+        } ,
+        [ComponentInputListSelectorProps.prop_heightItems]: {
+            name:                ComponentInputListSelectorProps.prop_heightItems,
+            value:               GOG_SetValue<number>( 45 ),
+        } ,
+        [ComponentInputListSelectorProps.prop_titleAll]: {
+            name:                ComponentInputListSelectorProps.prop_titleAll,
+            value:               GOG_SetValue<Observable<string> | string>( "Select All" ),
+        } ,
+        [ComponentInputListSelectorProps.prop_draggable]: {
+            name:                ComponentInputListSelectorProps.prop_draggable,
+            value:               GOG_SetValue<boolean>( true ),
+        } ,
+        [ComponentInputListSelectorProps.prop_backgroundColorIcon]: {
+            name:                ComponentInputListSelectorProps.prop_backgroundColorIcon,
+            value:               GOG_SetValue<Color | null>( null ),
+        } ,
+        [ComponentInputListSelectorProps.prop_colorIcon]: {
+            name:                ComponentInputListSelectorProps.prop_colorIcon,
+            value:               GOG_SetValue<Color | null>( null ),
         } ,
     } ,
     schemas:   {
@@ -137,7 +208,49 @@ const ComponentInputListSelectorConfigs  =  {
 
     } ,
     methods: {
-
+        CLICK_ICON: {
+            name:                      "fn_onClickIcon" ,
+            dataArgs: {},
+            componentArgs: {}
+        },
+        CLICK_ACCEPT: {
+            name:                      "fn_onClickAccept" ,
+            dataArgs: {},
+            componentArgs: {
+                COLUMNS : {
+                    name:                 "COLUMNS"
+                }
+            }
+        },
+        CLICK_REJECT: {
+            name:                      "fn_onClickReject" ,
+            dataArgs: {},
+            componentArgs: {}
+        },
+        CALLBACK_COL_SELECTOR: {
+            name:                      "fn_onCallbackColSelector" ,
+            dataArgs: {},
+            componentArgs: {
+                ORDER : {
+                    name:                 "ORDER"
+                } ,
+                IS_COMPLETE : {
+                    name:                 "IS_COMPLETE"
+                }
+            }
+        },
+        DELETE_SELECTED_ITEM: {
+            name:                      "fn_onDeleteSelectedItem" ,
+            dataArgs: {},
+            componentArgs: {
+                LIST : {
+                    name:                 "LIST"
+                } ,
+                VALUE : {
+                    name:                 "VALUE"
+                }
+            }
+        },
     }
 } as const
 
@@ -146,8 +259,27 @@ export type ComponentInputListSelectorPropsType =        GOG_ExtractNameValue<ty
 export type ComponentInputListSelectorSchemaType =       GOG_ExtractName<typeof ComponentInputListSelectorConfigs.schemas>
 export type ComponentInputListSelectorTemplatesType =    GOG_ExtractName<typeof ComponentInputListSelectorConfigs.templates>
 
-export type ComponentInputListSelectorMethodsType = {
+export type ComponentInputListSelector_Methods_CLICK_ICON_ComponentArgs =       GOG_ExtractName<typeof ComponentInputListSelectorConfigs.methods.CLICK_ICON.componentArgs>
+export type ComponentInputListSelector_Methods_CLICK_ICON_DataArgs =          GOG_ExtractNameValue<typeof ComponentInputListSelectorConfigs.methods.CLICK_ICON.dataArgs>
 
+export type ComponentInputListSelector_Methods_CLICK_ACCEPT_ComponentArgs =   GOG_ExtractName<typeof ComponentInputListSelectorConfigs.methods.CLICK_ACCEPT.componentArgs>
+export type ComponentInputListSelector_Methods_CLICK_ACCEPT_DataArgs =      GOG_ExtractNameValue<typeof ComponentInputListSelectorConfigs.methods.CLICK_ACCEPT.dataArgs>
+
+export type ComponentInputListSelector_Methods_CLICK_REJECT_ComponentArgs =   GOG_ExtractName<typeof ComponentInputListSelectorConfigs.methods.CLICK_REJECT.componentArgs>
+export type ComponentInputListSelector_Methods_CLICK_REJECT_DataArgs =      GOG_ExtractNameValue<typeof ComponentInputListSelectorConfigs.methods.CLICK_REJECT.dataArgs>
+
+export type ComponentInputListSelector_Methods_CALLBACK_COL_SELECTOR_ComponentArgs = GOG_ExtractName<typeof ComponentInputListSelectorConfigs.methods.CALLBACK_COL_SELECTOR.componentArgs>
+export type ComponentInputListSelector_Methods_CALLBACK_COL_SELECTOR_DataArgs =    GOG_ExtractNameValue<typeof ComponentInputListSelectorConfigs.methods.CALLBACK_COL_SELECTOR.dataArgs>
+
+export type ComponentInputListSelector_Methods_DELETE_SELECTED_ITEM_ComponentArgs = GOG_ExtractName<typeof ComponentInputListSelectorConfigs.methods.DELETE_SELECTED_ITEM.componentArgs>
+export type ComponentInputListSelector_Methods_DELETE_SELECTED_ITEM_DataArgs =    GOG_ExtractNameValue<typeof ComponentInputListSelectorConfigs.methods.DELETE_SELECTED_ITEM.dataArgs>
+
+export type ComponentInputListSelectorMethodsType = {
+    [ComponentInputListSelectorConfigs.methods.CLICK_ICON.name]:                ComponentCallBackType<ComponentInputListSelector_Methods_CLICK_ICON_ComponentArgs , ComponentInputListSelector_Methods_CLICK_ICON_DataArgs>
+    [ComponentInputListSelectorConfigs.methods.CLICK_ACCEPT.name]:             ComponentCallBackType<ComponentInputListSelector_Methods_CLICK_ACCEPT_ComponentArgs , ComponentInputListSelector_Methods_CLICK_ACCEPT_DataArgs>
+    [ComponentInputListSelectorConfigs.methods.CLICK_REJECT.name]:             ComponentCallBackType<ComponentInputListSelector_Methods_CLICK_REJECT_ComponentArgs , ComponentInputListSelector_Methods_CLICK_REJECT_DataArgs>
+    [ComponentInputListSelectorConfigs.methods.CALLBACK_COL_SELECTOR.name]:     ComponentCallBackType<ComponentInputListSelector_Methods_CALLBACK_COL_SELECTOR_ComponentArgs , ComponentInputListSelector_Methods_CALLBACK_COL_SELECTOR_DataArgs>
+    [ComponentInputListSelectorConfigs.methods.DELETE_SELECTED_ITEM.name]:     ComponentCallBackType<ComponentInputListSelector_Methods_DELETE_SELECTED_ITEM_ComponentArgs , ComponentInputListSelector_Methods_DELETE_SELECTED_ITEM_DataArgs>
 }
 
 
@@ -180,6 +312,72 @@ export abstract class ComponentInputListSelectorBase extends ComponentBase<
             title:                                            Language.translate("components.input_list_selector.props.prop_menuBorderColor.title"),
             description:                                      Language.translate("components.input_list_selector.props.prop_menuBorderColor.description"),
         } ,
+        [ComponentInputListSelectorConfigs.keys.prop_columns.name]: {
+            prop:                                             ComponentInputListSelectorConfigs.keys.prop_columns.name,
+            default:                                          ComponentInputListSelectorConfigs.keys.prop_columns.value,
+            title:                                            Language.translate("components.input_list_selector.props.prop_columns.title"),
+            description:                                      Language.translate("components.input_list_selector.props.prop_columns.description"),
+        } ,
+        [ComponentInputListSelectorConfigs.keys.prop_icon.name]: {
+            prop:                                             ComponentInputListSelectorConfigs.keys.prop_icon.name,
+            default:                                          ComponentInputListSelectorConfigs.keys.prop_icon.value,
+            title:                                            Language.translate("components.input_list_selector.props.prop_icon.title"),
+            description:                                      Language.translate("components.input_list_selector.props.prop_icon.description"),
+        } ,
+        [ComponentInputListSelectorConfigs.keys.prop_showListSelected.name]: {
+            prop:                                             ComponentInputListSelectorConfigs.keys.prop_showListSelected.name,
+            default:                                          ComponentInputListSelectorConfigs.keys.prop_showListSelected.value,
+            title:                                            Language.translate("components.input_list_selector.props.prop_showListSelected.title"),
+            description:                                      Language.translate("components.input_list_selector.props.prop_showListSelected.description"),
+        } ,
+        [ComponentInputListSelectorConfigs.keys.prop_labelShow.name]: {
+            prop:                                             ComponentInputListSelectorConfigs.keys.prop_labelShow.name,
+            default:                                          ComponentInputListSelectorConfigs.keys.prop_labelShow.value,
+            title:                                            Language.translate("components.input_list_selector.props.prop_labelShow.title"),
+            description:                                      Language.translate("components.input_list_selector.props.prop_labelShow.description"),
+        } ,
+        [ComponentInputListSelectorConfigs.keys.prop_widthBody.name]: {
+            prop:                                             ComponentInputListSelectorConfigs.keys.prop_widthBody.name,
+            default:                                          ComponentInputListSelectorConfigs.keys.prop_widthBody.value,
+            title:                                            Language.translate("components.input_list_selector.props.prop_widthBody.title"),
+            description:                                      Language.translate("components.input_list_selector.props.prop_widthBody.description"),
+        } ,
+        [ComponentInputListSelectorConfigs.keys.prop_heightBody.name]: {
+            prop:                                             ComponentInputListSelectorConfigs.keys.prop_heightBody.name,
+            default:                                          ComponentInputListSelectorConfigs.keys.prop_heightBody.value,
+            title:                                            Language.translate("components.input_list_selector.props.prop_heightBody.title"),
+            description:                                      Language.translate("components.input_list_selector.props.prop_heightBody.description"),
+        } ,
+        [ComponentInputListSelectorConfigs.keys.prop_heightItems.name]: {
+            prop:                                             ComponentInputListSelectorConfigs.keys.prop_heightItems.name,
+            default:                                          ComponentInputListSelectorConfigs.keys.prop_heightItems.value,
+            title:                                            Language.translate("components.input_list_selector.props.prop_heightItems.title"),
+            description:                                      Language.translate("components.input_list_selector.props.prop_heightItems.description"),
+        } ,
+        [ComponentInputListSelectorConfigs.keys.prop_titleAll.name]: {
+            prop:                                             ComponentInputListSelectorConfigs.keys.prop_titleAll.name,
+            default:                                          ComponentInputListSelectorConfigs.keys.prop_titleAll.value,
+            title:                                            Language.translate("components.input_list_selector.props.prop_titleAll.title"),
+            description:                                      Language.translate("components.input_list_selector.props.prop_titleAll.description"),
+        } ,
+        [ComponentInputListSelectorConfigs.keys.prop_draggable.name]: {
+            prop:                                             ComponentInputListSelectorConfigs.keys.prop_draggable.name,
+            default:                                          ComponentInputListSelectorConfigs.keys.prop_draggable.value,
+            title:                                            Language.translate("components.input_list_selector.props.prop_draggable.title"),
+            description:                                      Language.translate("components.input_list_selector.props.prop_draggable.description"),
+        } ,
+        [ComponentInputListSelectorConfigs.keys.prop_backgroundColorIcon.name]: {
+            prop:                                             ComponentInputListSelectorConfigs.keys.prop_backgroundColorIcon.name,
+            default:                                          ComponentInputListSelectorConfigs.keys.prop_backgroundColorIcon.value,
+            title:                                            Language.translate("components.input_list_selector.props.prop_backgroundColorIcon.title"),
+            description:                                      Language.translate("components.input_list_selector.props.prop_backgroundColorIcon.description"),
+        } ,
+        [ComponentInputListSelectorConfigs.keys.prop_colorIcon.name]: {
+            prop:                                             ComponentInputListSelectorConfigs.keys.prop_colorIcon.name,
+            default:                                          ComponentInputListSelectorConfigs.keys.prop_colorIcon.value,
+            title:                                            Language.translate("components.input_list_selector.props.prop_colorIcon.title"),
+            description:                                      Language.translate("components.input_list_selector.props.prop_colorIcon.description"),
+        } ,
     });
 
 
@@ -199,7 +397,13 @@ export abstract class ComponentInputListSelectorBase extends ComponentBase<
             title:              Language.translate("components.input_list_selector.schema.main.title") ,
             description:        Language.translate("components.input_list_selector.schema.main.description") ,
             props: [
-
+                this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_columns.name] ,
+                this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_icon.name] ,
+                this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_showListSelected.name] ,
+                this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_labelShow.name] ,
+                this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_draggable.name] ,
+                this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_backgroundColorIcon.name] ,
+                this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_colorIcon.name] ,
             ]
         } ,
         [ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu.name]: {
@@ -209,6 +413,8 @@ export abstract class ComponentInputListSelectorBase extends ComponentBase<
             props: [
                 this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_menuBackgroundColor.name] ,
                 this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_menuBorderColor.name] ,
+                this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_widthBody.name] ,
+                this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_heightBody.name] ,
             ]
         } ,
         [ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu_IconList.name]: {
@@ -216,7 +422,9 @@ export abstract class ComponentInputListSelectorBase extends ComponentBase<
             title:              Language.translate("components.input_list_selector.schema.main_formFloatMenu_iconList.title") ,
             description:        Language.translate("components.input_list_selector.schema.main_formFloatMenu_iconList.description") ,
             props: [
-
+                this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_icon.name] ,
+                this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_backgroundColorIcon.name] ,
+                this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_colorIcon.name] ,
             ]
         } ,
         [ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu_CheckBoxes.name]: {
@@ -224,7 +432,10 @@ export abstract class ComponentInputListSelectorBase extends ComponentBase<
             title:              Language.translate("components.input_list_selector.schema.main_formFloatMenu_body_checkBoxes.title") ,
             description:        Language.translate("components.input_list_selector.schema.main_formFloatMenu_body_checkBoxes.description") ,
             props: [
-
+                this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_columns.name] ,
+                this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_titleAll.name] ,
+                this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_heightItems.name] ,
+                this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_draggable.name] ,
             ]
         } ,
         [ComponentInputListSelectorConfigs.schemas.Main_FormListSelected.name]: {
@@ -232,7 +443,8 @@ export abstract class ComponentInputListSelectorBase extends ComponentBase<
             title:              Language.translate("components.input_list_selector.schema.main_formListSelected.title") ,
             description:        Language.translate("components.input_list_selector.schema.main_formListSelected.description") ,
             props: [
-
+                this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_columns.name] ,
+                this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_showListSelected.name] ,
             ]
         } ,
     })
@@ -250,7 +462,39 @@ export abstract class ComponentInputListSelectorBase extends ComponentBase<
         PROPERTYs Methods
     --------------------------------------------- */
     _COMPONENT_METHODS = defineComponentMethods<ComponentInputListSelectorMethodsType , ComponentInputListSelectorPropsType>({
-
+        [ComponentInputListSelectorConfigs.methods.CLICK_ICON.name]: {
+            title:                                            Language.translate("components.input_list_selector.methods.fn_onClickIcon.title"),
+            description:                                      Language.translate("components.input_list_selector.methods.fn_onClickIcon.description"),
+            args: {}
+        },
+        [ComponentInputListSelectorConfigs.methods.CLICK_ACCEPT.name]: {
+            title:                                            Language.translate("components.input_list_selector.methods.fn_onClickAccept.title"),
+            description:                                      Language.translate("components.input_list_selector.methods.fn_onClickAccept.description"),
+            args: {
+                [ComponentInputListSelectorConfigs.methods.CLICK_ACCEPT.componentArgs.COLUMNS.name] : this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_columns.name] ,
+            }
+        },
+        [ComponentInputListSelectorConfigs.methods.CLICK_REJECT.name]: {
+            title:                                            Language.translate("components.input_list_selector.methods.fn_onClickReject.title"),
+            description:                                      Language.translate("components.input_list_selector.methods.fn_onClickReject.description"),
+            args: {}
+        },
+        [ComponentInputListSelectorConfigs.methods.CALLBACK_COL_SELECTOR.name]: {
+            title:                                            Language.translate("components.input_list_selector.methods.fn_onCallbackColSelector.title"),
+            description:                                      Language.translate("components.input_list_selector.methods.fn_onCallbackColSelector.description"),
+            args: {
+                [ComponentInputListSelectorConfigs.methods.CALLBACK_COL_SELECTOR.componentArgs.ORDER.name] :      this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_columns.name] ,
+                [ComponentInputListSelectorConfigs.methods.CALLBACK_COL_SELECTOR.componentArgs.IS_COMPLETE.name] : this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_columns.name] ,
+            }
+        },
+        [ComponentInputListSelectorConfigs.methods.DELETE_SELECTED_ITEM.name]: {
+            title:                                            Language.translate("components.input_list_selector.methods.fn_onDeleteSelectedItem.title"),
+            description:                                      Language.translate("components.input_list_selector.methods.fn_onDeleteSelectedItem.description"),
+            args: {
+                [ComponentInputListSelectorConfigs.methods.DELETE_SELECTED_ITEM.componentArgs.LIST.name] :  this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_columns.name] ,
+                [ComponentInputListSelectorConfigs.methods.DELETE_SELECTED_ITEM.componentArgs.VALUE.name] : this._COMPONENT_PATTERN[ComponentInputListSelectorConfigs.keys.prop_columns.name] ,
+            }
+        },
     });
 
 
@@ -264,10 +508,38 @@ export abstract class ComponentInputListSelectorBase extends ComponentBase<
                 styles: {}  ,
 
                 prop_labelTitle: "Input List Selector" ,
-                prop_labelTooltipDescription: "this is for [input-list-selector]"
+                prop_labelTooltipDescription: "this is for [input-list-selector]" ,
+                prop_labelShow: true ,
+                prop_showListSelected: true ,
+                prop_draggable: true ,
+                prop_widthBody: SizeUnit(350 , UNITS.PEXEL) ,
+                prop_heightBody: SizeUnit(300 , UNITS.PEXEL) ,
+                prop_heightItems: 45 ,
+
+                prop_columns: [
+                    { id: "col1", title: "Column 1", selected: true } ,
+                    { id: "col2", title: "Column 2", selected: true } ,
+                    { id: "col3", title: "Column 3", selected: false } ,
+                    { id: "col4", title: "Column 4", selected: true } ,
+                    { id: "col5", title: "Column 5", selected: false } ,
+                ] ,
             },
             <ComponentInputListSelectorMethodsType>{
-
+                fn_onClickIcon: function (event, dataArgs, componentArgs) {
+                    console.log("[InputListSelector] icon clicked");
+                } ,
+                fn_onClickAccept: function (event, dataArgs, componentArgs) {
+                    console.log("[InputListSelector] accept clicked", componentArgs);
+                } ,
+                fn_onClickReject: function (event, dataArgs, componentArgs) {
+                    console.log("[InputListSelector] reject clicked");
+                } ,
+                fn_onCallbackColSelector: function (event, dataArgs, componentArgs) {
+                    console.log("[InputListSelector] callback col selector", componentArgs);
+                } ,
+                fn_onDeleteSelectedItem: function (event, dataArgs, componentArgs) {
+                    console.log("[InputListSelector] delete selected item", componentArgs);
+                } ,
             }
         ).getElement();
     }
@@ -278,8 +550,11 @@ export abstract class ComponentInputListSelectorBase extends ComponentBase<
 
 export class ComponentInputListSelector extends ComponentInputListSelectorBase {
 
-    _FLOAT_MENU ;
-    _STATUS_SHOW_FLOAT_MENU = new Observable(false);
+    private var_columns: Observable<ColumnItem[]>;
+    private var_tempOrder: Observable<(string | number)[]>;
+    private var_showPopup: Observable<boolean>;
+    private _checkBoxInstance: ComponentInputAgreementCheckBox | null = null;
+    private _columnsBackup: ColumnItem[] = [];
 
     /* ---------------------------------------------
        SETUP
@@ -290,6 +565,12 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
         events = null
     ) {
         super("input-list-selector", null);
+
+        const initialColumns: ColumnItem[] = (config as any)[ComponentInputListSelectorConfigs.keys.prop_columns.name] ?? [];
+        this.var_columns = new Observable<ColumnItem[]>([...initialColumns]);
+        this.var_tempOrder = new Observable<(string | number)[]>([]);
+        this.var_showPopup = new Observable<boolean>(false);
+
         super.renderComponent(config, methods , events);
     }
 
@@ -301,6 +582,7 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
     override renderContentComponent() {
         return this.executeSchemaPart(ComponentInputListSelectorConfigs.schemas.Main.name)
     }
+
 
     override renderManagerComponent(partName , attrsDefault, data , extra) : ReactiveElement {
         switch (partName){
@@ -317,21 +599,29 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
         }
     }
 
+
     private template_render_main(attrsDefault , data , extra) : ReactiveElement {
 
         if (data != null) {
+
+            const children: (ReactiveElement | string)[] = [];
+
+            children.push(
+                this.executeSchemaPart(ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu.name)
+            );
+            children.push(
+                this.executeSchemaPart(ComponentInputListSelectorConfigs.schemas.Main_FormListSelected.name)
+            );
 
             return ReactiveElement.part(  "section" ,{
                 attrs: {
                     ...attrsDefault
                 },
                 className: [
-                    "row" , "p-0" , "m-0"
+                    //"row" ,
+                    "p-0" , "m-0", "mt-2"
                 ] ,
-                children: [
-                    this.executeSchemaPart(ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu.name) ,
-                    this.executeSchemaPart(ComponentInputListSelectorConfigs.schemas.Main_FormListSelected.name) ,
-                ]
+                children: children
             });
 
         }
@@ -340,38 +630,125 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
     }
 
 
-
     private template_render_main_formFloatMenu(attrsDefault , data , extra) : ReactiveElement {
 
         if (data != null) {
 
             const prop_menuBackgroundColor =       data[ComponentInputListSelectorConfigs.keys.prop_menuBackgroundColor.name];
             const prop_menuBorderColor =           data[ComponentInputListSelectorConfigs.keys.prop_menuBorderColor.name];
+            const prop_widthBody =                 data[ComponentInputListSelectorConfigs.keys.prop_widthBody.name];
+            const prop_heightBody =                data[ComponentInputListSelectorConfigs.keys.prop_heightBody.name];
 
-            return new ComponentPositionMenu(
-                <ComponentPositionMenuPropsType>{
-                    classList: ["col-md-3" , "col-12" , "border" , "p-2"]  ,
-                    styles: {}  ,
 
-                    prop_menuBackgroundColor:   prop_menuBackgroundColor ,
-                    prop_menuBorderColor:       prop_menuBorderColor ,
-                    prop_menuSelector:          this.executeSchemaPart(ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu_IconList.name)  ,
-                    prop_menuBody:              this.executeSchemaPart(ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu_CheckBoxes.name) ,
-                    prop_menuBodyWidth:         SizeUnit(350 , UNITS.PEXEL)
-                },
-                <ComponentPositionMenuMethodsType>{
-                    fn_onClickOpen: function (event, dataArgs:ComponentPositionMenu_Methods_CLICK_OPEN_DataArgs, componentArgs:ComponentPositionMenu_Methods_CLICK_OPEN_ComponentArgs){
-                        console.log("position open")
-                    } ,
-                    fn_onClickAccept: function (event, dataArgs:ComponentPositionMenu_Methods_CLICK_ACCEPT_DataArgs, componentArgs:ComponentPositionMenu_Methods_CLICK_ACCEPT_ComponentArgs){
-                        console.log("position accept")
-                        return true;
-                    } ,
-                    fn_onClickReject: function (event, dataArgs:ComponentPositionMenu_Methods_CLICK_REJECT_DataArgs, componentArgs:ComponentPositionMenu_Methods_CLICK_REJECT_ComponentArgs){
-                        console.log("position reject")
-                    }
-                }
-            ).getReactiveElement();
+            return ReactiveElement.part("div", {
+                attrs: { ...attrsDefault },
+                className: [
+                    "p-0" , "position-relative"
+                ]  ,
+                stylesBind: {
+                    width: Observable.computed(
+                        (sizeName) => {
+                            return  SizeCalc(
+                                SizeUnit(
+                                    ToolsCss.getIconSize(sizeName),
+                                    UNITS.PEXEL
+                                ),
+                                OPERATION.ADD ,
+                                ToolsComponents_MarginWidth?.[sizeName]
+                            )
+                        } ,
+                        [AppConfig.get_sizeName()],
+                        this.getScope()
+                    ) ,
+                    height: Observable.computed(
+                        (sizeName) => {
+                            return  SizeCalc(
+                                SizeUnit(
+                                    ToolsCss.getIconSize(sizeName),
+                                    UNITS.PEXEL
+                                ),
+                                OPERATION.ADD ,
+                                ToolsComponents_MarginWidth?.[sizeName]
+                            )
+                        } ,
+                        [AppConfig.get_sizeName()],
+                        this.getScope()
+                    ) ,
+                    marginTop: Observable.computed(
+                        (sizeName) => {
+                            return ToolsComponents_MarginWidth?.[sizeName]
+                        } ,
+                        [AppConfig.get_sizeName()],
+                        this.getScope()
+                    ) ,
+                    marginBottom: Observable.computed(
+                        (sizeName) => {
+                            return ToolsComponents_MarginWidth?.[sizeName]
+                        } ,
+                        [AppConfig.get_sizeName()],
+                        this.getScope()
+                    ) ,
+                    float: Observable.computed(
+                        (dir) => {
+                            return   dir ? "right" : "left"
+                        } ,
+                        [AppConfig.get_directionRtl()],
+                        this.getScope()
+                    ) ,
+                } ,
+                children: [
+                    new ComponentPositionMenu(
+                        <ComponentPositionMenuPropsType>{
+                            classList: [
+                                // "col-md-2" , "col-12" , "border" , "p-2"
+                            ]  ,
+                            styles: Observable.computed(
+                                (sizeName, dir) => {
+                                    return{
+                                        width :  SizeUnit(
+                                            ToolsCss.getIconSize(sizeName),
+                                            UNITS.PEXEL
+                                        ),
+                                        height :  SizeUnit(
+                                            ToolsCss.getIconSize(sizeName),
+                                            UNITS.PEXEL
+                                        ),
+                                    };
+                                } ,
+                                [
+                                    AppConfig.get_sizeName() ,
+                                    AppConfig.get_directionRtl()
+                                ],
+                                this.getScope()
+                            ) ,
+
+                            prop_structureClass: [
+                                "w-100" , "h-100"
+                            ] ,
+
+                            prop_menuBackgroundColor:   prop_menuBackgroundColor ,
+                            prop_menuBorderColor:       prop_menuBorderColor ,
+                            prop_menuSelector:          this.executeSchemaPart(ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu_IconList.name)  ,
+                            prop_menuBody:              this.executeSchemaPart(ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu_CheckBoxes.name) ,
+                            prop_menuBodyWidth:         prop_widthBody ?? SizeUnit(350 , UNITS.PEXEL) ,
+                            prop_menuBodyHeight:        prop_heightBody ?? SizeUnit(300 , UNITS.PEXEL) ,
+                        },
+                        <ComponentPositionMenuMethodsType>{
+                            fn_onClickOpen: (event: any, dataArgs: ComponentPositionMenu_Methods_CLICK_OPEN_DataArgs, componentArgs: ComponentPositionMenu_Methods_CLICK_OPEN_ComponentArgs) => {
+                                this.fn_onClickIcon(event);
+                            } ,
+                            fn_onClickAccept: (event: any, dataArgs: ComponentPositionMenu_Methods_CLICK_ACCEPT_DataArgs, componentArgs: ComponentPositionMenu_Methods_CLICK_ACCEPT_ComponentArgs) => {
+                                this.fn_onClickAccept(event);
+                                return true;
+                            } ,
+                            fn_onClickReject: (event: any, dataArgs: ComponentPositionMenu_Methods_CLICK_REJECT_DataArgs, componentArgs: ComponentPositionMenu_Methods_CLICK_REJECT_ComponentArgs) => {
+                                this.fn_onClickReject(event);
+                            }
+                        }
+                    ).getReactiveElement()
+                ]
+            });
+
 
         }
 
@@ -383,26 +760,44 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
 
         if (data != null) {
 
+            const prop_icon =                    data[ComponentInputListSelectorConfigs.keys.prop_icon.name];
+            const prop_backgroundColorIcon =     data[ComponentInputListSelectorConfigs.keys.prop_backgroundColorIcon.name];
+            const prop_colorIcon =               data[ComponentInputListSelectorConfigs.keys.prop_colorIcon.name];
+
+            const styles: Record<string, string> = {
+                "cursor": "pointer",
+            };
+            if (prop_backgroundColorIcon) {
+                styles["background-color"] = String(prop_backgroundColorIcon);
+            }
+
+            const iconStyles: Record<string, string> = {
+                "top": "50%",
+                "left": "50%",
+                "transform": "translate(-50%, -50%)",
+                "position": "absolute",
+            };
+            if (prop_colorIcon) {
+                iconStyles["color"] = String(prop_colorIcon);
+            }
+
             return new ToolsComponents.ComponentIcon(
                 <ComponentIconPropsType>{
                     classList:  [
-
+                        "position-relative", "d-block" , "w-100" , "h-100"
                     ]  ,
-                    styles:     {
-
-                    },
+                    prop_structureClass: [  "d-block" , "w-100" , "h-100"]  ,
+                    styles:     styles,
                     prop_iconClass : [
-
+                        //"position-absolute"
                     ] ,
-                    prop_iconStyles : {
-                        "cursor" : "pointer"
-                    } ,
-                    prop_icon: ToolsIcons.icon_select_columns({size: SIZES.L})
+                    prop_iconStyles : iconStyles ,
+                    prop_icon: prop_icon ,
                 },
                 <ComponentIconMethodsType>{
-                    fn_onClickIcon: function (event, dataArgs : ComponentIcon_Methods_CLICK_DataArgs, componentArgs: ComponentIcon_Methods_CLICK_ComponentArgs)  {
-
-                    }.bind(this) ,
+                    fn_onClickIcon: (event: any, dataArgs : ComponentIcon_Methods_CLICK_DataArgs, componentArgs: ComponentIcon_Methods_CLICK_ComponentArgs)  => {
+                        this.fn_onClickIcon(event);
+                    } ,
                 }
             ).getReactiveElement();
 
@@ -416,46 +811,63 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
 
         if (data != null) {
 
-            return new ComponentInputAgreementCheckBox(
-                <ComponentInputAgreementCheckBoxPropsType>{
-                    classList: []  ,
-                    styles: {}  ,
+            const prop_titleAll =        data[ComponentInputListSelectorConfigs.keys.prop_titleAll.name];
+            const prop_heightItems =     data[ComponentInputListSelectorConfigs.keys.prop_heightItems.name];
+            const prop_draggable =       data[ComponentInputListSelectorConfigs.keys.prop_draggable.name];
 
+            return ReactiveElement.part("div", {
+                attrs: { ...attrsDefault },
+                children: Observable.computed(
+                    (columns) => {
+                        const checkBoxList = columns.map((col: ColumnItem) => ({
+                            id: col.id,
+                            title: col.title,
+                        }));
+                        const selectedIds = columns.filter((c: ColumnItem) => c.selected).map((c: ColumnItem) => c.id);
+                        const orderIds = selectedIds.slice();
 
-                    prop_name: "agreement-checkbox" ,
-                    prop_checkBoxOrderStatus: true ,
-                    prop_checkBoxList: [
-                        {
-                            id:          1 ,
-                            title:      "item A" ,
-                        } ,
-                        {
-                            id:          2 ,
-                            title:      "item B" ,
-                            isPin:      true
-                        } ,
-                        {
-                            id:          3 ,
-                            title:      "item C" ,
-                        } ,
-                        {
-                            id:          4 ,
-                            title:      "item D" ,
-                        }
-                    ] ,
-                    prop_value: [1 , 2 , 3] ,
-                    prop_checkBoxOrder: [3]
+                        const checkBox = new ComponentInputAgreementCheckBox(
+                            <any>{
+                                classList: []  ,
+                                styles: {}  ,
 
-                },
-                <ComponentInputAgreementCheckBoxMethodsType>{
-                    fn_onClickAll: function (event, dataArgs : ComponentInputAgreementCheckBox_Methods_CLICK_ALL_DataArgs, componentArgs: ComponentInputAgreementCheckBox_Methods_CLICK_ALL_ComponentArgs) {
-                        console.log("checkbox All" , dataArgs , componentArgs);
-                    } ,
-                    fn_onClickItem: function (event, dataArgs : ComponentInputAgreementCheckBox_Methods_CLICK_ITEM_DataArgs, componentArgs: ComponentInputAgreementCheckBox_Methods_CLICK_ITEM_ComponentArgs) {
-                        console.log("checkbox All" , dataArgs , componentArgs);
-                    }
-                }
-            ).getReactiveElement();
+                                prop_name: "input-list-selector-checkboxes" ,
+                                prop_checkBoxOrderStatus: prop_draggable ?? true ,
+                                prop_checkBoxList: checkBoxList ,
+                                prop_value: selectedIds ,
+                                prop_checkBoxOrder: orderIds ,
+                                prop_checkBoxAllTitle: prop_titleAll ?? "Select All" ,
+                            },
+                            <ComponentInputAgreementCheckBoxMethodsType>{
+                                fn_onClickAll: (event: any, dataArgs : ComponentInputAgreementCheckBox_Methods_CLICK_ALL_DataArgs, componentArgs: ComponentInputAgreementCheckBox_Methods_CLICK_ALL_ComponentArgs) => {
+                                    const currentValue = componentArgs.VALUE;
+                                    const list = componentArgs.LIST;
+                                    if (Array.isArray(currentValue) && Array.isArray(list)) {
+                                        const newOrder = list
+                                            .filter((item: any) => currentValue.includes(item.id))
+                                            .map((item: any) => item.id);
+                                        this.var_tempOrder.set(newOrder);
+                                    }
+                                } ,
+                                fn_onClickItem: (event: any, dataArgs : ComponentInputAgreementCheckBox_Methods_CLICK_ITEM_DataArgs, componentArgs: ComponentInputAgreementCheckBox_Methods_CLICK_ITEM_ComponentArgs) => {
+                                    const currentValue = componentArgs.VALUE;
+                                    const list = componentArgs.LIST;
+                                    if (Array.isArray(currentValue) && Array.isArray(list)) {
+                                        const newOrder = list
+                                            .filter((item: any) => currentValue.includes(item.id))
+                                            .map((item: any) => item.id);
+                                        this.var_tempOrder.set(newOrder);
+                                    }
+                                }
+                            }
+                        );
+                        this._checkBoxInstance = checkBox;
+                        return [checkBox.getReactiveElement()];
+                    },
+                    [this.var_columns],
+                    this.getScope()
+                )
+            });
 
         }
 
@@ -467,21 +879,132 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
 
         if (data != null) {
 
-            return ReactiveElement.part(  "section" ,{
-                attrs: {
-                    ...attrsDefault
-                },
+            const prop_showListSelected =    data[ComponentInputListSelectorConfigs.keys.prop_showListSelected.name];
+
+            if (!prop_showListSelected) {
+                return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
+            }
+
+            return ReactiveElement.part("div", {
+                attrs: { ...attrsDefault },
                 className: [
-                    "col-12" , "col-md-10"
-                ] ,
-                children: [
-                    "HI"
-                ]
+                    "p-0", "m-0"
+                ]  ,
+                children: Observable.computed(
+                    (columns) => {
+                        const selectedList: propListSelectedScroller_List[] = columns
+                            .filter((c: ColumnItem) => c.selected)
+                            .map((c: ColumnItem) => ({
+                                id: c.id,
+                                title: c.title,
+                                canDelete: true,
+                            }));
+
+                        const selectedIds = columns.filter((c: ColumnItem) => c.selected).map((c: ColumnItem) => c.id);
+
+                        return [new ComponentListSelectedScroller(
+                            <any>{
+                                classList: []  ,
+                                styles: {}  ,
+
+                                prop_list: selectedList ,
+                                prop_value: selectedIds ,
+                            },
+                            <ComponentListSelectedScrollerMethodsType>{
+                                fn_onDeleteItem: (event: any, dataArgs: ComponentListSelectedScroller_Methods_DELETE_ITEM_DataArgs, componentArgs: ComponentListSelectedScroller_Methods_DELETE_ITEM_ComponentArgs) => {
+                                    this.fn_onDeleteSelectedItem(event, dataArgs);
+                                }
+                            }
+                        ).getReactiveElement()];
+                    },
+                    [this.var_columns],
+                    this.getScope()
+                )
             });
 
         }
 
         return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
+    }
+
+
+    /* ---------------------------------------------
+      FUNCTIONs
+     --------------------------------------------- */
+
+    private fn_onClickIcon(event: any) {
+        const currentShow = this.var_showPopup.get();
+        this.var_showPopup.set(!currentShow);
+
+        if (!currentShow) {
+            const columns = this.var_columns.get();
+            const selectedIds = columns.filter(c => c.selected).map(c => c.id);
+            this.var_tempOrder.set([...selectedIds]);
+            this._columnsBackup = columns.map(c => ({ ...c }));
+        }
+
+        const params: ComponentInputListSelector_Methods_CLICK_ICON_DataArgs = {};
+        this.executeMethod(ComponentInputListSelectorConfigs.methods.CLICK_ICON.name, event, params);
+    }
+
+    private fn_onClickAccept(event: any) {
+        let tempOrder = this.var_tempOrder.get();
+
+        if (this._checkBoxInstance) {
+            const cbValue = this._checkBoxInstance.get(GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name);
+            const cbList = this._checkBoxInstance.get("prop_checkBoxList");
+            if (Array.isArray(cbValue) && Array.isArray(cbList)) {
+                tempOrder = cbList
+                    .filter((item: any) => cbValue.includes(item.id))
+                    .map((item: any) => item.id);
+            }
+        }
+
+        const columns = this.var_columns.get();
+
+        const newColumns: ColumnItem[] = columns.map(col => ({
+            ...col,
+            selected: tempOrder.includes(col.id),
+        }));
+
+        this.var_columns.set(newColumns);
+
+        const params: ComponentInputListSelector_Methods_CLICK_ACCEPT_DataArgs = {};
+        this.executeMethod(ComponentInputListSelectorConfigs.methods.CLICK_ACCEPT.name, event, params);
+
+        const callbackParams: ComponentInputListSelector_Methods_CALLBACK_COL_SELECTOR_DataArgs = {};
+        this.executeMethod(ComponentInputListSelectorConfigs.methods.CALLBACK_COL_SELECTOR.name, event, callbackParams);
+
+        this.var_tempOrder.set([]);
+        this.var_showPopup.set(false);
+    }
+
+    private fn_onClickReject(event: any) {
+        if (this._columnsBackup.length > 0) {
+            this.var_columns.set(this._columnsBackup.map(c => ({ ...c })));
+        }
+        this.var_tempOrder.set([]);
+        this.var_showPopup.set(false);
+
+        const params: ComponentInputListSelector_Methods_CLICK_REJECT_DataArgs = {};
+        this.executeMethod(ComponentInputListSelectorConfigs.methods.CLICK_REJECT.name, event, params);
+    }
+
+    private fn_onDeleteSelectedItem(event: any, dataArgs: any) {
+        const itemId = dataArgs?.ID;
+        const columns = this.var_columns.get();
+
+        const newColumns: ColumnItem[] = columns.map(col => {
+            if (col.id === itemId) {
+                return { ...col, selected: false };
+            }
+            return col;
+        });
+
+        this.var_columns.set(newColumns);
+
+        const params: ComponentInputListSelector_Methods_DELETE_SELECTED_ITEM_DataArgs = {};
+        this.executeMethod(ComponentInputListSelectorConfigs.methods.DELETE_SELECTED_ITEM.name, event, params);
     }
 
 }

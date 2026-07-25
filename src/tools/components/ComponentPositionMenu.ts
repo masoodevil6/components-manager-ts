@@ -76,9 +76,11 @@ export const ComponentPositionMenuProps = {
     prop_menuBodyHeight :                 "prop_menuBodyHeight" ,
     prop_menuBorderWidth :                "prop_menuBorderWidth" ,
 
+    prop_menuBtnRejectHas :               "prop_menuBtnRejectHas" ,
     prop_menuBtnRejectIcon :              "prop_menuBtnRejectIcon" ,
     prop_menuBtnRejectTitle :             "prop_menuBtnRejectTitle" ,
 
+    prop_menuBtnAcceptHas :               "prop_menuBtnAcceptHas" ,
     prop_menuBtnAcceptIcon :              "prop_menuBtnAcceptIcon" ,
     prop_menuBtnAcceptTitle :             "prop_menuBtnAcceptTitle" ,
 } as const;
@@ -120,6 +122,10 @@ const ComponentPositionMenuConfigs  =  {
             value:               GOG_SetValue<GOG_ValueOf<typeof SIZES> | number>(SIZES.S),
         } ,
 
+        [ComponentPositionMenuProps.prop_menuBtnRejectHas]: {
+            name:               ComponentPositionMenuProps.prop_menuBtnRejectHas,
+            value:              GOG_SetValue<boolean>(true),
+        } ,
         [ComponentPositionMenuProps.prop_menuBtnRejectIcon]: {
             name:               ComponentPositionMenuProps.prop_menuBtnRejectIcon,
             value:              GOG_SetValue<IconsType|null>(ToolsIcons.icon_close({size: SIZES.M , primaryColor:Color(COLORS_MAIN.SHAN ,COLORS_GRAD.GRADE_1), secondaryColor:Color(COLORS_MAIN.PRIMARY ,COLORS_GRAD.GRADE_4)})),
@@ -129,6 +135,10 @@ const ComponentPositionMenuConfigs  =  {
             value:              GOG_SetValue<Observable<string>| string| null>( Language.translate("components.position_menu.props.prop_menuBtnRejectTitle.value")),
         } ,
 
+        [ComponentPositionMenuProps.prop_menuBtnAcceptHas]: {
+            name:               ComponentPositionMenuProps.prop_menuBtnAcceptHas,
+            value:              GOG_SetValue<boolean>(true),
+        } ,
         [ComponentPositionMenuProps.prop_menuBtnAcceptIcon]: {
             name:               ComponentPositionMenuProps.prop_menuBtnAcceptIcon,
             value:              GOG_SetValue<IconsType|null>(ToolsIcons.icon_status({size: SIZES.M , primaryColor:Color(COLORS_MAIN.SHAN ,COLORS_GRAD.GRADE_1), secondaryColor:Color(COLORS_MAIN.PRIMARY ,COLORS_GRAD.GRADE_4)})),
@@ -277,6 +287,12 @@ export abstract class ComponentPositionMenuBase extends ComponentBase<
         } ,
 
 
+        [ComponentPositionMenuConfigs.keys.prop_menuBtnRejectHas.name]: {
+            prop:                                             ComponentPositionMenuConfigs.keys.prop_menuBtnRejectHas.name,
+            default:                                          ComponentPositionMenuConfigs.keys.prop_menuBtnRejectHas.value,
+            title:                                            Language.translate("components.position_menu.props.prop_menuBtnRejectHas.title"),
+            description:                                      Language.translate("components.position_menu.props.prop_menuBtnRejectHas.description"),
+        } ,
         [ComponentPositionMenuConfigs.keys.prop_menuBtnRejectIcon.name]: {
             prop:                                             ComponentPositionMenuConfigs.keys.prop_menuBtnRejectIcon.name,
             default:                                          ComponentPositionMenuConfigs.keys.prop_menuBtnRejectIcon.value,
@@ -290,6 +306,12 @@ export abstract class ComponentPositionMenuBase extends ComponentBase<
             description:                                      Language.translate("components.position_menu.props.prop_menuBtnRejectTitle.description"),
         } ,
 
+        [ComponentPositionMenuConfigs.keys.prop_menuBtnAcceptHas.name]: {
+            prop:                                             ComponentPositionMenuConfigs.keys.prop_menuBtnAcceptHas.name,
+            default:                                          ComponentPositionMenuConfigs.keys.prop_menuBtnAcceptHas.value,
+            title:                                            Language.translate("components.position_menu.props.prop_menuBtnAcceptHas.title"),
+            description:                                      Language.translate("components.position_menu.props.prop_menuBtnAcceptHas.description"),
+        } ,
         [ComponentPositionMenuConfigs.keys.prop_menuBtnAcceptIcon.name]: {
             prop:                                             ComponentPositionMenuConfigs.keys.prop_menuBtnAcceptIcon.name,
             default:                                          ComponentPositionMenuConfigs.keys.prop_menuBtnAcceptIcon.value,
@@ -363,6 +385,7 @@ export abstract class ComponentPositionMenuBase extends ComponentBase<
             title:              Language.translate("components.position_menu.schema.formFloatMenu_body_buttons_accept.title") ,
             description:        Language.translate("components.position_menu.schema.formFloatMenu_body_buttons_accept.description") ,
             props: [
+                this._COMPONENT_PATTERN[ComponentPositionMenuConfigs.keys.prop_menuBtnAcceptHas.name] ,
                 this._COMPONENT_PATTERN[ComponentPositionMenuConfigs.keys.prop_menuBtnAcceptIcon.name] ,
                 this._COMPONENT_PATTERN[ComponentPositionMenuConfigs.keys.prop_menuBtnAcceptTitle.name] ,
             ]
@@ -372,6 +395,7 @@ export abstract class ComponentPositionMenuBase extends ComponentBase<
             title:              Language.translate("components.position_menu.schema.formFloatMenu_body_buttons_reject.title") ,
             description:        Language.translate("components.position_menu.schema.formFloatMenu_body_buttons_reject.description") ,
             props: [
+                this._COMPONENT_PATTERN[ComponentPositionMenuConfigs.keys.prop_menuBtnRejectHas.name] ,
                 this._COMPONENT_PATTERN[ComponentPositionMenuConfigs.keys.prop_menuBtnRejectIcon.name] ,
                 this._COMPONENT_PATTERN[ComponentPositionMenuConfigs.keys.prop_menuBtnRejectTitle.name] ,
             ]
@@ -587,7 +611,7 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
 
             this._FLOAT_MENU = new ComponentFloatMenu(
                 <ComponentFloatMenuPropsType>{
-                    classList: [ "position-relative"]  ,
+                    classList: [ "position-relative" , "d-block" , "w-100" , "h-100"]  ,
                     // prop_floatClass: ["p-2"] ,
                     prop_selectorContent:             this.executeSchemaPart(ComponentPositionMenuConfigs.schemas.FormFloatMenu_Selector.name) ,
                     prop_selectorClass:               [] ,
@@ -637,7 +661,8 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
                     ...attrsDefault
                 },
                 className: [
-                    "bg-white" , "rounded"
+                    "bg-white" , "rounded" ,
+                    "d-block" , "w-100" , "h-100"
                 ] ,
                 children: [
                     prop_menuSelector ,
@@ -770,26 +795,56 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
 
         if (data != null) {
 
+            const prop_menuBtnAcceptHas =               data[ComponentPositionMenuConfigs.keys.prop_menuBtnAcceptHas.name];
             const prop_menuBtnAcceptIcon =              data[ComponentPositionMenuConfigs.keys.prop_menuBtnAcceptIcon.name];
             const prop_menuBtnAcceptTitle =             data[ComponentPositionMenuConfigs.keys.prop_menuBtnAcceptTitle.name];
 
-            return new ComponentButton(
-                <ComponentButtonPropsType>{
-                    classList:       ["col-md-6" ]  ,
-                    prop_btnTitle:   prop_menuBtnAcceptTitle ,
-                    prop_type:       "submit" ,
-                    prop_btnIcon:    prop_menuBtnAcceptIcon
-                } ,
-                <ComponentButtonMethodsType>{
-                    fn_onClickButton: function (event, dataArgs : ComponentButton_Methods_CLICK_DataArgs, componentArgs: ComponentButton_Methods_CLICK_ComponentArgs) {
-                        const params : ComponentPositionMenu_Methods_CLICK_ACCEPT_DataArgs = {}
-                        const close = this.executeMethod(ComponentPositionMenuConfigs.methods.CLICK_ACCEPT.name  , event , params);
-                        if (close){
-                            this.pr_handleMenuClose(false , event);
+            console.log(prop_menuBtnAcceptHas)
+
+            // return Observable.conditionWhen(
+            //     prop_menuBtnAcceptHas,
+            //     (show: boolean) => !show,
+            //     () => {
+            //         return new ComponentButton(
+            //             <ComponentButtonPropsType>{
+            //                 classList:       ["col-md-6" ]  ,
+            //                 prop_btnTitle:   prop_menuBtnAcceptTitle ,
+            //                 prop_type:       "submit" ,
+            //                 prop_btnIcon:    prop_menuBtnAcceptIcon
+            //             } ,
+            //             <ComponentButtonMethodsType>{
+            //                 fn_onClickButton: function (event, dataArgs : ComponentButton_Methods_CLICK_DataArgs, componentArgs: ComponentButton_Methods_CLICK_ComponentArgs) {
+            //                     const params : ComponentPositionMenu_Methods_CLICK_ACCEPT_DataArgs = {}
+            //                     const close = this.executeMethod(ComponentPositionMenuConfigs.methods.CLICK_ACCEPT.name  , event , params);
+            //                     if (close){
+            //                         this.pr_handleMenuClose(false , event);
+            //                     }
+            //                 }.bind(this)
+            //             }
+            //         ).getReactiveElement()
+            //     },
+            //     () =>  GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault) ,
+            //     this.getScope()
+            // ).get()
+
+             return new ComponentButton(
+                        <ComponentButtonPropsType>{
+                            classList:       ["col-md-6" ]  ,
+                            prop_btnTitle:   prop_menuBtnAcceptTitle ,
+                            prop_type:       "submit" ,
+                            prop_btnIcon:    prop_menuBtnAcceptIcon
+                        } ,
+                        <ComponentButtonMethodsType>{
+                            fn_onClickButton: function (event, dataArgs : ComponentButton_Methods_CLICK_DataArgs, componentArgs: ComponentButton_Methods_CLICK_ComponentArgs) {
+                                const params : ComponentPositionMenu_Methods_CLICK_ACCEPT_DataArgs = {}
+                                const close = this.executeMethod(ComponentPositionMenuConfigs.methods.CLICK_ACCEPT.name  , event , params);
+                                if (close){
+                                    this.pr_handleMenuClose(false , event);
+                                }
+                            }.bind(this)
                         }
-                    }.bind(this)
-                }
-            ).getReactiveElement();
+                    ).getReactiveElement()
+
 
         }
 
@@ -800,6 +855,7 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
 
         if (data != null) {
 
+            const prop_menuBtnRejectHas =               data[ComponentPositionMenuConfigs.keys.prop_menuBtnRejectHas.name];
             const prop_menuBtnRejectIcon =              data[ComponentPositionMenuConfigs.keys.prop_menuBtnRejectIcon.name];
             const prop_menuBtnRejectTitle =             data[ComponentPositionMenuConfigs.keys.prop_menuBtnRejectTitle.name];
 

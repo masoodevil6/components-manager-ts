@@ -497,7 +497,11 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
             "float-menu" ,
             null
         );
-        super.renderComponent(config , methods , events);
+        super.renderComponent({
+            ...config ,
+            classList: ["d-block" , "w-100" , "h-100"] ,
+            prop_structureClass: ["d-block" , "w-100" , "h-100"] ,
+        } , methods , events);
     }
 
 
@@ -549,10 +553,11 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                     prop_selectorStyles
                 },
                 classBind: [
-                    prop_selectorClass
+                    prop_selectorClass ,
+
                 ],
                 className: [
-                 //   "position-relative"
+                    "d-block" , "w-100" , "h-100"
                 ] ,
                 on: {
 

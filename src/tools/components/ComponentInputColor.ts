@@ -61,7 +61,10 @@ import {
     ComponentBorderPropsType
 } from "./ComponentBorder";
 import {ToolsIcons} from "../icons";
-import {ComponentIconMethodsType, ComponentIconPropsType} from "./ComponentIcon";
+import {
+    ComponentIcon_Methods_CLICK_ComponentArgs,
+    ComponentIcon_Methods_CLICK_DataArgs, ComponentIconMethodsType, ComponentIconPropsType
+} from "./ComponentIcon";
 import {
     ComponentElementPosition,
     ComponentElementPositionMethodsType,
@@ -69,6 +72,15 @@ import {
 } from "./ComponentElementPosition";
 import {ComponentValidateMethodsType, ComponentValidatePropsType} from "./ComponentValidate";
 import {ComponentLabelMethodsType, ComponentLabelPropsType} from "./ComponentLabel";
+import {
+    ComponentPositionMenu,
+    ComponentPositionMenu_Methods_CLICK_ACCEPT_ComponentArgs, ComponentPositionMenu_Methods_CLICK_ACCEPT_DataArgs,
+    ComponentPositionMenu_Methods_CLICK_OPEN_ComponentArgs, ComponentPositionMenu_Methods_CLICK_OPEN_DataArgs,
+    ComponentPositionMenu_Methods_CLICK_REJECT_ComponentArgs,
+    ComponentPositionMenu_Methods_CLICK_REJECT_DataArgs,
+    ComponentPositionMenuMethodsType,
+    ComponentPositionMenuPropsType
+} from "./ComponentPositionMenu";
 
 
 export const ComponentInputColorProps = {
@@ -194,6 +206,9 @@ const ComponentInputColorConfigs = {
         ///----------------------
         Main: {
             name:               "part-main"
+        },
+        FormColorSelector: {
+            name:               "part-form-color-selector"
         },
         FormColor: {
             name:               "part-form-color"
@@ -404,6 +419,12 @@ export abstract class ComponentInputColorBase extends ComponentBase<
             description:        Language.translate("components.input_color.schema.main.description"),
             props: []
         },
+        [ComponentInputColorConfigs.schemas.FormColorSelector.name]: {
+            part:               ComponentInputColorConfigs.schemas.FormColorSelector.name,
+            title:              Language.translate("components.input_color.schema.form_color_selector.title"),
+            description:        Language.translate("components.input_color.schema.form_color_selector.description"),
+            props: []
+        },
         [ComponentInputColorConfigs.schemas.FormColor.name]: {
             part:               ComponentInputColorConfigs.schemas.FormColor.name,
             title:              Language.translate("components.input_color.schema.form_color.title"),
@@ -607,6 +628,8 @@ export class ComponentInputColor extends ComponentInputColorBase {
         switch (partName) {
             case ComponentInputColorConfigs.schemas.Main.name:
                 return this.template_render_main(attrsDefault, data, extra);
+            case ComponentInputColorConfigs.schemas.FormColorSelector.name:
+                return this.template_render_form_color_selector(attrsDefault, data, extra);
             case ComponentInputColorConfigs.schemas.FormColor.name:
                 return this.template_render_form_color(attrsDefault, data, extra);
             case ComponentInputColorConfigs.schemas.FormColorIconEmpty.name:
@@ -651,16 +674,52 @@ export class ComponentInputColor extends ComponentInputColorBase {
                     display: "flow-root"
                 },
                 children: [
-                    this.executeSchemaPart(ComponentInputColorConfigs.schemas.FormColor.name),
-                    this.executeSchemaPart(ComponentInputColorConfigs.schemas.FormTitle.name),
-                    this.executeSchemaPart(ComponentInputColorConfigs.schemas.FormIconClear.name),
-                    this.executeSchemaPart(ComponentInputColorConfigs.schemas.FormSelector.name),
-                    this.executeSchemaPart(ComponentInputColorConfigs.schemas.Validate.name),
+                    this.executeSchemaPart(ComponentInputColorConfigs.schemas.FormColorSelector.name),
+                    //this.executeSchemaPart(ComponentInputColorConfigs.schemas.FormColor.name),
+                    // this.executeSchemaPart(ComponentInputColorConfigs.schemas.FormTitle.name),
+                    // this.executeSchemaPart(ComponentInputColorConfigs.schemas.FormIconClear.name),
+                    // this.executeSchemaPart(ComponentInputColorConfigs.schemas.FormSelector.name),
+                    // this.executeSchemaPart(ComponentInputColorConfigs.schemas.Validate.name),
                 ]
             });
         }
         return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
     }
+
+
+    private template_render_form_color_selector(attrsDefault, data, extra): ReactiveElement {
+        if (data != null) {
+            this.fn_setupObservables();
+
+            return new ComponentPositionMenu(
+                <ComponentPositionMenuPropsType>{
+                    classList: ["col-md-6" , "col-12" , "border" , "p-2"]  ,
+                    styles: {}  ,
+
+                    prop_menuBodyWidth:  SizeUnit(350 , UNITS.PEXEL) ,
+
+                    prop_menuSelector:   "asd" ,
+                    prop_menuBody: "asd"
+
+                },
+                <ComponentPositionMenuMethodsType>{
+                    fn_onClickOpen: function (event, dataArgs:ComponentPositionMenu_Methods_CLICK_OPEN_DataArgs, componentArgs:ComponentPositionMenu_Methods_CLICK_OPEN_ComponentArgs){
+                        console.log("position open")
+                    } ,
+                    fn_onClickAccept: function (event, dataArgs:ComponentPositionMenu_Methods_CLICK_ACCEPT_DataArgs, componentArgs:ComponentPositionMenu_Methods_CLICK_ACCEPT_ComponentArgs){
+                        console.log("position accept")
+                        return true;
+                    } ,
+                    fn_onClickReject: function (event, dataArgs:ComponentPositionMenu_Methods_CLICK_REJECT_DataArgs, componentArgs:ComponentPositionMenu_Methods_CLICK_REJECT_ComponentArgs){
+                        console.log("position reject")
+                    }
+                }
+            ).getReactiveElement();
+        }
+        return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
+    }
+
+
 
 
     private template_render_form_color(attrsDefault, data, extra): ReactiveElement {

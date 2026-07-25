@@ -74,6 +74,15 @@
     --borderRadiusXXLarge: 15px;
 
 
+    /* [Margin] */
+    --marginXSmall:  2.5px;
+    --marginSmall:   5px;
+    --marginMedium:  7.5px;
+    --marginLarge:   10px;
+    --marginXLarge:  12.5px;
+    --marginXXLarge: 15px;
+
+
 
 
     --fontVazir:           "Vazir";

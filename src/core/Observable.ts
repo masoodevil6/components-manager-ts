@@ -227,17 +227,27 @@ export class Observable<T> {
         return derived;
     }
 
-    static conditionWhen<T, TResult>(
-        observable: Observable<T>,
-        condition: (value: T) => boolean,
+
+
+    static conditionWhen<TResult>(
+        observableOrList: Observable<any> | Observable<any>[],
+        condition: (...values: any[]) => boolean,
         onTrue: () => TResult,
         onFalse?: () => TResult,
         scope?: Scope
     ): Observable<TResult | null> {
 
+        const observables = Array.isArray(observableOrList)
+            ? observableOrList
+            : [observableOrList];
+
+        const getValues = () => observables.map(o => o.get());
+
         const evaluate = (): TResult | null => {
 
-            if (condition(observable.get())) {
+            const values = getValues();
+
+            if (condition(...values)) {
                 return onTrue();
             }
 
@@ -246,14 +256,19 @@ export class Observable<T> {
 
         const derived = new Observable<TResult | null>(evaluate());
 
-        const unsub = observable.subscribe(() => {
-            derived.set(evaluate());
-        });
+        const update = () => derived.set(evaluate());
 
-        scope?.track(unsub);
+        const unsubs = observables.map(o => o.subscribe(update));
+
+        scope?.track(() => {
+            unsubs.forEach(u => u());
+        });
 
         return derived;
     }
+
+
+
 
 
     private _mapValue<U>(value: T, mapping: Mapping<T, U>): U {

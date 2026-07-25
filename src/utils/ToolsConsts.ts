@@ -105,10 +105,6 @@ export type SizesType = typeof SIZES[keyof typeof SIZES];
 
 
 
-
-
-
-
 export const ToolsComponents_BorderRadius = {
     [SIZES.XS]:      "var(--borderRadiusXSmall)",
     [SIZES.S]:       "var(--borderRadiusSmall)",
@@ -118,10 +114,6 @@ export const ToolsComponents_BorderRadius = {
     [SIZES.XXL]:     "var(--borderRadiusXXLarge)",
 } as const;
 export type BorderRadiusType = typeof ToolsComponents_BorderRadius[keyof typeof ToolsComponents_BorderRadius];
-
-
-
-
 
 
 
@@ -137,6 +129,17 @@ export const ToolsComponents_BorderWidth = {
 export type BorderWidthType = typeof ToolsComponents_BorderWidth[keyof typeof ToolsComponents_BorderWidth];
 
 
+
+
+export const ToolsComponents_MarginWidth = {
+    [SIZES.XS]:      "var(--marginXSmall)",
+    [SIZES.S]:       "var(--marginSmall)",
+    [SIZES.M]:       "var(--marginMedium)",
+    [SIZES.L]:       "var(--marginLarge)",
+    [SIZES.XL]:      "var(--marginXLarge)",
+    [SIZES.XXL]:     "var(--marginXXLarge)",
+} as const;
+export type MarginType = typeof ToolsComponents_MarginWidth[keyof typeof ToolsComponents_MarginWidth];
 
 
 

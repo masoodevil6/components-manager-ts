@@ -1236,7 +1236,6 @@ export class ComponentInputSize extends ComponentInputSizeBase {
                                 classList: [],
                                 styles: {},
                                 prop_positionType:     ComponentElementPosition_positionTypes.ABSOLUTE,
-                                prop_positionTop:      SizeUnit(0, UNITS.PEXEL),
                                 prop_positionZIndex:   10,
                                 prop_positionStyles: {
                                     cursor:       "pointer",
