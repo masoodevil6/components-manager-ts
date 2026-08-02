@@ -113,8 +113,8 @@ export class TestsPage implements ITemplate{
                     //
                     // TOOLS.COMPONENT.ComponentRecyclerView.renderExampleComponent() ,
                     //
-                     //TOOLS.COMPONENT.ComponentFloatMenu.renderExampleComponent() ,
-                    TOOLS.COMPONENT.ComponentPositionMenu.renderExampleComponent() ,
+                    // TOOLS.COMPONENT.ComponentFloatMenu.renderExampleComponent() ,
+                    // TOOLS.COMPONENT.ComponentPositionMenu.renderExampleComponent() ,
                     //
                     // TOOLS.COMPONENT.ComponentTooltipDescription.renderExampleComponent() ,
                     //
@@ -124,10 +124,9 @@ export class TestsPage implements ITemplate{
                     // TOOLS.COMPONENT.ComponentCollapse.renderExampleComponent() ,
                     // TOOLS.COMPONENT.ComponentTabs.renderExampleComponent() ,
                     //
-                    TOOLS.COMPONENT.ComponentInputListSelector.renderExampleComponent() ,
+                    //TOOLS.COMPONENT.ComponentInputListSelector.renderExampleComponent() ,
                     // TOOLS.COMPONENT.ComponentInputCheckBox.renderExampleComponent() ,
                     // TOOLS.COMPONENT.ComponentInputAgreementCheckBox.renderExampleComponent() ,
-                    // TOOLS.COMPONENT.ComponentInput.renderExampleComponent() ,
                     // TOOLS.COMPONENT.ComponentValidate.renderExampleComponent() ,
                     //
                     // TOOLS.COMPONENT.ComponentWindow.renderExampleComponent() ,
@@ -135,19 +134,18 @@ export class TestsPage implements ITemplate{
                     // TOOLS.COMPONENT.ComponentLoading.renderExampleComponent() ,
                     // TOOLS.COMPONENT.ComponentWebCode.renderExampleComponent() ,
 
-                    TOOLS.COMPONENT.ComponentInput.renderExampleComponent() ,
-                    TOOLS.COMPONENT.ComponentInputPassword.renderExampleComponent() ,
-                    TOOLS.COMPONENT.ComponentInputEmail.renderExampleComponent() ,
+                    //TOOLS.COMPONENT.ComponentTable.renderExampleComponent() ,
+
+                    // TOOLS.COMPONENT.ComponentInput.renderExampleComponent() ,
+                    // TOOLS.COMPONENT.ComponentInputPassword.renderExampleComponent() ,
+                    // TOOLS.COMPONENT.ComponentInputEmail.renderExampleComponent() ,
                     TOOLS.COMPONENT.ComponentInputPhone.renderExampleComponent() ,
-
-                    TOOLS.COMPONENT.ComponentTimerDown.renderExampleComponent() ,
-
-                    TOOLS.COMPONENT.ComponentInputOtp.renderExampleComponent() ,
-
                     TOOLS.COMPONENT.ComponentInputSize.renderExampleComponent() ,
+                    // TOOLS.COMPONENT.ComponentInputColor.renderExampleComponent() ,
 
-                    TOOLS.COMPONENT.ComponentInputColor.renderExampleComponent() ,
+                    // TOOLS.COMPONENT.ComponentInputOtp.renderExampleComponent() ,
 
+                    //TOOLS.COMPONENT.ComponentTimerDown.renderExampleComponent() ,
                     //TOOLS.COMPONENT.ComponentMouseScroller.renderExampleComponent() ,
                     //TOOLS.COMPONENT.ComponentSidebar.renderExampleComponent() ,
                 ]

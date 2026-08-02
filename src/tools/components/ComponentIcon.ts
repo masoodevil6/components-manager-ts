@@ -341,16 +341,19 @@ export class ComponentIcon extends ComponentIconBase {
                 on: {
 
                     click: (event: Event) => {
+                        event.preventDefault();
                         const params : ComponentIcon_Methods_CLICK_DataArgs = {}
                         this.executeMethod(ComponentIconConfigs.methods.CLICK.name , event , params);
                     },
 
                     mouseenter: (event: Event) => {
+                        event.preventDefault();
                         const params : ComponentIcon_Methods_HOVER_DataArgs = {}
                         this.executeMethod(ComponentIconConfigs.methods.HOVER.name , event , params);
                     },
 
                     mouseleave: (event: Event) => {
+                        event.preventDefault();
                         const params : ComponentIcon_Methods_BLUR_DataArgs = {}
                         this.executeMethod(ComponentIconConfigs.methods.BLUR.name , event , params);
                     }

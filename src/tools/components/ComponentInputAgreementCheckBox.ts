@@ -588,7 +588,8 @@ export class ComponentInputAgreementCheckBox extends ComponentInputAgreementChec
                                         prop_draggableItems:   list
                                     },
                                     <ComponentDraggableOrdersYMethodsType>{
-                                        fn_onUpdateOrder: function (event, dataArgs:ComponentDraggableOrdersY_Methods_UPDATE_DataArgs, componentArgs : ComponentDraggableOrdersY_Methods_UPDATE_ComponentArgs){
+                                        fn_onUpdateOrder: function (event: Event, dataArgs:ComponentDraggableOrdersY_Methods_UPDATE_DataArgs, componentArgs : ComponentDraggableOrdersY_Methods_UPDATE_ComponentArgs){
+                                            event.preventDefault();
                                             const newOrder = componentArgs?.ORDER ?? [];
                                             const list = componentArgs?.LIST ?? [];
                                             this.pr_updateValueAfterOrder(newOrder , list , event)
@@ -648,7 +649,8 @@ export class ComponentInputAgreementCheckBox extends ComponentInputAgreementChec
                                     prop_title:      itemCheckBox?.title ?? null,
                                 },
                                 <ComponentInputCheckBoxMethodsType>{
-                                    fn_onClickCheckbox: function (event, dataArgs : ComponentInputCheckBox_Methods_CLICK_DataArgs, componentArgs: ComponentInputCheckBox_Methods_CLICK_ComponentArgs) {
+                                    fn_onClickCheckbox: function (event: Event, dataArgs : ComponentInputCheckBox_Methods_CLICK_DataArgs, componentArgs: ComponentInputCheckBox_Methods_CLICK_ComponentArgs) {
+                                        event.preventDefault();
                                         const value = componentArgs?.[ComponentInputCheckBoxConfigs.methods.CLICK.componentArgs.VALUE.name];
                                         const isDisable = componentArgs?.[ComponentInputCheckBoxConfigs.methods.CLICK.componentArgs.IS_DISABLE.name];
                                         if (!isDisable){
@@ -686,7 +688,7 @@ export class ComponentInputAgreementCheckBox extends ComponentInputAgreementChec
      FUNCTIONs
     --------------------------------------------- */
 
-    private pr_onClickLabel(event, dataArgs:ComponentLabel_Methods_CLICK_DataArgs, componentArgs:ComponentLabel_Methods_CLICK_ComponentArgs): void{
+    private pr_onClickLabel(event: Event, dataArgs:ComponentLabel_Methods_CLICK_DataArgs, componentArgs:ComponentLabel_Methods_CLICK_ComponentArgs): void{
         if (!dataArgs.IS_DISABLE){
             const checkBoxAll = this._CHECK_BOX_ALL.get(GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name);
             this._CHECK_BOX_ALL.set(GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name , !checkBoxAll)
@@ -695,7 +697,8 @@ export class ComponentInputAgreementCheckBox extends ComponentInputAgreementChec
     }
 
 
-    private pr_onClickCheckBoxAll(event , checkBoxValue): void{
+    private pr_onClickCheckBoxAll(event: Event , checkBoxValue): void{
+        event.preventDefault();
         const prop_checkBoxList=   this.get(ComponentInputAgreementCheckBoxConfigs.keys.prop_checkBoxList.name);
         const prop_checkBoxOrder=   this.get(ComponentInputAgreementCheckBoxConfigs.keys.prop_checkBoxOrder.name);
 
@@ -711,7 +714,8 @@ export class ComponentInputAgreementCheckBox extends ComponentInputAgreementChec
     }
 
 
-    private pr_onClickCheckBoxItem(event , checkBoxId , checkBoxValue): void{
+    private pr_onClickCheckBoxItem(event: Event , checkBoxId , checkBoxValue): void{
+        event.preventDefault();
         const prop_checkBoxList=   this.get(ComponentInputAgreementCheckBoxConfigs.keys.prop_checkBoxList.name);
         const prop_checkBoxOrder=   this.get(ComponentInputAgreementCheckBoxConfigs.keys.prop_checkBoxOrder.name);
         const prop_value =         this.get(GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name);
@@ -775,7 +779,7 @@ export class ComponentInputAgreementCheckBox extends ComponentInputAgreementChec
         ]
     }
 
-    private pr_updateValueAfterOrder(newOrder , list , event){
+    private pr_updateValueAfterOrder(newOrder , list , event: Event){
 
         const prop_checkBoxList=   this.get(ComponentInputAgreementCheckBoxConfigs.keys.prop_checkBoxList.name);
         const currentValue =      this.get(GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name);

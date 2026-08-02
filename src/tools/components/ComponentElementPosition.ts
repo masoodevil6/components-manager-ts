@@ -504,7 +504,8 @@ export class ComponentElementPosition extends ComponentElementPositionBase {
                     prop_selectorContent
                 ],
                 on: {
-                    click: (event) => {
+                    click: (event: Event) => {
+                        event.preventDefault();
                         const params: ComponentElementPosition_Methods_CLICK_DataArgs = {}
                         this.executeMethod(ComponentElementPositionConfigs.methods.CLICK.name , event , params);
                     },

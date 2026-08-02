@@ -30,7 +30,7 @@
  import {ComponentInputFile} from "./ComponentInputFile";
 import {ComponentInputPassword} from "./ComponentInputPassword";
 import {ComponentInputEmail} from "./ComponentInputEmail";
-import {ComponentInputPhone} from "./ComponentInputPhone";
+import ComponentInputPhone from "./ComponentInputPhone";
 import {ComponentTimerDown} from "./ComponentTimerDown";
 import {ComponentInputOtp} from "./ComponentInputOtp";
 import {ComponentInputSize} from "./ComponentInputSize";
@@ -51,6 +51,7 @@ import {ComponentInputColor} from "./ComponentInputColor";
 
 
  import {ComponentMouseScroller} from "./ComponentMouseScroller";
+import {ComponentTable} from "./ComponentTable";
 
 export const ToolsComponents = {
     ComponentMessages ,
@@ -101,5 +102,7 @@ export const ToolsComponents = {
 
     ComponentSidebar ,
     ComponentMouseScroller ,
+
+    ComponentTable ,
 
 }

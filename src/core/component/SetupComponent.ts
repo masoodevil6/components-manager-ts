@@ -8,6 +8,7 @@ import {ToolsComponents} from "../../tools/components";
 import {AppConfig} from "../AppConfig";
 import {ToolsCss} from "../../utils/ToolsCss";
 import {ComponentAttrsDefault} from "./ConnectorComponent";
+import {Observable} from "../Observable";
 
 
 
@@ -419,9 +420,11 @@ export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_re
         const prop_value=      data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name];
         const prop_isDisable=  data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
 
-        if (prop_name.get()){
-
-            return ReactiveElement.part(  "input" ,{
+        return Observable.conditionWhen(
+            prop_isDisable ,
+            (isDisabled) => isDisabled ,
+            () =>  GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault),
+            () => ReactiveElement.part(  "input" ,{
                 attrs: {
                     ...attrsDefault ,
                     type: "hidden" ,
@@ -453,9 +456,9 @@ export function GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_re
                         }
                     ) ,
                 }
-            });
-
-        }
+            }),
+            this.getScope()
+        ).get()
 
     }
 

@@ -58,30 +58,64 @@
 
     /* [Border-Width] */
     --borderWidthXSmall:   1px;
-    --borderWidthSmall:    2px;
-    --borderWidthMedium:   3px;
-    --borderWidthLarge:    4px;
-    --borderWidthXLarge:   5px;
-    --borderWidthXXLarge:  6px;
+    --borderWidthSmall:    1px;
+    --borderWidthMedium:   2px;
+    --borderWidthLarge:    2px;
+    --borderWidthXLarge:   3px;
+    --borderWidthXXLarge:  4px;
 
 
     /* [Border-Radius] */
-    --borderRadiusXSmall:  2.5px;
+    --borderRadiusXSmall:  2px;
     --borderRadiusSmall:   5px;
-    --borderRadiusMedium:  7.5px;
-    --borderRadiusLarge:   10px;
-    --borderRadiusXLarge:  12.5px;
-    --borderRadiusXXLarge: 15px;
+    --borderRadiusMedium:  7px;
+    --borderRadiusLarge:   9px;
+    --borderRadiusXLarge:  11px;
+    --borderRadiusXXLarge: 13px;
 
 
     /* [Margin] */
-    --marginXSmall:  2.5px;
-    --marginSmall:   5px;
-    --marginMedium:  7.5px;
-    --marginLarge:   10px;
-    --marginXLarge:  12.5px;
-    --marginXXLarge: 15px;
+    --marginXSmall:  1px;
+    --marginSmall:   2px;
+    --marginMedium:  3px;
+    --marginLarge:   4px;
+    --marginXLarge:  5px;
+    --marginXXLarge: 6px;
 
+    /* [Padding] */
+    --paddingXSmall:  1px;
+    --paddingSmall:   2px;
+    --paddingMedium:  3px;
+    --paddingLarge:   4px;
+    --paddingXLarge:  5px;
+    --paddingXXLarge: 6px;
+
+
+    /* [Height] */
+    --heightXSmall:  16px;
+    --heightSmall:   18px;
+    --heightMedium:  20px;
+    --heightLarge:   22px;
+    --heightXLarge:  24px;
+    --heightXXLarge: 26px;
+
+
+    /* [FontSize] */
+    --fontSizeXSmall:  9px;
+    --fontSizeSmall:   10px;
+    --fontSizeMedium:  11px;
+    --fontSizeLarge:   12px;
+    --fontSizeXLarge:  13px;
+    --fontSizeXXLarge: 14px;
+
+
+    /* [IconSize] */
+    --iconSizeXSmall:  14px;
+    --iconSizeSmall:   16px;
+    --iconSizeMedium:  18px;
+    --iconSizeLarge:   20px;
+    --iconSizeXLarge:  22px;
+    --iconSizeXXLarge: 24px;
 
 
 

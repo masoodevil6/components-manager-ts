@@ -4,24 +4,34 @@ import {SIZES} from "../utils/ToolsConsts";
 import {fa} from "../langs/Fa";
 
 export class AppConfig {
-    // static _state = {
-    //     directionRtl:      false,
-    //     language:          "en",
-    //     sizeNameSmall:     SIZES.S,
-    //     sizeName:          SIZES.M,
-    //     sizeNameLarge:     SIZES.L,
-    //     stdHeight:         25,
-    //
-    // };
+
+    static _DIRECTION_RTL= {
+        name: "directionRtl" ,
+        value: false
+    };
+    static _LANGUAGE= {
+        name: "language" ,
+        value: "en"
+    };
+    static _SIZE_NAME= {
+        name: "sizeName" ,
+        value: SIZES.M
+    };
+    static _FONT_NAME= {
+        name: "font" ,
+        value: "IRANSans"
+    };
+
 
     static _state = {
-        directionRtl:  new Observable(false),
-        language:      new Observable("en"),
+        [this._DIRECTION_RTL.name]:  new Observable(this._DIRECTION_RTL.value),
+        [this._LANGUAGE.name]:       new Observable(this._LANGUAGE.value),
+        [this._SIZE_NAME.name]:      new Observable(this._SIZE_NAME.value),
+        [this._FONT_NAME.name]:      new Observable(this._FONT_NAME.value),
+
         sizeNameSmall: new Observable(SIZES.S),
-        sizeName:      new Observable(SIZES.M),
         sizeNameLarge: new Observable(SIZES.L),
         stdHeight:     new Observable(25),
-        //font:        new Observable("IRANSans"),
     };
 
     static get(key) {
@@ -39,13 +49,16 @@ export class AppConfig {
 
 
     static get_directionRtl() : Observable<any> {
-        return this.observable("directionRtl");
+        return this.observable(this._DIRECTION_RTL.name);
     }
     static get_language() : Observable<any> {
-        return this.observable("language");
+        return this.observable(this._LANGUAGE.name);
     }
     static get_sizeName() : Observable<any> {
-        return this.observable("sizeName");
+        return this.observable(this._SIZE_NAME.name);
+    }
+    static get_fontName() : Observable<any> {
+        return this.observable(this._FONT_NAME.name);
     }
 
 

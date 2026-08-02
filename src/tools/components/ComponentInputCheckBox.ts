@@ -712,7 +712,8 @@ export class ComponentInputCheckBox extends ComponentInputCheckBoxBase {
                     })
                 } ,
                 <ComponentBorderMethodsType>{
-                    fn_onClickBorder: function (event, dataArgs : ComponentBorder_Methods_CLICK_BORDER_ComponentArgs, componentArgs: ComponentBorder_Methods_CLICK_BORDER_DataArgs)  {
+                    fn_onClickBorder: function (event: Event, dataArgs : ComponentBorder_Methods_CLICK_BORDER_ComponentArgs, componentArgs: ComponentBorder_Methods_CLICK_BORDER_DataArgs)  {
+                        event.preventDefault();
                         this.pr_setChangeValue(event)
                     }.bind(this) ,
                 }
@@ -727,7 +728,7 @@ export class ComponentInputCheckBox extends ComponentInputCheckBoxBase {
 
         if (data != null) {
 
-            return new ComponentElementPosition(
+            return new ToolsComponents.ComponentElementPosition(
                 <ComponentElementPositionPropsType>{
                     classList:               ["d-block"]  ,
                     styles: {
@@ -813,7 +814,7 @@ export class ComponentInputCheckBox extends ComponentInputCheckBoxBase {
             const directionRtl =     AppConfig.get("directionRtl");
             const elFontSize =       ToolsCss.getFontSize(AppConfig.get("sizeName"));
 
-            return ReactiveElement.part(  "b" ,{
+            return ReactiveElement.b({
                 attrs: {
                     ...attrsDefault
                 },
@@ -867,8 +868,8 @@ export class ComponentInputCheckBox extends ComponentInputCheckBoxBase {
                     prop_title
                 ] ,
                 on: {
-                    click: e => {
-                        this.pr_setChangeValue(e)
+                    click: event => {
+                        this.pr_setChangeValue(event)
                     }
                 }
             });
@@ -884,11 +885,13 @@ export class ComponentInputCheckBox extends ComponentInputCheckBoxBase {
     /* ---------------------------------------------
      FUNCTIONs
     --------------------------------------------- */
-    private pr_onClickLabel(event , dataArgs , componentArgs): void{
+    private pr_onClickLabel(event: Event , dataArgs , componentArgs): void{
+        event.preventDefault()
         this.pr_setChangeValue(event)
     }
 
-    private pr_setChangeValue(event) : void {
+    private pr_setChangeValue(event: Event) : void {
+        event.preventDefault()
         const prop_isDisable = this.get(GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name);
         if (prop_isDisable){
 

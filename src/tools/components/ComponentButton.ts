@@ -1,5 +1,6 @@
 import {
     ComponentBase,
+    ComponentCallBackType,
     defineComponentMethods,
     defineComponentPatterns,
     defineComponentSchema,
@@ -12,19 +13,19 @@ import {
 import {ReactiveElement} from "../../core/ReactiveElement";
 import {ToolsCss} from "../../utils/ToolsCss";
 import {ToolsComponents} from "./index";
-import {ComponentCallBackType} from "../../core/ComponentBase";
 import {Language} from "../../core/Language";
 import {AppConfig} from "../../core/AppConfig";
 import {
     Color,
     COLORS_GRAD,
     COLORS_MAIN,
-    IconsType, SizeCalc,
-    SIZES, SizesType, SizeUnit,
-    ToolsComponents_BorderRadius,
-    ToolsComponents_BorderWidth, UNITS
+    IconsType,
+    SizeCalc,
+    SIZES,
+    SizesType,
+    SizeUnit,
+    ToolsComponents_BorderRadius, UNITS
 } from "../../utils/ToolsConsts";
-import {TOOLS} from "../tools";
 import {
     GOG_ComponentBasicConfigs_Component_keys,
     GOG_ComponentBasicConfigs_Component_parts,
@@ -32,18 +33,14 @@ import {
     GOG_ComponentBasicConfigs_Component_Schema,
     GOG_ComponentBasicConfigs_Component_Structure_keys,
     GOG_ComponentBasicConfigs_Component_Structure_parts,
-    GOG_ComponentBasicConfigs_Component_Structure_Pattern, GOG_ComponentBasicConfigs_Component_Structure_Schema,
+    GOG_ComponentBasicConfigs_Component_Structure_Pattern,
+    GOG_ComponentBasicConfigs_Component_Structure_Schema,
     GOG_ComponentBasicProps_Component,
     GOG_ComponentBasicProps_Component_Structure,
 } from "../../core/component/SetupComponent";
 import {ToolsIcons} from "../icons";
 import {ComponentIconMethodsType, ComponentIconPropsType} from "./ComponentIcon";
 import {Observable} from "../../core/Observable";
-import {ComponentSidebarProps} from "./ComponentSidebar";
-
-
-
-
 
 
 export const ComponentButtonProps = {
@@ -72,6 +69,10 @@ export const ComponentButtonProps = {
     prop_btnIconStyles :                   "prop_btnIconStyles" ,
     prop_btnIconClass :                    "prop_btnIconClass" ,
     prop_btnBorderRadius :                 "prop_btnBorderRadius" ,
+    prop_btnBorderRadiusStartTop :         "prop_btnBorderRadiusStartTop" ,
+    prop_btnBorderRadiusStartBottom :      "prop_btnBorderRadiusStartBottom" ,
+    prop_btnBorderRadiusEndTop :           "prop_btnBorderRadiusEndTop" ,
+    prop_btnBorderRadiusEndBottom :        "prop_btnBorderRadiusEndBottom" ,
     prop_variant :                         "prop_variant" ,
 } as const;
 
@@ -136,7 +137,7 @@ const ComponentButtonConfigs  =  {
         } ,
         [ComponentButtonProps.prop_btnBorderWidth]: {
             name:                      ComponentButtonProps.prop_btnBorderWidth        ,
-            value:                     GOG_SetValue<typeof SIZES | number |  null>( SIZES.M) ,
+            value:                     GOG_SetValue<typeof SIZES |  null>( SIZES.M) ,
         } ,
         [ComponentButtonProps.prop_btnBackgroundColor]: {
             name:                      ComponentButtonProps.prop_btnBackgroundColor,
@@ -182,10 +183,28 @@ const ComponentButtonConfigs  =  {
             name:                     ComponentButtonProps.prop_btnIconClass,
             value:                    GOG_SetValue<string[]>( ["w-100"]) ,
         } ,
+
         [ComponentButtonProps.prop_btnBorderRadius]: {
             name:                     ComponentButtonProps.prop_btnBorderRadius,
-            value:                    GOG_SetValue<GOG_ValueOf<typeof SIZES>>(SIZES.M),
+            value:                    GOG_SetValue<SizesType | null>(SIZES.M),
         } ,
+        [ComponentButtonProps.prop_btnBorderRadiusStartTop]: {
+            name:                     ComponentButtonProps.prop_btnBorderRadiusStartTop,
+            value:                    GOG_SetValue<SizesType | null>(null),
+        } ,
+        [ComponentButtonProps.prop_btnBorderRadiusStartBottom]: {
+            name:                     ComponentButtonProps.prop_btnBorderRadiusStartBottom,
+            value:                    GOG_SetValue<SizesType | null>(null),
+        } ,
+        [ComponentButtonProps.prop_btnBorderRadiusEndTop]: {
+            name:                     ComponentButtonProps.prop_btnBorderRadiusEndTop,
+            value:                    GOG_SetValue<SizesType | null>(null),
+        } ,
+        [ComponentButtonProps.prop_btnBorderRadiusEndBottom]: {
+            name:                     ComponentButtonProps.prop_btnBorderRadiusEndBottom,
+            value:                    GOG_SetValue<SizesType | null>(null),
+        } ,
+
         [ComponentButtonProps.prop_variant]: {
             name:                     ComponentButtonProps.prop_variant,
             value:                    GOG_SetValue<GOG_ValueOf<typeof ComponentButton_Variants>>(ComponentButton_Variants.SECONDARY),
@@ -367,12 +386,38 @@ export class ComponentButtonBase extends ComponentBase<
                 title:                                            Language.translate("components.button.props.prop_btnIconClass.title"),
                 description:                                      Language.translate("components.button.props.prop_btnIconClass.description"),
             } ,
+
             [ComponentButtonConfigs.keys.prop_btnBorderRadius.name]: {
                 prop:                                             ComponentButtonConfigs.keys.prop_btnBorderRadius.name,
                 default:                                          ComponentButtonConfigs.keys.prop_btnBorderRadius.value,
                 title:                                            Language.translate("components.button.props.prop_btnBorderRadius.title"),
                 description:                                      Language.translate("components.button.props.prop_btnBorderRadius.description"),
             } ,
+            [ComponentButtonConfigs.keys.prop_btnBorderRadiusStartTop.name]: {
+                prop:                                             ComponentButtonConfigs.keys.prop_btnBorderRadiusStartTop.name,
+                default:                                          ComponentButtonConfigs.keys.prop_btnBorderRadiusStartTop.value,
+                title:                                            Language.translate("components.button.props.prop_btnBorderRadiusStartTop.title"),
+                description:                                      Language.translate("components.button.props.prop_btnBorderRadiusStartTop.description"),
+            } ,
+            [ComponentButtonConfigs.keys.prop_btnBorderRadiusStartBottom.name]: {
+                prop:                                             ComponentButtonConfigs.keys.prop_btnBorderRadiusStartBottom.name,
+                default:                                          ComponentButtonConfigs.keys.prop_btnBorderRadiusStartBottom.value,
+                title:                                            Language.translate("components.button.props.prop_btnBorderRadiusStartBottom.title"),
+                description:                                      Language.translate("components.button.props.prop_btnBorderRadiusStartBottom.description"),
+            } ,
+            [ComponentButtonConfigs.keys.prop_btnBorderRadiusEndTop.name]: {
+                prop:                                             ComponentButtonConfigs.keys.prop_btnBorderRadiusEndTop.name,
+                default:                                          ComponentButtonConfigs.keys.prop_btnBorderRadiusEndTop.value,
+                title:                                            Language.translate("components.button.props.prop_btnBorderRadiusEndTop.title"),
+                description:                                      Language.translate("components.button.props.prop_btnBorderRadiusEndTop.description"),
+            } ,
+            [ComponentButtonConfigs.keys.prop_btnBorderRadiusEndBottom.name]: {
+                prop:                                             ComponentButtonConfigs.keys.prop_btnBorderRadiusEndBottom.name,
+                default:                                          ComponentButtonConfigs.keys.prop_btnBorderRadiusEndBottom.value,
+                title:                                            Language.translate("components.button.props.prop_btnBorderRadiusEndBottom.title"),
+                description:                                      Language.translate("components.button.props.prop_btnBorderRadiusEndBottom.description"),
+            } ,
+
             [ComponentButtonConfigs.keys.prop_variant.name]: {
                 prop:                                             ComponentButtonConfigs.keys.prop_variant.name,
                 default:                                          ComponentButtonConfigs.keys.prop_variant.value,
@@ -410,6 +455,10 @@ export class ComponentButtonBase extends ComponentBase<
                 this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnBackgroundColor.name] ,
                 this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnBackgroundColor_hover.name] ,
                 this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnBorderRadius.name] ,
+                this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnBorderRadiusStartTop.name] ,
+                this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnBorderRadiusStartBottom.name] ,
+                this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnBorderRadiusEndTop.name] ,
+                this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnBorderRadiusEndBottom.name] ,
                 this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnBorderColor.name] ,
                 this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnBorderWidth.name] ,
                 this._COMPONENT_PATTERN[ComponentButtonConfigs.keys.prop_btnIcon.name] ,
@@ -474,6 +523,11 @@ export class ComponentButtonBase extends ComponentBase<
                 classList: ["col-md-3" , "col-12" , "border" , "p-2"]  ,
                 prop_btnTitle: "asd" ,
                 prop_type: "submit" ,
+                prop_btnBorderRadius: SIZES.DEFAULT ,  // null,
+                prop_btnBorderRadiusStartTop: SIZES.M ,
+                prop_btnBorderRadiusEndTop: SIZES.XXL ,
+                prop_btnBorderRadiusStartBottom: SIZES.XXL ,
+                prop_btnBorderRadiusEndBottom: SIZES.M ,
                 prop_btnIcon: ToolsIcons.icon_reload({size: SIZES.M , primaryColor:Color(COLORS_MAIN.SHAN ,COLORS_GRAD.GRADE_1), secondaryColor:Color(COLORS_MAIN.INFO ,COLORS_GRAD.GRADE_4)})
             } ,
             <ComponentButtonMethodsType>{
@@ -564,9 +618,14 @@ export class ComponentButton extends ComponentButtonBase{
             const prop_btnStyles   =     data[ComponentButtonConfigs.keys.prop_btnStyles.name];
             const prop_btnWidth   =      data[ComponentButtonConfigs.keys.prop_btnWidth.name];
             const prop_btnHeight   =     data[ComponentButtonConfigs.keys.prop_btnHeight.name];
-            const prop_btnBorderRadius = data[ComponentButtonConfigs.keys.prop_btnBorderRadius.name];
             const prop_btnBorderWidth =  data[ComponentButtonConfigs.keys.prop_btnBorderWidth.name];
-            const prop_btnIcon        =   data[ComponentButtonConfigs.keys.prop_btnIcon.name];
+            const prop_btnIcon       =   data[ComponentButtonConfigs.keys.prop_btnIcon.name];
+
+            const prop_btnBorderRadius =            data[ComponentButtonConfigs.keys.prop_btnBorderRadius.name];
+            const prop_btnBorderRadiusStartTop =    data[ComponentButtonConfigs.keys.prop_btnBorderRadiusStartTop.name];
+            const prop_btnBorderRadiusStartBottom = data[ComponentButtonConfigs.keys.prop_btnBorderRadiusStartBottom.name];
+            const prop_btnBorderRadiusEndTop =      data[ComponentButtonConfigs.keys.prop_btnBorderRadiusEndTop.name];
+            const prop_btnBorderRadiusEndBottom =   data[ComponentButtonConfigs.keys.prop_btnBorderRadiusEndBottom.name];
 
             let btnBackgroundColor = {};
             btnBackgroundColor[ComponentButton_Types.SUBMIT] =          "var(--primaryColor1)";
@@ -601,7 +660,6 @@ export class ComponentButton extends ComponentButtonBase{
                     stylesBind: (el) => ({
                         width:               prop_btnWidth ,
                         height:              prop_btnHeight ,
-                        borderWidth:         prop_btnBorderWidth ,
                         borderColor:         prop_type.mapList(btnBorderColor) ,
 
                         backgroundColor: el.hover.mapList({
@@ -612,9 +670,146 @@ export class ComponentButton extends ComponentButtonBase{
                             true:           "background-color 1000ms ease" ,
                             false:          "background-color 200ms ease"
                         }) ,
-                        borderRadius: prop_btnBorderRadius instanceof Observable
-                            ? prop_btnBorderRadius.map((s: any) => s == null ? "0 !important" : `${ToolsComponents_BorderRadius[s ?? SIZES.M]} !important`)
-                            : (prop_btnBorderRadius == null ? "0 !important" : `${ToolsComponents_BorderRadius[prop_btnBorderRadius ?? SIZES.M]} !important`),
+
+                        borderWidth: Observable.computed(
+                            (sizeNameBorderWidth, sizeNameDefault) => {
+                                console.log(sizeNameBorderWidth, sizeNameDefault)
+                                if (sizeNameBorderWidth != null){
+                                    if (sizeNameBorderWidth != SIZES.DEFAULT){
+                                        return ToolsComponents_BorderRadius?.[sizeNameBorderWidth]
+                                    }
+                                    else {
+                                        return ToolsComponents_BorderRadius?.[sizeNameDefault]
+                                    }
+                                }
+                                return SizeUnit(0 , UNITS.PEXEL);
+                            } ,
+                            [
+                                prop_btnBorderWidth,
+                                AppConfig.get_sizeName()
+                            ] ,
+                            this.getScope()
+                        ),
+
+                        borderRadius: Observable.computed(
+                            (sizeNameRadius, sizeNameDefault) => {
+                                if (sizeNameRadius != null){
+                                    if (sizeNameRadius != SIZES.DEFAULT){
+                                        return ToolsComponents_BorderRadius?.[sizeNameRadius]
+                                    }
+                                    else {
+                                        return ToolsComponents_BorderRadius?.[sizeNameDefault]
+                                    }
+                                }
+                            } ,
+                            [
+                                prop_btnBorderRadius,
+                                AppConfig.get_sizeName()
+                            ] ,
+                            this.getScope()
+                        ),
+                        borderTopLeftRadius: Observable.computed(
+                            (sizeNameRadiusStartTop , sizeNameRadiusEndTop , dir, sizeNameDefault) => {
+                                if (dir && sizeNameRadiusEndTop != null){
+                                    if (sizeNameRadiusEndTop != SIZES.DEFAULT){
+                                        return ToolsComponents_BorderRadius?.[sizeNameRadiusEndTop]
+                                    }
+                                    else {
+                                        return ToolsComponents_BorderRadius?.[sizeNameDefault]
+                                    }
+                                }
+                                else if (!dir && sizeNameRadiusStartTop != null){
+                                    if (sizeNameRadiusStartTop != SIZES.DEFAULT){
+                                        return ToolsComponents_BorderRadius?.[sizeNameRadiusStartTop]
+                                    }
+                                    else {
+                                        return ToolsComponents_BorderRadius?.[sizeNameDefault]
+                                    }
+                                }
+                            } ,
+                            [
+                                prop_btnBorderRadiusStartTop ,
+                                prop_btnBorderRadiusEndTop ,
+                                AppConfig.get_directionRtl(),
+                                AppConfig.get_sizeName()
+                            ] ,
+                            this.getScope()
+                        ),
+                        borderTopRightRadius: Observable.computed(
+                            (sizeNameRadiusStartTop , sizeNameRadiusEndTop , dir, sizeNameDefault) => {
+                                if (dir && sizeNameRadiusStartTop != null){
+                                    if (sizeNameRadiusStartTop != SIZES.DEFAULT){
+                                        return ToolsComponents_BorderRadius?.[sizeNameRadiusStartTop]
+                                    }
+                                    else {
+                                        return ToolsComponents_BorderRadius?.[sizeNameDefault]
+                                    }
+                                }
+                                else if (!dir && sizeNameRadiusEndTop != null){
+                                    if (sizeNameRadiusEndTop != SIZES.DEFAULT){
+                                        return ToolsComponents_BorderRadius?.[sizeNameRadiusEndTop]
+                                    }
+                                    else {
+                                        return ToolsComponents_BorderRadius?.[sizeNameDefault]
+                                    }
+                                }
+                            } ,
+                            [
+                                prop_btnBorderRadiusStartTop ,
+                                prop_btnBorderRadiusEndTop ,
+                                AppConfig.get_directionRtl(),
+                                AppConfig.get_sizeName()
+                            ] ,
+                            this.getScope()
+                        ),
+                        borderBottomLeftRadius: Observable.computed(
+                            (sizeNameRadiusStartBottom , sizeNameRadiusEndBottom , dir , sizeNameDefault) => {
+                                if (dir && sizeNameRadiusEndBottom != null){
+                                    if (sizeNameRadiusEndBottom != SIZES.DEFAULT){
+                                        return ToolsComponents_BorderRadius?.[sizeNameRadiusEndBottom]
+                                    }
+                                    else {
+                                        return ToolsComponents_BorderRadius?.[sizeNameDefault]
+                                    }
+                                }
+                                else if (!dir && sizeNameRadiusStartBottom != null){
+                                    if (sizeNameRadiusStartBottom != SIZES.DEFAULT){
+                                        return ToolsComponents_BorderRadius?.[sizeNameRadiusStartBottom]
+                                    }
+                                    else {
+                                        return ToolsComponents_BorderRadius?.[sizeNameDefault]
+                                    }
+                                }
+                            } ,
+                            [
+                                prop_btnBorderRadiusStartBottom ,
+                                prop_btnBorderRadiusEndBottom ,
+                                AppConfig.get_directionRtl(),
+                                AppConfig.get_sizeName()
+                            ] ,
+                            this.getScope()
+                        ),
+                        borderBottomRightRadius: Observable.computed(
+                            (sizeNameRadiusStartBottom , sizeNameRadiusEndBottom , dir) => {
+                                if (dir){
+                                    return ToolsComponents_BorderRadius?.[sizeNameRadiusStartBottom]
+                                }
+                                else {
+                                    return ToolsComponents_BorderRadius?.[sizeNameRadiusEndBottom]
+                                }
+                            } ,
+                            [
+                                prop_btnBorderRadiusStartBottom ,
+                                prop_btnBorderRadiusEndBottom ,
+                                AppConfig.get_directionRtl()
+                            ] ,
+                            this.getScope()
+                        ),
+
+
+                        // borderRadius: prop_btnBorderRadius instanceof Observable
+                        //     ? prop_btnBorderRadius.map((s: any) => s == null ? "0 !important" : `${ToolsComponents_BorderRadius[s ?? SIZES.M]} !important`)
+                        //     : (prop_btnBorderRadius == null ? "0 !important" : `${ToolsComponents_BorderRadius[prop_btnBorderRadius ?? SIZES.M]} !important`),
                         prop_btnStyles ,
                     }) ,
                     // children: [

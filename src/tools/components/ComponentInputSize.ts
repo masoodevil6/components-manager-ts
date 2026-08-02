@@ -27,7 +27,8 @@ import {
     IconsSourceType,
     Color,
     COLORS_MAIN,
-    COLORS_GRAD
+    COLORS_GRAD, ToolsComponents_Padding, ToolsComponents_Height, ToolsComponents_IconSize, StyleValue,
+    ToolsComponents_FontSize
 } from "../../utils/ToolsConsts";
 import {IconOptions, IconString} from "../icons/index";
 
@@ -86,6 +87,12 @@ import {
     ComponentElementPosition_positionTypes
 } from "./ComponentElementPosition";
 import {TranslateUnit} from "../../utils/ToolsConsts";
+import {ComponentBorderMethodsType, ComponentBorderPropsType} from "./ComponentBorder";
+import {
+    ComponentInputPhone_Methods_INPUT_BLUR_ComponentArgs,
+    ComponentInputPhone_Methods_INPUT_CHANGE_ComponentArgs,
+    ComponentInputPhone_Methods_INPUT_FOCUS_ComponentArgs, ComponentInputPhoneProps
+} from "./ComponentInputPhone";
 
 
 
@@ -111,10 +118,10 @@ export const ComponentInputSizeProps = {
     prop_icon:                             "prop_icon",
     prop_iconPositive:                     "prop_iconPositive",
     prop_iconNegetive:                     "prop_iconNegetive",
-    prop_iconColor:                        "prop_iconColor" ,
     prop_min:                              "prop_min",
     prop_max:                              "prop_max",
     prop_isAbsoluteRule:                   "prop_isAbsoluteRule",
+    prop_hasRules:                         "prop_hasRules",
     prop_listRules:                        "prop_listRules",
     prop_msgRules:                         "prop_msgRules",
 } as const;
@@ -189,10 +196,6 @@ const ComponentInputSizeConfigs = {
             name:               ComponentInputSizeProps.prop_iconNegetive,
             value:              GOG_SetValue<IconsSourceType>(ToolsIcons.icon_minus_badge),
         },
-        [ComponentInputSizeProps.prop_iconColor]: {
-            name:               ComponentInputSizeProps.prop_iconColor,
-            value:              GOG_SetValue<Color | null>(   Color(COLORS_MAIN.SHAN , COLORS_GRAD.GRADE_1 )),
-        },
         [ComponentInputSizeProps.prop_min]: {
             name:               ComponentInputSizeProps.prop_min,
             value:              GOG_SetValue<number | null>(null),
@@ -205,6 +208,10 @@ const ComponentInputSizeConfigs = {
             name:               ComponentInputSizeProps.prop_isAbsoluteRule,
             value:              GOG_SetValue<boolean>(true),
         },
+        [ComponentInputSizeProps.prop_hasRules]: {
+            name:               ComponentInputSizeProps.prop_hasRules,
+            value:              GOG_SetValue<boolean>(false),
+        },
         [ComponentInputSizeProps.prop_listRules]: {
             name:               ComponentInputSizeProps.prop_listRules,
             value:              GOG_SetValue<any[]>([]),
@@ -212,10 +219,6 @@ const ComponentInputSizeConfigs = {
         [ComponentInputSizeProps.prop_msgRules]: {
             name:               ComponentInputSizeProps.prop_msgRules,
             value:              GOG_SetValue<Record<string, string> | null>(null),
-        },
-        [GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name]: {
-            name:               GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name,
-            value:              GOG_SetValue<Observable<string> | string>(""),
         },
     },
     schemas: {
@@ -307,12 +310,6 @@ export abstract class ComponentInputSizeBase extends ComponentBase<
             ...GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_Pattern(this),
             ...GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_Pattern(this),
             ///----------------------
-            [ComponentInputSizeConfigs.keys.prop_value.name]: {
-                prop: ComponentInputSizeConfigs.keys.prop_value.name,
-                default: ComponentInputSizeConfigs.keys.prop_value.value,
-                title: Language.translate("components.public.props.prop_value.title"),
-                description: Language.translate("components.public.props.prop_value.description"),
-            },
             [ComponentInputSizeConfigs.keys.prop_title.name]: {
                 prop: ComponentInputSizeConfigs.keys.prop_title.name,
                 default: ComponentInputSizeConfigs.keys.prop_title.value,
@@ -403,12 +400,6 @@ export abstract class ComponentInputSizeBase extends ComponentBase<
                 title: Language.translate("components.input_size.props.prop_iconNegetive.title"),
                 description: Language.translate("components.input_size.props.prop_iconNegetive.description"),
             },
-            [ComponentInputSizeConfigs.keys.prop_iconColor.name]: {
-                prop: ComponentInputSizeConfigs.keys.prop_iconColor.name,
-                default: ComponentInputSizeConfigs.keys.prop_iconColor.value,
-                title: Language.translate("components.input_size.props.prop_iconColor.title"),
-                description: Language.translate("components.input_size.props.prop_iconColor.description"),
-            },
             [ComponentInputSizeConfigs.keys.prop_min.name]: {
                 prop: ComponentInputSizeConfigs.keys.prop_min.name,
                 default: ComponentInputSizeConfigs.keys.prop_min.value,
@@ -426,6 +417,12 @@ export abstract class ComponentInputSizeBase extends ComponentBase<
                 default: ComponentInputSizeConfigs.keys.prop_isAbsoluteRule.value,
                 title: Language.translate("components.input.props.prop_isAbsoluteRule.title"),
                 description: Language.translate("components.input.props.prop_isAbsoluteRule.description"),
+            },
+            [ComponentInputSizeConfigs.keys.prop_hasRules.name]: {
+                prop:                                             ComponentInputSizeConfigs.keys.prop_hasRules.name,
+                default:                                          ComponentInputSizeConfigs.keys.prop_hasRules.value,
+                title:                                            Language.translate("components.input.props.prop_hasRules.title"),
+                description:                                      Language.translate("components.input.props.prop_hasRules.description"),
             },
             [ComponentInputSizeConfigs.keys.prop_listRules.name]: {
                 prop: ComponentInputSizeConfigs.keys.prop_listRules.name,
@@ -506,7 +503,6 @@ export abstract class ComponentInputSizeBase extends ComponentBase<
             props: [
                 this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name],
                 this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_iconPositive.name],
-                this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_iconColor.name],
                 this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_inputBorderWidth.name],
             ]
         },
@@ -517,7 +513,6 @@ export abstract class ComponentInputSizeBase extends ComponentBase<
             props: [
                 this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name],
                 this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_iconNegetive.name],
-                this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_iconColor.name],
                 this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_inputBorderWidth.name],
             ]
         },
@@ -527,9 +522,11 @@ export abstract class ComponentInputSizeBase extends ComponentBase<
             description: Language.translate("components.input_size.schema.validate.description"),
             props: [
                 this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_isAbsoluteRule.name],
+                this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_hasRules.name],
                 this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_listRules.name],
                 this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_msgRules.name],
                 this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name],
+                this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name],
                 this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_title.name],
             ]
         },
@@ -583,14 +580,13 @@ export abstract class ComponentInputSizeBase extends ComponentBase<
 
 
     static override renderExampleComponent(): HTMLElement {
-        const valueObs = new Observable<string>("0");
         const comp = new ComponentInputSize(
             <ComponentInputSizePropsType>{
                 classList: ["col-md-3", "col-12", "border", "p-2"],
                 prop_labelTitle: "Input Size Example",
                 prop_labelTooltipDescription: "Numeric input with +/- buttons and min/max",
                 prop_placeholder: "Enter number...",
-                prop_value: valueObs,
+                prop_value: 10,
                 prop_size: SIZES.M,
                 prop_icon: ToolsIcons.icon_search({ size: SIZES.S }),
                 prop_min: 0,
@@ -620,6 +616,8 @@ export abstract class ComponentInputSizeBase extends ComponentBase<
 export class ComponentInputSize extends ComponentInputSizeBase {
 
     private var_inputValue = new Observable<string>("");
+
+    private _ELEMENT_INPUT = null;
 
     /* ---------------------------------------------
         SETUP
@@ -663,38 +661,74 @@ export class ComponentInputSize extends ComponentInputSizeBase {
     }
 
 
+    // ---------------------------------------------
     private template_render_form(attrsDefault, data, extra): ReactiveElement {
         if (data != null) {
             const prop_backgroundColorForm = data[ComponentInputSizeConfigs.keys.prop_backgroundColorForm.name];
-            const prop_formBorderRadius = data[ComponentInputSizeConfigs.keys.prop_formBorderRadius.name];
+            const prop_formBorderRadius =    data[ComponentInputSizeConfigs.keys.prop_formBorderRadius.name];
 
             return ReactiveElement.part("section", {
-                attrs: {
-                    ...attrsDefault,
-                    "id": `component-input-size-form-${this._COMPONENT_RANDOM_ID}`,
-                },
-                styles: {
-                    marginTop: "5px" ,
-                },
+                attrs: { ...attrsDefault },
+                stylesCustom:`
+ /* Chrome, Edge, Safari, Opera */
+#${attrsDefault.id} input[type="number"]::-webkit-inner-spin-button,
+#${attrsDefault.id} input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+#${attrsDefault.id} input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+                ` ,
                 children: [
-                    ReactiveElement.part("section", {
-                        stylesBind: {
-                            backgroundColor: prop_backgroundColorForm,
-                            borderRadius: prop_formBorderRadius instanceof Observable
-                                ? prop_formBorderRadius.map((s: any) => `${ToolsComponents_BorderRadius[s ?? SIZES.M]} !important`)
-                                : `${ToolsComponents_BorderRadius[prop_formBorderRadius ?? SIZES.M]} !important`,
-                        } ,
-                        className: ["position-relative", "p-0"],
-                        children: [
-                            this.executeSchemaPart(ComponentInputSizeConfigs.schemas.INPUT.name),
-                            this.executeSchemaPart(ComponentInputSizeConfigs.schemas.ICON_CLEAR.name),
-                            this.executeSchemaPart(ComponentInputSizeConfigs.schemas.ICON.name),
-                            this.executeSchemaPart(ComponentInputSizeConfigs.schemas.BUTTON_POSITIVE.name),
-                            this.executeSchemaPart(ComponentInputSizeConfigs.schemas.BUTTON_NEGATIVE.name),
-                        ]
-                    }) ,
+                    new ToolsComponents.ComponentBorder(
+                        <ComponentBorderPropsType>{
+                            classList: [ "pt-2" , "d-block"]  ,
+                            styles: {}  ,
+                            prop_borderClass: []  ,
+                            prop_borderStyles: Observable.computed(
+                                (sizeName) => {
+                                    return {
+                                        height: SizeCalc(
+                                            ToolsComponents_BorderWidth?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Padding?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Height?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Padding?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_BorderWidth?.[sizeName] ,
+                                        )
+                                    }
+                                } ,
+                                [
+                                    AppConfig.get_sizeName()
+                                ] ,
+                                this.getScope()
+                            ) ,
+                            prop_borderRadius: prop_formBorderRadius ,
+                            prop_content:                        ReactiveElement.div({
+                                className: ["position-relative"  , "h-100"] ,
+                                children: [
+                                    this.executeSchemaPart(ComponentInputSizeConfigs.schemas.ICON.name),
+                                    this.executeSchemaPart(ComponentInputSizeConfigs.schemas.INPUT.name),
+
+                                    // this.executeSchemaPart(ComponentInputSizeConfigs.schemas.ICON_CLEAR.name),
+                                    // this.executeScheaPart(ComponentInputSizeConfigs.schemas.BUTTON_POSITIVE.name),
+                                    // this.executeSchemaPart(ComponentInputSizeConfigs.schemas.BUTTON_NEGATIVE.name),
+                                ]
+                            }) ,
+                            prop_borderColor:                    null ,
+                            prop_contentBackgroundColor:         prop_backgroundColorForm ,
+                        },
+                        <ComponentBorderMethodsType>{}
+                    ).getReactiveElement() ,
                     this.executeSchemaPart(ComponentInputSizeConfigs.schemas.VALIDATE.name),
-                ]
+                ],
             });
 
         }
@@ -703,220 +737,313 @@ export class ComponentInputSize extends ComponentInputSizeBase {
     }
 
 
+
+    // ---------------------------------------------
+    private template_render_icon(attrsDefault, data, extra): ReactiveElement {
+        if (data != null) {
+            const prop_icon =      data[ComponentInputSizeConfigs.keys.prop_icon.name];
+            const prop_colorIcon = data[ComponentInputSizeConfigs.keys.prop_colorIcon.name];
+
+            return ReactiveElement.part("section", {
+                attrs: { ...attrsDefault },
+                children: Observable.computed(
+                    (icon , colorIcon: any) => {
+                        if (!icon) return null;
+
+                        return  new ToolsComponents.ComponentIcon(
+                            <ComponentIconPropsType>{
+                                classList:   [],
+                                styles:      Observable.computed(
+                                    (sizeName , dir) => {
+                                        return {
+                                            cursor:   "pointer",
+                                            width: SizeCalc(
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Height?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                            ) ,
+                                            height: SizeCalc(
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Height?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                            ) ,
+                                            float: dir ? "right" : "left"
+                                        }
+                                    },
+                                    [
+                                        AppConfig.get_sizeName() ,
+                                        AppConfig.get_directionRtl()
+                                    ] ,
+                                    this.getScope()
+                                ),
+                                prop_iconClass: ["d-block"],
+                                prop_iconStyles:      Observable.computed(
+                                    (sizeName , dir) => {
+                                        return {
+                                            margin:   "auto",
+                                            width: SizeCalc(
+                                                ToolsComponents_IconSize?.[sizeName] ,
+                                            ) ,
+                                            lineHeight: SizeCalc(
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Height?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                            ) ,
+                                            height: SizeCalc(
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Height?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                            )
+                                        }
+                                    },
+                                    [
+                                        AppConfig.get_sizeName() ,
+                                        AppConfig.get_directionRtl()
+                                    ] ,
+                                    this.getScope()
+                                ),
+                                prop_icon: prop_icon,
+                            },
+                            <ComponentIconMethodsType>{
+                                fn_onClickIcon: (event, dataArgs, componentArgs) => {
+                                    this._ELEMENT_INPUT.focusFn();
+                                }
+                            }).getReactiveElement()
+
+                    },
+                    [prop_icon , prop_colorIcon],
+                    this.getScope()
+                ),
+            });
+        }
+
+        return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
+    }
+
+
+    // ---------------------------------------------
     private template_render_input(attrsDefault, data, extra): ReactiveElement {
         if (data != null) {
-            const prop_inputClass = data[ComponentInputSizeConfigs.keys.prop_inputClass.name];
-            const prop_inputStyles = data[ComponentInputSizeConfigs.keys.prop_inputStyles.name];
-            const prop_inputBorderColor = data[ComponentInputSizeConfigs.keys.prop_inputBorderColor.name];
-            const prop_inputBorderColorFocus = data[ComponentInputSizeConfigs.keys.prop_inputBorderColorFocus.name];
-            const prop_inputBorderWidth = data[ComponentInputSizeConfigs.keys.prop_inputBorderWidth.name];
-            const prop_inputBorderRadius = data[ComponentInputSizeConfigs.keys.prop_inputBorderRadius.name];
-            const prop_name = data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_name.name];
-            const prop_value = data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name];
-            const prop_placeholder = data[ComponentInputSizeConfigs.keys.prop_placeholder.name];
-            const prop_icon = data[ComponentInputSizeConfigs.keys.prop_icon.name];
-            const prop_isDisable = data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
-            const prop_size = data[ComponentInputSizeConfigs.keys.prop_size.name];
 
-            const directionRtl = AppConfig.get("directionRtl");
+            const prop_value =         data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name];
+            const prop_inputClass =    data[ComponentInputSizeConfigs.keys.prop_inputClass.name];
+            const prop_inputStyles =   data[ComponentInputSizeConfigs.keys.prop_inputStyles.name];
+            const prop_name =          data[ComponentInputSizeConfigs.keys.prop_name.name];
+            const prop_placeholder =   data[ComponentInputSizeConfigs.keys.prop_placeholder.name];
+            const prop_isDisable =     data[ComponentInputSizeConfigs.keys.prop_isDisable.name];
+            const prop_icon =          data[ComponentInputSizeConfigs.keys.prop_icon.name];
 
-            const inputValue = prop_value instanceof Observable
-                ? prop_value
-                : this.var_inputValue;
-
-            if (prop_value instanceof Observable) {
-                this.var_inputValue = prop_value;
-            }
-
-            const inputId = `component-input-size-input-${this._COMPONENT_RANDOM_ID}`;
-
-            return ReactiveElement.input({
+            this._ELEMENT_INPUT = ReactiveElement.input({
                 attrs: {
                     ...attrsDefault,
-                    "id": inputId,
-                    "type": "text",
+                    type:        "number",
                 },
                 attrsBind: {
-                    name: prop_name,
+                    name:        Observable.computed(
+                        (name) => {
+                            return `${name}[value]`
+                        },
+                        [
+                            prop_name
+                        ],
+                        this.getScope()
+                    ),
                     placeholder: prop_placeholder,
-                    value: inputValue,
-                    disabled: prop_isDisable instanceof Observable
-                        ? prop_isDisable.map((v: boolean) => v ? "disabled" : (null as any))
-                        : (prop_isDisable ? "disabled" : (null as any)),
+                    value:       prop_value,
+                    disabled :   Observable.computed(
+                        (status) => {
+                            return status ? "disabled" : null
+                        } ,
+                        [
+                            prop_isDisable
+                        ] ,
+                        this.getScope()
+                    )
                 },
                 className: [
                     "d-block",
                 ],
                 classBind: [
                     prop_inputClass,
-                    prop_isDisable instanceof Observable
-                        ? prop_isDisable.mapBoolean("disabled", "")
-                        : (prop_isDisable ? "disabled" : ""),
-                    prop_icon instanceof Observable
-                        ? prop_icon.mapBoolean("border", "")
-                        : (prop_icon ? "border" : ""),
                 ],
                 styles: {
-                    [directionRtl ? "paddingLeft" : "paddingRight"]: "20px",
-                    [directionRtl ? "right" : "left"]: "0",
-                    direction: directionRtl ? "rtl" : "ltr",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
+                    whiteSpace:   "nowrap",
+                    overflow:     "hidden",
                     textOverflow: "ellipsis",
-                    top: "0",
-                    paddingTop: "1px" ,
-                    paddingBottom: "1px" ,
-                    outline: "none",
-                    boxShadow: "none",
+                    top:          "0",
+                    outline:      "none",
+                    boxShadow:    "none",
                 },
                 stylesBind: (el) => ({
                     prop_inputStyles,
 
-                    borderWidth: Observable.computed((borderWidth) =>
-                            {
-                                console.log(borderWidth)
-                                return  `${ToolsComponents_BorderWidth?.[borderWidth]} !important`
-                            },
-                            [
-                                 prop_inputBorderWidth , 
-                            ],
-                            this.getScope()
-                        ) ,
-                        
-                    borderRadius: Observable.computed((borderRadius) =>
-                            {
-                                return  `${ToolsComponents_BorderRadius?.[borderRadius]} !important`
-                            },
-                            [
-                                 prop_inputBorderRadius , 
-                            ],
-                            this.getScope()
-                        ) ,
-                        
+                    width: Observable.computed(
+                        (sizeName, icon , countryHas, countryWidth, cityHas, cityWidth) => {
+                            let listCalc = [
+                                SizeUnit(100 , UNITS.PERCENT)
+                            ];
+                            if (icon != null){
+                                listCalc.push(OPERATION.MINUS);
+                                listCalc.push(ToolsComponents_BorderWidth?.[sizeName]);
+                                listCalc.push(OPERATION.MINUS);
+                                listCalc.push(ToolsComponents_Padding?.[sizeName]);
+                                listCalc.push(OPERATION.MINUS);
+                                listCalc.push(ToolsComponents_Height?.[sizeName]);
+                                listCalc.push(OPERATION.MINUS);
+                                listCalc.push(ToolsComponents_Padding?.[sizeName]);
+                                listCalc.push(OPERATION.MINUS);
+                                listCalc.push(ToolsComponents_BorderWidth?.[sizeName]);
+                            }
+                            return SizeCalc(...listCalc)
+                        } ,
+                        [
+                            AppConfig.get_sizeName() ,
+                            prop_icon
+                        ] ,
+                        this.getScope()
+                    ) ,
+
+
+                    borderWidth: Observable.computed(
+                        (sizeName: string) => StyleValue.important(ToolsComponents_BorderWidth?.[sizeName]),
+                        [AppConfig.get_sizeName()],
+                        this.getScope()
+                    ),
+
+                    borderRadius: Observable.computed(
+                        (sizeName) => {
+                            return ToolsComponents_BorderRadius?.[sizeName]
+                        } ,
+                        [
+                            AppConfig.get_sizeName()
+                        ] ,
+                        this.getScope()
+                    ) ,
+
+
+
+                    direction: Observable.computed(
+                        (dir)=> {
+                            return dir ? "rtl" : "ltr";
+                        },
+                        [
+                            AppConfig.get_directionRtl()
+                        ] ,
+                        this.getScope()
+                    )  ,
+
+                    float: Observable.computed(
+                        (dir)=> {
+                            return dir ? "right" : "left";
+                        },
+                        [
+                            AppConfig.get_directionRtl()
+                        ] ,
+                        this.getScope()
+                    )  ,
+
+                    lineHeight: Observable.computed(
+                        (sizeName)=> {
+                            return ToolsComponents_Height?.[sizeName];
+                        },
+                        [
+                            AppConfig.get_sizeName()
+                        ] ,
+                        this.getScope()
+                    )  ,
+
                     borderColor: el.focus.mapList({
-                        true:  
-                            Observable.computed((borderColor) =>
-                                {
-                                     return  `${borderColor} !important`
-                                },
-                                [
-                                    prop_inputBorderColorFocus , 
-                                ],
-                                this.getScope()
-                            ) ,
+                        true:  StyleValue.important( Color(COLORS_MAIN.SECONDARY, COLORS_GRAD.GRADE_1))  ,
+                        false: StyleValue.important( Color(COLORS_MAIN.PRIMARY, COLORS_GRAD.GRADE_1))  ,
+                    }) ,
 
-                        false:  
-                            Observable.computed((borderColor) =>
-                                {
-                                     return  `${borderColor} !important`
-                                },
-                                [
-                                    prop_inputBorderColor , 
-                                ],
-                                this.getScope()
-                            ) ,
-                        }),
+                    fontSize: Observable.computed(
+                        (sizeName)=> {
+                            return ToolsComponents_FontSize?.[sizeName];
+                        },
+                        [
+                            AppConfig.get_sizeName()
+                        ] ,
+                        this.getScope()
+                    )  ,
 
-                    lineHeight: Observable.computed((sizeName) =>
-                            {
-                                return SizeUnit(
-                                    ToolsCss.getHeightSize(sizeName),
-                                     UNITS.PEXEL
-                                )
-                            },
-                            [
-                                 AppConfig.get_sizeName() , 
-                            ],
-                            this.getScope()
-                        ) ,
+                    paddingTop: Observable.computed(
+                        (sizeName)=> {
+                            return ToolsComponents_Padding?.[sizeName];
+                        },
+                        [
+                            AppConfig.get_sizeName()
+                        ] ,
+                        this.getScope()
+                    )  ,
 
-                    fontSize: Observable.computed((sizeName) =>
-                            {
-                                return SizeUnit(
-                                    ToolsCss.getFontSize(sizeName),
-                                     UNITS.PEXEL
-                                )
-                            },
-                            [
-                                 AppConfig.get_sizeName() , 
-                            ],
-                            this.getScope()
-                        ) ,
+                    paddingBottom: Observable.computed(
+                        (sizeName)=> {
+                            return ToolsComponents_Padding?.[sizeName];
+                        },
+                        [
+                            AppConfig.get_sizeName()
+                        ] ,
+                        this.getScope()
+                    )  ,
 
-                    width: Observable.computed((icon) =>
-                            {
-                                let calc = [
-                                    SizeUnit(100, UNITS.PERCENT) 
-                                ];
-                                if(icon){
-                                    calc.push(OPERATION.MINUS);
-                                    calc.push(SizeUnit(35, UNITS.PEXEL));
-                                }
-                                return  SizeCalc(...calc);
-                            },
-                            [
-                                 prop_icon 
-                            ],
-                            this.getScope()
-                        ) ,
 
-                    marginLeft: Observable.computed(( dir , icon) =>
-                            {
-                                if(!dir && icon != null){
-                                    return  SizeUnit(35, UNITS.PEXEL);
-                                }
-                                return null;
-                            },
-                            [
-                                 AppConfig.get_directionRtl() , 
-                                 prop_icon 
-                            ],
-                            this.getScope()
-                        ) ,
-                        
-                    marginRight: Observable.computed(( dir , icon) =>
-                            {
-                                if(dir && icon != null){
-                                    return  SizeUnit(35, UNITS.PEXEL);
-                                }
-                                return null;
-                            },
-                            [ 
-                                 AppConfig.get_directionRtl() , 
-                                 prop_icon 
-                            ],
-                            this.getScope()
-                        ) ,
+
+
+
                 }),
                 on: {
                     input: (event: Event) => {
-                        const val = (event.target as HTMLInputElement).value;
-                        this.fn_validateInputIsNumber(event);
-                        const params: ComponentInputSize_Methods_INPUT_DataArgs = {
-                            [ComponentInputSizeConfigs.methods.INPUT.dataArgs.VALUE.name]: val,
-                        };
-                        this.executeMethod(ComponentInputSizeConfigs.methods.INPUT.name, event, params);
+                        // const value = event.target?.value ?? undefined;
+                        // this.set(ComponentInputPhoneConfigs.keys.prop_value.name , value)
+                        // const paramsFn : ComponentInputPhone_Methods_INPUT_CHANGE_ComponentArgs = {}
+                        // this.executeMethod(ComponentInputPhoneConfigs.methods.INPUT_CHANGE.name  , event , paramsFn);
                     },
                     focus: (event: Event) => {
-                        const val = (event.target as HTMLInputElement).value;
-                        const params: ComponentInputSize_Methods_FOCUS_DataArgs = {
-                            [ComponentInputSizeConfigs.methods.FOCUS.dataArgs.VALUE.name]: val,
-                        };
-                        this.executeMethod(ComponentInputSizeConfigs.methods.FOCUS.name, event, params);
+                        // this._DROPDOWN_OPEN_COUNTRY.set(false);
+                        // this._DROPDOWN_OPEN_CITY.set(false);
+                        //
+                        // const paramsFn : ComponentInputPhone_Methods_INPUT_FOCUS_ComponentArgs = {}
+                        // this.executeMethod(ComponentInputPhoneConfigs.methods.INPUT_FOCUS.name  , event , paramsFn);
                     },
                     blur: (event: Event) => {
-                        const val = (event.target as HTMLInputElement).value;
-                        const params: ComponentInputSize_Methods_BLUR_DataArgs = {
-                            [ComponentInputSizeConfigs.methods.BLUR.dataArgs.VALUE.name]: val,
-                        };
-                        this.executeMethod(ComponentInputSizeConfigs.methods.BLUR.name, event, params);
+                        // const paramsFn : ComponentInputPhone_Methods_INPUT_BLUR_ComponentArgs = {}
+                        // this.executeMethod(ComponentInputPhoneConfigs.methods.INPUT_BLUR.name  , event , paramsFn);
                     },
                 }
             });
+
+            return this._ELEMENT_INPUT;
         }
 
         return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
     }
+
+
 
 
     private template_render_iconClear(attrsDefault, data, extra): ReactiveElement {
@@ -1029,106 +1156,11 @@ export class ComponentInputSize extends ComponentInputSizeBase {
     }
 
 
-    private template_render_icon(attrsDefault, data, extra): ReactiveElement {
-        if (data != null) {
-            const prop_icon = data[ComponentInputSizeConfigs.keys.prop_icon.name];
-
-            return ReactiveElement.part("section", {
-                attrs: { ...attrsDefault },
-                children: Observable.computed(
-                    (iconValue: any, size: any) => {
-                        if (!iconValue) return null;
-                     
-                        return new ComponentElementPosition(
-                            <ComponentElementPositionPropsType>{
-                                classList: [],
-                                styles: {},
-                                prop_positionZIndex: ToolsCss.getZIndex(Z_INDEXES.tools_btn , 10),
-                                prop_positionType:   ComponentElementPosition_positionTypes.ABSOLUTE,
-                                prop_positionTop:    SizeUnit(50, UNITS.PERCENT),
-                                prop_positionWidth:  SizeUnit(30, UNITS.PEXEL),
-                                prop_positionStyles: {
-                                    display:         "flex",
-                                    alignItems:      "center",
-                                    justifyContent:  "center",
-                                },
-                                prop_positionLeft: Observable.computed(( dir) =>
-                                                                 {
-                                                                    return !dir ? SizeUnit(0, UNITS.PEXEL) : null;
-                                                                 },
-                                                                 [
-                                                                      AppConfig.get_directionRtl() 
-                                                                 ],
-                                                                 this.getScope()
-                                                            ) ,
-                                prop_positionRight: Observable.computed(( dir) =>
-                                                                 {
-                                                                    return dir ? SizeUnit(0, UNITS.PEXEL) : null;
-                                                                 },
-                                                                 [
-                                                                      AppConfig.get_directionRtl() 
-                                                                 ],
-                                                                 this.getScope()
-                                                            ) ,
-                                prop_positionTranslate: Observable.computed(( dir) =>
-                                                                 {
-                                                                     return dir  
-                                                                        ? TranslateUnit(SizeUnit(-5, UNITS.PEXEL), SizeUnit(-50, UNITS.PERCENT))
-                                                                        : TranslateUnit(SizeUnit(5, UNITS.PEXEL), SizeUnit(-50, UNITS.PERCENT));
-                                                                 },
-                                                                 [
-                                                                      AppConfig.get_directionRtl() 
-                                                                 ],
-                                                                 this.getScope()
-                                                            ) ,
-                                prop_positionHeight: Observable.computed(( sizeName) =>
-                                                                 {
-                                                                     return SizeUnit(
-                                                                        ToolsCss.getIconSize(sizeName),
-                                                                        UNITS.PEXEL
-                                                                    );
-                                                                 },
-                                                                 [
-                                                                      AppConfig.get_sizeName() 
-                                                                 ],
-                                                                 this.getScope()
-                                                            ) ,
-                                prop_content: new ToolsComponents.ComponentIcon(
-                                                     <ComponentIconPropsType> {
-                                                         classList:        [],
-                                                         styles:           {},
-                                                         prop_iconClass:   [],
-                                                         prop_iconStyles:  {
-                                                             margin:        "auto",
-                                                             cursor:        "pointer",
-                                                         },
-                                                         prop_icon:    prop_icon,
-                                                     } ,
-                                                     <ComponentIconMethodsType>{
-                                                         fn_onClickIcon: (event, dataArgs, componentArgs) => {
-                                                             this.fn_onFocusInput(event);
-                                                         }
-                                                     }
-                                                 ).getReactiveElement(),
-                            } ,
-                            <ComponentElementPositionMethodsType>{}
-                        ).getReactiveElement();
-                    },
-                    [prop_icon],
-                    this.getScope()
-                ),
-            });
-        }
-
-        return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
-    }
-
 
     private template_render_buttonPositive(attrsDefault, data, extra): ReactiveElement {
         if (data != null) {
             const prop_isDisable =    data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
             const prop_iconPositive = data[ComponentInputSizeConfigs.keys.prop_iconPositive.name];
-            const prop_iconColor =    data[ComponentInputSizeConfigs.keys.prop_iconColor.name];
             const prop_inputBorderWidth = data[ComponentInputSizeConfigs.keys.prop_inputBorderWidth.name];
 
             return ReactiveElement.part("section", {
@@ -1179,12 +1211,11 @@ export class ComponentInputSize extends ComponentInputSizeBase {
                                                               borderBottomLeftRadius:     "0 !important",
                                                           },
                                                           prop_btnBorderRadius:        null,
-                                                          prop_btnTitle:               Observable.computed(( iconColor , iconPositive) =>
+                                                          prop_btnTitle:               Observable.computed(( iconPositive) =>
                                                                                                {
-                                                                                                   return iconPositive?.({primaryColor: iconColor})
+                                                                                                   return iconPositive?.()
                                                                                                },
-                                                                                               [ 
-                                                                                                    prop_iconColor , 
+                                                                                               [
                                                                                                     prop_iconPositive 
                                                                                                ],
                                                                                                this.getScope()
@@ -1222,7 +1253,6 @@ export class ComponentInputSize extends ComponentInputSizeBase {
         if (data != null) {
             const prop_isDisable = data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
             const prop_iconNegetive = data[ComponentInputSizeConfigs.keys.prop_iconNegetive.name];
-            const prop_iconColor = data[ComponentInputSizeConfigs.keys.prop_iconColor.name];
             const prop_inputBorderWidth = data[ComponentInputSizeConfigs.keys.prop_inputBorderWidth.name];
 
             return ReactiveElement.part("section", {
@@ -1277,12 +1307,11 @@ export class ComponentInputSize extends ComponentInputSizeBase {
                                                          borderBottomLeftRadius:     "0 !important",
                                                      },
                                                      prop_btnBorderRadius:        null,
-                                                     prop_btnTitle:               Observable.computed(( iconColor , iconNegetive) =>
+                                                     prop_btnTitle:               Observable.computed((  iconNegetive) =>
                                                          {
-                                                             return iconNegetive?.({primaryColor: iconColor})
+                                                             return iconNegetive?.()
                                                          },
                                                          [
-                                                             prop_iconColor ,
                                                              prop_iconNegetive
                                                          ],
                                                          this.getScope()
@@ -1316,56 +1345,52 @@ export class ComponentInputSize extends ComponentInputSizeBase {
     }
 
 
+    // ---------------------------------------------
     private template_render_validate(attrsDefault, data, extra): ReactiveElement {
         if (data != null) {
-            const prop_isDisable = data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
+            const prop_value =          data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name];
+            const prop_isDisable =      data[ComponentInputSizeConfigs.keys.prop_isDisable.name];
+            const prop_hasRules =       data[ComponentInputSizeConfigs.keys.prop_hasRules.name];
             const prop_isAbsoluteRule = data[ComponentInputSizeConfigs.keys.prop_isAbsoluteRule.name];
-            const prop_listRules = data[ComponentInputSizeConfigs.keys.prop_listRules.name];
-            const prop_msgRules = data[ComponentInputSizeConfigs.keys.prop_msgRules.name];
-            const prop_title = data[ComponentInputSizeConfigs.keys.prop_title.name];
+            const prop_listRules =      data[ComponentInputSizeConfigs.keys.prop_listRules.name];
+            const prop_msgRules =       data[ComponentInputSizeConfigs.keys.prop_msgRules.name];
+            const prop_title =          data[ComponentInputSizeConfigs.keys.prop_title.name];
 
             return ReactiveElement.part("section", {
-                attrs: {
-                    ...attrsDefault,
-                    "id": `component-input-size-validate-${this._COMPONENT_RANDOM_ID}`,
-                },
+                attrs: { ...attrsDefault },
                 className: ["position-relative"],
-                children: [
-                    ReactiveElement.part("section", {
-                        attrs: { ...attrsDefault },
-                        children: Observable.computed(
-                            (isDisable: boolean, isAbsoluteRule: any, listRules: any, msgRules: any, title: any) => {
-                                if (isDisable) return null;
-                                if (!Array.isArray(listRules) || listRules.length === 0) return null;
+                children: Observable.computed(
+                    (isDisable: boolean, hasRules: boolean) => {
+                        if (isDisable) return null;
+                        if (!hasRules) return null;
 
-                                return new ToolsComponents.ComponentValidate(
-                                    <ComponentValidatePropsType>{
-                                        classList: ["mt-1"],
-                                        prop_reference: `component-input-size-input-${this._COMPONENT_RANDOM_ID}`,
-                                        prop_isAbsolute: isAbsoluteRule ?? true,
-                                        prop_listRules: listRules,
-                                        prop_msgRules: msgRules ?? null,
-                                        prop_title: title ?? "",
-                                        prop_size: "m",
-                                        prop_value: this.var_inputValue,
-                                    },
-                                    <ComponentValidateMethodsType>{
-                                        fn_onChangeValidate: (event, dataArgs, componentArgs) => {
-                                        }
-                                    }
-                                ).getReactiveElement();
+                        return new ToolsComponents.ComponentValidate(
+                            <ComponentValidatePropsType>{
+                                classList:        ["mt-1"],
+                                prop_reference:   `component-input-phone-input-${this._COMPONENT_RANDOM_ID}`,
+                                prop_isAbsolute:  prop_isAbsoluteRule ,
+                                prop_listRules:   prop_listRules ,
+                                prop_msgRules:    prop_msgRules ,
+                                prop_title:       prop_title ,
+                                prop_value:       prop_value ,
                             },
-                            [prop_isDisable, prop_isAbsoluteRule, prop_listRules, prop_msgRules, prop_title],
-                            this.getScope()
-                        ),
-                    }).getReactiveElement()
-                ]
-            });
+                            <ComponentValidateMethodsType>{
+                                fn_onChangeValidate: (event, dataArgs, componentArgs) => {
 
+                                }
+                            }
+                        ).getReactiveElement();
+                    },
+                    [prop_isDisable, prop_hasRules],
+                    this.getScope()
+                ),
+            });
         }
 
         return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
     }
+
+
 
 
     /* ---------------------------------------------

@@ -16,8 +16,9 @@ import {AppConfig} from "../../core/AppConfig";
 import {
     Color,
     COLORS_GRAD,
-    COLORS_MAIN,
-    SIZES,
+    COLORS_MAIN, OPERATION, SizeCalc,
+    SIZES, SizeUnit, ToolsComponents_BorderWidth, ToolsComponents_Height,
+    ToolsComponents_Margin, ToolsComponents_Padding,
     UNITS
 } from "../../utils/ToolsConsts";
 import {
@@ -60,6 +61,7 @@ import {
     ComponentIconPropsType
 } from "./ComponentIcon";
 import {ToolsIcons} from "../icons";
+import {ToolsComponents} from "./index";
 
 export const ComponentListSelectedScrollerProps = {
     ...GOG_ComponentBasicProps_Component,
@@ -114,15 +116,15 @@ const ComponentListSelectedScrollerConfigs = {
 
         [ComponentListSelectedScrollerProps.prop_borderBackgroundColor]: {
             name: ComponentListSelectedScrollerProps.prop_borderBackgroundColor,
-            value: GOG_SetValue<any>(Color(COLORS_MAIN.SHAN, COLORS_GRAD.GRADE_1))
+            value: GOG_SetValue<typeof Color | null>(Color(COLORS_MAIN.SHAN, COLORS_GRAD.GRADE_1))
         },
         [ComponentListSelectedScrollerProps.prop_borderColor]: {
             name: ComponentListSelectedScrollerProps.prop_borderColor,
-            value: GOG_SetValue<any>(Color(COLORS_MAIN.PRIMARY, COLORS_GRAD.GRADE_1))
+            value: GOG_SetValue<typeof Color | null>(Color(COLORS_MAIN.PRIMARY, COLORS_GRAD.GRADE_1))
         },
         [ComponentListSelectedScrollerProps.prop_borderClass]: {
             name: ComponentListSelectedScrollerProps.prop_borderClass,
-            value: GOG_SetValue<string[]>([])
+            value: GOG_SetValue<string[]>(["px-1"])
         },
         [ComponentListSelectedScrollerProps.prop_borderStyles]: {
             name: ComponentListSelectedScrollerProps.prop_borderStyles,
@@ -130,7 +132,7 @@ const ComponentListSelectedScrollerConfigs = {
         },
         [ComponentListSelectedScrollerProps.prop_borderWidth]: {
             name: ComponentListSelectedScrollerProps.prop_borderWidth,
-            value: GOG_SetValue<GOG_ValueOf<typeof SIZES> | number>(SIZES.M)
+            value: GOG_SetValue<GOG_ValueOf<typeof SIZES> | number>(SIZES.S)
         },
         [ComponentListSelectedScrollerProps.prop_borderRadius]: {
             name: ComponentListSelectedScrollerProps.prop_borderRadius,
@@ -489,7 +491,7 @@ export abstract class ComponentListSelectedScrollerBase extends ComponentBase<
                 styles: {},
                 
                 prop_name:        "checkbox_name",
-                prop_value:       [1,2,3,4] ,
+                prop_value:       [1,2,3,4,5,6,7] ,
                 prop_listType :   "active" ,
                 prop_list: [
                     { id: 1, title: "itemA" },
@@ -558,12 +560,12 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
                     classList: [],
                     styles: {},
                     prop_contentBackgroundColor: prop_borderBackgroundColor,
-                    prop_borderClass: prop_borderClass,
-                    prop_borderColor: prop_borderColor,
-                    prop_borderStyles: prop_borderStyles,
-                    prop_borderWidth: prop_borderWidth,
-                    prop_borderRadius: prop_borderRadius,
-                    prop_borderType: ComponentBorder_BorderTypes.SOLID,
+                    prop_borderClass:            prop_borderClass,
+                    prop_borderColor:            prop_borderColor,
+                    prop_borderStyles:           prop_borderStyles,
+                    prop_borderWidth:            prop_borderWidth,
+                    prop_borderRadius:           prop_borderRadius,
+                    prop_borderType:             ComponentBorder_BorderTypes.SOLID,
                     prop_content: [this.executeSchemaPart(ComponentListSelectedScrollerConfigs.schemas.Border_List.name)]
                 },
                 <ComponentBorderMethodsType>{
@@ -632,18 +634,11 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
                 return fullList.filter((item: any) => selectedIds.includes(item?.id));
             };
 
-            const sectionStyles = Observable.computed(
-                (borderStyles: any) => ({
-                    ...(borderStyles ?? {})
-                }),
-                [prop_listBorderStyles],
-                this.getScope()
-            );
 
             return ReactiveElement.part("section", {
-                attrs: { ...attrsDefault },
-                styles: sectionStyles,
-                className: prop_listBorderClass,
+                attrs: { ...attrsDefault } ,
+                stylesBind: prop_listBorderStyles ,
+                classBind:  [prop_listBorderClass]  ,
                 children: Observable.computed(
                     (
                         list: any,
@@ -678,7 +673,7 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
                                     [ComponentListSelectedScrollerConfigs.keys.prop_listTitleStyles.name]: titleStyles
                                 }}
                             );
-                            return [ReactiveElement.part("span", {
+                            return [ReactiveElement.span( {
                                 attrs: {
                                     dir: AppConfig.get("directionRtl") ? "rtl" : "ltr"
                                 },
@@ -703,7 +698,7 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
                         }
 
                         if (showDots) {
-                            rows.push(ReactiveElement.part("div", {
+                            rows.push(ReactiveElement.div( {
                                 styles: {
                                     whiteSpace: "nowrap",
                                     userSelect: "none"
@@ -745,7 +740,7 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
                             document.addEventListener("mouseup", onUp);
                         };
 
-                        const scrollContainer = ReactiveElement.part("div", {
+                        const scrollContainer = ReactiveElement.div( {
                             styles: {
                                 display:          "flex",
                                 flexDirection:    "row",
@@ -757,8 +752,28 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
                                 scrollbarWidth:   "none",
                                 msOverflowStyle:  "none"
                             },
+                            stylesBind: {
+                                marginTop: Observable.computed(
+                                    (sizeName) => {
+                                        return ToolsComponents_Margin?.[sizeName];
+                                    } ,
+                                    [
+                                        AppConfig.get_sizeName()
+                                    ],
+                                    this.getScope()
+                                ) ,
+                                marginBottom: Observable.computed(
+                                    (sizeName) => {
+                                        return ToolsComponents_Margin?.[sizeName];
+                                    } ,
+                                    [
+                                        AppConfig.get_sizeName()
+                                    ],
+                                    this.getScope()
+                                )
+                            },
                             className: [
-                                "list-scroller-container" , "px-1" , "py-1"
+                                "list-scroller-container" //, "px-1" , "py-1"
                             ],
                             on: { mousedown: onMouseDown },
                             children: rows
@@ -807,18 +822,13 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
         const prop_listBorderWidth = data[ComponentListSelectedScrollerConfigs.keys.prop_listBorderWidth.name];
         const prop_listBorderRadius = data[ComponentListSelectedScrollerConfigs.keys.prop_listBorderRadius.name];
 
-        const titleEl = this.executeSchemaPart(ComponentListSelectedScrollerConfigs.schemas.Border_List_ItemBorder_Title.name, { item, data });
-        const iconCloseEl = (item?.canDelete === false)
-            ? null
-            : this.executeSchemaPart(ComponentListSelectedScrollerConfigs.schemas.Border_List_ItemBorder_IconClose.name, { item, itemId, fireDelete, data });
-
-        return new ComponentBorder(
-            <any>{
-                prop_borderType: ComponentBorder_BorderTypes.SOLID,
-                prop_borderWidth: prop_listBorderWidth,
-                prop_borderRadius: prop_listBorderRadius,
-                prop_borderColor: prop_listBorderColor,
-                prop_contentBackgroundColor: prop_listBorderBackgroundColor,
+        return new ToolsComponents.ComponentBorder(
+            <ComponentBorderPropsType>{
+                prop_borderType:              ComponentBorder_BorderTypes.SOLID,
+                prop_borderWidth:             prop_listBorderWidth,
+                prop_borderRadius:            prop_listBorderRadius,
+                prop_borderColor:             prop_listBorderColor,
+                prop_contentBackgroundColor:  prop_listBorderBackgroundColor,
                 prop_borderClass:      Observable.computed(
                     (classNames) => {
                         return [...classNames , "w-100"]
@@ -836,7 +846,7 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
                     [prop_listBorderStyles],
                     this.getScope()
                 ),
-                prop_content: ReactiveElement.part("div", {
+                prop_content: ReactiveElement.div( {
                     styles: {
                         display:          "flex",
                         alignItems:       "center",
@@ -845,7 +855,28 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
                         whiteSpace:       "nowrap",
                         padding:          "0px 4px"
                     },
-                    children: [titleEl, iconCloseEl].filter(Boolean)
+                    stylesBind: {
+                        height: Observable.computed(
+                            (sizeName) =>{
+                                return SizeCalc(
+                                    ToolsComponents_Padding?.[sizeName] ,
+                                    OPERATION.ADD ,
+                                    ToolsComponents_Height?.[sizeName] ,
+                                    OPERATION.ADD ,
+                                    ToolsComponents_Padding?.[sizeName] ,
+                                )
+                            } ,
+                            [
+                                AppConfig.get_sizeName()
+                            ] ,
+                            this.getScope())
+                    } ,
+                    children: [
+                        this.executeSchemaPart(ComponentListSelectedScrollerConfigs.schemas.Border_List_ItemBorder_Title.name, { item, data }),
+                        (item?.canDelete === false)
+                            ? null
+                            : this.executeSchemaPart(ComponentListSelectedScrollerConfigs.schemas.Border_List_ItemBorder_IconClose.name, { item, itemId, fireDelete, data })
+                    ].filter(Boolean)
                 })
             },
             <ComponentBorderMethodsType>{}
@@ -857,8 +888,8 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
         const title = item?.title;
 
         const dataSource = data ?? extra?.data;
-        const prop_listTitleColor = dataSource?.[ComponentListSelectedScrollerConfigs.keys.prop_listTitleColor.name];
-        const prop_listTitleClass = dataSource?.[ComponentListSelectedScrollerConfigs.keys.prop_listTitleClass.name];
+        const prop_listTitleColor  = dataSource?.[ComponentListSelectedScrollerConfigs.keys.prop_listTitleColor.name];
+        const prop_listTitleClass  = dataSource?.[ComponentListSelectedScrollerConfigs.keys.prop_listTitleClass.name];
         const prop_listTitleStyles = dataSource?.[ComponentListSelectedScrollerConfigs.keys.prop_listTitleStyles.name];
 
         const getTitleText = (t: any) => {
@@ -869,10 +900,10 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
 
         const titleText = getTitleText(title);
 
-        return ReactiveElement.part("b", {
+        return ReactiveElement.b( {
             attrs: { ...attrsDefault },
-            className: [
-                prop_listTitleClass , "px-1" , "py-1"
+            classBind: [
+                prop_listTitleClass
             ],
             children: Observable.computed(
                 (styles: any, color: any) => {
@@ -885,7 +916,7 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
                     if (color != null) {
                         computedStyles.color = color.toString();
                     }
-                    return [ReactiveElement.part("span", {
+                    return [ReactiveElement.span( {
                         styles: computedStyles,
                         children: [titleText]
                     })];

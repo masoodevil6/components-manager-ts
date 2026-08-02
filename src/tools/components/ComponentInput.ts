@@ -561,6 +561,7 @@ export abstract class ComponentInputBase extends ComponentBase<
                 this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_btnColor.name],
                 this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_size.name],
                 this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_inputBorderWidth.name],
+                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_formBorderRadius.name],
             ]
         },
         VALIDATE: {
@@ -638,6 +639,7 @@ export abstract class ComponentInputBase extends ComponentBase<
                 prop_labelTooltipDescription: "This is an input with validation",
                 prop_type: ComponentInput_Types.STRING,
                 prop_placeholder: "Enter text...",
+                prop_name: "input_example" ,
                 prop_value: valueObs,
                 prop_size: SIZES.M,
                 prop_icon: ToolsIcons.icon_search({ size: SIZES.S }),
@@ -739,12 +741,12 @@ export class ComponentInput extends ComponentInputBase {
     private template_render_form(attrsDefault, data, extra): ReactiveElement {
         if (data != null) {
             const prop_backgroundColorForm = data[ComponentInputConfigs.keys.prop_backgroundColorForm.name];
-            const prop_formBorderRadius = data[ComponentInputConfigs.keys.prop_formBorderRadius.name];
+            const prop_formBorderRadius =    data[ComponentInputConfigs.keys.prop_formBorderRadius.name];
 
             return ReactiveElement.part("section", {
                 attrs: {
                     ...attrsDefault,
-                    "id": `component-input-form-${this._COMPONENT_RANDOM_ID}`,
+                  //  "id": `component-input-form-${this._COMPONENT_RANDOM_ID}`,
                 },
                 styles: {
                     marginTop: "5px" ,
@@ -777,20 +779,20 @@ export class ComponentInput extends ComponentInputBase {
 
     private template_render_input(attrsDefault, data, extra): ReactiveElement {
         if (data != null) {
-            const prop_inputClass = data[ComponentInputConfigs.keys.prop_inputClass.name];
-            const prop_inputStyles = data[ComponentInputConfigs.keys.prop_inputStyles.name];
-            const prop_inputBorderColor = data[ComponentInputConfigs.keys.prop_inputBorderColor.name];
+            const prop_inputClass =            data[ComponentInputConfigs.keys.prop_inputClass.name];
+            const prop_inputStyles =           data[ComponentInputConfigs.keys.prop_inputStyles.name];
+            const prop_inputBorderColor =      data[ComponentInputConfigs.keys.prop_inputBorderColor.name];
             const prop_inputBorderColorFocus = data[ComponentInputConfigs.keys.prop_inputBorderColorFocus.name];
-            const prop_inputBorderWidth = data[ComponentInputConfigs.keys.prop_inputBorderWidth.name];
-            const prop_inputBorderRadius = data[ComponentInputConfigs.keys.prop_inputBorderRadius.name];
-            const prop_type = data[ComponentInputConfigs.keys.prop_type.name];
-            const prop_name = data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_name.name];
-            const prop_value = data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name];
-            const prop_placeholder = data[ComponentInputConfigs.keys.prop_placeholder.name];
-            const prop_icon = data[ComponentInputConfigs.keys.prop_icon.name];
-            const prop_btnAddStatus = data[ComponentInputConfigs.keys.prop_btnAddStatus.name];
-            const prop_isDisable = data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
-            const prop_size = data[ComponentInputConfigs.keys.prop_size.name];
+            const prop_inputBorderWidth =      data[ComponentInputConfigs.keys.prop_inputBorderWidth.name];
+            const prop_inputBorderRadius =     data[ComponentInputConfigs.keys.prop_inputBorderRadius.name];
+            const prop_type =                  data[ComponentInputConfigs.keys.prop_type.name];
+            const prop_name =                  data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_name.name];
+            const prop_value =                 data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name];
+            const prop_placeholder =           data[ComponentInputConfigs.keys.prop_placeholder.name];
+            const prop_icon =                  data[ComponentInputConfigs.keys.prop_icon.name];
+            const prop_btnAddStatus =          data[ComponentInputConfigs.keys.prop_btnAddStatus.name];
+            const prop_isDisable =             data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
+            const prop_size =                  data[ComponentInputConfigs.keys.prop_size.name];
 
             const directionRtl = AppConfig.get("directionRtl");
 
@@ -807,7 +809,7 @@ export class ComponentInput extends ComponentInputBase {
             return ReactiveElement.input({
                 attrs: {
                     ...attrsDefault,
-                    "id": inputId,
+                    //"id": inputId,
                 },
                 attrsBind: {
                     type: prop_type,
@@ -1100,15 +1102,15 @@ export class ComponentInput extends ComponentInputBase {
 
     private template_render_button(attrsDefault, data, extra): ReactiveElement {
         if (data != null) {
-            const prop_btnAddStatus = data[ComponentInputConfigs.keys.prop_btnAddStatus.name];
-            const prop_btnAddIcon = data[ComponentInputConfigs.keys.prop_btnAddIcon.name];
-            const prop_btnAddTitle = data[ComponentInputConfigs.keys.prop_btnAddTitle.name];
-            const prop_btnAddClass = data[ComponentInputConfigs.keys.prop_btnAddClass.name];
-            const prop_btnColor = data[ComponentInputConfigs.keys.prop_btnColor.name];
-            const prop_size = data[ComponentInputConfigs.keys.prop_size.name];
+            const prop_btnAddStatus =     data[ComponentInputConfigs.keys.prop_btnAddStatus.name];
+            const prop_btnAddIcon =       data[ComponentInputConfigs.keys.prop_btnAddIcon.name];
+            const prop_btnAddTitle =      data[ComponentInputConfigs.keys.prop_btnAddTitle.name];
+            const prop_btnAddClass =      data[ComponentInputConfigs.keys.prop_btnAddClass.name];
+            const prop_btnColor =         data[ComponentInputConfigs.keys.prop_btnColor.name];
+            const prop_size =             data[ComponentInputConfigs.keys.prop_size.name];
             const prop_inputBorderWidth = data[ComponentInputConfigs.keys.prop_inputBorderWidth.name];
+            const prop_formBorderRadius = data[ComponentInputConfigs.keys.prop_formBorderRadius.name];
 
-            const directionRtl = AppConfig.get("directionRtl");
 
             return ReactiveElement.part("section", {
                 attrs: { ...attrsDefault },
@@ -1121,27 +1123,29 @@ export class ComponentInput extends ComponentInputBase {
                         const borderOffset = Math.round(ToolsCss.getHeightSize(borderWidthSize) / 7);
 
                         const btnAddClassArr = btnAddClass ?? [];
-                        const btnProps: any = {
-                            classList: [],
-                            styles: {},
-                            prop_btnClass: [/*"border"*/, "shadow-sm", "px-3", ...btnAddClassArr],
-                            prop_btnStyles: {
-                                cursor: "pointer",
-                                width: "160px",
-                            },
-                            prop_btnBorderRadius: null ,
-                            prop_btnTitle: btnAddTitle ?? "add item",
-                            prop_type: btnColor ?? ComponentButton_Types.SUBMIT,
-                            prop_btnType: "button",
-                            prop_btnIcon: btnAddIcon ?? "&plus;",
-                            prop_size: sizeName,
-
-                            prop_btnBorderWidth: 0
-                            //prop_btnBorderColor: Color(COLORS_MAIN.PRIMARY , COLORS_GRAD.GRADE_1)
-                        };
-
                         const btnEl = new ToolsComponents.ComponentButton(
-                            btnProps as ComponentButtonPropsType,
+                            <ComponentButtonPropsType>{
+                                classList: [],
+                                styles: {},
+                                prop_btnClass: [
+                                    ...btnAddClassArr ,
+                                    "shadow-sm", "px-3"
+                                ],
+                                prop_btnStyles: {
+                                    cursor: "pointer",
+                                    width: "160px",
+                                },
+                                prop_btnBorderRadius: null ,
+                                prop_btnTitle: btnAddTitle ?? "add item",
+                                prop_type: btnColor ?? ComponentButton_Types.SUBMIT,
+                                prop_btnType: "button",
+                                prop_btnIcon: btnAddIcon ?? "&plus;",
+                                prop_size: sizeName,
+
+                                prop_btnBorderWidth:           null ,
+                                prop_btnBorderRadiusEndTop:    prop_formBorderRadius ,
+                                prop_btnBorderRadiusEndBottom: prop_formBorderRadius ,
+                            } ,
                             <ComponentButtonMethodsType>{
                                 fn_onClickButton: (event, dataArgs, componentArgs) => {
                                     event.stopPropagation();
@@ -1155,29 +1159,51 @@ export class ComponentInput extends ComponentInputBase {
                         );
 
                         const posProps: any = {
-                                classList: [],
-                                styles: {},
-                                prop_positionType: ComponentElementPosition_positionTypes.ABSOLUTE,
-                                prop_positionTop: SizeUnit(borderOffset, UNITS.PEXEL),
-                                prop_positionZIndex: 10,
-                                prop_positionStyles: {
+                            classList: [],
+                            styles: {},
+                            prop_positionType: ComponentElementPosition_positionTypes.ABSOLUTE,
+
+                            prop_positionZIndex: 10,
+                            prop_positionStyles: {
                                     cursor: "pointer",
                                     width: "160px",
+                            },
+                            prop_positionTop: Observable.computed(
+                                (sizeName)=>{
+                                    return ToolsComponents_BorderWidth?.[sizeName]
                                 },
-                                prop_content: btnEl.getReactiveElement(),
+                                [
+                                    AppConfig.get_sizeName()
+                                ] ,
+                                this.getScope()
+                            ),
+                            prop_positionEnd: Observable.computed(
+                                (sizeName)=>{
+                                    return ToolsComponents_BorderWidth?.[sizeName]
+                                },
+                                [
+                                    AppConfig.get_sizeName()
+                                ] ,
+                                this.getScope()
+                            ),
+                            prop_content: btnEl.getReactiveElement(),
                         };
-                        if (directionRtl) {
-                                posProps.prop_positionLeft = SizeUnit(borderOffset, UNITS.PEXEL);
-                        } else {
-                                posProps.prop_positionRight = SizeUnit(borderOffset, UNITS.PEXEL);
-                        }
+
 
                         return new ComponentElementPosition(
                             posProps as ComponentElementPositionPropsType,
                             <ComponentElementPositionMethodsType>{}
                         ).getReactiveElement();
                     },
-                    [prop_btnAddStatus, prop_btnAddIcon, prop_btnAddTitle, prop_btnAddClass, prop_btnColor, prop_size, prop_inputBorderWidth],
+                    [
+                        prop_btnAddStatus,
+                        prop_btnAddIcon,
+                        prop_btnAddTitle,
+                        prop_btnAddClass,
+                        prop_btnColor,
+                        prop_size,
+                        prop_inputBorderWidth
+                    ],
                     this.getScope()
                 ),
             });
@@ -1198,7 +1224,7 @@ export class ComponentInput extends ComponentInputBase {
             return ReactiveElement.part("section", {
                 attrs: {
                     ...attrsDefault,
-                    "id": `component-input-form-${this._COMPONENT_RANDOM_ID}`,
+                    //"id": `component-input-form-${this._COMPONENT_RANDOM_ID}`,
                 },
                 className: ["position-relative"],
                 children: [

@@ -450,7 +450,7 @@ export abstract class ComponentPositionMenuBase extends ComponentBase<
     static override renderExampleComponent(): HTMLElement {
         return new ComponentPositionMenu(
             <ComponentPositionMenuPropsType>{
-                classList: ["col-md-3" , "col-12" , "border" , "p-2"]  ,
+                classList: ["col-md-3" , "col-12" , "border" , "p-2" , "position-relative"]  ,
                 styles: {}  ,
 
                 prop_menuBodyWidth:  SizeUnit(350 , UNITS.PEXEL) ,
@@ -661,7 +661,7 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
                     ...attrsDefault
                 },
                 className: [
-                    "bg-white" , "rounded" ,
+                   // "bg-white" , "rounded" ,
                     "d-block" , "w-100" , "h-100"
                 ] ,
                 children: [

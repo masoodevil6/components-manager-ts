@@ -22,7 +22,7 @@ import {
     IconsType, OPERATION, SizeCalc,
     SIZES, SizesType, SizeUnit,
     ToolsComponents_BorderRadius,
-    ToolsComponents_BorderWidth, ToolsComponents_MarginWidth, UNITS
+    ToolsComponents_BorderWidth, ToolsComponents_Height, ToolsComponents_Margin, ToolsComponents_Padding, UNITS
 } from "../../utils/ToolsConsts";
 import {TOOLS} from "../tools";
 import {
@@ -84,6 +84,7 @@ import {
     ComponentListSelectedScrollerPropsType,
     propListSelectedScroller_List
 } from "./ComponentListSelectedScroller";
+import {ComponentBorderMethodsType, ComponentBorderPropsType } from "./ComponentBorder";
 
 
 
@@ -95,6 +96,7 @@ export const ComponentInputListSelectorProps = {
     ...GOG_ComponentBasicProps_Component_Structure_FormInput_Label ,
 
     ///----------------------
+    prop_inputBackgroundColor :           "prop_inputBackgroundColor" ,
     prop_menuBackgroundColor :            "prop_menuBackgroundColor" ,
     prop_menuBorderColor :                "prop_menuBorderColor" ,
 
@@ -127,6 +129,10 @@ const ComponentInputListSelectorConfigs  =  {
 
         ///----------------------
 
+        [ComponentInputListSelectorProps.prop_inputBackgroundColor]: {
+            name:                ComponentInputListSelectorProps.prop_inputBackgroundColor,
+            value:               GOG_SetValue<Color | null>( Color(COLORS_MAIN.PRIMARY , COLORS_GRAD.GRADE_1 )),
+        } ,
         [ComponentInputListSelectorProps.prop_menuBackgroundColor]: {
             name:                ComponentInputListSelectorProps.prop_menuBackgroundColor,
             value:               GOG_SetValue<Color | null>( Color(COLORS_MAIN.SHAN , COLORS_GRAD.GRADE_1 )),
@@ -300,6 +306,12 @@ export abstract class ComponentInputListSelectorBase extends ComponentBase<
         ...GOG_ComponentBasicConfigs_Component_Structure_FormInput_Pattern(this) ,
         ...GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_Pattern(this) ,
         ///----------------------
+        [ComponentInputListSelectorConfigs.keys.prop_inputBackgroundColor.name]: {
+            prop:                                             ComponentInputListSelectorConfigs.keys.prop_inputBackgroundColor.name,
+            default:                                          ComponentInputListSelectorConfigs.keys.prop_inputBackgroundColor.value,
+            title:                                            Language.translate("components.input_list_selector.props.prop_inputBackgroundColor.title"),
+            description:                                      Language.translate("components.input_list_selector.props.prop_inputBackgroundColor.description"),
+        } ,
         [ComponentInputListSelectorConfigs.keys.prop_menuBackgroundColor.name]: {
             prop:                                             ComponentInputListSelectorConfigs.keys.prop_menuBackgroundColor.name,
             default:                                          ComponentInputListSelectorConfigs.keys.prop_menuBackgroundColor.value,
@@ -502,46 +514,88 @@ export abstract class ComponentInputListSelectorBase extends ComponentBase<
        Example
     --------------------------------------------- */
     static override renderExampleComponent(): HTMLElement {
-        return new ComponentInputListSelector(
-            <ComponentInputListSelectorPropsType>{
-                classList: ["col-md-3" , "col-12" , "border" , "p-2"]  ,
-                styles: {}  ,
 
-                prop_labelTitle: "Input List Selector" ,
-                prop_labelTooltipDescription: "this is for [input-list-selector]" ,
-                prop_labelShow: true ,
-                prop_showListSelected: true ,
-                prop_draggable: true ,
-                prop_widthBody: SizeUnit(350 , UNITS.PEXEL) ,
-                prop_heightBody: SizeUnit(300 , UNITS.PEXEL) ,
-                prop_heightItems: 45 ,
+        return ReactiveElement.div({
+            className: ["col-md-3" , "col-12" , "border" , "p-2"] ,
+            children: [
+                new ComponentInputListSelector(
+                    <ComponentInputListSelectorPropsType>{
+                        classList: ["border-bottom" , "border-2" , "pb-2"]  ,
+                        styles: {}  ,
 
-                prop_columns: [
-                    { id: "col1", title: "Column 1", selected: true } ,
-                    { id: "col2", title: "Column 2", selected: true } ,
-                    { id: "col3", title: "Column 3", selected: false } ,
-                    { id: "col4", title: "Column 4", selected: true } ,
-                    { id: "col5", title: "Column 5", selected: false } ,
-                ] ,
-            },
-            <ComponentInputListSelectorMethodsType>{
-                fn_onClickIcon: function (event, dataArgs, componentArgs) {
-                    console.log("[InputListSelector] icon clicked");
-                } ,
-                fn_onClickAccept: function (event, dataArgs, componentArgs) {
-                    console.log("[InputListSelector] accept clicked", componentArgs);
-                } ,
-                fn_onClickReject: function (event, dataArgs, componentArgs) {
-                    console.log("[InputListSelector] reject clicked");
-                } ,
-                fn_onCallbackColSelector: function (event, dataArgs, componentArgs) {
-                    console.log("[InputListSelector] callback col selector", componentArgs);
-                } ,
-                fn_onDeleteSelectedItem: function (event, dataArgs, componentArgs) {
-                    console.log("[InputListSelector] delete selected item", componentArgs);
-                } ,
-            }
-        ).getElement();
+                        prop_labelTitle: "Input List Selector" ,
+                        prop_labelTooltipDescription: "this is for [input-list-selector]" ,
+                        prop_labelShow: true ,
+                        prop_showListSelected: true ,
+                        prop_draggable: true ,
+                        prop_widthBody: SizeUnit(350 , UNITS.PEXEL) ,
+                        prop_heightBody: SizeUnit(300 , UNITS.PEXEL) ,
+                        prop_heightItems: 45 ,
+
+                        prop_columns: [
+                            { id: "col1", title: "Column 1", selected: true } ,
+                            { id: "col2", title: "Column 2", selected: true } ,
+                            { id: "col3", title: "Column 3", selected: false } ,
+                            { id: "col4", title: "Column 4", selected: true } ,
+                            { id: "col5", title: "Column 5", selected: false } ,
+                        ] ,
+                    },
+                    <ComponentInputListSelectorMethodsType>{
+                        fn_onClickIcon: function (event, dataArgs, componentArgs) {
+                            console.log("[InputListSelector] icon clicked");
+                        } ,
+                        fn_onClickAccept: function (event, dataArgs, componentArgs) {
+                            console.log("[InputListSelector] accept clicked", componentArgs);
+                        } ,
+                        fn_onClickReject: function (event, dataArgs, componentArgs) {
+                            console.log("[InputListSelector] reject clicked");
+                        } ,
+                        fn_onCallbackColSelector: function (event, dataArgs, componentArgs) {
+                            console.log("[InputListSelector] callback col selector", componentArgs);
+                        } ,
+                        fn_onDeleteSelectedItem: function (event, dataArgs, componentArgs) {
+                            console.log("[InputListSelector] delete selected item", componentArgs);
+                        } ,
+                    }
+                ).getReactiveElement() ,
+                new ComponentInputListSelector(
+                    <ComponentInputListSelectorPropsType>{
+                        classList: ["mt-2"]  ,
+                        styles: {}  ,
+
+                        prop_showListSelected: false ,
+                        prop_inputBackgroundColor: null ,
+
+                        prop_columns: [
+                            { id: "col1", title: "Column 1", selected: true } ,
+                            { id: "col2", title: "Column 2", selected: true } ,
+                            { id: "col3", title: "Column 3", selected: false } ,
+                            { id: "col4", title: "Column 4", selected: true } ,
+                            { id: "col5", title: "Column 5", selected: false } ,
+                        ] ,
+                    },
+                    <ComponentInputListSelectorMethodsType>{
+                        fn_onClickIcon: function (event, dataArgs, componentArgs) {
+                            console.log("[InputListSelector] icon clicked");
+                        } ,
+                        fn_onClickAccept: function (event, dataArgs, componentArgs) {
+                            console.log("[InputListSelector] accept clicked", componentArgs);
+                        } ,
+                        fn_onClickReject: function (event, dataArgs, componentArgs) {
+                            console.log("[InputListSelector] reject clicked");
+                        } ,
+                        fn_onCallbackColSelector: function (event, dataArgs, componentArgs) {
+                            console.log("[InputListSelector] callback col selector", componentArgs);
+                        } ,
+                        fn_onDeleteSelectedItem: function (event, dataArgs, componentArgs) {
+                            console.log("[InputListSelector] delete selected item", componentArgs);
+                        } ,
+                    }
+                ).getReactiveElement()
+            ]
+        })
+
+
     }
 
 
@@ -566,7 +620,8 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
     ) {
         super("input-list-selector", null);
 
-        const initialColumns: ColumnItem[] = (config as any)[ComponentInputListSelectorConfigs.keys.prop_columns.name] ?? [];
+        const rawColumns = (config as any)[ComponentInputListSelectorConfigs.keys.prop_columns.name] ?? [];
+        const initialColumns: ColumnItem[] = Observable.isObservable(rawColumns) ? rawColumns.get() : rawColumns;
         this.var_columns = new Observable<ColumnItem[]>([...initialColumns]);
         this.var_tempOrder = new Observable<(string | number)[]>([]);
         this.var_showPopup = new Observable<boolean>(false);
@@ -603,26 +658,24 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
     private template_render_main(attrsDefault , data , extra) : ReactiveElement {
 
         if (data != null) {
+            const prop_inputBackgroundColor =       data[ComponentInputListSelectorConfigs.keys.prop_inputBackgroundColor.name];
 
-            const children: (ReactiveElement | string)[] = [];
-
-            children.push(
-                this.executeSchemaPart(ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu.name)
-            );
-            children.push(
-                this.executeSchemaPart(ComponentInputListSelectorConfigs.schemas.Main_FormListSelected.name)
-            );
-
-            return ReactiveElement.part(  "section" ,{
-                attrs: {
-                    ...attrsDefault
+            return new ToolsComponents.ComponentBorder(
+                <ComponentBorderPropsType>{
+                    classList: ["pt-2" , "d-block"]  ,
+                    prop_borderClass: []  ,
+                    styles: {}  ,
+                    prop_content:                        ReactiveElement.div({
+                        children: [
+                            this.executeSchemaPart(ComponentInputListSelectorConfigs.schemas.Main_FormFloatMenu.name) ,
+                            this.executeSchemaPart(ComponentInputListSelectorConfigs.schemas.Main_FormListSelected.name)
+                        ]
+                    }) ,
+                    prop_borderColor:                    null ,
+                    prop_contentBackgroundColor:         prop_inputBackgroundColor ,
                 },
-                className: [
-                    //"row" ,
-                    "p-0" , "m-0", "mt-2"
-                ] ,
-                children: children
-            });
+                <ComponentBorderMethodsType>{}
+            ).getReactiveElement();
 
         }
 
@@ -643,18 +696,17 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
             return ReactiveElement.part("div", {
                 attrs: { ...attrsDefault },
                 className: [
-                    "p-0" , "position-relative"
+                    "position-relative"
                 ]  ,
                 stylesBind: {
                     width: Observable.computed(
                         (sizeName) => {
                             return  SizeCalc(
-                                SizeUnit(
-                                    ToolsCss.getIconSize(sizeName),
-                                    UNITS.PEXEL
-                                ),
+                                ToolsComponents_Padding?.[sizeName] ,
                                 OPERATION.ADD ,
-                                ToolsComponents_MarginWidth?.[sizeName]
+                                ToolsComponents_Height?.[sizeName] ,
+                                OPERATION.ADD ,
+                                ToolsComponents_Padding?.[sizeName] ,
                             )
                         } ,
                         [AppConfig.get_sizeName()],
@@ -662,13 +714,16 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
                     ) ,
                     height: Observable.computed(
                         (sizeName) => {
-                            return  SizeCalc(
-                                SizeUnit(
-                                    ToolsCss.getIconSize(sizeName),
-                                    UNITS.PEXEL
-                                ),
+                            return SizeCalc(
+                                ToolsComponents_BorderWidth?.[sizeName] ,
                                 OPERATION.ADD ,
-                                ToolsComponents_MarginWidth?.[sizeName]
+                                ToolsComponents_Padding?.[sizeName] ,
+                                OPERATION.ADD ,
+                                ToolsComponents_Height?.[sizeName] ,
+                                OPERATION.ADD ,
+                                ToolsComponents_Padding?.[sizeName] ,
+                                OPERATION.ADD ,
+                                ToolsComponents_BorderWidth?.[sizeName] ,
                             )
                         } ,
                         [AppConfig.get_sizeName()],
@@ -676,14 +731,28 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
                     ) ,
                     marginTop: Observable.computed(
                         (sizeName) => {
-                            return ToolsComponents_MarginWidth?.[sizeName]
+                            return ToolsComponents_Margin?.[sizeName]
                         } ,
                         [AppConfig.get_sizeName()],
                         this.getScope()
                     ) ,
                     marginBottom: Observable.computed(
                         (sizeName) => {
-                            return ToolsComponents_MarginWidth?.[sizeName]
+                            return ToolsComponents_Margin?.[sizeName]
+                        } ,
+                        [AppConfig.get_sizeName()],
+                        this.getScope()
+                    ) ,
+                    marginLeft: Observable.computed(
+                        (sizeName) => {
+                            return ToolsComponents_Margin?.[sizeName]
+                        } ,
+                        [AppConfig.get_sizeName()],
+                        this.getScope()
+                    ) ,
+                    marginRight: Observable.computed(
+                        (sizeName) => {
+                            return ToolsComponents_Margin?.[sizeName]
                         } ,
                         [AppConfig.get_sizeName()],
                         this.getScope()
@@ -734,14 +803,17 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
                             prop_menuBodyHeight:        prop_heightBody ?? SizeUnit(300 , UNITS.PEXEL) ,
                         },
                         <ComponentPositionMenuMethodsType>{
-                            fn_onClickOpen: (event: any, dataArgs: ComponentPositionMenu_Methods_CLICK_OPEN_DataArgs, componentArgs: ComponentPositionMenu_Methods_CLICK_OPEN_ComponentArgs) => {
+                            fn_onClickOpen: (event: Event, dataArgs: ComponentPositionMenu_Methods_CLICK_OPEN_DataArgs, componentArgs: ComponentPositionMenu_Methods_CLICK_OPEN_ComponentArgs) => {
+                                event.preventDefault();
                                 this.fn_onClickIcon(event);
                             } ,
-                            fn_onClickAccept: (event: any, dataArgs: ComponentPositionMenu_Methods_CLICK_ACCEPT_DataArgs, componentArgs: ComponentPositionMenu_Methods_CLICK_ACCEPT_ComponentArgs) => {
+                            fn_onClickAccept: (event: Event, dataArgs: ComponentPositionMenu_Methods_CLICK_ACCEPT_DataArgs, componentArgs: ComponentPositionMenu_Methods_CLICK_ACCEPT_ComponentArgs) => {
+                                event.preventDefault();
                                 this.fn_onClickAccept(event);
                                 return true;
                             } ,
-                            fn_onClickReject: (event: any, dataArgs: ComponentPositionMenu_Methods_CLICK_REJECT_DataArgs, componentArgs: ComponentPositionMenu_Methods_CLICK_REJECT_ComponentArgs) => {
+                            fn_onClickReject: (event: Event, dataArgs: ComponentPositionMenu_Methods_CLICK_REJECT_DataArgs, componentArgs: ComponentPositionMenu_Methods_CLICK_REJECT_ComponentArgs) => {
+                                event.preventDefault();
                                 this.fn_onClickReject(event);
                             }
                         }
@@ -826,20 +898,20 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
                         const selectedIds = columns.filter((c: ColumnItem) => c.selected).map((c: ColumnItem) => c.id);
                         const orderIds = selectedIds.slice();
 
-                        const checkBox = new ComponentInputAgreementCheckBox(
-                            <any>{
-                                classList: []  ,
-                                styles: {}  ,
-
-                                prop_name: "input-list-selector-checkboxes" ,
+                        const checkBox = new ToolsComponents.ComponentInputAgreementCheckBox(
+                            <ComponentInputAgreementCheckBoxPropsType>{
+                                classList:                []  ,
+                                styles:                   {}  ,
+                                prop_name:                "input-list-selector-checkboxes" ,
                                 prop_checkBoxOrderStatus: prop_draggable ?? true ,
-                                prop_checkBoxList: checkBoxList ,
-                                prop_value: selectedIds ,
-                                prop_checkBoxOrder: orderIds ,
-                                prop_checkBoxAllTitle: prop_titleAll ?? "Select All" ,
+                                prop_checkBoxList:        checkBoxList ,
+                                prop_value:               selectedIds ,
+                                prop_checkBoxOrder:       orderIds ,
+                                prop_checkBoxAllTitle:    prop_titleAll ?? "Select All" ,
                             },
                             <ComponentInputAgreementCheckBoxMethodsType>{
-                                fn_onClickAll: (event: any, dataArgs : ComponentInputAgreementCheckBox_Methods_CLICK_ALL_DataArgs, componentArgs: ComponentInputAgreementCheckBox_Methods_CLICK_ALL_ComponentArgs) => {
+                                fn_onClickAll: (event: Event, dataArgs : ComponentInputAgreementCheckBox_Methods_CLICK_ALL_DataArgs, componentArgs: ComponentInputAgreementCheckBox_Methods_CLICK_ALL_ComponentArgs) => {
+                                    event.stopPropagation();
                                     const currentValue = componentArgs.VALUE;
                                     const list = componentArgs.LIST;
                                     if (Array.isArray(currentValue) && Array.isArray(list)) {
@@ -849,7 +921,8 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
                                         this.var_tempOrder.set(newOrder);
                                     }
                                 } ,
-                                fn_onClickItem: (event: any, dataArgs : ComponentInputAgreementCheckBox_Methods_CLICK_ITEM_DataArgs, componentArgs: ComponentInputAgreementCheckBox_Methods_CLICK_ITEM_ComponentArgs) => {
+                                fn_onClickItem: (event: Event, dataArgs : ComponentInputAgreementCheckBox_Methods_CLICK_ITEM_DataArgs, componentArgs: ComponentInputAgreementCheckBox_Methods_CLICK_ITEM_ComponentArgs) => {
+                                    event.stopPropagation();
                                     const currentValue = componentArgs.VALUE;
                                     const list = componentArgs.LIST;
                                     if (Array.isArray(currentValue) && Array.isArray(list)) {
@@ -881,46 +954,56 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
 
             const prop_showListSelected =    data[ComponentInputListSelectorConfigs.keys.prop_showListSelected.name];
 
-            if (!prop_showListSelected) {
-                return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
-            }
+            return Observable.conditionWhen(
+                prop_showListSelected ,
+                (statusShowListScroller) => {
+                    return statusShowListScroller
+                } ,
+                () => {
+                    return ReactiveElement.part("div", {
+                         attrs: { ...attrsDefault },
+                         className: [
+                             "p-0", "m-0"
+                         ]  ,
+                         children: Observable.computed(
+                             (columns) => {
+                                 const selectedList: propListSelectedScroller_List[] = columns
+                                     .filter((c: ColumnItem) => c.selected)
+                                     .map((c: ColumnItem) => ({
+                                         id: c.id,
+                                         title: c.title,
+                                         canDelete: true,
+                                     }));
 
-            return ReactiveElement.part("div", {
-                attrs: { ...attrsDefault },
-                className: [
-                    "p-0", "m-0"
-                ]  ,
-                children: Observable.computed(
-                    (columns) => {
-                        const selectedList: propListSelectedScroller_List[] = columns
-                            .filter((c: ColumnItem) => c.selected)
-                            .map((c: ColumnItem) => ({
-                                id: c.id,
-                                title: c.title,
-                                canDelete: true,
-                            }));
+                                 const selectedIds = columns.filter((c: ColumnItem) => c.selected).map((c: ColumnItem) => c.id);
 
-                        const selectedIds = columns.filter((c: ColumnItem) => c.selected).map((c: ColumnItem) => c.id);
+                                 return [new ComponentListSelectedScroller(
+                                     <any>{
+                                         classList: []  ,
+                                         styles: {}  ,
 
-                        return [new ComponentListSelectedScroller(
-                            <any>{
-                                classList: []  ,
-                                styles: {}  ,
-
-                                prop_list: selectedList ,
-                                prop_value: selectedIds ,
-                            },
-                            <ComponentListSelectedScrollerMethodsType>{
-                                fn_onDeleteItem: (event: any, dataArgs: ComponentListSelectedScroller_Methods_DELETE_ITEM_DataArgs, componentArgs: ComponentListSelectedScroller_Methods_DELETE_ITEM_ComponentArgs) => {
-                                    this.fn_onDeleteSelectedItem(event, dataArgs);
-                                }
-                            }
-                        ).getReactiveElement()];
-                    },
-                    [this.var_columns],
-                    this.getScope()
-                )
-            });
+                                         prop_borderColor:  Color(COLORS_MAIN.PRIMARY, COLORS_GRAD.GRADE_1),
+                                         prop_list:         selectedList ,
+                                         prop_value:        selectedIds ,
+                                     },
+                                     <ComponentListSelectedScrollerMethodsType>{
+                                         fn_onDeleteItem: (event: any, dataArgs: ComponentListSelectedScroller_Methods_DELETE_ITEM_DataArgs, componentArgs: ComponentListSelectedScroller_Methods_DELETE_ITEM_ComponentArgs) => {
+                                             this.fn_onDeleteSelectedItem(event, dataArgs);
+                                         }
+                                     }
+                                 ).getReactiveElement()];
+                             },
+                             [this.var_columns],
+                             this.getScope()
+                         )
+                        }
+                    );
+                } ,
+                () => {
+                    return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
+                } ,
+                this.getScope()
+            ).get();
 
         }
 
@@ -952,22 +1035,35 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
 
         if (this._checkBoxInstance) {
             const cbValue = this._checkBoxInstance.get(GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name);
-            const cbList = this._checkBoxInstance.get("prop_checkBoxList");
-            if (Array.isArray(cbValue) && Array.isArray(cbList)) {
-                tempOrder = cbList
-                    .filter((item: any) => cbValue.includes(item.id))
-                    .map((item: any) => item.id);
+            const cbOrder = this._checkBoxInstance.get("prop_checkBoxOrder");
+            if (Array.isArray(cbValue)) {
+                const valueSet = new Set(cbValue);
+                const orderSet = new Set(cbOrder);
+                tempOrder = (Array.isArray(cbOrder) ? cbOrder : []).filter((id: string | number) => valueSet.has(id));
+                cbValue.forEach((id: string | number) => {
+                    if (!orderSet.has(id)) tempOrder.push(id);
+                });
             }
         }
 
         const columns = this.var_columns.get();
 
-        const newColumns: ColumnItem[] = columns.map(col => ({
-            ...col,
-            selected: tempOrder.includes(col.id),
-        }));
+        const colMap = new Map(columns.map(c => [c.id, c]));
+        const selectedSet = new Set(tempOrder);
+        const orderedSelected: ColumnItem[] = tempOrder
+            .map((id: string | number) => {
+                const col = colMap.get(id);
+                if (col) return { ...col, selected: true };
+                return null;
+            })
+            .filter(Boolean) as ColumnItem[];
+        const rest: ColumnItem[] = columns
+            .filter(c => !selectedSet.has(c.id))
+            .map(c => ({ ...c, selected: false }));
+        const newColumns: ColumnItem[] = [...orderedSelected, ...rest];
 
         this.var_columns.set(newColumns);
+        this.set(ComponentInputListSelectorConfigs.keys.prop_columns.name, newColumns);
 
         const params: ComponentInputListSelector_Methods_CLICK_ACCEPT_DataArgs = {};
         this.executeMethod(ComponentInputListSelectorConfigs.methods.CLICK_ACCEPT.name, event, params);
@@ -981,7 +1077,9 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
 
     private fn_onClickReject(event: any) {
         if (this._columnsBackup.length > 0) {
-            this.var_columns.set(this._columnsBackup.map(c => ({ ...c })));
+            const restored = this._columnsBackup.map(c => ({ ...c }));
+            this.var_columns.set(restored);
+            this.set(ComponentInputListSelectorConfigs.keys.prop_columns.name, restored);
         }
         this.var_tempOrder.set([]);
         this.var_showPopup.set(false);
@@ -1002,6 +1100,7 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
         });
 
         this.var_columns.set(newColumns);
+        this.set(ComponentInputListSelectorConfigs.keys.prop_columns.name, newColumns);
 
         const params: ComponentInputListSelector_Methods_DELETE_SELECTED_ITEM_DataArgs = {};
         this.executeMethod(ComponentInputListSelectorConfigs.methods.DELETE_SELECTED_ITEM.name, event, params);

@@ -243,6 +243,7 @@ _COMPONENT_METHODS = defineComponentMethods({
 - استفاده از `Observable` برای state management
 - استفاده از `Scope` برای lifecycle management
 - dispose کردن scopes در زمان مناسب
+- **قانون: به هیچ عنوان از `observable.get()` به صورت مستقیم استفاده نشود.** به جای آن از متدهای کمکی `Observable.ts` مانند `Observable.computed`، `Observable.map`، `Observable.for`، `Observable.conditionWhen` و `Observable.conditionSwitch` استفاده شود تا خاصیت Observable بودن حفظ شود.
 
 ```typescript
 private _renderScope = new Scope();
@@ -257,6 +258,7 @@ private createComponentElement() {
 ## ReactiveElement
 - استفاده از `ReactiveElement` برای DOM manipulation
 - استفاده از `getElement()` و `getReactiveElement()` برای دسترسی به element
+- **قانون: هر متد schema فقط می‌تواند از یک `ReactiveElement` یا component استفاده کند.** این قانون برای قابل توسعه و نگهداری بودن کد ضروری است. اگر به بیش از یک element نیاز است، باید به متدهای جداگانه شکسته شود.
 
 ## Naming Conventions
 - `_COMPONENT_` prefix برای internal properties

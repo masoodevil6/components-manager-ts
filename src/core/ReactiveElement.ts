@@ -1,4 +1,6 @@
 import {Observable} from "./Observable";
+import {ToolsCss} from "../utils/ToolsCss";
+import {StyleValue} from "../utils/ToolsConsts";
 
 type ClassValue = string | string[];
 type StyleMap = Record<string, string>;
@@ -24,6 +26,16 @@ type EventListenerRecord = {
     event: string;
     handler: EventListener;
 };
+
+
+
+export function styleImportant(value: string | number): StyleValue {
+    return {
+        value,
+        important: true
+    };
+}
+
 
 export class ReactiveElement {
 
@@ -139,74 +151,122 @@ export class ReactiveElement {
 
     }
 
+
+
+    private _toCssPropertyName(name: string): string {
+        return name.replace(/[A-Z]/g, m => "-" + m.toLowerCase());
+    }
+
+    private _setStyle(key: string, value: any) {
+
+        if (key.startsWith("--")) {
+
+            if (value == null) {
+                this.element.style.removeProperty(key);
+                return;
+            }
+
+            if (
+                value &&
+                typeof value === "object" &&
+                value.important
+            ) {
+                this.element.style.setProperty(
+                    key,
+                    String(value.value),
+                    "important"
+                );
+            } else {
+                this.element.style.setProperty(
+                    key,
+                    String(value)
+                );
+            }
+
+            return;
+        }
+
+        //console.log(" ---------------------- SET " , value , value instanceof StyleValue);
+
+        if (
+            value &&
+            typeof value === "object" &&
+            value.important
+        ) {
+
+            this.element.style.setProperty(
+                this._toCssPropertyName(key),
+                String(value.value),
+                "important"
+            );
+
+            return;
+        }
+
+        (this.element.style as any)[key] = value;
+    }
+
+
     // styles
     private _applyStyles(styles?: StyleMap) {
 
         if (!styles) return;
 
         Object.entries(styles).forEach(([key, value]) => {
-            (this.element.style as any)[key] = value;
+            this._setStyle(key, value);
         });
+
     }
 
-    private _applyStylesBind(stylesBind: Record<string, Observable<any>> | Observable<Record<string, any>>) {
+    private _applyStylesBind(
+        stylesBind: Record<string, Observable<any>> | Observable<Record<string, any>>
+    ) {
 
         if (!stylesBind) return;
 
-        // Handle single Observable containing a style object
         if (Observable.isObservable(stylesBind)) {
+
             this._bindObservable(stylesBind, value => {
                 if (value && typeof value === "object") {
                     Object.entries(value).forEach(([styleKey, styleValue]) => {
-                        if (styleKey.startsWith("--")) {
-                            if (styleValue == null) {
-                                this.element.style.removeProperty(styleKey);
-                            } else {
-                                this.element.style.setProperty(styleKey, String(styleValue));
-                            }
-                        } else {
-                            (this.element.style as any)[styleKey] = styleValue;
-                        }
+                        this._setStyle(styleKey, styleValue);
                     });
                 }
             });
+
             return;
         }
 
-        // Handle Record<string, Observable<any>>
         Object.entries(stylesBind).forEach(([key, observable]) => {
-            // Skip if not an Observable instance
+
+
             if (!Observable.isObservable(observable)) {
                 return;
             }
 
             this._bindObservable(observable, value => {
 
+                if (value instanceof StyleValue) {
+                    this._setStyle(key, value);
+                    return;
+                }
+
                 if (value && typeof value === "object") {
 
                     Object.entries(value).forEach(([styleKey, styleValue]) => {
-                        (this.element.style as any)[styleKey] = styleValue;
+                        this._setStyle(styleKey, styleValue);
                     });
 
                 } else {
 
-                    if(key.startsWith("--")){
-                        if (value == null){
-                            this.element.style.removeProperty(key);
-                        }
-                        else{
-                            this.element.style.setProperty(key , value);
-                        }
-                    }
-                    else{
-                        (this.element.style as any)[key] = value;
-                    }
+                    this._setStyle(key, value);
 
                 }
 
             });
 
         });
+
     }
 
     private _applyCustomStyle(css?: string) {
@@ -497,6 +557,24 @@ export class ReactiveElement {
         return new ReactiveElement(el, o)
     }
 
+
+
+    ///---------------------------------
+    ///
+    ///---------------------------------
+    focusFn(options?: FocusOptions) : ReactiveElement {
+        this.getElement().focus(options);
+        return this;
+    }
+    blurFn() : ReactiveElement {
+        this.getElement().blur();
+        return this;
+    }
+
+
+    ///---------------------------------
+    ///
+    ///---------------------------------
     static div(o?: Options) { return new ReactiveElement("div", o) }
     static button(o?: Options) { return new ReactiveElement("button", o) }
     static b(o?: Options) { return new ReactiveElement("b", o) }
@@ -514,4 +592,6 @@ export class ReactiveElement {
     static img(o?: Options) { return new ReactiveElement("img", o) }
     static i(o?: Options) { return new ReactiveElement("i", o) }
     static style(o?: Options) { return new ReactiveElement("style", o) }
+    static select(o?: Options) { return new ReactiveElement("select", o) }
+    static option(o?: Options) { return new ReactiveElement("option", o) }
 }

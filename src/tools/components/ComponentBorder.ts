@@ -722,7 +722,16 @@ export class ComponentBorder extends ComponentBorderBase{
                         prop_borderStyles ,
                         minWidth:         prop_minWidth ,
                         width:         prop_width ,
-                        borderStyle:      prop_borderType ,
+                        borderStyle:      Observable.computed(
+                            (borderType , borderColor)=>{
+                                if(borderColor != null){
+                                    return borderType;
+                                } 
+                                return null;
+                            } ,
+                            [prop_borderType , prop_borderColor] ,
+                             this.getScope()
+                        ) ,
                         borderWidth:      prop_borderWidth.map(
                             v=>{
                                 if (typeof v == "string" && ToolsCss.checkExistSizeSelected(v)){
@@ -788,24 +797,30 @@ export class ComponentBorder extends ComponentBorderBase{
 
 
                     }) ,
-                    className: ["p-0"] ,
+                    className: [
+                        "p-0"
+                    ] ,
                     classBind: [
                         prop_borderClass
                     ] ,
                     on: {
                         click: (event: Event) => {
+                            event.stopPropagation();
                             const params : ComponentBorder_Methods_CLICK_BORDER_DataArgs = {}
                             this.executeMethod(ComponentBorderConfigs.methods.CLICK_BORDER.name  , event , params);
                         },
                         mousemove: (event: Event) => {
+                            event.stopPropagation();
                             const params : ComponentBorder_Methods_MOUSE_MOVE_BORDER_DataArgs = {}
                             this.executeMethod(ComponentBorderConfigs.methods.MOUSE_MOVE_BORDER.name  , event , params);
                         },
                         mousedown: (event: Event) => {
+                            event.stopPropagation();
                             const params : ComponentBorder_Methods_MOUSE_DOWN_BORDER_DataArgs = {}
                             this.executeMethod(ComponentBorderConfigs.methods.MOUSE_DOWN_BORDER.name  , event , params);
                         },
                         mouseup: (event: Event) => {
+                            event.stopPropagation();
                             const params : ComponentBorder_Methods_MOUSE_UP_BORDER_DataArgs = {}
                             this.executeMethod(ComponentBorderConfigs.methods.MOUSE_UP_BORDER.name  , event , params);
                         },

@@ -23,7 +23,9 @@ import {
     IconsType,
     SIZES, SizesType, SizeUnit, UNITS,
     ToolsComponents_BorderRadius,
-    ToolsComponents_BorderWidth
+    ToolsComponents_BorderWidth, SizeCalc, OPERATION, ToolsComponents_Padding, ToolsComponents_Height,
+    ToolsComponents_IconSize, Z_INDEXES, ToolsComponents_ZIndex,
+    ToolsComponents_FontSize, styleImportant, StyleValue, CssColorVar
 } from "../../utils/ToolsConsts";
 import {TOOLS} from "../tools";
 import {
@@ -70,6 +72,7 @@ import {
     ComponentElementPosition_positionTypes
 } from "./ComponentElementPosition";
 import {TranslateUnit} from "../../utils/ToolsConsts";
+import {ComponentBorderMethodsType, ComponentBorderPropsType} from "./ComponentBorder";
 
 
 
@@ -82,9 +85,19 @@ export const ComponentInputPhoneProps = {
     ///----------------------
     prop_title:                            "prop_title",
     prop_name:                             "prop_name",
+    prop_isDisable:                        "prop_isDisable",
+
+    prop_countryHas  :                     "prop_countryHas",
+    prop_countryWidth  :                   "prop_countryWidth",
+    prop_countryValue:                     "prop_countryValue",
+    prop_countryOptions:                   "prop_countryOptions",
+
+    prop_cityHas  :                        "prop_cityHas",
+    prop_cityWidth  :                      "prop_cityWidth",
+    prop_cityValue:                        "prop_cityValue",
+    prop_cityOptions:                      "prop_cityOptions",
+
     prop_value:                            "prop_value",
-    prop_options:                          "prop_options",
-    prop_itemSelected:                     "prop_itemSelected",
     prop_size:                             "prop_size",
     prop_placeholder:                      "prop_placeholder",
     prop_labelClass:                       "prop_labelClass",
@@ -93,7 +106,6 @@ export const ComponentInputPhoneProps = {
     prop_formBorderRadius:                 "prop_formBorderRadius",
     prop_colorIcon:                        "prop_colorIcon",
     prop_icon:                             "prop_icon",
-    prop_iconPhone:                        "prop_iconPhone",
     prop_inputClass:                       "prop_inputClass",
     prop_inputStyles:                      "prop_inputStyles",
     prop_inputBorderColor:                 "prop_inputBorderColor",
@@ -113,7 +125,6 @@ const ComponentInputPhoneConfigs = {
         ...GOG_ComponentBasicConfigs_Component_keys,
         ...GOG_ComponentBasicConfigs_Component_Structure_keys,
         ...GOG_ComponentBasicConfigs_Component_Structure_FormInput_keys,
-        ...GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys,
         ...GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_keys,
         ///----------------------
         [ComponentInputPhoneProps.prop_title]: {
@@ -124,17 +135,48 @@ const ComponentInputPhoneConfigs = {
             name:               ComponentInputPhoneProps.prop_name,
             value:              GOG_SetValue<string | null>(null),
         },
+        [ComponentInputPhoneProps.prop_isDisable]: {
+            name:               ComponentInputPhoneProps.prop_isDisable,
+            value:              GOG_SetValue<boolean>(false),
+        },
+
+        [ComponentInputPhoneProps.prop_countryHas]: {
+            name:               ComponentInputPhoneProps.prop_countryHas,
+            value:              GOG_SetValue<Observable<boolean>>(true),
+        },
+        [ComponentInputPhoneProps.prop_countryWidth]: {
+            name:               ComponentInputPhoneProps.prop_countryWidth,
+            value:              GOG_SetValue<Observable<number>>(80),
+        },
+        [ComponentInputPhoneProps.prop_countryValue]: {
+            name:               ComponentInputPhoneProps.prop_countryValue,
+            value:              GOG_SetValue<Observable<string> | string>(""),
+        },
+
+        [ComponentInputPhoneProps.prop_cityHas]: {
+            name:               ComponentInputPhoneProps.prop_cityHas,
+            value:              GOG_SetValue<Observable<boolean>>(false),
+        },
+        [ComponentInputPhoneProps.prop_cityWidth]: {
+            name:               ComponentInputPhoneProps.prop_cityWidth,
+            value:              GOG_SetValue<Observable<number>>(80),
+        },
+        [ComponentInputPhoneProps.prop_cityValue]: {
+            name:               ComponentInputPhoneProps.prop_cityValue,
+            value:              GOG_SetValue<Observable<string> | string>(""),
+        },
+        [ComponentInputPhoneProps.prop_cityOptions]: {
+            name:               ComponentInputPhoneProps.prop_cityOptions,
+            value:              GOG_SetValue<any[]>([]),
+        },
+
         [ComponentInputPhoneProps.prop_value]: {
             name:               ComponentInputPhoneProps.prop_value,
             value:              GOG_SetValue<Observable<string> | string>(""),
         },
-        [ComponentInputPhoneProps.prop_options]: {
-            name:               ComponentInputPhoneProps.prop_options,
+        [ComponentInputPhoneProps.prop_countryOptions]: {
+            name:               ComponentInputPhoneProps.prop_countryOptions,
             value:              GOG_SetValue<any[]>([]),
-        },
-        [ComponentInputPhoneProps.prop_itemSelected]: {
-            name:               ComponentInputPhoneProps.prop_itemSelected,
-            value:              GOG_SetValue<any>(null),
         },
         [ComponentInputPhoneProps.prop_size]: {
             name:               ComponentInputPhoneProps.prop_size,
@@ -166,10 +208,6 @@ const ComponentInputPhoneConfigs = {
         },
         [ComponentInputPhoneProps.prop_icon]: {
             name:               ComponentInputPhoneProps.prop_icon,
-            value:              GOG_SetValue<IconsType | null>(null),
-        },
-        [ComponentInputPhoneProps.prop_iconPhone]: {
-            name:               ComponentInputPhoneProps.prop_iconPhone,
             value:              GOG_SetValue<IconsType | null>(ToolsIcons.icon_phone({})),
         },
         [ComponentInputPhoneProps.prop_hasRules]: {
@@ -198,7 +236,7 @@ const ComponentInputPhoneConfigs = {
         },
         [ComponentInputPhoneProps.prop_inputBorderColor]: {
             name:               ComponentInputPhoneProps.prop_inputBorderColor,
-            value:              GOG_SetValue<string>("var(--primaryColor1)"),
+            value:              GOG_SetValue<CssColorVar | null>(Color(COLORS_MAIN.PRIMARY, COLORS_GRAD.GRADE_1)),
         },
         [ComponentInputPhoneProps.prop_inputBorderColorFocus]: {
             name:               ComponentInputPhoneProps.prop_inputBorderColorFocus,
@@ -217,14 +255,16 @@ const ComponentInputPhoneConfigs = {
         ...GOG_ComponentBasicConfigs_Component_parts,
         ...GOG_ComponentBasicConfigs_Component_Structure_parts,
         ...GOG_ComponentBasicConfigs_Component_Structure_FormInput_parts,
-        ...GOG_ComponentBasicConfigs_Component_Structure_FormInput_value_parts,
         ...GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_parts,
         ///----------------------
         FORM: {
             name:               "part_form"
         },
-        SELECT: {
-            name:               "part_select"
+        COUNTRY_SELECT: {
+            name:               "part_country_select"
+        },
+        CITY_SELECT: {
+            name:               "part_city_select"
         },
         INPUT: {
             name:               "part_input"
@@ -245,68 +285,92 @@ const ComponentInputPhoneConfigs = {
         },
     },
     methods: {
-        SELECT_CHANGE: {
-            name:                      "fn_onSelectChange",
+        SELECT_COUNTRY_CHANGE: {
+            name:                      "fn_onSelectCountryChange",
             dataArgs: {
-                SELECTED_ID: {
-                    name:              "SELECTED_ID",
-                    value:             GOG_SetValue<any>(null),
+                COUNTRY: {
+                    name:              "country",
                 },
-                SELECTED_DATA: {
-                    name:              "SELECTED_DATA",
-                    value:             GOG_SetValue<any>(null),
+                CITY: {
+                    name:              "city",
+                },
+                VALUE: {
+                    name:              "value",
                 },
             },
-            componentArgs: {}
+            componentArgs: {
+                 
+            }
+        },
+        
+        SELECT_CITY_CHANGE: {
+            name:                      "fn_onSelectCityChange",
+            dataArgs: {
+                COUNTRY: {
+                    name:              "country",
+                },
+                CITY: {
+                    name:              "city",
+                },
+                VALUE: {
+                    name:              "value",
+                },
+            },
+            componentArgs: {
+                 
+            }
         },
         INPUT_CHANGE: {
             name:                      "fn_onInputChange",
             dataArgs: {
+                COUNTRY: {
+                    name:              "country",
+                },
+                CITY: {
+                    name:              "city",
+                },
                 VALUE: {
-                    name:              "VALUE",
-                    value:             GOG_SetValue<string>(""),
+                    name:              "value",
                 },
             },
-            componentArgs: {}
+            componentArgs: {
+
+            }
         },
-        FOCUS: {
-            name:                      "fn_onFocus",
+        INPUT_FOCUS: {
+            name:                      "fn_onInputFocus",
             dataArgs: {
+                COUNTRY: {
+                    name:              "country",
+                },
+                CITY: {
+                    name:              "city",
+                },
                 VALUE: {
-                    name:              "VALUE",
-                    value:             GOG_SetValue<string>(""),
+                    name:              "value",
                 },
             },
-            componentArgs: {}
+            componentArgs: {
+                
+            }
         },
-        BLUR: {
-            name:                      "fn_onBlur",
+        INPUT_BLUR: {
+            name:                      "fn_onInputBlur",
             dataArgs: {
+                COUNTRY: {
+                    name:              "country",
+                },
+                CITY: {
+                    name:              "city",
+                },
                 VALUE: {
-                    name:              "VALUE",
-                    value:             GOG_SetValue<string>(""),
+                    name:              "value",
                 },
             },
-            componentArgs: {}
-        },
-        CALLBACK: {
-            name:                      "fn_callback",
-            dataArgs: {
-                CODE: {
-                    name:              "CODE",
-                    value:             GOG_SetValue<any>(null),
-                },
-                NUMBER: {
-                    name:              "NUMBER",
-                    value:             GOG_SetValue<string>(""),
-                },
-                TEXT: {
-                    name:              "TEXT",
-                    value:             GOG_SetValue<string>(""),
-                },
-            },
-            componentArgs: {}
-        },
+            componentArgs: {
+                
+            }
+        }
     }
 } as const;
 
@@ -316,23 +380,23 @@ export type ComponentInputPhonePropsType =                      GOG_ExtractNameV
 export type ComponentInputPhoneSchemaType =                     GOG_ExtractName<typeof ComponentInputPhoneConfigs.schemas>
 export type ComponentInputPhoneTemplatesType =                  GOG_ExtractName<typeof ComponentInputPhoneConfigs.templates>
 
-export type ComponentInputPhone_Methods_SELECT_CHANGE_ComponentArgs =   GOG_ExtractName<typeof ComponentInputPhoneConfigs.methods.SELECT_CHANGE.componentArgs>
-export type ComponentInputPhone_Methods_SELECT_CHANGE_DataArgs =        GOG_ExtractNameValue<typeof ComponentInputPhoneConfigs.methods.SELECT_CHANGE.dataArgs>
-export type ComponentInputPhone_Methods_INPUT_CHANGE_ComponentArgs =    GOG_ExtractName<typeof ComponentInputPhoneConfigs.methods.INPUT_CHANGE.componentArgs>
-export type ComponentInputPhone_Methods_INPUT_CHANGE_DataArgs =         GOG_ExtractNameValue<typeof ComponentInputPhoneConfigs.methods.INPUT_CHANGE.dataArgs>
-export type ComponentInputPhone_Methods_FOCUS_ComponentArgs =           GOG_ExtractName<typeof ComponentInputPhoneConfigs.methods.FOCUS.componentArgs>
-export type ComponentInputPhone_Methods_FOCUS_DataArgs =                GOG_ExtractNameValue<typeof ComponentInputPhoneConfigs.methods.FOCUS.dataArgs>
-export type ComponentInputPhone_Methods_BLUR_ComponentArgs =            GOG_ExtractName<typeof ComponentInputPhoneConfigs.methods.BLUR.componentArgs>
-export type ComponentInputPhone_Methods_BLUR_DataArgs =                 GOG_ExtractNameValue<typeof ComponentInputPhoneConfigs.methods.BLUR.dataArgs>
-export type ComponentInputPhone_Methods_CALLBACK_ComponentArgs =        GOG_ExtractName<typeof ComponentInputPhoneConfigs.methods.CALLBACK.componentArgs>
-export type ComponentInputPhone_Methods_CALLBACK_DataArgs =             GOG_ExtractNameValue<typeof ComponentInputPhoneConfigs.methods.CALLBACK.dataArgs>
+export type ComponentInputPhone_Methods_SELECT_COUNTRY_CHANGE_ComponentArgs =   GOG_ExtractName<typeof ComponentInputPhoneConfigs.methods.SELECT_COUNTRY_CHANGE.componentArgs>
+export type ComponentInputPhone_Methods_SELECT_COUNTRY_CHANGE_DataArgs =        GOG_ExtractNameValue<typeof ComponentInputPhoneConfigs.methods.SELECT_COUNTRY_CHANGE.dataArgs>
+export type ComponentInputPhone_Methods_SELECT_CITY_CHANGE_ComponentArgs =      GOG_ExtractName<typeof ComponentInputPhoneConfigs.methods.SELECT_CITY_CHANGE.componentArgs>
+export type ComponentInputPhone_Methods_SELECT_CITY_CHANGE_DataArgs =           GOG_ExtractNameValue<typeof ComponentInputPhoneConfigs.methods.SELECT_CITY_CHANGE.dataArgs>
+export type ComponentInputPhone_Methods_INPUT_CHANGE_ComponentArgs =            GOG_ExtractName<typeof ComponentInputPhoneConfigs.methods.INPUT_CHANGE.componentArgs>
+export type ComponentInputPhone_Methods_INPUT_CHANGE_DataArgs =                 GOG_ExtractNameValue<typeof ComponentInputPhoneConfigs.methods.INPUT_CHANGE.dataArgs>
+export type ComponentInputPhone_Methods_INPUT_FOCUS_ComponentArgs =             GOG_ExtractName<typeof ComponentInputPhoneConfigs.methods.INPUT_FOCUS.componentArgs>
+export type ComponentInputPhone_Methods_INPUT_FOCUS_DataArgs =                  GOG_ExtractNameValue<typeof ComponentInputPhoneConfigs.methods.INPUT_FOCUS.dataArgs>
+export type ComponentInputPhone_Methods_INPUT_BLUR_ComponentArgs =              GOG_ExtractName<typeof ComponentInputPhoneConfigs.methods.INPUT_BLUR.componentArgs>
+export type ComponentInputPhone_Methods_INPUT_BLUR_DataArgs =                   GOG_ExtractNameValue<typeof ComponentInputPhoneConfigs.methods.INPUT_BLUR.dataArgs>
 
 export type ComponentInputPhoneMethodsType = {
-    [ComponentInputPhoneConfigs.methods.SELECT_CHANGE.name]: ComponentCallBackType<ComponentInputPhone_Methods_SELECT_CHANGE_ComponentArgs, ComponentInputPhone_Methods_SELECT_CHANGE_DataArgs>,
-    [ComponentInputPhoneConfigs.methods.INPUT_CHANGE.name]: ComponentCallBackType<ComponentInputPhone_Methods_INPUT_CHANGE_ComponentArgs, ComponentInputPhone_Methods_INPUT_CHANGE_DataArgs>,
-    [ComponentInputPhoneConfigs.methods.FOCUS.name]: ComponentCallBackType<ComponentInputPhone_Methods_FOCUS_ComponentArgs, ComponentInputPhone_Methods_FOCUS_DataArgs>,
-    [ComponentInputPhoneConfigs.methods.BLUR.name]: ComponentCallBackType<ComponentInputPhone_Methods_BLUR_ComponentArgs, ComponentInputPhone_Methods_BLUR_DataArgs>,
-    [ComponentInputPhoneConfigs.methods.CALLBACK.name]: ComponentCallBackType<ComponentInputPhone_Methods_CALLBACK_ComponentArgs, ComponentInputPhone_Methods_CALLBACK_DataArgs>,
+    [ComponentInputPhoneConfigs.methods.SELECT_COUNTRY_CHANGE.name]: ComponentCallBackType<ComponentInputPhone_Methods_SELECT_COUNTRY_CHANGE_ComponentArgs, ComponentInputPhone_Methods_SELECT_COUNTRY_CHANGE_DataArgs>,
+    [ComponentInputPhoneConfigs.methods.SELECT_CITY_CHANGE.name]:    ComponentCallBackType<ComponentInputPhone_Methods_SELECT_CITY_CHANGE_ComponentArgs, ComponentInputPhone_Methods_SELECT_CITY_CHANGE_DataArgs>,
+    [ComponentInputPhoneConfigs.methods.INPUT_CHANGE.name]:          ComponentCallBackType<ComponentInputPhone_Methods_INPUT_CHANGE_ComponentArgs, ComponentInputPhone_Methods_INPUT_CHANGE_DataArgs>,
+    [ComponentInputPhoneConfigs.methods.INPUT_FOCUS.name]:           ComponentCallBackType<ComponentInputPhone_Methods_INPUT_FOCUS_ComponentArgs, ComponentInputPhone_Methods_INPUT_FOCUS_DataArgs>,
+    [ComponentInputPhoneConfigs.methods.INPUT_BLUR.name]:            ComponentCallBackType<ComponentInputPhone_Methods_INPUT_BLUR_ComponentArgs, ComponentInputPhone_Methods_INPUT_BLUR_DataArgs>,
 }
 
 
@@ -352,7 +416,6 @@ export abstract class ComponentInputPhoneBase extends ComponentBase<
             ...GOG_ComponentBasicConfigs_Component_Pattern(this),
             ...GOG_ComponentBasicConfigs_Component_Structure_Pattern(this),
             ...GOG_ComponentBasicConfigs_Component_Structure_FormInput_Pattern(this),
-            ...GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_Pattern(this),
             ...GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_Pattern(this),
             ///----------------------
             [ComponentInputPhoneConfigs.keys.prop_title.name]: {
@@ -367,23 +430,70 @@ export abstract class ComponentInputPhoneBase extends ComponentBase<
                 title:                                            Language.translate("components.public.props.prop_name.title"),
                 description:                                      Language.translate("components.public.props.prop_name.description"),
             },
+            [ComponentInputPhoneConfigs.keys.prop_isDisable.name]: {
+                prop:                                             ComponentInputPhoneConfigs.keys.prop_isDisable.name,
+                default:                                          ComponentInputPhoneConfigs.keys.prop_isDisable.value,
+                title:                                            Language.translate("components.public.props.prop_isDisable.title"),
+                description:                                      Language.translate("components.public.props.prop_isDisable.description"),
+            },
+
+            [ComponentInputPhoneConfigs.keys.prop_countryHas.name]: {
+                prop:                                             ComponentInputPhoneConfigs.keys.prop_countryHas.name,
+                default:                                          ComponentInputPhoneConfigs.keys.prop_countryHas.value,
+                title:                                            Language.translate("components.public.props.prop_countryHas.title"),
+                description:                                      Language.translate("components.public.props.prop_countryHas.description"),
+            },
+            [ComponentInputPhoneConfigs.keys.prop_countryWidth.name]: {
+                prop:                                             ComponentInputPhoneConfigs.keys.prop_countryWidth.name,
+                default:                                          ComponentInputPhoneConfigs.keys.prop_countryWidth.value,
+                title:                                            Language.translate("components.public.props.prop_countryWidth.title"),
+                description:                                      Language.translate("components.public.props.prop_countryWidth.description"),
+            },
+            [ComponentInputPhoneConfigs.keys.prop_countryOptions.name]: {
+                prop:                                             ComponentInputPhoneConfigs.keys.prop_countryOptions.name,
+                default:                                          ComponentInputPhoneConfigs.keys.prop_countryOptions.value,
+                title:                                            Language.translate("components.input_phone.props.prop_countryOptions.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_countryOptions.description"),
+            },
+            [ComponentInputPhoneConfigs.keys.prop_countryValue.name]: {
+                prop:                                             ComponentInputPhoneConfigs.keys.prop_countryValue.name,
+                default:                                          ComponentInputPhoneConfigs.keys.prop_countryValue.value,
+                title:                                            Language.translate("components.public.props.prop_countryValue.title"),
+                description:                                      Language.translate("components.public.props.prop_countryValue.description"),
+            },
+
+
+            [ComponentInputPhoneConfigs.keys.prop_cityHas.name]: {
+                prop:                                             ComponentInputPhoneConfigs.keys.prop_cityHas.name,
+                default:                                          ComponentInputPhoneConfigs.keys.prop_cityHas.value,
+                title:                                            Language.translate("components.public.props.prop_countryHas.title"),
+                description:                                      Language.translate("components.public.props.prop_countryHas.description"),
+            },
+            [ComponentInputPhoneConfigs.keys.prop_cityWidth.name]: {
+                prop:                                             ComponentInputPhoneConfigs.keys.prop_cityWidth.name,
+                default:                                          ComponentInputPhoneConfigs.keys.prop_cityWidth.value,
+                title:                                            Language.translate("components.public.props.prop_countryWidth.title"),
+                description:                                      Language.translate("components.public.props.prop_countryWidth.description"),
+            },
+            [ComponentInputPhoneConfigs.keys.prop_cityOptions.name]: {
+                prop:                                             ComponentInputPhoneConfigs.keys.prop_cityOptions.name,
+                default:                                          ComponentInputPhoneConfigs.keys.prop_cityOptions.value,
+                title:                                            Language.translate("components.input_phone.props.prop_cityOptions.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_cityOptions.description"),
+            },
+            [ComponentInputPhoneConfigs.keys.prop_cityValue.name]: {
+                prop:                                             ComponentInputPhoneConfigs.keys.prop_cityValue.name,
+                default:                                          ComponentInputPhoneConfigs.keys.prop_cityValue.value,
+                title:                                            Language.translate("components.public.props.prop_countryValue.title"),
+                description:                                      Language.translate("components.public.props.prop_countryValue.description"),
+            },
+
+
             [ComponentInputPhoneConfigs.keys.prop_value.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_value.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_value.value,
                 title:                                            Language.translate("components.public.props.prop_value.title"),
                 description:                                      Language.translate("components.public.props.prop_value.description"),
-            },
-            [ComponentInputPhoneConfigs.keys.prop_options.name]: {
-                prop:                                             ComponentInputPhoneConfigs.keys.prop_options.name,
-                default:                                          ComponentInputPhoneConfigs.keys.prop_options.value,
-                title:                                            Language.translate("components.input_phone.props.prop_options.title"),
-                description:                                      Language.translate("components.input_phone.props.prop_options.description"),
-            },
-            [ComponentInputPhoneConfigs.keys.prop_itemSelected.name]: {
-                prop:                                             ComponentInputPhoneConfigs.keys.prop_itemSelected.name,
-                default:                                          ComponentInputPhoneConfigs.keys.prop_itemSelected.value,
-                title:                                            Language.translate("components.input_phone.props.prop_itemSelected.title"),
-                description:                                      Language.translate("components.input_phone.props.prop_itemSelected.description"),
             },
             [ComponentInputPhoneConfigs.keys.prop_size.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_size.name,
@@ -457,12 +567,6 @@ export abstract class ComponentInputPhoneBase extends ComponentBase<
                 title:                                            Language.translate("components.input.props.prop_icon.title"),
                 description:                                      Language.translate("components.input.props.prop_icon.description"),
             },
-            [ComponentInputPhoneConfigs.keys.prop_iconPhone.name]: {
-                prop:                                             ComponentInputPhoneConfigs.keys.prop_iconPhone.name,
-                default:                                          ComponentInputPhoneConfigs.keys.prop_iconPhone.value,
-                title:                                            Language.translate("components.input.props.prop_icon.title"),
-                description:                                      Language.translate("components.input.props.prop_icon.description"),
-            },
             [ComponentInputPhoneConfigs.keys.prop_inputClass.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_inputClass.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_inputClass.value,
@@ -510,7 +614,6 @@ export abstract class ComponentInputPhoneBase extends ComponentBase<
         ...GOG_ComponentBasicConfigs_Component_Schema(this),
         ...GOG_ComponentBasicConfigs_Component_Structure_Schema(this),
         ...GOG_ComponentBasicConfigs_Component_Structure_FormInput_Schema(this),
-        ...GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_Schema(this),
         ...GOG_ComponentBasicConfigs_Component_Structure_FormInput_Label_Schema(this),
         ///----------------------
         FORM: {
@@ -518,22 +621,40 @@ export abstract class ComponentInputPhoneBase extends ComponentBase<
             title:              Language.translate("components.input.schema.form.title"),
             description:        Language.translate("components.input.schema.form.description"),
             props: [
-                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_size.name],
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_backgroundColorForm.name],
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_formBorderRadius.name],
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_selectWidth.name],
             ]
         },
-        SELECT: {
-            part:               ComponentInputPhoneConfigs.schemas.SELECT.name,
-            title:              Language.translate("components.input_phone.schema.select.title"),
-            description:        Language.translate("components.input_phone.schema.select.description"),
+
+        COUNTRY_SELECT: {
+            part:               ComponentInputPhoneConfigs.schemas.COUNTRY_SELECT.name,
+            title:              Language.translate("components.input_phone.schema.country_select.title"),
+            description:        Language.translate("components.input_phone.schema.country_select.description"),
             props: [
-                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_options.name],
-                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_itemSelected.name],
-                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_size.name],
+                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_countryWidth.name],
+                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_countryHas.name],
+                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_countryOptions.name],
+                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_countryValue.name],
+                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_name.name],
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_selectWidth.name],
-                this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name],
+                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_isDisable.name],
+            ]
+        },
+        CITY_SELECT: {
+            part:               ComponentInputPhoneConfigs.schemas.CITY_SELECT.name,
+            title:              Language.translate("components.input_phone.schema.city_select.title"),
+            description:        Language.translate("components.input_phone.schema.city_select.description"),
+            props: [
+                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_countryHas.name],
+                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_countryValue.name],
+
+                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_cityWidth.name],
+                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_cityHas.name],
+                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_cityOptions.name],
+                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_cityValue.name],
+                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_name.name],
+                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_isDisable.name],
             ]
         },
         INPUT: {
@@ -541,11 +662,16 @@ export abstract class ComponentInputPhoneBase extends ComponentBase<
             title:              Language.translate("components.input.schema.input.title"),
             description:        Language.translate("components.input.schema.input.description"),
             props: [
+                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_countryHas.name],
+                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_countryWidth.name],
+
+                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_cityHas.name],
+                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_cityWidth.name],
+
+                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_isDisable.name],
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_name.name],
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_value.name],
-                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_size.name],
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_placeholder.name],
-                this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name],
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_hasRules.name],
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_isAbsoluteRule.name],
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_listRules.name],
@@ -566,7 +692,6 @@ export abstract class ComponentInputPhoneBase extends ComponentBase<
             description:        Language.translate("components.input.schema.icon.description"),
             props: [
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_icon.name],
-                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_iconPhone.name],
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_size.name],
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_colorIcon.name],
             ]
@@ -576,7 +701,7 @@ export abstract class ComponentInputPhoneBase extends ComponentBase<
             title:              Language.translate("components.input.schema.icon_clear.title"),
             description:        Language.translate("components.input.schema.icon_clear.description"),
             props: [
-                this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name],
+                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_isDisable.name],
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_size.name],
             ]
         },
@@ -589,7 +714,7 @@ export abstract class ComponentInputPhoneBase extends ComponentBase<
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_isAbsoluteRule.name],
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_listRules.name],
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_msgRules.name],
-                this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name],
+                this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_isDisable.name],
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_title.name],
                 this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_size.name],
             ]
@@ -613,44 +738,51 @@ export abstract class ComponentInputPhoneBase extends ComponentBase<
         PROPERTYs Methods
     --------------------------------------------- */
     _COMPONENT_METHODS = defineComponentMethods<ComponentInputPhoneMethodsType, ComponentInputPhonePropsType>({
-        [ComponentInputPhoneConfigs.methods.SELECT_CHANGE.name]: {
-            title:                                            Language.translate("components.input_phone.methods.fn_onSelectChange.title"),
-            description:                                      Language.translate("components.input_phone.methods.fn_onSelectChange.description"),
+        [ComponentInputPhoneConfigs.methods.SELECT_COUNTRY_CHANGE.name]: {
+            title:                                            Language.translate("components.input_phone.methods.fn_onSelectCountryChange.title"),
+            description:                                      Language.translate("components.input_phone.methods.fn_onSelectCountryChange.description"),
             args: {
-                [ComponentInputPhoneConfigs.methods.SELECT_CHANGE.dataArgs.SELECTED_ID.name]: this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_itemSelected.name],
-                [ComponentInputPhoneConfigs.methods.SELECT_CHANGE.dataArgs.SELECTED_DATA.name]: this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_options.name],
+                [ComponentInputPhoneConfigs.methods.SELECT_COUNTRY_CHANGE.dataArgs.COUNTRY.name]: this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_countryValue.name],
+                [ComponentInputPhoneConfigs.methods.SELECT_COUNTRY_CHANGE.dataArgs.CITY.name]:    this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_cityValue.name],
+                [ComponentInputPhoneConfigs.methods.SELECT_COUNTRY_CHANGE.dataArgs.VALUE.name]:   this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_value.name],
+            }
+        },
+        [ComponentInputPhoneConfigs.methods.SELECT_CITY_CHANGE.name]: {
+            title:                                            Language.translate("components.input_phone.methods.fn_onSelectCityChange.title"),
+            description:                                      Language.translate("components.input_phone.methods.fn_onSelectCityChange.description"),
+            args: {
+                [ComponentInputPhoneConfigs.methods.SELECT_CITY_CHANGE.dataArgs.COUNTRY.name]: this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_countryValue.name],
+                [ComponentInputPhoneConfigs.methods.SELECT_CITY_CHANGE.dataArgs.CITY.name]:    this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_cityValue.name],
+                [ComponentInputPhoneConfigs.methods.SELECT_CITY_CHANGE.dataArgs.VALUE.name]:   this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_value.name],
             }
         },
         [ComponentInputPhoneConfigs.methods.INPUT_CHANGE.name]: {
             title:                                            Language.translate("components.input.methods.fn_onInput.title"),
             description:                                      Language.translate("components.input.methods.fn_onInput.description"),
             args: {
-                [ComponentInputPhoneConfigs.methods.INPUT_CHANGE.dataArgs.VALUE.name]: this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_value.name],
-            }
+                [ComponentInputPhoneConfigs.methods.INPUT_CHANGE.dataArgs.COUNTRY.name]: this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_countryValue.name],
+                [ComponentInputPhoneConfigs.methods.INPUT_CHANGE.dataArgs.CITY.name]:    this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_cityValue.name],
+                [ComponentInputPhoneConfigs.methods.INPUT_CHANGE.dataArgs.VALUE.name]:   this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_value.name],     
+                   }
         },
-        [ComponentInputPhoneConfigs.methods.FOCUS.name]: {
+        [ComponentInputPhoneConfigs.methods.INPUT_FOCUS.name]: {
             title:                                            Language.translate("components.input.methods.fn_onFocus.title"),
             description:                                      Language.translate("components.input.methods.fn_onFocus.description"),
             args: {
-                [ComponentInputPhoneConfigs.methods.FOCUS.dataArgs.VALUE.name]: this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_value.name],
+                [ComponentInputPhoneConfigs.methods.INPUT_FOCUS.dataArgs.COUNTRY.name]: this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_countryValue.name],
+                [ComponentInputPhoneConfigs.methods.INPUT_FOCUS.dataArgs.CITY.name]:    this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_cityValue.name],
+                [ComponentInputPhoneConfigs.methods.INPUT_FOCUS.dataArgs.VALUE.name]:   this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_value.name],
             }
         },
-        [ComponentInputPhoneConfigs.methods.BLUR.name]: {
+        [ComponentInputPhoneConfigs.methods.INPUT_BLUR.name]: {
             title:                                            Language.translate("components.input.methods.fn_onBlur.title"),
             description:                                      Language.translate("components.input.methods.fn_onBlur.description"),
             args: {
-                [ComponentInputPhoneConfigs.methods.BLUR.dataArgs.VALUE.name]: this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_value.name],
+                [ComponentInputPhoneConfigs.methods.INPUT_BLUR.dataArgs.COUNTRY.name]: this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_countryValue.name],
+                [ComponentInputPhoneConfigs.methods.INPUT_BLUR.dataArgs.CITY.name]:    this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_cityValue.name],
+                [ComponentInputPhoneConfigs.methods.INPUT_BLUR.dataArgs.VALUE.name]:   this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_value.name],
             }
-        },
-        [ComponentInputPhoneConfigs.methods.CALLBACK.name]: {
-            title:                                            Language.translate("components.input_phone.methods.fn_callback.title"),
-            description:                                      Language.translate("components.input_phone.methods.fn_callback.description"),
-            args: {
-                [ComponentInputPhoneConfigs.methods.CALLBACK.dataArgs.CODE.name]: this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_itemSelected.name],
-                [ComponentInputPhoneConfigs.methods.CALLBACK.dataArgs.NUMBER.name]: this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_value.name],
-                [ComponentInputPhoneConfigs.methods.CALLBACK.dataArgs.TEXT.name]: this._COMPONENT_PATTERN[ComponentInputPhoneConfigs.keys.prop_value.name],
-            }
-        },
+        }
     });
 
 
@@ -658,55 +790,67 @@ export abstract class ComponentInputPhoneBase extends ComponentBase<
         Example
     --------------------------------------------- */
     static override renderExampleComponent(): HTMLElement {
-        const valueObs = new Observable<string>("");
-        const selectedObs = new Observable<any>(null);
 
         const inputPhoneComp = new ComponentInputPhone(
             {
-                classList: ["col-md-3", "col-12", "border", "p-2"],
-                prop_title: "Phone Example",
-                prop_labelTitle: "Phone Example",
-                prop_labelTooltipDescription: "Enter your phone number",
-                prop_placeholder: "Enter phone number...",
-                prop_value: valueObs,
-                prop_itemSelected: selectedObs,
-                prop_size: SIZES.M,
-                prop_selectWidth: "140px",
-                prop_options: [
-                    { id: 1, name: "Iran", code: "+98" },
-                    { id: 2, name: "USA", code: "+1" },
-                    { id: 3, name: "UK", code: "+44" },
+                classList:                     ["col-md-3", "col-12", "border", "p-2"],
+                prop_title:                    "Phone Example",
+                prop_labelTitle:               "Phone Example",
+                prop_labelTooltipDescription:  "Enter your phone number",
+                prop_placeholder:              "Enter phone number...",
+
+                prop_countryHas:                true ,
+                prop_countryWidth:              80 ,
+                prop_countryValue:              1,
+                prop_countryOptions: [
+                    { id: 1, name: "Iran",    code: "+98" },
+                    { id: 2, name: "USA",     code: "+1" },
+                    { id: 3, name: "UK",      code: "+44" },
                     { id: 4, name: "Germany", code: "+49" },
                 ],
+
+                prop_cityHas:                   true ,
+                prop_cityWidth:                 80 ,
+                prop_cityValue:                 101,
+                prop_cityOptions: [
+                    { id: 101, name: "Tehran",    code: "021", countryId: 1 },
+                    { id: 102, name: "Shiraz",    code: "071", countryId: 1 },
+                    { id: 103, name: "Mashhad",   code: "051", countryId: 1 },
+                    { id: 201, name: "New York",  code: "212", countryId: 2 },
+                    { id: 202, name: "Los Angeles", code: "213", countryId: 2 },
+                    { id: 301, name: "London",    code: "020", countryId: 3 },
+                    { id: 401, name: "Berlin",    code: "030", countryId: 4 },
+                ],
+
+                prop_value:                    "2636617530",
                 prop_listRules: [
                     {
-                        rule: "_not_empty",
+                        rule:        "_not_empty",
                         description: "This field is required"
                     },
                 ],
                 prop_msgRules: {
-                    "_not_empty": "Phone number is required",
+                    "_not_empty":    "Phone number is required",
                 },
+                prop_name: "input_example_phone" ,
                 prop_isAbsoluteRule: true,
                 prop_hasRules: true,
             } as any as ComponentInputPhonePropsType,
             <ComponentInputPhoneMethodsType>{
-                fn_onSelectChange: (event, dataArgs, componentArgs) => {
-                    selectedObs.set(dataArgs.SELECTED_ID);
-                    console.log("select changed", dataArgs.SELECTED_ID, dataArgs.SELECTED_DATA);
+                fn_onSelectCountryChange: (event, dataArgs, componentArgs) => {
+                    console.log("fn_onSelectCountryChange", dataArgs, componentArgs);
+                },
+                fn_onSelectCityChange: (event, dataArgs, componentArgs) => {
+                    console.log("fn_onSelectCityChange", dataArgs, componentArgs);
                 },
                 fn_onInputChange: (event, dataArgs, componentArgs) => {
-                    valueObs.set(dataArgs.VALUE);
-                    console.log("input changed", dataArgs.VALUE);
+                    console.log("fn_onInputChange", dataArgs, componentArgs);
                 },
-                fn_onFocus: (event, dataArgs, componentArgs) => {
-                    console.log("focus", dataArgs.VALUE);
+                fn_onInputFocus: (event, dataArgs, componentArgs) => {
+                    console.log("fn_onInputFocus", dataArgs, componentArgs);
                 },
-                fn_onBlur: (event, dataArgs, componentArgs) => {
-                    console.log("blur", dataArgs.VALUE);
-                },
-                fn_callback: (event, dataArgs, componentArgs) => {
-                    console.log("callback", dataArgs.CODE, dataArgs.NUMBER, dataArgs.TEXT);
+                fn_onInputBlur: (event, dataArgs, componentArgs) => {
+                    console.log("fn_onInputBlur", dataArgs, componentArgs);
                 },
             }
         );
@@ -716,10 +860,14 @@ export abstract class ComponentInputPhoneBase extends ComponentBase<
 }
 
 
-export class ComponentInputPhone extends ComponentInputPhoneBase {
+class ComponentInputPhone extends ComponentInputPhoneBase {
 
-    private var_inputValue = new Observable<string>("");
-    private var_selectedCode: any = null;
+    private _SEARCH_TEXT_COUNTRY =   new Observable<string>("");
+    private _SEARCH_TEXT_CITY =      new Observable<string>("");
+    private _DROPDOWN_OPEN_COUNTRY = new Observable<boolean>(false);
+    private _DROPDOWN_OPEN_CITY =    new Observable<boolean>(false);
+    private _ELEMENT_INPUT = null;
+
 
     /* ---------------------------------------------
         SETUP
@@ -731,7 +879,6 @@ export class ComponentInputPhone extends ComponentInputPhoneBase {
     ) {
         super("input-phone", null);
         super.renderComponent(config, methods, events);
-        this.fn_setupValueObservable();
     }
 
 
@@ -746,8 +893,10 @@ export class ComponentInputPhone extends ComponentInputPhoneBase {
         switch (partName) {
             case ComponentInputPhoneConfigs.schemas.FORM.name:
                 return this.template_render_form(attrsDefault, data, extra);
-            case ComponentInputPhoneConfigs.schemas.SELECT.name:
-                return this.template_render_select(attrsDefault, data, extra);
+            case ComponentInputPhoneConfigs.schemas.COUNTRY_SELECT.name:
+                return this.template_render_country_select(attrsDefault, data, extra);
+            case ComponentInputPhoneConfigs.schemas.CITY_SELECT.name:
+                return this.template_render_city_select(attrsDefault, data, extra);
             case ComponentInputPhoneConfigs.schemas.INPUT.name:
                 return this.template_render_input(attrsDefault, data, extra);
             case ComponentInputPhoneConfigs.schemas.ICON.name:
@@ -761,375 +910,179 @@ export class ComponentInputPhone extends ComponentInputPhoneBase {
     }
 
 
-    /* ---------------------------------------------
-        template_render_form — یک ReactiveElement.section
-    --------------------------------------------- */
+    // ---------------------------------------------
     private template_render_form(attrsDefault, data, extra): ReactiveElement {
         if (data != null) {
             const prop_backgroundColorForm = data[ComponentInputPhoneConfigs.keys.prop_backgroundColorForm.name];
-            const prop_formBorderRadius = data[ComponentInputPhoneConfigs.keys.prop_formBorderRadius.name];
-            const prop_selectWidth = data[ComponentInputPhoneConfigs.keys.prop_selectWidth.name];
-
-            const directionRtl = AppConfig.get("directionRtl");
+            const prop_formBorderRadius =    data[ComponentInputPhoneConfigs.keys.prop_formBorderRadius.name];
 
             return ReactiveElement.part("section", {
-                attrs: {
-                    ...attrsDefault,
-                    "id": `component-input-phone-form-${this._COMPONENT_RANDOM_ID}`,
-                },
-                styles: {
-                    marginTop: "5px",
-                },
+                attrs: { ...attrsDefault },
+                stylesCustom:`
+ /* Chrome, Edge, Safari, Opera */
+#${attrsDefault.id} input[type="number"]::-webkit-inner-spin-button,
+#${attrsDefault.id} input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+#${attrsDefault.id} input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+                ` ,
                 children: [
-                    ReactiveElement.part("section", {
-                        stylesBind: {
-                            backgroundColor: prop_backgroundColorForm,
-                            borderRadius: prop_formBorderRadius instanceof Observable
-                                ? prop_formBorderRadius.map((s: any) => `${ToolsComponents_BorderRadius[s ?? SIZES.M]} !important`)
-                                : `${ToolsComponents_BorderRadius[prop_formBorderRadius ?? SIZES.M]} !important`,
-                        },
-                        className: ["position-relative", "p-0", "d-flex"],
-                        styles: {
-                            display: "flex",
-                            alignItems: "stretch",
-                        },
-                        children: [
-                            ReactiveElement.part("div", {
-                                styles: {
-                                    flexShrink: "0",
-                                    width: prop_selectWidth ?? "140px",
-                                },
+                    new ToolsComponents.ComponentBorder(
+                        <ComponentBorderPropsType>{
+                            classList: [ "pt-2" , "d-block"]  ,
+                            styles: {}  ,
+                            prop_borderClass: []  ,
+                            prop_borderStyles: Observable.computed(
+                                (sizeName) => {
+                                    return {
+                                        height: SizeCalc(
+                                            ToolsComponents_BorderWidth?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Padding?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Height?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Padding?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_BorderWidth?.[sizeName] ,
+                                        )
+                                    }
+                                } ,
+                                [
+                                    AppConfig.get_sizeName()
+                                ] ,
+                                this.getScope()
+                            ) ,
+                            prop_borderRadius: prop_formBorderRadius ,
+                            prop_content:                        ReactiveElement.div({
+                                className: ["position-relative"  , "h-100"] ,
                                 children: [
-                                    this.executeSchemaPart(ComponentInputPhoneConfigs.schemas.SELECT.name),
-                                ]
-                            }),
-                            ReactiveElement.part("div", {
-                                className: ["position-relative"],
-                                styles: {
-                                    flexGrow: "1",
-                                    minWidth: "0",
-                                    [directionRtl ? "marginRight" : "marginLeft"]: "-2px",
-                                },
-                                children: [
-                                    this.executeSchemaPart(ComponentInputPhoneConfigs.schemas.INPUT.name),
                                     this.executeSchemaPart(ComponentInputPhoneConfigs.schemas.ICON.name),
+                                    this.executeSchemaPart(ComponentInputPhoneConfigs.schemas.COUNTRY_SELECT.name),
+                                    this.executeSchemaPart(ComponentInputPhoneConfigs.schemas.CITY_SELECT.name),
+                                    this.executeSchemaPart(ComponentInputPhoneConfigs.schemas.INPUT.name) ,
                                     this.executeSchemaPart(ComponentInputPhoneConfigs.schemas.ICON_CLEAR.name),
                                 ]
-                            }),
-                        ]
-                    }),
+                            }) ,
+                            prop_borderColor:                    null ,
+                            prop_contentBackgroundColor:         prop_backgroundColorForm ,
+                        },
+                        <ComponentBorderMethodsType>{}
+                    ).getReactiveElement() ,
                     this.executeSchemaPart(ComponentInputPhoneConfigs.schemas.VALIDATE.name),
-                ]
-            });
-        }
-
-        return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
-    }
-
-
-    /* ---------------------------------------------
-        template_render_select — یک ReactiveElement.part("select")
-    --------------------------------------------- */
-    private template_render_select(attrsDefault, data, extra): ReactiveElement {
-        if (data != null) {
-            const prop_options = data[ComponentInputPhoneConfigs.keys.prop_options.name];
-            const prop_itemSelected = data[ComponentInputPhoneConfigs.keys.prop_itemSelected.name];
-            const prop_size = data[ComponentInputPhoneConfigs.keys.prop_size.name];
-            const prop_isDisable = data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
-
-            const selectId = `component-input-phone-select-${this._COMPONENT_RANDOM_ID}`;
-
-            const directionRtl = AppConfig.get("directionRtl");
-
-            const options = prop_options instanceof Observable ? prop_options.get() : prop_options;
-            const itemSelected = prop_itemSelected instanceof Observable ? prop_itemSelected.get() : prop_itemSelected;
-
-            const optionsWithCode = options != null ? options.map((item: any) => ({
-                id: item.id,
-                name: item.hasOwnProperty("code") ? `${item.code} ${item.name}` : item.name,
-                code: item.code,
-            })) : [];
-
-            const sizeName = prop_size instanceof Observable ? prop_size.get() : (prop_size ?? SIZES.M);
-            const isDisable = prop_isDisable instanceof Observable ? prop_isDisable.get() : prop_isDisable;
-
-            const optionChildren = optionsWithCode.map((opt: any) =>
-                ReactiveElement.part("option", {
-                    attrs: {
-                        value: opt.id,
-                        selected: itemSelected != null && String(opt.id) === String(itemSelected) ? "selected" : null,
-                    },
-                    children: opt.name,
-                })
-            );
-
-            return ReactiveElement.part("select", {
-                attrs: {
-                    ...attrsDefault,
-                    "id": selectId,
-                    "disabled": isDisable ? "disabled" : null,
-                },
-                className: ["form-control", "d-block"],
-                styles: {
-                    lineHeight: `${ToolsCss.getHeightSize(sizeName)}px`,
-                    fontSize: `${ToolsCss.getFontSize(sizeName)}px`,
-                    outline: "none",
-                    boxShadow: "none",
-                    width: "100%",
-                    paddingTop: "1px",
-                    paddingBottom: "1px",
-                    borderWidth: `${ToolsComponents_BorderWidth[SIZES.M]} !important`,
-                    borderStyle: "solid",
-                    borderColor: "var(--primaryColor1) !important",
-                    backgroundColor: "var(--secondaryColor1)",
-                    [directionRtl ? "borderTopLeftRadius" : "borderTopRightRadius"]: "0 !important",
-                    [directionRtl ? "borderBottomLeftRadius" : "borderBottomRightRadius"]: "0 !important",
-                },
-                children: optionChildren,
-                on: {
-                    change: (event: Event) => {
-                        const selectEl = event.target as HTMLSelectElement;
-                        const selectedId = selectEl.value;
-                        const selectedData = optionsWithCode.find((o: any) => String(o.id) === String(selectedId)) ?? null;
-                        this.var_selectedCode = selectedData;
-                        const params: ComponentInputPhone_Methods_SELECT_CHANGE_DataArgs = {
-                            [ComponentInputPhoneConfigs.methods.SELECT_CHANGE.dataArgs.SELECTED_ID.name]: selectedId,
-                            [ComponentInputPhoneConfigs.methods.SELECT_CHANGE.dataArgs.SELECTED_DATA.name]: selectedData,
-                        };
-                        this.executeMethod(ComponentInputPhoneConfigs.methods.SELECT_CHANGE.name, event, params);
-                        this.fn_executeCallback(event);
-                    },
-                }
-            });
-        }
-
-        return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
-    }
-
-
-    /* ---------------------------------------------
-        template_render_input — یک ReactiveElement.input
-    --------------------------------------------- */
-    private template_render_input(attrsDefault, data, extra): ReactiveElement {
-        if (data != null) {
-            const prop_inputClass = data[ComponentInputPhoneConfigs.keys.prop_inputClass.name];
-            const prop_inputStyles = data[ComponentInputPhoneConfigs.keys.prop_inputStyles.name];
-            const prop_inputBorderColor = data[ComponentInputPhoneConfigs.keys.prop_inputBorderColor.name];
-            const prop_inputBorderColorFocus = data[ComponentInputPhoneConfigs.keys.prop_inputBorderColorFocus.name];
-            const prop_inputBorderWidth = data[ComponentInputPhoneConfigs.keys.prop_inputBorderWidth.name];
-            const prop_inputBorderRadius = data[ComponentInputPhoneConfigs.keys.prop_inputBorderRadius.name];
-            const prop_name = data[ComponentInputPhoneConfigs.keys.prop_name.name];
-            const prop_value = data[ComponentInputPhoneConfigs.keys.prop_value.name];
-            const prop_size = data[ComponentInputPhoneConfigs.keys.prop_size.name];
-            const prop_placeholder = data[ComponentInputPhoneConfigs.keys.prop_placeholder.name];
-            const prop_isDisable = data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
-            const prop_icon = data[ComponentInputPhoneConfigs.keys.prop_icon.name];
-
-            const directionRtl = AppConfig.get("directionRtl");
-
-            const inputValue = prop_value instanceof Observable
-                ? prop_value
-                : this.var_inputValue;
-
-            if (prop_value instanceof Observable) {
-                this.var_inputValue = prop_value;
-            }
-
-            const inputId = `component-input-phone-input-${this._COMPONENT_RANDOM_ID}`;
-
-            return ReactiveElement.input({
-                attrs: {
-                    ...attrsDefault,
-                    "id": inputId,
-                    "type": "tel",
-                },
-                attrsBind: {
-                    name: prop_name,
-                    placeholder: prop_placeholder,
-                    value: inputValue,
-                    disabled: prop_isDisable instanceof Observable
-                        ? prop_isDisable.map((v: boolean) => v ? "disabled" : (null as any))
-                        : (prop_isDisable ? "disabled" : (null as any)),
-                },
-                className: [
-                    "d-block",
                 ],
-                classBind: [
-                    prop_inputClass,
-                    prop_isDisable instanceof Observable
-                        ? prop_isDisable.mapBoolean("disabled", "")
-                        : (prop_isDisable ? "disabled" : ""),
-                    prop_icon instanceof Observable
-                        ? prop_icon.mapBoolean("border", "")
-                        : (prop_icon ? "border" : ""),
-                ],
-                styles: {
-                    [directionRtl ? "paddingLeft" : "paddingRight"]: "35px",
-                    [directionRtl ? "right" : "left"]: "0",
-                    direction: directionRtl ? "rtl" : "ltr",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    top: "0",
-                    paddingTop: "1px",
-                    paddingBottom: "1px",
-                    outline: "none",
-                    boxShadow: "none",
-                },
-                stylesBind: (el) => ({
-                    prop_inputStyles,
-                    borderWidth: prop_inputBorderWidth instanceof Observable
-                        ? prop_inputBorderWidth.map((s: any) => `${ToolsComponents_BorderWidth[s ?? SIZES.M]} !important`)
-                        : `${ToolsComponents_BorderWidth[prop_inputBorderWidth ?? SIZES.M]} !important`,
-                    borderRadius: prop_inputBorderRadius instanceof Observable
-                        ? prop_inputBorderRadius.map((s: any) => `${ToolsComponents_BorderRadius[s ?? SIZES.M]} !important`)
-                        : `${ToolsComponents_BorderRadius[prop_inputBorderRadius ?? SIZES.M]} !important`,
-                    borderColor: el.focus.mapList({
-                        true:  prop_inputBorderColorFocus instanceof Observable
-                            ? prop_inputBorderColorFocus.map((v: string | null) => v ? `${v} !important` : (null as any))
-                            : (prop_inputBorderColorFocus ? `${prop_inputBorderColorFocus} !important` : (null as any)),
-                        false: prop_inputBorderColor instanceof Observable
-                            ? prop_inputBorderColor.map((v: string | null) => v ? `${v} !important` : (null as any))
-                            : (prop_inputBorderColor ? `${prop_inputBorderColor} !important` : (null as any)),
-                    }),
-                    lineHeight: prop_size instanceof Observable
-                        ? prop_size.map((s: any) => `${ToolsCss.getHeightSize(s ?? SIZES.M)}px`)
-                        : `${ToolsCss.getHeightSize(prop_size ?? SIZES.M)}px`,
-                    fontSize: prop_size instanceof Observable
-                        ? prop_size.map((s: any) => `${ToolsCss.getFontSize(s ?? SIZES.M)}px`)
-                        : `${ToolsCss.getFontSize(prop_size ?? SIZES.M)}px`,
-                    [directionRtl ? "marginRight" : "marginLeft"]: prop_icon instanceof Observable
-                        ? prop_icon.map((v: any) => v ? "35px" : "0")
-                        : (prop_icon ? "35px" : "0"),
-                    width: prop_icon instanceof Observable
-                        ? prop_icon.map((v: any) => v ? "calc(100% - 35px)" : "calc(100% - 35px)")
-                        : (prop_icon ? "calc(100% - 35px)" : "calc(100% - 35px)"),
-                    ...(directionRtl
-                        ? { borderTopRightRadius: prop_icon instanceof Observable
-                                ? prop_icon.mapBoolean("0 !important", null as any)
-                                : (prop_icon ? "0 !important" : (null as any)),
-                            borderBottomRightRadius: prop_icon instanceof Observable
-                                ? prop_icon.mapBoolean("0 !important", null as any)
-                                : (prop_icon ? "0 !important" : (null as any)),
-                            borderTopLeftRadius: "0 !important",
-                            borderBottomLeftRadius: "0 !important",
-                        }
-                        : { borderTopLeftRadius: prop_icon instanceof Observable
-                                ? prop_icon.mapBoolean("0 !important", null as any)
-                                : (prop_icon ? "0 !important" : (null as any)),
-                            borderBottomLeftRadius: prop_icon instanceof Observable
-                                ? prop_icon.mapBoolean("0 !important", null as any)
-                                : (prop_icon ? "0 !important" : (null as any)),
-                            borderTopRightRadius: "0 !important",
-                            borderBottomRightRadius: "0 !important",
-                        }),
-                }),
-                on: {
-                    input: (event: Event) => {
-                        const val = (event.target as HTMLInputElement).value;
-                        this.var_inputValue.set(val);
-                        const params: ComponentInputPhone_Methods_INPUT_CHANGE_DataArgs = {
-                            [ComponentInputPhoneConfigs.methods.INPUT_CHANGE.dataArgs.VALUE.name]: val,
-                        };
-                        this.executeMethod(ComponentInputPhoneConfigs.methods.INPUT_CHANGE.name, event, params);
-                        this.fn_executeCallback(event);
-                    },
-                    focus: (event: Event) => {
-                        const val = (event.target as HTMLInputElement).value;
-                        const params: ComponentInputPhone_Methods_FOCUS_DataArgs = {
-                            [ComponentInputPhoneConfigs.methods.FOCUS.dataArgs.VALUE.name]: val,
-                        };
-                        this.executeMethod(ComponentInputPhoneConfigs.methods.FOCUS.name, event, params);
-                    },
-                    blur: (event: Event) => {
-                        const val = (event.target as HTMLInputElement).value;
-                        const params: ComponentInputPhone_Methods_BLUR_DataArgs = {
-                            [ComponentInputPhoneConfigs.methods.BLUR.dataArgs.VALUE.name]: val,
-                        };
-                        this.executeMethod(ComponentInputPhoneConfigs.methods.BLUR.name, event, params);
-                    },
-                }
             });
+
         }
 
         return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
     }
 
 
-    /* ---------------------------------------------
-        template_render_icon — ترکیبی: ComponentElementPosition + ComponentIcon
-    --------------------------------------------- */
+    // ---------------------------------------------
     private template_render_icon(attrsDefault, data, extra): ReactiveElement {
         if (data != null) {
             const prop_icon = data[ComponentInputPhoneConfigs.keys.prop_icon.name];
-            const prop_iconPhone = data[ComponentInputPhoneConfigs.keys.prop_iconPhone.name];
-            const prop_size = data[ComponentInputPhoneConfigs.keys.prop_size.name];
             const prop_colorIcon = data[ComponentInputPhoneConfigs.keys.prop_colorIcon.name];
-
-            const directionRtl = AppConfig.get("directionRtl");
-
-            const iconValue = prop_icon ?? prop_iconPhone;
 
             return ReactiveElement.part("section", {
                 attrs: { ...attrsDefault },
                 children: Observable.computed(
-                    (iconVal: any, size: any, colorIcon: any) => {
-                        if (!iconVal) return null;
+                    (icon , colorIcon: any) => {
+                        if (!icon) return null;
 
-                        const sizeName = size ?? SIZES.M;
-                        const elIconHeight = ToolsCss.getIconSize(sizeName);
-
-                        const iconProps: any = {
-                            classList: [],
-                            styles: {},
-                            prop_iconClass: [],
-                            prop_iconStyles: {
-                                margin: "auto",
-                                cursor: "pointer",
-                                color: colorIcon ?? "",
+                        return  new ToolsComponents.ComponentIcon(
+                            <ComponentIconPropsType>{
+                                classList:   [],
+                                styles:      Observable.computed(
+                                    (sizeName , dir) => {
+                                        return {
+                                            cursor:   "pointer",
+                                            width: SizeCalc(
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Height?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                            ) ,
+                                            height: SizeCalc(
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Height?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                            ) ,
+                                            float: dir ? "right" : "left"
+                                        }
+                                    },
+                                    [
+                                        AppConfig.get_sizeName() ,
+                                        AppConfig.get_directionRtl()
+                                    ] ,
+                                    this.getScope()
+                                ),
+                                prop_iconClass: ["d-block"],
+                                prop_iconStyles:      Observable.computed(
+                                    (sizeName , dir) => {
+                                        return {
+                                            margin:   "auto",
+                                            width: SizeCalc(
+                                                ToolsComponents_IconSize?.[sizeName] ,
+                                            ) ,
+                                            lineHeight: SizeCalc(
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Height?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                            ) ,
+                                            height: SizeCalc(
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Height?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                            )
+                                        }
+                                    },
+                                    [
+                                        AppConfig.get_sizeName() ,
+                                        AppConfig.get_directionRtl()
+                                    ] ,
+                                    this.getScope()
+                                ),
+                                prop_icon: prop_icon,
                             },
-                            prop_icon: iconVal,
-                        };
-
-                        const iconEl = new ToolsComponents.ComponentIcon(
-                            iconProps as ComponentIconPropsType,
                             <ComponentIconMethodsType>{
                                 fn_onClickIcon: (event, dataArgs, componentArgs) => {
-                                    this.fn_onFocusInput(event);
+                                    this._ELEMENT_INPUT.focusFn();
                                 }
-                            }
-                        );
+                            }).getReactiveElement()
 
-                        const posProps: any = {
-                            classList: [],
-                            styles: {},
-                            prop_positionType: ComponentElementPosition_positionTypes.ABSOLUTE,
-                            prop_positionTop: SizeUnit(50, UNITS.PERCENT),
-                            prop_positionWidth: SizeUnit(30, UNITS.PEXEL),
-                            prop_positionHeight: SizeUnit(elIconHeight, UNITS.PEXEL),
-                            prop_positionStyles: {
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                            },
-                            prop_positionTranslate: directionRtl
-                                ? TranslateUnit(SizeUnit(-5, UNITS.PEXEL), SizeUnit(-50, UNITS.PERCENT))
-                                : TranslateUnit(SizeUnit(5, UNITS.PEXEL), SizeUnit(-50, UNITS.PERCENT)),
-                            prop_positionZIndex: 10,
-                            prop_content: iconEl.getReactiveElement(),
-                        };
-                        if (directionRtl) {
-                            posProps.prop_positionRight = SizeUnit(0, UNITS.PEXEL);
-                        } else {
-                            posProps.prop_positionLeft = SizeUnit(0, UNITS.PEXEL);
-                        }
-
-                        return new ComponentElementPosition(
-                            posProps as ComponentElementPositionPropsType,
-                            <ComponentElementPositionMethodsType>{}
-                        ).getReactiveElement();
                     },
-                    [iconValue instanceof Observable ? iconValue : new Observable(iconValue), prop_size, prop_colorIcon],
+                    [prop_icon , prop_colorIcon],
                     this.getScope()
                 ),
             });
@@ -1139,13 +1092,1163 @@ export class ComponentInputPhone extends ComponentInputPhoneBase {
     }
 
 
-    /* ---------------------------------------------
-        template_render_icon_clear — ترکیبی: ComponentElementPosition + ComponentIcon
-    --------------------------------------------- */
+    // ---------------------------------------------
+    private template_render_country_select(attrsDefault, data, extra): ReactiveElement {
+        if (data != null) {
+            const prop_countryHas=       data[ComponentInputPhoneConfigs.keys.prop_countryHas.name];
+            const prop_countryWidth=     data[ComponentInputPhoneConfigs.keys.prop_countryWidth.name];
+
+            const prop_name=             data[ComponentInputPhoneConfigs.keys.prop_name.name];
+            const prop_countryOptions =  data[ComponentInputPhoneConfigs.keys.prop_countryOptions.name];
+            const prop_countryValue =    data[ComponentInputPhoneConfigs.keys.prop_countryValue.name];
+            const prop_isDisable =       data[ComponentInputPhoneConfigs.keys.prop_isDisable.name];
+
+            return Observable.computed(
+                (countryHas: boolean, name: string) => {
+                    if (!countryHas) return null;
+
+                    return ReactiveElement.div({
+                        attrs: { ...attrsDefault },
+                        className: ["custom-select-wrapper"],
+                        styles: {
+                            position: "relative",
+                        },
+                        stylesCustom: `
+#${attrsDefault.id} .custom-select-option:hover {
+    background-color: var(--primaryColor2, rgba(0,0,0,0.08));
+}
+#${attrsDefault.id} .custom-select-search:focus {
+    border-color: ${Color(COLORS_MAIN.SECONDARY, COLORS_GRAD.GRADE_1)} !important;
+}
+#${attrsDefault.id} .custom-select-options::-webkit-scrollbar {
+    width: 6px;
+}
+#${attrsDefault.id} .custom-select-options::-webkit-scrollbar-thumb {
+    background: ${Color(COLORS_MAIN.PRIMARY, COLORS_GRAD.GRADE_1)};
+    border-radius: 3px;
+}
+#${attrsDefault.id} .custom-select-options::-webkit-scrollbar-track {
+    background: transparent;
+}
+                        `,
+                        stylesBind: {
+                            width: Observable.computed(
+                                (countryWidth: number) => SizeUnit(countryWidth, UNITS.PEXEL),
+                                [prop_countryWidth],
+                                this.getScope()
+                            ),
+                            float: Observable.computed(
+                                (dir: boolean) => dir ? "right" : "left",
+                                [AppConfig.get_directionRtl()],
+                                this.getScope()
+                            ),
+                        },
+                        children: [
+                            ReactiveElement.input({
+                                attrs: {
+                                    type: "hidden",
+                                    name: `${name}[country]`,
+                                },
+                                attrsBind: {
+                                    value: prop_countryValue,
+                                },
+                            }),
+                            ReactiveElement.div({
+                                className: ["form-control", "d-block", "custom-select-trigger"],
+                                styles: {
+                                    cursor: "pointer",
+                                    outline: "none",
+                                    boxShadow: "none",
+                                    borderStyle: "solid",
+                                    borderColor: Color(COLORS_MAIN.PRIMARY, COLORS_GRAD.GRADE_1),
+                                    backgroundColor: Color(COLORS_MAIN.SHAN, COLORS_GRAD.GRADE_1),
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                    overflow: "hidden",
+                                    whiteSpace: "nowrap",
+                                    textOverflow: "ellipsis",
+                                    userSelect: "none",
+                                },
+                                stylesBind: (el) => ({
+                                    lineHeight: Observable.computed(
+                                        (sizeName: string) => ToolsComponents_Height?.[sizeName],
+                                        [AppConfig.get_sizeName()],
+                                        this.getScope()
+                                    ),
+                                    
+                                    borderColor: Observable.computed(
+                                        (isOpen: boolean) => {
+                                            if(isOpen){
+                                                return `${Color(COLORS_MAIN.SECONDARY, COLORS_GRAD.GRADE_1)}`;
+                                            }
+                                            return `${Color(COLORS_MAIN.PRIMARY, COLORS_GRAD.GRADE_1)} `;
+                                        } ,
+                                        [
+                                            this._DROPDOWN_OPEN_COUNTRY
+                                        ] ,
+                                        this.getScope()
+                                    ),
+
+                                    borderWidth: Observable.computed(
+                                        (sizeName: string) => StyleValue.important(ToolsComponents_BorderWidth?.[sizeName]),
+                                        [AppConfig.get_sizeName()],
+                                        this.getScope()
+                                    ),
+                                    
+                                    borderTopWidth: Observable.computed(
+                                        (sizeName: string) => StyleValue.important(ToolsComponents_BorderWidth?.[sizeName]),
+                                        [AppConfig.get_sizeName()],
+                                        this.getScope()
+                                    ),
+                                    borderBottomWidth: Observable.computed(
+                                        (sizeName: string) => StyleValue.important(ToolsComponents_BorderWidth?.[sizeName]),
+                                        [AppConfig.get_sizeName()],
+                                        this.getScope()
+                                    ),
+                                    
+                                    borderLeftWidth: Observable.computed(
+                                        (dir: boolean, sizeName: string) => {
+                                            if (!dir) return ToolsComponents_BorderWidth?.[sizeName];
+                                            return SizeUnit(0, UNITS.PEXEL);
+                                        },
+                                        [
+                                            AppConfig.get_directionRtl(),
+                                            AppConfig.get_sizeName() 
+                                        ],
+                                        this.getScope()
+                                    ),
+                                    borderRightWidth: Observable.computed(
+                                        (dir: boolean, sizeName: string) => {
+                                            if (dir) return ToolsComponents_BorderWidth?.[sizeName];
+                                            return SizeUnit(0, UNITS.PEXEL);
+                                        },
+                                        [
+                                            AppConfig.get_directionRtl(),
+                                            AppConfig.get_sizeName() 
+                                        ],
+                                        this.getScope()
+                                    ),
+
+                                    fontSize: Observable.computed(
+                                        (sizeName: string) => ToolsComponents_FontSize?.[sizeName],
+                                        [AppConfig.get_sizeName()],
+                                        this.getScope()
+                                    ),
+                                    paddingTop: Observable.computed(
+                                        (sizeName: string) => ToolsComponents_Padding?.[sizeName],
+                                        [AppConfig.get_sizeName()],
+                                        this.getScope()
+                                    ),
+                                    paddingBottom: Observable.computed(
+                                        (sizeName: string) => ToolsComponents_Padding?.[sizeName],
+                                        [AppConfig.get_sizeName()],
+                                        this.getScope()
+                                    ),
+                                    borderTopLeftRadius: Observable.computed(
+                                        (dir: boolean, sizeName: string) => {
+                                            if (!dir) return ToolsComponents_BorderRadius?.[sizeName];
+                                            return SizeUnit(0, UNITS.PEXEL);
+                                        },
+                                        [AppConfig.get_directionRtl(), AppConfig.get_sizeName()],
+                                        this.getScope()
+                                    ),
+                                    borderBottomLeftRadius: Observable.computed(
+                                        (dir: boolean, sizeName: string) => {
+                                            if (!dir) return ToolsComponents_BorderRadius?.[sizeName];
+                                            return SizeUnit(0, UNITS.PEXEL);
+                                        },
+                                        [AppConfig.get_directionRtl(), AppConfig.get_sizeName()],
+                                        this.getScope()
+                                    ),
+                                    borderTopRightRadius: Observable.computed(
+                                        (dir: boolean, sizeName: string) => {
+                                            if (dir) return ToolsComponents_BorderRadius?.[sizeName];
+                                            return SizeUnit(0, UNITS.PEXEL);
+                                        },
+                                        [AppConfig.get_directionRtl(), AppConfig.get_sizeName()],
+                                        this.getScope()
+                                    ),
+                                    borderBottomRightRadius: Observable.computed(
+                                        (dir: boolean, sizeName: string) => {
+                                            if (dir) return ToolsComponents_BorderRadius?.[sizeName];
+                                            return SizeUnit(0, UNITS.PEXEL);
+                                        },
+                                        [AppConfig.get_directionRtl(), AppConfig.get_sizeName()],
+                                        this.getScope()
+                                    ),
+                                }),
+                                attrsBind: {
+                                    disabled: Observable.computed(
+                                        (status: boolean) => status ? "disabled" : null,
+                                        [prop_isDisable],
+                                        this.getScope()
+                                    ),
+                                },
+                                on: {
+                                    click: (event: Event) => {
+                                        event.stopPropagation();
+                                        if (prop_isDisable.get()) return;
+                                        const newOpen = !this._DROPDOWN_OPEN_COUNTRY.get();
+                                        this._DROPDOWN_OPEN_COUNTRY.set(newOpen);
+                                        this._DROPDOWN_OPEN_CITY.set(false);
+                                        if (newOpen) {
+                                            this._SEARCH_TEXT_COUNTRY.set("");
+                                            const wrapperId = attrsDefault.id;
+                                            setTimeout(() => {
+                                                const docHandler = (e: MouseEvent) => {
+                                                    const target = e.target as HTMLElement;
+                                                    if (!target.closest(`#${wrapperId}`)) {
+                                                        this._DROPDOWN_OPEN_COUNTRY.set(false);
+                                                        document.removeEventListener('click', docHandler);
+                                                    }
+                                                };
+                                                document.addEventListener('click', docHandler);
+                                            }, 0);
+                                        }
+                                    },
+                                },
+                                children: [
+                                    ReactiveElement.span({
+                                        styles: {
+                                            overflow: "hidden",
+                                            textOverflow: "ellipsis",
+                                            whiteSpace: "nowrap",
+                                            flex: "1",
+                                        },
+                                        children: [
+                                            Observable.computed(
+                                                (value: any, options: any[]) => {
+                                                    const found = options.find((item: any) => String(item.id) === String(value));
+                                                    if (found) return `${found.code} ${found.name}`;
+                                                    return "";
+                                                },
+                                                [
+                                                    prop_countryValue,
+                                                    prop_countryOptions
+                                                ],
+                                                this.getScope()
+                                            )
+                                        ],
+                                    }),
+                                    ReactiveElement.span({
+                                        styles: {
+                                            flexShrink: "0",
+                                            fontSize: "10px",
+                                            marginInlineStart: "4px",
+                                        },
+                                        children: Observable.computed(
+                                            (isOpen: boolean) => [isOpen ? "▲" : "▼"],
+                                            [this._DROPDOWN_OPEN_COUNTRY],
+                                            this.getScope()
+                                        ),
+                                    }),
+                                ],
+                            }),
+                            ReactiveElement.div({
+                                className: ["custom-select-dropdown"],
+                                styles: {
+                                    position: "absolute",
+                                    top: "100%",
+                                    insetInlineStart: "0",
+                                    zIndex: "9999",
+                                    backgroundColor: Color(COLORS_MAIN.SHAN, COLORS_GRAD.GRADE_1),
+                                    border: `1px solid ${Color(COLORS_MAIN.PRIMARY, COLORS_GRAD.GRADE_1)}`,
+                                    borderTop: "none",
+                                    maxHeight: "220px",
+                                    overflow: "hidden",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    boxSizing: "border-box",
+                                    minWidth: "200px",
+                                },
+                                stylesBind: {
+                                    display: Observable.computed(
+                                        (isOpen: boolean) => isOpen ? "flex" : "none",
+                                        [this._DROPDOWN_OPEN_COUNTRY],
+                                        this.getScope()
+                                    ),
+                                },
+                                children: [
+                                    ReactiveElement.input({
+                                        attrs: {
+                                            type: "text",
+                                            placeholder: "Search...",
+                                        },
+                                        className: ["form-control", "custom-select-search"],
+                                        styles: {
+                                            border: "none",
+                                            borderBottom: `1px solid ${Color(COLORS_MAIN.PRIMARY, COLORS_GRAD.GRADE_1)}`,
+                                            borderRadius: "0",
+                                            outline: "none",
+                                            boxShadow: "none",
+                                            fontSize: "12px",
+                                            padding: "6px 8px",
+                                            boxSizing: "border-box",
+                                            width: "100%",
+                                        },
+                                        attrsBind: {
+                                            value: this._SEARCH_TEXT_COUNTRY,
+                                        },
+                                        on: {
+                                            input: (event: Event) => {
+                                                this._SEARCH_TEXT_COUNTRY.set((event.target as HTMLInputElement).value);
+                                            },
+                                            click: (event: Event) => {
+                                                event.stopPropagation();
+                                            },
+                                            mousedown: (event: Event) => {
+                                                event.stopPropagation();
+                                            },
+                                        },
+                                    }),
+                                    ReactiveElement.div({
+                                        className: ["custom-select-options"],
+                                        styles: {
+                                            overflowY: "auto",
+                                            flex: "1",
+                                            maxHeight: "190px",
+                                        },
+                                        children: Observable.for(
+                                            Observable.computed(
+                                                (options: any[], search: string) => {
+                                                    if (!search) return options;
+                                                    const lowerSearch = search.toLowerCase();
+                                                    return options.filter((item: any) =>
+                                                        (item.name || "").toLowerCase().includes(lowerSearch) ||
+                                                        (item.code || "").toLowerCase().includes(lowerSearch)
+                                                    );
+                                                },
+                                                [prop_countryOptions, this._SEARCH_TEXT_COUNTRY],
+                                                this.getScope()
+                                            ),
+                                            (item: any, index: number) => {
+                                                return ReactiveElement.div({
+                                                    className: ["custom-select-option"],
+                                                    styles: {
+                                                        padding: "6px 8px",
+                                                        cursor: "pointer",
+                                                        fontSize: "12px",
+                                                        whiteSpace: "nowrap",
+                                                        overflow: "hidden",
+                                                    },
+                                                    stylesBind: {
+                                                        backgroundColor: Observable.computed(
+                                                            (value: any) => {
+                                                                return String(item.id) === String(value)
+                                                                    ? Color(COLORS_MAIN.PRIMARY, COLORS_GRAD.GRADE_2)
+                                                                    : "transparent";
+                                                            },
+                                                            [prop_countryValue],
+                                                            this.getScope()
+                                                        ),
+                                                        color: Observable.computed(
+                                                            (value: any) => {
+                                                                return String(item.id) === String(value)
+                                                                    ? Color(COLORS_MAIN.SHAN, COLORS_GRAD.GRADE_2)
+                                                                    : Color(COLORS_MAIN.PRIMARY, COLORS_GRAD.GRADE_2);
+                                                            },
+                                                            [prop_countryValue],
+                                                            this.getScope()
+                                                        ),
+                                                    },
+                                                    on: {
+                                                        click: (event: Event) => {
+                                                            event.stopPropagation();
+                                                            this.set(ComponentInputPhoneConfigs.keys.prop_countryValue.name, String(item.id));
+                                                            this.set(ComponentInputPhoneConfigs.keys.prop_cityValue.name, "");
+                                                            this.set(ComponentInputPhoneConfigs.keys.prop_value.name , "")
+                                                            this._DROPDOWN_OPEN_COUNTRY.set(false);
+
+                                                            const params : ComponentInputPhone_Methods_SELECT_COUNTRY_CHANGE_ComponentArgs = {}
+                                                            this.executeMethod(ComponentInputPhoneConfigs.methods.SELECT_COUNTRY_CHANGE.name  , event , params);
+
+                                                        },
+                                                    },
+                                                    children: [
+                                                        ReactiveElement.span({
+                                                            styles:{
+                                                                width: "60px" ,
+                                                                float: "left"
+                                                            },
+                                                            children:[
+                                                                item.code
+                                                            ]
+                                                        }) ,
+                                                        ReactiveElement.span({
+                                                            styles:{
+                                                                width: "calc(100% - 60px)" ,
+                                                                float: "left"
+                                                            },
+                                                            children:[
+                                                                item.name
+                                                            ]
+                                                        })
+                                                    ],
+                                                });
+                                            },
+                                            {},
+                                            this.getScope()
+                                        ),
+                                    }),
+                                ],
+                            }),
+                        ],
+                    });
+                } ,
+                [
+                    prop_countryHas ,
+                    prop_name ,
+                ] ,
+                this.getScope()
+            )
+
+        }
+
+        return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
+    }
+
+
+    // ---------------------------------------------
+    private template_render_city_select(attrsDefault, data, extra): ReactiveElement {
+        if (data != null) {
+            const prop_countryHas =    data[ComponentInputPhoneConfigs.keys.prop_countryHas.name];
+            const prop_countryValue =  data[ComponentInputPhoneConfigs.keys.prop_countryValue.name];
+            
+            const prop_cityHas=        data[ComponentInputPhoneConfigs.keys.prop_cityHas.name];
+            const prop_cityWidth=      data[ComponentInputPhoneConfigs.keys.prop_cityWidth.name];
+
+            const prop_name=           data[ComponentInputPhoneConfigs.keys.prop_name.name];
+            const prop_cityOptions =   data[ComponentInputPhoneConfigs.keys.prop_cityOptions.name];
+            const prop_cityValue =     data[ComponentInputPhoneConfigs.keys.prop_cityValue.name];
+            const prop_isDisable =     data[ComponentInputPhoneConfigs.keys.prop_isDisable.name];
+
+            return Observable.computed(
+                (cityHas: boolean, name: string) => {
+                    if (!cityHas) return null;
+
+                    const cityOptionsFiltered = Observable.computed(
+                        (options: any[], countryHas: boolean, countryVal: any, search: string) => {
+                            let filtered = options;
+                            if (countryHas) {
+                                filtered = filtered.filter((item: any) =>
+                                    String(item.countryId) === String(countryVal)
+                                );
+                            }
+                            if (search) {
+                                const lowerSearch = search.toLowerCase();
+                                filtered = filtered.filter((item: any) =>
+                                    (item.name || "").toLowerCase().includes(lowerSearch) ||
+                                    (item.code || "").toLowerCase().includes(lowerSearch)
+                                );
+                            }
+                            return filtered;
+                        },
+                        [
+                            prop_cityOptions, 
+                            prop_countryHas,
+                            prop_countryValue,
+                            this._SEARCH_TEXT_CITY
+                        ],
+                        this.getScope()
+                    );
+
+                    return ReactiveElement.div({
+                        attrs: { ...attrsDefault },
+                        className: ["custom-select-wrapper", "city-select-wrapper"],
+                        styles: {
+                            position: "relative",
+                        },
+                        stylesCustom: `
+#${attrsDefault.id} .custom-select-option:hover {
+    background-color: var(--primaryColor2, rgba(0,0,0,0.08));
+}
+#${attrsDefault.id} .custom-select-search:focus {
+    border-color: ${Color(COLORS_MAIN.SECONDARY, COLORS_GRAD.GRADE_1)} !important;
+}
+#${attrsDefault.id} .custom-select-options::-webkit-scrollbar {
+    width: 6px;
+}
+#${attrsDefault.id} .custom-select-options::-webkit-scrollbar-thumb {
+    background: ${Color(COLORS_MAIN.PRIMARY, COLORS_GRAD.GRADE_1)};
+    border-radius: 3px;
+}
+#${attrsDefault.id} .custom-select-options::-webkit-scrollbar-track {
+    background: transparent;
+}
+                        `,
+                        stylesBind: {
+                            width: Observable.computed(
+                                (cityWidth: number) => SizeUnit(cityWidth, UNITS.PEXEL),
+                                [prop_cityWidth],
+                                this.getScope()
+                            ),
+                            float: Observable.computed(
+                                (dir: boolean) => dir ? "right" : "left",
+                                [AppConfig.get_directionRtl()],
+                                this.getScope()
+                            ),
+                        },
+                        children: [
+                            ReactiveElement.input({
+                                attrs: {
+                                    type: "hidden",
+                                    name: `${name}[city]`,
+                                },
+                                attrsBind: {
+                                    value: prop_cityValue,
+                                },
+                            }),
+                            ReactiveElement.div({
+                                className: ["form-control", "d-block", "custom-select-trigger"],
+                                styles: {
+                                    cursor:           "pointer",
+                                    outline:          "none",
+                                    boxShadow:        "none",
+                                    borderStyle:      "solid",
+                                    borderColor:      Color(COLORS_MAIN.PRIMARY, COLORS_GRAD.GRADE_1),
+                                    backgroundColor:  Color(COLORS_MAIN.SHAN, COLORS_GRAD.GRADE_1),
+                                    display:          "flex",
+                                    justifyContent:   "space-between",
+                                    alignItems:       "center",
+                                    overflow:         "hidden",
+                                    whiteSpace:       "nowrap",
+                                    textOverflow:     "ellipsis",
+                                    userSelect:       "none",
+                                },
+                                stylesBind: (el) => ({
+                                    lineHeight: Observable.computed(
+                                        (sizeName: string) => ToolsComponents_Height?.[sizeName],
+                                        [AppConfig.get_sizeName()],
+                                        this.getScope()
+                                    ),
+
+                                    borderColor: Observable.computed(
+                                        (isOpen: boolean) => {
+                                            if(isOpen){
+                                                return `${Color(COLORS_MAIN.SECONDARY, COLORS_GRAD.GRADE_1)}`;
+                                            }
+                                            return `${Color(COLORS_MAIN.PRIMARY, COLORS_GRAD.GRADE_1)} `;
+                                        } ,
+                                        [
+                                            this._DROPDOWN_OPEN_CITY
+                                        ] ,
+                                        this.getScope()
+                                    ),
+                                    
+                                    fontSize: Observable.computed(
+                                        (sizeName: string) => ToolsComponents_FontSize?.[sizeName],
+                                        [AppConfig.get_sizeName()],
+                                        this.getScope()
+                                    ),
+                                    paddingTop: Observable.computed(
+                                        (sizeName: string) => ToolsComponents_Padding?.[sizeName],
+                                        [AppConfig.get_sizeName()],
+                                        this.getScope()
+                                    ),
+                                    paddingBottom: Observable.computed(
+                                        (sizeName: string) => ToolsComponents_Padding?.[sizeName],
+                                        [AppConfig.get_sizeName()],
+                                        this.getScope()
+                                    ),
+                                    
+                                    borderTopWidth: Observable.computed(
+                                        (sizeName: string) => StyleValue.important(ToolsComponents_BorderWidth?.[sizeName]),
+                                        [AppConfig.get_sizeName()],
+                                        this.getScope()
+                                    ),
+                                    borderBottomWidth: Observable.computed(
+                                        (sizeName: string) => StyleValue.important(ToolsComponents_BorderWidth?.[sizeName]),
+                                        [AppConfig.get_sizeName()],
+                                        this.getScope()
+                                    ),
+                                    
+                                    borderLeftWidth: Observable.computed(
+                                        (dir: boolean, sizeName: string) => {
+                                            if (!dir) return ToolsComponents_BorderWidth?.[sizeName];
+                                            return SizeUnit(0, UNITS.PEXEL);
+                                        },
+                                        [
+                                            AppConfig.get_directionRtl(),
+                                            AppConfig.get_sizeName() 
+                                        ],
+                                        this.getScope()
+                                    ),
+                                    borderRightWidth: Observable.computed(
+                                        (dir: boolean, sizeName: strin) => {
+                                            if (dir) return ToolsComponents_BorderWidth?.[sizeName];
+                                            return SizeUnit(0, UNITS.PEXEL);
+                                        },
+                                        [
+                                            AppConfig.get_directionRtl(),
+                                            AppConfig.get_sizeName() 
+                                        ],
+                                        this.getScope()
+                                    ),
+                                    
+                                    borderTopLeftRadius: Observable.computed(
+                                        (dir: boolean, sizeName: string, countryHas: boolean) => {
+                                            if (!dir && !countryHas) return ToolsComponents_BorderRadius?.[sizeName];
+                                            return SizeUnit(0, UNITS.PEXEL);
+                                        },
+                                        [
+                                            AppConfig.get_directionRtl(),
+                                            AppConfig.get_sizeName() , 
+                                            prop_countryHas
+                                        ],
+                                        this.getScope()
+                                    ),
+                                    borderBottomLeftRadius: Observable.computed(
+                                        (dir: boolean, sizeName: string, countryHas: boolean) => {
+                                            if (!dir && !countryHas) return ToolsComponents_BorderRadius?.[sizeName];
+                                            return SizeUnit(0, UNITS.PEXEL);
+                                        },
+                                        [
+                                            AppConfig.get_directionRtl(),
+                                            AppConfig.get_sizeName() ,
+                                            prop_countryHas
+                                        ],
+                                        this.getScope()
+                                    ),
+                                    borderTopRightRadius: Observable.computed(
+                                        (dir: boolean, sizeName: string, countryHas: boolean) => {
+                                            if (dir && !countryHas) return ToolsComponents_BorderRadius?.[sizeName];
+                                            return SizeUnit(0, UNITS.PEXEL);
+                                        },
+                                        [
+                                            AppConfig.get_directionRtl(), 
+                                            AppConfig.get_sizeName() ,
+                                            prop_countryHas
+                                        ],
+                                        this.getScope()
+                                    ),
+                                    borderBottomRightRadius: Observable.computed(
+                                        (dir: boolean, sizeName: string, countryHas: boolean) => {
+                                            if (dir && !countryHas) return ToolsComponents_BorderRadius?.[sizeName];
+                                            return SizeUnit(0, UNITS.PEXEL);
+                                        },
+                                        [
+                                            AppConfig.get_directionRtl(),
+                                            AppConfig.get_sizeName() ,
+                                            prop_countryHas
+                                        ],
+                                        this.getScope()
+                                    ),
+                                }),
+                                attrsBind: {
+                                    disabled: Observable.computed(
+                                        (status: boolean) => status ? "disabled" : null,
+                                        [prop_isDisable],
+                                        this.getScope()
+                                    ),
+                                },
+                                on: {
+                                    click: (event: Event) => {
+                                        event.stopPropagation();
+                                        if (prop_isDisable.get()) return;
+                                        const newOpen = !this._DROPDOWN_OPEN_CITY.get();
+                                        this._DROPDOWN_OPEN_CITY.set(newOpen);
+                                        this._DROPDOWN_OPEN_COUNTRY.set(false);
+                                        if (newOpen) {
+                                            this._SEARCH_TEXT_CITY.set("");
+                                            const wrapperId = attrsDefault.id;
+                                            setTimeout(() => {
+                                                const docHandler = (e: MouseEvent) => {
+                                                    const target = e.target as HTMLElement;
+                                                    if (!target.closest(`#${wrapperId}`)) {
+                                                        this._DROPDOWN_OPEN_CITY.set(false);
+                                                        document.removeEventListener('click', docHandler);
+                                                    }
+                                                };
+                                                document.addEventListener('click', docHandler);
+                                            }, 0);
+                                        }
+                                    },
+                                },
+                                children: [
+                                    ReactiveElement.span({
+                                        styles: {
+                                            overflow:       "hidden",
+                                            textOverflow:   "ellipsis",
+                                            whiteSpace:     "nowrap",
+                                            flex:           "1",
+                                        },
+                                        children: [
+                                            Observable.computed(
+                                                (value: any, options: any[], countryHas: boolean, countryVal: any) => {
+                                                    let filtered = options;
+                                                    if (countryHas) {
+                                                        filtered = filtered.filter((item: any) =>
+                                                            String(item.countryId) === String(countryVal)
+                                                        );
+                                                    }
+                                                    const found = filtered.find((item: any) => String(item.id) === String(value));
+                                                    if (found) return `${found.code} ${found.name}`;
+                                                    return "";
+                                                },
+                                                [prop_cityValue, prop_cityOptions, prop_countryHas, prop_countryValue],
+                                                this.getScope()
+                                            )
+                                        ],
+                                    }),
+                                    ReactiveElement.span({
+                                        styles: {
+                                            flexShrink: "0",
+                                            fontSize: "10px",
+                                            marginInlineStart: "4px",
+                                        },
+                                        children: Observable.computed(
+                                            (isOpen: boolean) => [isOpen ? "▲" : "▼"],
+                                            [this._DROPDOWN_OPEN_CITY],
+                                            this.getScope()
+                                        ),
+                                    }),
+                                ],
+                            }),
+                            ReactiveElement.div({
+                                className: ["custom-select-dropdown"],
+                                styles: {
+                                    position: "absolute",
+                                    top: "100%",
+                                    insetInlineStart: "0",
+                                    zIndex: "9999",
+                                    backgroundColor: Color(COLORS_MAIN.SHAN, COLORS_GRAD.GRADE_1),
+                                    border: `1px solid ${Color(COLORS_MAIN.PRIMARY, COLORS_GRAD.GRADE_1)}`,
+                                    borderTop: "none",
+                                    maxHeight: "220px",
+                                    overflow: "hidden",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    boxSizing: "border-box",
+                                    minWidth: "200px",
+                                },
+                                stylesBind: {
+                                    display: Observable.computed(
+                                        (isOpen: boolean) => isOpen ? "flex" : "none",
+                                        [this._DROPDOWN_OPEN_CITY],
+                                        this.getScope()
+                                    ),
+                                },
+                                children: [
+                                    ReactiveElement.input({
+                                        attrs: {
+                                            type: "text",
+                                            placeholder: "Search...",
+                                        },
+                                        className: ["form-control", "custom-select-search"],
+                                        styles: {
+                                            border:         "none",
+                                            borderBottom:   `1px solid ${Color(COLORS_MAIN.PRIMARY, COLORS_GRAD.GRADE_1)}`,
+                                            borderRadius:   "0",
+                                            outline:        "none",
+                                            boxShadow:      "none",
+                                            fontSize:       "12px",
+                                            padding:        "6px 8px",
+                                            boxSizing:      "border-box",
+                                            width:          "100%",
+                                        },
+                                        attrsBind: {
+                                            value: this._SEARCH_TEXT_CITY,
+                                        },
+                                        on: {
+                                            input: (event: Event) => {
+                                                this._SEARCH_TEXT_CITY.set((event.target as HTMLInputElement).value);
+                                            },
+                                            click: (event: Event) => {
+                                                event.stopPropagation();
+                                            },
+                                            mousedown: (event: Event) => {
+                                                event.stopPropagation();
+                                            },
+                                        },
+                                    }),
+                                    ReactiveElement.div({
+                                        className: ["custom-select-options"],
+                                        styles: {
+                                            overflowY: "auto",
+                                            flex: "1",
+                                            maxHeight: "190px",
+                                        },
+                                        children: Observable.for(
+                                            cityOptionsFiltered,
+                                            (item: any, index: number) => {
+                                                return ReactiveElement.div({
+                                                    className: ["custom-select-option"],
+                                                    styles: {
+                                                        padding: "6px 8px",
+                                                        cursor: "pointer",
+                                                        fontSize: "12px",
+                                                        whiteSpace: "nowrap",
+                                                        overflow: "hidden",
+                                                    },
+                                                    stylesBind: {
+                                                        backgroundColor: Observable.computed(
+                                                            (value: any) => {
+                                                                return String(item.id) === String(value)
+                                                                    ? Color(COLORS_MAIN.PRIMARY, COLORS_GRAD.GRADE_2)
+                                                                    : "transparent";
+                                                            },
+                                                            [prop_cityValue],
+                                                            this.getScope()
+                                                        ),
+                                                        color: Observable.computed(
+                                                            (value: any) => {
+                                                                return String(item.id) === String(value)
+                                                                    ? Color(COLORS_MAIN.SHAN, COLORS_GRAD.GRADE_2)
+                                                                    : Color(COLORS_MAIN.PRIMARY, COLORS_GRAD.GRADE_2);
+                                                            },
+                                                            [prop_cityValue],
+                                                            this.getScope()
+                                                        ),
+                                                    },
+                                                    on: {
+                                                        click: (event: Event) => {
+                                                            event.stopPropagation();
+                                                            
+                                                            this.set(ComponentInputPhoneConfigs.keys.prop_cityValue.name, String(item.id));
+                                                            this.set(ComponentInputPhoneConfigs.keys.prop_value.name , "")
+                                                            
+                                                            this._DROPDOWN_OPEN_CITY.set(false);
+
+                                                            const paramsFn : ComponentInputPhone_Methods_SELECT_CITY_CHANGE_ComponentArgs = {}
+                                                            this.executeMethod(ComponentInputPhoneConfigs.methods.SELECT_CITY_CHANGE.name  , event , paramsFn);
+                                                        },
+                                                    },
+                                                    children: [
+                                                        ReactiveElement.span({
+                                                            styles:{
+                                                                width: "60px" ,
+                                                                float: "left"
+                                                            },
+                                                            children:[
+                                                                item.code
+                                                            ]
+                                                        }) ,
+                                                        ReactiveElement.span({
+                                                            styles:{
+                                                                width: "calc(100% - 60px)" ,
+                                                                float: "left"
+                                                            },
+                                                            children:[
+                                                                item.name
+                                                            ]
+                                                        })
+                                                    ]
+                                                });
+                                            },
+                                            {},
+                                            this.getScope()
+                                        ),
+                                    }),
+                                ],
+                            }),
+                        ],
+                    });
+                },
+                [
+                    prop_cityHas,
+                    prop_name,
+                ],
+                this.getScope()
+            )
+
+        }
+
+        return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
+    }
+
+
+    // ---------------------------------------------
+    private template_render_input(attrsDefault, data, extra): ReactiveElement {
+        if (data != null) {
+            const prop_countryHas=    data[ComponentInputPhoneConfigs.keys.prop_countryHas.name];
+            const prop_countryWidth=  data[ComponentInputPhoneConfigs.keys.prop_countryWidth.name];
+            const prop_cityHas=       data[ComponentInputPhoneConfigs.keys.prop_cityHas.name];
+            const prop_cityWidth=     data[ComponentInputPhoneConfigs.keys.prop_cityWidth.name];
+
+            const prop_inputClass =    data[ComponentInputPhoneConfigs.keys.prop_inputClass.name];
+            const prop_inputStyles =   data[ComponentInputPhoneConfigs.keys.prop_inputStyles.name];
+            const prop_name =          data[ComponentInputPhoneConfigs.keys.prop_name.name];
+            const prop_placeholder =   data[ComponentInputPhoneConfigs.keys.prop_placeholder.name];
+            const prop_isDisable =     data[ComponentInputPhoneConfigs.keys.prop_isDisable.name];
+            const prop_value =         data[ComponentInputPhoneConfigs.keys.prop_value.name];
+            const prop_icon =          data[ComponentInputPhoneConfigs.keys.prop_icon.name];
+
+            this._ELEMENT_INPUT = ReactiveElement.input({
+                attrs: {
+                    ...attrsDefault,
+                    type:        "number",
+                },
+                attrsBind: {
+                    name:        Observable.computed(
+                        (name) => {
+                            return `${name}[value]`
+                        },
+                        [
+                            prop_name
+                        ],
+                        this.getScope()
+                    ),
+                    placeholder: prop_placeholder,
+                    value:       prop_value,
+                    disabled :   Observable.computed(
+                        (status) => {
+                            return status ? "disabled" : null
+                        } ,
+                        [
+                            prop_isDisable
+                        ] ,
+                        this.getScope()
+                    )
+                },
+                className: [
+                    "d-block",
+                ],
+                classBind: [
+                    prop_inputClass,
+                ],
+                styles: {
+                    whiteSpace:   "nowrap",
+                    overflow:     "hidden",
+                    textOverflow: "ellipsis",
+                    top:          "0",
+                    outline:      "none",
+                    boxShadow:    "none",
+                },
+                stylesBind: (el) => ({
+                    prop_inputStyles,
+
+                    width: Observable.computed(
+                        (sizeName, icon , countryHas, countryWidth, cityHas, cityWidth) => {
+                            let listCalc = [
+                                SizeUnit(100 , UNITS.PERCENT)
+                            ];
+                            if (countryHas){
+                                listCalc.push(OPERATION.MINUS);
+                                listCalc.push(
+                                    SizeUnit(countryWidth , UNITS.PEXEL)
+                                );
+                            }
+                            if (cityHas){
+                                listCalc.push(OPERATION.MINUS);
+                                listCalc.push(
+                                    SizeUnit(cityWidth , UNITS.PEXEL)
+                                );
+                            }
+                            if (icon != null){
+                                listCalc.push(OPERATION.MINUS);
+                                listCalc.push(ToolsComponents_BorderWidth?.[sizeName]);
+                                listCalc.push(OPERATION.MINUS);
+                                listCalc.push(ToolsComponents_Padding?.[sizeName]);
+                                listCalc.push(OPERATION.MINUS);
+                                listCalc.push(ToolsComponents_Height?.[sizeName]);
+                                listCalc.push(OPERATION.MINUS);
+                                listCalc.push(ToolsComponents_Padding?.[sizeName]);
+                                listCalc.push(OPERATION.MINUS);
+                                listCalc.push(ToolsComponents_BorderWidth?.[sizeName]);
+                            }
+                            return SizeCalc(...listCalc)
+                        } ,
+                        [
+                            AppConfig.get_sizeName() ,
+                            prop_icon ,
+                            prop_countryHas ,
+                            prop_countryWidth ,
+                            prop_cityHas ,
+                            prop_cityWidth
+                        ] ,
+                        this.getScope()
+                    ) ,
+
+
+                    borderWidth: Observable.computed(
+                        (sizeName: string) => StyleValue.important(ToolsComponents_BorderWidth?.[sizeName]),
+                        [AppConfig.get_sizeName()],
+                        this.getScope()
+                    ),
+
+                    borderTopLeftRadius: Observable.computed(
+                        (dir , sizeName, countryHas , cityHas) => {
+                            if(dir){
+                                return ToolsComponents_BorderRadius?.[sizeName]
+                            }
+                            else if (!countryHas && !cityHas){
+                                return ToolsComponents_BorderRadius?.[sizeName]
+                            }
+                            return SizeUnit(0 , UNITS.PEXEL);
+                        } ,
+                        [
+                            AppConfig.get_directionRtl() ,
+                            AppConfig.get_sizeName() ,
+                            prop_countryHas ,
+                            prop_cityHas
+                        ] ,
+                        this.getScope()
+                    ) ,
+
+                    borderBottomLeftRadius: Observable.computed(
+                        (dir , sizeName, countryHas , cityHas:boolean) => {
+                            if(dir){
+                                return ToolsComponents_BorderRadius?.[sizeName]
+                            }
+                            else if (!countryHas && !cityHas){
+                                return ToolsComponents_BorderRadius?.[sizeName]
+                            }
+                            return SizeUnit(0 , UNITS.PEXEL);
+                        } ,
+                        [
+                            AppConfig.get_directionRtl() ,
+                            AppConfig.get_sizeName() ,
+                            prop_countryHas ,
+                            prop_cityHas
+                        ] ,
+                        this.getScope()
+                    ) ,
+
+                    borderTopRightRadius: Observable.computed(
+                        (dir , sizeName, countryHas , cityHas: boolean) => {
+                            if(!dir){
+                                return ToolsComponents_BorderRadius?.[sizeName]
+                            }
+                            else if (!countryHas && !cityHas){
+                                return ToolsComponents_BorderRadius?.[sizeName]
+                            }
+                            return SizeUnit(0 , UNITS.PEXEL);
+                        } ,
+                        [
+                            AppConfig.get_directionRtl() ,
+                            AppConfig.get_sizeName() ,
+                            prop_countryHas ,
+                            prop_cityHas
+                        ] ,
+                        this.getScope()
+                    ) ,
+
+                    borderBottomRightRadius: Observable.computed(
+                        (dir , sizeName, countryHas , cityHas: boolean) => {
+                            if(!dir){
+                                return ToolsComponents_BorderRadius?.[sizeName]
+                            }
+                            else if (!countryHas && !cityHas){
+                                return ToolsComponents_BorderRadius?.[sizeName]
+                            }
+                            return SizeUnit(0 , UNITS.PEXEL);
+                        } ,
+                        [
+                            AppConfig.get_directionRtl() ,
+                            AppConfig.get_sizeName() ,
+                            prop_countryHas ,
+                            prop_cityHas
+                        ] ,
+                        this.getScope()
+                    ) ,
+
+
+
+
+                    direction: Observable.computed(
+                        (dir)=> {
+                            return dir ? "rtl" : "ltr";
+                        },
+                        [
+                            AppConfig.get_directionRtl()
+                        ] ,
+                        this.getScope()
+                    )  ,
+
+                    float: Observable.computed(
+                        (dir)=> {
+                            return dir ? "right" : "left";
+                        },
+                        [
+                            AppConfig.get_directionRtl()
+                        ] ,
+                        this.getScope()
+                    )  ,
+
+                    lineHeight: Observable.computed(
+                        (sizeName)=> {
+                            return ToolsComponents_Height?.[sizeName];
+                        },
+                        [
+                            AppConfig.get_sizeName()
+                        ] ,
+                        this.getScope()
+                    )  ,
+
+                    borderColor: el.focus.mapList({
+                        true:  StyleValue.important( Color(COLORS_MAIN.SECONDARY, COLORS_GRAD.GRADE_1))  ,
+                        false: StyleValue.important( Color(COLORS_MAIN.PRIMARY, COLORS_GRAD.GRADE_1))  ,
+                    }) ,
+
+                    fontSize: Observable.computed(
+                        (sizeName)=> {
+                            return ToolsComponents_FontSize?.[sizeName];
+                        },
+                        [
+                            AppConfig.get_sizeName()
+                        ] ,
+                        this.getScope()
+                    )  ,
+
+                    paddingTop: Observable.computed(
+                        (sizeName)=> {
+                            return ToolsComponents_Padding?.[sizeName];
+                        },
+                        [
+                            AppConfig.get_sizeName()
+                        ] ,
+                        this.getScope()
+                    )  ,
+
+                    paddingBottom: Observable.computed(
+                        (sizeName)=> {
+                            return ToolsComponents_Padding?.[sizeName];
+                        },
+                        [
+                            AppConfig.get_sizeName()
+                        ] ,
+                        this.getScope()
+                    )  ,
+
+
+
+
+
+                }),
+                on: {
+                    input: (event: Event) => {
+                        const value = event.target?.value ?? undefined;
+                        this.set(ComponentInputPhoneConfigs.keys.prop_value.name , value)
+                        const paramsFn : ComponentInputPhone_Methods_INPUT_CHANGE_ComponentArgs = {}
+                        this.executeMethod(ComponentInputPhoneConfigs.methods.INPUT_CHANGE.name  , event , paramsFn);
+                    },
+                    focus: (event: Event) => {
+                        this._DROPDOWN_OPEN_COUNTRY.set(false);
+                        this._DROPDOWN_OPEN_CITY.set(false);
+
+                        const paramsFn : ComponentInputPhone_Methods_INPUT_FOCUS_ComponentArgs = {}
+                        this.executeMethod(ComponentInputPhoneConfigs.methods.INPUT_FOCUS.name  , event , paramsFn);
+                    },
+                    blur: (event: Event) => {
+                        const paramsFn : ComponentInputPhone_Methods_INPUT_BLUR_ComponentArgs = {}
+                        this.executeMethod(ComponentInputPhoneConfigs.methods.INPUT_BLUR.name  , event , paramsFn);
+                    },
+                }
+            });
+
+            return this._ELEMENT_INPUT;
+        }
+
+        return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
+    }
+
+
+    // ---------------------------------------------
     private template_render_icon_clear(attrsDefault, data, extra): ReactiveElement {
         if (data != null) {
-            const prop_isDisable = data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
-            const prop_size = data[ComponentInputPhoneConfigs.keys.prop_size.name];
+            const prop_size =         data[ComponentInputPhoneConfigs.keys.prop_size.name];
+            const prop_isDisable =    data[ComponentInputPhoneConfigs.keys.prop_isDisable.name];
 
             const directionRtl = AppConfig.get("directionRtl");
 
@@ -1155,54 +2258,87 @@ export class ComponentInputPhone extends ComponentInputPhoneBase {
                     (isDisable: boolean, size: any) => {
                         if (isDisable) return null;
 
-                        const sizeName = size ?? SIZES.M;
-                        const elIconHeight = ToolsCss.getIconSize(sizeName);
-
-                        const iconClearProps: any = {
-                            classList: [],
-                            styles: {},
-                            prop_iconClass: [],
-                            prop_iconStyles: {
-                                fontSize: "20pt",
-                                margin: "0 10px",
-                                cursor: "pointer",
-                            },
-                            prop_icon: ToolsIcons.icon_clear({ size: sizeName }),
-                        };
-
-                        const iconClearEl = new ToolsComponents.ComponentIcon(
-                            iconClearProps as ComponentIconPropsType,
-                            <ComponentIconMethodsType>{
-                                fn_onClickIcon: (event, dataArgs, componentArgs) => {
-                                    this.fn_onClearInput(event);
-                                }
-                            }
-                        );
-
-                        const posProps: any = {
-                            classList: [],
-                            styles: {},
-                            prop_positionType: ComponentElementPosition_positionTypes.ABSOLUTE,
-                            prop_positionTop: SizeUnit(50, UNITS.PERCENT),
-                            prop_positionWidth: SizeUnit(30, UNITS.PEXEL),
-                            prop_positionHeight: SizeUnit(elIconHeight, UNITS.PEXEL),
-                            prop_positionStyles: {
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                            },
-                            prop_positionTranslate: TranslateUnit(SizeUnit(0, UNITS.PEXEL), SizeUnit(-50, UNITS.PERCENT)),
-                            prop_positionZIndex: 10,
-                            prop_content: iconClearEl.getReactiveElement(),
-                        };
-                        if (directionRtl) {
-                            posProps.prop_positionLeft = SizeUnit(0, UNITS.PEXEL);
-                        } else {
-                            posProps.prop_positionRight = SizeUnit(0, UNITS.PEXEL);
-                        }
-
                         return new ComponentElementPosition(
-                            posProps as ComponentElementPositionPropsType,
+                            <ComponentElementPositionPropsType>{
+                                classList: [],
+                                prop_positionType: ComponentElementPosition_positionTypes.ABSOLUTE,
+                                prop_positionTop:      SizeUnit(50, UNITS.PERCENT),
+                                prop_positionEnd:      SizeUnit(0, UNITS.PERCENT),
+                                prop_positionWidth:    Observable.computed(
+                                    (sizeName) => {
+                                        return SizeCalc(
+                                            ToolsComponents_BorderWidth?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Padding?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Height?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Padding?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_BorderWidth?.[sizeName] ,
+                                        )
+                                    } ,
+                                    [
+                                        AppConfig.get_sizeName()
+                                    ] ,
+                                    this.getScope()
+                                ),
+                                prop_positionHeight:    Observable.computed(
+                                    (sizeName) => {
+                                        return SizeCalc(
+                                            ToolsComponents_BorderWidth?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Padding?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Height?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Padding?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_BorderWidth?.[sizeName] ,
+                                        )
+                                    } ,
+                                    [
+                                        AppConfig.get_sizeName()
+                                    ] ,
+                                    this.getScope()
+                                ),
+                                prop_positionTranslate: TranslateUnit(SizeUnit(0, UNITS.PERCENT), SizeUnit(-50, UNITS.PERCENT)),
+                                prop_positionZIndex: 10,
+                                prop_content:  new ToolsComponents.ComponentIcon(
+                                                      <ComponentIconPropsType>{
+                                                          classList: [],
+                                                          prop_iconStyles:      Observable.computed(
+                                                              (sizeName) => {
+                                                                  return {
+                                                                      cursor:     "pointer",
+                                                                      lineHeight:  SizeCalc(
+                                                                          ToolsComponents_BorderWidth?.[sizeName] ,
+                                                                          OPERATION.ADD ,
+                                                                          ToolsComponents_Padding?.[sizeName] ,
+                                                                          OPERATION.ADD ,
+                                                                          ToolsComponents_Height?.[sizeName] ,
+                                                                          OPERATION.ADD ,
+                                                                          ToolsComponents_Padding?.[sizeName] ,
+                                                                          OPERATION.ADD ,
+                                                                          ToolsComponents_BorderWidth?.[sizeName] ,
+                                                                      )
+                                                                  }
+                                                              },
+                                                              [
+                                                                  AppConfig.get_sizeName()
+                                                              ] ,
+                                                              this.getScope()
+                                                          ),
+                                                          prop_iconClass: ["d-block" , "text-center"],
+                                                          prop_icon: ToolsIcons.icon_clear(),
+                                                      },
+                                                      <ComponentIconMethodsType>{
+                                                          fn_onClickIcon: (event, dataArgs, componentArgs) => {
+                                                              this.set(ComponentInputPhoneConfigs.keys.prop_value.name , "")
+                                                          }
+                                                      }
+                                                  ).getReactiveElement(),
+                            },
                             <ComponentElementPositionMethodsType>{}
                         ).getReactiveElement();
                     },
@@ -1216,46 +2352,43 @@ export class ComponentInputPhone extends ComponentInputPhoneBase {
     }
 
 
-    /* ---------------------------------------------
-        template_render_validate — یک ComponentValidate
-    --------------------------------------------- */
+    // ---------------------------------------------
     private template_render_validate(attrsDefault, data, extra): ReactiveElement {
         if (data != null) {
-            const prop_isDisable = data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
-            const prop_hasRules = data[ComponentInputPhoneConfigs.keys.prop_hasRules.name];
+            const prop_isDisable =      data[ComponentInputPhoneConfigs.keys.prop_isDisable.name];
+            const prop_value =          data[ComponentInputPhoneConfigs.keys.prop_value.name];
+            const prop_hasRules =       data[ComponentInputPhoneConfigs.keys.prop_hasRules.name];
             const prop_isAbsoluteRule = data[ComponentInputPhoneConfigs.keys.prop_isAbsoluteRule.name];
-            const prop_listRules = data[ComponentInputPhoneConfigs.keys.prop_listRules.name];
-            const prop_msgRules = data[ComponentInputPhoneConfigs.keys.prop_msgRules.name];
-            const prop_title = data[ComponentInputPhoneConfigs.keys.prop_title.name];
-            const prop_size = data[ComponentInputPhoneConfigs.keys.prop_size.name];
+            const prop_listRules =      data[ComponentInputPhoneConfigs.keys.prop_listRules.name];
+            const prop_msgRules =       data[ComponentInputPhoneConfigs.keys.prop_msgRules.name];
+            const prop_title =          data[ComponentInputPhoneConfigs.keys.prop_title.name];
 
             return ReactiveElement.part("section", {
                 attrs: { ...attrsDefault },
                 className: ["position-relative"],
                 children: Observable.computed(
-                    (isDisable: boolean, hasRules: boolean, isAbsoluteRule: any, listRules: any, msgRules: any, title: any, size: any) => {
+                    (isDisable: boolean, hasRules: boolean) => {
                         if (isDisable) return null;
                         if (!hasRules) return null;
-                        if (!Array.isArray(listRules) || listRules.length === 0) return null;
 
                         return new ToolsComponents.ComponentValidate(
                             <ComponentValidatePropsType>{
-                                classList: ["mt-1"],
-                                prop_reference: `component-input-phone-input-${this._COMPONENT_RANDOM_ID}`,
-                                prop_isAbsolute: isAbsoluteRule ?? true,
-                                prop_listRules: listRules,
-                                prop_msgRules: msgRules ?? null,
-                                prop_title: title ?? "",
-                                prop_size: size ?? SIZES.M,
-                                prop_value: this.var_inputValue,
+                                classList:        ["mt-1"],
+                                prop_reference:   `component-input-phone-input-${this._COMPONENT_RANDOM_ID}`,
+                                prop_isAbsolute:  prop_isAbsoluteRule ,
+                                prop_listRules:   prop_listRules ,
+                                prop_msgRules:    prop_msgRules ,
+                                prop_title:       prop_title ,
+                                prop_value:       prop_value ,
                             },
                             <ComponentValidateMethodsType>{
                                 fn_onChangeValidate: (event, dataArgs, componentArgs) => {
+
                                 }
                             }
                         ).getReactiveElement();
                     },
-                    [prop_isDisable, prop_hasRules, prop_isAbsoluteRule, prop_listRules, prop_msgRules, prop_title, prop_size],
+                    [prop_isDisable, prop_hasRules],
                     this.getScope()
                 ),
             });
@@ -1265,64 +2398,11 @@ export class ComponentInputPhone extends ComponentInputPhoneBase {
     }
 
 
-    /* ---------------------------------------------
-        FUNCTIONs
-    --------------------------------------------- */
-    private fn_setupValueObservable() {
-        const propValueObs = this.getObservable(ComponentInputPhoneConfigs.keys.prop_value.name);
-        if (propValueObs != null) {
-            this.var_inputValue = propValueObs;
-        }
-    }
 
-    fn_getValueInput(): string {
-        const inputEl = document.querySelector(`input#component-input-phone-input-${this._COMPONENT_RANDOM_ID}`) as HTMLInputElement | null;
-        if (inputEl) {
-            return inputEl.value;
-        }
-        return this.var_inputValue.get();
-    }
+    // ---------------------------------------------
 
-    fn_getSelectedCode(): any {
-        return this.var_selectedCode;
-    }
 
-    fn_executeCallback(event: Event) {
-        const code = this.var_selectedCode;
-        const number = this.fn_getValueInput();
-        const text = (code != null && code.hasOwnProperty("code") ? `${code["code"]}-` : "") + (number != null ? number : "");
-
-        const params: ComponentInputPhone_Methods_CALLBACK_DataArgs = {
-            [ComponentInputPhoneConfigs.methods.CALLBACK.dataArgs.CODE.name]: code,
-            [ComponentInputPhoneConfigs.methods.CALLBACK.dataArgs.NUMBER.name]: number,
-            [ComponentInputPhoneConfigs.methods.CALLBACK.dataArgs.TEXT.name]: text,
-        };
-        this.executeMethod(ComponentInputPhoneConfigs.methods.CALLBACK.name, event, params);
-    }
-
-    fn_onClearInput(event: Event) {
-        const inputEl = document.querySelector(`input#component-input-phone-input-${this._COMPONENT_RANDOM_ID}`) as HTMLInputElement | null;
-        if (inputEl) {
-            inputEl.value = "";
-        }
-        this.var_inputValue.set("");
-        const params: ComponentInputPhone_Methods_INPUT_CHANGE_DataArgs = {
-            [ComponentInputPhoneConfigs.methods.INPUT_CHANGE.dataArgs.VALUE.name]: "",
-        };
-        this.executeMethod(ComponentInputPhoneConfigs.methods.INPUT_CHANGE.name, event, params);
-        this.fn_onFocusInput(event);
-    }
-
-    fn_onFocusInput(event: Event) {
-        const inputEl = document.querySelector(`input#component-input-phone-input-${this._COMPONENT_RANDOM_ID}`) as HTMLInputElement | null;
-        if (inputEl) {
-            inputEl.focus();
-        }
-        const val = this.fn_getValueInput();
-        const params: ComponentInputPhone_Methods_FOCUS_DataArgs = {
-            [ComponentInputPhoneConfigs.methods.FOCUS.dataArgs.VALUE.name]: val,
-        };
-        this.executeMethod(ComponentInputPhoneConfigs.methods.FOCUS.name, event, params);
-    }
 
 }
+
+export default ComponentInputPhone
