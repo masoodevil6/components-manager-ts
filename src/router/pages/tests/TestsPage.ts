@@ -136,12 +136,14 @@ export class TestsPage implements ITemplate{
 
                     //TOOLS.COMPONENT.ComponentTable.renderExampleComponent() ,
 
-                    // TOOLS.COMPONENT.ComponentInput.renderExampleComponent() ,
+                    TOOLS.COMPONENT.ComponentInput.renderExampleComponent() ,
                     // TOOLS.COMPONENT.ComponentInputPassword.renderExampleComponent() ,
                     // TOOLS.COMPONENT.ComponentInputEmail.renderExampleComponent() ,
                     TOOLS.COMPONENT.ComponentInputPhone.renderExampleComponent() ,
                     TOOLS.COMPONENT.ComponentInputSize.renderExampleComponent() ,
                     // TOOLS.COMPONENT.ComponentInputColor.renderExampleComponent() ,
+
+                    //TOOLS.COMPONENT.ComponentSelectOption.renderExampleComponent() ,
 
                     // TOOLS.COMPONENT.ComponentInputOtp.renderExampleComponent() ,
 

@@ -421,33 +421,33 @@ export abstract class ComponentInputPhoneBase extends ComponentBase<
             [ComponentInputPhoneConfigs.keys.prop_title.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_title.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_title.value,
-                title:                                            Language.translate("components.input.props.prop_title.title"),
-                description:                                      Language.translate("components.input.props.prop_title.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_title.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_title.description"),
             },
             [ComponentInputPhoneConfigs.keys.prop_name.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_name.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_name.value,
-                title:                                            Language.translate("components.public.props.prop_name.title"),
-                description:                                      Language.translate("components.public.props.prop_name.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_name.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_name.description"),
             },
             [ComponentInputPhoneConfigs.keys.prop_isDisable.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_isDisable.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_isDisable.value,
-                title:                                            Language.translate("components.public.props.prop_isDisable.title"),
-                description:                                      Language.translate("components.public.props.prop_isDisable.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_isDisable.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_isDisable.description"),
             },
 
             [ComponentInputPhoneConfigs.keys.prop_countryHas.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_countryHas.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_countryHas.value,
-                title:                                            Language.translate("components.public.props.prop_countryHas.title"),
-                description:                                      Language.translate("components.public.props.prop_countryHas.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_countryHas.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_countryHas.description"),
             },
             [ComponentInputPhoneConfigs.keys.prop_countryWidth.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_countryWidth.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_countryWidth.value,
-                title:                                            Language.translate("components.public.props.prop_countryWidth.title"),
-                description:                                      Language.translate("components.public.props.prop_countryWidth.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_countryWidth.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_countryWidth.description"),
             },
             [ComponentInputPhoneConfigs.keys.prop_countryOptions.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_countryOptions.name,
@@ -461,8 +461,6 @@ export abstract class ComponentInputPhoneBase extends ComponentBase<
                 title:                                            Language.translate("components.public.props.prop_countryValue.title"),
                 description:                                      Language.translate("components.public.props.prop_countryValue.description"),
             },
-
-
             [ComponentInputPhoneConfigs.keys.prop_cityHas.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_cityHas.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_cityHas.value,
@@ -484,34 +482,32 @@ export abstract class ComponentInputPhoneBase extends ComponentBase<
             [ComponentInputPhoneConfigs.keys.prop_cityValue.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_cityValue.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_cityValue.value,
-                title:                                            Language.translate("components.public.props.prop_countryValue.title"),
-                description:                                      Language.translate("components.public.props.prop_countryValue.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_countryValue.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_countryValue.description"),
             },
-
-
             [ComponentInputPhoneConfigs.keys.prop_value.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_value.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_value.value,
-                title:                                            Language.translate("components.public.props.prop_value.title"),
-                description:                                      Language.translate("components.public.props.prop_value.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_value.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_value.description"),
             },
             [ComponentInputPhoneConfigs.keys.prop_size.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_size.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_size.value,
-                title:                                            Language.translate("components.input.props.prop_size.title"),
-                description:                                      Language.translate("components.input.props.prop_size.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_size.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_size.description"),
             },
             [ComponentInputPhoneConfigs.keys.prop_placeholder.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_placeholder.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_placeholder.value,
-                title:                                            Language.translate("components.input.props.prop_placeholder.title"),
-                description:                                      Language.translate("components.input.props.prop_placeholder.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_placeholder.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_placeholder.description"),
             },
             [ComponentInputPhoneConfigs.keys.prop_labelClass.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_labelClass.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_labelClass.value,
-                title:                                            Language.translate("components.input.props.prop_labelClass.title"),
-                description:                                      Language.translate("components.input.props.prop_labelClass.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_labelClass.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_labelClass.description"),
             },
             [ComponentInputPhoneConfigs.keys.prop_selectWidth.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_selectWidth.name,
@@ -522,86 +518,86 @@ export abstract class ComponentInputPhoneBase extends ComponentBase<
             [ComponentInputPhoneConfigs.keys.prop_backgroundColorForm.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_backgroundColorForm.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_backgroundColorForm.value,
-                title:                                            Language.translate("components.input.props.prop_backgroundColorForm.title"),
-                description:                                      Language.translate("components.input.props.prop_backgroundColorForm.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_backgroundColorForm.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_backgroundColorForm.description"),
             },
             [ComponentInputPhoneConfigs.keys.prop_formBorderRadius.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_formBorderRadius.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_formBorderRadius.value,
-                title:                                            Language.translate("components.input.props.prop_formBorderRadius.title"),
-                description:                                      Language.translate("components.input.props.prop_formBorderRadius.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_formBorderRadius.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_formBorderRadius.description"),
             },
             [ComponentInputPhoneConfigs.keys.prop_hasRules.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_hasRules.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_hasRules.value,
-                title:                                            Language.translate("components.input.props.prop_hasRules.title"),
-                description:                                      Language.translate("components.input.props.prop_hasRules.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_hasRules.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_hasRules.description"),
             },
             [ComponentInputPhoneConfigs.keys.prop_isAbsoluteRule.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_isAbsoluteRule.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_isAbsoluteRule.value,
-                title:                                            Language.translate("components.input.props.prop_isAbsoluteRule.title"),
-                description:                                      Language.translate("components.input.props.prop_isAbsoluteRule.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_isAbsoluteRule.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_isAbsoluteRule.description"),
             },
             [ComponentInputPhoneConfigs.keys.prop_listRules.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_listRules.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_listRules.value,
-                title:                                            Language.translate("components.input.props.prop_listRules.title"),
-                description:                                      Language.translate("components.input.props.prop_listRules.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_listRules.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_listRules.description"),
             },
             [ComponentInputPhoneConfigs.keys.prop_msgRules.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_msgRules.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_msgRules.value,
-                title:                                            Language.translate("components.input.props.prop_msgRules.title"),
-                description:                                      Language.translate("components.input.props.prop_msgRules.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_msgRules.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_msgRules.description"),
             },
             [ComponentInputPhoneConfigs.keys.prop_colorIcon.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_colorIcon.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_colorIcon.value,
-                title:                                            Language.translate("components.input.props.prop_colorIcon.title"),
-                description:                                      Language.translate("components.input.props.prop_colorIcon.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_colorIcon.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_colorIcon.description"),
             },
             [ComponentInputPhoneConfigs.keys.prop_icon.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_icon.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_icon.value,
-                title:                                            Language.translate("components.input.props.prop_icon.title"),
-                description:                                      Language.translate("components.input.props.prop_icon.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_icon.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_icon.description"),
             },
             [ComponentInputPhoneConfigs.keys.prop_inputClass.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_inputClass.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_inputClass.value,
-                title:                                            Language.translate("components.input.props.prop_inputClass.title"),
-                description:                                      Language.translate("components.input.props.prop_inputClass.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_inputClass.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_inputClass.description"),
             },
             [ComponentInputPhoneConfigs.keys.prop_inputStyles.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_inputStyles.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_inputStyles.value,
-                title:                                            Language.translate("components.input.props.prop_inputStyles.title"),
-                description:                                      Language.translate("components.input.props.prop_inputStyles.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_inputStyles.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_inputStyles.description"),
             },
             [ComponentInputPhoneConfigs.keys.prop_inputBorderColor.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_inputBorderColor.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_inputBorderColor.value,
-                title:                                            Language.translate("components.input.props.prop_inputBorderColor.title"),
-                description:                                      Language.translate("components.input.props.prop_inputBorderColor.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_inputBorderColor.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_inputBorderColor.description"),
             },
             [ComponentInputPhoneConfigs.keys.prop_inputBorderColorFocus.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_inputBorderColorFocus.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_inputBorderColorFocus.value,
-                title:                                            Language.translate("components.input.props.prop_inputBorderColorFocus.title"),
-                description:                                      Language.translate("components.input.props.prop_inputBorderColorFocus.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_inputBorderColorFocus.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_inputBorderColorFocus.description"),
             },
             [ComponentInputPhoneConfigs.keys.prop_inputBorderWidth.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_inputBorderWidth.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_inputBorderWidth.value,
-                title:                                            Language.translate("components.input.props.prop_inputBorderWidth.title"),
-                description:                                      Language.translate("components.input.props.prop_inputBorderWidth.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_inputBorderWidth.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_inputBorderWidth.description"),
             },
             [ComponentInputPhoneConfigs.keys.prop_inputBorderRadius.name]: {
                 prop:                                             ComponentInputPhoneConfigs.keys.prop_inputBorderRadius.name,
                 default:                                          ComponentInputPhoneConfigs.keys.prop_inputBorderRadius.value,
-                title:                                            Language.translate("components.input.props.prop_inputBorderRadius.title"),
-                description:                                      Language.translate("components.input.props.prop_inputBorderRadius.description"),
+                title:                                            Language.translate("components.input_phone.props.prop_inputBorderRadius.title"),
+                description:                                      Language.translate("components.input_phone.props.prop_inputBorderRadius.description"),
             },
         }
     );
@@ -822,7 +818,11 @@ export abstract class ComponentInputPhoneBase extends ComponentBase<
                     { id: 401, name: "Berlin",    code: "030", countryId: 4 },
                 ],
 
+                prop_name:                     "input_example_phone" ,
                 prop_value:                    "2636617530",
+
+                prop_isAbsoluteRule:            true,
+                prop_hasRules:                  true ,
                 prop_listRules: [
                     {
                         rule:        "_not_empty",
@@ -832,25 +832,23 @@ export abstract class ComponentInputPhoneBase extends ComponentBase<
                 prop_msgRules: {
                     "_not_empty":    "Phone number is required",
                 },
-                prop_name: "input_example_phone" ,
-                prop_isAbsoluteRule: true,
-                prop_hasRules: true,
+
             } as any as ComponentInputPhonePropsType,
             <ComponentInputPhoneMethodsType>{
                 fn_onSelectCountryChange: (event, dataArgs, componentArgs) => {
-                    console.log("fn_onSelectCountryChange", dataArgs, componentArgs);
+                    console.log("ComponentInputPhone [fn_onSelectCountryChange]", dataArgs, componentArgs);
                 },
                 fn_onSelectCityChange: (event, dataArgs, componentArgs) => {
-                    console.log("fn_onSelectCityChange", dataArgs, componentArgs);
+                    console.log("ComponentInputPhone [fn_onSelectCityChange]", dataArgs, componentArgs);
                 },
                 fn_onInputChange: (event, dataArgs, componentArgs) => {
-                    console.log("fn_onInputChange", dataArgs, componentArgs);
+                    console.log("ComponentInputPhone [fn_onInputChange]", dataArgs, componentArgs);
                 },
                 fn_onInputFocus: (event, dataArgs, componentArgs) => {
-                    console.log("fn_onInputFocus", dataArgs, componentArgs);
+                    console.log("ComponentInputPhone [fn_onInputFocus]", dataArgs, componentArgs);
                 },
                 fn_onInputBlur: (event, dataArgs, componentArgs) => {
-                    console.log("fn_onInputBlur", dataArgs, componentArgs);
+                    console.log("ComponentInputPhone [fn_onInputBlur]", dataArgs, componentArgs);
                 },
             }
         );
@@ -860,12 +858,14 @@ export abstract class ComponentInputPhoneBase extends ComponentBase<
 }
 
 
-class ComponentInputPhone extends ComponentInputPhoneBase {
+export class ComponentInputPhone extends ComponentInputPhoneBase {
 
     private _SEARCH_TEXT_COUNTRY =   new Observable<string>("");
     private _SEARCH_TEXT_CITY =      new Observable<string>("");
+
     private _DROPDOWN_OPEN_COUNTRY = new Observable<boolean>(false);
     private _DROPDOWN_OPEN_CITY =    new Observable<boolean>(false);
+
     private _ELEMENT_INPUT = null;
 
 
@@ -935,8 +935,18 @@ class ComponentInputPhone extends ComponentInputPhoneBase {
                 children: [
                     new ToolsComponents.ComponentBorder(
                         <ComponentBorderPropsType>{
-                            classList: [ "pt-2" , "d-block"]  ,
-                            styles: {}  ,
+                            classList: [ "d-block"]  ,
+                            styles: Observable.computed(
+                                (sizeName) => {
+                                    return {
+                                        padding: ToolsComponents_Padding?.[sizeName]
+                                    }
+                                } ,
+                                [
+                                    AppConfig.get_sizeName()
+                                ] ,
+                                this.getScope()
+                            ) ,
                             prop_borderClass: []  ,
                             prop_borderStyles: Observable.computed(
                                 (sizeName) => {
@@ -951,7 +961,8 @@ class ComponentInputPhone extends ComponentInputPhoneBase {
                                             ToolsComponents_Padding?.[sizeName] ,
                                             OPERATION.ADD ,
                                             ToolsComponents_BorderWidth?.[sizeName] ,
-                                        )
+                                        ) ,
+                                        padding: ToolsComponents_Padding?.[sizeName]
                                     }
                                 } ,
                                 [
@@ -2143,9 +2154,6 @@ class ComponentInputPhone extends ComponentInputPhoneBase {
                         this.getScope()
                     ) ,
 
-
-
-
                     direction: Observable.computed(
                         (dir)=> {
                             return dir ? "rtl" : "ltr";
@@ -2211,10 +2219,6 @@ class ComponentInputPhone extends ComponentInputPhoneBase {
                         this.getScope()
                     )  ,
 
-
-
-
-
                 }),
                 on: {
                     input: (event: Event) => {
@@ -2249,8 +2253,6 @@ class ComponentInputPhone extends ComponentInputPhoneBase {
         if (data != null) {
             const prop_size =         data[ComponentInputPhoneConfigs.keys.prop_size.name];
             const prop_isDisable =    data[ComponentInputPhoneConfigs.keys.prop_isDisable.name];
-
-            const directionRtl = AppConfig.get("directionRtl");
 
             return ReactiveElement.part("section", {
                 attrs: { ...attrsDefault },
@@ -2355,8 +2357,8 @@ class ComponentInputPhone extends ComponentInputPhoneBase {
     // ---------------------------------------------
     private template_render_validate(attrsDefault, data, extra): ReactiveElement {
         if (data != null) {
-            const prop_isDisable =      data[ComponentInputPhoneConfigs.keys.prop_isDisable.name];
-            const prop_value =          data[ComponentInputPhoneConfigs.keys.prop_value.name];
+            const prop_isDisable =      data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
+            const prop_value =          data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name];
             const prop_hasRules =       data[ComponentInputPhoneConfigs.keys.prop_hasRules.name];
             const prop_isAbsoluteRule = data[ComponentInputPhoneConfigs.keys.prop_isAbsoluteRule.name];
             const prop_listRules =      data[ComponentInputPhoneConfigs.keys.prop_listRules.name];
@@ -2368,13 +2370,11 @@ class ComponentInputPhone extends ComponentInputPhoneBase {
                 className: ["position-relative"],
                 children: Observable.computed(
                     (isDisable: boolean, hasRules: boolean) => {
-                        if (isDisable) return null;
-                        if (!hasRules) return null;
+                        if (isDisable || !hasRules) return null;
 
                         return new ToolsComponents.ComponentValidate(
                             <ComponentValidatePropsType>{
                                 classList:        ["mt-1"],
-                                prop_reference:   `component-input-phone-input-${this._COMPONENT_RANDOM_ID}`,
                                 prop_isAbsolute:  prop_isAbsoluteRule ,
                                 prop_listRules:   prop_listRules ,
                                 prop_msgRules:    prop_msgRules ,
@@ -2401,8 +2401,5 @@ class ComponentInputPhone extends ComponentInputPhoneBase {
 
     // ---------------------------------------------
 
-
-
 }
 
-export default ComponentInputPhone

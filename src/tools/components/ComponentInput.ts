@@ -23,7 +23,8 @@ import {
     IconsType,
     SIZES, SizesType, SizeUnit, UNITS,
     ToolsComponents_BorderRadius,
-    ToolsComponents_BorderWidth
+    ToolsComponents_BorderWidth, ToolsComponents_Padding, SizeCalc, OPERATION, ToolsComponents_Height,
+    ToolsComponents_IconSize, StyleValue, ToolsComponents_FontSize
 } from "../../utils/ToolsConsts";
 import {TOOLS} from "../tools";
 import {
@@ -79,6 +80,12 @@ import {
     ComponentElementPosition_positionTypes
 } from "./ComponentElementPosition";
 import {TranslateUnit} from "../../utils/ToolsConsts";
+import {ComponentBorderMethodsType, ComponentBorderPropsType} from "./ComponentBorder";
+import {ComponentInputPhone_Methods_INPUT_CHANGE_ComponentArgs} from "./ComponentInputPhone";
+import {
+    ComponentInputSize_Methods_INPUT_BLUR_ComponentArgs,
+    ComponentInputSize_Methods_INPUT_FOCUS_ComponentArgs
+} from "./ComponentInputSize";
 
 
 
@@ -104,10 +111,12 @@ export const ComponentInputProps = {
     prop_placeholder:                      "prop_placeholder",
     prop_icon:                             "prop_icon",
     prop_btnAddStatus:                     "prop_btnAddStatus",
+    prop_btnAddWidth:                      "prop_btnAddWidth",
     prop_btnAddIcon:                       "prop_btnAddIcon",
     prop_btnAddTitle:                      "prop_btnAddTitle",
     prop_btnAddClass:                      "prop_btnAddClass",
     prop_btnColor:                         "prop_btnColor",
+    prop_hasRules:                         "prop_hasRules",
     prop_isAbsoluteRule:                   "prop_isAbsoluteRule",
     prop_listRules:                        "prop_listRules",
     prop_msgRules:                         "prop_msgRules",
@@ -197,6 +206,10 @@ const ComponentInputConfigs = {
             name:               ComponentInputProps.prop_btnAddStatus,
             value:              GOG_SetValue<boolean>(false),
         },
+        [ComponentInputProps.prop_btnAddWidth]: {
+            name:               ComponentInputProps.prop_btnAddWidth,
+            value:              GOG_SetValue<number>(120),
+        },
         [ComponentInputProps.prop_btnAddIcon]: {
             name:               ComponentInputProps.prop_btnAddIcon,
             value:              GOG_SetValue<string>("&plus;"),
@@ -213,9 +226,13 @@ const ComponentInputConfigs = {
             name:               ComponentInputProps.prop_btnColor,
             value:              GOG_SetValue<GOG_ValueOf<typeof ComponentButton_Types>>(ComponentButton_Types.SUBMIT),
         },
+        [ComponentInputProps.prop_hasRules]: {
+            name:               ComponentInputProps.prop_hasRules,
+            value:              GOG_SetValue<boolean>(false),
+        },
         [ComponentInputProps.prop_isAbsoluteRule]: {
             name:               ComponentInputProps.prop_isAbsoluteRule,
-            value:              GOG_SetValue<boolean>(true),
+            value:              GOG_SetValue<boolean>(false),
         },
         [ComponentInputProps.prop_listRules]: {
             name:               ComponentInputProps.prop_listRules,
@@ -224,10 +241,6 @@ const ComponentInputConfigs = {
         [ComponentInputProps.prop_msgRules]: {
             name:               ComponentInputProps.prop_msgRules,
             value:              GOG_SetValue<Record<string, string> | null>(null),
-        },
-        [GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name]: {
-            name:               GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name,
-            value:              GOG_SetValue<Observable<string> | string>(""),
         },
     },
     schemas: {
@@ -262,32 +275,29 @@ const ComponentInputConfigs = {
         },
     },
     methods: {
-        INPUT: {
-            name:                      "fn_onInput",
+        INPUT_CHANGE: {
+            name:                      "fn_onInputChange",
             dataArgs: {
                 VALUE: {
-                    name:              "VALUE",
-                    value:             GOG_SetValue<string>(""),
+                    name:              "value",
                 },
             },
             componentArgs: {}
         },
-        FOCUS: {
-            name:                      "fn_onFocus",
+        INPUT_FOCUS: {
+            name:                      "fn_onInputFocus",
             dataArgs: {
                 VALUE: {
-                    name:              "VALUE",
-                    value:             GOG_SetValue<string>(""),
+                    name:              "value",
                 },
             },
             componentArgs: {}
         },
-        BLUR: {
-            name:                      "fn_onBlur",
+        INPUT_BLUR: {
+            name:                      "fn_onInputBlur",
             dataArgs: {
                 VALUE: {
-                    name:              "VALUE",
-                    value:             GOG_SetValue<string>(""),
+                    name:              "value",
                 },
             },
             componentArgs: {}
@@ -296,8 +306,7 @@ const ComponentInputConfigs = {
             name:                      "fn_onClickButton",
             dataArgs: {
                 VALUE: {
-                    name:              "VALUE",
-                    value:             GOG_SetValue<string>(""),
+                    name:              "value",
                 },
             },
             componentArgs: {}
@@ -311,19 +320,19 @@ export type ComponentInputPropsType =                      GOG_ExtractNameValue<
 export type ComponentInputSchemaType =                     GOG_ExtractName<typeof ComponentInputConfigs.schemas>
 export type ComponentInputTemplatesType =                  GOG_ExtractName<typeof ComponentInputConfigs.templates>
 
-export type ComponentInput_Methods_INPUT_ComponentArgs =   GOG_ExtractName<typeof ComponentInputConfigs.methods.INPUT.componentArgs>
-export type ComponentInput_Methods_INPUT_DataArgs =        GOG_ExtractNameValue<typeof ComponentInputConfigs.methods.INPUT.dataArgs>
-export type ComponentInput_Methods_FOCUS_ComponentArgs =   GOG_ExtractName<typeof ComponentInputConfigs.methods.FOCUS.componentArgs>
-export type ComponentInput_Methods_FOCUS_DataArgs =        GOG_ExtractNameValue<typeof ComponentInputConfigs.methods.FOCUS.dataArgs>
-export type ComponentInput_Methods_BLUR_ComponentArgs =    GOG_ExtractName<typeof ComponentInputConfigs.methods.BLUR.componentArgs>
-export type ComponentInput_Methods_BLUR_DataArgs =         GOG_ExtractNameValue<typeof ComponentInputConfigs.methods.BLUR.dataArgs>
-export type ComponentInput_Methods_CLICK_BUTTON_ComponentArgs = GOG_ExtractName<typeof ComponentInputConfigs.methods.CLICK_BUTTON.componentArgs>
-export type ComponentInput_Methods_CLICK_BUTTON_DataArgs = GOG_ExtractNameValue<typeof ComponentInputConfigs.methods.CLICK_BUTTON.dataArgs>
+export type ComponentInput_Methods_INPUT_CHANGE_ComponentArgs =  GOG_ExtractName<typeof ComponentInputConfigs.methods.INPUT_CHANGE.componentArgs>
+export type ComponentInput_Methods_INPUT_CHANGE_DataArgs =       GOG_ExtractNameValue<typeof ComponentInputConfigs.methods.INPUT_CHANGE.dataArgs>
+export type ComponentInput_Methods_INPUT_FOCUS_ComponentArgs =   GOG_ExtractName<typeof ComponentInputConfigs.methods.INPUT_FOCUS.componentArgs>
+export type ComponentInput_Methods_INPUT_FOCUS_DataArgs =        GOG_ExtractNameValue<typeof ComponentInputConfigs.methods.INPUT_FOCUS.dataArgs>
+export type ComponentInput_Methods_INPUT_BLUR_ComponentArgs =    GOG_ExtractName<typeof ComponentInputConfigs.methods.INPUT_BLUR.componentArgs>
+export type ComponentInput_Methods_INPUT_BLUR_DataArgs =         GOG_ExtractNameValue<typeof ComponentInputConfigs.methods.INPUT_BLUR.dataArgs>
+export type ComponentInput_Methods_CLICK_BUTTON_ComponentArgs =  GOG_ExtractName<typeof ComponentInputConfigs.methods.CLICK_BUTTON.componentArgs>
+export type ComponentInput_Methods_CLICK_BUTTON_DataArgs =       GOG_ExtractNameValue<typeof ComponentInputConfigs.methods.CLICK_BUTTON.dataArgs>
 
 export type ComponentInputMethodsType = {
-    [ComponentInputConfigs.methods.INPUT.name]: ComponentCallBackType<ComponentInput_Methods_INPUT_ComponentArgs, ComponentInput_Methods_INPUT_DataArgs>,
-    [ComponentInputConfigs.methods.FOCUS.name]: ComponentCallBackType<ComponentInput_Methods_FOCUS_ComponentArgs, ComponentInput_Methods_FOCUS_DataArgs>,
-    [ComponentInputConfigs.methods.BLUR.name]: ComponentCallBackType<ComponentInput_Methods_BLUR_ComponentArgs, ComponentInput_Methods_BLUR_DataArgs>,
+    [ComponentInputConfigs.methods.INPUT_CHANGE.name]: ComponentCallBackType<ComponentInput_Methods_INPUT_CHANGE_ComponentArgs, ComponentInput_Methods_INPUT_CHANGE_DataArgs>,
+    [ComponentInputConfigs.methods.INPUT_FOCUS.name]:  ComponentCallBackType<ComponentInput_Methods_INPUT_FOCUS_ComponentArgs, ComponentInput_Methods_INPUT_FOCUS_DataArgs>,
+    [ComponentInputConfigs.methods.INPUT_BLUR.name]:   ComponentCallBackType<ComponentInput_Methods_INPUT_BLUR_ComponentArgs, ComponentInput_Methods_INPUT_BLUR_DataArgs>,
     [ComponentInputConfigs.methods.CLICK_BUTTON.name]: ComponentCallBackType<ComponentInput_Methods_CLICK_BUTTON_ComponentArgs, ComponentInput_Methods_CLICK_BUTTON_DataArgs>,
 }
 
@@ -443,6 +452,12 @@ export abstract class ComponentInputBase extends ComponentBase<
                 title:                                            Language.translate("components.input.props.prop_btnAddStatus.title"),
                 description:                                      Language.translate("components.input.props.prop_btnAddStatus.description"),
             },
+            [ComponentInputConfigs.keys.prop_btnAddWidth.name]: {
+                prop:                                             ComponentInputConfigs.keys.prop_btnAddWidth.name,
+                default:                                          ComponentInputConfigs.keys.prop_btnAddWidth.value,
+                title:                                            Language.translate("components.input.props.prop_btnAddWidth.title"),
+                description:                                      Language.translate("components.input.props.prop_btnAddWidth.description"),
+            },
             [ComponentInputConfigs.keys.prop_btnAddIcon.name]: {
                 prop:                                             ComponentInputConfigs.keys.prop_btnAddIcon.name,
                 default:                                          ComponentInputConfigs.keys.prop_btnAddIcon.value,
@@ -466,6 +481,12 @@ export abstract class ComponentInputBase extends ComponentBase<
                 default:                                          ComponentInputConfigs.keys.prop_btnColor.value,
                 title:                                            Language.translate("components.input.props.prop_btnColor.title"),
                 description:                                      Language.translate("components.input.props.prop_btnColor.description"),
+            },
+            [ComponentInputConfigs.keys.prop_hasRules.name]: {
+                prop:                                             ComponentInputConfigs.keys.prop_hasRules.name,
+                default:                                          ComponentInputConfigs.keys.prop_hasRules.value,
+                title:                                            Language.translate("components.input.props.prop_hasRules.title"),
+                description:                                      Language.translate("components.input.props.prop_hasRules.description"),
             },
             [ComponentInputConfigs.keys.prop_isAbsoluteRule.name]: {
                 prop:                                             ComponentInputConfigs.keys.prop_isAbsoluteRule.name,
@@ -508,37 +529,6 @@ export abstract class ComponentInputBase extends ComponentBase<
                 this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_formBorderRadius.name],
             ]
         },
-        INPUT: {
-            part:               ComponentInputConfigs.schemas.INPUT.name,
-            title:              Language.translate("components.input.schema.input.title"),
-            description:        Language.translate("components.input.schema.input.description"),
-            props: [
-                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_inputClass.name],
-                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_inputStyles.name],
-                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_inputBorderColor.name],
-                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_inputBorderColorFocus.name],
-                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_inputBorderWidth.name],
-                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_inputBorderRadius.name],
-                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_type.name],
-                this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_name.name],
-                this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name],
-                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_placeholder.name],
-                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_icon.name],
-                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_btnAddStatus.name],
-                this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name],
-                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_size.name],
-            ]
-        },
-        ICON_CLEAR: {
-            part:               ComponentInputConfigs.schemas.ICON_CLEAR.name,
-            title:              Language.translate("components.input.schema.icon_clear.title"),
-            description:        Language.translate("components.input.schema.icon_clear.description"),
-            props: [
-                this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name],
-                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_btnAddStatus.name],
-                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_size.name],
-            ]
-        },
         ICON: {
             part:               ComponentInputConfigs.schemas.ICON.name,
             title:              Language.translate("components.input.schema.icon.title"),
@@ -549,19 +539,49 @@ export abstract class ComponentInputBase extends ComponentBase<
                 this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_colorIcon.name],
             ]
         },
+        INPUT: {
+            part:               ComponentInputConfigs.schemas.INPUT.name,
+            title:              Language.translate("components.input.schema.input.title"),
+            description:        Language.translate("components.input.schema.input.description"),
+            props: [
+                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_inputClass.name],
+                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_inputStyles.name],
+                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_type.name],
+                this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_name.name],
+                this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name],
+                this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name],
+                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_placeholder.name],
+                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_icon.name],
+                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_btnAddStatus.name],
+                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_btnAddWidth.name],
+            ]
+        },
+        ICON_CLEAR: {
+            part:               ComponentInputConfigs.schemas.ICON_CLEAR.name,
+            title:              Language.translate("components.input.schema.icon_clear.title"),
+            description:        Language.translate("components.input.schema.icon_clear.description"),
+            props: [
+                this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name],
+                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_btnAddStatus.name],
+                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_size.name],
+                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_btnAddStatus.name],
+                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_btnAddWidth.name],
+            ]
+        },
         BUTTON: {
             part:               ComponentInputConfigs.schemas.BUTTON.name,
             title:              Language.translate("components.input.schema.button.title"),
             description:        Language.translate("components.input.schema.button.description"),
             props: [
+                this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name],
                 this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_btnAddStatus.name],
                 this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_btnAddIcon.name],
                 this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_btnAddTitle.name],
                 this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_btnAddClass.name],
                 this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_btnColor.name],
                 this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_size.name],
-                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_inputBorderWidth.name],
-                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_formBorderRadius.name],
+                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_btnAddStatus.name],
+                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_btnAddWidth.name],
             ]
         },
         VALIDATE: {
@@ -569,6 +589,7 @@ export abstract class ComponentInputBase extends ComponentBase<
             title:              Language.translate("components.input.schema.validate.title"),
             description:        Language.translate("components.input.schema.validate.description"),
             props: [
+                this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_hasRules.name],
                 this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_isAbsoluteRule.name],
                 this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_listRules.name],
                 this._COMPONENT_PATTERN[ComponentInputConfigs.keys.prop_msgRules.name],
@@ -595,25 +616,25 @@ export abstract class ComponentInputBase extends ComponentBase<
         PROPERTYs Methods
     --------------------------------------------- */
     _COMPONENT_METHODS = defineComponentMethods<ComponentInputMethodsType, ComponentInputPropsType>({
-        [ComponentInputConfigs.methods.INPUT.name]: {
-            title:                                            Language.translate("components.input.methods.fn_onInput.title"),
-            description:                                      Language.translate("components.input.methods.fn_onInput.description"),
+        [ComponentInputConfigs.methods.INPUT_CHANGE.name]: {
+            title:                                            Language.translate("components.input.methods.fn_onInputChange.title"),
+            description:                                      Language.translate("components.input.methods.fn_onInputChange.description"),
             args: {
-                [ComponentInputConfigs.methods.INPUT.dataArgs.VALUE.name]: this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name],
+                [ComponentInputConfigs.methods.INPUT_CHANGE.dataArgs.VALUE.name]: this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name],
             }
         },
-        [ComponentInputConfigs.methods.FOCUS.name]: {
-            title:                                            Language.translate("components.input.methods.fn_onFocus.title"),
-            description:                                      Language.translate("components.input.methods.fn_onFocus.description"),
+        [ComponentInputConfigs.methods.INPUT_FOCUS.name]: {
+            title:                                            Language.translate("components.input.methods.fn_onInputFocus.title"),
+            description:                                      Language.translate("components.input.methods.fn_onInputFocus.description"),
             args: {
-                [ComponentInputConfigs.methods.FOCUS.dataArgs.VALUE.name]: this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name],
+                [ComponentInputConfigs.methods.INPUT_CHANGE.dataArgs.VALUE.name]: this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name],
             }
         },
-        [ComponentInputConfigs.methods.BLUR.name]: {
-            title:                                            Language.translate("components.input.methods.fn_onBlur.title"),
-            description:                                      Language.translate("components.input.methods.fn_onBlur.description"),
+        [ComponentInputConfigs.methods.INPUT_BLUR.name]: {
+            title:                                            Language.translate("components.input.methods.fn_onInputBlur.title"),
+            description:                                      Language.translate("components.input.methods.fn_onInputBlur.description"),
             args: {
-                [ComponentInputConfigs.methods.BLUR.dataArgs.VALUE.name]: this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name],
+                [ComponentInputConfigs.methods.INPUT_CHANGE.dataArgs.VALUE.name]: this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name],
             }
         },
         [ComponentInputConfigs.methods.CLICK_BUTTON.name]: {
@@ -630,21 +651,26 @@ export abstract class ComponentInputBase extends ComponentBase<
         Example
     --------------------------------------------- */
     static override renderExampleComponent(): HTMLElement {
-        const valueObs = new Observable<string>("");
+
 
         const inputComp = new ComponentInput(
             <ComponentInputPropsType>{
                 classList: ["col-md-3", "col-12", "border", "p-2"],
-                prop_labelTitle: "Input Example",
+                prop_labelTitle:              "Input Example",
                 prop_labelTooltipDescription: "This is an input with validation",
-                prop_type: ComponentInput_Types.STRING,
-                prop_placeholder: "Enter text...",
-                prop_name: "input_example" ,
-                prop_value: valueObs,
-                prop_size: SIZES.M,
-                prop_icon: ToolsIcons.icon_search({ size: SIZES.S }),
-                prop_btnAddStatus: true,
-                prop_btnAddTitle: "Add",
+                prop_type:                     ComponentInput_Types.STRING,
+                prop_placeholder:              "Enter text...",
+                prop_name:                     "input_example" ,
+                prop_value:                    "value test",
+                prop_icon:                     ToolsIcons.icon_search({ size: SIZES.S }),
+
+                prop_btnAddStatus:             true,
+                prop_btnAddWidth:              120,
+                prop_btnAddTitle:              "Add",
+
+                prop_hasRules:                  true ,
+                prop_msgRules:                  null,
+                prop_isAbsoluteRule:            true,
                 prop_listRules: [
                     {
                         rule: "_not_empty",
@@ -669,22 +695,19 @@ export abstract class ComponentInputBase extends ComponentBase<
                         description: "Must contain at least one uppercase letter"
                     },
                 ],
-                prop_msgRules: null,
-                prop_isAbsoluteRule: true,
             },
             <ComponentInputMethodsType>{
-                fn_onInput: (event, dataArgs, componentArgs) => {
-                    valueObs.set((event.target as HTMLInputElement).value);
-                    console.log("input", dataArgs.VALUE);
+                fn_onInputChange: (event, dataArgs, componentArgs) => {
+                    console.log("ComponentInput [fn_onInputChange]", dataArgs, componentArgs);
                 },
-                fn_onFocus: (event, dataArgs, componentArgs) => {
-                    console.log("focus", dataArgs.VALUE);
+                fn_onInputFocus: (event, dataArgs, componentArgs) => {
+                    console.log("ComponentInput [fn_onInputFocus]", dataArgs, componentArgs);
                 },
-                fn_onBlur: (event, dataArgs, componentArgs) => {
-                    console.log("blur", dataArgs.VALUE);
+                fn_onInputBlur: (event, dataArgs, componentArgs) => {
+                    console.log("ComponentInput [fn_onInputBlur]", dataArgs, componentArgs);
                 },
                 fn_onClickButton: (event, dataArgs, componentArgs) => {
-                    console.log("button click", dataArgs.VALUE);
+                    console.log("ComponentInput [fn_onClickButton]", dataArgs, componentArgs);
                 },
             }
         );
@@ -696,7 +719,7 @@ export abstract class ComponentInputBase extends ComponentBase<
 
 export class ComponentInput extends ComponentInputBase {
 
-    private var_inputValue = new Observable<string>("");
+    private _ELEMENT_INPUT = null;
 
     /* ---------------------------------------------
         SETUP
@@ -708,7 +731,6 @@ export class ComponentInput extends ComponentInputBase {
     ) {
         super("input", null);
         super.renderComponent(config, methods, events);
-        this.fn_setupValueObservable();
     }
 
 
@@ -726,7 +748,7 @@ export class ComponentInput extends ComponentInputBase {
             case ComponentInputConfigs.schemas.INPUT.name:
                 return this.template_render_input(attrsDefault, data, extra);
             case ComponentInputConfigs.schemas.ICON_CLEAR.name:
-                return this.template_render_iconClear(attrsDefault, data, extra);
+                return this.template_render_icon_clear(attrsDefault, data, extra);
             case ComponentInputConfigs.schemas.ICON.name:
                 return this.template_render_icon(attrsDefault, data, extra);
             case ComponentInputConfigs.schemas.BUTTON.name:
@@ -738,37 +760,83 @@ export class ComponentInput extends ComponentInputBase {
     }
 
 
+    // ---------------------------------------------
     private template_render_form(attrsDefault, data, extra): ReactiveElement {
         if (data != null) {
             const prop_backgroundColorForm = data[ComponentInputConfigs.keys.prop_backgroundColorForm.name];
             const prop_formBorderRadius =    data[ComponentInputConfigs.keys.prop_formBorderRadius.name];
 
             return ReactiveElement.part("section", {
-                attrs: {
-                    ...attrsDefault,
-                  //  "id": `component-input-form-${this._COMPONENT_RANDOM_ID}`,
-                },
-                styles: {
-                    marginTop: "5px" ,
-                },
+                attrs: { ...attrsDefault },
+                stylesCustom:`
+ /* Chrome, Edge, Safari, Opera */
+#${attrsDefault.id} input[type="number"]::-webkit-inner-spin-button,
+#${attrsDefault.id} input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+#${attrsDefault.id} input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+                ` ,
                 children: [
-                    ReactiveElement.part("section", {
-                        stylesBind: {
-                            backgroundColor: prop_backgroundColorForm,
-                            borderRadius: prop_formBorderRadius instanceof Observable
-                                ? prop_formBorderRadius.map((s: any) => `${ToolsComponents_BorderRadius[s ?? SIZES.M]} !important`)
-                                : `${ToolsComponents_BorderRadius[prop_formBorderRadius ?? SIZES.M]} !important`,
-                        } ,
-                        className: ["position-relative", "p-0"],
-                        children: [
-                            this.executeSchemaPart(ComponentInputConfigs.schemas.INPUT.name),
-                            this.executeSchemaPart(ComponentInputConfigs.schemas.ICON_CLEAR.name),
-                            this.executeSchemaPart(ComponentInputConfigs.schemas.ICON.name),
-                            this.executeSchemaPart(ComponentInputConfigs.schemas.BUTTON.name),
-                        ]
-                    }) ,
+                    new ToolsComponents.ComponentBorder(
+                        <ComponentBorderPropsType>{
+                            classList: [ "d-block"]  ,
+                            styles: Observable.computed(
+                                (sizeName) => {
+                                    return {
+                                        padding: ToolsComponents_Padding?.[sizeName]
+                                    }
+                                } ,
+                                [
+                                    AppConfig.get_sizeName()
+                                ] ,
+                                this.getScope()
+                            ) ,
+                            prop_borderClass: []  ,
+                            prop_borderStyles: Observable.computed(
+                                (sizeName) => {
+                                    return {
+                                        height: SizeCalc(
+                                            ToolsComponents_BorderWidth?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Padding?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Height?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Padding?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_BorderWidth?.[sizeName] ,
+                                        ) ,
+                                        padding: ToolsComponents_Padding?.[sizeName]
+                                    }
+                                } ,
+                                [
+                                    AppConfig.get_sizeName()
+                                ] ,
+                                this.getScope()
+                            ) ,
+                            prop_borderRadius: prop_formBorderRadius ,
+                            prop_content:                        ReactiveElement.div({
+                                className: ["position-relative"  , "h-100"] ,
+                                children: [
+                                    this.executeSchemaPart(ComponentInputConfigs.schemas.ICON.name),
+                                    this.executeSchemaPart(ComponentInputConfigs.schemas.INPUT.name) ,
+                                    this.executeSchemaPart(ComponentInputConfigs.schemas.ICON_CLEAR.name),
+                                    this.executeSchemaPart(ComponentInputConfigs.schemas.BUTTON.name),
+                                ]
+                            }) ,
+                            prop_borderColor:                    null ,
+                            prop_contentBackgroundColor:         prop_backgroundColorForm ,
+                        },
+                        <ComponentBorderMethodsType>{}
+                    ).getReactiveElement() ,
                     this.executeSchemaPart(ComponentInputConfigs.schemas.VALIDATE.name),
-                ]
+                ],
             });
 
         }
@@ -777,243 +845,483 @@ export class ComponentInput extends ComponentInputBase {
     }
 
 
+    // ---------------------------------------------
+    private template_render_icon(attrsDefault, data, extra): ReactiveElement {
+        if (data != null) {
+            const prop_icon =      data[ComponentInputConfigs.keys.prop_icon.name];
+            const prop_colorIcon = data[ComponentInputConfigs.keys.prop_colorIcon.name];
+
+            return ReactiveElement.part("section", {
+                attrs: { ...attrsDefault },
+                children: Observable.computed(
+                    (icon , colorIcon: any) => {
+                        if (!icon) return null;
+
+                        return  new ToolsComponents.ComponentIcon(
+                            <ComponentIconPropsType>{
+                                classList:   [],
+                                styles:      Observable.computed(
+                                    (sizeName , dir) => {
+                                        return {
+                                            cursor:   "pointer",
+                                            width: SizeCalc(
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Height?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                            ) ,
+                                            height: SizeCalc(
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Height?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                            ) ,
+                                            float: dir ? "right" : "left"
+                                        }
+                                    },
+                                    [
+                                        AppConfig.get_sizeName() ,
+                                        AppConfig.get_directionRtl()
+                                    ] ,
+                                    this.getScope()
+                                ),
+                                prop_iconClass: ["d-block"],
+                                prop_iconStyles:      Observable.computed(
+                                    (sizeName , dir) => {
+                                        return {
+                                            margin:   "auto",
+                                            width: SizeCalc(
+                                                ToolsComponents_IconSize?.[sizeName] ,
+                                            ) ,
+                                            lineHeight: SizeCalc(
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Height?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                            ) ,
+                                            height: SizeCalc(
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Height?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                            )
+                                        }
+                                    },
+                                    [
+                                        AppConfig.get_sizeName() ,
+                                        AppConfig.get_directionRtl()
+                                    ] ,
+                                    this.getScope()
+                                ),
+                                prop_icon: prop_icon,
+                            },
+                            <ComponentIconMethodsType>{
+                                fn_onClickIcon: (event, dataArgs, componentArgs) => {
+                                    this._ELEMENT_INPUT.focusFn();
+                                }
+                            }).getReactiveElement()
+
+                    },
+                    [prop_icon , prop_colorIcon],
+                    this.getScope()
+                ),
+            });
+        }
+
+        return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
+    }
+
+
+    // ---------------------------------------------
     private template_render_input(attrsDefault, data, extra): ReactiveElement {
         if (data != null) {
-            const prop_inputClass =            data[ComponentInputConfigs.keys.prop_inputClass.name];
-            const prop_inputStyles =           data[ComponentInputConfigs.keys.prop_inputStyles.name];
-            const prop_inputBorderColor =      data[ComponentInputConfigs.keys.prop_inputBorderColor.name];
-            const prop_inputBorderColorFocus = data[ComponentInputConfigs.keys.prop_inputBorderColorFocus.name];
-            const prop_inputBorderWidth =      data[ComponentInputConfigs.keys.prop_inputBorderWidth.name];
-            const prop_inputBorderRadius =     data[ComponentInputConfigs.keys.prop_inputBorderRadius.name];
-            const prop_type =                  data[ComponentInputConfigs.keys.prop_type.name];
-            const prop_name =                  data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_name.name];
-            const prop_value =                 data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name];
-            const prop_placeholder =           data[ComponentInputConfigs.keys.prop_placeholder.name];
-            const prop_icon =                  data[ComponentInputConfigs.keys.prop_icon.name];
-            const prop_btnAddStatus =          data[ComponentInputConfigs.keys.prop_btnAddStatus.name];
-            const prop_isDisable =             data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
-            const prop_size =                  data[ComponentInputConfigs.keys.prop_size.name];
 
-            const directionRtl = AppConfig.get("directionRtl");
+            const prop_name =          data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_name.name];
+            const prop_value =         data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name];
+            const prop_isDisable =     data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
+            const prop_inputStyles =   data[ComponentInputConfigs.keys.prop_inputStyles.name];
+            const prop_inputClass =    data[ComponentInputConfigs.keys.prop_inputClass.name];
+            const prop_type =          data[ComponentInputConfigs.keys.prop_type.name];
+            const prop_placeholder =   data[ComponentInputConfigs.keys.prop_placeholder.name];
+            const prop_icon =          data[ComponentInputConfigs.keys.prop_icon.name];
+            const prop_btnAddStatus =  data[ComponentInputConfigs.keys.prop_btnAddStatus.name];
+            const prop_btnAddWidth =   data[ComponentInputConfigs.keys.prop_btnAddWidth.name];
 
-            const inputValue = prop_value instanceof Observable
-                ? prop_value
-                : this.var_inputValue;
-
-            if (prop_value instanceof Observable) {
-                this.var_inputValue = prop_value;
-            }
-
-            const inputId = `component-input-input-${this._COMPONENT_RANDOM_ID}`;
-
-            return ReactiveElement.input({
+            this._ELEMENT_INPUT = ReactiveElement.input({
                 attrs: {
                     ...attrsDefault,
-                    //"id": inputId,
                 },
                 attrsBind: {
-                    type: prop_type,
-                    name: prop_name,
+                    name:        Observable.computed(
+                        (name) => {
+                            return `${name}[value]`
+                        },
+                        [
+                            prop_name
+                        ],
+                        this.getScope()
+                    ),
+                    value:       prop_value,
+                    type:        prop_type,
                     placeholder: prop_placeholder,
-                    value: inputValue,
-                    disabled: prop_isDisable instanceof Observable
-                        ? prop_isDisable.map((v: boolean) => v ? "disabled" : (null as any))
-                        : (prop_isDisable ? "disabled" : (null as any)),
+                    disabled :   Observable.computed(
+                        (status) => {
+                            return status ? "disabled" : null
+                        } ,
+                        [
+                            prop_isDisable
+                        ] ,
+                        this.getScope()
+                    )
                 },
                 className: [
                     "d-block",
                 ],
                 classBind: [
                     prop_inputClass,
-                    prop_isDisable instanceof Observable
-                        ? prop_isDisable.mapBoolean("disabled", "")
-                        : (prop_isDisable ? "disabled" : ""),
-                    prop_icon instanceof Observable
-                        ? prop_icon.mapBoolean("border", "")
-                        : (prop_icon ? "border" : ""),
                 ],
                 styles: {
-                    [directionRtl ? "paddingLeft" : "paddingRight"]: "35px",
-                    [directionRtl ? "right" : "left"]: "0",
-                    direction: directionRtl ? "rtl" : "ltr",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
+                    whiteSpace:   "nowrap",
+                    overflow:     "hidden",
                     textOverflow: "ellipsis",
-                    top: "0",
-                    paddingTop: "1px" ,
-                    paddingBottom: "1px" ,
-                    outline: "none",
-                    boxShadow: "none",
+                    outline:      "none",
+                    boxShadow:    "none",
                 },
                 stylesBind: (el) => ({
                     prop_inputStyles,
-                    borderWidth: prop_inputBorderWidth instanceof Observable
-                        ? prop_inputBorderWidth.map((s: any) => `${ToolsComponents_BorderWidth[s ?? SIZES.M]} !important`)
-                        : `${ToolsComponents_BorderWidth[prop_inputBorderWidth ?? SIZES.M]} !important`,
-                    borderRadius: prop_inputBorderRadius instanceof Observable
-                        ? prop_inputBorderRadius.map((s: any) => `${ToolsComponents_BorderRadius[s ?? SIZES.M]} !important`)
-                        : `${ToolsComponents_BorderRadius[prop_inputBorderRadius ?? SIZES.M]} !important`,
+
+                    width: Observable.computed(
+                        (sizeName, icon , btnAddStatus, btnAddWidth) => {
+                            console.log("btnAddStatus" , btnAddStatus)
+                            let listCalc = [
+                                SizeUnit(100 , UNITS.PERCENT) ,
+                            ];
+                            if (btnAddStatus){
+                                listCalc.push(OPERATION.MINUS);
+                                listCalc.push(SizeUnit(btnAddWidth , UNITS.PEXEL));
+                            }
+                            if (icon != null){
+                                listCalc.push(OPERATION.MINUS);
+                                listCalc.push(ToolsComponents_BorderWidth?.[sizeName]);
+                                listCalc.push(OPERATION.MINUS);
+                                listCalc.push(ToolsComponents_Padding?.[sizeName]);
+                                listCalc.push(OPERATION.MINUS);
+                                listCalc.push(ToolsComponents_Height?.[sizeName]);
+                                listCalc.push(OPERATION.MINUS);
+                                listCalc.push(ToolsComponents_Padding?.[sizeName]);
+                                listCalc.push(OPERATION.MINUS);
+                                listCalc.push(ToolsComponents_BorderWidth?.[sizeName]);
+                            }
+                            return SizeCalc(...listCalc)
+                        } ,
+                        [
+                            AppConfig.get_sizeName() ,
+                            prop_icon ,
+                            prop_btnAddStatus ,
+                            prop_btnAddWidth
+                        ] ,
+                        this.getScope()
+                    ) ,
+
+                    borderWidth: Observable.computed(
+                        (sizeName: string) => StyleValue.important(ToolsComponents_BorderWidth?.[sizeName]),
+                        [AppConfig.get_sizeName()],
+                        this.getScope()
+                    ),
+
+                    borderTopRightRadius: Observable.computed(
+                        (sizeName , dir , btnAddStatus) => {
+                            if(dir){
+                                return ToolsComponents_BorderRadius?.[sizeName]
+                            }
+                            else if (!btnAddStatus){
+                                return ToolsComponents_BorderRadius?.[sizeName]
+                            }
+                            return SizeUnit(0, UNITS.PEXEL);
+                        } ,
+                        [
+                            AppConfig.get_sizeName() ,
+                            AppConfig.get_directionRtl() ,
+                            prop_btnAddStatus
+                        ] ,
+                        this.getScope()
+                    ) ,
+
+                    borderBottomRightRadius: Observable.computed(
+                        (sizeName , dir , btnAddStatus) => {
+                            if(dir){
+                                return ToolsComponents_BorderRadius?.[sizeName]
+                            }
+                            else if (!btnAddStatus){
+                                return ToolsComponents_BorderRadius?.[sizeName]
+                            }
+                            return SizeUnit(0, UNITS.PEXEL);
+                        } ,
+                        [
+                            AppConfig.get_sizeName() ,
+                            AppConfig.get_directionRtl(),
+                            prop_btnAddStatus
+                        ] ,
+                        this.getScope()
+                    ) ,
+
+                    borderTopLeftRadius: Observable.computed(
+                        (sizeName , dir , btnAddStatus) => {
+                            if(!dir){
+                                return ToolsComponents_BorderRadius?.[sizeName]
+                            }
+                            else if (!btnAddStatus){
+                                return ToolsComponents_BorderRadius?.[sizeName]
+                            }
+                            return SizeUnit(0, UNITS.PEXEL);
+                        } ,
+                        [
+                            AppConfig.get_sizeName() ,
+                            AppConfig.get_directionRtl(),
+                            prop_btnAddStatus
+                        ] ,
+                        this.getScope()
+                    ) ,
+
+                    borderBottomLeftRadius: Observable.computed(
+                        (sizeName , dir, btnAddStatus) => {
+                            if(!dir){
+                                return ToolsComponents_BorderRadius?.[sizeName]
+                            }
+                            else if (!btnAddStatus){
+                                return ToolsComponents_BorderRadius?.[sizeName]
+                            }
+                            return SizeUnit(0, UNITS.PEXEL);
+                        } ,
+                        [
+                            AppConfig.get_sizeName() ,
+                            AppConfig.get_directionRtl(),
+                            prop_btnAddStatus
+                        ] ,
+                        this.getScope()
+                    ) ,
+
+
+                    direction: Observable.computed(
+                        (dir)=> {
+                            return dir ? "rtl" : "ltr";
+                        },
+                        [
+                            AppConfig.get_directionRtl()
+                        ] ,
+                        this.getScope()
+                    )  ,
+
+                    float: Observable.computed(
+                        (dir)=> {
+                            return dir ? "right" : "left";
+                        },
+                        [
+                            AppConfig.get_directionRtl()
+                        ] ,
+                        this.getScope()
+                    )  ,
+
+                    lineHeight: Observable.computed(
+                        (sizeName)=> {
+                            return ToolsComponents_Height?.[sizeName];
+                        },
+                        [
+                            AppConfig.get_sizeName()
+                        ] ,
+                        this.getScope()
+                    )  ,
+
                     borderColor: el.focus.mapList({
-                        true:  prop_inputBorderColorFocus instanceof Observable
-                            ? prop_inputBorderColorFocus.map((v: string | null) => v ? `${v} !important` : (null as any))
-                            : (prop_inputBorderColorFocus ? `${prop_inputBorderColorFocus} !important` : (null as any)),
-                        false: prop_inputBorderColor instanceof Observable
-                            ? prop_inputBorderColor.map((v: string | null) => v ? `${v} !important` : (null as any))
-                            : (prop_inputBorderColor ? `${prop_inputBorderColor} !important` : (null as any)),
-                    }),
-                    lineHeight: prop_size instanceof Observable
-                        ? prop_size.map((s: any) => `${ToolsCss.getHeightSize(s ?? SIZES.M)}px`)
-                        : `${ToolsCss.getHeightSize(prop_size ?? SIZES.M)}px`,
-                    fontSize: prop_size instanceof Observable
-                        ? prop_size.map((s: any) => `${ToolsCss.getFontSize(s ?? SIZES.M)}px`)
-                        : `${ToolsCss.getFontSize(prop_size ?? SIZES.M)}px`,
-                    [directionRtl ? "marginRight" : "marginLeft"]: prop_icon instanceof Observable
-                        ? prop_icon.map((v: any) => v ? "35px" : "0")
-                        : (prop_icon ? "35px" : "0"),
-                    width: prop_btnAddStatus instanceof Observable
-                        ? prop_btnAddStatus.map((v: boolean) => `calc(100%  - ${v ? "35px" : "0px"})`)
-                        : `calc(100%  - ${prop_btnAddStatus ? "35px" : "0px"})`,
-                    ...(directionRtl
-                        ? { borderTopRightRadius: prop_icon instanceof Observable
-                                ? prop_icon.mapBoolean("0 !important", null as any)
-                                : (prop_icon ? "0 !important" : (null as any)),
-                            borderBottomRightRadius: prop_icon instanceof Observable
-                                ? prop_icon.mapBoolean("0 !important", null as any)
-                                : (prop_icon ? "0 !important" : (null as any)),
-                            borderTopLeftRadius: prop_btnAddStatus instanceof Observable
-                                ? prop_btnAddStatus.mapBoolean("0 !important", null as any)
-                                : (prop_btnAddStatus ? "0 !important" : (null as any)),
-                            borderBottomLeftRadius: prop_btnAddStatus instanceof Observable
-                                ? prop_btnAddStatus.mapBoolean("0 !important", null as any)
-                                : (prop_btnAddStatus ? "0 !important" : (null as any)),
-                        }
-                        : { borderTopLeftRadius: prop_icon instanceof Observable
-                                ? prop_icon.mapBoolean("0 !important", null as any)
-                                : (prop_icon ? "0 !important" : (null as any)),
-                            borderBottomLeftRadius: prop_icon instanceof Observable
-                                ? prop_icon.mapBoolean("0 !important", null as any)
-                                : (prop_icon ? "0 !important" : (null as any)),
-                            borderTopRightRadius: prop_btnAddStatus instanceof Observable
-                                ? prop_btnAddStatus.mapBoolean("0 !important", null as any)
-                                : (prop_btnAddStatus ? "0 !important" : (null as any)),
-                            borderBottomRightRadius: prop_btnAddStatus instanceof Observable
-                                ? prop_btnAddStatus.mapBoolean("0 !important", null as any)
-                                : (prop_btnAddStatus ? "0 !important" : (null as any)),
-                        }),
+                        true:  StyleValue.important( Color(COLORS_MAIN.SECONDARY, COLORS_GRAD.GRADE_1))  ,
+                        false: StyleValue.important( Color(COLORS_MAIN.PRIMARY, COLORS_GRAD.GRADE_1))  ,
+                    }) ,
+
+                    fontSize: Observable.computed(
+                        (sizeName)=> {
+                            return ToolsComponents_FontSize?.[sizeName];
+                        },
+                        [
+                            AppConfig.get_sizeName()
+                        ] ,
+                        this.getScope()
+                    )  ,
+
+                    paddingTop: Observable.computed(
+                        (sizeName)=> {
+                            return ToolsComponents_Padding?.[sizeName];
+                        },
+                        [
+                            AppConfig.get_sizeName()
+                        ] ,
+                        this.getScope()
+                    )  ,
+
+                    paddingBottom: Observable.computed(
+                        (sizeName)=> {
+                            return ToolsComponents_Padding?.[sizeName];
+                        },
+                        [
+                            AppConfig.get_sizeName()
+                        ] ,
+                        this.getScope()
+                    )  ,
+
                 }),
                 on: {
                     input: (event: Event) => {
-                        const val = (event.target as HTMLInputElement).value;
-                        this.var_inputValue.set(val);
-                        const params: ComponentInput_Methods_INPUT_DataArgs = {
-                            [ComponentInputConfigs.methods.INPUT.dataArgs.VALUE.name]: val,
-                        };
-                        this.executeMethod(ComponentInputConfigs.methods.INPUT.name, event, params);
+                        const value = event.target?.value ?? undefined;
+                        this.fn_onChangeValue(event , value);
                     },
                     focus: (event: Event) => {
-                        const val = (event.target as HTMLInputElement).value;
-                        const params: ComponentInput_Methods_FOCUS_DataArgs = {
-                            [ComponentInputConfigs.methods.FOCUS.dataArgs.VALUE.name]: val,
-                        };
-                        this.executeMethod(ComponentInputConfigs.methods.FOCUS.name, event, params);
+                         this.fn_onChangeFocus(event);
                     },
                     blur: (event: Event) => {
-                        const val = (event.target as HTMLInputElement).value;
-                        const params: ComponentInput_Methods_BLUR_DataArgs = {
-                            [ComponentInputConfigs.methods.BLUR.dataArgs.VALUE.name]: val,
-                        };
-                        this.executeMethod(ComponentInputConfigs.methods.BLUR.name, event, params);
-                    },
-                    keydown: (event: KeyboardEvent) => {
-                        if (event.key === "Enter") {
-                            const btnAddStatus = prop_btnAddStatus instanceof Observable ? prop_btnAddStatus.get() : prop_btnAddStatus;
-                            if (btnAddStatus) {
-                                event.preventDefault();
-                                const val = this.fn_getValueInput();
-                                const params: ComponentInput_Methods_CLICK_BUTTON_DataArgs = {
-                                    [ComponentInputConfigs.methods.CLICK_BUTTON.dataArgs.VALUE.name]: val,
-                                };
-                                this.executeMethod(ComponentInputConfigs.methods.CLICK_BUTTON.name, event, params);
-                            }
-                        }
+                         this.fn_onChangeBlur(event);
                     },
                 }
             });
+
+            return this._ELEMENT_INPUT;
         }
 
         return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
     }
 
 
-    private template_render_iconClear(attrsDefault, data, extra): ReactiveElement {
+    // ---------------------------------------------
+    private template_render_icon_clear(attrsDefault, data, extra): ReactiveElement {
         if (data != null) {
-            const prop_isDisable = data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
-            const prop_btnAddStatus = data[ComponentInputConfigs.keys.prop_btnAddStatus.name];
-            const prop_size = data[ComponentInputConfigs.keys.prop_size.name];
-
-            const directionRtl = AppConfig.get("directionRtl");
+            const prop_size =          data[ComponentInputConfigs.keys.prop_size.name];
+            const prop_isDisable =     data[ComponentInputConfigs.keys.prop_isDisable.name];
+            const prop_btnAddStatus =  data[ComponentInputConfigs.keys.prop_btnAddStatus.name];
+            const prop_btnAddWidth =   data[ComponentInputConfigs.keys.prop_btnAddWidth.name];
 
             return ReactiveElement.part("section", {
                 attrs: { ...attrsDefault },
                 children: Observable.computed(
-                    (isDisable: boolean, btnAddStatus: boolean, size: any) => {
+                    (isDisable: boolean, size: any) => {
                         if (isDisable) return null;
 
-                        const sizeName = size ?? SIZES.M;
-                        const btnOffset = btnAddStatus ? 160 : 0;
-                        const elIconHeight = ToolsCss.getIconSize(sizeName);
-
-                        const iconClearProps: any = {
-                                classList: [],
-                                styles: {},
-                                prop_iconClass: [],
-                                prop_iconStyles: {
-                                    fontSize: "20pt",
-                                    margin: "0 10px",
-                                    cursor: "pointer",
-                                },
-                                prop_icon: ToolsIcons.icon_clear({ size: sizeName }),
-                        };
-
-                        const iconClearEl = new ToolsComponents.ComponentIcon(
-                            iconClearProps as ComponentIconPropsType,
-                            <ComponentIconMethodsType>{
-                                fn_onClickIcon: (event, dataArgs, componentArgs) => {
-                                    this.fn_onClearInput(event);
-                                }
-                            }
-                        );
-
-                        const posProps: any = {
-                                classList: [],
-                                styles: {},
-                                prop_positionType: ComponentElementPosition_positionTypes.ABSOLUTE,
-                                prop_positionTop: SizeUnit(50, UNITS.PERCENT),
-                                prop_positionWidth: SizeUnit(30, UNITS.PEXEL),
-                                prop_positionHeight: SizeUnit(elIconHeight, UNITS.PEXEL),
-                                prop_positionStyles: {
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                },
-                                prop_positionTranslate: directionRtl
-                                    ? TranslateUnit(SizeUnit(btnOffset, UNITS.PEXEL), SizeUnit(-50, UNITS.PERCENT))
-                                    : TranslateUnit(SizeUnit(-btnOffset, UNITS.PEXEL), SizeUnit(-50, UNITS.PERCENT)),
-                                prop_positionZIndex: 10,
-                                prop_content: iconClearEl.getReactiveElement(),
-                        };
-                        if (directionRtl) {
-                                posProps.prop_positionLeft = SizeUnit(0, UNITS.PEXEL);
-                        } else {
-                                posProps.prop_positionRight = SizeUnit(0, UNITS.PEXEL);
-                        }
-
                         return new ComponentElementPosition(
-                            posProps as ComponentElementPositionPropsType,
+                            <ComponentElementPositionPropsType>{
+                                classList: [],
+                                prop_positionType: ComponentElementPosition_positionTypes.ABSOLUTE,
+                                prop_positionTop:      SizeUnit(50, UNITS.PERCENT),
+                                //prop_positionEnd:      SizeUnit(0, UNITS.PERCENT),
+                                prop_positionEnd:    Observable.computed(
+                                    (sizeName, btnAddStatus , btnAddWidth) => {
+                                        if (btnAddStatus){
+                                            return SizeUnit(btnAddWidth , UNITS.PEXEL)
+                                        }
+                                        return SizeUnit(0 , UNITS.PERCENT);
+                                    } ,
+                                    [
+                                        AppConfig.get_sizeName() ,
+                                        prop_btnAddStatus ,
+                                        prop_btnAddWidth
+                                    ] ,
+                                    this.getScope()
+                                ),
+                                prop_positionWidth:    Observable.computed(
+                                    (sizeName) => {
+                                        return SizeCalc(
+                                            ToolsComponents_BorderWidth?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Padding?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Height?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Padding?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_BorderWidth?.[sizeName] ,
+                                        )
+                                    } ,
+                                    [
+                                        AppConfig.get_sizeName()
+                                    ] ,
+                                    this.getScope()
+                                ),
+                                prop_positionHeight:    Observable.computed(
+                                    (sizeName) => {
+                                        return SizeCalc(
+                                            ToolsComponents_BorderWidth?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Padding?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Height?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Padding?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_BorderWidth?.[sizeName] ,
+                                        )
+                                    } ,
+                                    [
+                                        AppConfig.get_sizeName()
+                                    ] ,
+                                    this.getScope()
+                                ),
+                                prop_positionTranslate: TranslateUnit(SizeUnit(0, UNITS.PERCENT), SizeUnit(-50, UNITS.PERCENT)),
+                                prop_positionZIndex: 10,
+                                prop_content:  new ToolsComponents.ComponentIcon(
+                                    <ComponentIconPropsType>{
+                                        classList: [],
+                                        prop_iconStyles:      Observable.computed(
+                                            (sizeName) => {
+                                                return {
+                                                    cursor:     "pointer",
+                                                    lineHeight:  SizeCalc(
+                                                        ToolsComponents_BorderWidth?.[sizeName] ,
+                                                        OPERATION.ADD ,
+                                                        ToolsComponents_Padding?.[sizeName] ,
+                                                        OPERATION.ADD ,
+                                                        ToolsComponents_Height?.[sizeName] ,
+                                                        OPERATION.ADD ,
+                                                        ToolsComponents_Padding?.[sizeName] ,
+                                                        OPERATION.ADD ,
+                                                        ToolsComponents_BorderWidth?.[sizeName] ,
+                                                    )
+                                                }
+                                            },
+                                            [
+                                                AppConfig.get_sizeName()
+                                            ] ,
+                                            this.getScope()
+                                        ),
+                                        prop_iconClass: ["d-block" , "text-center"],
+                                        prop_icon: ToolsIcons.icon_clear(),
+                                    },
+                                    <ComponentIconMethodsType>{
+                                        fn_onClickIcon: (event, dataArgs, componentArgs) => {
+                                            //this.set(ComponentInputPhoneConfigs.keys.prop_value.name , "")
+                                        }
+                                    }
+                                ).getReactiveElement(),
+                            },
                             <ComponentElementPositionMethodsType>{}
                         ).getReactiveElement();
                     },
-                    [prop_isDisable, prop_btnAddStatus, prop_size],
+                    [prop_isDisable, prop_size],
                     this.getScope()
                 ),
             });
@@ -1023,291 +1331,175 @@ export class ComponentInput extends ComponentInputBase {
     }
 
 
-    private template_render_icon(attrsDefault, data, extra): ReactiveElement {
-        if (data != null) {
-            const prop_icon = data[ComponentInputConfigs.keys.prop_icon.name];
-            const prop_size = data[ComponentInputConfigs.keys.prop_size.name];
-            const prop_colorIcon = data[ComponentInputConfigs.keys.prop_colorIcon.name];
-
-            const directionRtl = AppConfig.get("directionRtl");
-
-            return ReactiveElement.part("section", {
-                attrs: { ...attrsDefault },
-                children: Observable.computed(
-                    (iconValue: any, size: any, colorIcon: any) => {
-                        if (!iconValue) return null;
-
-                        const sizeName = size ?? SIZES.M;
-                        const elIconHeight = ToolsCss.getIconSize(sizeName);
-
-                        const iconProps: any = {
-                                classList: [],
-                                styles: {},
-                                prop_iconClass: [],
-                                prop_iconStyles: {
-                                    margin: "auto",
-                                    cursor: "pointer",
-                                    color: colorIcon ?? "",
-                                },
-                                prop_icon: iconValue,
-                        };
-
-                        const iconEl = new ToolsComponents.ComponentIcon(
-                            iconProps as ComponentIconPropsType,
-                            <ComponentIconMethodsType>{
-                                fn_onClickIcon: (event, dataArgs, componentArgs) => {
-                                    this.fn_onFocusInput(event);
-                                }
-                            }
-                        );
-
-                        const posProps: any = {
-                                classList: [],
-                                styles: {},
-                                prop_positionType: ComponentElementPosition_positionTypes.ABSOLUTE,
-                                prop_positionTop: SizeUnit(50, UNITS.PERCENT),
-                                prop_positionWidth: SizeUnit(30, UNITS.PEXEL),
-                                prop_positionHeight: SizeUnit(elIconHeight, UNITS.PEXEL),
-                                prop_positionStyles: {
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                },
-                                prop_positionTranslate: directionRtl
-                                    ? TranslateUnit(SizeUnit(-5, UNITS.PEXEL), SizeUnit(-50, UNITS.PERCENT))
-                                    : TranslateUnit(SizeUnit(5, UNITS.PEXEL), SizeUnit(-50, UNITS.PERCENT)),
-                                prop_positionZIndex: 10,
-                                prop_content: iconEl.getReactiveElement(),
-                        };
-                        if (directionRtl) {
-                                posProps.prop_positionRight = SizeUnit(0, UNITS.PEXEL);
-                        } else {
-                                posProps.prop_positionLeft = SizeUnit(0, UNITS.PEXEL);
-                        }
-
-                        return new ComponentElementPosition(
-                            posProps as ComponentElementPositionPropsType,
-                            <ComponentElementPositionMethodsType>{}
-                        ).getReactiveElement();
-                    },
-                    [prop_icon, prop_size, prop_colorIcon],
-                    this.getScope()
-                ),
-            });
-        }
-
-        return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
-    }
-
-
+    // ---------------------------------------------
     private template_render_button(attrsDefault, data, extra): ReactiveElement {
         if (data != null) {
-            const prop_btnAddStatus =     data[ComponentInputConfigs.keys.prop_btnAddStatus.name];
-            const prop_btnAddIcon =       data[ComponentInputConfigs.keys.prop_btnAddIcon.name];
+            const prop_isDisable =        data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
             const prop_btnAddTitle =      data[ComponentInputConfigs.keys.prop_btnAddTitle.name];
             const prop_btnAddClass =      data[ComponentInputConfigs.keys.prop_btnAddClass.name];
-            const prop_btnColor =         data[ComponentInputConfigs.keys.prop_btnColor.name];
-            const prop_size =             data[ComponentInputConfigs.keys.prop_size.name];
-            const prop_inputBorderWidth = data[ComponentInputConfigs.keys.prop_inputBorderWidth.name];
-            const prop_formBorderRadius = data[ComponentInputConfigs.keys.prop_formBorderRadius.name];
-
+            const prop_btnAddStatus =     data[ComponentInputConfigs.keys.prop_btnAddStatus.name];
+            const prop_btnAddWidth =      data[ComponentInputConfigs.keys.prop_btnAddWidth.name];
 
             return ReactiveElement.part("section", {
                 attrs: { ...attrsDefault },
                 children: Observable.computed(
-                    (btnAddStatus: boolean, btnAddIcon: any, btnAddTitle: any, btnAddClass: any, btnColor: any, size: any, inputBorderWidth: any) => {
-                        if (!btnAddStatus) return null;
+                    (isDisable: boolean , btnAddStatus: boolean) => {
+                        if (isDisable || !btnAddStatus) return null;
 
-                        const sizeName = size ?? SIZES.M;
-                        const borderWidthSize = inputBorderWidth ?? SIZES.M;
-                        const borderOffset = Math.round(ToolsCss.getHeightSize(borderWidthSize) / 7);
-
-                        const btnAddClassArr = btnAddClass ?? [];
-                        const btnEl = new ToolsComponents.ComponentButton(
+                        return new ToolsComponents.ComponentButton(
                             <ComponentButtonPropsType>{
-                                classList: [],
-                                styles: {},
-                                prop_btnClass: [
-                                    ...btnAddClassArr ,
-                                    "shadow-sm", "px-3"
-                                ],
-                                prop_btnStyles: {
-                                    cursor: "pointer",
-                                    width: "160px",
-                                },
-                                prop_btnBorderRadius: null ,
-                                prop_btnTitle: btnAddTitle ?? "add item",
-                                prop_type: btnColor ?? ComponentButton_Types.SUBMIT,
-                                prop_btnType: "button",
-                                prop_btnIcon: btnAddIcon ?? "&plus;",
-                                prop_size: sizeName,
+                                classList:      [],
+                                styles:         {},
+                                prop_btnClass: Observable.computed(
+                                    (btnAddClass) => {
+                                        return [...btnAddClass , "shadow-sm", "px-2"]
+                                    },
+                                    [
+                                        prop_btnAddClass
+                                    ] ,
+                                    this.getScope()
+                                ) ,
+                                prop_btnStyles: Observable.computed(
+                                    (dir , sizeName , buttonsWidth) => {
+                                        return {
+                                            float:                       dir ? "right" : "left" ,
+                                            width:                       SizeUnit(buttonsWidth , UNITS.PEXEL),
+                                            height:                      SizeCalc(
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Height?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_Padding?.[sizeName] ,
+                                                OPERATION.ADD ,
+                                                ToolsComponents_BorderWidth?.[sizeName] ,
+                                            ) ,
+                                            cursor:                     "pointer",
+                                        }
+                                    },
+                                    [
+                                        AppConfig.get_directionRtl() ,
+                                        AppConfig.get_sizeName() ,
+                                        prop_btnAddWidth
+                                    ] ,
+                                    this.getScope()
+                                ) ,
+                                prop_btnBorderRadiusEndTop:        Observable.computed(
+                                    (sizeName) => {
+                                        return sizeName
+                                    } ,
+                                    [
+                                        AppConfig.get_sizeName() ,
+                                    ] ,
+                                    this.getScope()
+                                ),
 
-                                prop_btnBorderWidth:           null ,
-                                prop_btnBorderRadiusEndTop:    prop_formBorderRadius ,
-                                prop_btnBorderRadiusEndBottom: prop_formBorderRadius ,
-                            } ,
+                                prop_btnBorderRadiusEndBottom:        Observable.computed(
+                                    (sizeName) => {
+                                        return sizeName
+                                    } ,
+                                    [
+                                        AppConfig.get_sizeName() ,
+                                    ] ,
+                                    this.getScope()
+                                ),
+                                prop_btnBorderRadiusStartTop:         null,
+                                prop_btnBorderRadiusStartBottom:      null,
+                                prop_btnBorderRadius:                 null,
+                                prop_btnBorderWidth:                  0,
+                                prop_btnTitle:                        prop_btnAddTitle ,
+                                prop_btnType:                         "button",
+                            },
                             <ComponentButtonMethodsType>{
                                 fn_onClickButton: (event, dataArgs, componentArgs) => {
                                     event.stopPropagation();
-                                    const val = this.fn_getValueInput();
-                                    const params: ComponentInput_Methods_CLICK_BUTTON_DataArgs = {
-                                        [ComponentInputConfigs.methods.CLICK_BUTTON.dataArgs.VALUE.name]: val,
-                                    };
-                                    this.executeMethod(ComponentInputConfigs.methods.CLICK_BUTTON.name, event, params);
+                                    this.fn_onClickButton(event);
                                 }
-                            }
-                        );
-
-                        const posProps: any = {
-                            classList: [],
-                            styles: {},
-                            prop_positionType: ComponentElementPosition_positionTypes.ABSOLUTE,
-
-                            prop_positionZIndex: 10,
-                            prop_positionStyles: {
-                                    cursor: "pointer",
-                                    width: "160px",
-                            },
-                            prop_positionTop: Observable.computed(
-                                (sizeName)=>{
-                                    return ToolsComponents_BorderWidth?.[sizeName]
-                                },
-                                [
-                                    AppConfig.get_sizeName()
-                                ] ,
-                                this.getScope()
-                            ),
-                            prop_positionEnd: Observable.computed(
-                                (sizeName)=>{
-                                    return ToolsComponents_BorderWidth?.[sizeName]
-                                },
-                                [
-                                    AppConfig.get_sizeName()
-                                ] ,
-                                this.getScope()
-                            ),
-                            prop_content: btnEl.getReactiveElement(),
-                        };
-
-
-                        return new ComponentElementPosition(
-                            posProps as ComponentElementPositionPropsType,
-                            <ComponentElementPositionMethodsType>{}
-                        ).getReactiveElement();
+                            }).getReactiveElement()
                     },
                     [
-                        prop_btnAddStatus,
-                        prop_btnAddIcon,
-                        prop_btnAddTitle,
-                        prop_btnAddClass,
-                        prop_btnColor,
-                        prop_size,
-                        prop_inputBorderWidth
+                        prop_isDisable ,
+                        prop_btnAddStatus
                     ],
                     this.getScope()
                 ),
             });
+
         }
 
         return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
     }
 
 
+    // ---------------------------------------------
     private template_render_validate(attrsDefault, data, extra): ReactiveElement {
         if (data != null) {
-            const prop_isDisable = data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
+            const prop_isDisable =      data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
+            const prop_value =          data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name];
+            const prop_hasRules =       data[ComponentInputConfigs.keys.prop_hasRules.name];
             const prop_isAbsoluteRule = data[ComponentInputConfigs.keys.prop_isAbsoluteRule.name];
-            const prop_listRules = data[ComponentInputConfigs.keys.prop_listRules.name];
-            const prop_msgRules = data[ComponentInputConfigs.keys.prop_msgRules.name];
-            const prop_title = data[ComponentInputConfigs.keys.prop_title.name];
+            const prop_listRules =      data[ComponentInputConfigs.keys.prop_listRules.name];
+            const prop_msgRules =       data[ComponentInputConfigs.keys.prop_msgRules.name];
+            const prop_title =          data[ComponentInputConfigs.keys.prop_title.name];
 
             return ReactiveElement.part("section", {
-                attrs: {
-                    ...attrsDefault,
-                    //"id": `component-input-form-${this._COMPONENT_RANDOM_ID}`,
-                },
+                attrs: { ...attrsDefault },
                 className: ["position-relative"],
-                children: [
-                    ReactiveElement.part("section", {
-                        attrs: { ...attrsDefault },
-                        children: Observable.computed(
-                            (isDisable: boolean, isAbsoluteRule: any, listRules: any, msgRules: any, title: any) => {
-                                console.log(listRules)
+                children: Observable.computed(
+                    (isDisable: boolean, hasRules: boolean) => {
+                        if (isDisable || !hasRules) return null;
 
-                                if (isDisable) return null;
-                                if (!Array.isArray(listRules) || listRules.length === 0) return null;
-
-                                return new ToolsComponents.ComponentValidate(
-                                    <ComponentValidatePropsType>{
-                                        classList: ["mt-1"],
-                                        prop_reference: `component-input-input-${this._COMPONENT_RANDOM_ID}`,
-                                        prop_isAbsolute: isAbsoluteRule ?? true,
-                                        prop_listRules: listRules,
-                                        prop_msgRules: msgRules ?? null,
-                                        prop_title: title ?? "",
-                                        prop_size: "m",
-                                        prop_value: this.var_inputValue,
-                                    },
-                                    <ComponentValidateMethodsType>{
-                                        fn_onChangeValidate: (event, dataArgs, componentArgs) => {
-                                        }
-                                    }
-                                ).getReactiveElement();
+                        return new ToolsComponents.ComponentValidate(
+                            <ComponentValidatePropsType>{
+                                classList:        ["mt-1"],
+                                prop_isAbsolute:  prop_isAbsoluteRule ,
+                                prop_listRules:   prop_listRules ,
+                                prop_msgRules:    prop_msgRules ,
+                                prop_title:       prop_title ,
+                                prop_value:       prop_value ,
                             },
-                            [prop_isDisable, prop_isAbsoluteRule, prop_listRules, prop_msgRules, prop_title],
-                            this.getScope()
-                        ),
-                    }).getReactiveElement()
-                ]
-            });
+                            <ComponentValidateMethodsType>{
+                                fn_onChangeValidate: (event, dataArgs, componentArgs) => {
 
+                                }
+                            }
+                        ).getReactiveElement();
+                    },
+                    [prop_isDisable, prop_hasRules],
+                    this.getScope()
+                ),
+            });
         }
 
         return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
     }
 
 
-    /* ---------------------------------------------
-        FUNCTIONs
-    --------------------------------------------- */
-    private fn_setupValueObservable() {
-        const propValueObs = this.getObservable(GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name);
-        if (propValueObs != null) {
-            this.var_inputValue = propValueObs;
-        }
+
+
+
+    // ---------------------------------------------
+    private fn_onChangeValue(event: Event , value: String|null){
+        this.set(GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name , value)
+        const paramsFn : ComponentInputPhone_Methods_INPUT_CHANGE_ComponentArgs = {}
+        this.executeMethod(ComponentInputConfigs.methods.INPUT_CHANGE.name  , event , paramsFn);
     }
 
-    fn_getValueInput(): string {
-        const inputEl = document.querySelector(`input#component-input-input-${this._COMPONENT_RANDOM_ID}`) as HTMLInputElement | null;
-        if (inputEl) {
-            return inputEl.value;
-        }
-        return this.var_inputValue.get();
+    private fn_onChangeFocus(event: Event){
+        const paramsFn : ComponentInputSize_Methods_INPUT_FOCUS_ComponentArgs = {}
+        this.executeMethod(ComponentInputConfigs.methods.INPUT_FOCUS.name  , event , paramsFn);
     }
 
-    fn_onClearInput(event: Event) {
-        const inputEl = document.querySelector(`input#component-input-input-${this._COMPONENT_RANDOM_ID}`) as HTMLInputElement | null;
-        if (inputEl) {
-            inputEl.value = "";
-        }
-        this.var_inputValue.set("");
-        const params: ComponentInput_Methods_INPUT_DataArgs = {
-            [ComponentInputConfigs.methods.INPUT.dataArgs.VALUE.name]: "",
-        };
-        this.executeMethod(ComponentInputConfigs.methods.INPUT.name, event, params);
-        this.fn_onFocusInput(event);
+    private fn_onChangeBlur(event: Event){
+        const paramsFn : ComponentInputSize_Methods_INPUT_BLUR_ComponentArgs = {}
+        this.executeMethod(ComponentInputConfigs.methods.INPUT_BLUR.name  , event , paramsFn);
     }
 
-    fn_onFocusInput(event: Event) {
-        const inputEl = document.querySelector(`input#component-input-input-${this._COMPONENT_RANDOM_ID}`) as HTMLInputElement | null;
-        if (inputEl) {
-            inputEl.focus();
-        }
-        const val = this.fn_getValueInput();
-        const params: ComponentInput_Methods_FOCUS_DataArgs = {
-            [ComponentInputConfigs.methods.FOCUS.dataArgs.VALUE.name]: val,
-        };
-        this.executeMethod(ComponentInputConfigs.methods.FOCUS.name, event, params);
+    private fn_onClickButton(event: Event){
+        const paramsFn : ComponentInput_Methods_CLICK_BUTTON_ComponentArgs = {}
+        this.executeMethod(ComponentInputConfigs.methods.CLICK_BUTTON.name  , event , paramsFn);
     }
+
 
 }

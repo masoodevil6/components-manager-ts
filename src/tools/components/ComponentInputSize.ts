@@ -116,6 +116,9 @@ export const ComponentInputSizeProps = {
     prop_inputBorderRadius:                "prop_inputBorderRadius",
     prop_placeholder:                      "prop_placeholder",
     prop_icon:                             "prop_icon",
+
+    prop_buttonsWidth:                     "prop_buttonsWidth",
+
     prop_iconPositive:                     "prop_iconPositive",
     prop_iconNegetive:                     "prop_iconNegetive",
     prop_min:                              "prop_min",
@@ -188,6 +191,13 @@ const ComponentInputSizeConfigs = {
             name:               ComponentInputSizeProps.prop_icon,
             value:              GOG_SetValue<IconsType | null>(null),
         },
+
+
+        [ComponentInputSizeProps.prop_buttonsWidth]: {
+            name:               ComponentInputSizeProps.prop_buttonsWidth,
+            value:              GOG_SetValue<number>(45),
+        },
+
         [ComponentInputSizeProps.prop_iconPositive]: {
             name:               ComponentInputSizeProps.prop_iconPositive,
             value:              GOG_SetValue<IconsSourceType>(ToolsIcons.icon_plus_badge),
@@ -240,31 +250,51 @@ const ComponentInputSizeConfigs = {
         BODY: { name: "body" },
     },
     methods: {
-        INPUT: {
-            name: "fn_onInput",
-            dataArgs: { VALUE: { name: "VALUE", value: GOG_SetValue<string>("") } },
+        INPUT_CHANGE: {
+            name:               "fn_onInputChange",
+            dataArgs: { 
+                VALUE: { 
+                    name:       "value"
+                } ,
+                MIN: { 
+                    name:       "min"
+                } ,
+                MAX: { 
+                    name:       "max"
+                } 
+            },
             componentArgs: {}
         },
-        FOCUS: {
-            name: "fn_onFocus",
-            dataArgs: { VALUE: { name: "VALUE", value: GOG_SetValue<string>("") } },
+        INPUT_FOCUS: {
+            name: "fn_onInputFocus",
+            dataArgs: {
+                VALUE: {
+                    name:       "value"
+                } ,
+                MIN: {
+                    name:       "min"
+                } ,
+                MAX: {
+                    name:       "max"
+                }
+            },
             componentArgs: {}
         },
-        BLUR: {
-            name: "fn_onBlur",
-            dataArgs: { VALUE: { name: "VALUE", value: GOG_SetValue<string>("") } },
+        INPUT_BLUR: {
+            name: "fn_onInputBlur",
+            dataArgs: {
+                VALUE: {
+                    name:       "value"
+                } ,
+                MIN: {
+                    name:       "min"
+                } ,
+                MAX: {
+                    name:       "max"
+                }
+            },
             componentArgs: {}
-        },
-        CLICK_POSITIVE: {
-            name: "fn_onClickPositive",
-            dataArgs: { VALUE: { name: "VALUE", value: GOG_SetValue<string>("") } },
-            componentArgs: {}
-        },
-        CLICK_NEGATIVE: {
-            name: "fn_onClickNegative",
-            dataArgs: { VALUE: { name: "VALUE", value: GOG_SetValue<string>("") } },
-            componentArgs: {}
-        },
+        }
     }
 } as const;
 
@@ -274,23 +304,17 @@ export type ComponentInputSizePropsType = GOG_ExtractNameValue<typeof ComponentI
 export type ComponentInputSizeSchemaType = GOG_ExtractName<typeof ComponentInputSizeConfigs.schemas>
 export type ComponentInputSizeTemplatesType = GOG_ExtractName<typeof ComponentInputSizeConfigs.templates>
 
-export type ComponentInputSize_Methods_INPUT_ComponentArgs = GOG_ExtractName<typeof ComponentInputSizeConfigs.methods.INPUT.componentArgs>
-export type ComponentInputSize_Methods_INPUT_DataArgs = GOG_ExtractNameValue<typeof ComponentInputSizeConfigs.methods.INPUT.dataArgs>
-export type ComponentInputSize_Methods_FOCUS_ComponentArgs = GOG_ExtractName<typeof ComponentInputSizeConfigs.methods.FOCUS.componentArgs>
-export type ComponentInputSize_Methods_FOCUS_DataArgs = GOG_ExtractNameValue<typeof ComponentInputSizeConfigs.methods.FOCUS.dataArgs>
-export type ComponentInputSize_Methods_BLUR_ComponentArgs = GOG_ExtractName<typeof ComponentInputSizeConfigs.methods.BLUR.componentArgs>
-export type ComponentInputSize_Methods_BLUR_DataArgs = GOG_ExtractNameValue<typeof ComponentInputSizeConfigs.methods.BLUR.dataArgs>
-export type ComponentInputSize_Methods_CLICK_POSITIVE_ComponentArgs = GOG_ExtractName<typeof ComponentInputSizeConfigs.methods.CLICK_POSITIVE.componentArgs>
-export type ComponentInputSize_Methods_CLICK_POSITIVE_DataArgs = GOG_ExtractNameValue<typeof ComponentInputSizeConfigs.methods.CLICK_POSITIVE.dataArgs>
-export type ComponentInputSize_Methods_CLICK_NEGATIVE_ComponentArgs = GOG_ExtractName<typeof ComponentInputSizeConfigs.methods.CLICK_NEGATIVE.componentArgs>
-export type ComponentInputSize_Methods_CLICK_NEGATIVE_DataArgs = GOG_ExtractNameValue<typeof ComponentInputSizeConfigs.methods.CLICK_NEGATIVE.dataArgs>
+export type ComponentInputSize_Methods_INPUT_CHANGE_ComponentArgs = GOG_ExtractName<typeof ComponentInputSizeConfigs.methods.INPUT_CHANGE.componentArgs>
+export type ComponentInputSize_Methods_INPUT_CHANGE_DataArgs =      GOG_ExtractNameValue<typeof ComponentInputSizeConfigs.methods.INPUT_CHANGE.dataArgs>
+export type ComponentInputSize_Methods_INPUT_FOCUS_ComponentArgs =  GOG_ExtractName<typeof ComponentInputSizeConfigs.methods.INPUT_FOCUS.componentArgs>
+export type ComponentInputSize_Methods_INPUT_FOCUS_DataArgs =       GOG_ExtractNameValue<typeof ComponentInputSizeConfigs.methods.INPUT_FOCUS.dataArgs>
+export type ComponentInputSize_Methods_INPUT_BLUR_ComponentArgs =   GOG_ExtractName<typeof ComponentInputSizeConfigs.methods.INPUT_BLUR.componentArgs>
+export type ComponentInputSize_Methods_INPUT_BLUR_DataArgs =        GOG_ExtractNameValue<typeof ComponentInputSizeConfigs.methods.INPUT_BLUR.dataArgs>
 
 export type ComponentInputSizeMethodsType = {
-    [ComponentInputSizeConfigs.methods.INPUT.name]: ComponentCallBackType<ComponentInputSize_Methods_INPUT_ComponentArgs, ComponentInputSize_Methods_INPUT_DataArgs>,
-    [ComponentInputSizeConfigs.methods.FOCUS.name]: ComponentCallBackType<ComponentInputSize_Methods_FOCUS_ComponentArgs, ComponentInputSize_Methods_FOCUS_DataArgs>,
-    [ComponentInputSizeConfigs.methods.BLUR.name]: ComponentCallBackType<ComponentInputSize_Methods_BLUR_ComponentArgs, ComponentInputSize_Methods_BLUR_DataArgs>,
-    [ComponentInputSizeConfigs.methods.CLICK_POSITIVE.name]: ComponentCallBackType<ComponentInputSize_Methods_CLICK_POSITIVE_ComponentArgs, ComponentInputSize_Methods_CLICK_POSITIVE_DataArgs>,
-    [ComponentInputSizeConfigs.methods.CLICK_NEGATIVE.name]: ComponentCallBackType<ComponentInputSize_Methods_CLICK_NEGATIVE_ComponentArgs, ComponentInputSize_Methods_CLICK_NEGATIVE_DataArgs>,
+    [ComponentInputSizeConfigs.methods.INPUT_CHANGE.name]: ComponentCallBackType<ComponentInputSize_Methods_INPUT_CHANGE_DataArgs, ComponentInputSize_Methods_INPUT_CHANGE_ComponentArgs>,
+    [ComponentInputSizeConfigs.methods.INPUT_FOCUS.name]:  ComponentCallBackType<ComponentInputSize_Methods_INPUT_FOCUS_DataArgs, ComponentInputSize_Methods_INPUT_FOCUS_ComponentArgs>,
+    [ComponentInputSizeConfigs.methods.INPUT_BLUR.name]:   ComponentCallBackType<ComponentInputSize_Methods_INPUT_BLUR_DataArgs, ComponentInputSize_Methods_INPUT_BLUR_ComponentArgs>,
 }
 
 
@@ -388,6 +412,15 @@ export abstract class ComponentInputSizeBase extends ComponentBase<
                 title: Language.translate("components.input.props.prop_icon.title"),
                 description: Language.translate("components.input.props.prop_icon.description"),
             },
+
+
+            [ComponentInputSizeConfigs.keys.prop_buttonsWidth.name]: {
+                prop: ComponentInputSizeConfigs.keys.prop_buttonsWidth.name,
+                default: ComponentInputSizeConfigs.keys.prop_buttonsWidth.value,
+                title: Language.translate("components.input_size.props.prop_buttonsWidth.title"),
+                description: Language.translate("components.input_size.props.prop_buttonsWidth.description"),
+            },
+
             [ComponentInputSizeConfigs.keys.prop_iconPositive.name]: {
                 prop: ComponentInputSizeConfigs.keys.prop_iconPositive.name,
                 default: ComponentInputSizeConfigs.keys.prop_iconPositive.value,
@@ -474,7 +507,8 @@ export abstract class ComponentInputSizeBase extends ComponentBase<
                 this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name],
                 this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_min.name],
                 this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_max.name],
-                this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_size.name],
+                
+                this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_buttonsWidth.name],
             ]
         },
         ICON_CLEAR: {
@@ -483,7 +517,7 @@ export abstract class ComponentInputSizeBase extends ComponentBase<
             description: Language.translate("components.input_size.schema.icon_clear.description"),
             props: [
                 this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name],
-                this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_size.name],
+                this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_buttonsWidth.name],
             ]
         },
         ICON: {
@@ -494,6 +528,7 @@ export abstract class ComponentInputSizeBase extends ComponentBase<
                 this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_icon.name],
                 this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_size.name],
                 this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_colorIcon.name],
+                this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_buttonsWidth.name],
             ]
         },
         BUTTON_POSITIVE: {
@@ -502,8 +537,7 @@ export abstract class ComponentInputSizeBase extends ComponentBase<
             description: Language.translate("components.input_size.schema.button_positive.description"),
             props: [
                 this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name],
-                this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_iconPositive.name],
-                this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_inputBorderWidth.name],
+                this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_buttonsWidth.name],
             ]
         },
         BUTTON_NEGATIVE: {
@@ -512,8 +546,7 @@ export abstract class ComponentInputSizeBase extends ComponentBase<
             description: Language.translate("components.input_size.schema.button_negative.description"),
             props: [
                 this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name],
-                this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_iconNegetive.name],
-                this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_inputBorderWidth.name],
+                this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_buttonsWidth.name],
             ]
         },
         VALIDATE: {
@@ -540,40 +573,33 @@ export abstract class ComponentInputSizeBase extends ComponentBase<
         },
     });
 
+
     _COMPONENT_METHODS = defineComponentMethods<ComponentInputSizeMethodsType, ComponentInputSizePropsType>({
-        [ComponentInputSizeConfigs.methods.INPUT.name]: {
-            title: Language.translate("components.input_size.methods.fn_onInput.title"),
-            description: Language.translate("components.input_size.methods.fn_onInput.description"),
+        [ComponentInputSizeConfigs.methods.INPUT_CHANGE.name]: {
+            title: Language.translate("components.input_size.methods.fn_onInputChange.title"),
+            description: Language.translate("components.input_size.methods.fn_onInputChange.description"),
             args: {
-                [ComponentInputSizeConfigs.methods.INPUT.dataArgs.VALUE.name]: this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name],
+                [ComponentInputSizeConfigs.methods.INPUT_CHANGE.dataArgs.VALUE.name]: this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name],
+                [ComponentInputSizeConfigs.methods.INPUT_CHANGE.dataArgs.MIN.name]:   this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_min.name],
+                [ComponentInputSizeConfigs.methods.INPUT_CHANGE.dataArgs.MAX.name]:   this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_max.name],
             }
         },
-        [ComponentInputSizeConfigs.methods.FOCUS.name]: {
-            title: Language.translate("components.input_size.methods.fn_onFocus.title"),
-            description: Language.translate("components.input_size.methods.fn_onFocus.description"),
+        [ComponentInputSizeConfigs.methods.INPUT_FOCUS.name]: {
+            title: Language.translate("components.input_size.methods.fn_onInputFocus.title"),
+            description: Language.translate("components.input_size.methods.fn_onInputFocus.description"),
             args: {
-                [ComponentInputSizeConfigs.methods.FOCUS.dataArgs.VALUE.name]: this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name],
+                [ComponentInputSizeConfigs.methods.INPUT_FOCUS.dataArgs.VALUE.name]: this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name],
+                [ComponentInputSizeConfigs.methods.INPUT_FOCUS.dataArgs.MIN.name]:   this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_min.name],
+                [ComponentInputSizeConfigs.methods.INPUT_FOCUS.dataArgs.MAX.name]:   this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_max.name],
             }
         },
-        [ComponentInputSizeConfigs.methods.BLUR.name]: {
-            title: Language.translate("components.input_size.methods.fn_onBlur.title"),
-            description: Language.translate("components.input_size.methods.fn_onBlur.description"),
+        [ComponentInputSizeConfigs.methods.INPUT_BLUR.name]: {
+            title: Language.translate("components.input_size.methods.fn_onInputBlur.title"),
+            description: Language.translate("components.input_size.methods.fn_onInputBlur.description"),
             args: {
-                [ComponentInputSizeConfigs.methods.BLUR.dataArgs.VALUE.name]: this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name],
-            }
-        },
-        [ComponentInputSizeConfigs.methods.CLICK_POSITIVE.name]: {
-            title: Language.translate("components.input_size.methods.fn_onClickPositive.title"),
-            description: Language.translate("components.input_size.methods.fn_onClickPositive.description"),
-            args: {
-                [ComponentInputSizeConfigs.methods.CLICK_POSITIVE.dataArgs.VALUE.name]: this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name],
-            }
-        },
-        [ComponentInputSizeConfigs.methods.CLICK_NEGATIVE.name]: {
-            title: Language.translate("components.input_size.methods.fn_onClickNegative.title"),
-            description: Language.translate("components.input_size.methods.fn_onClickNegative.description"),
-            args: {
-                [ComponentInputSizeConfigs.methods.CLICK_NEGATIVE.dataArgs.VALUE.name]: this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name],
+                [ComponentInputSizeConfigs.methods.INPUT_BLUR.dataArgs.VALUE.name]: this._COMPONENT_PATTERN[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name],
+                [ComponentInputSizeConfigs.methods.INPUT_BLUR.dataArgs.MIN.name]:   this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_min.name],
+                [ComponentInputSizeConfigs.methods.INPUT_BLUR.dataArgs.MAX.name]:   this._COMPONENT_PATTERN[ComponentInputSizeConfigs.keys.prop_max.name],
             }
         },
     });
@@ -583,29 +609,30 @@ export abstract class ComponentInputSizeBase extends ComponentBase<
         const comp = new ComponentInputSize(
             <ComponentInputSizePropsType>{
                 classList: ["col-md-3", "col-12", "border", "p-2"],
-                prop_labelTitle: "Input Size Example",
+                prop_labelTitle:              "Input Size Example",
                 prop_labelTooltipDescription: "Numeric input with +/- buttons and min/max",
-                prop_placeholder: "Enter number...",
-                prop_value: 10,
-                prop_size: SIZES.M,
-                prop_icon: ToolsIcons.icon_search({ size: SIZES.S }),
-                prop_min: 0,
-                prop_max: 100,
-                //prop_iconPositive: ToolsIcons.icon_plus_badge,
-                //prop_iconNegetive: ToolsIcons.icon_minus_badge,
+                prop_placeholder:             "Enter number...",
+                prop_icon:                    ToolsIcons.icon_search({ size: SIZES.S }),
+                prop_value:                   10,
+                prop_min:                     20,
+                prop_max:                     90,
+                prop_isAbsoluteRule:          true,
+                prop_hasRules:                true,
                 prop_listRules: [
                     { rule: "_not_empty", description: "This field is required" },
                     { rule: "_is_number", description: "Must be a valid number" },
                 ],
-                prop_msgRules: null,
-                prop_isAbsoluteRule: true,
             },
             <ComponentInputSizeMethodsType>{
-                fn_onInput: (event, dataArgs) => { valueObs.set((event.target as HTMLInputElement).value); },
-                fn_onFocus: (event, dataArgs) => {},
-                fn_onBlur: (event, dataArgs) => {},
-                fn_onClickPositive: (event, dataArgs) => {},
-                fn_onClickNegative: (event, dataArgs) => {},
+                fn_onInputChange:  (event, dataArgs, componentArgs) => {
+                    console.log("ComponentInputSize: [fn_onInputChange]", dataArgs, componentArgs);
+                },
+                fn_onInputFocus:  (event, dataArgs, componentArgs) => {
+                    console.log("ComponentInputSize: [fn_onInputFocus]", dataArgs, componentArgs);
+                },
+                fn_onInputBlur:  (event, dataArgs, componentArgs) => {
+                    console.log("ComponentInputSize: [fn_onInputBlur]", dataArgs, componentArgs);
+                },
             }
         );
         return comp.getElement() as HTMLElement;
@@ -629,7 +656,6 @@ export class ComponentInputSize extends ComponentInputSizeBase {
     ) {
         super("input-size", null);
         super.renderComponent(config, methods, events);
-        this.fn_setupValueObservable();
     }
 
 
@@ -686,8 +712,18 @@ export class ComponentInputSize extends ComponentInputSizeBase {
                 children: [
                     new ToolsComponents.ComponentBorder(
                         <ComponentBorderPropsType>{
-                            classList: [ "pt-2" , "d-block"]  ,
-                            styles: {}  ,
+                            classList: [ "d-block"]  ,
+                            styles: Observable.computed(
+                                (sizeName) => {
+                                    return {
+                                        padding: ToolsComponents_Padding?.[sizeName]
+                                    }
+                                } ,
+                                [
+                                    AppConfig.get_sizeName()
+                                ] ,
+                                this.getScope()
+                            ) ,
                             prop_borderClass: []  ,
                             prop_borderStyles: Observable.computed(
                                 (sizeName) => {
@@ -716,10 +752,9 @@ export class ComponentInputSize extends ComponentInputSizeBase {
                                 children: [
                                     this.executeSchemaPart(ComponentInputSizeConfigs.schemas.ICON.name),
                                     this.executeSchemaPart(ComponentInputSizeConfigs.schemas.INPUT.name),
-
-                                    // this.executeSchemaPart(ComponentInputSizeConfigs.schemas.ICON_CLEAR.name),
-                                    // this.executeScheaPart(ComponentInputSizeConfigs.schemas.BUTTON_POSITIVE.name),
-                                    // this.executeSchemaPart(ComponentInputSizeConfigs.schemas.BUTTON_NEGATIVE.name),
+                                    this.executeSchemaPart(ComponentInputSizeConfigs.schemas.BUTTON_NEGATIVE.name),
+                                    this.executeSchemaPart(ComponentInputSizeConfigs.schemas.BUTTON_POSITIVE.name),
+                                    this.executeSchemaPart(ComponentInputSizeConfigs.schemas.ICON_CLEAR.name),
                                 ]
                             }) ,
                             prop_borderColor:                    null ,
@@ -735,7 +770,6 @@ export class ComponentInputSize extends ComponentInputSizeBase {
 
         return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
     }
-
 
 
     // ---------------------------------------------
@@ -856,6 +890,9 @@ export class ComponentInputSize extends ComponentInputSizeBase {
             const prop_placeholder =   data[ComponentInputSizeConfigs.keys.prop_placeholder.name];
             const prop_isDisable =     data[ComponentInputSizeConfigs.keys.prop_isDisable.name];
             const prop_icon =          data[ComponentInputSizeConfigs.keys.prop_icon.name];
+            const prop_buttonsWidth =  data[ComponentInputSizeConfigs.keys.prop_buttonsWidth.name];
+            const prop_min =           data[ComponentInputSizeConfigs.keys.prop_min.name];
+            const prop_max =           data[ComponentInputSizeConfigs.keys.prop_max.name];
 
             this._ELEMENT_INPUT = ReactiveElement.input({
                 attrs: {
@@ -872,8 +909,23 @@ export class ComponentInputSize extends ComponentInputSizeBase {
                         ],
                         this.getScope()
                     ),
+                    value:        Observable.computed(
+                        (value , min , nax) => {
+                            const [valueOut, isChanged] = this.fn_onValidateValue(value);
+
+                            if (isChanged){
+                                this.set(GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name , valueOut);
+                            }
+                            return valueOut;
+                        },
+                        [
+                            prop_value
+                        ],
+                        this.getScope()
+                    ),
+                    min:         prop_min ,
+                    max:         prop_max ,
                     placeholder: prop_placeholder,
-                    value:       prop_value,
                     disabled :   Observable.computed(
                         (status) => {
                             return status ? "disabled" : null
@@ -902,9 +954,13 @@ export class ComponentInputSize extends ComponentInputSizeBase {
                     prop_inputStyles,
 
                     width: Observable.computed(
-                        (sizeName, icon , countryHas, countryWidth, cityHas, cityWidth) => {
+                        (sizeName, icon , buttonsWidth) => {
                             let listCalc = [
-                                SizeUnit(100 , UNITS.PERCENT)
+                                SizeUnit(100 , UNITS.PERCENT) ,
+                                OPERATION.MINUS ,
+                                SizeUnit(buttonsWidth , UNITS.PEXEL) ,
+                                OPERATION.MINUS ,
+                                SizeUnit(buttonsWidth , UNITS.PEXEL) ,
                             ];
                             if (icon != null){
                                 listCalc.push(OPERATION.MINUS);
@@ -922,7 +978,8 @@ export class ComponentInputSize extends ComponentInputSizeBase {
                         } ,
                         [
                             AppConfig.get_sizeName() ,
-                            prop_icon
+                            prop_icon ,
+                            prop_buttonsWidth
                         ] ,
                         this.getScope()
                     ) ,
@@ -934,16 +991,61 @@ export class ComponentInputSize extends ComponentInputSizeBase {
                         this.getScope()
                     ),
 
-                    borderRadius: Observable.computed(
-                        (sizeName) => {
-                            return ToolsComponents_BorderRadius?.[sizeName]
+                    borderTopRightRadius: Observable.computed(
+                        (sizeName , dir) => {
+                            if(dir){
+                                return ToolsComponents_BorderRadius?.[sizeName]
+                            }
+                            return SizeUnit(0, UNITS.PEXEL);
                         } ,
                         [
-                            AppConfig.get_sizeName()
+                            AppConfig.get_sizeName() ,
+                            AppConfig.get_directionRtl()
+                        ] ,
+                        this.getScope()
+                    ) ,
+                    
+                    borderBottomRightRadius: Observable.computed(
+                        (sizeName , dir) => {
+                            if(dir){
+                                return ToolsComponents_BorderRadius?.[sizeName]
+                            }
+                            return SizeUnit(0, UNITS.PEXEL);
+                        } ,
+                        [
+                            AppConfig.get_sizeName() ,
+                            AppConfig.get_directionRtl()
                         ] ,
                         this.getScope()
                     ) ,
 
+                    borderTopLeftRadius: Observable.computed(
+                        (sizeName , dir) => {
+                            if(!dir){
+                                return ToolsComponents_BorderRadius?.[sizeName]
+                            }
+                            return SizeUnit(0, UNITS.PEXEL);
+                        } ,
+                        [
+                            AppConfig.get_sizeName() ,
+                            AppConfig.get_directionRtl()
+                        ] ,
+                        this.getScope()
+                    ) ,
+
+                    borderBottomLeftRadius: Observable.computed(
+                        (sizeName , dir) => {
+                            if(!dir){
+                                return ToolsComponents_BorderRadius?.[sizeName]
+                            }
+                            return SizeUnit(0, UNITS.PEXEL);
+                        } ,
+                        [
+                            AppConfig.get_sizeName() ,
+                            AppConfig.get_directionRtl()
+                        ] ,
+                        this.getScope()
+                    ) ,
 
 
                     direction: Observable.computed(
@@ -1011,28 +1113,18 @@ export class ComponentInputSize extends ComponentInputSizeBase {
                         this.getScope()
                     )  ,
 
-
-
-
-
                 }),
                 on: {
                     input: (event: Event) => {
-                        // const value = event.target?.value ?? undefined;
-                        // this.set(ComponentInputPhoneConfigs.keys.prop_value.name , value)
-                        // const paramsFn : ComponentInputPhone_Methods_INPUT_CHANGE_ComponentArgs = {}
-                        // this.executeMethod(ComponentInputPhoneConfigs.methods.INPUT_CHANGE.name  , event , paramsFn);
+                        const value = parseInt(event.target?.value) ?? undefined;
+                        this.fn_onChangeValue(event , value);
                     },
                     focus: (event: Event) => {
-                        // this._DROPDOWN_OPEN_COUNTRY.set(false);
-                        // this._DROPDOWN_OPEN_CITY.set(false);
-                        //
-                        // const paramsFn : ComponentInputPhone_Methods_INPUT_FOCUS_ComponentArgs = {}
-                        // this.executeMethod(ComponentInputPhoneConfigs.methods.INPUT_FOCUS.name  , event , paramsFn);
+                        this.fn_onChangeFocus(event);
                     },
                     blur: (event: Event) => {
-                        // const paramsFn : ComponentInputPhone_Methods_INPUT_BLUR_ComponentArgs = {}
-                        // this.executeMethod(ComponentInputPhoneConfigs.methods.INPUT_BLUR.name  , event , paramsFn);
+                        this.fn_onGetInput().value = this.fn_getValue();
+                        this.fn_onChangeBlur(event);
                     },
                 }
             });
@@ -1044,12 +1136,12 @@ export class ComponentInputSize extends ComponentInputSizeBase {
     }
 
 
-
-
+    // ---------------------------------------------
     private template_render_iconClear(attrsDefault, data, extra): ReactiveElement {
         if (data != null) {
-            const prop_isDisable = data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
-          
+            const prop_isDisable =     data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
+            const prop_buttonsWidth =  data[ComponentInputSizeConfigs.keys.prop_buttonsWidth.name];
+
             return ReactiveElement.part("section", {
                 attrs: { ...attrsDefault },
                 children: Observable.computed(
@@ -1057,93 +1149,95 @@ export class ComponentInputSize extends ComponentInputSizeBase {
                         if (isDisable) return null;
 
                         return new ComponentElementPosition(
-                            <ComponentElementPositionPropsType>
-                            {
+                            <ComponentElementPositionPropsType>{
                                 classList: [],
-                                styles: {},
-                                
-                                prop_positionZIndex: ToolsCss.getZIndex(Z_INDEXES.tools_btn , 10),
-                                prop_positionType:   ComponentElementPosition_positionTypes.ABSOLUTE,
-                                prop_positionTop:    SizeUnit(50, UNITS.PERCENT),
-                                prop_positionWidth:  SizeUnit(30, UNITS.PEXEL),
-                                prop_positionStyles: {
-                                    display:         "flex",
-                                    alignItems:      "center",
-                                    justifyContent:  "center",
-                                },
-                                prop_positionLeft: Observable.computed(( dir) =>
-                                                                 {
-                                                                    return dir ? SizeUnit(0, UNITS.PEXEL) : null;
-                                                                 },
-                                                                 [
-                                                                      AppConfig.get_directionRtl() 
-                                                                 ],
-                                                                 this.getScope()
-                                                            ) ,
-                                prop_positionRight: Observable.computed(( dir) =>
-                                                                 {
-                                                                    return !dir ? SizeUnit(0, UNITS.PEXEL) : null;
-                                                                 },
-                                                                 [
-                                                                      AppConfig.get_directionRtl() 
-                                                                 ],
-                                                                 this.getScope()
-                                                            ) ,
-                                prop_positionHeight: Observable.computed(( sizeName) =>
-                                                                 {
-                                                                     return SizeUnit(
-                                                                        ToolsCss.getIconSize(sizeName),
-                                                                        UNITS.PEXEL
-                                                                    );
-                                                                 },
-                                                                 [
-                                                                      AppConfig.get_sizeName() 
-                                                                 ],
-                                                                 this.getScope()
-                                                            ) ,
-                                prop_positionTranslate: Observable.computed(( dir) =>
-                                                                 {
-                                                                     return dir
-                                                                        ? TranslateUnit(SizeUnit(70, UNITS.PEXEL), SizeUnit(-50, UNITS.PERCENT))
-                                                                        : TranslateUnit(SizeUnit(-70, UNITS.PEXEL), SizeUnit(-50, UNITS.PERCENT));
-                                                                 },
-                                                                 [
-                                                                      AppConfig.get_directionRtl() 
-                                                                 ],
-                                                                 this.getScope()
-                                                            ) ,
-                                prop_content: new ToolsComponents.ComponentIcon(
-                                                        <ComponentIconPropsType>{
-                                                            classList: [],
-                                                            styles: {},
-                                                            prop_iconClass: [],
-                                                            prop_iconStyles: {
-                                                                fontSize: "20pt",
-                                                                margin: "0 10px",
-                                                                cursor: "pointer",
-                                                            },
-
-                                                            prop_icon: Observable.computed(( sizeName) =>
-                                                                 {
-                                                                     return ToolsIcons.icon_clear({ size: sizeName });
-                                                                 },
-                                                                 [
-                                                                      AppConfig.get_sizeName() 
-                                                                 ],
-                                                                 this.getScope()
-                                                            )
-
-                                                        } ,
-                                                        <ComponentIconMethodsType>{
-                                                            fn_onClickIcon: (event, dataArgs, componentArgs) => {
-                                                                this.fn_onClearInput(event);
-                                                            }
-                                                        }
-                                                    ).getReactiveElement(),
-                            } ,
-                            <ComponentElementPositionMethodsType>{
-
-                            }
+                                prop_positionType: ComponentElementPosition_positionTypes.ABSOLUTE,
+                                prop_positionTop:      SizeUnit(50, UNITS.PERCENT),
+                                prop_positionEnd:      Observable.computed(
+                                    (buttonsWidth) => {
+                                        return SizeUnit(buttonsWidth*2, UNITS.PEXEL)
+                                    } ,
+                                    [
+                                        prop_buttonsWidth
+                                    ] ,
+                                    this.getScope()
+                                ),
+                                prop_positionWidth:    Observable.computed(
+                                    (sizeName) => {
+                                        return SizeCalc(
+                                            ToolsComponents_BorderWidth?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Padding?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Height?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Padding?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_BorderWidth?.[sizeName] ,
+                                        )
+                                    } ,
+                                    [
+                                        AppConfig.get_sizeName()
+                                    ] ,
+                                    this.getScope()
+                                ),
+                                prop_positionHeight:    Observable.computed(
+                                    (sizeName) => {
+                                        return SizeCalc(
+                                            ToolsComponents_BorderWidth?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Padding?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Height?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_Padding?.[sizeName] ,
+                                            OPERATION.ADD ,
+                                            ToolsComponents_BorderWidth?.[sizeName] ,
+                                        )
+                                    } ,
+                                    [
+                                        AppConfig.get_sizeName()
+                                    ] ,
+                                    this.getScope()
+                                ),
+                                prop_positionTranslate: TranslateUnit(SizeUnit(0, UNITS.PERCENT), SizeUnit(-50, UNITS.PERCENT)),
+                                prop_positionZIndex: 10,
+                                prop_content:  new ToolsComponents.ComponentIcon(
+                                                      <ComponentIconPropsType>{
+                                                          classList: [],
+                                                          prop_iconStyles:      Observable.computed(
+                                                              (sizeName) => {
+                                                                  return {
+                                                                      cursor:     "pointer",
+                                                                      lineHeight:  SizeCalc(
+                                                                          ToolsComponents_BorderWidth?.[sizeName] ,
+                                                                          OPERATION.ADD ,
+                                                                          ToolsComponents_Padding?.[sizeName] ,
+                                                                          OPERATION.ADD ,
+                                                                          ToolsComponents_Height?.[sizeName] ,
+                                                                          OPERATION.ADD ,
+                                                                          ToolsComponents_Padding?.[sizeName] ,
+                                                                          OPERATION.ADD ,
+                                                                          ToolsComponents_BorderWidth?.[sizeName] ,
+                                                                      )
+                                                                  }
+                                                              },
+                                                              [
+                                                                  AppConfig.get_sizeName()
+                                                              ] ,
+                                                              this.getScope()
+                                                          ),
+                                                          prop_iconClass: ["d-block" , "text-center"],
+                                                          prop_icon: ToolsIcons.icon_clear(),
+                                                      },
+                                                      <ComponentIconMethodsType>{
+                                                          fn_onClickIcon: (event, dataArgs, componentArgs) => {
+                                                              this.fn_onChangeValue(event , null);
+                                                          }
+                                                      }
+                                                  ).getReactiveElement(),
+                            },
+                            <ComponentElementPositionMethodsType>{}
                         ).getReactiveElement();
                     },
                     [prop_isDisable],
@@ -1157,87 +1251,61 @@ export class ComponentInputSize extends ComponentInputSizeBase {
 
 
 
-    private template_render_buttonPositive(attrsDefault, data, extra): ReactiveElement {
+    // ---------------------------------------------
+    private template_render_buttonNegative(attrsDefault, data, extra): ReactiveElement {
         if (data != null) {
-            const prop_isDisable =    data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
-            const prop_iconPositive = data[ComponentInputSizeConfigs.keys.prop_iconPositive.name];
-            const prop_inputBorderWidth = data[ComponentInputSizeConfigs.keys.prop_inputBorderWidth.name];
+            const prop_isDisable =     data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
+            const prop_buttonsWidth =  data[ComponentInputSizeConfigs.keys.prop_buttonsWidth.name];
 
             return ReactiveElement.part("section", {
                 attrs: { ...attrsDefault },
                 children: Observable.computed(
                     (isDisable: boolean) => {
                         if (isDisable ) return null;
-                      
-                        return new ComponentElementPosition(
-                            <ComponentElementPositionPropsType>{
-                                classList: [],
-                                styles: {},
-                                prop_positionType:    ComponentElementPosition_positionTypes.ABSOLUTE,
-                                prop_positionZIndex:  10,
-                                prop_positionStyles: {
-                                    cursor:           "pointer",
-                                    width:            "35px",
+
+                        return new ToolsComponents.ComponentButton(
+                            <ComponentButtonPropsType>{
+                                    classList:      [],
+                                    styles:         {},
+                                    prop_btnClass:  ["shadow-sm", "px-2"],
+                                    prop_btnStyles: Observable.computed(
+                                        (dir , sizeName , buttonsWidth) => {
+                                            return {
+                                                float:                       dir ? "right" : "left" , 
+                                                width:                       SizeUnit(buttonsWidth , UNITS.PEXEL),
+                                                height:                      SizeCalc(
+                                                    ToolsComponents_BorderWidth?.[sizeName] ,
+                                                    OPERATION.ADD ,
+                                                    ToolsComponents_Padding?.[sizeName] ,
+                                                    OPERATION.ADD ,
+                                                    ToolsComponents_Height?.[sizeName] ,
+                                                    OPERATION.ADD ,
+                                                    ToolsComponents_Padding?.[sizeName] ,
+                                                    OPERATION.ADD ,
+                                                    ToolsComponents_BorderWidth?.[sizeName] ,
+                                                ) ,
+                                                cursor:                     "pointer",
+                                            }
+                                        },
+                                        [
+                                            AppConfig.get_directionRtl() ,
+                                            AppConfig.get_sizeName() ,
+                                            prop_buttonsWidth
+                                        ] ,
+                                        this.getScope()
+                                    ) ,
+                                    prop_btnBorderRadius:                 null,
+                                    prop_btnBorderWidth:                  null,
+                                    prop_btnTitle:                        ToolsIcons.icon_minus_badge({primaryColor:Color(COLORS_MAIN.SHAN, COLORS_GRAD.GRADE_1)}) ,
+                                    prop_btnType:                         "button",
                                 },
-                                prop_positionTop:      Observable.computed(( sizeName) =>
-                                                                {
-                                                                    return`${ToolsComponents_BorderWidth?.[sizeName]} `;
-                                                                },
-                                                                [
-                                                                    prop_inputBorderWidth
-                                                                ],
-                                                                this.getScope()
-                                                            ) ,
-                                prop_positionEnd:      Observable.computed(( sizeName) =>
-                                                                {
-                                                                    return`${ToolsComponents_BorderWidth?.[sizeName]} `;
-                                                                },
-                                                                [
-                                                                    prop_inputBorderWidth
-                                                                ],
-                                                                this.getScope()
-                                                            ) ,
-                                prop_content: new ToolsComponents.ComponentButton(
-                                                      <ComponentButtonPropsType>{
-                                                          classList:      [],
-                                                          styles:         {},
-                                                          prop_btnClass:  ["shadow-sm", "px-2"],
-                                                          prop_btnStyles: {
-                                                              cursor:                     "pointer",
-                                                              width:                      "35px",
-                                                              borderTopRightRadius:       "0 !important",
-                                                              borderBottomRightRadius:    "0 !important",
-                                                              borderTopLeftRadius:        "0 !important",
-                                                              borderBottomLeftRadius:     "0 !important",
-                                                          },
-                                                          prop_btnBorderRadius:        null,
-                                                          prop_btnTitle:               Observable.computed(( iconPositive) =>
-                                                                                               {
-                                                                                                   return iconPositive?.()
-                                                                                               },
-                                                                                               [
-                                                                                                    prop_iconPositive 
-                                                                                               ],
-                                                                                               this.getScope()
-                                                                                          ) ,
-                                                          prop_btnType:                "button",
-                                                          prop_btnBorderWidth:         0,
-                                                      },
-                                                      <ComponentButtonMethodsType>{
-                                                          fn_onClickButton: (event, dataArgs, componentArgs) => {
-                                                              event.stopPropagation();
-                                                              this.fn_positiveInputValue(event);
-                                                              const val = this.fn_getValueInput();
-                                                              const params: ComponentInputSize_Methods_CLICK_POSITIVE_DataArgs = {
-                                                                  [ComponentInputSizeConfigs.methods.CLICK_POSITIVE.dataArgs.VALUE.name]: val,
-                                                              };
-                                                              this.executeMethod(ComponentInputSizeConfigs.methods.CLICK_POSITIVE.name, event, params);
-                                                          }
-                                                      }).getReactiveElement(),
-                                                      
-                            },
-                            <ComponentElementPositionMethodsType>{}
-                        ).getReactiveElement();
+                                <ComponentButtonMethodsType>{
+                                    fn_onClickButton: (event, dataArgs, componentArgs) => {
+                                        const value = this.fn_onValidateNegativeValue();
+                                        this.fn_onGetInput().value = value;
+                                        this.fn_onChangeValue(event , value);
+                                    }
+                                }).getReactiveElement()
                     },
                     [prop_isDisable],
                     this.getScope()
@@ -1249,91 +1317,84 @@ export class ComponentInputSize extends ComponentInputSizeBase {
     }
 
 
-    private template_render_buttonNegative(attrsDefault, data, extra): ReactiveElement {
+
+    // ---------------------------------------------
+    private template_render_buttonPositive(attrsDefault, data, extra): ReactiveElement {
         if (data != null) {
-            const prop_isDisable = data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
-            const prop_iconNegetive = data[ComponentInputSizeConfigs.keys.prop_iconNegetive.name];
-            const prop_inputBorderWidth = data[ComponentInputSizeConfigs.keys.prop_inputBorderWidth.name];
+            const prop_isDisable =     data[GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_isDisable.name];
+            const prop_buttonsWidth =  data[ComponentInputSizeConfigs.keys.prop_buttonsWidth.name];
 
             return ReactiveElement.part("section", {
                 attrs: { ...attrsDefault },
                 children: Observable.computed(
                     (isDisable: boolean) => {
-                        if (isDisable) return null;
+                        if (isDisable ) return null;
 
-                        return new ComponentElementPosition(
-                            <ComponentElementPositionPropsType>{
-                                classList: [],
-                                styles: {},
-                                prop_positionType:     ComponentElementPosition_positionTypes.ABSOLUTE,
-                                prop_positionZIndex:   10,
-                                prop_positionStyles: {
-                                    cursor:       "pointer",
-                                    width:        "35px",
+
+                        return new ToolsComponents.ComponentButton(
+                            <ComponentButtonPropsType>{
+                                    classList:      [],
+                                    styles:         {},
+                                    prop_btnClass:  ["shadow-sm", "px-2"],
+                                    prop_btnStyles: Observable.computed(
+                                        (dir , sizeName , buttonsWidth) => {
+                                            return {
+                                                float:                       dir ? "right" : "left" , 
+                                                width:                       SizeUnit(buttonsWidth , UNITS.PEXEL),
+                                                height:                      SizeCalc(
+                                                    ToolsComponents_BorderWidth?.[sizeName] ,
+                                                    OPERATION.ADD ,
+                                                    ToolsComponents_Padding?.[sizeName] ,
+                                                    OPERATION.ADD ,
+                                                    ToolsComponents_Height?.[sizeName] ,
+                                                    OPERATION.ADD ,
+                                                    ToolsComponents_Padding?.[sizeName] ,
+                                                    OPERATION.ADD ,
+                                                    ToolsComponents_BorderWidth?.[sizeName] ,
+                                                ) ,
+                                                cursor:                     "pointer",
+                                            }
+                                        },
+                                        [
+                                            AppConfig.get_directionRtl() ,
+                                            AppConfig.get_sizeName() ,
+                                            prop_buttonsWidth
+                                        ] ,
+                                        this.getScope()
+                                    ) ,
+                                    prop_btnBorderRadiusEndTop:        Observable.computed(
+                                        (sizeName) => {
+                                            return sizeName
+                                        } ,
+                                        [
+                                            AppConfig.get_sizeName() ,
+                                        ] ,
+                                        this.getScope()
+                                    ),
+                                    
+                                    prop_btnBorderRadiusEndBottom:        Observable.computed(
+                                        (sizeName) => {
+                                            return sizeName
+                                        } ,
+                                        [
+                                            AppConfig.get_sizeName() ,
+                                        ] ,
+                                        this.getScope()
+                                    ),
+                                    prop_btnBorderRadiusStartTop:         null,
+                                    prop_btnBorderRadiusStartBottom:      null,
+                                    prop_btnBorderRadius:                 null,
+                                    prop_btnBorderWidth:                  0,
+                                    prop_btnTitle:                        ToolsIcons.icon_plus_badge({primaryColor:Color(COLORS_MAIN.SHAN, COLORS_GRAD.GRADE_1)}) ,
+                                    prop_btnType:                         "button",
                                 },
-                                prop_positionTop:      Observable.computed(( sizeName) =>
-                                                           {
-                                                               return`${ToolsComponents_BorderWidth?.[sizeName]} `;
-                                                           },
-                                                           [
-                                                               prop_inputBorderWidth
-                                                           ],
-                                                           this.getScope()
-                                                       ) ,
-                                prop_positionEnd:      Observable.computed(( sizeName) =>
-                                                            {
-                                                                return  SizeCalc(
-                                                                    `${ToolsComponents_BorderWidth?.[sizeName]}` ,
-                                                                    OPERATION.ADD ,
-                                                                    SizeUnit(35, UNITS.PEXEL)
-                                                                );
-                                                            },
-                                                            [
-                                                                prop_inputBorderWidth
-                                                            ],
-                                                            this.getScope()
-                                                        ) ,
-                                prop_content: new ToolsComponents.ComponentButton(
-                                    <ComponentButtonPropsType>{
-                                                     classList:      [],
-                                                     styles:         {},
-                                                     prop_btnClass:  ["shadow-sm", "px-2"],
-                                                     prop_btnStyles: {
-                                                         cursor:                     "pointer",
-                                                         width:                      "35px",
-                                                         borderTopRightRadius:       "0 !important",
-                                                         borderBottomRightRadius:    "0 !important",
-                                                         borderTopLeftRadius:        "0 !important",
-                                                         borderBottomLeftRadius:     "0 !important",
-                                                     },
-                                                     prop_btnBorderRadius:        null,
-                                                     prop_btnTitle:               Observable.computed((  iconNegetive) =>
-                                                         {
-                                                             return iconNegetive?.()
-                                                         },
-                                                         [
-                                                             prop_iconNegetive
-                                                         ],
-                                                         this.getScope()
-                                                     ) ,
-                                                     prop_btnType:                "button",
-                                                     prop_btnBorderWidth:         0,
-                                                 },
-                                                 <ComponentButtonMethodsType>{
-                                                     fn_onClickButton: (event, dataArgs, componentArgs) => {
-                                                         event.stopPropagation();
-                                                         this.fn_negativeInputValue(event);
-                                                         const val = this.fn_getValueInput();
-                                                         const params: ComponentInputSize_Methods_CLICK_NEGATIVE_DataArgs = {
-                                                             [ComponentInputSizeConfigs.methods.CLICK_NEGATIVE.dataArgs.VALUE.name]: val,
-                                                         };
-                                                         this.executeMethod(ComponentInputSizeConfigs.methods.CLICK_NEGATIVE.name, event, params);
-                                                     }
-                                                 }
-                                                 ).getReactiveElement(),
-                            },
-                            <ComponentElementPositionMethodsType>{}
-                        ).getReactiveElement();
+                                <ComponentButtonMethodsType>{
+                                    fn_onClickButton: (event, dataArgs, componentArgs) => {
+                                        const value = this.fn_onValidatePositiveValue();
+                                        this.fn_onGetInput().value = value;
+                                        this.fn_onChangeValue(event , value);
+                                    }
+                                }).getReactiveElement()
                     },
                     [prop_isDisable],
                     this.getScope()
@@ -1343,6 +1404,7 @@ export class ComponentInputSize extends ComponentInputSizeBase {
 
         return GOG_ComponentBasicConfigs_partDoseNotBody(attrsDefault);
     }
+
 
 
     // ---------------------------------------------
@@ -1361,13 +1423,11 @@ export class ComponentInputSize extends ComponentInputSizeBase {
                 className: ["position-relative"],
                 children: Observable.computed(
                     (isDisable: boolean, hasRules: boolean) => {
-                        if (isDisable) return null;
-                        if (!hasRules) return null;
+                        if (isDisable || !hasRules) return null;
 
                         return new ToolsComponents.ComponentValidate(
                             <ComponentValidatePropsType>{
                                 classList:        ["mt-1"],
-                                prop_reference:   `component-input-phone-input-${this._COMPONENT_RANDOM_ID}`,
                                 prop_isAbsolute:  prop_isAbsoluteRule ,
                                 prop_listRules:   prop_listRules ,
                                 prop_msgRules:    prop_msgRules ,
@@ -1396,95 +1456,97 @@ export class ComponentInputSize extends ComponentInputSizeBase {
     /* ---------------------------------------------
         FUNCTIONs
     --------------------------------------------- */
-    private fn_setupValueObservable() {
-        const propValueObs = this.getObservable(GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name);
-        if (propValueObs != null) {
-            this.var_inputValue = propValueObs;
-        }
+    private fn_onGetInput(){
+        return this._ELEMENT_INPUT.getElement();
     }
 
-    fn_getValueInput(): string {
-        const inputEl = document.querySelector(`input#component-input-size-input-${this._COMPONENT_RANDOM_ID}`) as HTMLInputElement | null;
-        if (inputEl) {
-            return inputEl.value;
-        }
-        return this.var_inputValue.get();
+    private fn_getValue(){
+        return this.get(GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name)
+    }
+    private fn_getMin(){
+        return this.get(ComponentInputSizeConfigs.keys.prop_min.name);
+    }
+    private fn_getMax(){
+        return this.get(ComponentInputSizeConfigs.keys.prop_max.name);
     }
 
-    fn_onClearInput(event: Event) {
-        const inputEl = document.querySelector(`input#component-input-size-input-${this._COMPONENT_RANDOM_ID}`) as HTMLInputElement | null;
-        if (inputEl) {
-            inputEl.value = "";
+
+    private fn_onValidateValue(value){
+        const min = this.fn_getMin();
+        const max = this.fn_getMax();
+        let valueOut = 0;
+        let isChanged = false;
+        if (value != null){
+            if (min !=null && max != null && value < max && value > min){
+                valueOut = value;
+            }
+            else if(min !=null && value < min){
+                isChanged = true;
+                valueOut = min;
+            }
+            else if(max !=null && value > max){
+                isChanged = true;
+                valueOut = max;
+            }
         }
-        this.var_inputValue.set("");
-        const params: ComponentInputSize_Methods_INPUT_DataArgs = {
-            [ComponentInputSizeConfigs.methods.INPUT.dataArgs.VALUE.name]: "",
-        };
-        this.executeMethod(ComponentInputSizeConfigs.methods.INPUT.name, event, params);
-        this.fn_onFocusInput(event);
+        console.log(valueOut,  max !=null && value > max)
+
+        return [valueOut, isChanged];
     }
 
-    fn_onFocusInput(event: Event) {
-        const inputEl = document.querySelector(`input#component-input-size-input-${this._COMPONENT_RANDOM_ID}`) as HTMLInputElement | null;
-        if (inputEl) {
-            inputEl.focus();
+    private fn_onValidateNegativeValue(){
+        let newValue = 0;
+        const value = this.fn_getValue();
+        const min =   this.fn_getMin();
+
+        if (value != null || value != ""){
+            newValue = value - 1;
+            if (min != null){
+                if (newValue < min){
+                    newValue = min;
+                }
+            }
         }
-        const val = this.fn_getValueInput();
-        const params: ComponentInputSize_Methods_FOCUS_DataArgs = {
-            [ComponentInputSizeConfigs.methods.FOCUS.dataArgs.VALUE.name]: val,
-        };
-        this.executeMethod(ComponentInputSizeConfigs.methods.FOCUS.name, event, params);
+        return newValue;
+    }
+    private fn_onValidatePositiveValue(){
+        let newValue = 0;
+        const value = this.fn_getValue();
+        const min =   this.fn_getMin();
+        const max =   this.fn_getMax();
+
+        if (value != null && value != ""){
+            newValue = value + 1;
+            if (max != null){
+                if (newValue > max){
+                    newValue = max;
+                }
+            }
+        }
+        else{
+            if (min != null){
+                newValue = min
+            }
+        }
+
+        return newValue;
     }
 
-    fn_positiveInputValue(event: Event) {
-        const inputEl = document.querySelector(`input#component-input-size-input-${this._COMPONENT_RANDOM_ID}`) as HTMLInputElement | null;
-        if (!inputEl) return;
-        let value = parseFloat(this.fn_convertStrToNum(inputEl.value));
-        if (isNaN(value)) {
-            value = 0;
-        } else {
-            value = value + 1;
-        }
-        this.fn_setValueInput(inputEl, value);
+
+    private fn_onChangeValue(event: Event , value: Number|null){
+        this.set(GOG_ComponentBasicConfigs_Component_Structure_FormInput_Value_keys.prop_value.name , value)
+        const paramsFn : ComponentInputPhone_Methods_INPUT_CHANGE_ComponentArgs = {}
+        this.executeMethod(ComponentInputSizeConfigs.methods.INPUT_CHANGE.name  , event , paramsFn);
     }
 
-    fn_negativeInputValue(event: Event) {
-        const inputEl = document.querySelector(`input#component-input-size-input-${this._COMPONENT_RANDOM_ID}`) as HTMLInputElement | null;
-        if (!inputEl) return;
-        let value = parseFloat(this.fn_convertStrToNum(inputEl.value));
-        if (isNaN(value)) {
-            value = 0;
-        } else {
-            value = value - 1;
-        }
-        this.fn_setValueInput(inputEl, value);
+    private fn_onChangeFocus(event: Event){
+        const paramsFn : ComponentInputSize_Methods_INPUT_FOCUS_ComponentArgs = {}
+        this.executeMethod(ComponentInputSizeConfigs.methods.INPUT_FOCUS.name  , event , paramsFn);
     }
 
-    fn_validateInputIsNumber(event: Event) {
-        const inputEl = document.querySelector(`input#component-input-size-input-${this._COMPONENT_RANDOM_ID}`) as HTMLInputElement | null;
-        if (!inputEl) return;
-        const value = parseFloat(this.fn_convertStrToNum((event.target as HTMLInputElement).value));
-        if (!isNaN(value)) {
-            this.fn_setValueInput(inputEl, value);
-        }
-    }
-
-    fn_setValueInput(inputEl: HTMLInputElement, value: number) {
-        const prop_min = this.get(ComponentInputSizeConfigs.keys.prop_min.name) as number | null;
-        const prop_max = this.get(ComponentInputSizeConfigs.keys.prop_max.name) as number | null;
-
-        if (prop_min != null && value < prop_min) {
-            inputEl.value = String(prop_min);
-        } else if (prop_max != null && value > prop_max) {
-            inputEl.value = String(prop_max);
-        } else {
-            inputEl.value = String(value);
-        }
-        this.var_inputValue.set(inputEl.value);
-    }
-
-    private fn_convertStrToNum(str: string): string {
-        return str.replace(/[^0-9.\-]/g, "");
+    private fn_onChangeBlur(event: Event){
+        const paramsFn : ComponentInputSize_Methods_INPUT_BLUR_ComponentArgs = {}
+        this.executeMethod(ComponentInputSizeConfigs.methods.INPUT_BLUR.name  , event , paramsFn);
     }
 
 }

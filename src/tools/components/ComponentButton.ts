@@ -137,7 +137,7 @@ const ComponentButtonConfigs  =  {
         } ,
         [ComponentButtonProps.prop_btnBorderWidth]: {
             name:                      ComponentButtonProps.prop_btnBorderWidth        ,
-            value:                     GOG_SetValue<typeof SIZES |  null>( SIZES.M) ,
+            value:                     GOG_SetValue<typeof SIZES |  null>( null) ,
         } ,
         [ComponentButtonProps.prop_btnBackgroundColor]: {
             name:                      ComponentButtonProps.prop_btnBackgroundColor,
