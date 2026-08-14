@@ -8,6 +8,27 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true ,
+
+    "baseUrl": ".",
+    "paths": {
+      //"@/framework" :       ["src/framework"] ,
+
+      "@/core" :            ["src/framework/core/configs"] ,
+      "@/core_configs" :    ["src/framework/core/configs"] ,
+      "@/core_languages" :  ["src/framework/core/languages"] ,
+      "@/core_observable" : ["src/framework/core/observable"] ,
+      "@/core_reactive" :   ["src/framework/core/reactive"] ,
+
+      "@/ui" :              ["src/framework/ui"] ,
+      "@/ui_categories" :   ["src/framework/ui/categories"] ,
+      "@/ui_components" :   ["src/framework/ui/components"] ,
+      "@/ui_icons" :        ["src/framework/ui/icons"] ,
+
+      "@/util" :           ["src/framework/util"] ,
+      "@/util_consts" :    ["src/framework/util/consts"] ,
+      "@/util_brands" :    ["src/framework/util/brands"] ,
+      "@/util_styles" :    ["src/framework/util/styles"] ,
+    }
   }
 }

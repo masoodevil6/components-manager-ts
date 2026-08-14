@@ -1,0 +1,1 @@
+export type Type_PartAttrDefault = { "data-part-name" : string  , id: string}

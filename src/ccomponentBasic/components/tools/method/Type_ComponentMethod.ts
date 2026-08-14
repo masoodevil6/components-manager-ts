@@ -1,0 +1,1 @@
+export type Type_ComponentMethod<TMethod> = keyof TMethod;

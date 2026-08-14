@@ -1,0 +1,1 @@
+export {TCLanguagesDefinition} from "./TCLanguagesDefinition";

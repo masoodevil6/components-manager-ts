@@ -1,0 +1,1 @@
+export type TBrands<T , B> = T & {__brand: B};

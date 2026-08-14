@@ -1,0 +1,17 @@
+body{
+    font-family: var(--fontSelected);
+}
+
+
+
+
+.d-flow-root{
+    display: flow-root !important;
+}
+
+.ms-scroller-hidden::-webkit-scrollbar{
+    display: none;
+}
+
+
+

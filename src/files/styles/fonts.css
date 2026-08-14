@@ -1,0 +1,16 @@
+
+
+@font-face{
+    font-family: "Vazir";
+    src: url("../fonts/Vazir-Regular.ttf") format("woff");
+}
+
+@font-face{
+    font-family: "B Yekan";
+    src: url("../fonts/BYekan.ttf") format("woff");
+}
+
+@font-face{
+    font-family: "A Iranian Sans";
+    src: url("../fonts/IRANSans/Iranian Sans.ttf") format("woff");
+}
