@@ -12,23 +12,30 @@
 
     "baseUrl": ".",
     "paths": {
-      //"@/framework" :       ["src/framework"] ,
+      "@/framework" :         ["src/framework"] ,
 
-      "@/core" :            ["src/framework/core/configs"] ,
-      "@/core_configs" :    ["src/framework/core/configs"] ,
-      "@/core_languages" :  ["src/framework/core/languages"] ,
-      "@/core_observable" : ["src/framework/core/observable"] ,
-      "@/core_reactive" :   ["src/framework/core/reactive"] ,
+      "@/core" :              ["src/framework/module_core"] ,
+      "@/core_configs" :      ["src/framework/module_core/module_configs"] ,
+      "@/core_components" :   ["src/framework/module_core/module_components"] ,
+      "@/core_languages" :    ["src/framework/module_core/module_languages"] ,
+      "@/core_observable" :   ["src/framework/module_core/module_observable"] ,
+      "@/core_reactive" :     ["src/framework/module_core/module_reactive"] ,
 
-      "@/ui" :              ["src/framework/ui"] ,
-      "@/ui_categories" :   ["src/framework/ui/categories"] ,
-      "@/ui_components" :   ["src/framework/ui/components"] ,
-      "@/ui_icons" :        ["src/framework/ui/icons"] ,
+      "@/ui" :                ["src/framework/ui"] ,
+      "@/ui_categories" :     ["src/framework/ui/categories"] ,
+      "@/ui_components" :     ["src/framework/ui/components"] ,
+      "@/ui_icons" :          ["src/framework/ui/icons"] ,
 
-      "@/util" :           ["src/framework/util"] ,
-      "@/util_consts" :    ["src/framework/util/consts"] ,
-      "@/util_brands" :    ["src/framework/util/brands"] ,
-      "@/util_styles" :    ["src/framework/util/styles"] ,
+      "@/util" :              ["src/framework/util"] ,
+      "@/util_brands" :       ["src/framework/util/brands"] ,
+      "@/util_consts" :       ["src/framework/util/consts"] ,
+      "@/util_styles" :       ["src/framework/util/styles"] ,
+      "@/util_convertor" :    ["src/framework/util/convertor"] ,
+      "@/util_dates" :        ["src/framework/util/dates"] ,
+      "@/util_excels" :       ["src/framework/util/excel"] ,
+      "@/util_files" :        ["src/framework/util/files"] ,
+      "@/util_publics" :      ["src/framework/util/publics"] ,
+      "@/util_validators" :   ["src/framework/util/validators"] ,
     }
   }
 }

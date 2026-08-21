@@ -1,24 +1,24 @@
-import * as UICategory from "@/ui_categories";
-import * as UIComponent from "@/ui_components";
-import * as UIIcon from "@/ui_icons";
+export * as Category from "@/ui_categories";
+export * as Component from "@/ui_components";
+//export * as Icon from "@/ui_icons";
 
 
 //----------------------------
 // Category
 //----------------------------
-export const Category = {
-    UI:     UICategory.Lists.UI ,
-    Icon:   UICategory.Lists.Icon,
-};
+// export const Category = {
+//     UI:     UICategory.Lists.UI ,
+//     //Icon:   UICategory.Lists.Icon,
+// };
 
 
 //----------------------------
 // Component
 //----------------------------
-export const Component = UIComponent.Lists;
+//export const Component = UIComponent.Lists;
 
 
 //----------------------------
 // Icon
 //----------------------------
-export const Icon = UIIcon.Lists;
+//export const Icon = UIIcon.Lists;

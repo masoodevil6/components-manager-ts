@@ -1,1 +1,4 @@
 node_modules/*
+
+# MindBase checkpoints
+.mindbase-checkpoints

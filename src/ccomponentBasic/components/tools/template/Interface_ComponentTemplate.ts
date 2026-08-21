@@ -6,6 +6,6 @@ export interface Interface_ComponentTemplate<TPropTypes>{
     html?:             string;
     attrs?:            Record<string, string>;
     value?:            any;
-    title?:            CoreObservable.Observable<string> ,
-    description?:      CoreObservable.Observable<string> ,
+    title?:            CoreObservable.ClObservable<string> ,
+    description?:      CoreObservable.ClObservable<string> ,
 };

@@ -22,7 +22,7 @@ export class ComponentBase<
 
     _COMPONENT_TEMPLATES! : { [K in  CoreComponent.Tools.Template.Type<TTemplate>]?:    CoreComponent.Tools.Template.Interface<TProp> } ;
 
-    _COMPONENT_PROPS_BIND: Record<string, CoreObservable.Observable<any>> = {};
+    _COMPONENT_PROPS_BIND: Record<string, CoreObservable.ClObservable<any>> = {};
 
     _COMPONENT_CONFIG!: Record<string, any>;
 
@@ -229,7 +229,7 @@ export class ComponentBase<
     }
 
     getSchemaPropsInPart(props: CoreComponent.Tools.Prop.Interface<any>[]){
-        let resultExp: Record<string, CoreObservable.Observable<any>>  = {};
+        let resultExp: Record<string, CoreObservable.ClObservable<any>>  = {};
         for (const param of props) {
             if (param != null && param.hasOwnProperty("prop")) {
                 resultExp[param.prop] = this._COMPONENT_PROPS_BIND[param.prop];
@@ -273,7 +273,7 @@ export class ComponentBase<
         return null;
     }
 
-    getScope(): CoreObservable.Scope{
+    getScope(): CoreObservable.ClScope{
         return this._renderScope;
     }
 

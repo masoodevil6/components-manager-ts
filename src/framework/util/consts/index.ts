@@ -7,3 +7,6 @@ export {Units} from "./Units";
 export {Operation} from "./Operation";
 
 export {ZIndex} from "./ZIndex";
+
+export {FileExtensionTypes} from "./FileExtensionTypes";
+export {FileMimeTypes} from "./FileMimeTypes";

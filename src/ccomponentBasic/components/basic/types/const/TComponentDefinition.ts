@@ -1,4 +1,4 @@
-import * as Categories from "src/categories"
+import * as Categories from "@"
 
 export type TComponentDefinition ={
     id:       string;

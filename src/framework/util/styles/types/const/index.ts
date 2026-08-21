@@ -1,8 +1,8 @@
-export {TCSizes} from "./TCSizes";
-export {TCZIndex} from "./TCZIndex";
+export {TCSizes as Sizes} from "./TCSizes";
+export {TCZIndex as ZIndex} from "./TCZIndex";
 
-export {TCOperation} from "./TCOperation";
-export {TCUnits} from "./TCUnits";
+export {TCOperation as Operation} from "./TCOperation";
+export {TCUnits as Units} from "./TCUnits";
 
-export {TCColorMain} from "./TCColorMain";
-export {TCColorGrad} from "./TCColorGrad";
+export {TCColorMain as ColorMain} from "./TCColorMain";
+export {TCColorGrad as ColorGrad} from "./TCColorGrad";

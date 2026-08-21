@@ -1,0 +1,1 @@
+export type TTypeOf<T> = T;

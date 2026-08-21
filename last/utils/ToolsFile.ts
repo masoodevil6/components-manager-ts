@@ -24,6 +24,8 @@ export class ToolsFile {
         newFileName: string | null = null
     ): MainDataFile {
 
+        file.type
+
         return {
 
             file,

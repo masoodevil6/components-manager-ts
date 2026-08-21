@@ -1,0 +1,1 @@
+export {MTCopyText as Text} from "./MTCopyText"

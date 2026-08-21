@@ -1,20 +1,20 @@
 
-export {TVColor} from "./TVColor";
+export {TVColor as Color} from "./TVColor";
 
-export {TVFontSize } from "./TVFontSize";
+export {TVFontSize as FontSize } from "./TVFontSize";
 
-export {TVIconSize} from "./TVIconSize";
+export {TVIconSize as IconSize} from "./TVIconSize";
 
-export {TVHeight} from "./TVHeight";
+export {TVHeight as Height} from "./TVHeight";
 
-export {TVSizeUnit} from "./TVSizeUnit";
-export {TVSizeCalc} from "./TVSizeCalc";
+export {TVSizeUnit as SizeUnit} from "./TVSizeUnit";
+export {TVSizeCalc as SizeCalc} from "./TVSizeCalc";
 
-export {TVTransform} from "./TVTransform";
+export {TVTransform as Transform} from "./TVTransform";
 
-export {TVBorderRadius} from "./TVBorderRadius";
+export {TVBorderRadius as BorderRadius} from "./TVBorderRadius";
 
-export {TVBorderWidth} from "./TVBorderWidth";
+export {TVBorderWidth as BorderWidth} from "./TVBorderWidth";
 
-export {TVMargin} from "./TVMargin";
-export {TVPadding} from "./TVPadding";
+export {TVMargin as Margin} from "./TVMargin";
+export {TVPadding as Padding} from "./TVPadding";

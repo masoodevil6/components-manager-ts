@@ -5,6 +5,6 @@ export interface Interface_ComponentProp<TPropTypes> {
     default:           TPropTypes;
     value?:            null;
     hasMultiTemplate?: boolean;
-    title?:            CoreObservable.Observable<string> ,
-    description?:      CoreObservable.Observable<string> ,
+    title?:            CoreObservable.ClObservable<string> ,
+    description?:      CoreObservable.ClObservable<string> ,
 }

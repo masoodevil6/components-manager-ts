@@ -1,2 +1,2 @@
-export {TCategoryComponentDefinition} from "./TCategoryComponentDefinition"
-export {TCategoryIconDefinition} from "./TCategoryIconDefinition"
+export {TCategoryComponentDefinition as CategoryComponentDefinition} from "./TCategoryComponentDefinition"
+export {TCategoryIconDefinition as CategoryIconDefinition} from "./TCategoryIconDefinition"
