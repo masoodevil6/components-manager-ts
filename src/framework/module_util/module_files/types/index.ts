@@ -1,0 +1,1 @@
+export type {TFileInfo as FileInfo} from "./TFileInfo"

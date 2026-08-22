@@ -704,7 +704,7 @@ export abstract class ComponentInputFileBase extends ComponentBase<
                 prop_labelTitle: "Input File",
                 prop_labelTooltipDescription: "Drag & drop or click to upload files",
 
-                prop_title: "Upload Files",
+                prop_title: "Upload files",
                 prop_name: "file_example",
                 prop_accept: "image/*,.pdf",
                 prop_maxCount: 3,

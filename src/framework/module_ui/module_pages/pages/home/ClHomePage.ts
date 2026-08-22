@@ -1,6 +1,6 @@
-import {ITemplate} from "../../interfaces/ITemplate";
+import { ITemplate } from "@/core_route_public";
 
-export class HomePage implements ITemplate{
+export class ClHomePage implements ITemplate {
 
     render(query?: Record<string,string> ,extra?: Record<string, any>): HTMLElement {
         const container = document.createElement("div")

@@ -1,1 +1,1 @@
-export {TCLanguagesDefinition} from "./TCLanguagesDefinition";
+export type {TCLanguagesDefinition as LanguagesDefinition} from "./TCLanguagesDefinition";

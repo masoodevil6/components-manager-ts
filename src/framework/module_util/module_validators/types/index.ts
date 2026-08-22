@@ -1,0 +1,1 @@
+export type {TValidatorResult as ValidatorResult} from "./TValidatorResult"

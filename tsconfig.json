@@ -12,30 +12,72 @@
 
     "baseUrl": ".",
     "paths": {
-      "@/framework" :         ["src/framework"] ,
+      "@/framework" :                ["src/framework"] ,
 
-      "@/core" :              ["src/framework/module_core"] ,
-      "@/core_configs" :      ["src/framework/module_core/module_configs"] ,
-      "@/core_components" :   ["src/framework/module_core/module_components"] ,
-      "@/core_languages" :    ["src/framework/module_core/module_languages"] ,
-      "@/core_observable" :   ["src/framework/module_core/module_observable"] ,
-      "@/core_reactive" :     ["src/framework/module_core/module_reactive"] ,
+      /// CORE
+      "@/core" :                     ["src/framework/module_core"] ,
+      /// CORE -> Config
+      "@/core_configs" :             ["src/framework/module_core/module_configs"] ,
+      "@/core_configs_public" :      ["src/framework/module_core/module_configs/public"] ,
+      /// CORE -> Component
+      "@/core_components" :          ["src/framework/module_core/module_components"] ,
+      "@/core_components_public" :   ["src/framework/module_core/module_components/public"] ,
+      /// CORE -> Language
+      "@/core_languages" :           ["src/framework/module_core/module_languages"] ,
+      "@/core_languages_public" :    ["src/framework/module_core/module_languages/public"] ,
+      /// CORE -> Observable
+      "@/core_observable" :          ["src/framework/module_core/module_observable"] ,
+      "@/core_observable_public" :   ["src/framework/module_core/module_observable/public"] ,
+      /// CORE -> Reactive
+      "@/core_reactive" :            ["src/framework/module_core/module_reactive"] ,
+      "@/core_reactive_public" :     ["src/framework/module_core/module_reactive/public"] ,
+      /// CORE -> Route
+      "@/core_route" :               ["src/framework/module_core/module_route"] ,
+      "@/core_route_public" :        ["src/framework/module_core/module_route/public"] ,
 
-      "@/ui" :                ["src/framework/ui"] ,
-      "@/ui_categories" :     ["src/framework/ui/categories"] ,
-      "@/ui_components" :     ["src/framework/ui/components"] ,
-      "@/ui_icons" :          ["src/framework/ui/icons"] ,
 
-      "@/util" :              ["src/framework/util"] ,
-      "@/util_brands" :       ["src/framework/util/brands"] ,
-      "@/util_consts" :       ["src/framework/util/consts"] ,
-      "@/util_styles" :       ["src/framework/util/styles"] ,
-      "@/util_convertor" :    ["src/framework/util/convertor"] ,
-      "@/util_dates" :        ["src/framework/util/dates"] ,
-      "@/util_excels" :       ["src/framework/util/excel"] ,
-      "@/util_files" :        ["src/framework/util/files"] ,
-      "@/util_publics" :      ["src/framework/util/publics"] ,
-      "@/util_validators" :   ["src/framework/util/validators"] ,
+
+      /// UI
+      "@/ui" :                       ["src/framework/module_ui"] ,
+      "@/ui_categories" :            ["src/framework/module_ui/module_categories"] ,
+      "@/ui_components" :            ["src/framework/module_ui/module_components"] ,
+      "@/ui_icons" :                 ["src/framework/module_ui/module_icons"] ,
+      /// UI -> pages
+      "@/ui_pages" :                 ["src/framework/module_ui/module_pages"] ,
+      "@/ui_pages_public" :          ["src/framework/module_ui/module_pages/public"] ,
+
+
+
+
+      /// UTIL
+      "@/util" :                     ["src/framework/module_util"] ,
+      /// UTIL -> Brands
+      "@/util_brands" :              ["src/framework/module_util/module_brands"] ,
+      "@/util_brands_public" :       ["src/framework/module_util/module_brands/public"] ,
+      /// UTIL -> Consts
+      "@/util_consts" :              ["src/framework/module_util/module_consts"] ,
+      "@/util_consts_public" :       ["src/framework/module_util/module_consts/public"] ,
+      /// UTIL -> Styles
+      "@/util_styles" :              ["src/framework/module_util/module_styles"] ,
+      "@/util_styles_public" :       ["src/framework/module_util/module_styles/public"] ,
+      /// UTIL -> validators
+      "@/util_validators" :          ["src/framework/module_util/module_validators"] ,
+      "@/util_validators_public" :   ["src/framework/module_util/module_validators/public"] ,
+      /// UTIL -> convertor
+      "@/util_convertor" :           ["src/framework/module_util/module_convertor"] ,
+      "@/util_convertor_public" :    ["src/framework/module_util/module_convertor/public"] ,
+      /// UTIL -> files
+      "@/util_files" :               ["src/framework/module_util/module_files"] ,
+      "@/util_files_public" :        ["src/framework/module_util/module_files/public"] ,
+      /// UTIL -> dates
+      "@/util_dates" :               ["src/framework/module_util/module_dates"] ,
+      "@/util_dates_public" :        ["src/framework/module_util/module_dates/public"] ,
+      /// UTIL -> excels
+      "@/util_excels" :              ["src/framework/module_util/module_excel"] ,
+      "@/util_excels_public" :       ["src/framework/module_util/module_excel/public"] ,
+      /// UTIL -> tools
+      "@/util_tools" :               ["src/framework/module_util/module_tools"] ,
+      "@/util_tools_public" :        ["src/framework/module_util/module_tools/public"] ,
     }
   }
 }

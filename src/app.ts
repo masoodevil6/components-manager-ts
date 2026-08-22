@@ -1,16 +1,14 @@
 
 // styles
-import './styles/app.css';
-import './styles/bootstrap.css';
-import './styles/main.css';
+import './files/styles/bootstrap.css';
+import './files/styles/app.css';
+import './files/styles/main.css';
 
-import {Router} from "./router/core/router";
-import {ROUTES_MAP} from "./router/core/routes";
+import * as framework from "@/framework";
 
-
-const router = new Router(
+const router = new framework.Route.App(
     document.getElementById("app")!,
-    ROUTES_MAP
+    framework.Pages.PageMap
 )
 
 router.resolve()

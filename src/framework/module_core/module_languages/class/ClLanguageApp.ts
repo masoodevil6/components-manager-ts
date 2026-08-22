@@ -9,8 +9,8 @@ export class ClLanguageApp {
         CoreLanguage.Definition.En;
 
     static setLanguage(language: CoreLanguage.Type.Var.TVLanguageDefinition): void {
-        CoreConfig.Configs.Language.set(language);
-        CoreConfig.Configs.DirectionRtl.set(language.directionRtl);
+        CoreConfig.Class.ConfigApp.state(CoreConfig.States.Language).set(language);
+        CoreConfig.Class.ConfigApp.state(CoreConfig.States.DirectionRtl).set(language.directionRtl);
     }
 
 
@@ -19,7 +19,7 @@ export class ClLanguageApp {
         params: Record<string, any> = {}
     ): CoreObservable.Class.Observable<string> {
 
-        return CoreConfig.Configs.Language
+        return CoreConfig.Class.ConfigApp.state(CoreConfig.States.Language)
             .observable()
             .map((lang: CoreLanguage.Type.Var.TVLanguageDefinition) => {
 

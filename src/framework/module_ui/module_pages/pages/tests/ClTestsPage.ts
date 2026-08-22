@@ -1,13 +1,7 @@
-import {ITemplate} from "../../interfaces/ITemplate";
-import {TOOLS} from "../../../tools/tools";
-import {AppConfig} from "../../../core/AppConfig";
-import {Observable} from "../../../core/Observable";
-import {ReactiveElement} from "../../../core/ReactiveElement";
-import {Language} from "../../../core/Language";
-import {Color, COLORS_GRAD, COLORS_MAIN, SIZES, SizeUnit, UNITS} from "../../../utils/ToolsConsts";
+import { ITemplate } from "@/core_route_public";
+import { App as ReactiveApp } from "@/core_reactive_public";
 
-
-export class TestsPage implements ITemplate{
+export class ClTestsPage implements ITemplate {
 
     render(query?: Record<string,string> ,extra?: Record<string, any>): HTMLElement {
 
@@ -73,7 +67,7 @@ export class TestsPage implements ITemplate{
         return el.getElement()*/
 
 
-        const content = ReactiveElement.section(
+        const content = ReactiveApp.section(
             {
                 className: [
                     "row" , "p-0" , "m-0"

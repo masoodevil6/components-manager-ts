@@ -1,5 +1,4 @@
-export class TemplateEngine {
-
+export class ClTemplateEngine {
     static apply(root: HTMLElement, data: Record<string, any>){
         root.querySelectorAll("[data-text]").forEach(el => {
             const key = el.getAttribute("data-text")
