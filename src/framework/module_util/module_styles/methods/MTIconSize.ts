@@ -1,6 +1,8 @@
-import * as UtilConsts from "@/util_consts";
-import * as UtilStyle from "@/util_styles";
+import * as UtilConsts                     from "@/util_consts";
+///------------------------------
+import {TCSizes    as Sizes }              from "../types/const/TCSizes";
+import {TVIconSize as IconSize}            from "../types/var/TVIconSize";
 
-export const MTIconSize = (size: UtilStyle.Types.Const.Sizes = UtilConsts.Sizes.Sizes.M) : UtilStyle.Types.Var.IconSize  => {
-    return `var(--iconSize${size})` as UtilStyle.Types.Var.IconSize
+export const MTIconSize = (size: Sizes = UtilConsts.Sizes.M) : IconSize  => {
+    return `var(--iconSize${size})` as IconSize
 }

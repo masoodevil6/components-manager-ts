@@ -1,6 +1,8 @@
-import * as UtilConsts from "@/util_consts";
-import * as UtilStyle from "@/util_styles";
+import * as UtilConsts                   from "@/util_consts";
+///------------------------------
+import {TCUnits    as Units }            from "../types/const/TCUnits";
+import {TVSizeUnit as SizeUnit }         from "../types/var/TVSizeUnit";
 
-export const MTSizeUnit = (number: number  , unit:  UtilStyle.Types.Const.Units = UtilConsts.Sizes.Units.PEXEL) : UtilStyle.Types.Var.SizeUnit=> {
-    return `${number}${unit}` as UtilStyle.Types.Var.SizeUnit
+export const MTSizeUnit = (number: number  , unit:  Units = UtilConsts.Units.PEXEL) : SizeUnit=> {
+    return `${number}${unit}` as SizeUnit
 }

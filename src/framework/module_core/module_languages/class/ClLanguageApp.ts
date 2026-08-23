@@ -1,27 +1,29 @@
-import * as CoreConfig from "@/core_configs";
-import * as CoreLanguage from "@/core_languages";
-import * as CoreObservable from "@/core_observable";
+import * as CoreConfig                                  from "@/core_configs";
+import * as CoreObservable                              from "@/core_observable";
+///------------------------------
+import * as Directory                                   from "../directory";
+import {DefEn as En}                                    from "../definition/DefEn";
+import {TVLanguageDefinition as LanguageDefinition}     from "../type/var/TVLanguageDefinition";
 
 
 export class ClLanguageApp {
 
-    private static _fallback =
-        CoreLanguage.Definition.En;
+    private static _fallback = En;
 
-    static setLanguage(language: CoreLanguage.Type.Var.TVLanguageDefinition): void {
-        CoreConfig.Class.ConfigApp.state(CoreConfig.States.Language).set(language);
-        CoreConfig.Class.ConfigApp.state(CoreConfig.States.DirectionRtl).set(language.directionRtl);
+    static setLanguage(language: LanguageDefinition): void {
+        CoreConfig.App.state(CoreConfig.States.Language).set(language);
+        CoreConfig.App.state(CoreConfig.States.DirectionRtl).set(language.directionRtl);
     }
 
 
     static translate(
         key: string,
         params: Record<string, any> = {}
-    ): CoreObservable.Class.Observable<string> {
+    ): CoreObservable.App<string> {
 
-        return CoreConfig.Class.ConfigApp.state(CoreConfig.States.Language)
+        return CoreConfig.App.state(CoreConfig.States.Language)
             .observable()
-            .map((lang: CoreLanguage.Type.Var.TVLanguageDefinition) => {
+            .map((lang: LanguageDefinition) => {
 
                 const dictionary =
                     this._getDictionary(lang.code);
@@ -57,7 +59,7 @@ export class ClLanguageApp {
     ): any {
 
         return (
-            CoreLanguage.Directory as any
+            Directory as any
         )[code];
     }
 

@@ -1,7 +1,8 @@
-import * as Util from "@/util";
-import * as CoreConfig from "@/core_configs";
+import * as Util                                             from "@/util";
+///------------------------------
+import {TConfigStateDefinition as ConfigStateDefinition}     from "../type/TConfigStateDefinition";
 
-export const StateConfigSizeName : CoreConfig.Type.TConfigStateDefinition<Util.Styles.Types.Const.Sizes> = {
+export const StateConfigSizeName : ConfigStateDefinition<Util.Styles.TCSizes> = {
     name: "SizeName" ,
     default: Util.Consts.Sizes.M,
 }

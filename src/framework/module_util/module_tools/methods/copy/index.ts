@@ -1,1 +1,1 @@
-export {MTCopyText as Text} from "./MTCopyText"
+export  {MTCopyText as Text} from "./MTCopyText"

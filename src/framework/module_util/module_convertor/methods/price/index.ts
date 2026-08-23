@@ -1,2 +1,2 @@
-export {MTFromPriceToString as FromPriceToString} from "./MTFromPriceToString";
-export {MTFromStringToPrice as FromStringToPrice} from "./MTFromStringToPrice";
+export  {MTFromPriceToString as FromPriceToString} from "./MTFromPriceToString";
+export  {MTFromStringToPrice as FromStringToPrice} from "./MTFromStringToPrice";

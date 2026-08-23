@@ -1,1 +1,1 @@
-export {IConfigState} from "./IConfigState";
+export type {IConfigState as ConfigState} from "./IConfigState";

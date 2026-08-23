@@ -1,7 +1,9 @@
-import * as UtilValidators from "@/util_validators"
+///------------------------------
+import {AbstractValidatorRule as ValidatorRule}     from "../abstract/AbstractValidatorRule";
+import {TValidatorResult      as ValidatorResult}   from "../types/TValidatorResult";
 
 export class ClValidateIsEmail
-    extends UtilValidators.Abstract.ValidatorRule {
+    extends ValidatorRule {
 
     constructor(
         description: string
@@ -11,7 +13,7 @@ export class ClValidateIsEmail
 
     validate(
         input: string
-    ): UtilValidators.Types.ValidatorResult {
+    ): ValidatorResult {
 
         const emailRegex =
             /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

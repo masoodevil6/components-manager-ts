@@ -1,5 +1,6 @@
 import * as CoreObservable from "@/core_observable";
-import * as Util from "@/util";
+import * as Util           from "@/util";
+///------------------------------
 
 
 
@@ -19,7 +20,7 @@ type Options = {
     stylesCustom?: string;
     stylesBind?: any;
     attrs?: AttrMap;
-    attrsBind?: Record<string, CoreObservable.Class.Observable<any>>;
+    attrsBind?: Record<string, CoreObservable.App<any>>;
     on?: EventMap;
 };
 
@@ -44,9 +45,9 @@ export class ClReactiveElement {
     private _hoverHandlers: Record<string, any> = {};
     private _bindings: (() => void)[] = [];
 
-    hover: CoreObservable.Class.Observable<boolean>;
-    focus: CoreObservable.Class.Observable<boolean>;
-    active: CoreObservable.Class.Observable<boolean>;
+    hover:  CoreObservable.App<boolean>;
+    focus:  CoreObservable.App<boolean>;
+    active: CoreObservable.App<boolean>;
 
     constructor(tagName: string, options: Options = {}) {
 
@@ -55,15 +56,15 @@ export class ClReactiveElement {
 
         this.element = document.createElement(tagName);
 
-        this.hover = new CoreObservable.Class.Observable(false);
+        this.hover = new CoreObservable.App(false);
         this.element.addEventListener("mouseenter", () => this.hover.set(true));
         this.element.addEventListener("mouseleave", () => this.hover.set(false));
 
-        this.focus = new CoreObservable.Class.Observable(false);
+        this.focus = new CoreObservable.App(false);
         this.element.addEventListener("focus", () => this.focus.set(true), true);
         this.element.addEventListener("blur", () => this.focus.set(false), true);
 
-        this.active = new CoreObservable.Class.Observable(false);
+        this.active = new CoreObservable.App(false);
         this.element.addEventListener("mousedown", () => this.active.set(true));
         this.element.addEventListener("mouseup", () => this.active.set(false));
         this.element.addEventListener("mouseleave", () => this.active.set(false));
@@ -71,7 +72,7 @@ export class ClReactiveElement {
         this._applyOptions();
     }
 
-    private _bindObservable<T>(observable: CoreObservable.Class.Observable<T>, callback: (v: T) => void) {
+    private _bindObservable<T>(observable: CoreObservable.App<T>, callback: (v: T) => void) {
         callback(observable.get());
         const unsub = observable.subscribe(callback);
         this._bindings.push(unsub);
@@ -109,7 +110,7 @@ export class ClReactiveElement {
         }
     }
 
-    private _applyClassBind(classBind: CoreObservable.Class.Observable<any>[]) {
+    private _applyClassBind(classBind: CoreObservable.App<any>[]) {
 
         if (!classBind) return;
 
@@ -212,12 +213,12 @@ export class ClReactiveElement {
     }
 
     private _applyStylesBind(
-        stylesBind: Record<string, CoreObservable.Class.Observable<any>> | CoreObservable.Class.Observable<Record<string, any>>
+        stylesBind: Record<string, CoreObservable.App<any>> | CoreObservable.App<Record<string, any>>
     ) {
 
         if (!stylesBind) return;
 
-        if (CoreObservable.Class.Observable.isObservable(stylesBind)) {
+        if (CoreObservable.App.isObservable(stylesBind)) {
 
             this._bindObservable(stylesBind, value => {
                 if (value && typeof value === "object") {
@@ -233,13 +234,13 @@ export class ClReactiveElement {
         Object.entries(stylesBind).forEach(([key, observable]) => {
 
 
-            if (!CoreObservable.Class.Observable.isObservable(observable)) {
+            if (!CoreObservable.App.isObservable(observable)) {
                 return;
             }
 
             this._bindObservable(observable, value => {
 
-                if (value instanceof Util.Styles.Class.ClStyleValue) {
+                if (value instanceof Util.Styles.ClStyleValue) {
                     this._setStyle(key, value);
                     return;
                 }
@@ -286,7 +287,7 @@ export class ClReactiveElement {
         });
     }
 
-    private _applyAttrsBind(attrsBind?: Record<string, CoreObservable.Class.Observable<any>>) {
+    private _applyAttrsBind(attrsBind?: Record<string, CoreObservable.App<any>>) {
 
         if (!attrsBind) return;
 
@@ -324,7 +325,7 @@ export class ClReactiveElement {
                 return;
             }
 
-            if (child instanceof CoreObservable.Class.Observable) {
+            if (child instanceof CoreObservable.App) {
                 const start = document.createComment("obs-start");
                 const end = document.createComment("obs-end");
 
@@ -514,7 +515,7 @@ export class ClReactiveElement {
         if (o.on) this._setEvents();
     }
 
-    getClReactiveElement(): ClReactiveElement {
+    getReactiveElement(): ClReactiveElement {
         return this;
     }
 

@@ -1,6 +1,9 @@
-import * as UtilFiles from "@/util_files";
+///------------------------------
+import {MTGetIMimeType  as GetIMimeType } from "../methods/MTGetIMimeType";
+import { MTGetExtension as GetExtension}  from "../methods/MTGetExtension";
+import {TFileInfo       as FileInfo}      from "../types/TFileInfo";
 
-export const MTGetInfo = function (file: File, newFileName: string | null = null): UtilFiles.Types.FileInfo {
+export const MTGetInfo = function (file: File, newFileName: string | null = null): FileInfo {
     const fileName = newFileName
         ? `${newFileName}.${this.getExtensionFileSelected(file.name)}`
         : file.name;
@@ -9,7 +12,7 @@ export const MTGetInfo = function (file: File, newFileName: string | null = null
         size:      file.size,
         type:      file.type,
         name:      fileName,
-        mime:      UtilFiles.Methods.GetIMimeType(fileName) ,
-        extension: UtilFiles.Methods.GetExtension(fileName)
+        mime:      GetIMimeType(fileName) ,
+        extension: GetExtension(fileName)
     };
 }

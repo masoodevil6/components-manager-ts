@@ -1,8 +1,9 @@
-import * as CoreLanguage from "@/core_languages"
-import * as CoreConfig from "@/core_configs";
+import * as CoreLanguage                                     from "@/core_languages"
+///------------------------------
+import {TConfigStateDefinition as ConfigStateDefinition}     from "../type/TConfigStateDefinition";
 
 
-export const StateConfigLanguage : CoreConfig.Type.TConfigStateDefinition<CoreLanguage.Type.Const.TCLanguagesDefinition> = {
+export const StateConfigLanguage : ConfigStateDefinition<CoreLanguage.TLanguagesDefinition> = {
     name: "language" ,
-    default: CoreLanguage.Definition.Fa,
+    default: CoreLanguage.DefinitionFa,
 }

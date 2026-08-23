@@ -1,11 +1,11 @@
-// ایمپورت مستقیم از ماژول‌های منبع برای جلوگیری از Circular Dependency
-// (ایمپورت از "@/framework" باعث وابستگی دایره‌ای می‌شود)
-import { ClHomePage as HomePage }  from "../pages/home";
-import { ClIconPage as IconPage }  from "../pages/icons";
-import { ClTestsPage as TestsPage } from "../pages/tests";
+import type { TRouter }                from "@/core_route";
+import { App as LanguageApp }          from "@/core_languages";
+///------------------------------
+import {ClHomePage   as HomePage}      from "../pages/home/ClHomePage";
+import {ClIconPage   as IconPage}      from "../pages/icons/ClIconPage";
+import {ClTestsPage  as TestsPage}     from "../pages/tests/ClTestsPage";
 
-import type { TRouter } from "@/core_route_public";
-import { App as LanguageApp }     from "@/core_languages_public";
+
 
 export const CtPageMaps: TRouter = {
 

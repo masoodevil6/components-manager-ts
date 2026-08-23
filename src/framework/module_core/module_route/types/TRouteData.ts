@@ -1,4 +1,5 @@
-import * as Observable from "@/core_observable";
-import * as CoreRoute from "@/core_route"
+import * as Observable              from "@/core_observable";
+///------------------------------
+import {ITemplate as Template}      from "../interfaces/ITemplate";
 
-export type TRouteData =  {template:new () => CoreRoute.Interfaces.Template ,data?:any , headerTitle: Observable.Class.Observable<string>};
+export type TRouteData =  {template:new () => Template ,data?:any , headerTitle: Observable.App<string>};

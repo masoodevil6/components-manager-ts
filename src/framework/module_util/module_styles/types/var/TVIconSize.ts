@@ -1,3 +1,5 @@
-import * as UtilStyle from "@/util_styles"
 
-export type TVIconSize = `var(--iconSize${UtilStyle.Types.Const.Units})`
+///------------------------------
+import {TCUnits as Units} from "../../types/const/TCUnits";
+
+export type TVIconSize = `var(--iconSize${Units})`

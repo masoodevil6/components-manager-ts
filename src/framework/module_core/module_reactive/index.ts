@@ -1,1 +1,1 @@
-export * as Class from "./class";
+export {ReactiveElement as App} from  "./class"

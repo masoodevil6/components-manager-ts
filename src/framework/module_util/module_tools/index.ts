@@ -1,2 +1,7 @@
-export * as Methods from "./methods";
-export * as Types from "./types";
+export {
+    Array ,
+    Copy ,
+    Json ,
+    Attrs ,
+    Replace
+} from "./methods";

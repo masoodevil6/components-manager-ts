@@ -1,5 +1,8 @@
-import * as CoreComponent from "@/core_components";
+// --------------------------------
+import {Interface_ComponentMethod as MethodInterface }   from "../../tools/method/Interface_ComponentMethod";
+import {Type_ComponentMethod      as MethodType }        from "../../tools/method/Type_ComponentMethod";
 
-export function Define_ComponentMethod<TMethod , TPropTypes>(methods: { [K in CoreComponent.Tools.Method.Type<TMethod>]: CoreComponent.Tools.Method.Interface<TPropTypes> } ) : { [K in CoreComponent.Tools.Method.Type<TMethod>]: CoreComponent.Tools.Method.Interface<TPropTypes> } {
+
+export function Define_ComponentMethod<TMethod , TPropTypes>(methods: { [K in MethodType<TMethod>]: MethodInterface<TPropTypes> } ) : { [K in MethodType<TMethod>]: MethodInterface<TPropTypes> } {
     return methods;
 }

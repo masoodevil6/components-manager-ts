@@ -1,7 +1,8 @@
 
-import * as UtilStyle from "@/util_styles";
+///------------------------------
+import {ClStyleValue as StyleValue }        from "../class/ClStyleValue";
 
-export function MTStyleImportant(value: string | number): UtilStyle.Class.ClStyleValue {
+export function MTStyleImportant(value: string | number): StyleValue {
     return {
         value,
         important: true

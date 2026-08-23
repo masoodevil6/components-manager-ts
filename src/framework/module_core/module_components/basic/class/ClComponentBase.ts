@@ -1,28 +1,38 @@
-import * as CoreConfigs from "@/core_configs";
-import * as CoreComponent from "@/core_components";
-import * as CoreObservable from "@/core_observable";
-import * as CoreReactive from "@/core_reactive";
-
+import * as CoreConfigs                                                                      from "@/core_configs";
+import * as CoreObservable                                                                   from "@/core_observable";
+import * as CoreReactive                                                                     from "@/core_reactive";
+// --------------------------------
+import {AbComponentConnector        as ComponentConnector}                                   from "../abstract/AbComponentConnector";
+import {TPartAttrDefault            as PartAttrDefault}                                      from "../../basic/types/TPartAttrDefault";
+import {Interface_ComponentMethod   as MethodInterface  }                                    from "../../tools/method/Interface_ComponentMethod";
+import {Type_ComponentMethod        as MethodType  }                                         from "../../tools/method/Type_ComponentMethod";
+import {Callback_ComponentMethod    as MethodCallback  }                                     from "../../tools/method/Callback_ComponentMethod";
+import {Interface_ComponentProp     as PropInterface  }                                      from "../../tools/prop/Interface_ComponentProp";
+import {Type_ComponentProp          as PropType  }                                           from "../../tools/prop/Type_ComponentProp";
+import {Interface_ComponentSchema   as SchemaInterface  }                                    from "../../tools/schema/Interface_ComponentSchema";
+import {Type_ComponentSchema        as SchemaType  }                                         from "../../tools/schema/Type_ComponentSchema";
+import {Interface_ComponentTemplate as TemplateInterface  }                                  from "../../tools/template/Interface_ComponentTemplate";
+import {Type_ComponentTemplate      as TemplateType  }                                       from "../../tools/template/Type_ComponentTemplate";
 
 
 export class ClComponentBase<
     TProp extends Record<string, any> ,
     TSchemas ,
     TTemplate ,
-    TMethods extends Record<string, CoreComponent.Tools.Method.Callback<any , any>>
-    > extends CoreComponent.Basic.Abstract.ComponentConnector{
+    TMethods extends Record<string, MethodCallback<any , any>>
+    > extends ComponentConnector{
 
-    private _renderScope = new CoreObservable.Class.Scope();
+    private _renderScope = new CoreObservable.Scope();
 
-    _COMPONENT_PATTERN! : { [K in   CoreComponent.Tools.Prop.Type<TProp>]?:             CoreComponent.Tools.Prop.Interface<TProp[K]> }
+    _COMPONENT_PATTERN! : { [K in    PropType<TProp>]?:            PropInterface<TProp[K]> }
 
-    _COMPONENT_SCHEMA! :   { [K in  CoreComponent.Tools.Schema.Type<TSchemas>]:         CoreComponent.Tools.Schema.Interface<TSchemas[K] , TProp> }
+    _COMPONENT_SCHEMA! :   { [K in   SchemaType<TSchemas>]:        SchemaInterface<TSchemas[K] , TProp> }
 
-    _COMPONENT_METHODS! :   { [K in  CoreComponent.Tools.Method.Type<TMethods>]:        CoreComponent.Tools.Method.Interface<TProp> }
+    _COMPONENT_METHODS! :   { [K in  MethodType<TMethods>]:        MethodInterface<TProp> }
 
-    _COMPONENT_TEMPLATES! : { [K in  CoreComponent.Tools.Template.Type<TTemplate>]?:    CoreComponent.Tools.Template.Interface<TProp> } ;
+    _COMPONENT_TEMPLATES! : { [K in  TemplateType<TTemplate>]?:    TemplateInterface<TProp> } ;
 
-    _COMPONENT_PROPS_BIND: Record<string, CoreObservable.Class.Observable<any>> = {};
+    _COMPONENT_PROPS_BIND: Record<string, CoreObservable.App<any>> = {};
 
     _COMPONENT_CONFIG!: Record<string, any>;
 
@@ -32,7 +42,7 @@ export class ClComponentBase<
     _COMPONENT_NAME: string;
     //_COMPONENT_SELECTOR: string | null = null;
     //_COMPONENT_ELEMENT: HTMLElement | null = null;
-    _COMPONENT_CONTENT!: CoreReactive.ReactiveElement;
+    _COMPONENT_CONTENT!: CoreReactive.App;
     //_COMPONENT_SLOTS: any[] = [];
 
     _unsubscribeDirection: any;
@@ -90,18 +100,18 @@ export class ClComponentBase<
 
     connectedCallback() {
         this._unsubscribeDirection =
-            CoreObservable.Class.Observable.computed(
+            CoreObservable.App.computed(
                 ( dir) => {
                     this.set("directionRtl", dir);
                     },
                 [
-                    CoreConfigs.Class.ConfigApp.state(CoreConfigs.States.DirectionRtl).observable()
+                    CoreConfigs.App.state(CoreConfigs.States.DirectionRtl).observable()
                 ],
                 this.getScope());
 
     }
 
-    #getReadyUserConfigAndDefaultConfig(config: Record<string, any>):   CoreComponent.Tools.Prop.Interface<TProp>[] {
+    #getReadyUserConfigAndDefaultConfig(config: Record<string, any>):   PropInterface<TProp>[] {
         const props = this._COMPONENT_PATTERN;
         if (config) {
 
@@ -134,11 +144,11 @@ export class ClComponentBase<
                     }
 
                     itemProp.value = value;
-                    if (CoreObservable.Class.Observable.isObservable(value)){
+                    if (CoreObservable.App.isObservable(value)){
                         this._COMPONENT_PROPS_BIND[propName] = value;
                     }
                     else {
-                        this._COMPONENT_PROPS_BIND[propName] = new CoreObservable.Class.Observable(value);
+                        this._COMPONENT_PROPS_BIND[propName] = new CoreObservable.App(value);
                     }
                 }
             })
@@ -150,12 +160,12 @@ export class ClComponentBase<
     //--------------------------------------------------
     // GET Ready ==> _COMPONENT_METHODS
     //--------------------------------------------------
-    #getReadyComponentMethods(methods: Record<string, CoreComponent.Tools.Method.Callback<any , any>>) {
+    #getReadyComponentMethods(methods: Record<string, MethodCallback<any , any>>) {
         for (const keyMethod in this._COMPONENT_METHODS){
             for (const methodName in  methods){
                 const fn = methods[keyMethod];
                 if (keyMethod == methodName && fn != null && typeof fn === "function"){
-                    const itemMethod: CoreComponent.Tools.Method.Interface<TProp> = this._COMPONENT_METHODS[keyMethod];
+                    const itemMethod: MethodInterface<TProp> = this._COMPONENT_METHODS[keyMethod];
                     itemMethod.destination = fn;
                 }
             }
@@ -172,7 +182,7 @@ export class ClComponentBase<
 
     private createComponentElement(){
         this._renderScope.dispose();
-        this._renderScope = new CoreObservable.Class.Scope();
+        this._renderScope = new CoreObservable.Scope();
 
         this._COMPONENT_CONTENT = this.executeSchemaPart(GOG_ComponentBasicConfigs_Component_parts.Component.name)!;
 
@@ -209,7 +219,7 @@ export class ClComponentBase<
                         const props  = itemPart.props;
                         const data = this.getSchemaPropsInPart(props);
 
-                        const attrsDefault : CoreComponent.Basic.Types.PartAttrDefault = {
+                        const attrsDefault : PartAttrDefault = {
                             "data-part-name":     partName,
                             "id":                 this.getPartId(partName),
                         }
@@ -228,8 +238,8 @@ export class ClComponentBase<
         return result;
     }
 
-    getSchemaPropsInPart(props: CoreComponent.Tools.Prop.Interface<any>[]){
-        let resultExp: Record<string, CoreObservable.Class.Observable<any>>  = {};
+    getSchemaPropsInPart(props: PropInterface<any>[]){
+        let resultExp: Record<string, CoreObservable.App<any>>  = {};
         for (const param of props) {
             if (param != null && param.hasOwnProperty("prop")) {
                 resultExp[param.prop] = this._COMPONENT_PROPS_BIND[param.prop];
@@ -273,7 +283,7 @@ export class ClComponentBase<
         return null;
     }
 
-    getScope(): CoreObservable.Class.Scope{
+    getScope(): CoreObservable.Scope{
         return this._renderScope;
     }
 
@@ -308,7 +318,7 @@ export class ClComponentBase<
         return [fn, argsObject];
     }
 
-    #executeMethod_getMethodData_getArgs(args: Record< string, CoreComponent.Tools.Prop.Interface<TProp> >): Record<string, any> {
+    #executeMethod_getMethodData_getArgs(args: Record< string, PropInterface<TProp> >): Record<string, any> {
         const argsExp: Record<string, any> = {};
         Object.keys(args).forEach(keyArg => {
             const argProp   = args[keyArg];

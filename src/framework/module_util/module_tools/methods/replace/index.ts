@@ -1,1 +1,1 @@
-export {MTReplaceInTextWithPattern as TextWithPattern} from "./MTReplaceInTextWithPattern"
+export  {MTReplaceInTextWithPattern as TextWithPattern} from "./MTReplaceInTextWithPattern"

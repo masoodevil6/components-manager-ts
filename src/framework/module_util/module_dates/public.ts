@@ -1,3 +1,0 @@
-export {
-    TimeUnix
-} from "./methods"

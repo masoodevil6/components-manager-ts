@@ -1,6 +1,6 @@
 import * as UI from "@/ui"
 
-export interface TComponentDefinition {
+export type TComponentDefinition ={
     id:       string;
     name:     string;
     version:  string;

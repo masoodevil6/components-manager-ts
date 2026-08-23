@@ -1,5 +1,7 @@
+import { ITemplate } from "@/core_route";
+///------------------------------
 import './icons.css';
-import { ITemplate } from "@/core_route_public";
+
 
 export class ClIconPage implements ITemplate {
 

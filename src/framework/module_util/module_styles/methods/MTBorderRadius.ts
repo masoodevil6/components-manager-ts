@@ -1,6 +1,8 @@
-import * as UtilConsts from "@/util_consts";
-import * as UtilStyle from "@/util_styles"
+import * as UtilConsts                       from "@/util_consts";
+///------------------------------
+import {TCSizes        as Sizes}             from "../types/const/TCSizes";
+import {TVBorderRadius as BorderRadius}      from "../types/var/TVBorderRadius";
 
-export const MTBorderRadius = (size: UtilStyle.Types.Const.Sizes = UtilConsts.Sizes.Sizes.M) : UtilStyle.Types.Var.BorderRadius  => {
-    return `var(--borderRadius${size})` as UtilStyle.Types.Var.BorderRadius
+export const MTBorderRadius = (size: Sizes = UtilConsts.Sizes.M) : BorderRadius  => {
+    return `var(--borderRadius${size})` as BorderRadius
 }

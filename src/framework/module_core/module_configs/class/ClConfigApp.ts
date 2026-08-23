@@ -1,20 +1,23 @@
-import * as CoreConfig from "@/core_configs";
+
+// --------------------------------
+import {ClConfigState          as ConfigState}                  from "../class/ClConfigState";
+import {TConfigStateDefinition as ConfigStateDefinition}        from "../type/TConfigStateDefinition";
 
 export class ClConfigApp {
 
     private static _states = new Map<
         string,
-        CoreConfig.Interface.IConfigState<any>
+        ConfigState<any>
     >();
 
     public static state<T>(
-        definition: CoreConfig.Type.TConfigStateDefinition<T>
-    ): CoreConfig.Interface.IConfigState<T> {
+        definition: ConfigStateDefinition<T>
+    ): ConfigState<T> {
 
         let state = this._states.get(definition.name);
 
         if (!state) {
-            state = new CoreConfig.Class.ConfigState<T>(
+            state = new ConfigState<T>(
                 definition.default
             );
 
@@ -24,6 +27,6 @@ export class ClConfigApp {
             );
         }
 
-        return state as CoreConfig.Interface.IConfigState<T>;
+        return state as ConfigState<T>;
     }
 }

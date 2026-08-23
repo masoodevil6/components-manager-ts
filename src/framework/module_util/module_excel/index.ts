@@ -1,1 +1,3 @@
-export * as Methods from "./methods";
+export {
+    AddExcelKeys
+} from "./methods";

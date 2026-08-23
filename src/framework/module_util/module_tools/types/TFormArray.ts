@@ -1,4 +1,4 @@
 export type TFormArray = {
-    name: string;
-    value: unknown;
+    name:    string;
+    value:   unknown;
 }

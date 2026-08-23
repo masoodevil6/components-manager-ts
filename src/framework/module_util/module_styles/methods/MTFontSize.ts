@@ -1,6 +1,8 @@
-import * as UtilConsts from "@/util_consts";
-import * as UtilStyle from "@/util_styles";
+import * as UtilConsts                  from "@/util_consts";
+///------------------------------
+import {TCSizes    as Sizes }           from "../types/const/TCSizes";
+import {TVFontSize as FontSize}         from "../types/var/TVFontSize";
 
-export const MTFontSize = (size: UtilStyle.Types.Const.Sizes = UtilConsts.Sizes.Sizes.M) : UtilStyle.Types.Var.FontSize  => {
-    return `var(--fontSize${size})` as UtilStyle.Types.Var.FontSize
+export const MTFontSize = (size: Sizes = UtilConsts.Sizes.M) : FontSize  => {
+    return `var(--fontSize${size})` as  FontSize
 }

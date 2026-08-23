@@ -1,1 +1,1 @@
-export {ITemplate as Template } from "./ITemplate";
+export type {ITemplate as Template } from "./ITemplate";

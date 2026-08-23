@@ -1,6 +1,7 @@
-import * as CoreConfig from "@/core_configs";
+///------------------------------
+import {TConfigStateDefinition as ConfigStateDefinition}     from "../type/TConfigStateDefinition";
 
-export const StateConfigFontName : CoreConfig.Type.TConfigStateDefinition<string> = {
+export const StateConfigFontName : ConfigStateDefinition<string> = {
     name: "fontName" ,
     default: "IRANSans",
 }

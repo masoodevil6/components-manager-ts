@@ -1,6 +1,8 @@
-import * as UtilTools from "@/util_tools"
 
-export const MTMergeMultiFormArrays = function (...arrays: UtilTools.Types.FormArray[][]): UtilTools.Types.FormArray[] {
+///------------------------------
+import {TFormArray as FormArray}    from "../../types/TFormArray"
+
+export const MTMergeMultiFormArrays = function (...arrays: FormArray[][]): FormArray[] {
     const map = new Map<string, unknown>();
 
     for (const array of arrays) {

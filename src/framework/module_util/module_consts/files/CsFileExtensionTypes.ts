@@ -1,33 +1,35 @@
-import * as UtilConsts from "@/util_consts";
 
-export const CsFileExtensionTypes: Record<string, UtilConsts.Files.FileMimeTypes> = {
+///------------------------------
+import {CsFileMimeTypes as FileMimeTypes} from "./CsFileMimeTypes";
 
-    png:      UtilConsts.Files.FileMimeTypes.PNG,
+export const CsFileExtensionTypes: Record<string, FileMimeTypes> = {
 
-    jpg:      UtilConsts.Files.FileMimeTypes.JPG,
-    jpeg:     UtilConsts.Files.FileMimeTypes.JPEG,
+    png:      FileMimeTypes.PNG,
 
-    gif:      UtilConsts.Files.FileMimeTypes.GIF,
-    webp:     UtilConsts.Files.FileMimeTypes.WEBP,
-    svg:      UtilConsts.Files.FileMimeTypes.SVG,
-    ico:      UtilConsts.Files.FileMimeTypes.ICO,
-    bmp:      UtilConsts.Files.FileMimeTypes.BMP,
-    tiff:     UtilConsts.Files.FileMimeTypes.TIFF,
+    jpg:      FileMimeTypes.JPG,
+    jpeg:     FileMimeTypes.JPEG,
 
-    pdf:      UtilConsts.Files.FileMimeTypes.PDF,
+    gif:      FileMimeTypes.GIF,
+    webp:     FileMimeTypes.WEBP,
+    svg:      FileMimeTypes.SVG,
+    ico:      FileMimeTypes.ICO,
+    bmp:      FileMimeTypes.BMP,
+    tiff:     FileMimeTypes.TIFF,
 
-    json:     UtilConsts.Files.FileMimeTypes.JSON,
-    xml:      UtilConsts.Files.FileMimeTypes.XML,
+    pdf:      FileMimeTypes.PDF,
 
-    txt:      UtilConsts.Files.FileMimeTypes.TXT,
-    csv:      UtilConsts.Files.FileMimeTypes.CSV,
-    html:     UtilConsts.Files.FileMimeTypes.HTML,
-    css:      UtilConsts.Files.FileMimeTypes.CSS,
+    json:     FileMimeTypes.JSON,
+    xml:      FileMimeTypes.XML,
 
-    js:       UtilConsts.Files.FileMimeTypes.JS,
-    ts:       UtilConsts.Files.FileMimeTypes.TS,
+    txt:      FileMimeTypes.TXT,
+    csv:      FileMimeTypes.CSV,
+    html:     FileMimeTypes.HTML,
+    css:      FileMimeTypes.CSS,
 
-    zip:      UtilConsts.Files.FileMimeTypes.ZIP,
-    rar:      UtilConsts.Files.FileMimeTypes.RAR,
-    gz:       UtilConsts.Files.FileMimeTypes.GZIP,
+    js:       FileMimeTypes.JS,
+    ts:       FileMimeTypes.TS,
+
+    zip:      FileMimeTypes.ZIP,
+    rar:      FileMimeTypes.RAR,
+    gz:       FileMimeTypes.GZIP,
 };

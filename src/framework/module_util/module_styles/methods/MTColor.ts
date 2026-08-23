@@ -1,6 +1,9 @@
-import * as UtilConsts from "@/util_consts";
-import * as UtilStyle from "@/util_styles";
+import * as UtilConsts               from "@/util_consts";
+///------------------------------
+import {TCColorMain as ColorMain}    from "../types/const/TCColorMain";
+import {TCColorGrad as ColorGrad}    from "../types/const/TCColorGrad";
+import {TVColor     as Color}        from "../types/var/TVColor";
 
-export const MTColor = (color: UtilStyle.Types.Const.ColorMain = UtilConsts.Colors.ColorMain.PRIMARY , grade: UtilStyle.Types.Const.ColorGrad = UtilConsts.Colors.ColorGrad.GRADE_1) : UtilStyle.Types.Var.Color  => {
-    return `var(--${color}Color${grade})` as UtilStyle.Types.Var.Color
+export const MTColor = (color: ColorMain = UtilConsts.ColorMain.PRIMARY , grade: ColorGrad = UtilConsts.ColorGrad.GRADE_1) : Color  => {
+    return `var(--${color}Color${grade})` as Color
 }

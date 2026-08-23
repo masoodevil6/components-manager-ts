@@ -1,2 +1,7 @@
-export * as Methods from "./methods";
-export * as Types from "./types";
+export
+{
+    GetInfo ,
+    GetExtension ,
+    GetIMimeType
+}
+from "./methods";

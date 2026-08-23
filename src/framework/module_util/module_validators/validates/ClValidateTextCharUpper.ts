@@ -1,11 +1,13 @@
-import * as UtilValidators from "@/util_validators"
+///------------------------------
+import {AbstractValidatorRule as ValidatorRule}     from "../abstract/AbstractValidatorRule";
+import {TValidatorResult      as ValidatorResult}   from "../types/TValidatorResult";
 
 type ValidatorTextCharUpperParams = {
     min: number;
 };
 
 export class ClValidateTextCharUpper
-    extends UtilValidators.Abstract.ValidatorRule<ValidatorTextCharUpperParams> {
+    extends ValidatorRule<ValidatorTextCharUpperParams> {
 
     constructor(
         description: string,
@@ -19,7 +21,7 @@ export class ClValidateTextCharUpper
 
     validate(
         input: string
-    ): UtilValidators.Types.ValidatorResult {
+    ): ValidatorResult {
 
         const regex = new RegExp(
             `(?:.*[A-Z]){${this.params.min},}`

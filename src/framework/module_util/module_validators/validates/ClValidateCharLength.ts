@@ -1,11 +1,14 @@
-import * as UtilValidators from "@/util_validators"
+///------------------------------
+
+import {AbstractValidatorRule as ValidatorRule}     from "../abstract/AbstractValidatorRule";
+import {TValidatorResult      as ValidatorResult}   from "../types/TValidatorResult";
 
 type ValidatorCharLengthParams = {
     min: number;
 };
 
 export class ClValidateCharLength
-    extends UtilValidators.Abstract.ValidatorRule<ValidatorCharLengthParams> {
+    extends ValidatorRule<ValidatorCharLengthParams> {
 
     constructor(
         description: string,
@@ -19,7 +22,7 @@ export class ClValidateCharLength
 
     validate(
         input: string
-    ): UtilValidators.Types.ValidatorResult {
+    ): ValidatorResult {
 
         const count = input
             .split("")

@@ -1,1 +1,1 @@
-export type {TConfigStateDefinition} from "./TConfigStateDefinition";
+export type {TConfigStateDefinition as ConfigStateDefinition} from "./TConfigStateDefinition";

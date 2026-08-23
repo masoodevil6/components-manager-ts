@@ -1,6 +1,8 @@
-import * as CoreConfig from "@/core_configs";
 
-export const StateConfigDirectionRtl : CoreConfig.Type.TConfigStateDefinition<boolean> = {
+///------------------------------
+import {TConfigStateDefinition as ConfigStateDefinition}     from "../type/TConfigStateDefinition";
+
+export const StateConfigDirectionRtl : ConfigStateDefinition<boolean> = {
     name: "directionRtl" ,
     default: false,
 }

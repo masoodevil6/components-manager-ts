@@ -1,5 +1,6 @@
-import { ITemplate } from "@/core_route_public";
-import { App as ReactiveApp } from "@/core_reactive_public";
+import { ITemplate }          from "@/core_route";
+import { App as ReactiveApp } from "@/core_reactive";
+///------------------------------
 
 export class ClTestsPage implements ITemplate {
 

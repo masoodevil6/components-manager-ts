@@ -1,10 +1,13 @@
-import * as CoreRoute from "@/core_route";
+
+///------------------------------
+import {TRouteData as RouteData}     from "../types/TRouteData";
+import {TRouter    as Router }       from "../types/TRouter";
 
 export class ClRouter {
     root:    HTMLElement
-    routes:  CoreRoute.Types.Router
+    routes:  Router
 
-    constructor(root: HTMLElement, routes: CoreRoute.Types.Router){
+    constructor(root: HTMLElement, routes: Router){
         this.root = root
         this.routes = routes
         window.addEventListener("popstate", () => this.resolve())
@@ -29,7 +32,7 @@ export class ClRouter {
 
 
 
-    #setTitlePage(route: CoreRoute.Types.RouteData){
+    #setTitlePage(route: RouteData){
         if(route.headerTitle){
             const headerTitle = document.querySelector("head title") as HTMLElement
             headerTitle.textContent = route.headerTitle.get()
@@ -43,7 +46,7 @@ export class ClRouter {
         return query;
     }
 
-    #renderPage(route: CoreRoute.Types.RouteData){
+    #renderPage(route: RouteData){
         this.root.innerHTML = ""
 
         const pageInstance = new route.template()

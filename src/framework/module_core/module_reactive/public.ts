@@ -1,1 +1,0 @@
-export {ReactiveElement as App} from  "./class"

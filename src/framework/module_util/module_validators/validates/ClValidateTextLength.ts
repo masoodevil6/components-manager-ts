@@ -1,11 +1,13 @@
-import * as UtilValidators from "@/util_validators"
+///------------------------------
+import {AbstractValidatorRule as ValidatorRule}     from "../abstract/AbstractValidatorRule";
+import {TValidatorResult      as ValidatorResult}   from "../types/TValidatorResult";
 
 type ValidatorTextLengthParams = {
     min: number;
 };
 
 export class ClValidateTextLength
-    extends UtilValidators.Abstract.ValidatorRule<ValidatorTextLengthParams> {
+    extends ValidatorRule<ValidatorTextLengthParams> {
 
     constructor(
         description: string,
@@ -19,7 +21,7 @@ export class ClValidateTextLength
 
     validate(
         input: string
-    ): UtilValidators.Types.ValidatorResult {
+    ): ValidatorResult {
 
         return [
             input.length >= this.params.min,

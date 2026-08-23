@@ -1,8 +1,12 @@
-import * as UtilStyle from "@/util_styles";
+
+///------------------------------
+import {TCOperation as Operation }     from "../types/const/TCOperation";
+import {TVSizeUnit  as SizeUnit }      from "../types/var/TVSizeUnit";
+import { TVSizeCalc as SizeCalc}       from "../types/var/TVSizeCalc";
 
 
-type CalcSizeParts = UtilStyle.Types.Const.Operation | UtilStyle.Types.Var.SizeUnit
-export const MTSizeCalc = (...parts : CalcSizeParts[]) : UtilStyle.Types.Var.SizeCalc => {
+type CalcSizeParts = Operation | SizeUnit
+export const MTSizeCalc = (...parts : CalcSizeParts[]) : SizeCalc => {
     let partStr = ""
     if (parts){
         for (let i = 0; i < parts.length; i++) {
@@ -12,5 +16,5 @@ export const MTSizeCalc = (...parts : CalcSizeParts[]) : UtilStyle.Types.Var.Siz
             }
         }
     }
-    return `calc(${partStr})` as  UtilStyle.Types.Var.SizeCalc
+    return `calc(${partStr})` as  SizeCalc
 }

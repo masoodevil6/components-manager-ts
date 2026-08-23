@@ -1,2 +1,6 @@
-export * as Consts from "./consts";
-export * as Pages from "./pages";
+
+export { Home, Tests, Icon } from "./pages";
+
+export {
+    CtPageMaps as PageMap
+} from "./consts/CtPageMaps";

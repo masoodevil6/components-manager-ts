@@ -1,3 +1,5 @@
-import * as CoreRoute from "@/core_route"
 
-export type TRouter =  Record<string, CoreRoute.Types.RouteData>;
+///------------------------------
+import { TRouteData as RouteData}     from "../types/TRouteData";
+
+export type TRouter =  Record<string, RouteData>;

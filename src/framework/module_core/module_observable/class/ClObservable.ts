@@ -1,4 +1,6 @@
-import * as CoreObservable from "@/core_observable"
+
+///------------------------------
+import {ClScope as Scope}     from "../class/ClScope";
 
 type Subscriber<T> = (value: T) => void;
 type Mapping<T, U> = ((value: T) => U) | { [key: string]: U | ClObservable<U>; default?: U | ClObservable<U> };
@@ -78,7 +80,7 @@ export class ClObservable<T> {
         return derived;
     }*/
 
-    subscribe(fn: Subscriber<T>, scope?: CoreObservable.Class.Scope): () => void {
+    subscribe(fn: Subscriber<T>, scope?: Scope): () => void {
         this._subscribers.add(fn);
 
         const unsubscribe = () => this._subscribers.delete(fn)
@@ -90,7 +92,7 @@ export class ClObservable<T> {
         return unsubscribe
     }
 
-    map<U>(fn: (value: T) => U, scope?: CoreObservable.Class.Scope): ClObservable<U> {
+    map<U>(fn: (value: T) => U, scope?: Scope): ClObservable<U> {
         const derived = new ClObservable(fn(this._value));
 
         const unsub = this.subscribe(v => derived.set(fn(v)))
@@ -100,7 +102,7 @@ export class ClObservable<T> {
         return derived;
     }
 
-    mapBoolean<U>(trueValue: U, falseValue: U, scope?:  CoreObservable.Class.Scope): ClObservable<U> {
+    mapBoolean<U>(trueValue: U, falseValue: U, scope?:  Scope): ClObservable<U> {
         const derived = new ClObservable(this._value ? trueValue : falseValue);
         const unsub = this.subscribe(v => derived.set(v ? trueValue : falseValue));
 
@@ -109,7 +111,7 @@ export class ClObservable<T> {
         return derived;
     }
 
-    mapList<U>(mapping: Mapping<T, U>, scope?:  CoreObservable.Class.Scope): ClObservable<U> {
+    mapList<U>(mapping: Mapping<T, U>, scope?:  Scope): ClObservable<U> {
         const initialMappedValue = this._mapValue(this._value, mapping);
         const derived = new ClObservable(initialMappedValue);
 
@@ -125,7 +127,7 @@ export class ClObservable<T> {
 
     mapArray<U, R>(
         mapper: (item: R, index: number) => U,
-        scope?:  CoreObservable.Class.Scope
+        scope?:  Scope
     ): ClObservable<U[]> {
         const initial = (this.get() as R[]).map((item, index) => mapper(item, index));
         const derived = new ClObservable(initial);
@@ -139,7 +141,7 @@ export class ClObservable<T> {
         return derived;
     }
 
-    static computed<T>(fn: (...args: any[]) => T, observables: ClObservable<any>[], scope?:  CoreObservable.Class.Scope): ClObservable<T> {
+    static computed<T>(fn: (...args: any[]) => T, observables: ClObservable<any>[], scope?:  Scope): ClObservable<T> {
         const getValues = () => observables.map(o => o.get());
         const derived = new ClObservable(fn(...getValues()));
 
@@ -163,7 +165,7 @@ export class ClObservable<T> {
     static conditionSwitch<TKey extends PropertyKey, TResult>(
         observable: ClObservable<TKey>,
         map: ChooseMap<TKey, TResult>,
-        scope?:  CoreObservable.Class.Scope
+        scope?:  Scope
     ): ClObservable<TResult | null> {
 
         const evaluate = (): TResult | null => {
@@ -195,7 +197,7 @@ export class ClObservable<T> {
         condition: (...values: any[]) => boolean,
         onTrue: () => TResult,
         onFalse?: () => TResult,
-        scope?:  CoreObservable.Class.Scope
+        scope?:  Scope
     ): ClObservable<TResult | null> {
 
         const observables = Array.isArray(observableOrList)
@@ -237,7 +239,7 @@ export class ClObservable<T> {
             context: Record<string, any>
         ) => TResult,
         context: Record<string, ClObservable<any>> = {},
-        scope?:  CoreObservable.Class.Scope
+        scope?:  Scope
     ): ClObservable<TResult[]> {
 
         const getContextValues = () => {
@@ -302,7 +304,7 @@ export class ClObservable<T> {
             context: Record<string, any>
         ) => TResult,
         context: Record<string, ClObservable<any>> = {},
-        scope?:  CoreObservable.Class.Scope
+        scope?:  Scope
     ): ClObservable<TResult[]> {
 
         const getContextValues = () => {
@@ -376,7 +378,7 @@ export class ClObservable<T> {
     }
 
 
-    private _bindToScope(unsub: () => void, scope?:  CoreObservable.Class.Scope) {
+    private _bindToScope(unsub: () => void, scope?:  Scope) {
         if (!scope) return;
         scope.track(unsub);
     }

@@ -1,6 +1,8 @@
-import * as UtilConsts from "@/util_consts";
-import * as UtilStyle from "@/util_styles";
+import * as UtilConsts                 from "@/util_consts";
+///------------------------------
+import {TCSizes  as Sizes }            from "../types/const/TCSizes";
+import {TVMargin as Margin}            from "../types/var/TVMargin";
 
-export const MTMargin = (size: UtilStyle.Types.Const.Sizes = UtilConsts.Sizes.Sizes.M) : UtilStyle.Types.Var.Margin  => {
-    return `var(--margin${size})` as UtilStyle.Types.Var.Margin
+export const MTMargin = (size: Sizes = UtilConsts.Sizes.M) : Margin  => {
+    return `var(--margin${size})` as Margin
 }

@@ -1,5 +1,6 @@
-import * as UtilValidator from "@/util_validators";
-import * as UtilTools from "@/util_tools";
+import * as UtilTools                            from "@/util_tools";
+///------------------------------
+import {TValidatorResult as ValidatorResult}     from "../types/TValidatorResult";
 
 export abstract class AbstractValidatorRule<TParams = void> {
 
@@ -8,12 +9,12 @@ export abstract class AbstractValidatorRule<TParams = void> {
         public readonly params: TParams
     ) {}
 
-    abstract validate(input: string): UtilValidator.Types.ValidatorResult;
+    abstract validate(input: string): ValidatorResult;
 
 
     protected getDescription(): string {
 
-        return UtilTools.Methods.Replace.TextWithPattern(
+        return UtilTools.Replace.TextWithPattern(
             this.description,
             this.params as Record<string, unknown>
         );

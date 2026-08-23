@@ -1,1 +1,1 @@
-export {ClStyleValue} from "./ClStyleValue"
+export {ClStyleValue as StyleValue} from "./ClStyleValue"

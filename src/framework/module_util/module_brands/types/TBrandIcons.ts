@@ -1,3 +1,5 @@
-import * as UtilBrands from "@/util_brands";
 
-export type TBrandIcons = UtilBrands.Types.Brands<string , "icon">
+///------------------------------
+import {TBrands as Brands}       from "../types/TBrands";
+
+export type TBrandIcons = Brands<string , "icon">

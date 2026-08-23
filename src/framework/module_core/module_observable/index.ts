@@ -1,1 +1,1 @@
-export * as Class from "./class";
+export {Scope , Observable as App} from "./class"

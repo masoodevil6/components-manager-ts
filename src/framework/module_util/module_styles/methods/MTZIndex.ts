@@ -1,6 +1,7 @@
-import * as UtilConsts from "@/util_consts";
-import * as UtilStyle from "@/util_styles";
+import * as UtilConsts                  from "@/util_consts";
+///------------------------------
+import {TCZIndex as ZIndex }            from "../types/const/TCZIndex";
 
-export const MTZIndex = (zIndex: UtilStyle.Types.Const.ZIndex = UtilConsts.Styles.ZIndex.basic) : number  => {
+export const MTZIndex = (zIndex: ZIndex = UtilConsts.ZIndex.basic) : number  => {
     return zIndex as number
 }

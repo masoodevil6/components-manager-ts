@@ -1,10 +1,11 @@
 
-import * as UtilConsts from "@/util_consts";
-import * as UtilFiles from "@/util_files";
+import * as UtilConsts                  from "@/util_consts";
+///------------------------------
+import {MTGetExtension as GetExtension} from "../methods/MTGetExtension";
 
 export const MTGetIMimeType = function (filename: string): string {
 
-    const extension = UtilFiles.Methods.GetExtension(filename);
+    const extension = GetExtension(filename);
 
-    return UtilConsts.Files.FileExtensionTypes[extension] ?? "";
+    return UtilConsts.FileExtensionTypes[extension] ?? "";
 }

@@ -1,3 +1,1 @@
-
-
 export type Type_ComponentTemplate<TSchema> = keyof TSchema;

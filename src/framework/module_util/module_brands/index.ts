@@ -1,1 +1,1 @@
-export * as Types from "./types";
+export type {BrandIcons as Icons} from "./types"

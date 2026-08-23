@@ -1,3 +1,3 @@
-export * as Class from "./class";
-export * as Types from "./types";
-export * as Interfaces from "./interfaces";
+export {ClRouter as App} from "./class/ClRouter";
+export type {ITemplate}  from "./interfaces/ITemplate";
+export type {TRouter}    from "./types/TRouter";

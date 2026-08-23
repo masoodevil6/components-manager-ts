@@ -1,9 +1,11 @@
-import * as UtilConvertor from "@/util_convertor";
-export const MTToSerializeArray = function (formElement: HTMLFormElement | null): UtilConvertor.Types.SerializeItem[] {
+///------------------------------
+import {TSerializeItem as SerializeItem} from "../../types/TSerializeItem";
+
+export const MTToSerializeArray = function (formElement: HTMLFormElement | null): SerializeItem[] {
     if (!formElement)
         return [];
 
-    const result: UtilConvertor.Types.SerializeItem[] = [];
+    const result: SerializeItem[] = [];
 
     const elements = formElement.elements;
 

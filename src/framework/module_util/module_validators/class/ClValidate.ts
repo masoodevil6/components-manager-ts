@@ -1,11 +1,14 @@
-import * as UtilValidator from "@/util_validators"
+
+///------------------------------
+import {AbstractValidatorRule as ValidatorRule}     from "../abstract/AbstractValidatorRule";
+import {TValidatorResult      as ValidatorResult}   from "../types/TValidatorResult";
 
 export class ClValidator {
 
     static validate(
         input: string,
-        rules: UtilValidator.Abstract.ValidatorRule[]
-    ): UtilValidator.Types.ValidatorResult[] {
+        rules: ValidatorRule[]
+    ): ValidatorResult[] {
 
         if (typeof input !== 'string') {
             throw new Error('Input must be a string');

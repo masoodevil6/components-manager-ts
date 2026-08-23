@@ -1,11 +1,14 @@
-import * as UtilValidators from "@/util_validators"
+///------------------------------
+import {AbstractValidatorRule as ValidatorRule}     from "../abstract/AbstractValidatorRule";
+import {TValidatorResult      as ValidatorResult}   from "../types/TValidatorResult";
+
 
 type ValidatorTextForbiddenParams = {
     chars: string[];
 };
 
 export class ClValidateTextForbidden
-    extends UtilValidators.Abstract.ValidatorRule<ValidatorTextForbiddenParams> {
+    extends ValidatorRule<ValidatorTextForbiddenParams> {
 
     constructor(
         description: string,
@@ -19,7 +22,7 @@ export class ClValidateTextForbidden
 
     validate(
         input: string
-    ): UtilValidators.Types.ValidatorResult {
+    ): ValidatorResult {
 
         const escaped = this.params.chars
             .map(

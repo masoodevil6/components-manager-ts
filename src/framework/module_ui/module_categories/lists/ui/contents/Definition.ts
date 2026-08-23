@@ -1,6 +1,6 @@
 import * as UICategories from "@/ui_categories"
 
-export const Definition : UICategories.Basic.Types.CategoryComponentDefinition = {
+export const Definition : UICategories.TCategoryComponentDefinition = {
     id: "contents",
     name: "contents"
 }

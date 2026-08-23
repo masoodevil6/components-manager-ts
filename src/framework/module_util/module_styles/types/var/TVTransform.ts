@@ -1,3 +1,5 @@
-import * as UtilStyle from "@/util_styles"
 
-export type TVTransform = `translate(${UtilStyle.Types.Var.SizeUnit} , ${UtilStyle.Types.Var.SizeUnit})`
+///------------------------------
+import {TVSizeUnit as SizeUnit} from "../../types/var/TVSizeUnit";
+
+export type TVTransform = `translate(${SizeUnit} , ${SizeUnit})`

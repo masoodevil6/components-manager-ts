@@ -1,4 +1,7 @@
-export * as Files  from "./files";
-export * as Colors  from "./colors";
-export * as Sizes  from "./sizes";
-export * as Styles  from "./styles";
+export {Sizes , Operation , Units} from "./sizes";
+
+export {ColorMain , ColorGrad} from "./colors";
+
+export {ZIndex} from "./styles";
+
+export {FileMimeTypes , FileExtensionTypes} from "./files";

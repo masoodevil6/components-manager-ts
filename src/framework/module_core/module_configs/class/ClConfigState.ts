@@ -1,17 +1,17 @@
-import * as CoreConfig from "@/core_configs";
-import * as CoreObservable from "@/core_observable";
+import * as CoreObservable                            from "@/core_observable";
 ///------------------------------
+import {IConfigState as ConfigState}                  from "../interface/IConfigState";
 
 export class ClConfigState<T>
-    implements CoreConfig.Interface.IConfigState<T> {
+    implements ConfigState<T> {
 
-    protected _state: CoreObservable.Observable<T>;
+    protected _state: CoreObservable.App<T>;
 
     constructor(value : T) {
-        this._state = new CoreObservable.Observable(value);
+        this._state = new CoreObservable.App(value);
     }
 
-    observable(): CoreObservable.Observable<T> {
+    observable(): CoreObservable.App<T> {
         return this._state;
     }
 

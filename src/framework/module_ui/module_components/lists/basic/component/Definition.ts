@@ -2,7 +2,7 @@ import * as UiCategory from "@/ui_categories"
 import * as UiComponent from "@/ui_components"
 
 
-export const Definition : UiComponent.Basic.Types.TComponentDefinition  = {
+export const Definition : UiComponent.Basic.Types.ComponentDefinition  = {
 
     id:      "component",
     name:    "component",

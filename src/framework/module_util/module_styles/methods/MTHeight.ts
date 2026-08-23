@@ -1,6 +1,8 @@
-import * as UtilConsts from "@/util_consts";
-import * as UtilStyle from "@/util_styles";
+import * as UtilConsts                   from "@/util_consts";
+///------------------------------
+import {TCSizes  as Sizes }              from "../types/const/TCSizes";
+import {TVHeight as Height}              from "../types/var/TVHeight";
 
-export const MTHeight = (size: UtilStyle.Types.Const.Sizes = UtilConsts.Sizes.Sizes.M) : UtilStyle.Types.Var.Height  => {
-    return `var(--height${size})` as UtilStyle.Types.Var.Height
+export const MTHeight = (size: Sizes = UtilConsts.Sizes.M) : Height  => {
+    return `var(--height${size})` as Height
 }

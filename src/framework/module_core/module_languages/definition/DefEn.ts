@@ -1,9 +1,9 @@
 
+///------------------------------
+import {TVLanguageDefinition as LanguageDefinition}     from "../type/var/TVLanguageDefinition";
 
-import * as CoreLanguage from "@/core_languages";
-
-export const DefEn : CoreLanguage.Type.Var.TVLanguageDefinition ={
-    code: "en" ,
-    name: "English" ,
-    directionRtl: false ,
+export const DefEn : LanguageDefinition ={
+    code:            "en" ,
+    name:            "English" ,
+    directionRtl:    false ,
 }
