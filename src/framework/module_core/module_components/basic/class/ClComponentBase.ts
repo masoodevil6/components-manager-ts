@@ -184,13 +184,16 @@ export class ClComponentBase<
         this._renderScope.dispose();
         this._renderScope = new CoreObservable.Scope();
 
-        this._COMPONENT_CONTENT = this.executeSchemaPart(GOG_ComponentBasicConfigs_Component_parts.Component.name)!;
+        // اولین Part تعریف‌شده در Schema به عنوان بخش اصلی (Root) کامپوننت رندر می‌شود
+        const firstSchema = Object.values(this._COMPONENT_SCHEMA)[0] as SchemaInterface<any, any> | undefined;
+        const rootPartName: string | undefined = firstSchema?.part as string | undefined;
+        this._COMPONENT_CONTENT = this.executeSchemaPart(rootPartName as string)!;
 
-        const selector = this.get(GOG_ComponentBasicProps_Component.selector);
+        const selector = this.get("selector");
         if (selector){
             const el = document.querySelector(selector)
             if (el){
-                const append = this.get(GOG_ComponentBasicProps_Component.append);
+                const append = this.get("append");
                 if (append){
                     el.append(this._COMPONENT_CONTENT.getElement())
                 }

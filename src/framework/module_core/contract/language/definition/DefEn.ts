@@ -1,6 +1,6 @@
 
 ///------------------------------
-import {TVLanguageDefinition as LanguageDefinition}     from "../type/var/TVLanguageDefinition";
+import {TLanguageDefinition as LanguageDefinition}     from "../types/TLanguageDefinition";
 
 export const DefEn : LanguageDefinition ={
     code:            "En" ,

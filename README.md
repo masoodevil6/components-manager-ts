@@ -23,6 +23,25 @@ src/framework/
 └── util/                   # ابزارهای کمکی داخلی فریم‌ورک
 ```
 
+## راه‌اندازی اولیه (Initialization)
+
+قبل از استفاده از کامپوننت‌ها و سیستم زبان‌ها، حتماً باید سیستم **Bootstrap** اجرا شود تا وابستگی‌های چرخه‌ای (Circular Dependencies) حل شوند و دیکشنری زبان‌ها بارگذاری شود.
+
+```typescript
+// src/app.ts
+import "./files/styles/bootstrap.css";
+import "./files/styles/main.css";
+
+// ✅ ضروری: راه‌اندازی سیستم زبان قبل از سایر عملیات
+import { Boot_Language } from "@/framework/bootstrap/Language";
+Boot_Language();
+
+import * as framework from "@/framework";
+// ادامه کد روتینگ...
+```
+
+برای اطلاعات بیشتر در مورد اینکه چرا این مرحله ضروری است و نحوه عملکرد آن، به **[راهنمای Bootstrap](documents/BOOTSTRAP.md)** مراجعه کنید.
+
 ---
 
 ### ۱. هسته اصلی (Core)

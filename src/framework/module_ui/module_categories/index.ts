@@ -1,9 +1,15 @@
-export * as UI from "./lists/ui"
-//export {Icon} from "./lists/icons"
+export {
+UI , Icons
+} from "./lists"
 
 
 export type {
     CategoryIconDefinition      as TCategoryIconDefinition ,
     CategoryComponentDefinition as TCategoryComponentDefinition
-}
-from "./basic/types"
+} from "./basic/types"
+
+export {
+    Fa   as CategoriesLanguageFa ,
+    En   as CategoriesLanguageEn ,
+    Keys as CategoriesLanguageKeys
+} from "./languages"

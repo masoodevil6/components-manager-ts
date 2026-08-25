@@ -1,97 +1,106 @@
-import * as CoreConfig                                  from "@/core_configs";
-import * as CoreObservable                              from "@/core_observable";
-///------------------------------
-import * as Directory                                   from "../directory";
-import {DefEn as En}                                    from "../definition/DefEn";
-import {TVLanguageDefinition as LanguageDefinition}     from "../type/var/TVLanguageDefinition";
+import * as Core from "@/core";
+import * as CoreConfig from "@/core_configs";
+import * as CoreObservable from "@/core_observable";
+import * as UtilBrands  from "@/util_brands";
 
+
+type TLanguageDictionary = Map<UtilBrands.TranslationKey, string>;
+type TLanguageDirectory = Record<string, TLanguageDictionary>;
 
 export class ClLanguageApp {
 
-    private static _fallback = En;
+    private static _directory:
+        TLanguageDirectory = {};
 
-    static setLanguage(language: LanguageDefinition): void {
-        CoreConfig.App.state(CoreConfig.States.Language).set(language);
-        CoreConfig.App.state(CoreConfig.States.DirectionRtl).set(language.directionRtl);
+    private static _fallback:
+        Core.Language.Types.LanguageDefinition;
+
+
+    static initialize(
+        directory: TLanguageDirectory,
+        fallback: Core.Language.Types.LanguageDefinition
+    ): void {
+
+        this._directory =
+            directory;
+
+        this._fallback =
+            fallback;
+    }
+
+
+    static setLanguage(
+        language: Core.Language.Types.LanguageDefinition
+    ): void {
+
+        CoreConfig.App
+            .state(
+                CoreConfig.States.Language
+            )
+            .set(language);
+
+        CoreConfig.App
+            .state(
+                CoreConfig.States.DirectionRtl
+            )
+            .set(language.directionRtl);
     }
 
 
     static translate(
-        key: string,
-        params: Record<string, any> = {}
+        key:    UtilBrands.TranslationKey,
+        params: Record<string, unknown> = {}
     ): CoreObservable.App<string> {
 
-        return CoreConfig.App.state(CoreConfig.States.Language)
+        return CoreConfig.App
+            .state(
+                CoreConfig.States.Language
+            )
             .observable()
-            .map((lang: LanguageDefinition) => {
+            .map(
+                (lang: Core.Language.Types.LanguageDefinition) => {
 
-                const dictionary =
-                    this._getDictionary(lang.code);
+                    const dictionary =
+                        this._directory[
+                            lang?.code
+                            ];
 
-                const fallback =
-                    this._getDictionary(
-                        this._fallback.code
+                    const fallback =
+                        this._directory[
+                            this._fallback?.code
+                            ];
+
+                    const text =
+                        dictionary?.get(key)
+                        ??
+                        fallback?.get(key)
+                        ??
+                        "";
+
+                    return this._template(
+                        text,
+                        params
                     );
-
-                const text =
-                    this._resolve(
-                        dictionary,
-                        key
-                    )
-                    ??
-                    this._resolve(
-                        fallback,
-                        key
-                    )
-                    ??
-                    key;
-
-                return this._template(
-                    text,
-                    params
-                );
-            });
-    }
-
-
-    private static _getDictionary(
-        code: string
-    ): any {
-
-        return (
-            Directory as any
-        )[code];
-    }
-
-
-    private static _resolve(
-        object: any,
-        path: string
-    ): any {
-
-        return path
-            .split(".")
-            .reduce(
-                (value, key) =>
-                    value?.[key],
-                object
+                }
             );
     }
 
 
     private static _template(
         text: string,
-        params: Record<string, any>
+        params: Record<string, unknown>
     ): string {
 
         return text.replace(
             /\{\{(.*?)\}\}/g,
-            (_, key) => {
+            (_, key: string) => {
 
                 const value =
                     params[key.trim()];
 
-                return value ?? "";
+                return value == null
+                    ? ""
+                    : String(value);
             }
         );
     }

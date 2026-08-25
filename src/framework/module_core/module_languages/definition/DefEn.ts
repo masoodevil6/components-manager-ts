@@ -3,7 +3,7 @@
 import {TVLanguageDefinition as LanguageDefinition}     from "../type/var/TVLanguageDefinition";
 
 export const DefEn : LanguageDefinition ={
-    code:            "en" ,
+    code:            "En" ,
     name:            "English" ,
     directionRtl:    false ,
 }

@@ -1,1 +1,1 @@
-export type {TVLanguageDefinition as LanguageDefinition} from "./TVLanguageDefinition";
+export type {TVLanguageDictionary as LanguageDictionary} from "./TVLanguageDictionary";

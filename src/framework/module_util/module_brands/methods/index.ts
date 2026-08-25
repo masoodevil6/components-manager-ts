@@ -1,0 +1,1 @@
+export {MTCreateTranslationKey as CreateTranslationKey} from "./MTCreateTranslationKey"

@@ -1,4 +1,9 @@
+
+import "./bootstrap/Language";
+
+
 // core
+export * as Core           from "@/core";
 export * as Config         from "@/core_configs";
 export * as Language       from "@/core_languages";
 export * as Observable     from "@/core_observable";

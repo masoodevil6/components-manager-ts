@@ -1,2 +1,2 @@
 export * as UI from "./ui";
-//export * as Icon from "./icon";
+export * as Icons from "./icons";

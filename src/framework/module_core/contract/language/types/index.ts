@@ -1,1 +1,1 @@
-export {TLanguageDefinition} from "./TLanguageDefinition"
+export type {TLanguageDefinition as LanguageDefinition} from "./TLanguageDefinition"

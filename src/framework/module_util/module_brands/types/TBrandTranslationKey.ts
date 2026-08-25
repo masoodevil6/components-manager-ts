@@ -2,4 +2,4 @@
 ///------------------------------
 import {TBrands as Brands}       from "../types/TBrands";
 
-export type TBrandIcons = Brands<string , "icon">
+export type TBrandTranslationKey = Brands<symbol , "translationKey">
