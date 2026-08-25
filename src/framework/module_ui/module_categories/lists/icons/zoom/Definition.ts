@@ -4,7 +4,7 @@ import {TCategoryIconDefinition}   from "../../../basic/types/TCategoryIconDefin
 
 export const Definition : TCategoryIconDefinition = {
     id:              "zoom" ,
-    name:            CoreLanguage.App.translate("icon.category_zoom.name") ,
-    description:     CoreLanguage.App.translate("icon.category_zoom.description") ,
+    name:            CoreLanguage.App.translate(CoreLanguage.Keys.category.icons.zoom.name) ,
+    description:     CoreLanguage.App.translate(CoreLanguage.Keys.category.icons.zoom.description) ,
     children:        []
 }
