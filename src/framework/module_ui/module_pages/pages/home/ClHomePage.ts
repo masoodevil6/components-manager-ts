@@ -2,7 +2,6 @@ import { ITemplate } from "@/core_route";
 import * as CoreReactive from "@/core_reactive";
 import * as CoreLanguage from "@/core_languages";
 import * as UiCategory from "@/ui_categories";
-import {CategoriesLanguageKeys} from "@/ui_categories";
 ///------------------------------
 
 export class ClHomePage implements ITemplate {
@@ -14,7 +13,17 @@ export class ClHomePage implements ITemplate {
                 "page home"
             ] ,
             children:[
-                CoreLanguage.App.translate(UiCategory.CategoriesLanguageKeys.category.icons.zoom.name )
+                CoreReactive.App.p({
+                    children: [
+                        CoreLanguage.App.translate(UiCategory.CategoriesLanguageKeys.category.icons.zoom.name ),
+                    ]
+                }) ,
+
+                CoreReactive.App.p({
+                    children: [
+                        CoreLanguage.App.translate(UiCategory.CategoriesLanguageKeys.category.icons.zoom.description ),
+                    ]
+                })
             ]
         }).getElement()
 

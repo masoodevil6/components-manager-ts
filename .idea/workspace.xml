@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="88c33080-fd23-4a2f-9df9-e50b68f92fd3" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/plans/ready-module-icons.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_core/module_observable/types/TObservableValue.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_core/module_observable/types/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_core/module_reactive/enums/EnElementNamespace.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_core/module_reactive/enums/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/languages/En.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/languages/Fa.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/languages/Keys.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/languages/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/lists/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/lists/zoom/Definition.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/lists/zoom/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/components.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.windsurf/rules/component-architecture.md" beforeDir="false" afterPath="$PROJECT_DIR$/.windsurf/rules/component-architecture.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.windsurf/rules/typescript-standards.md" beforeDir="false" afterPath="$PROJECT_DIR$/.windsurf/rules/typescript-standards.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/src/core/Observable.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/src/core/Observable.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/documents/ui/module_icons.md" beforeDir="false" afterPath="$PROJECT_DIR$/documents/ui/module_icons.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extra/target/componentWorkflow.js" beforeDir="false" afterPath="$PROJECT_DIR$/extra/target/componentWorkflow.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/last/tools/components/ComponentMouseScroller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/last/tools/components/ComponentMouseScroller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/last/tools/components/inputs/ComponentInput.ts" beforeDir="false" afterPath="$PROJECT_DIR$/last/tools/components/inputs/ComponentInput.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_core/contract/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_core/contract/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_core/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_core/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_core/module_observable/class/ClObservable.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_core/module_observable/class/ClObservable.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_core/module_observable/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_core/module_observable/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_core/module_reactive/class/ClReactiveElement.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_core/module_reactive/class/ClReactiveElement.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_core/module_reactive/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_core/module_reactive/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/basic/types/TCategoryIconDefinition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/basic/types/TCategoryIconDefinition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/zoom/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/zoom/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_icons/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_pages/pages/home/ClHomePage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_pages/pages/home/ClHomePage.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_pages/pages/icons/ClIconPage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_pages/pages/icons/ClIconPage.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_util/module_brands/types/TBrandIcons.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_util/module_brands/types/TBrandIcons.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_util/module_styles/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_util/module_styles/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="1214" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:/xampp/php/php.exe" />
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="3ISuAtoCjJWyWsUkXWk7KwTouuK" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "develop",
+    "last_opened_file_path": "D:/Projects/js/component-exp/master/src/framework/module_core/module_reactive",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "D:\\Projects\\js\\component-exp\\master\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Projects\js\component-exp\master\src\framework\module_core\module_reactive" />
+      <recent name="D:\Projects\js\component-exp\master\src\framework\module_core\module_reactive\types" />
+      <recent name="D:\Projects\js\component-exp\master\src\framework\module_ui\module_icons\lists" />
+      <recent name="D:\Projects\js\component-exp\master\src\framework\module_ui\module_icons\lists\zoom" />
+      <recent name="D:\Projects\js\component-exp\master\src\framework\module_core\module_observable" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-31caf2ab9e3c-JavaScript-PS-261.23567.149" />
+        <option value="bundled-php-predefined-a98d8de5180a-022fa7b8ab75-com.jetbrains.php.sharedIndexes-PS-261.23567.149" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="88c33080-fd23-4a2f-9df9-e50b68f92fd3" name="Changes" comment="" />
+      <created>1787770152262</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1787770152262</updated>
+      <workItem from="1787770157720" duration="1361000" />
+      <workItem from="1787779591254" duration="6810000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

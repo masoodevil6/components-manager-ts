@@ -1,5 +1,5 @@
 ---
-description: TypeScript coding standards and type system guidelines
+description: TypeScript coding standards and types system guidelines
 globs: "**/*.ts"
 ---
 

@@ -1,8 +1,7 @@
-import * as CoreObservable from "@/core_observable";
-import * as Util           from "@/util";
+import * as CoreObservable  from "@/core_observable";
+import * as Util            from "@/util";
 ///------------------------------
-
-
+import {EnElementNamespace} from "../enums/EnElementNamespace";
 
 type ClassValue = string | string[];
 type StyleMap = Record<string, string>;
@@ -20,7 +19,7 @@ type Options = {
     stylesCustom?: string;
     stylesBind?: any;
     attrs?: AttrMap;
-    attrsBind?: Record<string, CoreObservable.App<any>>;
+    attrsBind?: Record<string, CoreObservable.TObservableValue<any>>;
     on?: EventMap;
 };
 
@@ -36,7 +35,7 @@ export class ClReactiveElement {
     static version: string = "1.0.0-beta";
 
     tagName: string;
-    element: HTMLElement;
+    element: HTMLElement | SVGElement;
 
     private _options: Options;
     private _eventListeners: EventListenerRecord[] = [];
@@ -49,12 +48,24 @@ export class ClReactiveElement {
     focus:  CoreObservable.App<boolean>;
     active: CoreObservable.App<boolean>;
 
-    constructor(tagName: string, options: Options = {}) {
+    constructor(
+        tagName: string,
+        options: Options = {} ,
+        namespace: EnElementNamespace = EnElementNamespace.HTML
+    ) {
 
         this.tagName = tagName;
         this._options = options;
 
-        this.element = document.createElement(tagName);
+
+        if (namespace === EnElementNamespace.SVG) {
+            this.element = document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                this.tagName
+            );
+        } else {
+            this.element = document.createElement(this.tagName);
+        }
 
         this.hover = new CoreObservable.App(false);
         this.element.addEventListener("mouseenter", () => this.hover.set(true));
@@ -287,22 +298,30 @@ export class ClReactiveElement {
         });
     }
 
-    private _applyAttrsBind(attrsBind?: Record<string, CoreObservable.App<any>>) {
+    private _applyAttrsBind(attrsBind?: Record<string, CoreObservable.TObservableValue<any>>) {
 
         if (!attrsBind) return;
 
-        Object.entries(attrsBind).forEach(([key, observable]) => {
+        Object.entries(attrsBind).forEach(([key, value]) => {
 
-            this._bindObservable(observable, value => {
-
+            if (CoreObservable.App.isObservable(value)) {
+                this._bindObservable(value, v => {
+                    if (v === false || v == null) {
+                        this.element.removeAttribute(key);
+                    }
+                    else {
+                        this.element.setAttribute(key, String(v));
+                    }
+                });
+            }
+            else {
                 if (value === false || value == null) {
                     this.element.removeAttribute(key);
                 }
                 else {
                     this.element.setAttribute(key, String(value));
                 }
-
-            });
+            }
 
         });
     }
@@ -588,4 +607,9 @@ export class ClReactiveElement {
     static style(o?: Options) { return new ClReactiveElement("style", o) }
     static select(o?: Options) { return new ClReactiveElement("select", o) }
     static option(o?: Options) { return new ClReactiveElement("option", o) }
+
+    static svg(o?: Options) { return new ClReactiveElement("svg", o , EnElementNamespace.SVG) }
+    static svgFragment(o?: Options) { return new ClReactiveElement("fragment", o , EnElementNamespace.SVG) }
+    static svgCircle(o?: Options) { return new ClReactiveElement("circle", o , EnElementNamespace.SVG) }
+    static svgLine(o?: Options) { return new ClReactiveElement("line", o , EnElementNamespace.SVG) }
 }

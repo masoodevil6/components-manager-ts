@@ -1,1 +1,1 @@
-export * as Language from "./contract/language"
+export * as Language   from "./contract/language"

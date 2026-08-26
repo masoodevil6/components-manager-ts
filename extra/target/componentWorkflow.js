@@ -68,7 +68,7 @@ class ComponentWorkflow {
     var header = document.createElement('div');
     header.className = 'wf-builder-header';
     header.innerHTML = '<button class="btn-sm btn-secondary" id="wfBack">Back</button>' +
-      '<input type="text" id="wfName" placeholder="Workflow name...">' +
+      '<input types="text" id="wfName" placeholder="Workflow name...">' +
       '<div class="wf-validation-rules" id="wfNameRules" style="display:none;">' +
         '<div class="wf-rule-item" id="ruleUnique"><span class="wf-rule-icon wf-rule-fail">&#10008;</span><span>Unique name</span></div>' +
         '<div class="wf-rule-item" id="ruleUnderscore"><span class="wf-rule-icon wf-rule-pass">&#10004;</span><span>Underscore allowed</span></div>' +
@@ -84,9 +84,9 @@ class ComponentWorkflow {
     var toolbar = document.createElement('div');
     toolbar.className = 'wf-toolbar';
     toolbar.innerHTML =
-      '<div class="wf-tool" data-type="start" title="Start"><div class="wf-shape wf-start"></div><span>Start</span></div>' +
-      '<div class="wf-tool" data-type="end" title="End"><div class="wf-shape wf-end"></div><span>End</span></div>' +
-      '<div class="wf-tool" data-type="condition" title="Condition"><div class="wf-shape-wrap"><div class="wf-shape wf-condition"></div></div><span>Condition</span></div>';
+      '<div class="wf-tool" data-types="start" title="Start"><div class="wf-shape wf-start"></div><span>Start</span></div>' +
+      '<div class="wf-tool" data-types="end" title="End"><div class="wf-shape wf-end"></div><span>End</span></div>' +
+      '<div class="wf-tool" data-types="condition" title="Condition"><div class="wf-shape-wrap"><div class="wf-shape wf-condition"></div></div><span>Condition</span></div>';
     body.appendChild(toolbar);
 
     var canvasWrap = document.createElement('div');
@@ -121,7 +121,7 @@ class ComponentWorkflow {
     this.els.wfName.addEventListener('focus', function(){ self._validateName(this.value.trim()); });
     this.container.querySelectorAll('.wf-tool').forEach(function(tool){
       tool.addEventListener('click', function(){
-        var type = this.getAttribute('data-type');
+        var type = this.getAttribute('data-types');
         self.showNodeDialog(type);
       });
     });
@@ -133,9 +133,9 @@ class ComponentWorkflow {
     nd.style.cssText = 'display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;justify-content:center;align-items:center;';
     nd.innerHTML = '<div style="background:var(--vscode-panel-background);border:1px solid var(--vscode-panel-border);border-radius:5px;padding:18px 20px;min-width:260px;max-width:340px;">' +
       '<label style="display:block;font-size:11px;color:var(--vscode-descriptionForeground);margin-bottom:6px;">Title</label>' +
-      '<input type="text" id="wfNodeTitle" style="width:100%;padding:4px 8px;background:var(--vscode-input-background);color:var(--vscode-input-foreground);border:1px solid #555;border-radius:3px;font-size:12px;box-sizing:border-box;margin-bottom:10px;">' +
+      '<input types="text" id="wfNodeTitle" style="width:100%;padding:4px 8px;background:var(--vscode-input-background);color:var(--vscode-input-foreground);border:1px solid #555;border-radius:3px;font-size:12px;box-sizing:border-box;margin-bottom:10px;">' +
       '<label style="display:block;font-size:11px;color:var(--vscode-descriptionForeground);margin-bottom:6px;">Type</label>' +
-      '<input type="text" id="wfNodeType" readonly style="width:100%;padding:4px 8px;background:var(--vscode-input-background);color:var(--vscode-input-foreground);border:1px solid #555;border-radius:3px;font-size:12px;box-sizing:border-box;margin-bottom:10px;">' +
+      '<input types="text" id="wfNodeType" readonly style="width:100%;padding:4px 8px;background:var(--vscode-input-background);color:var(--vscode-input-foreground);border:1px solid #555;border-radius:3px;font-size:12px;box-sizing:border-box;margin-bottom:10px;">' +
       '<div style="display:flex;gap:6px;justify-content:flex-end;">' +
         '<button class="btn-sm" id="wfNodeSave">Add</button>' +
         '<button class="btn-sm btn-secondary" id="wfNodeCancel">Cancel</button>' +
@@ -147,7 +147,7 @@ class ComponentWorkflow {
     ns.style.cssText = 'display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;justify-content:center;align-items:center;';
     ns.innerHTML = '<div style="background:var(--vscode-panel-background);border:1px solid var(--vscode-panel-border);border-radius:5px;padding:18px 20px;min-width:260px;max-width:340px;">' +
       '<label style="display:block;font-size:11px;color:var(--vscode-descriptionForeground);margin-bottom:6px;">Title</label>' +
-      '<input type="text" id="wfNodeSettingsName" style="width:100%;padding:4px 8px;background:var(--vscode-input-background);color:var(--vscode-input-foreground);border:1px solid #555;border-radius:3px;font-size:12px;box-sizing:border-box;margin-bottom:10px;">' +
+      '<input types="text" id="wfNodeSettingsName" style="width:100%;padding:4px 8px;background:var(--vscode-input-background);color:var(--vscode-input-foreground);border:1px solid #555;border-radius:3px;font-size:12px;box-sizing:border-box;margin-bottom:10px;">' +
       '<label style="display:block;font-size:11px;color:var(--vscode-descriptionForeground);margin-bottom:6px;">Type</label>' +
       '<select id="wfNodeSettingsType" style="width:100%;padding:4px 8px;background:var(--vscode-input-background);color:var(--vscode-input-foreground);border:1px solid #555;border-radius:3px;font-size:12px;box-sizing:border-box;margin-bottom:10px;height:28px;">' +
         '<option value="start">Start</option><option value="end">End</option><option value="condition">Condition</option>' +

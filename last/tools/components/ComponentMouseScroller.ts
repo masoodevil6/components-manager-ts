@@ -282,33 +282,33 @@ const ComponentMouseScrollerConfigs  =  {
             name:                      "part-border-content-positionZoom_border"
         } ,
         BORDER_CONTENT_TOOLS: {
-            name:                      "part-border-content-tools"
+            name:                      "part-border-content-methods"
         } ,
         BORDER_CONTENT_TOOLS_CONTENT: {
-            name:                      "part-border-content-tools-content"
+            name:                      "part-border-content-methods-content"
         } ,
 
         BORDER_CONTENT_TOOLS_CONTENT_ZOOMING: {
-            name:                      "part-border-content-tools-content-zooing"
+            name:                      "part-border-content-methods-content-zooing"
         } ,
         BORDER_CONTENT_TOOLS_CONTENT_ZOOMING_IN: {
-            name:                      "part-border-content-tools-content-zooing-in"
+            name:                      "part-border-content-methods-content-zooing-in"
         } ,
         BORDER_CONTENT_TOOLS_CONTENT_ZOOMING_REFRESH: {
-            name:                      "part-border-content-tools-content-zooing-back"
+            name:                      "part-border-content-methods-content-zooing-back"
         } ,
         BORDER_CONTENT_TOOLS_CONTENT_ZOOMING_OUT: {
-            name:                      "part-border-content-tools-content-zooing-out"
+            name:                      "part-border-content-methods-content-zooing-out"
         } ,
 
         BORDER_CONTENT_TOOLS_CONTENT_COLORING: {
-            name:                      "part-border-content-tools-content-coloring"
+            name:                      "part-border-content-methods-content-coloring"
         } ,
         BORDER_CONTENT_TOOLS_CONTENT_COLORING_LIGHT: {
-            name:                      "part-border-content-tools-content-coloring-light"
+            name:                      "part-border-content-methods-content-coloring-light"
         } ,
         BORDER_CONTENT_TOOLS_CONTENT_COLORING_DARK: {
-            name:                      "part-border-content-tools-content-coloring-dark"
+            name:                      "part-border-content-methods-content-coloring-dark"
         } ,
 
     } ,

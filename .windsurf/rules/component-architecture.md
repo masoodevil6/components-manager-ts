@@ -1,6 +1,6 @@
 ---
 description: Component framework architecture and patterns
-globs: ["**/ComponentBase.ts", "**/core/**/*.ts", "**/tools/**/*.ts"]
+globs: ["**/ComponentBase.ts", "**/core/**/*.ts", "**/methods/**/*.ts"]
 ---
 
 # Component Architecture Standards

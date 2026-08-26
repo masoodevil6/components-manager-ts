@@ -1,4 +1,8 @@
 import { ITemplate } from "@/core_route";
+import * as CoreReactive from "@/core_reactive";
+import * as CoreLanguage from "@/core_languages";
+import * as UiCategory from "@/ui_categories";
+import * as UiIcons from "@/ui_icons"
 ///------------------------------
 import './icons.css';
 
@@ -7,9 +11,18 @@ export class ClIconPage implements ITemplate {
 
     render(query?: Record<string,string> ,extra?: Record<string, any>): HTMLElement {
 
-        const container = document.createElement("div")
-        container.className = "page home"
-        container.textContent = query?.message ??  "خوش آمدید!"
+        const container = CoreReactive.App.div({
+            className: [
+                "page home"
+            ] ,
+            children:[
+                UiIcons.MtCreateIcon(UiIcons.Icons.Zoom.DefinitionZoom ,
+                    //{size : 100}
+                ),
+
+
+            ]
+        }).getElement()
 
         return container
 

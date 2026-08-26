@@ -1,6 +1,6 @@
-
 ///------------------------------
 import {ClScope as Scope}     from "../class/ClScope";
+import {ObservableValue} from "../types"
 
 type Subscriber<T> = (value: T) => void;
 type Mapping<T, U> = ((value: T) => U) | { [key: string]: U | ClObservable<U>; default?: U | ClObservable<U> };
@@ -141,7 +141,7 @@ export class ClObservable<T> {
         return derived;
     }
 
-    static computed<T>(fn: (...args: any[]) => T, observables: ClObservable<any>[], scope?:  Scope): ClObservable<T> {
+    static computed<T>(fn: (...args: any[]) => T, observables: ObservableValue<any>[], scope?:  Scope): ClObservable<T> {
         const getValues = () => observables.map(o => o.get());
         const derived = new ClObservable(fn(...getValues()));
 

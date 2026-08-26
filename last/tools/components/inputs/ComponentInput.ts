@@ -1097,7 +1097,7 @@ export class ComponentInput extends ComponentInputBase {
             //             this.getScope()
             //         ),
             //         value:       prop_value,
-            //         type:        prop_type,
+            //         types:        prop_type,
             //         placeholder: prop_placeholder,
             //         disabled :   Observable.computed(
             //             (status) => {

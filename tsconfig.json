@@ -60,7 +60,7 @@
       "@/util_dates" :               ["src/framework/module_util/module_dates"] ,
       /// UTIL -> excels
       "@/util_excels" :              ["src/framework/module_util/module_excel"] ,
-      /// UTIL -> tools
+      /// UTIL -> methods
       "@/util_tools" :               ["src/framework/module_util/module_tools"] ,
     }
   }

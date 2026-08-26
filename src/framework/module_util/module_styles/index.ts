@@ -1,4 +1,4 @@
-export type {
+export {
     StyleImportant   as Style_Important ,
 
     SizeUnit         as Css_SizeUnit ,

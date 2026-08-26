@@ -645,7 +645,7 @@ observable.subscribe(fn); // ممکن است memory leak
 const count: Observable<number> = new Observable(0);
 
 // ❌ بد
-const count = new Observable(0); // type inference
+const count = new Observable(0); // types inference
 ```
 
 ---
