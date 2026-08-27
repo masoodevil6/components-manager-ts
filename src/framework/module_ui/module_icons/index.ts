@@ -6,8 +6,11 @@ export type {
     IconDefinition as IIconDefinition
 } from "./basic/interface";
 
-// Methods (Functions)
-export { CreateIcon as MtCreateIcon } from "./basic/methods";
 
-// Definitions (Values)
-export * as Icons from "./lists";
+
+
+
+// Methods (Functions)
+export { CreateIcon} from "./basic/methods";
+
+export * as Src from "./src"

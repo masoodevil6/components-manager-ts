@@ -5,7 +5,7 @@ import {IconVariant}        from "../enums"
 
 export interface IIconOptions {
 
-    size?:           CoreObservable.TObservableValue<string>;
+    size?:           CoreObservable.TObservableValue<string | number>;
 
     primaryColor?:   CoreObservable.TObservableValue<string>;
 
@@ -14,5 +14,7 @@ export interface IIconOptions {
     strokeWidth?:    CoreObservable.TObservableValue<number>;
 
     variant?:        CoreObservable.TObservableValue<IconVariant>;
+
+    scope?:          CoreObservable.Scope;
 
 }

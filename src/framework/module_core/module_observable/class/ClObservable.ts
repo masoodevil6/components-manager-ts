@@ -141,19 +141,34 @@ export class ClObservable<T> {
         return derived;
     }
 
-    static computed<T>(fn: (...args: any[]) => T, observables: ObservableValue<any>[], scope?:  Scope): ClObservable<T> {
-        const getValues = () => observables.map(o => o.get());
-        const derived = new ClObservable(fn(...getValues()));
+    static computed<T>(
+        fn: (...args: any[]) => T,
+        observables: ObservableValue<any>[],
+        scope?: Scope
+    ): ClObservable<T> {
 
-        const update = () => {
-            derived.set(fn(...getValues()));
-        }
+        const getValues = () =>
+            observables.map(value =>
+                ClObservable.isObservable(value)
+                    ? value.get()
+                    : value
+            );
 
-        const unsubscribes = observables.map(o => o.subscribe(update, scope));
+        const derived =
+            new ClObservable(fn(...getValues()));
+
+        const unsubscribes =
+            observables
+                .filter(ClObservable.isObservable)
+                .map(observable =>
+                    observable.subscribe(() => {
+                        derived.set(fn(...getValues()));
+                    }, scope)
+                );
 
         if (scope) {
             scope.track(() => {
-                unsubscribes.forEach(u => u());
+                unsubscribes.forEach(unsubscribe => unsubscribe());
             });
         }
 

@@ -5,10 +5,11 @@ import {IconRenderContext} from "./index"
 
 export interface IIconDefinition {
 
-    title:        UtilBrands.TranslationKey;
-    description?: UtilBrands.TranslationKey;
+    title:         UtilBrands.TranslationKey;
+    description?:  UtilBrands.TranslationKey;
 
-    viewBox:      string;
+    viewBoxX:      number;
+    viewBoxY:      number;
 
     render(
         context: IconRenderContext

@@ -9,6 +9,9 @@ export const Definition : TCategoryIconDefinition = {
     name:            CoreLanguage.App.translate(Keys.category.icons.zoom.name) ,
     description:     CoreLanguage.App.translate(Keys.category.icons.zoom.name ) ,
     icons:        [
-        UiIcons.Icons.Zoom.DefinitionZoom
+        UiIcons.Src.Zoom.Definition,
+        UiIcons.Src.ZoomIn.Definition,
+        UiIcons.Src.ZoomOut.Definition,
+        UiIcons.Src.ZoomRefresh.Definition
     ]
 }

@@ -112,12 +112,12 @@
 
 
     /* [IconSize] */
-    --iconSizeXSmall:        12px;
-    --iconSizeSmall:         14px;
-    --iconSizeMedium:        16px;
-    --iconSizeLarge:         18px;
-    --iconSizeXLarge:        20px;
-    --iconSizeXXLarge:       22px;
+    --iconSizeXSmall:        16px;
+    --iconSizeSmall:         20px;
+    --iconSizeMedium:        24px;
+    --iconSizeLarge:         32px;
+    --iconSizeXLarge:        46px;
+    --iconSizeXXLarge:       60px;
 
 
 

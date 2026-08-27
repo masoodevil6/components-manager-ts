@@ -13,6 +13,7 @@ export {
     BorderWidth      as Css_BorderWidth ,
     Margin           as Css_Margin  ,
     Padding          as Css_Padding  ,
+    IconStrokeWidth  as Css_IconStrokeWidth  ,
 } from "./methods";
 
 

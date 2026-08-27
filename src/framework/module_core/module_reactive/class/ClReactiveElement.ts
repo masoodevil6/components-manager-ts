@@ -586,8 +586,10 @@ export class ClReactiveElement {
 
 
     ///---------------------------------
-    ///
+    /// INIT Element
     ///---------------------------------
+
+    /// HTML
     static div(o?: Options) { return new ClReactiveElement("div", o) }
     static button(o?: Options) { return new ClReactiveElement("button", o) }
     static b(o?: Options) { return new ClReactiveElement("b", o) }
@@ -608,8 +610,12 @@ export class ClReactiveElement {
     static select(o?: Options) { return new ClReactiveElement("select", o) }
     static option(o?: Options) { return new ClReactiveElement("option", o) }
 
+
+    /// SVG
     static svg(o?: Options) { return new ClReactiveElement("svg", o , EnElementNamespace.SVG) }
     static svgFragment(o?: Options) { return new ClReactiveElement("fragment", o , EnElementNamespace.SVG) }
     static svgCircle(o?: Options) { return new ClReactiveElement("circle", o , EnElementNamespace.SVG) }
     static svgLine(o?: Options) { return new ClReactiveElement("line", o , EnElementNamespace.SVG) }
+    static svgPath(o?: Options) { return new ClReactiveElement("path", o , EnElementNamespace.SVG) }
+    static svgRect(o?: Options) { return new ClReactiveElement("rect", o , EnElementNamespace.SVG) }
 }

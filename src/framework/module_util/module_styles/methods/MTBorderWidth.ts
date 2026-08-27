@@ -1,8 +1,16 @@
-import * as UtilConsts                      from "@/util_consts";
+import * as UtilConsts        from "@/util_consts";
 ///------------------------------
-import {TCSizes       as Sizes}             from "../types/const/TCSizes";
-import {TVBorderWidth as BorderWidth}       from "../types/var/TVBorderWidth";
+import {TCSizes}              from "../types/const/TCSizes";
+import {TVBorderWidth }       from "../types/var/TVBorderWidth";
+import {MTSizeUnit}           from "./MTSizeUnit";
+import {TVSizeUnit}           from "../types/var/TVSizeUnit";
 
-export const MTBorderWidth = (size: Sizes = UtilConsts.Sizes.M) : BorderWidth  => {
-    return `var(--borderWidth${size})` as BorderWidth;
+export const MTBorderWidth = (size: TCSizes | TVSizeUnit   = UtilConsts.Sizes.M) : TVBorderWidth | TVSizeUnit   => {
+    if (Object.values(UtilConsts.Sizes).includes(size as TCSizes)) {
+        return `var(--borderWidth${size})` as TVBorderWidth;
+    }
+    if (typeof size === "number") {
+        return MTSizeUnit(size , UtilConsts.Units.PEXEL) as TVSizeUnit
+    }
+
 }

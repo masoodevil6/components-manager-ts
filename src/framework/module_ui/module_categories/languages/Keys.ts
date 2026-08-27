@@ -6,6 +6,22 @@ export const Keys = {
             zoom: {
                 name:        CreateTranslationKey() ,
                 description: CreateTranslationKey() ,
+            },
+            light: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            status: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            calc: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            time: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
             }
         } ,
 

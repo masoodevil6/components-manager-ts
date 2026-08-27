@@ -17,6 +17,7 @@ export function MtCreateIcon(
     options:    IconOptions = {}
 ): UtilBrands.Icons {
 
+    const scope = new CoreObservable.Scope()
 
     const sizeName =
         options.size ??
@@ -30,9 +31,25 @@ export function MtCreateIcon(
         options.secondaryColor ??
         UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1);
 
-    const strokeWidth =
+    const borderWidth =
         options.strokeWidth ??
-        10;
+        CoreObservable.App.computed(
+            (sizeName) => {
+                return UtilStyle.Css_BorderWidth(sizeName)
+            } ,
+            [
+                sizeName
+            ],
+            scope
+        );
+
+    const strokeWidth = CoreObservable.App.computed(
+        (strokeWidth) => {
+            return UtilStyle.Css_IconStrokeWidth(strokeWidth , definition.viewBoxX  , definition.viewBoxY)
+        } ,
+        [borderWidth] ,
+        scope
+    )
 
     const variant =
         options.variant ??
@@ -45,7 +62,8 @@ export function MtCreateIcon(
             primaryColor,
             secondaryColor,
             strokeWidth,
-            variant
+            variant ,
+            scope
         });
 
 
@@ -57,28 +75,25 @@ export function MtCreateIcon(
         } ,
         attrsBind: {
             "aria-label" :   CoreLanguage.App.translate(definition.title)  ,
-            "viewBox" :        definition.viewBox,
+            "viewBox" :      CoreObservable.App.computed(
+                (viewBoxX , viewBoxY)=> {
+                    return `0 0 ${viewBoxX} ${viewBoxY}`
+                },
+                [
+                    definition.viewBoxX ,
+                    definition.viewBoxY
+                ] ,
+                scope
+            ),
             width:           CoreObservable.App.computed(
                 value => UtilStyle.Css_IconSize(value),
                 [sizeName],
-                new CoreObservable.Scope()
+                scope
             ),
             height:          CoreObservable.App.computed(
                 value => UtilStyle.Css_IconSize(value),
                 [sizeName],
-                new CoreObservable.Scope()
-            ),
-        } ,
-        stylesBind: {
-            width:           CoreObservable.App.computed(
-                value => UtilStyle.Css_IconSize(value),
-                [sizeName],
-                new CoreObservable.Scope()
-            ),
-            height:          CoreObservable.App.computed(
-                value => UtilStyle.Css_IconSize(value),
-                [sizeName],
-                new CoreObservable.Scope()
+                scope
             ),
         } ,
         children: content

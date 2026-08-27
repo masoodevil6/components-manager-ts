@@ -1,7 +1,5 @@
-import { ITemplate } from "@/core_route";
+import {ITemplate} from "@/core_route";
 import * as CoreReactive from "@/core_reactive";
-import * as CoreLanguage from "@/core_languages";
-import * as UiCategory from "@/ui_categories";
 import * as UiIcons from "@/ui_icons"
 ///------------------------------
 import './icons.css';
@@ -16,9 +14,132 @@ export class ClIconPage implements ITemplate {
                 "page home"
             ] ,
             children:[
-                UiIcons.MtCreateIcon(UiIcons.Icons.Zoom.DefinitionZoom ,
-                    //{size : 100}
-                ),
+
+                CoreReactive.App.div({
+                    children:[
+                        UiIcons.CreateIcon(UiIcons.Src.Zoom.Definition ,
+                            {
+                                size : 100 ,
+                                // strokeWidth: 1 ,
+                                // primaryColor: "red" ,
+                            }
+                        ),
+                        UiIcons.CreateIcon(UiIcons.Src.ZoomIn.Definition ,
+                            {
+                                size : 100 ,
+                                // strokeWidth: 1 ,
+                                // primaryColor: "red" ,
+                            }
+                        ),
+                        UiIcons.CreateIcon(UiIcons.Src.ZoomOut.Definition ,
+                            {
+                                size : 100 ,
+                                // strokeWidth: 1 ,
+                                // primaryColor: "red" ,
+                            }
+                        ),
+                        UiIcons.CreateIcon(UiIcons.Src.ZoomRefresh.Definition ,
+                            {
+                                size : 100 ,
+                                // strokeWidth: 1 ,
+                                // primaryColor: "red" ,
+                            }
+                        ),
+                    ]
+                }),
+                CoreReactive.App.div({
+                    children:[
+
+                        UiIcons.CreateIcon(UiIcons.Src.LightSun.Definition ,
+                            {
+                                size : 100 ,
+                                // strokeWidth: 1 ,
+                                // primaryColor: "red" ,
+                            }
+                        ),
+
+                        UiIcons.CreateIcon(UiIcons.Src.LightMoon.Definition ,
+                            {
+                                size : 100 ,
+                                // strokeWidth: 1 ,
+                                // primaryColor: "red" ,
+                            }
+                        ),
+                    ]
+                }),
+                CoreReactive.App.div({
+                    children:[
+                        UiIcons.CreateIcon(UiIcons.Src.StatusIsTrue.Definition ,
+                            {
+                                size : 100 ,
+                                // strokeWidth: 1 ,
+                                // primaryColor: "red" ,
+                            }
+                        ),
+                        UiIcons.CreateIcon(UiIcons.Src.StatusIsFalse.Definition ,
+                            {
+                                size : 100 ,
+                                // strokeWidth: 1 ,
+                                // primaryColor: "red" ,
+                            }
+                        ),
+                    ]
+                }),
+                CoreReactive.App.div({
+                    children:[
+                        UiIcons.CreateIcon(UiIcons.Src.CalcPlus.Definition ,
+                            {
+                                size : 100 ,
+                                // strokeWidth: 1 ,
+                                // primaryColor: "red" ,
+                            }
+                        ),
+                        UiIcons.CreateIcon(UiIcons.Src.CalcMinus.Definition ,
+                            {
+                                size : 100 ,
+                                // strokeWidth: 1 ,
+                                // primaryColor: "red" ,
+                            }
+                        ),
+                        UiIcons.CreateIcon(UiIcons.Src.CalcCross.Definition ,
+                            {
+                                size : 100 ,
+                                // strokeWidth: 1 ,
+                                // primaryColor: "red" ,
+                            }
+                        ),
+                        UiIcons.CreateIcon(UiIcons.Src.CalcDivide.Definition ,
+                            {
+                                size : 100 ,
+                                // strokeWidth: 1 ,
+                                // primaryColor: "red" ,
+                            }
+                        ),
+                    ]
+                }),
+                CoreReactive.App.div({
+                    children:[
+                        UiIcons.CreateIcon(UiIcons.Src.TimeClock.Definition ,
+                            {
+                                size : 100 ,
+                                // strokeWidth: 1 ,
+                                // primaryColor: "red" ,
+                            }
+                        ),
+                        UiIcons.CreateIcon(UiIcons.Src.TimeCalender.Definition ,
+                            {
+                                size : 100 ,
+                                // strokeWidth: 1 ,
+                                // primaryColor: "red" ,
+                            }
+                        ),
+                    ]
+                }),
+                CoreReactive.App.div({
+                    children:[
+
+                    ]
+                })
 
 
             ]

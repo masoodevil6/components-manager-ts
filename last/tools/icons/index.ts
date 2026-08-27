@@ -186,7 +186,6 @@ export default {
 
      icon_note :                       IconNote ,
      icon_tag :                        IconTag ,
-     icon_time :                       IconTime ,
      icon_amount :                     IconAmount ,
 
      icon_number :                     IconNumber ,
@@ -202,13 +201,8 @@ export default {
      icon_resize :                     IconResize ,
      icon_tik :                        IconTik ,
 
-     icon_is_false :                   IconIsFalse ,
-     icon_is_true :                    IconIsTrue ,
 
-     icon_plus_badge :                 IconPlusBadge ,
-     icon_minus_badge :                IconMinusBadge ,
 
-     icon_calendar :                   IconCalender ,
 
      icon_wallet :                     IconWallet ,
      icon_wallet2 :                    IconWallet2 ,
@@ -241,11 +235,7 @@ export default {
      icon_account_destination :        IconDestination ,
      icon_account_group_add :          IconAccountGroupAdd ,
 
-     icon_moon :                       IconMoon ,
-     icon_sun :                        IconSun ,
-     icon_zoom_in :                    IconZoomIn ,
-     icon_zoom_out :                   IconZoomOut ,
-     icon_zoom_refresh :               IconZoomRefresh ,
+
 
      icon_loading :                    IconLoading ,
      icon_loading_dots :               IconLoadingDots ,
@@ -257,5 +247,24 @@ export default {
      icon_web_code_500 :               IconWebCode500 ,
      icon_web_code_504 :               IconWebCode504 ,
      icon_web_code_401 :               IconWebCode401 ,
+
+
+     // icon_time :                       IconTime ,
+     // icon_calendar :                   IconCalender ,
+
+
+     // icon_plus_badge :                 IconPlusBadge ,
+     // icon_minus_badge :                IconMinusBadge ,
+
+
+     // icon_moon :                       IconMoon ,
+     // icon_sun :                        IconSun ,
+
+     // icon_zoom_in :                    IconZoomIn ,
+     // icon_zoom_out :                   IconZoomOut ,
+     // icon_zoom_refresh :               IconZoomRefresh ,
+
+     // icon_is_false :                   IconIsFalse ,
+     // icon_is_true :                    IconIsTrue ,
 
 }

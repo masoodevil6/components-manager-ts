@@ -2,7 +2,6 @@ export {
 UI , Icons
 } from "./lists"
 
-
 export type {
     CategoryIconDefinition      as TCategoryIconDefinition ,
     CategoryComponentDefinition as TCategoryComponentDefinition

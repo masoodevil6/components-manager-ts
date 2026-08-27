@@ -5,45 +5,59 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="88c33080-fd23-4a2f-9df9-e50b68f92fd3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/plans/ready-module-icons.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/framework/module_core/module_observable/types/TObservableValue.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/framework/module_core/module_observable/types/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/framework/module_core/module_reactive/enums/EnElementNamespace.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/framework/module_core/module_reactive/enums/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/languages/En.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/languages/Fa.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/languages/Keys.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/languages/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/lists/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/lists/zoom/Definition.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/lists/zoom/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/components.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.windsurf/rules/component-architecture.md" beforeDir="false" afterPath="$PROJECT_DIR$/.windsurf/rules/component-architecture.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.windsurf/rules/typescript-standards.md" beforeDir="false" afterPath="$PROJECT_DIR$/.windsurf/rules/typescript-standards.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/src/core/Observable.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/src/core/Observable.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/documents/ui/module_icons.md" beforeDir="false" afterPath="$PROJECT_DIR$/documents/ui/module_icons.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/extra/target/componentWorkflow.js" beforeDir="false" afterPath="$PROJECT_DIR$/extra/target/componentWorkflow.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/components/ComponentMouseScroller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/last/tools/components/ComponentMouseScroller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/components/inputs/ComponentInput.ts" beforeDir="false" afterPath="$PROJECT_DIR$/last/tools/components/inputs/ComponentInput.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_core/contract/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_core/contract/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_core/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_core/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/calc/Definition.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/calc/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/src/calcCross/Definition.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/src/calcCross/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/src/calcDivide/Definition.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/src/calcDivide/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/src/calcMinus/Definition.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/src/calcMinus/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/src/calcPlus/Definition.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/src/calcPlus/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/src/timeCalender/Definition.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/src/timeCalender/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/src/timeClock/Definition.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/src/timeClock/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/src/zoom/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/framework/module_util/module_styles/methods/MTIconStrokeWidth.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconIsFalse.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconIsTrue.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconMinusBadge.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconMoon.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconPlusBadge.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconSun.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconZoomIn.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconZoomOut.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconZoomRefresh.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/last/tools/icons/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/last/tools/icons/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/files/styles/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/files/styles/app.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_core/module_observable/class/ClObservable.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_core/module_observable/class/ClObservable.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_core/module_observable/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_core/module_observable/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_core/module_reactive/class/ClReactiveElement.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_core/module_reactive/class/ClReactiveElement.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_core/module_reactive/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_core/module_reactive/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/basic/types/TCategoryIconDefinition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/basic/types/TCategoryIconDefinition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/languages/En.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/languages/En.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/languages/Fa.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/languages/Fa.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/languages/Keys.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/languages/Keys.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/zoom/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/zoom/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/zoom/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/zoom/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_icons/basic/interface/IIconDefinition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/basic/interface/IIconDefinition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_icons/basic/interface/IIconOptions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/basic/interface/IIconOptions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_icons/basic/interface/IIconRenderContext.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/basic/interface/IIconRenderContext.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_icons/basic/methods/MtCreateIcon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/basic/methods/MtCreateIcon.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_icons/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_pages/pages/home/ClHomePage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_pages/pages/home/ClHomePage.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_icons/languages/En.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/languages/En.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_icons/languages/Fa.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/languages/Fa.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_icons/languages/Keys.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/languages/Keys.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_icons/lists/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/src/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_icons/lists/zoom/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/src/zoom/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_icons/lists/zoom/index.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_pages/pages/icons/ClIconPage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_pages/pages/icons/ClIconPage.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_util/module_brands/types/TBrandIcons.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_util/module_brands/types/TBrandIcons.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_util/module_styles/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_util/module_styles/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_util/module_styles/methods/MTBorderWidth.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_util/module_styles/methods/MTBorderWidth.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_util/module_styles/methods/MTIconSize.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_util/module_styles/methods/MTIconSize.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_util/module_styles/methods/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_util/module_styles/methods/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +68,7 @@
     <execution />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="1214" />
+    <option name="cachedIndexableFilesCount" value="1261" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -90,7 +104,7 @@
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "git-widget-placeholder": "develop",
-    "last_opened_file_path": "D:/Projects/js/component-exp/master/src/framework/module_core/module_reactive",
+    "last_opened_file_path": "D:/Projects/js/component-exp/master/src/framework/module_util/module_styles/methods",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -102,11 +116,15 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\Projects\js\component-exp\master\src\framework\module_core\module_reactive" />
-      <recent name="D:\Projects\js\component-exp\master\src\framework\module_core\module_reactive\types" />
+      <recent name="D:\Projects\js\component-exp\master\src\framework\module_util\module_styles\methods" />
+      <recent name="D:\Projects\js\component-exp\master\src\framework\module_ui\module_icons\src\TimeClock" />
+      <recent name="D:\Projects\js\component-exp\master\src\framework\module_ui\module_icons\src\TimeCalender" />
+      <recent name="D:\Projects\js\component-exp\master\src\framework\module_ui\module_categories\lists\icons\time" />
+      <recent name="D:\Projects\js\component-exp\master\src\framework\module_ui\module_icons\src" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Projects\js\component-exp\master\src\framework\module_ui\module_icons\lists" />
-      <recent name="D:\Projects\js\component-exp\master\src\framework\module_ui\module_icons\lists\zoom" />
-      <recent name="D:\Projects\js\component-exp\master\src\framework\module_core\module_observable" />
+      <recent name="D:\Projects\js\component-exp\master\src\framework\module_ui\module_icons\lists\category_zoom" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -125,7 +143,9 @@
       <option name="presentableId" value="Default" />
       <updated>1787770152262</updated>
       <workItem from="1787770157720" duration="1361000" />
-      <workItem from="1787779591254" duration="6810000" />
+      <workItem from="1787779591254" duration="7155000" />
+      <workItem from="1787814031055" duration="3888000" />
+      <workItem from="1787830085366" duration="12915000" />
     </task>
     <servers />
   </component>
