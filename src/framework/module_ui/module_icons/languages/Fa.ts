@@ -134,5 +134,116 @@ export const Fa =
         [
             Keys.icons.timeClock.description,
             "آیکون تقویم که مربوط به زمان می باشد"
-        ]
+        ],
+
+
+
+        [
+            Keys.icons.arrowChevronDown.name,
+            "فلش پایین"
+        ],
+        [
+            Keys.icons.arrowChevronDown.description,
+            "آیکون فلش رو به پایین که برای نمایش باز شدن یا حرکت به سمت پایین استفاده می‌شود."
+        ],
+        [
+            Keys.icons.arrowChevronLeft.name,
+            "فلش چپ"
+        ],
+        [
+            Keys.icons.arrowChevronLeft.description,
+            "آیکون فلش رو به چپ که برای نمایش حرکت یا هدایت به سمت چپ استفاده می‌شود."
+        ],
+        [
+            Keys.icons.arrowChevronRight.name,
+            "فلش راست"
+        ],
+        [
+            Keys.icons.arrowChevronRight.description,
+            "آیکون فلش رو به راست که برای نمایش حرکت یا هدایت به سمت راست استفاده می‌شود."
+        ],
+        [
+            Keys.icons.arrowChevronUp.name,
+            "فلش بالا"
+        ],
+        [
+            Keys.icons.arrowChevronUp.description,
+            "آیکون فلش رو به بالا که برای نمایش بسته شدن یا حرکت به سمت بالا استفاده می‌شود."
+        ],
+
+
+
+        [
+            Keys.icons.arrowLeft.name,
+            "بازگشت به چپ"
+        ],
+        [
+            Keys.icons.arrowLeft.description,
+            "آیکون فلش پرشده با خط که برای بازگشت یا انتقال به سمت چپ استفاده می‌شود."
+        ],
+        [
+            Keys.icons.arrowRight.name,
+            "بازگشت به راست"
+        ],
+        [
+            Keys.icons.arrowRight.description,
+            "آیکون فلش پرشده با خط که برای بازگشت یا انتقال به سمت راست استفاده می‌شود."
+        ],
+
+
+
+        [
+            Keys.icons.arrowDoubleLeft.name,
+            "انتخاب همه به چپ"
+        ],
+        [
+            Keys.icons.arrowDoubleLeft.description,
+            "آیکون دو فلش رو به چپ که برای انتقال همه موارد به سمت چپ استفاده می‌شود."
+        ],
+        [
+            Keys.icons.arrowDoubleRight.name,
+            "انتخاب همه به راست"
+        ],
+        [
+            Keys.icons.arrowDoubleRight.description,
+            "آیکون دو فلش رو به راست که برای انتقال همه موارد به سمت راست استفاده می‌شود."
+        ],
+        [
+            Keys.icons.arrowUp.name,
+            "فلش رو به بالا"
+        ],
+        [
+            Keys.icons.arrowUp.description,
+            "آیکون فلش کامل رو به بالا که برای ارسال، آپلود یا حرکت به سمت بالا استفاده می‌شود."
+        ],
+        [
+            Keys.icons.arrowDown.name,
+            "فلش رو به پایین"
+        ],
+        [
+            Keys.icons.arrowDown.description,
+            "آیکون فلش کامل رو به پایین که برای دانلود یا حرکت به سمت پایین استفاده می‌شود."
+        ] ,
+
+
+
+        [
+            Keys.icons.arrowDoubleUp.name,
+            "جمع کردن همه به بالا"
+        ],
+        [
+            Keys.icons.arrowDoubleUp.description,
+            "آیکون دو فلش رو به بالا که برای جمع کردن یا انتقال همه موارد به سمت بالا استفاده می‌شود."
+        ],
+        [
+            Keys.icons.arrowDoubleDown.name,
+            "باز کردن همه به پایین"
+        ],
+        [
+            Keys.icons.arrowDoubleDown.description,
+            "آیکون دو فلش رو به پایین که برای باز کردن یا انتقال همه موارد به سمت پایین استفاده می‌شود."
+        ],
+
+
+
     ]);

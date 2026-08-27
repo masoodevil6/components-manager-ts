@@ -69,6 +69,65 @@ export const Keys = {
         timeCalender: {
             name:        CreateTranslationKey() ,
             description: CreateTranslationKey() ,
-        }
+        },
+
+
+
+        arrowChevronDown: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        arrowChevronLeft: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        arrowChevronRight: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        arrowChevronUp: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+
+
+
+        arrowLeft: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        arrowRight: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        arrowUp: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        arrowDown: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+
+
+        arrowDoubleLeft: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        arrowDoubleRight: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        arrowDoubleUp: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        arrowDoubleDown: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+
+
+
     } ,
 }

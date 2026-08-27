@@ -41,6 +41,16 @@ export const En =
         [
             Keys.category.icons.calc.description,
             "A list of calculator icons such as plus and minus"
+        ],
+
+
+        [
+            Keys.category.icons.arrows.name,
+            "Arrows icons"
+        ],
+        [
+            Keys.category.icons.arrows.description,
+            "A list of arrow icons such as arrows, back and select all"
         ]
 
 

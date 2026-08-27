@@ -16,123 +16,69 @@ export class ClIconPage implements ITemplate {
             children:[
 
                 CoreReactive.App.div({
+                    className:["border"] ,
                     children:[
-                        UiIcons.CreateIcon(UiIcons.Src.Zoom.Definition ,
-                            {
-                                size : 100 ,
-                                // strokeWidth: 1 ,
-                                // primaryColor: "red" ,
-                            }
-                        ),
-                        UiIcons.CreateIcon(UiIcons.Src.ZoomIn.Definition ,
-                            {
-                                size : 100 ,
-                                // strokeWidth: 1 ,
-                                // primaryColor: "red" ,
-                            }
-                        ),
-                        UiIcons.CreateIcon(UiIcons.Src.ZoomOut.Definition ,
-                            {
-                                size : 100 ,
-                                // strokeWidth: 1 ,
-                                // primaryColor: "red" ,
-                            }
-                        ),
-                        UiIcons.CreateIcon(UiIcons.Src.ZoomRefresh.Definition ,
-                            {
-                                size : 100 ,
-                                // strokeWidth: 1 ,
-                                // primaryColor: "red" ,
-                            }
-                        ),
+                        UiIcons.CreateIcon(UiIcons.Src.Zoom.Definition  ),
+                        UiIcons.CreateIcon(UiIcons.Src.ZoomIn.Definition  ),
+                        UiIcons.CreateIcon(UiIcons.Src.ZoomOut.Definition  ),
+                        UiIcons.CreateIcon(UiIcons.Src.ZoomRefresh.Definition   ),
                     ]
                 }),
                 CoreReactive.App.div({
+                    className:["border"] ,
                     children:[
-
-                        UiIcons.CreateIcon(UiIcons.Src.LightSun.Definition ,
-                            {
-                                size : 100 ,
-                                // strokeWidth: 1 ,
-                                // primaryColor: "red" ,
-                            }
-                        ),
-
-                        UiIcons.CreateIcon(UiIcons.Src.LightMoon.Definition ,
-                            {
-                                size : 100 ,
-                                // strokeWidth: 1 ,
-                                // primaryColor: "red" ,
-                            }
-                        ),
+                        UiIcons.CreateIcon(UiIcons.Src.LightSun.Definition  ),
+                        UiIcons.CreateIcon(UiIcons.Src.LightMoon.Definition  ),
                     ]
                 }),
                 CoreReactive.App.div({
+                    className:["border"] ,
                     children:[
-                        UiIcons.CreateIcon(UiIcons.Src.StatusIsTrue.Definition ,
-                            {
-                                size : 100 ,
-                                // strokeWidth: 1 ,
-                                // primaryColor: "red" ,
-                            }
-                        ),
-                        UiIcons.CreateIcon(UiIcons.Src.StatusIsFalse.Definition ,
-                            {
-                                size : 100 ,
-                                // strokeWidth: 1 ,
-                                // primaryColor: "red" ,
-                            }
-                        ),
+                        UiIcons.CreateIcon(UiIcons.Src.StatusIsTrue.Definition  ),
+                        UiIcons.CreateIcon(UiIcons.Src.StatusIsFalse.Definition  ),
                     ]
                 }),
                 CoreReactive.App.div({
+                    className:["border"] ,
                     children:[
-                        UiIcons.CreateIcon(UiIcons.Src.CalcPlus.Definition ,
-                            {
-                                size : 100 ,
-                                // strokeWidth: 1 ,
-                                // primaryColor: "red" ,
-                            }
-                        ),
-                        UiIcons.CreateIcon(UiIcons.Src.CalcMinus.Definition ,
-                            {
-                                size : 100 ,
-                                // strokeWidth: 1 ,
-                                // primaryColor: "red" ,
-                            }
-                        ),
-                        UiIcons.CreateIcon(UiIcons.Src.CalcCross.Definition ,
-                            {
-                                size : 100 ,
-                                // strokeWidth: 1 ,
-                                // primaryColor: "red" ,
-                            }
-                        ),
-                        UiIcons.CreateIcon(UiIcons.Src.CalcDivide.Definition ,
-                            {
-                                size : 100 ,
-                                // strokeWidth: 1 ,
-                                // primaryColor: "red" ,
-                            }
-                        ),
+                        UiIcons.CreateIcon(UiIcons.Src.CalcPlus.Definition   ),
+                        UiIcons.CreateIcon(UiIcons.Src.CalcMinus.Definition  ),
+                        UiIcons.CreateIcon(UiIcons.Src.CalcCross.Definition   ),
+                        UiIcons.CreateIcon(UiIcons.Src.CalcDivide.Definition  ),
                     ]
                 }),
                 CoreReactive.App.div({
+                    className:["border"] ,
                     children:[
-                        UiIcons.CreateIcon(UiIcons.Src.TimeClock.Definition ,
-                            {
-                                size : 100 ,
-                                // strokeWidth: 1 ,
-                                // primaryColor: "red" ,
-                            }
-                        ),
-                        UiIcons.CreateIcon(UiIcons.Src.TimeCalender.Definition ,
-                            {
-                                size : 100 ,
-                                // strokeWidth: 1 ,
-                                // primaryColor: "red" ,
-                            }
-                        ),
+                        UiIcons.CreateIcon(UiIcons.Src.TimeClock.Definition  ),
+                        UiIcons.CreateIcon(UiIcons.Src.TimeCalender.Definition  ),
+                    ]
+                }),
+                CoreReactive.App.div({
+                    className:["border"] ,
+                    children:[
+                        UiIcons.CreateIcon(UiIcons.Src.ArrowChevronUp.Definition   ),
+                        UiIcons.CreateIcon(UiIcons.Src.ArrowChevronRight.Definition   ),
+                        UiIcons.CreateIcon(UiIcons.Src.ArrowChevronDown.Definition   ),
+                        UiIcons.CreateIcon(UiIcons.Src.ArrowChevronLeft.Definition   ),
+                    ]
+                }),
+                CoreReactive.App.div({
+                    className:["border"] ,
+                    children:[
+                        UiIcons.CreateIcon(UiIcons.Src.ArrowUp.Definition     ),
+                        UiIcons.CreateIcon(UiIcons.Src.ArrowRight.Definition   ),
+                        UiIcons.CreateIcon(UiIcons.Src.ArrowDown.Definition   ),
+                        UiIcons.CreateIcon(UiIcons.Src.ArrowLeft.Definition   ),
+                    ]
+                }),
+                CoreReactive.App.div({
+                    className:["border"] ,
+                    children:[
+                        UiIcons.CreateIcon(UiIcons.Src.ArrowDoubleUp.Definition  ),
+                        UiIcons.CreateIcon(UiIcons.Src.ArrowDoubleRight.Definition  ),
+                        UiIcons.CreateIcon(UiIcons.Src.ArrowDoubleDown.Definition   ),
+                        UiIcons.CreateIcon(UiIcons.Src.ArrowDoubleLeft.Definition   ),
                     ]
                 }),
                 CoreReactive.App.div({

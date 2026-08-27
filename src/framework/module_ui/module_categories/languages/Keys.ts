@@ -22,6 +22,10 @@ export const Keys = {
             time: {
                 name:        CreateTranslationKey() ,
                 description: CreateTranslationKey() ,
+            },
+            arrows: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
             }
         } ,
 

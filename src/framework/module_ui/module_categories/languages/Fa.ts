@@ -55,5 +55,16 @@ export const Fa =
         [
             Keys.category.icons.time.description,
             "لیستی از ایکون های زمان مانند ساعت و تقویم"
+        ],
+
+
+
+        [
+            Keys.category.icons.arrows.name,
+            "ایکون های فلش"
+        ],
+        [
+            Keys.category.icons.arrows.description,
+            "لیستی از ایکون های فلش مانند فلش ها و بازگشت و انتخاب همه"
         ]
     ]);
