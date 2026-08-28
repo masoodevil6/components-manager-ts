@@ -3,37 +3,41 @@ import * as UtilConsts        from "@/util_consts";
 import {TCSizes}              from "../types/const/TCSizes";
 import {MTBorderWidth}        from "./MTBorderWidth";
 
+const ICON_STROKE_RATIO = 0.2;
+
 export const MTIconStrokeWidth = (
-    size: TCSizes | number   = UtilConsts.Sizes.M ,
-    viewBoxX: number = 24,
-    viewBoxY: number = 24,
-    viewBoxXStandard: number = 24,
-    viewBoxYStandard: number = 24
+    size: TCSizes | number = UtilConsts.Sizes.M,
+    viewBoxX = 24,
+    viewBoxY = 24,
+    viewBoxXStandard = 24,
+    viewBoxYStandard = 24
 ): number => {
 
-    const scale = Math.min(
+    const viewBoxScale = Math.min(
         viewBoxX / viewBoxXStandard,
         viewBoxY / viewBoxYStandard
     );
 
     let designStrokeWidth = 2;
+
     if (typeof size === "number") {
         designStrokeWidth = size;
     }
     else {
         const borderWidth = MTBorderWidth(size);
+
         if (typeof borderWidth === "string") {
-            const cssValue =
-                getComputedStyle(document.documentElement)
-                    .getPropertyValue(borderWidth)
-                    .trim();
+            const cssValue = getComputedStyle(document.documentElement)
+                .getPropertyValue(borderWidth)
+                .trim();
+
             const value = parseFloat(cssValue);
-            if (!Number.isNaN(value)) {
+
+            if (Number.isFinite(value)) {
                 designStrokeWidth = value;
             }
         }
-
     }
 
-    return designStrokeWidth * scale;
+    return designStrokeWidth * viewBoxScale * ICON_STROKE_RATIO;
 };

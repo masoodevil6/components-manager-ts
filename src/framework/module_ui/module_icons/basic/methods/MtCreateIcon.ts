@@ -43,13 +43,14 @@ export function MtCreateIcon(
             scope
         );
 
-    const strokeWidth = CoreObservable.App.computed(
-        (strokeWidth) => {
-            return UtilStyle.Css_IconStrokeWidth(strokeWidth , definition.viewBoxX  , definition.viewBoxY)
-        } ,
-        [borderWidth] ,
-        scope
-    )
+    const strokeWidth =
+        CoreObservable.App.computed(
+            (borderWidth) => {
+                return UtilStyle.Css_IconStrokeWidth(borderWidth , definition.viewBoxX  , definition.viewBoxY)
+            } ,
+            [borderWidth] ,
+            scope
+        )
 
     const variant =
         options.variant ??

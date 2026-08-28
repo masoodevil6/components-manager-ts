@@ -1,15 +1,19 @@
-import * as CoreLanguage           from "@/core_languages"
-import * as UiIcons           from "@/ui_icons"
+import * as CoreLanguage                   from "@/core_languages"
+import * as UiIcons                        from "@/ui_icons"
 // ------------------------------
-import {TCategoryIconDefinition}   from "../../../basic/types/TCategoryIconDefinition";
-import {Keys} from "../../../languages";
+import {Definition as BooleanDefinition}   from "./boolean";
+import {Definition as VisitDefinition}     from "./visit";
+import {Definition as LightDefinition}     from "./light";
+import {TCategoryIconDefinition}           from "../../../basic/types/TCategoryIconDefinition";
+import {Keys}                              from "../../../languages";
 
 export const Definition : TCategoryIconDefinition = {
-    id:              "status" ,
+    id:              "Status" ,
     name:            CoreLanguage.App.translate(Keys.category.icons.status.name) ,
     description:     CoreLanguage.App.translate(Keys.category.icons.status.name ) ,
-    icons:        [
-        UiIcons.Src.StatusIsTrue.Definition,
-        UiIcons.Src.StatusIsFalse.Definition
+    children:        [
+        BooleanDefinition ,
+        VisitDefinition ,
+        LightDefinition,
     ]
 }

@@ -40,6 +40,14 @@ export const Keys = {
             name:        CreateTranslationKey() ,
             description: CreateTranslationKey() ,
         },
+        visit: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        unVisit: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
 
 
 
@@ -123,6 +131,127 @@ export const Keys = {
             description: CreateTranslationKey() ,
         },
         arrowDoubleDown: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+
+
+
+        webCode401: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        webCode404: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        webCode500: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        webCode504: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+
+
+        webCode100: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        webCode101: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        webCode200: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        webCode201: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        webCode204: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        webCode301: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        webCode304: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        webCode400: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        webCode403: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        webCode405: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        webCode408: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        webCode410: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        webCode429: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        webCode502: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        webCode503: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+
+
+        print: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        excel: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+
+
+
+        edit: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        delete_: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+
+
+
+        paymentCash: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        paymentRial: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        paymentTether: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        paymentDerham: {
             name:        CreateTranslationKey() ,
             description: CreateTranslationKey() ,
         },

@@ -1,6 +1,9 @@
-export * as Zoom    from "./zoom"
-export * as Light   from "./light"
-export * as Status  from "./status"
-export * as Calc    from "./calc"
-export * as Time    from "./time"
-export * as Arrows  from "./arrows"
+
+export * as Status     from "./status"
+export * as Arrows     from "./arrows"
+export * as Calc       from "./calc"
+export * as Inputs     from "./inputs"
+export * as Files      from "./files"
+export * as WebCode    from "./webCodes"
+export * as Payments   from "./payments"
+

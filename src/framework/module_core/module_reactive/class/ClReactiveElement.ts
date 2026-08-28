@@ -615,7 +615,15 @@ export class ClReactiveElement {
     static svg(o?: Options) { return new ClReactiveElement("svg", o , EnElementNamespace.SVG) }
     static svgFragment(o?: Options) { return new ClReactiveElement("fragment", o , EnElementNamespace.SVG) }
     static svgCircle(o?: Options) { return new ClReactiveElement("circle", o , EnElementNamespace.SVG) }
+    static svgEllipse(o?: Options) { return new ClReactiveElement("ellipse", o , EnElementNamespace.SVG) }
     static svgLine(o?: Options) { return new ClReactiveElement("line", o , EnElementNamespace.SVG) }
     static svgPath(o?: Options) { return new ClReactiveElement("path", o , EnElementNamespace.SVG) }
     static svgRect(o?: Options) { return new ClReactiveElement("rect", o , EnElementNamespace.SVG) }
+    static svgText(o?: Options) { return new ClReactiveElement("text", o , EnElementNamespace.SVG) }
+    static svgDefs(o?: Options) { return new ClReactiveElement("defs", o , EnElementNamespace.SVG) }
+    static svgFilter(o?: Options) { return new ClReactiveElement("filter", o , EnElementNamespace.SVG) }
+    static svgFeGaussianBlur(o?: Options) { return new ClReactiveElement("feGaussianBlur", o , EnElementNamespace.SVG) }
+    static svgFeMerge(o?: Options) { return new ClReactiveElement("feMerge", o , EnElementNamespace.SVG) }
+    static svgFeMergeNode(o?: Options) { return new ClReactiveElement("feMergeNode", o , EnElementNamespace.SVG) }
+    static svgG(o?: Options) { return new ClReactiveElement("g", o , EnElementNamespace.SVG) }
 }
