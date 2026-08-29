@@ -1,1 +1,1 @@
-export {Definition} from "./Definition";
+export {Definition, StatusIsTrue, StatusIsFalse} from "./Definition";

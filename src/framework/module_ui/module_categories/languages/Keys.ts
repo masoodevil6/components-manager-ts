@@ -30,11 +30,36 @@ export const Keys = {
                 name:        CreateTranslationKey() ,
                 description: CreateTranslationKey() ,
             },
+            /// Status -> Pin
+            statusPin: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Status -> Resize
+            statusResize: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Status -> Locked
+            statusLocked: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
 
 
 
-            /// Arrows
-            arrows: {
+            /// Symbols
+            symbols: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Symbols -> Arrows
+            symbolsArrows: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Symbols -> Exclumation
+            symbolsExclumation: {
                 name:        CreateTranslationKey() ,
                 description: CreateTranslationKey() ,
             },
@@ -66,6 +91,31 @@ export const Keys = {
                 name:        CreateTranslationKey() ,
                 description: CreateTranslationKey() ,
             },
+            /// Inputs -> Tools
+            inputsTools: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Inputs -> Qr
+            inputsQr: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Inputs -> Select
+            inputsSelect: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Inputs -> Text
+            inputsText: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Inputs -> Number
+            inputsNumber: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
 
 
 
@@ -94,6 +144,46 @@ export const Keys = {
                 name:        CreateTranslationKey() ,
                 description: CreateTranslationKey() ,
             },
+            /// Files -> Toolbars -> Pin
+            filesToolbarsPin: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Files -> Toolbars -> Window
+            filesToolbarsWindow: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Files -> Toolbars -> Header
+            filesToolbarsHeader: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Files -> Logo
+            filesLogo: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Files -> Category
+            filesCategory: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Files -> Type
+            filesType: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Files -> Tag
+            filesTag: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Files -> Status
+            filesStatus: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
 
 
 
@@ -119,6 +209,11 @@ export const Keys = {
             },
             /// Payment -> Types
             paymentsType: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Payment -> Actions
+            paymentsActions: {
                 name:        CreateTranslationKey() ,
                 description: CreateTranslationKey() ,
             },
@@ -153,6 +248,73 @@ export const Keys = {
             },
             /// webCode -> 500
             webCodes500: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+
+            /// Loadings
+            loadings: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Loadings -> Circle
+            loadingsCircle: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Loadings -> Horizontal
+            loadingsHorizontal: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Loadings -> Vertical
+            loadingsVertical: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+
+            /// Users
+            users: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Users -> Account
+            usersAccount: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Users -> Emails
+            usersEmails: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Users -> Phone
+            usersPhone: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Users -> Password
+            usersPassword: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Payments -> Cash
+            paymentsCash: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Payments -> Leverage
+            paymentsLeverage: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Payments -> Input
+            paymentsInput: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+            /// Payments -> Rate
+            paymentsRate: {
                 name:        CreateTranslationKey() ,
                 description: CreateTranslationKey() ,
             },

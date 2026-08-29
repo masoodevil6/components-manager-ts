@@ -49,6 +49,11 @@ export * as CalcDivide            from "./calcDivide";
 
 export * as InputClock           from "./inputClock"
 export * as InputCalender        from "./inputCalender"
+export * as InputQrCode          from "./inputQrCode"
+export * as InputSelectColumn    from "./inputSelectColumn"
+export * as InputSelectOption    from "./inputSelectOption"
+export * as InputTitle           from "./inputTitle"
+export * as InputNumber          from "./inputNumber"
 
 
 
@@ -102,3 +107,61 @@ export * as PaymentCash          from "./paymentCash";
 export * as PaymentRial          from "./paymentRial";
 export * as PaymentTether        from "./paymentTether";
 export * as PaymentDerham        from "./paymentDerham";
+
+export * as PaymentWalletAdd     from "./paymentWalletAdd";
+export * as PaymentWithDrawal    from "./paymentWithDrawal";
+export * as PaymentDeposit       from "./paymentDeposit";
+export * as PaymentTransaction   from "./paymentTransaction";
+
+export * as LoadingOrbit         from "./loadingOrbit";
+export * as LoadingPulse         from "./loadingPulse";
+export * as Loading              from "./loading";
+export * as LoadingDotsHorizontal  from "./loadingDotsHorizontal";
+export * as LoadingBarsHorizontal  from "./loadingBarsHorizontal";
+export * as LoadingDotsVertical    from "./loadingDotsVertical";
+export * as LoadingBarsVertical    from "./loadingBarsVertical";
+
+export * as UserAccount             from "./userAccount";
+export * as UserAccountAdd          from "./userAccountAdd";
+export * as UserAccountGroupAdd     from "./userAccountGroupAdd";
+export * as UserAccountReference    from "./userAccountReference";
+export * as UserAccountReffrence    from "./userAccountReffrence";
+export * as PaymentAmount           from "./paymentAmount";
+export * as PaymentCashCurrency     from "./paymentCashCurrency";
+export * as PaymentCoinCurrency     from "./paymentCoinCurrency";
+export * as SymbolExclumationSquare   from "./symbolExclumationSquare";
+export * as SymbolExclumationWarning  from "./symbolExclumationWarning";
+export * as UserEmail1               from "./userEmail1";
+export * as UserEmail2               from "./userEmail2";
+export * as UserPhone               from "./userPhone";
+export * as StatusPinOpen           from "./statusPinOpen";
+export * as StatusPinClose          from "./statusPinClose";
+export * as StatusPin2Open          from "./statusPin2Open";
+export * as FileWindowClose        from "./fileWindowClose";
+export * as FileWindowResizeMax   from "./fileWindowResizeMax";
+export * as FileWindowResizeMin   from "./fileWindowResizeMin";
+export * as FileWindowMinimize     from "./fileWindowMinimize";
+export * as PaymentLeverage        from "./paymentLeverage";
+export * as PaymentLeverage2       from "./paymentLeverage2";
+export * as FileMenu              from "./fileMenu";
+export * as FileSetting            from "./fileSetting";
+export * as FileSearch             from "./fileSearch";
+export * as FileFilter             from "./fileFilter";
+export * as FileAttachment         from "./fileAttachment";
+export * as FileReload             from "./fileReload";
+export * as FileEmpty              from "./fileEmpty";
+export * as FileClearBroom         from "./fileClearBroom";
+export * as FileApplication        from "./fileApplication";
+export * as FileCategory           from "./fileCategory";
+export * as FileType           from "./fileType";
+export * as FileTypeNote       from "./fileTypeNote";
+export * as FileTage           from "./fileTage";
+export * as FileStatusComplete from "./fileStatusComplete";
+export * as UserPassword           from "./userPassword";
+export * as UserChangePassword     from "./userChangePassword";
+export * as StatusLockedClose      from "./statusLockedClose";
+export * as StatusLockedOpen       from "./statusLockedOpen";
+export * as PaymentWallet1        from "./paymentWallet1";
+export * as PaymentWallet2        from "./paymentWallet2";
+export * as PaymentCardNumber     from "./paymentCardNumber";
+export * as PaymentRate           from "./paymentRate";

@@ -1,1 +1,1 @@
-export {Definition} from "./Definition";
+export {Definition, StatusLightOn, StatusLightOff} from "./Definition";

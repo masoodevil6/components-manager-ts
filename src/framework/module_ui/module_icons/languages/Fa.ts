@@ -489,5 +489,488 @@ export const Fa =
             "آیکون سکه درهم که برای نشان دادن پرداخت با ارز درهم (امارات) استفاده می‌شود."
         ],
 
+        [
+            Keys.icons.paymentWalletAdd.name,
+            "افزودن به کیف پول"
+        ],
+        [
+            Keys.icons.paymentWalletAdd.description,
+            "آیکون افزودن وجه به کیف پول"
+        ],
+        [
+            Keys.icons.paymentWithDrawal.name,
+            "برداشت"
+        ],
+        [
+            Keys.icons.paymentWithDrawal.description,
+            "آیکون برداشت وجه از حساب"
+        ],
+        [
+            Keys.icons.paymentDeposit.name,
+            "واریز"
+        ],
+        [
+            Keys.icons.paymentDeposit.description,
+            "آیکون واریز وجه به حساب"
+        ],
+        [
+            Keys.icons.paymentTransaction.name,
+            "تراکنش"
+        ],
+        [
+            Keys.icons.paymentTransaction.description,
+            "آیکون انتقال و تراکنش مالی"
+        ],
+
+        [
+            Keys.icons.loadingOrbit.name,
+            "لودینگ مداری"
+        ],
+        [
+            Keys.icons.loadingOrbit.description,
+            "آیکون لودینگ با حرکت مداری دو بیضی متقاطع"
+        ],
+        [
+            Keys.icons.loadingPulse.name,
+            "لودینگ نبضی"
+        ],
+        [
+            Keys.icons.loadingPulse.description,
+            "آیکون لودینگ با انیمیشن نبضی دو دایره متغیر"
+        ],
+        [
+            Keys.icons.loading.name,
+            "لودینگ"
+        ],
+        [
+            Keys.icons.loading.description,
+            "آیکون لودینگ با چرخش دو قوس دایره‌ای"
+        ],
+        [
+            Keys.icons.loadingDotsHorizontal.name,
+            "لودینگ نقطه‌ای افقی"
+        ],
+        [
+            Keys.icons.loadingDotsHorizontal.description,
+            "آیکون لودینگ با سه نقطه متحرک افقی"
+        ],
+        [
+            Keys.icons.loadingBarsHorizontal.name,
+            "لودینگ میله‌ای افقی"
+        ],
+        [
+            Keys.icons.loadingBarsHorizontal.description,
+            "آیکون لودینگ با چهار میله عمودی متغیر در چینش افقی"
+        ],
+        [
+            Keys.icons.loadingDotsVertical.name,
+            "لودینگ نقطه‌ای عمودی"
+        ],
+        [
+            Keys.icons.loadingDotsVertical.description,
+            "آیکون لودینگ با سه نقطه متحرک عمودی"
+        ],
+        [
+            Keys.icons.loadingBarsVertical.name,
+            "لودینگ میله‌ای عمودی"
+        ],
+        [
+            Keys.icons.loadingBarsVertical.description,
+            "آیکون لودینگ با چهار میله افقی متغیر در چینش عمودی"
+        ],
+
+        [
+            Keys.icons.userAccount.name,
+            "حساب کاربری"
+        ],
+        [
+            Keys.icons.userAccount.description,
+            "آیکون حساب کاربری نشان‌دهنده یک کاربر"
+        ],
+        [
+            Keys.icons.userAccountAdd.name,
+            "افزودن حساب کاربری"
+        ],
+        [
+            Keys.icons.userAccountAdd.description,
+            "آیکون افزودن حساب کاربری جدید"
+        ],
+        [
+            Keys.icons.userAccountGroupAdd.name,
+            "افزودن گروه کاربری"
+        ],
+        [
+            Keys.icons.userAccountGroupAdd.description,
+            "آیکون افزودن گروه کاربری با چند کاربر"
+        ],
+        [
+            Keys.icons.userAccountReference.name,
+            "ارجاع حساب کاربری"
+        ],
+        [
+            Keys.icons.userAccountReference.description,
+            "آیکون ارجاع و معرفی حساب کاربری"
+        ],
+        [
+            Keys.icons.paymentAmount.name,
+            "مبلغ پرداخت"
+        ],
+        [
+            Keys.icons.paymentAmount.description,
+            "آیکون مبلغ و مقدار مالی پرداخت"
+        ],
+        [
+            Keys.icons.paymentCashCurrency.name,
+            "ارز نقدی"
+        ],
+        [
+            Keys.icons.paymentCashCurrency.description,
+            "آیکون اسکناس و پول نقد"
+        ],
+        [
+            Keys.icons.paymentCoinCurrency.name,
+            "سکه ارزی"
+        ],
+        [
+            Keys.icons.paymentCoinCurrency.description,
+            "آیکون سکه و ارز سکه‌ای"
+        ],
+        [
+            Keys.icons.symbolExclumationSquare.name,
+            "علامت تعجب مربعی"
+        ],
+        [
+            Keys.icons.symbolExclumationSquare.description,
+            "آیکون علامت تعجب درون مربع"
+        ],
+        [
+            Keys.icons.symbolExclumationWarning.name,
+            "علامت هشدار"
+        ],
+        [
+            Keys.icons.symbolExclumationWarning.description,
+            "آیکون هشدار و اخطار مثلثی"
+        ],
+        [
+            Keys.icons.userEmail1.name,
+            "ایمیل کاربری ۱"
+        ],
+        [
+            Keys.icons.userEmail1.description,
+            "آیکون ایمیل و پست الکترونیکی ساده"
+        ],
+        [
+            Keys.icons.userEmail2.name,
+            "ایمیل کاربری ۲"
+        ],
+        [
+            Keys.icons.userEmail2.description,
+            "آیکون ایمیل و پست الکترونیکی پوشه‌ای"
+        ],
+        [
+            Keys.icons.userPhone.name,
+            "تلفن کاربری"
+        ],
+        [
+            Keys.icons.userPhone.description,
+            "آیکون تلفن و تماس کاربری"
+        ],
+        [
+            Keys.icons.statusPinOpen.name,
+            "پین باز"
+        ],
+        [
+            Keys.icons.statusPinOpen.description,
+            "آیکون پین و سنجاق باز"
+        ],
+        [
+            Keys.icons.statusPinClose.name,
+            "پین بسته"
+        ],
+        [
+            Keys.icons.statusPinClose.description,
+            "آیکون پین و سنجاق بسته"
+        ],
+        [
+            Keys.icons.statusPin2Open.name,
+            "پین باز ۲"
+        ],
+        [
+            Keys.icons.statusPin2Open.description,
+            "آیکون پین و سنجاق باز مدل دوم"
+        ],
+        [
+            Keys.icons.fileWindowClose.name,
+            "بستن پنجره"
+        ],
+        [
+            Keys.icons.fileWindowClose.description,
+            "آیکون بستن و خروج از پنجره"
+        ],
+        [
+            Keys.icons.fileWindowResizeMax.name,
+            "بزرگ‌نمایی پنجره"
+        ],
+        [
+            Keys.icons.fileWindowResizeMax.description,
+            "آیکون بزرگ‌نمایی و ماکسیمایز پنجره"
+        ],
+        [
+            Keys.icons.fileWindowResizeMin.name,
+            "کوچک‌نمایی پنجره"
+        ],
+        [
+            Keys.icons.fileWindowResizeMin.description,
+            "آیکون کوچک‌نمایی و مینیمایز پنجره"
+        ],
+        [
+            Keys.icons.fileWindowMinimize.name,
+            "کوچک کردن پنجره"
+        ],
+        [
+            Keys.icons.fileWindowMinimize.description,
+            "آیکون کوچک کردن و مینیمایز پنجره"
+        ],
+        [
+            Keys.icons.paymentLeverage.name,
+            "اهرم معاملاتی"
+        ],
+        [
+            Keys.icons.paymentLeverage.description,
+            "آیکون اهرم و لوریج معاملاتی"
+        ],
+        [
+            Keys.icons.paymentLeverage2.name,
+            "اهرم معاملاتی ۲"
+        ],
+        [
+            Keys.icons.paymentLeverage2.description,
+            "آیکون اهرم و لوریج معاملاتی مدل دوم"
+        ],
+        [
+            Keys.icons.fileMenu.name,
+            "منوی همبرگری"
+        ],
+        [
+            Keys.icons.fileMenu.description,
+            "آیکون منوی همبرگری و فهرست"
+        ],
+        [
+            Keys.icons.fileSetting.name,
+            "تنظیمات"
+        ],
+        [
+            Keys.icons.fileSetting.description,
+            "آیکون چرخ‌دنده و تنظیمات"
+        ],
+        [
+            Keys.icons.fileSearch.name,
+            "جستجو"
+        ],
+        [
+            Keys.icons.fileSearch.description,
+            "آیکون ذره‌بین و جستجو در فایل‌ها"
+        ],
+        [
+            Keys.icons.fileFilter.name,
+            "فیلتر"
+        ],
+        [
+            Keys.icons.fileFilter.description,
+            "آیکون قیف و فیلتر کردن اطلاعات"
+        ],
+        [
+            Keys.icons.fileAttachment.name,
+            "پیوست"
+        ],
+        [
+            Keys.icons.fileAttachment.description,
+            "آیکون گیره کاغذ و پیوست کردن فایل"
+        ],
+        [
+            Keys.icons.fileReload.name,
+            "بارگذاری مجدد"
+        ],
+        [
+            Keys.icons.fileReload.description,
+            "آیکون فلش چرخشی و نوسازی محتوا"
+        ],
+        [
+            Keys.icons.fileEmpty.name,
+            "خالی"
+        ],
+        [
+            Keys.icons.fileEmpty.description,
+            "آیکون دایره با ضربدر و عدم وجود اطلاعات"
+        ],
+        [
+            Keys.icons.fileClearBroom.name,
+            "جاروی پاک‌سازی"
+        ],
+        [
+            Keys.icons.fileClearBroom.description,
+            "آیکون جارو برای پاک‌سازی و پاک کردن اطلاعات"
+        ],
+        [
+            Keys.icons.fileApplication.name,
+            "اپلیکیشن"
+        ],
+        [
+            Keys.icons.fileApplication.description,
+            "آیکون برنامه و اپلیکیشن با لوگوی AI"
+        ],
+        [
+            Keys.icons.fileCategory.name,
+            "دسته‌بندی"
+        ],
+        [
+            Keys.icons.fileCategory.description,
+            "آیکون دسته‌بندی و طبقه‌بندی اطلاعات"
+        ],
+        [
+            Keys.icons.fileType.name,
+            "نوع فایل"
+        ],
+        [
+            Keys.icons.fileType.description,
+            "آیکون اسناد روی‌هم‌چیده برای نمایش نوع و گونه فایل"
+        ],
+        [
+            Keys.icons.fileTypeNote.name,
+            "یادداشت"
+        ],
+        [
+            Keys.icons.fileTypeNote.description,
+            "آیکون برگه یادداشت با فنر و لیست موارد"
+        ],
+        [
+            Keys.icons.fileTage.name,
+            "برچسب"
+        ],
+        [
+            Keys.icons.fileTage.description,
+            "آیکون برچسب و تگ‌گذاری اطلاعات"
+        ],
+        [
+            Keys.icons.fileStatusComplete.name,
+            "انجام شده"
+        ],
+        [
+            Keys.icons.fileStatusComplete.description,
+            "آیکون تیک برای وضعیت انجام‌شده و تکمیل"
+        ],
+        [
+            Keys.icons.paymentRate.name,
+            "نرخ"
+        ],
+        [
+            Keys.icons.paymentRate.description,
+            "آیکون نرخ و سنجش ارزش در پرداخت‌ها"
+        ],
+        [
+            Keys.icons.inputQrCode.name,
+            "کد QR"
+        ],
+        [
+            Keys.icons.inputQrCode.description,
+            "آیکون کد QR برای ورودی و خواندن اطلاعات"
+        ],
+        [
+            Keys.icons.inputSelectColumn.name,
+            "انتخاب ستون"
+        ],
+        [
+            Keys.icons.inputSelectColumn.description,
+            "آیکون انتخاب ستون از میان چند ستون داده"
+        ],
+        [
+            Keys.icons.inputSelectOption.name,
+            "انتخاب گزینه"
+        ],
+        [
+            Keys.icons.inputSelectOption.description,
+            "آیکون کادر انتخاب (select) با فلش پایین برای انتخاب گزینه"
+        ],
+        [
+            Keys.icons.inputTitle.name,
+            "عنوان"
+        ],
+        [
+            Keys.icons.inputTitle.description,
+            "آیکون ورودی عنوان متن با نشانگرهای تراز"
+        ],
+        [
+            Keys.icons.inputNumber.name,
+            "عدد"
+        ],
+        [
+            Keys.icons.inputNumber.description,
+            "آیکون ورودی عدد (number)"
+        ],
+        [
+            Keys.icons.userPassword.name,
+            "رمز عبور"
+        ],
+        [
+            Keys.icons.userPassword.description,
+            "آیکون قفل و رمز عبور کاربر"
+        ],
+        [
+            Keys.icons.userChangePassword.name,
+            "تغییر رمز عبور"
+        ],
+        [
+            Keys.icons.userChangePassword.description,
+            "آیکون تغییر رمز عبور کاربر"
+        ],
+        [
+            Keys.icons.statusLockedClose.name,
+            "قفل بسته"
+        ],
+        [
+            Keys.icons.statusLockedClose.description,
+            "آیکون قفل بسته و حالت قفل"
+        ],
+        [
+            Keys.icons.statusLockedOpen.name,
+            "قفل باز"
+        ],
+        [
+            Keys.icons.statusLockedOpen.description,
+            "آیکون قفل باز و حالت بازشدن"
+        ],
+        [
+            Keys.icons.paymentWallet1.name,
+            "کیف پول ۱"
+        ],
+        [
+            Keys.icons.paymentWallet1.description,
+            "آیکون کیف پول مدل اول"
+        ],
+        [
+            Keys.icons.paymentWallet2.name,
+            "کیف پول ۲"
+        ],
+        [
+            Keys.icons.paymentWallet2.description,
+            "آیکون کیف پول مدل دوم"
+        ],
+        [
+            Keys.icons.paymentCardNumber.name,
+            "شماره کارت"
+        ],
+        [
+            Keys.icons.paymentCardNumber.description,
+            "آیکون شماره کارت بانکی"
+        ],
+        [
+            Keys.icons.userAccountReffrence.name,
+            "ارجاع حساب کاربری مقصد"
+        ],
+        [
+            Keys.icons.userAccountReffrence.description,
+            "آیکون ارجاع و انتقال حساب کاربری به مقصد"
+        ],
+
 
     ]);

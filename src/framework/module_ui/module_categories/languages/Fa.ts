@@ -45,20 +45,65 @@ export const Fa =
             Keys.category.icons.statusLight.description,
             "لیستی از ایکون های مربوط به نور مانند ماه و خورشید"
         ],
-
-
-
-
-
-
-        /// Arrows
+        /// Status -> Pin
         [
-            Keys.category.icons.arrows.name,
+            Keys.category.icons.statusPin.name,
+            "ایکون های پین"
+        ],
+        [
+            Keys.category.icons.statusPin.description,
+            "لیستی از ایکون های پین و سنجاق"
+        ],
+        /// Status -> Resize
+        [
+            Keys.category.icons.statusResize.name,
+            "ایکون های تغییر اندازه"
+        ],
+        [
+            Keys.category.icons.statusResize.description,
+            "لیستی از ایکون های بزرگ‌نمایی و کوچک‌نمایی"
+        ],
+        /// Status -> Locked
+        [
+            Keys.category.icons.statusLocked.name,
+            "ایکون های قفل"
+        ],
+        [
+            Keys.category.icons.statusLocked.description,
+            "لیستی از ایکون های قفل باز و بسته"
+        ],
+
+
+
+
+
+
+        /// Symbols
+        [
+            Keys.category.icons.symbols.name,
+            "ایکون های نمادین"
+        ],
+        [
+            Keys.category.icons.symbols.description,
+            "لیستی از ایکون های نمادین مانند فلش ها و نمادها"
+        ],
+        /// Symbols -> Arrows
+        [
+            Keys.category.icons.symbolsArrows.name,
             "ایکون های فلش"
         ],
         [
-            Keys.category.icons.arrows.description,
+            Keys.category.icons.symbolsArrows.description,
             "لیستی از ایکون های فلش مانند فلش ها و بازگشت و انتخاب همه"
+        ],
+        /// Symbols -> Exclumation
+        [
+            Keys.category.icons.symbolsExclumation.name,
+            "ایکون های علامت تعجب"
+        ],
+        [
+            Keys.category.icons.symbolsExclumation.description,
+            "لیستی از ایکون های علامت تعجب و هشدار"
         ],
         /// Arrows -> Basic
         [
@@ -113,6 +158,51 @@ export const Fa =
             Keys.category.icons.inputsTime.description,
             "لیستی از ایکون های زمان مانند ساعت و تقویم"
         ],
+        /// Inputs -> Tools
+        [
+            Keys.category.icons.inputsTools.name,
+            "ایکون های ابزار"
+        ],
+        [
+            Keys.category.icons.inputsTools.description,
+            "لیستی از ایکون های ابزار مانند جاروی پاک‌سازی"
+        ],
+        /// Inputs -> Qr
+        [
+            Keys.category.icons.inputsQr.name,
+            "ایکون های کد QR"
+        ],
+        [
+            Keys.category.icons.inputsQr.description,
+            "لیستی از ایکون های کد QR برای ورودی اطلاعات"
+        ],
+        /// Inputs -> Select
+        [
+            Keys.category.icons.inputsSelect.name,
+            "ایکون های انتخاب"
+        ],
+        [
+            Keys.category.icons.inputsSelect.description,
+            "لیستی از ایکون های کادر انتخاب و انتخاب ستون"
+        ],
+        /// Inputs -> Text
+        [
+            Keys.category.icons.inputsText.name,
+            "ایکون های متن"
+        ],
+        [
+            Keys.category.icons.inputsText.description,
+            "لیستی از ایکون های ورودی متن مانند عنوان"
+        ],
+        /// Inputs -> Number
+        [
+            Keys.category.icons.inputsNumber.name,
+            "ایکون های عدد"
+        ],
+        [
+            Keys.category.icons.inputsNumber.description,
+            "لیستی از ایکون های ورودی عدد"
+        ],
 
 
 
@@ -164,6 +254,78 @@ export const Fa =
             Keys.category.icons.filesToolbarsExport.description,
             "لیستی از ایکون های استخراج فایب"
         ],
+        /// Files -> Toolbars -> Pin
+        [
+            Keys.category.icons.filesToolbarsPin.name,
+            "ایکون های پین نوار ابزار"
+        ],
+        [
+            Keys.category.icons.filesToolbarsPin.description,
+            "لیستی از ایکون های پین و سنجاق نوار ابزار"
+        ],
+        /// Files -> Toolbars -> Window
+        [
+            Keys.category.icons.filesToolbarsWindow.name,
+            "ایکون های پنجره نوار ابزار"
+        ],
+        [
+            Keys.category.icons.filesToolbarsWindow.description,
+            "لیستی از ایکون های پنجره مانند بستن و تغییر اندازه"
+        ],
+        /// Files -> Toolbars -> Header
+        [
+            Keys.category.icons.filesToolbarsHeader.name,
+            "ایکون های هدر نوار ابزار"
+        ],
+        [
+            Keys.category.icons.filesToolbarsHeader.description,
+            "لیستی از ایکون های هدر مانند منو و تنظیمات"
+        ],
+        /// Files -> Logo
+        [
+            Keys.category.icons.filesLogo.name,
+            "ایکون های لوگو"
+        ],
+        [
+            Keys.category.icons.filesLogo.description,
+            "لیستی از ایکون های لوگو مانند اپلیکیشن"
+        ],
+        /// Files -> Category
+        [
+            Keys.category.icons.filesCategory.name,
+            "ایکون های دسته‌بندی"
+        ],
+        [
+            Keys.category.icons.filesCategory.description,
+            "لیستی از ایکون های دسته‌بندی و طبقه‌بندی"
+        ],
+        /// Files -> Type
+        [
+            Keys.category.icons.filesType.name,
+            "ایکون های نوع فایل"
+        ],
+        [
+            Keys.category.icons.filesType.description,
+            "لیستی از ایکون های نوع و گونه فایل"
+        ],
+        /// Files -> Tag
+        [
+            Keys.category.icons.filesTag.name,
+            "ایکون های برچسب"
+        ],
+        [
+            Keys.category.icons.filesTag.description,
+            "لیستی از ایکون های برچسب و تگ‌گذاری اطلاعات"
+        ],
+        /// Files -> Status
+        [
+            Keys.category.icons.filesStatus.name,
+            "ایکون های وضعیت"
+        ],
+        [
+            Keys.category.icons.filesStatus.description,
+            "لیستی از ایکون های وضعیت و حالت"
+        ],
 
 
 
@@ -209,6 +371,15 @@ export const Fa =
         [
             Keys.category.icons.paymentsType.description,
             "لیستی از ایکون های انواع پرداخت مانند نقدی و ریال و تتر"
+        ],
+        /// Payment -> Actions
+        [
+            Keys.category.icons.paymentsActions.name,
+            "ایکون های عملیات پرداخت"
+        ],
+        [
+            Keys.category.icons.paymentsActions.description,
+            "لیستی از ایکون های عملیات پرداخت مانند برداشت و واریز"
         ],
 
 
@@ -268,6 +439,125 @@ export const Fa =
             Keys.category.icons.webCodes200.description,
             "لیستی از ایکون های کدهای وب سری 500"
         ] ,
+
+        /// Loadings
+        [
+            Keys.category.icons.loadings.name,
+            "ایکون های لودینگ"
+        ],
+        [
+            Keys.category.icons.loadings.description,
+            "لیستی از ایکون های لودینگ و انتظار"
+        ],
+        /// Loadings -> Circle
+        [
+            Keys.category.icons.loadingsCircle.name,
+            "ایکون های لودینگ دایره‌ای"
+        ],
+        [
+            Keys.category.icons.loadingsCircle.description,
+            "لیستی از ایکون های لودینگ با انیمیشن دایره‌ای"
+        ],
+        /// Loadings -> Horizontal
+        [
+            Keys.category.icons.loadingsHorizontal.name,
+            "ایکون های لودینگ افقی"
+        ],
+        [
+            Keys.category.icons.loadingsHorizontal.description,
+            "لیستی از ایکون های لودینگ با چینش افقی"
+        ],
+        /// Loadings -> Vertical
+        [
+            Keys.category.icons.loadingsVertical.name,
+            "ایکون های لودینگ عمودی"
+        ],
+        [
+            Keys.category.icons.loadingsVertical.description,
+            "لیستی از ایکون های لودینگ با چینش عمودی"
+        ],
+
+        /// Users
+        [
+            Keys.category.icons.users.name,
+            "ایکون های کاربران"
+        ],
+        [
+            Keys.category.icons.users.description,
+            "لیستی از ایکون های مربوط به کاربران و حساب‌های کاربری"
+        ],
+        /// Users -> Account
+        [
+            Keys.category.icons.usersAccount.name,
+            "ایکون های حساب کاربری"
+        ],
+        [
+            Keys.category.icons.usersAccount.description,
+            "لیستی از ایکون های مربوط به حساب‌های کاربری و مبالغ"
+        ],
+        /// Users -> Emails
+        [
+            Keys.category.icons.usersEmails.name,
+            "ایکون های ایمیل کاربری"
+        ],
+        [
+            Keys.category.icons.usersEmails.description,
+            "لیستی از ایکون های ایمیل و پست الکترونیکی"
+        ],
+        /// Users -> Phone
+        [
+            Keys.category.icons.usersPhone.name,
+            "ایکون های تلفن کاربری"
+        ],
+        [
+            Keys.category.icons.usersPhone.description,
+            "لیستی از ایکون های تلفن و تماس کاربری"
+        ],
+        /// Users -> Password
+        [
+            Keys.category.icons.usersPassword.name,
+            "ایکون های رمز عبور کاربری"
+        ],
+        [
+            Keys.category.icons.usersPassword.description,
+            "لیستی از ایکون های رمز عبور و تغییر رمز"
+        ],
+        /// Payments -> Cash
+        [
+            Keys.category.icons.paymentsCash.name,
+            "ایکون های پرداخت نقدی"
+        ],
+        [
+            Keys.category.icons.paymentsCash.description,
+            "لیستی از ایکون های مربوط به پرداخت‌های نقدی"
+        ],
+        /// Payments -> Leverage
+        [
+            Keys.category.icons.paymentsLeverage.name,
+            "ایکون های اهرم معاملاتی"
+        ],
+        [
+            Keys.category.icons.paymentsLeverage.description,
+            "لیستی از ایکون های مربوط به اهرم و لوریج معاملاتی"
+        ],
+        /// Payments -> Input
+        [
+            Keys.category.icons.paymentsInput.name,
+            "ایکون های ورودی پرداخت"
+        ],
+        [
+            Keys.category.icons.paymentsInput.description,
+            "لیستی از ایکون های کیف پول و شماره کارت"
+        ],
+        /// Payments -> Rate
+        [
+            Keys.category.icons.paymentsRate.name,
+            "ایکون های نرخ"
+        ],
+        [
+            Keys.category.icons.paymentsRate.description,
+            "لیستی از ایکون های مربوط به نرخ و سنجش ارزش"
+        ],
 
 
     ]);

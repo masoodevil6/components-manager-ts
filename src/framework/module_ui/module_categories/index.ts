@@ -8,6 +8,10 @@ export type {
 } from "./basic/types"
 
 export {
+    CreateCategoryIcon
+} from "./basic/methods"
+
+export {
     Fa   as CategoriesLanguageFa ,
     En   as CategoriesLanguageEn ,
     Keys as CategoriesLanguageKeys

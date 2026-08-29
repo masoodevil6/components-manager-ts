@@ -497,5 +497,488 @@ export const En =
             "Derham coin icon used to represent payment with the UAE currency."
         ],
 
+        [
+            Keys.icons.paymentWalletAdd.name,
+            "Wallet Add"
+        ],
+        [
+            Keys.icons.paymentWalletAdd.description,
+            "Icon for adding funds to wallet"
+        ],
+        [
+            Keys.icons.paymentWithDrawal.name,
+            "Withdrawal"
+        ],
+        [
+            Keys.icons.paymentWithDrawal.description,
+            "Icon for withdrawing funds from account"
+        ],
+        [
+            Keys.icons.paymentDeposit.name,
+            "Deposit"
+        ],
+        [
+            Keys.icons.paymentDeposit.description,
+            "Icon for depositing funds to account"
+        ],
+        [
+            Keys.icons.paymentTransaction.name,
+            "Transaction"
+        ],
+        [
+            Keys.icons.paymentTransaction.description,
+            "Icon for financial transfer and transaction"
+        ],
+
+        [
+            Keys.icons.loadingOrbit.name,
+            "Loading Orbit"
+        ],
+        [
+            Keys.icons.loadingOrbit.description,
+            "Loading icon with orbital motion of two intersecting ellipses"
+        ],
+        [
+            Keys.icons.loadingPulse.name,
+            "Loading Pulse"
+        ],
+        [
+            Keys.icons.loadingPulse.description,
+            "Loading icon with pulsing animation of two varying circles"
+        ],
+        [
+            Keys.icons.loading.name,
+            "Loading"
+        ],
+        [
+            Keys.icons.loading.description,
+            "Loading icon with rotating dual arc segments"
+        ],
+        [
+            Keys.icons.loadingDotsHorizontal.name,
+            "Loading Dots Horizontal"
+        ],
+        [
+            Keys.icons.loadingDotsHorizontal.description,
+            "Loading icon with three animated horizontal dots"
+        ],
+        [
+            Keys.icons.loadingBarsHorizontal.name,
+            "Loading Bars Horizontal"
+        ],
+        [
+            Keys.icons.loadingBarsHorizontal.description,
+            "Loading icon with four animated vertical bars in horizontal layout"
+        ],
+        [
+            Keys.icons.loadingDotsVertical.name,
+            "Loading Dots Vertical"
+        ],
+        [
+            Keys.icons.loadingDotsVertical.description,
+            "Loading icon with three animated vertical dots"
+        ],
+        [
+            Keys.icons.loadingBarsVertical.name,
+            "Loading Bars Vertical"
+        ],
+        [
+            Keys.icons.loadingBarsVertical.description,
+            "Loading icon with four animated horizontal bars in vertical layout"
+        ],
+
+        [
+            Keys.icons.userAccount.name,
+            "User Account"
+        ],
+        [
+            Keys.icons.userAccount.description,
+            "Account icon representing a user"
+        ],
+        [
+            Keys.icons.userAccountAdd.name,
+            "User Account Add"
+        ],
+        [
+            Keys.icons.userAccountAdd.description,
+            "Icon for adding a new account"
+        ],
+        [
+            Keys.icons.userAccountGroupAdd.name,
+            "User Account Group Add"
+        ],
+        [
+            Keys.icons.userAccountGroupAdd.description,
+            "Icon for adding a group of users"
+        ],
+        [
+            Keys.icons.userAccountReference.name,
+            "User Account Reference"
+        ],
+        [
+            Keys.icons.userAccountReference.description,
+            "Icon for referencing an account"
+        ],
+        [
+            Keys.icons.paymentAmount.name,
+            "Payment Amount"
+        ],
+        [
+            Keys.icons.paymentAmount.description,
+            "Icon for payment amount and financial value"
+        ],
+        [
+            Keys.icons.paymentCashCurrency.name,
+            "Cash Currency"
+        ],
+        [
+            Keys.icons.paymentCashCurrency.description,
+            "Icon for banknote and cash currency"
+        ],
+        [
+            Keys.icons.paymentCoinCurrency.name,
+            "Coin Currency"
+        ],
+        [
+            Keys.icons.paymentCoinCurrency.description,
+            "Icon for coin and coin currency"
+        ],
+        [
+            Keys.icons.symbolExclumationSquare.name,
+            "Exclamation Square"
+        ],
+        [
+            Keys.icons.symbolExclumationSquare.description,
+            "Icon for exclamation mark inside a square"
+        ],
+        [
+            Keys.icons.symbolExclumationWarning.name,
+            "Warning"
+        ],
+        [
+            Keys.icons.symbolExclumationWarning.description,
+            "Icon for warning and alert triangle"
+        ],
+        [
+            Keys.icons.userEmail1.name,
+            "User Email 1"
+        ],
+        [
+            Keys.icons.userEmail1.description,
+            "Icon for simple email and electronic mail"
+        ],
+        [
+            Keys.icons.userEmail2.name,
+            "User Email 2"
+        ],
+        [
+            Keys.icons.userEmail2.description,
+            "Icon for envelope email and electronic mail"
+        ],
+        [
+            Keys.icons.userPhone.name,
+            "User Phone"
+        ],
+        [
+            Keys.icons.userPhone.description,
+            "Icon for phone and user call"
+        ],
+        [
+            Keys.icons.statusPinOpen.name,
+            "Pin Open"
+        ],
+        [
+            Keys.icons.statusPinOpen.description,
+            "Icon for open pin and thumbtack"
+        ],
+        [
+            Keys.icons.statusPinClose.name,
+            "Pin Close"
+        ],
+        [
+            Keys.icons.statusPinClose.description,
+            "Icon for closed pin and thumbtack"
+        ],
+        [
+            Keys.icons.statusPin2Open.name,
+            "Pin Open 2"
+        ],
+        [
+            Keys.icons.statusPin2Open.description,
+            "Icon for open pin and thumbtack variant 2"
+        ],
+        [
+            Keys.icons.fileWindowClose.name,
+            "Window Close"
+        ],
+        [
+            Keys.icons.fileWindowClose.description,
+            "Icon for closing and exiting a window"
+        ],
+        [
+            Keys.icons.fileWindowResizeMax.name,
+            "Window Resize Max"
+        ],
+        [
+            Keys.icons.fileWindowResizeMax.description,
+            "Icon for maximizing a window"
+        ],
+        [
+            Keys.icons.fileWindowResizeMin.name,
+            "Window Resize Min"
+        ],
+        [
+            Keys.icons.fileWindowResizeMin.description,
+            "Icon for minimizing a window size"
+        ],
+        [
+            Keys.icons.fileWindowMinimize.name,
+            "Window Minimize"
+        ],
+        [
+            Keys.icons.fileWindowMinimize.description,
+            "Icon for minimizing a window"
+        ],
+        [
+            Keys.icons.paymentLeverage.name,
+            "Leverage"
+        ],
+        [
+            Keys.icons.paymentLeverage.description,
+            "Icon for trading leverage"
+        ],
+        [
+            Keys.icons.paymentLeverage2.name,
+            "Leverage 2"
+        ],
+        [
+            Keys.icons.paymentLeverage2.description,
+            "Icon for trading leverage variant 2"
+        ],
+        [
+            Keys.icons.fileMenu.name,
+            "Hamburger Menu"
+        ],
+        [
+            Keys.icons.fileMenu.description,
+            "Icon for hamburger menu and navigation"
+        ],
+        [
+            Keys.icons.fileSetting.name,
+            "Settings"
+        ],
+        [
+            Keys.icons.fileSetting.description,
+            "Icon for gear and settings"
+        ],
+        [
+            Keys.icons.fileSearch.name,
+            "Search"
+        ],
+        [
+            Keys.icons.fileSearch.description,
+            "Icon for magnifier and searching files"
+        ],
+        [
+            Keys.icons.fileFilter.name,
+            "Filter"
+        ],
+        [
+            Keys.icons.fileFilter.description,
+            "Icon for funnel and filtering data"
+        ],
+        [
+            Keys.icons.fileAttachment.name,
+            "Attachment"
+        ],
+        [
+            Keys.icons.fileAttachment.description,
+            "Icon for paperclip and file attachment"
+        ],
+        [
+            Keys.icons.fileReload.name,
+            "Reload"
+        ],
+        [
+            Keys.icons.fileReload.description,
+            "Icon for circular arrow and refreshing content"
+        ],
+        [
+            Keys.icons.fileEmpty.name,
+            "Empty"
+        ],
+        [
+            Keys.icons.fileEmpty.description,
+            "Icon for circle with slash and no data"
+        ],
+        [
+            Keys.icons.fileClearBroom.name,
+            "Clear Broom"
+        ],
+        [
+            Keys.icons.fileClearBroom.description,
+            "Icon for broom and clearing data"
+        ],
+        [
+            Keys.icons.fileApplication.name,
+            "Application"
+        ],
+        [
+            Keys.icons.fileApplication.description,
+            "Icon for application with AI logo"
+        ],
+        [
+            Keys.icons.fileCategory.name,
+            "Category"
+        ],
+        [
+            Keys.icons.fileCategory.description,
+            "Icon for categories and data classification"
+        ],
+        [
+            Keys.icons.fileType.name,
+            "File Type"
+        ],
+        [
+            Keys.icons.fileType.description,
+            "Icon for stacked documents representing file type"
+        ],
+        [
+            Keys.icons.fileTypeNote.name,
+            "Note"
+        ],
+        [
+            Keys.icons.fileTypeNote.description,
+            "Notepad icon with spiral binding and bullet list"
+        ],
+        [
+            Keys.icons.fileTage.name,
+            "Tag"
+        ],
+        [
+            Keys.icons.fileTage.description,
+            "Icon for label tag and tagging data"
+        ],
+        [
+            Keys.icons.fileStatusComplete.name,
+            "Complete"
+        ],
+        [
+            Keys.icons.fileStatusComplete.description,
+            "Check mark icon for completed and done status"
+        ],
+        [
+            Keys.icons.paymentRate.name,
+            "Rate"
+        ],
+        [
+            Keys.icons.paymentRate.description,
+            "Icon for rate and value measurement in payments"
+        ],
+        [
+            Keys.icons.inputQrCode.name,
+            "QR Code"
+        ],
+        [
+            Keys.icons.inputQrCode.description,
+            "Icon for QR code input and data scanning"
+        ],
+        [
+            Keys.icons.inputSelectColumn.name,
+            "Select Column"
+        ],
+        [
+            Keys.icons.inputSelectColumn.description,
+            "Icon for selecting a column among multiple data columns"
+        ],
+        [
+            Keys.icons.inputSelectOption.name,
+            "Select Option"
+        ],
+        [
+            Keys.icons.inputSelectOption.description,
+            "Icon for a select dropdown with a chevron arrow for choosing an option"
+        ],
+        [
+            Keys.icons.inputTitle.name,
+            "Title"
+        ],
+        [
+            Keys.icons.inputTitle.description,
+            "Icon for title text input with alignment markers"
+        ],
+        [
+            Keys.icons.inputNumber.name,
+            "Number"
+        ],
+        [
+            Keys.icons.inputNumber.description,
+            "Icon for a number input field"
+        ],
+        [
+            Keys.icons.userPassword.name,
+            "Password"
+        ],
+        [
+            Keys.icons.userPassword.description,
+            "Icon for user password and lock"
+        ],
+        [
+            Keys.icons.userChangePassword.name,
+            "Change Password"
+        ],
+        [
+            Keys.icons.userChangePassword.description,
+            "Icon for changing user password"
+        ],
+        [
+            Keys.icons.statusLockedClose.name,
+            "Locked Close"
+        ],
+        [
+            Keys.icons.statusLockedClose.description,
+            "Icon for locked close state"
+        ],
+        [
+            Keys.icons.statusLockedOpen.name,
+            "Locked Open"
+        ],
+        [
+            Keys.icons.statusLockedOpen.description,
+            "Icon for locked open state"
+        ],
+        [
+            Keys.icons.paymentWallet1.name,
+            "Wallet 1"
+        ],
+        [
+            Keys.icons.paymentWallet1.description,
+            "Icon for wallet variant 1"
+        ],
+        [
+            Keys.icons.paymentWallet2.name,
+            "Wallet 2"
+        ],
+        [
+            Keys.icons.paymentWallet2.description,
+            "Icon for wallet variant 2"
+        ],
+        [
+            Keys.icons.paymentCardNumber.name,
+            "Card Number"
+        ],
+        [
+            Keys.icons.paymentCardNumber.description,
+            "Icon for bank card number"
+        ],
+        [
+            Keys.icons.userAccountReffrence.name,
+            "User Account Reference"
+        ],
+        [
+            Keys.icons.userAccountReffrence.description,
+            "Icon for referencing a user account to a destination"
+        ],
+
 
     ]);

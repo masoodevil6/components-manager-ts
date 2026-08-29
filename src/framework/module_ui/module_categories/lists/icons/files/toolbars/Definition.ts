@@ -3,6 +3,9 @@ import * as UiIcons                             from "@/ui_icons"
 // ------------------------------
 import {Definition as ZoomDefinition}           from "./zoom";
 import {Definition as ExportDefinition}         from "./export";
+import {Definition as PinDefinition}            from "./pin";
+import {Definition as WindowDefinition}         from "./window";
+import {Definition as HeaderDefinition}         from "./header";
 // ------------------------------
 import {TCategoryIconDefinition}                from "../../../../basic/types/TCategoryIconDefinition";
 import {Keys}                                   from "../../../../languages";
@@ -13,6 +16,9 @@ export const Definition : TCategoryIconDefinition = {
     description:     CoreLanguage.App.translate(Keys.category.icons.filesToolbars.name ) ,
     children:        [
         ZoomDefinition ,
-        ExportDefinition
+        ExportDefinition ,
+        PinDefinition ,
+        WindowDefinition ,
+        HeaderDefinition ,
     ]
 }

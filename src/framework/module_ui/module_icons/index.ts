@@ -3,7 +3,8 @@ export { IconVariant } from "./basic/enums";
 
 // Interfaces (Types)
 export type {
-    IconDefinition as IIconDefinition
+    IconDefinition as IIconDefinition,
+    IconOptions     as IIconOptions
 } from "./basic/interface";
 
 

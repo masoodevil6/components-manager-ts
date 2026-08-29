@@ -132,7 +132,7 @@ export function buildWebCodeLayers(options: IWebCodeAnimOptions): CoreReactive.A
     /// 3) لایه Ghost (اعداد محو - پر شده با رنگ اصلی)
     ///---------------------------------
     const ghostLayer = CoreReactive.App.svgG({
-        //attrs: {opacity: "0.75"},
+        attrs: {opacity: "0.5"},
         children: digits.map((d, i) => CoreReactive.App.svgText({
             attrs: {
                 x: String(positions[i]),

@@ -78,6 +78,26 @@ export const Keys = {
             name:        CreateTranslationKey() ,
             description: CreateTranslationKey() ,
         },
+        inputQrCode: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        inputSelectColumn: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        inputSelectOption: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        inputTitle: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        inputNumber: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
 
 
 
@@ -252,6 +272,229 @@ export const Keys = {
             description: CreateTranslationKey() ,
         },
         paymentDerham: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+
+        paymentWalletAdd: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        paymentWithDrawal: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        paymentDeposit: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        paymentTransaction: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+
+        loadingOrbit: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        loadingPulse: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        loading: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        loadingDotsHorizontal: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        loadingBarsHorizontal: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        loadingDotsVertical: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        loadingBarsVertical: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+
+        userAccount: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        userAccountAdd: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        userAccountGroupAdd: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        userAccountReference: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        paymentAmount: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        paymentCashCurrency: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        paymentCoinCurrency: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        symbolExclumationSquare: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        symbolExclumationWarning: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        userEmail1: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        userEmail2: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        userPhone: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        statusPinOpen: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        statusPinClose: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        statusPin2Open: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        fileWindowClose: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        fileWindowResizeMax: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        fileWindowResizeMin: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        fileWindowMinimize: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        paymentLeverage: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        paymentLeverage2: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        fileMenu: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        fileSetting: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        fileSearch: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        fileFilter: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        fileAttachment: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        fileReload: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        fileEmpty: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        fileClearBroom: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        fileApplication: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        fileCategory: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        fileType: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        fileTypeNote: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        fileTage: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        fileStatusComplete: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        userPassword: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        userChangePassword: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        statusLockedClose: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        statusLockedOpen: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        paymentWallet1: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        paymentWallet2: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        paymentCardNumber: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        paymentRate: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        userAccountReffrence: {
             name:        CreateTranslationKey() ,
             description: CreateTranslationKey() ,
         },

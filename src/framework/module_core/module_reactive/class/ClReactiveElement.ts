@@ -626,4 +626,8 @@ export class ClReactiveElement {
     static svgFeMerge(o?: Options) { return new ClReactiveElement("feMerge", o , EnElementNamespace.SVG) }
     static svgFeMergeNode(o?: Options) { return new ClReactiveElement("feMergeNode", o , EnElementNamespace.SVG) }
     static svgG(o?: Options) { return new ClReactiveElement("g", o , EnElementNamespace.SVG) }
+    static svgAnimate(o?: Options) { return new ClReactiveElement("animate", o , EnElementNamespace.SVG) }
+    static svgAnimateTransform(o?: Options) { return new ClReactiveElement("animateTransform", o , EnElementNamespace.SVG) }
+    static svgAnimateMotion(o?: Options) { return new ClReactiveElement("animateMotion", o , EnElementNamespace.SVG) }
+    static svgPolygon(o?: Options) { return new ClReactiveElement("polygon", o , EnElementNamespace.SVG) }
 }

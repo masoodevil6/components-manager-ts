@@ -45,20 +45,65 @@ export const En =
             Keys.category.icons.statusLight.description,
             "list of light icons such as Moon and Sun"
         ],
-
-
-
-
-
-
-        /// Arrows
+        /// Status -> Pin
         [
-            Keys.category.icons.arrows.name,
+            Keys.category.icons.statusPin.name,
+            "Pin icons"
+        ],
+        [
+            Keys.category.icons.statusPin.description,
+            "A list of pin and thumbtack icons"
+        ],
+        /// Status -> Resize
+        [
+            Keys.category.icons.statusResize.name,
+            "Resize icons"
+        ],
+        [
+            Keys.category.icons.statusResize.description,
+            "A list of maximize and minimize resize icons"
+        ],
+        /// Status -> Locked
+        [
+            Keys.category.icons.statusLocked.name,
+            "Locked icons"
+        ],
+        [
+            Keys.category.icons.statusLocked.description,
+            "A list of lock open and close icons"
+        ],
+
+
+
+
+
+
+        /// Symbols
+        [
+            Keys.category.icons.symbols.name,
+            "Symbol icons"
+        ],
+        [
+            Keys.category.icons.symbols.description,
+            "A list of symbol icons such as arrows and symbols"
+        ],
+        /// Symbols -> Arrows
+        [
+            Keys.category.icons.symbolsArrows.name,
             "Arrow icons"
         ],
         [
-            Keys.category.icons.arrows.description,
+            Keys.category.icons.symbolsArrows.description,
             "A list of arrow icons such as arrows and back and select all"
+        ],
+        /// Symbols -> Exclumation
+        [
+            Keys.category.icons.symbolsExclumation.name,
+            "Exclamation icons"
+        ],
+        [
+            Keys.category.icons.symbolsExclumation.description,
+            "A list of exclamation and warning icons"
         ],
         /// Arrows -> Basic
         [
@@ -112,6 +157,51 @@ export const En =
             Keys.category.icons.inputsTime.description,
             "A list of time icons such as clock and calendar"
         ],
+        /// Inputs -> Tools
+        [
+            Keys.category.icons.inputsTools.name,
+            "Tools icons"
+        ],
+        [
+            Keys.category.icons.inputsTools.description,
+            "A list of tool icons such as clear broom"
+        ],
+        /// Inputs -> Qr
+        [
+            Keys.category.icons.inputsQr.name,
+            "QR code icons"
+        ],
+        [
+            Keys.category.icons.inputsQr.description,
+            "A list of QR code icons for data input"
+        ],
+        /// Inputs -> Select
+        [
+            Keys.category.icons.inputsSelect.name,
+            "Select icons"
+        ],
+        [
+            Keys.category.icons.inputsSelect.description,
+            "A list of select dropdown and column selection icons"
+        ],
+        /// Inputs -> Text
+        [
+            Keys.category.icons.inputsText.name,
+            "Text icons"
+        ],
+        [
+            Keys.category.icons.inputsText.description,
+            "A list of text input icons such as title"
+        ],
+        /// Inputs -> Number
+        [
+            Keys.category.icons.inputsNumber.name,
+            "Number icons"
+        ],
+        [
+            Keys.category.icons.inputsNumber.description,
+            "A list of number input icons"
+        ],
 
 
 
@@ -154,6 +244,78 @@ export const En =
         [
             Keys.category.icons.filesToolbarsZoom.description,
             "List of zoom icons"
+        ],
+        /// Files -> Toolbars -> Pin
+        [
+            Keys.category.icons.filesToolbarsPin.name,
+            "Toolbar pin icons"
+        ],
+        [
+            Keys.category.icons.filesToolbarsPin.description,
+            "A list of toolbar pin and thumbtack icons"
+        ],
+        /// Files -> Toolbars -> Window
+        [
+            Keys.category.icons.filesToolbarsWindow.name,
+            "Toolbar window icons"
+        ],
+        [
+            Keys.category.icons.filesToolbarsWindow.description,
+            "A list of toolbar window icons such as close and resize"
+        ],
+        /// Files -> Toolbars -> Header
+        [
+            Keys.category.icons.filesToolbarsHeader.name,
+            "Toolbar header icons"
+        ],
+        [
+            Keys.category.icons.filesToolbarsHeader.description,
+            "A list of toolbar header icons such as menu and settings"
+        ],
+        /// Files -> Logo
+        [
+            Keys.category.icons.filesLogo.name,
+            "Logo icons"
+        ],
+        [
+            Keys.category.icons.filesLogo.description,
+            "A list of logo icons such as application"
+        ],
+        /// Files -> Category
+        [
+            Keys.category.icons.filesCategory.name,
+            "Category icons"
+        ],
+        [
+            Keys.category.icons.filesCategory.description,
+            "A list of category and classification icons"
+        ],
+        /// Files -> Type
+        [
+            Keys.category.icons.filesType.name,
+            "File type icons"
+        ],
+        [
+            Keys.category.icons.filesType.description,
+            "A list of file type icons"
+        ],
+        /// Files -> Tag
+        [
+            Keys.category.icons.filesTag.name,
+            "Tag icons"
+        ],
+        [
+            Keys.category.icons.filesTag.description,
+            "A list of label tag and tagging icons"
+        ],
+        /// Files -> Status
+        [
+            Keys.category.icons.filesStatus.name,
+            "Status icons"
+        ],
+        [
+            Keys.category.icons.filesStatus.description,
+            "A list of status icons"
         ],
 
 
@@ -199,7 +361,16 @@ export const En =
         ],
         [
             Keys.category.icons.paymentsType.description,
-            "A list of payment type icons such as cash, rial and tether"
+            "A list of payment types icons such as cash, rial and tether"
+        ],
+        /// Payment -> Actions
+        [
+            Keys.category.icons.paymentsActions.name,
+            "Payment Action Icons"
+        ],
+        [
+            Keys.category.icons.paymentsActions.description,
+            "A list of payment action icons such as withdrawal and deposit"
         ],
 
 
@@ -261,5 +432,124 @@ export const En =
             Keys.category.icons.webCodes200.description,
             "List of Web Code Icons Web Series 500"
         ] ,
+
+        /// Loadings
+        [
+            Keys.category.icons.loadings.name,
+            "Loading Icons"
+        ],
+        [
+            Keys.category.icons.loadings.description,
+            "A list of loading and spinner icons"
+        ],
+        /// Loadings -> Circle
+        [
+            Keys.category.icons.loadingsCircle.name,
+            "Circle Loading Icons"
+        ],
+        [
+            Keys.category.icons.loadingsCircle.description,
+            "A list of loading icons with circular animation"
+        ],
+        /// Loadings -> Horizontal
+        [
+            Keys.category.icons.loadingsHorizontal.name,
+            "Horizontal Loading Icons"
+        ],
+        [
+            Keys.category.icons.loadingsHorizontal.description,
+            "A list of loading icons with horizontal layout"
+        ],
+        /// Loadings -> Vertical
+        [
+            Keys.category.icons.loadingsVertical.name,
+            "Vertical Loading Icons"
+        ],
+        [
+            Keys.category.icons.loadingsVertical.description,
+            "A list of loading icons with vertical layout"
+        ],
+
+        /// Users
+        [
+            Keys.category.icons.users.name,
+            "User Icons"
+        ],
+        [
+            Keys.category.icons.users.description,
+            "A list of icons related to users and accounts"
+        ],
+        /// Users -> Account
+        [
+            Keys.category.icons.usersAccount.name,
+            "Account Icons"
+        ],
+        [
+            Keys.category.icons.usersAccount.description,
+            "A list of icons related to accounts and amounts"
+        ],
+        /// Users -> Emails
+        [
+            Keys.category.icons.usersEmails.name,
+            "User email icons"
+        ],
+        [
+            Keys.category.icons.usersEmails.description,
+            "A list of email and electronic mail icons"
+        ],
+        /// Users -> Phone
+        [
+            Keys.category.icons.usersPhone.name,
+            "User phone icons"
+        ],
+        [
+            Keys.category.icons.usersPhone.description,
+            "A list of phone and user call icons"
+        ],
+        /// Users -> Password
+        [
+            Keys.category.icons.usersPassword.name,
+            "User password icons"
+        ],
+        [
+            Keys.category.icons.usersPassword.description,
+            "A list of password and change password icons"
+        ],
+        /// Payments -> Cash
+        [
+            Keys.category.icons.paymentsCash.name,
+            "Cash Payment Icons"
+        ],
+        [
+            Keys.category.icons.paymentsCash.description,
+            "A list of icons related to cash payments"
+        ],
+        /// Payments -> Leverage
+        [
+            Keys.category.icons.paymentsLeverage.name,
+            "Leverage Icons"
+        ],
+        [
+            Keys.category.icons.paymentsLeverage.description,
+            "A list of icons related to trading leverage"
+        ],
+        /// Payments -> Input
+        [
+            Keys.category.icons.paymentsInput.name,
+            "Payment Input Icons"
+        ],
+        [
+            Keys.category.icons.paymentsInput.description,
+            "A list of wallet and card number icons"
+        ],
+        /// Payments -> Rate
+        [
+            Keys.category.icons.paymentsRate.name,
+            "Rate Icons"
+        ],
+        [
+            Keys.category.icons.paymentsRate.description,
+            "A list of icons related to rate and value measurement"
+        ],
 
     ]);

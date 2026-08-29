@@ -1,6 +1,8 @@
+
 import {ITemplate} from "@/core_route";
 import * as CoreReactive from "@/core_reactive";
 import * as UiIcons from "@/ui_icons"
+import * as UiCategories from "@/ui_categories";
 ///------------------------------
 import './icons.css';
 
@@ -9,6 +11,9 @@ export class ClIconPage implements ITemplate {
 
     render(query?: Record<string,string> ,extra?: Record<string, any>): HTMLElement {
 
+        console.log()
+
+
         const container = CoreReactive.App.div({
             className: [
                 "row"
@@ -16,6 +21,7 @@ export class ClIconPage implements ITemplate {
             children:[
 
 
+                /// Status
                 CoreReactive.App.div({
                     className:["col-12" , "row" , "p-0" , "m-0"] ,
                     children:[
@@ -25,8 +31,8 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiIcons.CreateIcon(UiIcons.Src.StatusIsTrue.Definition  ),
-                                        UiIcons.CreateIcon(UiIcons.Src.StatusIsFalse.Definition  ),
+                                        UiCategories.Icons.Status.Boolean.StatusIsTrue() ,
+                                        UiCategories.Icons.Status.Boolean.StatusIsFalse()
                                     ]
                                 }),
                             ]
@@ -37,8 +43,8 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiIcons.CreateIcon(UiIcons.Src.StatusVisit.Definition  ),
-                                        UiIcons.CreateIcon(UiIcons.Src.StatusUnVisit.Definition  ),
+                                        UiCategories.Icons.Status.Visit.StatusVisit() ,
+                                        UiCategories.Icons.Status.Visit.StatusUnVisit() ,
                                     ]
                                 }),
                             ]
@@ -49,8 +55,217 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiIcons.CreateIcon(UiIcons.Src.StatusMoon.Definition  ),
-                                        UiIcons.CreateIcon(UiIcons.Src.StatusSun.Definition  ),
+                                        UiCategories.Icons.Status.Light.StatusLightOn() ,
+                                        UiCategories.Icons.Status.Light.StatusLightOff() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Status.Pin.StatusPinOpen() ,
+                                        UiCategories.Icons.Status.Pin.StatusPinClose() ,
+                                        UiCategories.Icons.Status.Pin.StatusPin2Open() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Status.Resize.FileWindowResizeMax() ,
+                                        UiCategories.Icons.Status.Resize.FileWindowResizeMin() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Status.Locked.StatusLockedClose() ,
+                                        UiCategories.Icons.Status.Locked.StatusLockedOpen() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                    ]
+                }),
+
+
+
+                /// Arrows
+                CoreReactive.App.div({
+                    className:["col-12" , "row" , "p-0" , "m-0"] ,
+                    children:[
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Symbols.Arrows.Basic.ArrowUp() ,
+                                        UiCategories.Icons.Symbols.Arrows.Basic.ArrowRight() ,
+                                        UiCategories.Icons.Symbols.Arrows.Basic.ArrowDown() ,
+                                        UiCategories.Icons.Symbols.Arrows.Basic.ArrowLeft() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Symbols.Arrows.Chevron.ArrowChevronUp() ,
+                                        UiCategories.Icons.Symbols.Arrows.Chevron.ArrowChevronRight() ,
+                                        UiCategories.Icons.Symbols.Arrows.Chevron.ArrowChevronDown() ,
+                                        UiCategories.Icons.Symbols.Arrows.Chevron.ArrowChevronLeft() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Symbols.Arrows.Double.ArrowDoubleUp() ,
+                                        UiCategories.Icons.Symbols.Arrows.Double.ArrowDoubleRight() ,
+                                        UiCategories.Icons.Symbols.Arrows.Double.ArrowDoubleDown() ,
+                                        UiCategories.Icons.Symbols.Arrows.Double.ArrowDoubleLeft() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                    ]
+                }),
+
+
+
+                /// Symbols -> Exclumation
+                CoreReactive.App.div({
+                    className:["col-12" , "row" , "p-0" , "m-0"] ,
+                    children:[
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Symbols.Exclumation.SymbolExclumationSquare() ,
+                                        UiCategories.Icons.Symbols.Exclumation.SymbolExclumationWarning() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                    ]
+                }),
+
+
+
+                /// Calc
+                CoreReactive.App.div({
+                    className:["col-12" , "row" , "p-0" , "m-0"] ,
+                    children:[
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Calc.Symbol.CalcPlus() ,
+                                        UiCategories.Icons.Calc.Symbol.CalcMinus() ,
+                                        UiCategories.Icons.Calc.Symbol.CalcCross() ,
+                                        UiCategories.Icons.Calc.Symbol.CalcDivide() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                    ]
+                }),
+
+
+
+                /// Inputs
+                CoreReactive.App.div({
+                    className:["col-12" , "row" , "p-0" , "m-0"] ,
+                    children:[
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Inputs.Time.InputClock() ,
+                                        UiCategories.Icons.Inputs.Time.InputCalender() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Inputs.Qr.InputQrCode() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Inputs.Tools.FileClearBroom() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Inputs.Select.InputSelectColumn() ,
+                                        UiCategories.Icons.Inputs.Select.InputSelectOption() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Inputs.Text.InputTitle() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Inputs.Number.InputNumber() ,
                                     ]
                                 }),
                             ]
@@ -61,7 +276,7 @@ export class ClIconPage implements ITemplate {
 
 
 
-
+                /// Files
                 CoreReactive.App.div({
                     className:["col-12" , "row" , "p-0" , "m-0"] ,
                     children:[
@@ -71,11 +286,168 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
+                                        UiCategories.Icons.Files.Toolbars.Zoom.FilesZoom() ,
+                                        UiCategories.Icons.Files.Toolbars.Zoom.FilesZoomIn() ,
+                                        UiCategories.Icons.Files.Toolbars.Zoom.FilesZoomOut() ,
+                                        UiCategories.Icons.Files.Toolbars.Zoom.FilesZoomRefresh() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Files.Toolbars.Export.FilesPrint() ,
+                                        UiCategories.Icons.Files.Toolbars.Export.FilesExcel() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Files.Toolbars.Pin.StatusPinOpen() ,
+                                        UiCategories.Icons.Files.Toolbars.Pin.StatusPinClose() ,
+                                        UiCategories.Icons.Files.Toolbars.Pin.StatusPin2Open() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Files.Toolbars.Window.FileWindowClose() ,
+                                        UiCategories.Icons.Files.Toolbars.Window.FileWindowResizeMax() ,
+                                        UiCategories.Icons.Files.Toolbars.Window.FileWindowResizeMin() ,
+                                        UiCategories.Icons.Files.Toolbars.Window.FileWindowMinimize() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Files.Toolbars.Header.FileMenu() ,
+                                        UiCategories.Icons.Files.Toolbars.Header.FileSetting() ,
+                                        UiCategories.Icons.Files.Toolbars.Header.FileSearch() ,
+                                        UiCategories.Icons.Files.Toolbars.Header.FileFilter() ,
+                                        UiCategories.Icons.Files.Toolbars.Header.FileReload() ,
+                                        UiCategories.Icons.Files.Toolbars.Header.FileEmpty() ,
+                                        UiCategories.Icons.Files.Toolbars.Header.FileClearBroom() ,
+                                        UiCategories.Icons.Files.Toolbars.Header.InputTitle() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Files.Actions.FilesEdit() ,
+                                        UiCategories.Icons.Files.Actions.FilesDelete() ,
+                                        UiCategories.Icons.Files.Actions.FileAttachment() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Files.Logo.FileApplication() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Files.Category.FileCategory() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Files.Type.FileType() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Files.Type.FileTypeNote() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Files.Tag.FileTage() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Files.Status.FileStatusComplete() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                    ]
+                }),
 
-                                        UiIcons.CreateIcon(UiIcons.Src.ArrowUp.Definition     ),
-                                        UiIcons.CreateIcon(UiIcons.Src.ArrowRight.Definition   ),
-                                        UiIcons.CreateIcon(UiIcons.Src.ArrowDown.Definition   ),
-                                        UiIcons.CreateIcon(UiIcons.Src.ArrowLeft.Definition   ),
+
+
+                /// Loadings
+                CoreReactive.App.div({
+                    className:["col-12" , "row" , "p-0" , "m-0"] ,
+                    children:[
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Loadings.Circle.Loading() ,
+                                        UiCategories.Icons.Loadings.Circle.LoadingOrbit() ,
+                                        UiCategories.Icons.Loadings.Circle.LoadingPulse() ,
                                     ]
                                 }),
                             ]
@@ -86,10 +458,8 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiIcons.CreateIcon(UiIcons.Src.ArrowChevronUp.Definition   ),
-                                        UiIcons.CreateIcon(UiIcons.Src.ArrowChevronRight.Definition   ),
-                                        UiIcons.CreateIcon(UiIcons.Src.ArrowChevronDown.Definition   ),
-                                        UiIcons.CreateIcon(UiIcons.Src.ArrowChevronLeft.Definition   ),
+                                        UiCategories.Icons.Loadings.Horizontal.LoadingDotsHorizontal() ,
+                                        UiCategories.Icons.Loadings.Horizontal.LoadingBarsHorizontal()
                                     ]
                                 }),
                             ]
@@ -100,10 +470,153 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiIcons.CreateIcon(UiIcons.Src.ArrowDoubleUp.Definition  ),
-                                        UiIcons.CreateIcon(UiIcons.Src.ArrowDoubleRight.Definition  ),
-                                        UiIcons.CreateIcon(UiIcons.Src.ArrowDoubleDown.Definition   ),
-                                        UiIcons.CreateIcon(UiIcons.Src.ArrowDoubleLeft.Definition   ),
+                                        UiCategories.Icons.Loadings.Vertical.LoadingDotsVertical() ,
+                                        UiCategories.Icons.Loadings.Vertical.LoadingBarsVertical()
+                                    ]
+                                }),
+                            ]
+                        }),
+                    ]
+                }),
+
+
+
+                /// Loadings
+                CoreReactive.App.div({
+                    className:["col-12" , "row" , "p-0" , "m-0"] ,
+                    children:[
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Payments.Types.PaymentCash() ,
+                                        UiCategories.Icons.Payments.Types.PaymentRial() ,
+                                        UiCategories.Icons.Payments.Types.PaymentTether() ,
+                                        UiCategories.Icons.Payments.Types.PaymentDerham() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Payments.Actions.PaymentDeposit() ,
+                                        UiCategories.Icons.Payments.Actions.PaymentTransaction() ,
+                                        UiCategories.Icons.Payments.Actions.PaymentWithDrawal() ,
+                                        UiCategories.Icons.Payments.Actions.PaymentWalletAdd() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Payments.Cash.PaymentAmount() ,
+                                        UiCategories.Icons.Payments.Cash.PaymentCashCurrency() ,
+                                        UiCategories.Icons.Payments.Cash.PaymentCoinCurrency() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Payments.Leverage.PaymentLeverage() ,
+                                        UiCategories.Icons.Payments.Leverage.PaymentLeverage2() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Payments.Input.PaymentWallet1() ,
+                                        UiCategories.Icons.Payments.Input.PaymentWallet2() ,
+                                        UiCategories.Icons.Payments.Input.PaymentCardNumber() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Payments.Rate.PaymentRate() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                    ]
+                }),
+
+
+
+                /// Users
+                CoreReactive.App.div({
+                    className:["col-12" , "row" , "p-0" , "m-0"] ,
+                    children:[
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Users.Account.UserAccount() ,
+                                        UiCategories.Icons.Users.Account.UserAccountAdd() ,
+                                        UiCategories.Icons.Users.Account.UserAccountGroupAdd() ,
+                                        UiCategories.Icons.Users.Account.UserAccountReference() ,
+                                        UiCategories.Icons.Users.Account.UserAccountReffrence() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Users.Emails.UserEmail1() ,
+                                        UiCategories.Icons.Users.Emails.UserEmail2() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Users.Phone.UserPhone() ,
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        UiCategories.Icons.Users.Password.UserPassword() ,
+                                        UiCategories.Icons.Users.Password.UserChangePassword() ,
                                     ]
                                 }),
                             ]
@@ -114,127 +627,7 @@ export class ClIconPage implements ITemplate {
 
 
 
-
-
-
-                CoreReactive.App.div({
-                    className:["col-12" , "row" , "p-0" , "m-0"] ,
-                    children:[
-                        CoreReactive.App.div({
-                            className:["col-3" , "row" , "p-0" , "m-0"] ,
-                            children:[
-                                CoreReactive.App.div({
-                                    className:["border"] ,
-                                    children:[
-                                        UiIcons.CreateIcon(UiIcons.Src.CalcPlus.Definition   ),
-                                        UiIcons.CreateIcon(UiIcons.Src.CalcMinus.Definition  ),
-                                        UiIcons.CreateIcon(UiIcons.Src.CalcCross.Definition   ),
-                                        UiIcons.CreateIcon(UiIcons.Src.CalcDivide.Definition  ),
-                                    ]
-                                }),
-                            ]
-                        }),
-                    ]
-                }),
-
-
-
-
-
-                CoreReactive.App.div({
-                    className:["col-12" , "row" , "p-0" , "m-0"] ,
-                    children:[
-                        CoreReactive.App.div({
-                            className:["col-3" , "row" , "p-0" , "m-0"] ,
-                            children:[
-                                CoreReactive.App.div({
-                                    className:["border"] ,
-                                    children:[
-                                        UiIcons.CreateIcon(UiIcons.Src.InputClock.Definition  ),
-                                        UiIcons.CreateIcon(UiIcons.Src.InputCalender.Definition  ),
-                                    ]
-                                }),
-                            ]
-                        }),
-                    ]
-                }),
-
-
-
-
-
-
-
-                CoreReactive.App.div({
-                    className:["col-12" , "row" , "p-0" , "m-0"] ,
-                    children:[
-                        CoreReactive.App.div({
-                            className:["col-3" , "row" , "p-0" , "m-0"] ,
-                            children:[
-                                CoreReactive.App.div({
-                                    className:["border"] ,
-                                    children:[
-                                        UiIcons.CreateIcon(UiIcons.Src.FilesZoom.Definition  ),
-                                        UiIcons.CreateIcon(UiIcons.Src.FilesZoomIn.Definition  ),
-                                        UiIcons.CreateIcon(UiIcons.Src.FilesZoomOut.Definition  ),
-                                        UiIcons.CreateIcon(UiIcons.Src.FilesZoomRefresh.Definition   ),
-                                    ]
-                                }),
-                            ]
-                        }),
-                        CoreReactive.App.div({
-                            className:["col-3" , "row" , "p-0" , "m-0"] ,
-                            children:[
-                                CoreReactive.App.div({
-                                    className:["border"] ,
-                                    children:[
-                                        UiIcons.CreateIcon(UiIcons.Src.FilesPrint.Definition   ),
-                                        UiIcons.CreateIcon(UiIcons.Src.FilesExcel.Definition    ),
-                                    ]
-                                }),
-                            ]
-                        }),
-                        CoreReactive.App.div({
-                            className:["col-3" , "row" , "p-0" , "m-0"] ,
-                            children:[
-                                CoreReactive.App.div({
-                                    className:["border"] ,
-                                    children:[
-                                        UiIcons.CreateIcon(UiIcons.Src.FilesEdit.Definition ),
-                                        UiIcons.CreateIcon(UiIcons.Src.FilesDelete.Definition ),
-                                    ]
-                                }),
-                            ]
-                        }),
-                    ]
-                }),
-
-
-
-
-                CoreReactive.App.div({
-                    className:["col-12" , "row" , "p-0" , "m-0"] ,
-                    children:[
-                        CoreReactive.App.div({
-                            className:["col-3" , "row" , "p-0" , "m-0"] ,
-                            children:[
-                                CoreReactive.App.div({
-                                    className:["border"] ,
-                                    children:[
-                                        UiIcons.CreateIcon(UiIcons.Src.PaymentTether.Definition  ),
-                                        UiIcons.CreateIcon(UiIcons.Src.PaymentCash.Definition ) ,
-                                        UiIcons.CreateIcon(UiIcons.Src.PaymentRial.Definition ) ,
-                                        UiIcons.CreateIcon(UiIcons.Src.PaymentDerham.Definition  ),
-                                    ]
-                                }),
-                            ]
-                        }),
-                    ]
-                }),
-
-
-
-
+                /// WebCodes
                 CoreReactive.App.div({
                     className:["col-12" , "row" , "p-0" , "m-0"] ,
                     children:[
@@ -247,41 +640,13 @@ export class ClIconPage implements ITemplate {
                                         CoreReactive.App.div({
                                             className:["border" , "float-start"] ,
                                             children:[
-                                                UiIcons.CreateIcon(UiIcons.Src.WebCode100.Definition , {size: 100}  ),
+                                                UiCategories.Icons.WebCode.Series100.WebCode100( {size: 100} ) ,
                                             ]
                                         }),
                                         CoreReactive.App.div({
                                             className:["border" , "float-start"] ,
                                             children:[
-                                                UiIcons.CreateIcon(UiIcons.Src.WebCode101.Definition , {size: 100}  ),
-                                            ]
-                                        }),
-                                    ]
-                                }),
-                            ]
-                        }),
-                        CoreReactive.App.div({
-                            className:["col-3" , "row" , "p-0" , "m-0"] ,
-                            children:[
-                                CoreReactive.App.div({
-                                    className:["border"] ,
-                                    children:[
-                                        CoreReactive.App.div({
-                                            className:["border" , "float-start"] ,
-                                            children:[
-                                                UiIcons.CreateIcon(UiIcons.Src.WebCode200.Definition , {size: 100}  ),
-                                            ]
-                                        }),
-                                        CoreReactive.App.div({
-                                            className:["border" , "float-start"] ,
-                                            children:[
-                                                UiIcons.CreateIcon(UiIcons.Src.WebCode201.Definition , {size: 100}  ),
-                                            ]
-                                        }),
-                                        CoreReactive.App.div({
-                                            className:["border" , "float-start"] ,
-                                            children:[
-                                                UiIcons.CreateIcon(UiIcons.Src.WebCode204.Definition , {size: 100}  ),
+                                                UiCategories.Icons.WebCode.Series100.WebCode101( {size: 100} ) ,
                                             ]
                                         }),
                                     ]
@@ -297,65 +662,19 @@ export class ClIconPage implements ITemplate {
                                         CoreReactive.App.div({
                                             className:["border" , "float-start"] ,
                                             children:[
-                                                UiIcons.CreateIcon(UiIcons.Src.WebCode301.Definition , {size: 100}  ),
+                                                UiCategories.Icons.WebCode.Series200.WebCode200( {size: 100} ) ,
                                             ]
                                         }),
                                         CoreReactive.App.div({
                                             className:["border" , "float-start"] ,
                                             children:[
-                                                UiIcons.CreateIcon(UiIcons.Src.WebCode304.Definition , {size: 100}  ),
-                                            ]
-                                        }),
-                                    ]
-                                }),
-                            ]
-                        }),
-                        CoreReactive.App.div({
-                            className:["col-3" , "row" , "p-0" , "m-0"] ,
-                            children:[
-                                CoreReactive.App.div({
-                                    className:["border"] ,
-                                    children:[
-                                        CoreReactive.App.div({
-                                            className:["border" , "float-start"] ,
-                                            children:[
-                                                UiIcons.CreateIcon(UiIcons.Src.WebCode401.Definition , {size: 100}  ),
+                                                UiCategories.Icons.WebCode.Series200.WebCode201( {size: 100} ) ,
                                             ]
                                         }),
                                         CoreReactive.App.div({
                                             className:["border" , "float-start"] ,
                                             children:[
-                                                UiIcons.CreateIcon(UiIcons.Src.WebCode403.Definition , {size: 100}  ),
-                                            ]
-                                        }),
-                                        CoreReactive.App.div({
-                                            className:["border" , "float-start"] ,
-                                            children:[
-                                                UiIcons.CreateIcon(UiIcons.Src.WebCode404.Definition , {size: 100}  ),
-                                            ]
-                                        }),
-                                        CoreReactive.App.div({
-                                            className:["border" , "float-start"] ,
-                                            children:[
-                                                UiIcons.CreateIcon(UiIcons.Src.WebCode405.Definition , {size: 100}  ),
-                                            ]
-                                        }),
-                                        CoreReactive.App.div({
-                                            className:["border" , "float-start"] ,
-                                            children:[
-                                                UiIcons.CreateIcon(UiIcons.Src.WebCode408.Definition , {size: 100}  ),
-                                            ]
-                                        }),
-                                        CoreReactive.App.div({
-                                            className:["border" , "float-start"] ,
-                                            children:[
-                                                UiIcons.CreateIcon(UiIcons.Src.WebCode410.Definition , {size: 100}  ),
-                                            ]
-                                        }),
-                                        CoreReactive.App.div({
-                                            className:["border" , "float-start"] ,
-                                            children:[
-                                                UiIcons.CreateIcon(UiIcons.Src.WebCode429.Definition , {size: 100}  ),
+                                                UiCategories.Icons.WebCode.Series200.WebCode204( {size: 100} ) ,
                                             ]
                                         }),
                                     ]
@@ -371,19 +690,93 @@ export class ClIconPage implements ITemplate {
                                         CoreReactive.App.div({
                                             className:["border" , "float-start"] ,
                                             children:[
-                                                UiIcons.CreateIcon(UiIcons.Src.WebCode500.Definition , {size: 100}  ),
+                                                UiCategories.Icons.WebCode.Series300.WebCode301( {size: 100} ) ,
                                             ]
                                         }),
                                         CoreReactive.App.div({
                                             className:["border" , "float-start"] ,
                                             children:[
-                                                UiIcons.CreateIcon(UiIcons.Src.WebCode502.Definition , {size: 100}  ),
+                                                UiCategories.Icons.WebCode.Series300.WebCode304( {size: 100} ) ,
+                                            ]
+                                        }),
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        CoreReactive.App.div({
+                                            className:["border" , "float-start"] ,
+                                            children:[
+                                                UiCategories.Icons.WebCode.Series400.WebCode401( {size: 100} ) ,
                                             ]
                                         }),
                                         CoreReactive.App.div({
                                             className:["border" , "float-start"] ,
                                             children:[
-                                                UiIcons.CreateIcon(UiIcons.Src.WebCode504.Definition , {size: 100}  ),
+                                                UiCategories.Icons.WebCode.Series400.WebCode403( {size: 100} ) ,
+                                            ]
+                                        }),
+                                        CoreReactive.App.div({
+                                            className:["border" , "float-start"] ,
+                                            children:[
+                                                UiCategories.Icons.WebCode.Series400.WebCode404( {size: 100} ) ,
+                                            ]
+                                        }),
+                                        CoreReactive.App.div({
+                                            className:["border" , "float-start"] ,
+                                            children:[
+                                                UiCategories.Icons.WebCode.Series400.WebCode405( {size: 100} ) ,
+                                            ]
+                                        }),
+                                        CoreReactive.App.div({
+                                            className:["border" , "float-start"] ,
+                                            children:[
+                                                UiCategories.Icons.WebCode.Series400.WebCode408( {size: 100} ) ,
+                                            ]
+                                        }),
+                                        CoreReactive.App.div({
+                                            className:["border" , "float-start"] ,
+                                            children:[
+                                                UiCategories.Icons.WebCode.Series400.WebCode410( {size: 100} ) ,
+                                            ]
+                                        }),
+                                        CoreReactive.App.div({
+                                            className:["border" , "float-start"] ,
+                                            children:[
+                                                UiCategories.Icons.WebCode.Series400.WebCode429( {size: 100} ) ,
+                                            ]
+                                        }),
+                                    ]
+                                }),
+                            ]
+                        }),
+                        CoreReactive.App.div({
+                            className:["col-3" , "row" , "p-0" , "m-0"] ,
+                            children:[
+                                CoreReactive.App.div({
+                                    className:["border"] ,
+                                    children:[
+                                        CoreReactive.App.div({
+                                            className:["border" , "float-start"] ,
+                                            children:[
+                                                UiCategories.Icons.WebCode.Series500.WebCode500( {size: 100} ) ,
+                                            ]
+                                        }),
+                                        CoreReactive.App.div({
+                                            className:["border" , "float-start"] ,
+                                            children:[
+                                                UiCategories.Icons.WebCode.Series500.WebCode502( {size: 100} ) ,
+                                            ]
+                                        }),
+                                        CoreReactive.App.div({
+                                            className:["border" , "float-start"] ,
+                                            children:[
+                                                UiCategories.Icons.WebCode.Series500.WebCode504( {size: 100} ) ,
                                             ]
                                         }),
                                     ]
