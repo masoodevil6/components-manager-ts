@@ -1,1 +1,4 @@
-export {Definition, PaymentLeverage, PaymentLeverage2} from "./Definition";
+export {
+    Definition,
+    Leverage, Leverage2
+} from "./Definition";

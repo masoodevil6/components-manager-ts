@@ -1,1 +1,4 @@
-export {Definition, InputQrCode} from "./Definition";
+export {
+    Definition,
+    QrCode
+} from "./Definition";

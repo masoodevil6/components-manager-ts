@@ -7,17 +7,17 @@ import {CreateCategoryIcon}                from "../../../../../basic/methods";
 import {Keys}                              from "../../../../../languages";
 
 
-export const ArrowUp     : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowUp.Definition);
-export const ArrowDown   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowDown.Definition);
-export const ArrowRight  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowRight.Definition);
-export const ArrowLeft   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowLeft.Definition);
+export const Up     : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowUp.Definition);
+export const Down   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowDown.Definition);
+export const Right  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowRight.Definition);
+export const Left   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowLeft.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Basic" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.arrowsBasic.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.arrowsBasic.name ) ,
+    name:            Keys.category.icons.arrowsBasic.name ,
+    description:     Keys.category.icons.arrowsBasic.description  ,
     icons:          [
-        ArrowUp, ArrowDown , ArrowRight , ArrowLeft
+        Up, Down , Right , Left
     ]
 }

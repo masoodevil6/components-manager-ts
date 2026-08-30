@@ -96,7 +96,7 @@ export const Fa =
             Keys.category.icons.symbolsArrows.description,
             "لیستی از ایکون های فلش مانند فلش ها و بازگشت و انتخاب همه"
         ],
-        /// Symbols -> Exclumation
+        /// Symbols -> Exclamation
         [
             Keys.category.icons.symbolsExclumation.name,
             "ایکون های علامت تعجب"

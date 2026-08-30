@@ -1,1 +1,1 @@
-export {Definition, UserEmail1, UserEmail2} from "./Definition";
+export {Definition, Email1, Email2} from "./Definition";

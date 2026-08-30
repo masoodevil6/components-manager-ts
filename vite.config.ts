@@ -7,6 +7,7 @@ export default defineConfig({
       // ─── CORE ───────────────────────────────────────────────
       { find: '@/core_configs',      replacement: path.resolve(__dirname, './src/framework/module_core/module_configs') },
       { find: '@/core_components',   replacement: path.resolve(__dirname, './src/framework/module_core/module_components') },
+      { find: '@/core_event',        replacement: path.resolve(__dirname, './src/framework/module_core/module_event') },
       { find: '@/core_languages',    replacement: path.resolve(__dirname, './src/framework/module_core/module_languages') },
       { find: '@/core_observable',   replacement: path.resolve(__dirname, './src/framework/module_core/module_observable') },
       { find: '@/core_reactive',     replacement: path.resolve(__dirname, './src/framework/module_core/module_reactive') },

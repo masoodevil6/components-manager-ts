@@ -1,3 +1,4 @@
 export {
-    Definition, FilesEdit, FilesDelete, FileAttachment
+    Definition,
+    Edit, Delete, Attachment
 } from "./Definition";

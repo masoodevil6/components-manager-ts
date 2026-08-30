@@ -7,14 +7,14 @@ import {CreateCategoryIcon}                from "../../../../basic/methods";
 import {Keys}                              from "../../../../languages";
 
 
-export const UserPhone   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.UserPhone.Definition);
+export const Phone   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.UserPhone.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Phone" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.usersPhone.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.usersPhone.name ) ,
+    name:            Keys.category.icons.usersPhone.name ,
+    description:     Keys.category.icons.usersPhone.description  ,
     icons:          [
-        UserPhone
+        Phone
     ]
 }

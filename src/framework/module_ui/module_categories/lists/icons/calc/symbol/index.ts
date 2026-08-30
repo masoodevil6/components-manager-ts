@@ -1,1 +1,4 @@
-export {Definition, CalcPlus, CalcMinus, CalcCross, CalcDivide} from "./Definition"
+export {
+    Definition,
+    Plus, Minus, Cross, Divide
+} from "./Definition"

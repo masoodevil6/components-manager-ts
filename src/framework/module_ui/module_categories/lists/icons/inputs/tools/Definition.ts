@@ -7,14 +7,14 @@ import {CreateCategoryIcon}        from "../../../../basic/methods";
 import {Keys}                      from "../../../../languages";
 
 
-export const FileClearBroom     : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FileClearBroom.Definition);
+export const ClearBroom     : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FileClearBroom.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Tools" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.inputsTools.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.inputsTools.name ) ,
+    name:            Keys.category.icons.inputsTools.name ,
+    description:     Keys.category.icons.inputsTools.description  ,
     icons:          [
-        FileClearBroom
+        ClearBroom
     ]
 }

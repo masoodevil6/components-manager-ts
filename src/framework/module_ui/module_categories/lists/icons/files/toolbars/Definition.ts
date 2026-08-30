@@ -12,8 +12,8 @@ import {Keys}                                   from "../../../../languages";
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Toolbars" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.filesToolbars.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.filesToolbars.name ) ,
+    name:            Keys.category.icons.filesToolbars.name ,
+    description:     Keys.category.icons.filesToolbars.description  ,
     children:        [
         ZoomDefinition ,
         ExportDefinition ,

@@ -1,1 +1,4 @@
-export {Definition, InputNumber} from "./Definition";
+export {
+    Definition,
+    Number
+} from "./Definition";

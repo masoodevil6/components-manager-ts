@@ -7,17 +7,17 @@ import {CreateCategoryIcon}                from "../../../../../basic/methods";
 import {Keys}                              from "../../../../../languages";
 
 
-export const ArrowDoubleRight  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowDoubleRight.Definition);
-export const ArrowDoubleLeft   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowDoubleLeft.Definition);
-export const ArrowDoubleUp     : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowDoubleUp.Definition);
-export const ArrowDoubleDown   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowDoubleDown.Definition);
+export const Right  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowDoubleRight.Definition);
+export const Left   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowDoubleLeft.Definition);
+export const Up     : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowDoubleUp.Definition);
+export const Down   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowDoubleDown.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Double" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.arrowsDouble.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.arrowsDouble.name ) ,
+    name:            Keys.category.icons.arrowsDouble.name ,
+    description:     Keys.category.icons.arrowsDouble.description  ,
     icons:          [
-        ArrowDoubleRight, ArrowDoubleLeft, ArrowDoubleUp, ArrowDoubleDown,
+        Right, Left, Up, Down,
     ]
 }

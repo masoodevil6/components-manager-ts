@@ -1,1 +1,4 @@
-export {Definition, FileClearBroom} from "./Definition";
+export {
+    Definition,
+    ClearBroom
+} from "./Definition";

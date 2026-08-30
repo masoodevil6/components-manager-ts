@@ -1,1 +1,4 @@
-export {Definition, PaymentAmount, PaymentCashCurrency, PaymentCoinCurrency} from "./Definition";
+export {
+    Definition,
+    Amount, CashCurrency, CoinCurrency
+} from "./Definition";

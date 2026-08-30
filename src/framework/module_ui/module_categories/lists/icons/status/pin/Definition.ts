@@ -7,16 +7,17 @@ import {CreateCategoryIcon}                from "../../../../basic/methods";
 import {Keys}                              from "../../../../languages";
 
 
-export const StatusPinOpen    : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.StatusPinOpen.Definition);
-export const StatusPinClose   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.StatusPinClose.Definition);
-export const StatusPin2Open   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.StatusPin2Open.Definition);
+export const Open    : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.StatusPinOpen.Definition);
+export const Close   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.StatusPinClose.Definition);
+export const Open2   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.StatusPin2Open.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Pin" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.statusPin.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.statusPin.name ) ,
+    name:            Keys.category.icons.statusPin.name ,
+    description:     Keys.category.icons.statusPin.description  ,
     icons:          [
-        StatusPinOpen, StatusPinClose, StatusPin2Open
+        Open, Close,
+        Open2
     ]
 }

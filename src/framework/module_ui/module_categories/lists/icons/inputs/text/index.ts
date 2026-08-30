@@ -1,1 +1,4 @@
-export {Definition, InputTitle} from "./Definition";
+export {
+    Definition,
+    Title
+} from "./Definition";

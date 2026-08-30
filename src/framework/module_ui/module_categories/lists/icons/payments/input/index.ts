@@ -1,1 +1,4 @@
-export {Definition, PaymentWallet1, PaymentWallet2, PaymentCardNumber} from "./Definition";
+export {
+    Definition,
+    Wallet1, Wallet2, CardNumber
+} from "./Definition";

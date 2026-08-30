@@ -7,16 +7,16 @@ import {CreateCategoryIcon}                from "../../../../basic/methods";
 import {Keys}                              from "../../../../languages";
 
 
-export const PaymentWallet1    : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.PaymentWallet1.Definition);
-export const PaymentWallet2    : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.PaymentWallet2.Definition);
-export const PaymentCardNumber : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.PaymentCardNumber.Definition);
+export const Wallet1    : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.PaymentWallet1.Definition);
+export const Wallet2    : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.PaymentWallet2.Definition);
+export const CardNumber : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.PaymentCardNumber.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Input" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.paymentsInput.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.paymentsInput.name ) ,
+    name:            Keys.category.icons.paymentsInput.name ,
+    description:     Keys.category.icons.paymentsInput.description  ,
     icons:          [
-        PaymentWallet1, PaymentWallet2, PaymentCardNumber
+        Wallet1, Wallet2, CardNumber
     ]
 }

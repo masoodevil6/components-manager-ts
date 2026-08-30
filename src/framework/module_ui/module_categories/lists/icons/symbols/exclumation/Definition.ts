@@ -7,15 +7,15 @@ import {CreateCategoryIcon}                from "../../../../basic/methods";
 import {Keys}                              from "../../../../languages";
 
 
-export const SymbolExclumationSquare   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.SymbolExclumationSquare.Definition);
-export const SymbolExclumationWarning  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.SymbolExclumationWarning.Definition);
+export const Square   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.SymbolExclumationSquare.Definition);
+export const Warning  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.SymbolExclumationWarning.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
-    id:              "Exclumation" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.symbolsExclumation.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.symbolsExclumation.name ) ,
+    id:              "Exclamation" ,
+    name:            Keys.category.icons.symbolsExclumation.name ,
+    description:     Keys.category.icons.symbolsExclumation.description ,
     icons:          [
-        SymbolExclumationSquare, SymbolExclumationWarning
+        Square, Warning
     ]
 }

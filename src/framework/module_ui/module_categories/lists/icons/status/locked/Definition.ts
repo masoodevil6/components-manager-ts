@@ -7,15 +7,15 @@ import {CreateCategoryIcon}                from "../../../../basic/methods";
 import {Keys}                              from "../../../../languages";
 
 
-export const StatusLockedClose : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.StatusLockedClose.Definition);
-export const StatusLockedOpen  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.StatusLockedOpen.Definition);
+export const Close : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.StatusLockedClose.Definition);
+export const Open  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.StatusLockedOpen.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Locked" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.statusLocked.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.statusLocked.name ) ,
+    name:            Keys.category.icons.statusLocked.name ,
+    description:     Keys.category.icons.statusLocked.description  ,
     icons:          [
-        StatusLockedClose, StatusLockedOpen
+        Close, Open
     ]
 }

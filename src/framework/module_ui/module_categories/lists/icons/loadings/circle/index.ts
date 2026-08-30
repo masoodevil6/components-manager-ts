@@ -1,1 +1,3 @@
-export {Definition, LoadingOrbit, LoadingPulse, Loading} from "./Definition";
+export {Definition,
+    Orbit, Pulse, Simple
+} from "./Definition";

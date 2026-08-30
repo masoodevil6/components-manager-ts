@@ -7,15 +7,15 @@ import {CreateCategoryIcon}                from "../../../../basic/methods";
 import {Keys}                              from "../../../../languages";
 
 
-export const UserEmail1   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.UserEmail1.Definition);
-export const UserEmail2   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.UserEmail2.Definition);
+export const Email1   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.UserEmail1.Definition);
+export const Email2   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.UserEmail2.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Emails" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.usersEmails.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.usersEmails.name ) ,
+    name:            Keys.category.icons.usersEmails.name ,
+    description:     Keys.category.icons.usersEmails.description  ,
     icons:          [
-        UserEmail1, UserEmail2
+        Email1, Email2
     ]
 }

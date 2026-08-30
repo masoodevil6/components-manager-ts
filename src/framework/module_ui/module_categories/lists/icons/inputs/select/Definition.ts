@@ -7,16 +7,16 @@ import {CreateCategoryIcon}        from "../../../../basic/methods";
 import {Keys}                      from "../../../../languages";
 
 
-export const InputSelectColumn    : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.InputSelectColumn.Definition);
-export const InputSelectOption    : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.InputSelectOption.Definition);
+export const Column    : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.InputSelectColumn.Definition);
+export const Option    : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.InputSelectOption.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Select" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.inputsSelect.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.inputsSelect.name ) ,
+    name:            Keys.category.icons.inputsSelect.name ,
+    description:     Keys.category.icons.inputsSelect.description  ,
     icons:          [
-        InputSelectColumn,
-        InputSelectOption
+        Column,
+        Option
     ]
 }

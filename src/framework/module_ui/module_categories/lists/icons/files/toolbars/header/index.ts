@@ -1,1 +1,4 @@
-export {Definition, FileMenu, FileSetting, FileSearch, FileFilter, FileReload, FileEmpty, FileClearBroom, InputTitle} from "./Definition";
+export {
+    Definition,
+    Menu, Setting, Search, Filter, Reload, Empty, ClearBroom, Title
+} from "./Definition";

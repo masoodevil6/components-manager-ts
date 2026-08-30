@@ -1,1 +1,3 @@
-export {Definition, ArrowUp, ArrowDown, ArrowRight, ArrowLeft} from "./Definition";
+export {Definition,
+    Up, Down, Right, Left
+} from "./Definition";

@@ -1,1 +1,4 @@
-export {Definition, StatusIsTrue, StatusIsFalse} from "./Definition";
+export {
+    Definition,
+    IsTrue, IsFalse
+} from "./Definition";

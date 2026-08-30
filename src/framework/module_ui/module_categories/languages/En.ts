@@ -96,7 +96,7 @@ export const En =
             Keys.category.icons.symbolsArrows.description,
             "A list of arrow icons such as arrows and back and select all"
         ],
-        /// Symbols -> Exclumation
+        /// Symbols -> Exclamation
         [
             Keys.category.icons.symbolsExclumation.name,
             "Exclamation icons"

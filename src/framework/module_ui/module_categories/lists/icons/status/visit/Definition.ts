@@ -7,15 +7,15 @@ import {CreateCategoryIcon}                from "../../../../basic/methods";
 import {Keys}                              from "../../../../languages";
 
 
-export const StatusVisit    : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.StatusVisit.Definition);
-export const StatusUnVisit  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.StatusUnVisit.Definition);
+export const On    : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.StatusVisit.Definition);
+export const Off  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.StatusUnVisit.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Visit" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.statusVisit.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.statusVisit.name ) ,
+    name:            Keys.category.icons.statusVisit.name ,
+    description:     Keys.category.icons.statusVisit.description  ,
     icons:          [
-        StatusVisit, StatusUnVisit
+        On, Off
     ]
 }

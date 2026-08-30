@@ -12,8 +12,8 @@ import {Keys}                                  from "../../../languages";
 
 export const Definition : TCategoryIconDefinition = {
     id:              "WebCodes" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.webCodes.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.webCodes.name ) ,
+    name:            Keys.category.icons.webCodes.name ,
+    description:     Keys.category.icons.webCodes.name  ,
     children:           [
         Series100Definition ,
         Series200Definition ,

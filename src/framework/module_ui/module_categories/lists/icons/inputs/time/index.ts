@@ -1,1 +1,4 @@
-export {Definition, InputClock, InputCalender} from "./Definition";
+export {
+    Definition,
+    Clock, Calender
+} from "./Definition";

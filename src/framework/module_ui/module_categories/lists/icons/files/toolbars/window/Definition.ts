@@ -7,17 +7,19 @@ import {CreateCategoryIcon}                from "../../../../../basic/methods";
 import {Keys}                              from "../../../../../languages";
 
 
-export const FileWindowClose       : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FileWindowClose.Definition);
-export const FileWindowResizeMax   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FileWindowResizeMax.Definition);
-export const FileWindowResizeMin   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FileWindowResizeMin.Definition);
-export const FileWindowMinimize    : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FileWindowMinimize.Definition);
+export const Close       : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FileWindowClose.Definition);
+export const ResizeMax   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FileWindowResizeMax.Definition);
+export const ResizeMin   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FileWindowResizeMin.Definition);
+export const Minimize    : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FileWindowMinimize.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Window" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.filesToolbarsWindow.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.filesToolbarsWindow.name ) ,
+    name:            Keys.category.icons.filesToolbarsWindow.name ,
+    description:     Keys.category.icons.filesToolbarsWindow.description  ,
     icons:          [
-        FileWindowClose, FileWindowResizeMax, FileWindowResizeMin, FileWindowMinimize
+        Close,
+        ResizeMax, ResizeMin,
+        Minimize
     ]
 }

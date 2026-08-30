@@ -1,1 +1,4 @@
-export {Definition, PaymentRate} from "./Definition";
+export {
+    Definition,
+    Simple
+} from "./Definition";

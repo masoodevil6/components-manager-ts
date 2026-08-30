@@ -1,1 +1,1 @@
-export {Definition, UserPhone} from "./Definition";
+export {Definition, Phone} from "./Definition";

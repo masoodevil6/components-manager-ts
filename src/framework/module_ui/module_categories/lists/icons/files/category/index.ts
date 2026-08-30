@@ -1,1 +1,1 @@
-export {Definition, FileCategory} from "./Definition";
+export {Definition, Category} from "./Definition";

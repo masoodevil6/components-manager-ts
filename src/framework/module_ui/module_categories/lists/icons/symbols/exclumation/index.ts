@@ -1,1 +1,4 @@
-export {Definition, SymbolExclumationSquare, SymbolExclumationWarning} from "./Definition";
+export {
+    Definition,
+    Square, Warning
+} from "./Definition";

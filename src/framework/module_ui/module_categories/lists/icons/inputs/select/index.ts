@@ -1,1 +1,5 @@
-export {Definition, InputSelectColumn, InputSelectOption} from "./Definition";
+export {
+    Definition,
+    Column,
+    Option
+} from "./Definition";

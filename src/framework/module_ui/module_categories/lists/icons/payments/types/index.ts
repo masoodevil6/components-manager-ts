@@ -1,1 +1,4 @@
-export {Definition, PaymentCash, PaymentRial, PaymentTether, PaymentDerham} from "./Definition";
+export {
+    Definition,
+    Cash, Rial, Tether, Derham
+} from "./Definition";

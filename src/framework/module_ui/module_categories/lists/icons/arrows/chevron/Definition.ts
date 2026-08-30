@@ -15,8 +15,8 @@ export const ArrowChevronLeft   : TCategoryIconTotality = CreateCategoryIcon(UiI
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Chevron" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.arrowsChevron.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.arrowsChevron.name ) ,
+    name:            Keys.category.icons.arrowsChevron.name ,
+    description:     Keys.category.icons.arrowsChevron.description ,
     icons:          [
         ArrowChevronUp, ArrowChevronRight, ArrowChevronDown, ArrowChevronLeft,
     ]

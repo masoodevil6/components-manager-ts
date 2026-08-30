@@ -1,1 +1,4 @@
-export {Definition, StatusVisit, StatusUnVisit} from "./Definition";
+export {
+    Definition,
+    On, Off
+} from "./Definition";

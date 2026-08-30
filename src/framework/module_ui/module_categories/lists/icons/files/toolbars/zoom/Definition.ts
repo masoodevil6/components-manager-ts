@@ -7,17 +7,17 @@ import {CreateCategoryIcon}                     from "../../../../../basic/metho
 import {Keys}                                   from "../../../../../languages";
 
 
-export const FilesZoom         : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FilesZoom.Definition);
-export const FilesZoomIn       : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FilesZoomIn.Definition);
-export const FilesZoomOut      : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FilesZoomOut.Definition);
-export const FilesZoomRefresh  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FilesZoomRefresh.Definition);
+export const Zoom         : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FilesZoom.Definition);
+export const ZoomIn       : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FilesZoomIn.Definition);
+export const ZoomOut      : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FilesZoomOut.Definition);
+export const ZoomRefresh  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FilesZoomRefresh.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Zoom" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.filesToolbarsZoom.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.filesToolbarsZoom.name ) ,
+    name:            Keys.category.icons.filesToolbarsZoom.name ,
+    description:     Keys.category.icons.filesToolbarsZoom.description  ,
     icons:          [
-        FilesZoom, FilesZoomIn, FilesZoomOut, FilesZoomRefresh
+        Zoom, ZoomIn, ZoomOut, ZoomRefresh
     ]
 }

@@ -15,8 +15,8 @@ export const ArrowDoubleDown   : TCategoryIconTotality = CreateCategoryIcon(UiIc
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Double" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.arrowsDouble.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.arrowsDouble.name ) ,
+    name:            Keys.category.icons.arrowsDouble.name ,
+    description:     Keys.category.icons.arrowsDouble.description ,
     icons:          [
         ArrowDoubleRight, ArrowDoubleLeft, ArrowDoubleUp, ArrowDoubleDown,
     ]

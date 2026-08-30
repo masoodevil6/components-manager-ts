@@ -1,1 +1,1 @@
-export {Definition, UserPassword, UserChangePassword} from "./Definition";
+export {Definition, Password, ChangePassword} from "./Definition";

@@ -7,14 +7,14 @@ import {CreateCategoryIcon}        from "../../../../basic/methods";
 import {Keys}                      from "../../../../languages";
 
 
-export const FileTage             : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FileTage.Definition);
+export const Tage             : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FileTage.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Tag" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.filesTag.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.filesTag.name ) ,
+    name:            Keys.category.icons.filesTag.name ,
+    description:     Keys.category.icons.filesTag.description ,
     icons:          [
-        FileTage
+        Tage
     ]
 }

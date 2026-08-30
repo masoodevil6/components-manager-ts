@@ -7,14 +7,14 @@ import {CreateCategoryIcon}                from "../../../../basic/methods";
 import {Keys}                              from "../../../../languages";
 
 
-export const PaymentRate : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.PaymentRate.Definition);
+export const Simple : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.PaymentRate.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Rate" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.paymentsRate.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.paymentsRate.name ) ,
+    name:            Keys.category.icons.paymentsRate.name ,
+    description:     Keys.category.icons.paymentsRate.description  ,
     icons:          [
-        PaymentRate
+        Simple
     ]
 }

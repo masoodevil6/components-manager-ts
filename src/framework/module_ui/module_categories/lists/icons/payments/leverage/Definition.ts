@@ -7,15 +7,15 @@ import {CreateCategoryIcon}                from "../../../../basic/methods";
 import {Keys}                              from "../../../../languages";
 
 
-export const PaymentLeverage   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.PaymentLeverage.Definition);
-export const PaymentLeverage2  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.PaymentLeverage2.Definition);
+export const Leverage   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.PaymentLeverage.Definition);
+export const Leverage2  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.PaymentLeverage2.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Leverage" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.paymentsLeverage.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.paymentsLeverage.name ) ,
+    name:            Keys.category.icons.paymentsLeverage.name ,
+    description:     Keys.category.icons.paymentsLeverage.description  ,
     icons:          [
-        PaymentLeverage, PaymentLeverage2
+        Leverage, Leverage2
     ]
 }

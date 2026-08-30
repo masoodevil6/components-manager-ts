@@ -1,2 +1,6 @@
-export {Definition, FilesPrint, FilesExcel}           from "./Definition"
+export {
+    Definition,
+    Print,
+    Excel
+} from "./Definition"
 ///--------------------------------------------

@@ -14,8 +14,8 @@ import {Keys}                      from "../../../languages";
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Files" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.files.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.files.name ) ,
+    name:            Keys.category.icons.files.name ,
+    description:     Keys.category.icons.files.description  ,
     children:        [
         ToolbarsDefinition ,
         ActionsDefinition ,

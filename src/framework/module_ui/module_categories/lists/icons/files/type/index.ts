@@ -1,1 +1,1 @@
-export {Definition, FileType, FileTypeNote} from "./Definition";
+export {Definition, Type, TypeNote} from "./Definition";

@@ -1,1 +1,1 @@
-export {Definition, FileStatusComplete} from "./Definition";
+export {Definition, Complete} from "./Definition";

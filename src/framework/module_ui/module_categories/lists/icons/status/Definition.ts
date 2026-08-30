@@ -12,8 +12,8 @@ import {Keys}                              from "../../../languages";
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Status" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.status.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.status.name ) ,
+    name:            Keys.category.icons.status.name ,
+    description:     Keys.category.icons.status.description  ,
     children:        [
         BooleanDefinition ,
         VisitDefinition ,

@@ -1,1 +1,4 @@
-export {Definition, FileWindowResizeMax, FileWindowResizeMin} from "./Definition";
+export {
+    Definition,
+    WindowResizeMax, WindowResizeMin
+} from "./Definition";

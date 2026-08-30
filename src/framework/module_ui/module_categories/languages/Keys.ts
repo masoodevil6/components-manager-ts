@@ -58,7 +58,7 @@ export const Keys = {
                 name:        CreateTranslationKey() ,
                 description: CreateTranslationKey() ,
             },
-            /// Symbols -> Exclumation
+            /// Symbols -> Exclamation
             symbolsExclumation: {
                 name:        CreateTranslationKey() ,
                 description: CreateTranslationKey() ,

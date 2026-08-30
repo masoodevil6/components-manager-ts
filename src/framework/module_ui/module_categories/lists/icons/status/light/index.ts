@@ -1,1 +1,4 @@
-export {Definition, StatusLightOn, StatusLightOff} from "./Definition";
+export {
+    Definition,
+    On, Off
+} from "./Definition";

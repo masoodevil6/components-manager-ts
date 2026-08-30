@@ -1,1 +1,3 @@
-export {Definition, UserAccount, UserAccountAdd, UserAccountGroupAdd, UserAccountReference, UserAccountReffrence} from "./Definition";
+export {
+    Definition,
+    Simple, Add, GroupAdd, Reference, Destination} from "./Definition";

@@ -7,15 +7,15 @@ import {CreateCategoryIcon}                     from "../../../../../basic/metho
 import {Keys}                                   from "../../../../../languages";
 
 
-export const FilesPrint  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FilesPrint.Definition);
-export const FilesExcel  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FilesExcel.Definition);
+export const Print  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FilesPrint.Definition);
+export const Excel  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FilesExcel.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Zoom" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.filesToolbarsExport.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.filesToolbarsExport.name ) ,
+    name:            Keys.category.icons.filesToolbarsExport.name ,
+    description:     Keys.category.icons.filesToolbarsExport.description ,
     icons:          [
-        FilesPrint, FilesExcel
+        Print, Excel
     ]
 }

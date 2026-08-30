@@ -9,8 +9,8 @@ import {Keys}                              from "../../../languages";
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Users" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.users.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.users.name ) ,
+    name:            Keys.category.icons.users.name ,
+    description:     Keys.category.icons.users.description  ,
     children:        [
         AccountDefinition ,
         EmailsDefinition ,

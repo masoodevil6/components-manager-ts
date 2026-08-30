@@ -7,16 +7,16 @@ import {CreateCategoryIcon}                from "../../../../basic/methods";
 import {Keys}                              from "../../../../languages";
 
 
-export const PaymentAmount        : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.PaymentAmount.Definition);
-export const PaymentCashCurrency  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.PaymentCashCurrency.Definition);
-export const PaymentCoinCurrency  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.PaymentCoinCurrency.Definition);
+export const Amount        : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.PaymentAmount.Definition);
+export const CashCurrency  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.PaymentCashCurrency.Definition);
+export const CoinCurrency  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.PaymentCoinCurrency.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Cash" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.paymentsCash.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.paymentsCash.name ) ,
+    name:            Keys.category.icons.paymentsCash.name ,
+    description:     Keys.category.icons.paymentsCash.description  ,
     icons:          [
-        PaymentAmount, PaymentCashCurrency, PaymentCoinCurrency
+        Amount, CashCurrency, CoinCurrency
     ]
 }

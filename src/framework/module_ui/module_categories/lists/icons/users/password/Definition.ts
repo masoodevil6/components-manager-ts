@@ -7,15 +7,15 @@ import {CreateCategoryIcon}                from "../../../../basic/methods";
 import {Keys}                              from "../../../../languages";
 
 
-export const UserPassword       : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.UserPassword.Definition);
-export const UserChangePassword : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.UserChangePassword.Definition);
+export const Password       : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.UserPassword.Definition);
+export const ChangePassword : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.UserChangePassword.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Password" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.usersPassword.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.usersPassword.name ) ,
+    name:            Keys.category.icons.usersPassword.name ,
+    description:     Keys.category.icons.usersPassword.description  ,
     icons:          [
-        UserPassword, UserChangePassword
+        Password, ChangePassword
     ]
 }

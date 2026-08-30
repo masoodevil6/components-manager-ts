@@ -7,17 +7,17 @@ import {CreateCategoryIcon}                from "../../../../../basic/methods";
 import {Keys}                              from "../../../../../languages";
 
 
-export const ArrowChevronUp     : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowChevronUp.Definition);
-export const ArrowChevronRight  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowChevronRight.Definition);
-export const ArrowChevronDown   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowChevronDown.Definition);
-export const ArrowChevronLeft   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowChevronLeft.Definition);
+export const Up     : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowChevronUp.Definition);
+export const Right  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowChevronRight.Definition);
+export const Down   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowChevronDown.Definition);
+export const Left   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ArrowChevronLeft.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Chevron" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.arrowsChevron.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.arrowsChevron.name ) ,
+    name:            Keys.category.icons.arrowsChevron.name ,
+    description:     Keys.category.icons.arrowsChevron.description  ,
     icons:          [
-        ArrowChevronUp, ArrowChevronRight, ArrowChevronDown, ArrowChevronLeft,
+        Up, Right, Down, Left,
     ]
 }

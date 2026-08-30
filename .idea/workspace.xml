@@ -5,140 +5,131 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="88c33080-fd23-4a2f-9df9-e50b68f92fd3" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/plans/4.1-create-module-core-events.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plans/4.2-add-prop-emit-in-core-reactive.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plans/4.3-update-core-module-event.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.windsurf/rules/code-style.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.windsurf/rules/component-architecture.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.windsurf/rules/directory-structure.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.windsurf/rules/naming-conventions.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.windsurf/rules/reactive-patterns.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.windsurf/rules/typescript-standards.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.windsurf/workflows/build-test.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.windsurf/workflows/code-style-alignment.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.windsurf/workflows/component-creation.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/documents/guides/icon-migration-process.md" beforeDir="false" afterPath="$PROJECT_DIR$/documents/guides/icon-migration-process.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/documents/ui/module_icons.md" beforeDir="false" afterPath="$PROJECT_DIR$/documents/ui/module_icons.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconAccount.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconAccountAdd.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconAccountGroupAdd.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconAccountReference.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconAmount.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconApplication.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconCardNumber.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconCategory.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconChangePassword.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconClearBroom.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconClip.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconClose.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconCurrency.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconCurrency2.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconDeposit.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconDestination.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconDirham.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconEmail.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconEmail2.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconEmpty.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconExclamationSquare.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconFilter.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconLeverage.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconLeverage2.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconLoading.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconLoadingBars.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconLoadingDots.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconLoadingOrbit.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconLoadingPulse.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconLock.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconMenu.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconNote.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconNumber.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconPassword.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconPhone.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconPinClose.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconPinOpen.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconPinOpen2.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconQrCode.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconReload.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconResize.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconSearch.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconSelectColumn.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconSelectOption.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconStatus.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconTag.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconTik.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconTitle.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconTransition.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconType.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconTypeCash.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconTypeCash2.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconTypeRial.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconTypeTether.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconWallet.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconWallet2.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconWalletAdd.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconWarning.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconWebCode.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconWithdrawal.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/icons/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/last/tools/icons/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/documents/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/documents/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/documents/ui/module_categories.md" beforeDir="false" afterPath="$PROJECT_DIR$/documents/ui/module_categories.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/last/tools/icons/IconRate.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/_metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plans/documentation-plan.md" beforeDir="false" afterPath="$PROJECT_DIR$/plans/1-documentation-plan.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plans/fix-languages-circular-dependency.md" beforeDir="false" afterPath="$PROJECT_DIR$/plans/2-fix-languages-circular-dependency.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plans/ready-module-icons.md" beforeDir="false" afterPath="$PROJECT_DIR$/plans/3-ready-module-icons.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_core/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_core/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_core/module_reactive/class/ClReactiveElement.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_core/module_reactive/class/ClReactiveElement.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/basic/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/basic/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/basic/types/TCategoryComponentDefinition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/basic/types/TCategoryComponentDefinition.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/basic/types/TCategoryIconDefinition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/basic/types/TCategoryIconDefinition.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/languages/En.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/languages/En.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/languages/Fa.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/languages/Fa.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/languages/Keys.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/languages/Keys.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/arrows/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/arrows/Definition.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/arrows/basic/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/arrows/basic/Definition.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/arrows/basic/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/arrows/basic/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/arrows/chevron/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/arrows/chevron/Definition.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/arrows/chevron/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/arrows/chevron/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/arrows/double/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/arrows/double/Definition.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/arrows/double/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/arrows/double/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/calc/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/calc/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/calc/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/calc/Definition.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/calc/symbol/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/calc/symbol/Definition.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/calc/symbol/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/calc/symbol/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/Definition.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/actions/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/actions/Definition.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/actions/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/actions/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/category/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/category/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/category/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/category/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/logo/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/logo/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/logo/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/logo/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/status/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/status/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/status/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/status/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/tag/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/tag/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/tag/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/tag/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/Definition.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/export/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/export/Definition.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/export/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/export/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/header/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/header/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/header/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/header/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/pin/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/pin/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/pin/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/pin/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/window/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/window/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/window/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/window/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/zoom/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/zoom/Definition.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/zoom/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/toolbars/zoom/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/type/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/type/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/type/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/files/type/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/Definition.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/number/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/number/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/number/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/number/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/qr/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/qr/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/qr/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/qr/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/select/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/select/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/select/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/select/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/text/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/text/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/text/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/text/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/time/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/time/Definition.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/time/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/time/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/tools/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/tools/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/tools/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/inputs/tools/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/loadings/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/loadings/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/loadings/circle/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/loadings/circle/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/loadings/circle/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/loadings/circle/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/loadings/horizontal/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/loadings/horizontal/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/loadings/horizontal/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/loadings/horizontal/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/loadings/vertical/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/loadings/vertical/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/loadings/vertical/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/loadings/vertical/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/Definition.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/type/Definition.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/type/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/actions/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/actions/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/actions/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/actions/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/cash/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/cash/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/cash/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/cash/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/input/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/input/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/input/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/input/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/leverage/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/leverage/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/leverage/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/leverage/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/rate/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/rate/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/rate/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/rate/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/types/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/types/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/types/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/payments/types/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/Definition.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/boolean/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/boolean/Definition.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/boolean/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/boolean/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/light/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/light/Definition.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/light/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/light/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/locked/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/locked/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/locked/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/locked/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/pin/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/pin/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/pin/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/pin/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/resize/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/resize/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/resize/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/resize/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/visit/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/visit/Definition.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/visit/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/status/visit/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/symbols/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/symbols/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/symbols/arrows/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/symbols/arrows/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/symbols/arrows/basic/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/symbols/arrows/basic/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/symbols/arrows/basic/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/symbols/arrows/basic/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/symbols/arrows/chevron/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/symbols/arrows/chevron/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/symbols/arrows/chevron/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/symbols/arrows/chevron/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/symbols/arrows/double/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/symbols/arrows/double/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/symbols/arrows/double/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/symbols/arrows/double/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/symbols/exclumation/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/symbols/exclumation/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/symbols/exclumation/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/symbols/exclumation/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/symbols/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/symbols/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/users/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/users/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/users/account/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/users/account/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/users/account/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/users/account/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/users/emails/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/users/emails/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/users/emails/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/users/emails/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/users/password/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/users/password/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/users/password/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/users/password/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/users/phone/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/users/phone/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/users/phone/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/users/phone/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/webCodes/100/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/webCodes/100/Definition.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/webCodes/100/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/webCodes/100/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/webCodes/200/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/webCodes/200/Definition.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/webCodes/200/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/webCodes/200/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/webCodes/300/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/webCodes/300/Definition.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/webCodes/300/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/webCodes/300/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/webCodes/400/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/webCodes/400/Definition.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/webCodes/400/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/webCodes/400/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/webCodes/500/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/webCodes/500/Definition.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/webCodes/500/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/webCodes/500/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_icons/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_icons/languages/En.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/languages/En.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_icons/languages/Fa.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/languages/Fa.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_icons/languages/Keys.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/languages/Keys.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_icons/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/src/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_icons/src/webCode/anim.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_icons/src/webCode/anim.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/webCodes/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/icons/webCodes/Definition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_pages/pages/home/ClHomePage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_pages/pages/home/ClHomePage.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_pages/pages/icons/ClIconPage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_pages/pages/icons/ClIconPage.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -149,7 +140,7 @@
     <execution />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="1591" />
+    <option name="cachedIndexableFilesCount" value="1758" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -175,26 +166,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "develop",
-    "last_opened_file_path": "D:/projects/components/master/src/framework/module_ui/module_categories/lists/icons/symbols",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "D:\\Projects\\js\\component-exp\\master\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/projects/components/master/src/framework/module_ui/module_categories/lists/icons/symbols&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;D:\\Projects\\js\\component-exp\\master\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\projects\components\master\src\framework\module_ui\module_categories\lists\icons\symbols" />
@@ -232,7 +223,9 @@
       <workItem from="1787830085366" duration="21971000" />
       <workItem from="1787919315390" duration="13881000" />
       <workItem from="1787951444888" duration="5039000" />
-      <workItem from="1788031125390" duration="9148000" />
+      <workItem from="1788031125390" duration="9884000" />
+      <workItem from="1788074091156" duration="4185000" />
+      <workItem from="1788081420097" duration="10955000" />
     </task>
     <servers />
   </component>

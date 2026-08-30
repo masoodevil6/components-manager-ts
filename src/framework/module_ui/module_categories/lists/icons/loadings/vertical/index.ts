@@ -1,1 +1,5 @@
-export {Definition, LoadingDotsVertical, LoadingBarsVertical} from "./Definition";
+export {
+    Definition,
+    Dots,
+    Bars
+} from "./Definition";

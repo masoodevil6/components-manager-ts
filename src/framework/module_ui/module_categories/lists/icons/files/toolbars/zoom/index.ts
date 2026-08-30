@@ -1,2 +1,5 @@
-export {Definition, FilesZoom, FilesZoomIn, FilesZoomOut, FilesZoomRefresh}           from "./Definition"
+export {
+    Definition,
+    Zoom, ZoomIn, ZoomOut, ZoomRefresh
+} from "./Definition"
 ///--------------------------------------------

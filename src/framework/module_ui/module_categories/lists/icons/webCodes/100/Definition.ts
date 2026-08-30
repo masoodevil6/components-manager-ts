@@ -13,8 +13,8 @@ export const WebCode101  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Sr
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Series100" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.webCodes100.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.webCodes100.name ) ,
+    name:            Keys.category.icons.webCodes100.name ,
+    description:     Keys.category.icons.webCodes100.description ,
     icons:          [
         WebCode100, WebCode101,
     ]

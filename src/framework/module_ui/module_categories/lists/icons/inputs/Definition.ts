@@ -13,8 +13,8 @@ import {Keys}                              from "../../../languages";
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Inputs" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.inputs.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.inputs.name ) ,
+    name:            Keys.category.icons.inputs.name ,
+    description:     Keys.category.icons.inputs.description  ,
     children:        [
         TimeDefinition,
         ToolsDefinition,

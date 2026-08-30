@@ -1,4 +1,5 @@
 import * as CoreObservable  from "@/core_observable";
+import * as CoreEvent       from "@/core_event";
 import * as Util            from "@/util";
 ///------------------------------
 import {EnElementNamespace} from "../enums/EnElementNamespace";
@@ -7,7 +8,8 @@ type ClassValue = string | string[];
 type StyleMap = Record<string, string>;
 type AttrMap = Record<string, string | boolean | null | undefined>;
 
-type EventMap = Record<string, (e: Event) => void>;
+type TEventHandler = (e: Event, event?: CoreEvent.TEventHelper) => void;
+type EventMap = Record<string, TEventHandler>;
 
 type Options = {
     props?: any;
@@ -21,6 +23,8 @@ type Options = {
     attrs?: AttrMap;
     attrsBind?: Record<string, CoreObservable.TObservableValue<any>>;
     on?: EventMap;
+    unique?: CoreEvent.TStepRef;            // اتصال اعلانی المان به Step (رشته ممنوع — بخش ۳۰ پلن)
+    emit?: CoreEvent.TEmitHandler;          // Request Handler این المان — دریافت Request از CoreEvents و بازگرداندن Response (بخش ۱۴ Clarification پلن)
 };
 
 type EventListenerRecord = {
@@ -79,6 +83,11 @@ export class ClReactiveElement {
         this.element.addEventListener("mousedown", () => this.active.set(true));
         this.element.addEventListener("mouseup", () => this.active.set(false));
         this.element.addEventListener("mouseleave", () => this.active.set(false));
+
+        // Phase 7 (بخش ۳.۱ ب پلن): ثبت emit handler این المان در CoreEvents
+        if (this._options.unique && this._options.emit) {
+            CoreEvent.App.registerEmit(this._options.unique, this._options.emit);
+        }
 
         this._applyOptions();
     }
@@ -448,7 +457,8 @@ export class ClReactiveElement {
                     return;
                 }
 
-                handler(e);
+                // Phase 7 (بخش ۶.۲ پلن): تزریق helper رویداد — event.request(map)
+                handler(e, { request: (map) => CoreEvent.App.request(map) });
 
             };
 
@@ -544,6 +554,11 @@ export class ClReactiveElement {
 
     remove() {
         this.element?.remove?.();
+
+        // Phase 7 (بخش ۳.۱ ج پلن): آزادسازی emit handler ثبت‌شده این المان — جلوگیری از memory leak (پیوست ب-۳)
+        if (this._options.unique && this._options.emit) {
+            CoreEvent.App.dispose(this._options.unique);
+        }
     }
 
     static create(tagName: string, options?: Options) {
@@ -591,6 +606,7 @@ export class ClReactiveElement {
 
     /// HTML
     static div(o?: Options) { return new ClReactiveElement("div", o) }
+    static form(o?: Options) { return new ClReactiveElement("form", o) }
     static button(o?: Options) { return new ClReactiveElement("button", o) }
     static b(o?: Options) { return new ClReactiveElement("b", o) }
     static span(o?: Options) { return new ClReactiveElement("span", o) }

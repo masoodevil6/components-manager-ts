@@ -8,8 +8,8 @@ import {Keys}                              from "../../../languages";
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Loadings" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.loadings.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.loadings.name ) ,
+    name:            Keys.category.icons.loadings.name ,
+    description:     Keys.category.icons.loadings.description  ,
     children:        [
         CircleDefinition ,
         HorizontalDefinition ,

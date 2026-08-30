@@ -7,14 +7,14 @@ import {CreateCategoryIcon}        from "../../../../basic/methods";
 import {Keys}                      from "../../../../languages";
 
 
-export const InputQrCode         : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.InputQrCode.Definition);
+export const QrCode         : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.InputQrCode.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Qr" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.inputsQr.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.inputsQr.name ) ,
+    name:            Keys.category.icons.inputsQr.name ,
+    description:     Keys.category.icons.inputsQr.description  ,
     icons:          [
-        InputQrCode
+        QrCode
     ]
 }

@@ -7,16 +7,16 @@ import {CreateCategoryIcon}                from "../../../../basic/methods";
 import {Keys}                              from "../../../../languages";
 
 
-export const LoadingOrbit  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.LoadingOrbit.Definition);
-export const LoadingPulse  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.LoadingPulse.Definition);
-export const Loading       : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.Loading.Definition);
+export const Orbit  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.LoadingOrbit.Definition);
+export const Pulse  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.LoadingPulse.Definition);
+export const Simple       : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.Loading.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Circle" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.loadingsCircle.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.loadingsCircle.name ) ,
+    name:            Keys.category.icons.loadingsCircle.name ,
+    description:     Keys.category.icons.loadingsCircle.description  ,
     icons:          [
-        LoadingOrbit, LoadingPulse, Loading
+        Orbit, Pulse, Simple
     ]
 }

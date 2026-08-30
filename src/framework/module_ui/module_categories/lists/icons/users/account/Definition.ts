@@ -7,18 +7,18 @@ import {CreateCategoryIcon}                from "../../../../basic/methods";
 import {Keys}                              from "../../../../languages";
 
 
-export const UserAccount           : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.UserAccount.Definition);
-export const UserAccountAdd        : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.UserAccountAdd.Definition);
-export const UserAccountGroupAdd   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.UserAccountGroupAdd.Definition);
-export const UserAccountReference  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.UserAccountReference.Definition);
-export const UserAccountReffrence  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.UserAccountReffrence.Definition);
+export const Simple           : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.UserAccount.Definition);
+export const Add        : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.UserAccountAdd.Definition);
+export const GroupAdd   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.UserAccountGroupAdd.Definition);
+export const Reference  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.UserAccountReference.Definition);
+export const Destination  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.UserAccountReffrence.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Account" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.usersAccount.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.usersAccount.name ) ,
+    name:            Keys.category.icons.usersAccount.name ,
+    description:     Keys.category.icons.usersAccount.description  ,
     icons:          [
-        UserAccount, UserAccountAdd, UserAccountGroupAdd, UserAccountReference, UserAccountReffrence
+        Simple, Add, GroupAdd, Reference, Destination
     ]
 }

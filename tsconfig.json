@@ -20,6 +20,8 @@
       "@/core_configs" :             ["src/framework/module_core/module_configs"] ,
       /// CORE -> Component
       "@/core_components" :          ["src/framework/module_core/module_components"] ,
+      /// CORE -> Event
+      "@/core_event" :               ["src/framework/module_core/module_event"] ,
       /// CORE -> Language
       "@/core_languages" :           ["src/framework/module_core/module_languages"] ,
       /// CORE -> Observable

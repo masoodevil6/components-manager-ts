@@ -7,15 +7,15 @@ import {CreateCategoryIcon}                from "../../../../basic/methods";
 import {Keys}                              from "../../../../languages";
 
 
-export const FileWindowResizeMax : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FileWindowResizeMax.Definition);
-export const FileWindowResizeMin : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FileWindowResizeMin.Definition);
+export const WindowResizeMax : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FileWindowResizeMax.Definition);
+export const WindowResizeMin : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FileWindowResizeMin.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Resize" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.statusResize.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.statusResize.name ) ,
+    name:            Keys.category.icons.statusResize.name ,
+    description:     Keys.category.icons.statusResize.description ,
     icons:          [
-        FileWindowResizeMax, FileWindowResizeMin
+        WindowResizeMax, WindowResizeMin
     ]
 }

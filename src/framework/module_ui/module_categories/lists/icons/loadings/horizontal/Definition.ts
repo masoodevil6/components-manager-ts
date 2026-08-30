@@ -7,15 +7,15 @@ import {CreateCategoryIcon}                from "../../../../basic/methods";
 import {Keys}                              from "../../../../languages";
 
 
-export const LoadingDotsHorizontal : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.LoadingDotsHorizontal.Definition);
-export const LoadingBarsHorizontal : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.LoadingBarsHorizontal.Definition);
+export const Dots : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.LoadingDotsHorizontal.Definition);
+export const Bars : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.LoadingBarsHorizontal.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Horizontal" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.loadingsHorizontal.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.loadingsHorizontal.name ) ,
+    name:            Keys.category.icons.loadingsHorizontal.name ,
+    description:     Keys.category.icons.loadingsHorizontal.description  ,
     icons:          [
-        LoadingDotsHorizontal, LoadingBarsHorizontal
+        Dots, Bars
     ]
 }

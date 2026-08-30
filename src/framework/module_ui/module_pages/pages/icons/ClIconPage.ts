@@ -5,6 +5,7 @@ import * as UiIcons from "@/ui_icons"
 import * as UiCategories from "@/ui_categories";
 ///------------------------------
 import './icons.css';
+import {Destination} from "../../../module_categories/lists/icons/users/account";
 
 
 export class ClIconPage implements ITemplate {
@@ -31,8 +32,8 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Status.Boolean.StatusIsTrue() ,
-                                        UiCategories.Icons.Status.Boolean.StatusIsFalse()
+                                        UiCategories.Icons.Status.Boolean.IsTrue() ,
+                                        UiCategories.Icons.Status.Boolean.IsFalse()
                                     ]
                                 }),
                             ]
@@ -43,8 +44,8 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Status.Visit.StatusVisit() ,
-                                        UiCategories.Icons.Status.Visit.StatusUnVisit() ,
+                                        UiCategories.Icons.Status.Visit.On() ,
+                                        UiCategories.Icons.Status.Visit.Off() ,
                                     ]
                                 }),
                             ]
@@ -55,8 +56,8 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Status.Light.StatusLightOn() ,
-                                        UiCategories.Icons.Status.Light.StatusLightOff() ,
+                                        UiCategories.Icons.Status.Light.On() ,
+                                        UiCategories.Icons.Status.Light.Off() ,
                                     ]
                                 }),
                             ]
@@ -67,9 +68,9 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Status.Pin.StatusPinOpen() ,
-                                        UiCategories.Icons.Status.Pin.StatusPinClose() ,
-                                        UiCategories.Icons.Status.Pin.StatusPin2Open() ,
+                                        UiCategories.Icons.Status.Pin.Open() ,
+                                        UiCategories.Icons.Status.Pin.Close() ,
+                                        UiCategories.Icons.Status.Pin.Open2() ,
                                     ]
                                 }),
                             ]
@@ -80,8 +81,8 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Status.Resize.FileWindowResizeMax() ,
-                                        UiCategories.Icons.Status.Resize.FileWindowResizeMin() ,
+                                        UiCategories.Icons.Status.Resize.WindowResizeMax() ,
+                                        UiCategories.Icons.Status.Resize.WindowResizeMin() ,
                                     ]
                                 }),
                             ]
@@ -92,8 +93,8 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Status.Locked.StatusLockedClose() ,
-                                        UiCategories.Icons.Status.Locked.StatusLockedOpen() ,
+                                        UiCategories.Icons.Status.Locked.Close() ,
+                                        UiCategories.Icons.Status.Locked.Open() ,
                                     ]
                                 }),
                             ]
@@ -113,10 +114,10 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Symbols.Arrows.Basic.ArrowUp() ,
-                                        UiCategories.Icons.Symbols.Arrows.Basic.ArrowRight() ,
-                                        UiCategories.Icons.Symbols.Arrows.Basic.ArrowDown() ,
-                                        UiCategories.Icons.Symbols.Arrows.Basic.ArrowLeft() ,
+                                        UiCategories.Icons.Symbols.Arrows.Basic.Up() ,
+                                        UiCategories.Icons.Symbols.Arrows.Basic.Right() ,
+                                        UiCategories.Icons.Symbols.Arrows.Basic.Down() ,
+                                        UiCategories.Icons.Symbols.Arrows.Basic.Left() ,
                                     ]
                                 }),
                             ]
@@ -127,10 +128,10 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Symbols.Arrows.Chevron.ArrowChevronUp() ,
-                                        UiCategories.Icons.Symbols.Arrows.Chevron.ArrowChevronRight() ,
-                                        UiCategories.Icons.Symbols.Arrows.Chevron.ArrowChevronDown() ,
-                                        UiCategories.Icons.Symbols.Arrows.Chevron.ArrowChevronLeft() ,
+                                        UiCategories.Icons.Symbols.Arrows.Chevron.Up() ,
+                                        UiCategories.Icons.Symbols.Arrows.Chevron.Right() ,
+                                        UiCategories.Icons.Symbols.Arrows.Chevron.Down() ,
+                                        UiCategories.Icons.Symbols.Arrows.Chevron.Left() ,
                                     ]
                                 }),
                             ]
@@ -141,10 +142,10 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Symbols.Arrows.Double.ArrowDoubleUp() ,
-                                        UiCategories.Icons.Symbols.Arrows.Double.ArrowDoubleRight() ,
-                                        UiCategories.Icons.Symbols.Arrows.Double.ArrowDoubleDown() ,
-                                        UiCategories.Icons.Symbols.Arrows.Double.ArrowDoubleLeft() ,
+                                        UiCategories.Icons.Symbols.Arrows.Double.Up() ,
+                                        UiCategories.Icons.Symbols.Arrows.Double.Right() ,
+                                        UiCategories.Icons.Symbols.Arrows.Double.Down() ,
+                                        UiCategories.Icons.Symbols.Arrows.Double.Left() ,
                                     ]
                                 }),
                             ]
@@ -154,7 +155,7 @@ export class ClIconPage implements ITemplate {
 
 
 
-                /// Symbols -> Exclumation
+                /// Symbols -> Exclamation
                 CoreReactive.App.div({
                     className:["col-12" , "row" , "p-0" , "m-0"] ,
                     children:[
@@ -164,8 +165,8 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Symbols.Exclumation.SymbolExclumationSquare() ,
-                                        UiCategories.Icons.Symbols.Exclumation.SymbolExclumationWarning() ,
+                                        UiCategories.Icons.Symbols.Exclamation.Square() ,
+                                        UiCategories.Icons.Symbols.Exclamation.Warning() ,
                                     ]
                                 }),
                             ]
@@ -185,10 +186,10 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Calc.Symbol.CalcPlus() ,
-                                        UiCategories.Icons.Calc.Symbol.CalcMinus() ,
-                                        UiCategories.Icons.Calc.Symbol.CalcCross() ,
-                                        UiCategories.Icons.Calc.Symbol.CalcDivide() ,
+                                        UiCategories.Icons.Calc.Symbol.Plus() ,
+                                        UiCategories.Icons.Calc.Symbol.Minus() ,
+                                        UiCategories.Icons.Calc.Symbol.Cross() ,
+                                        UiCategories.Icons.Calc.Symbol.Divide() ,
                                     ]
                                 }),
                             ]
@@ -208,8 +209,8 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Inputs.Time.InputClock() ,
-                                        UiCategories.Icons.Inputs.Time.InputCalender() ,
+                                        UiCategories.Icons.Inputs.Time.Clock() ,
+                                        UiCategories.Icons.Inputs.Time.Calender() ,
                                     ]
                                 }),
                             ]
@@ -220,7 +221,7 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Inputs.Qr.InputQrCode() ,
+                                        UiCategories.Icons.Inputs.Qr.QrCode() ,
                                     ]
                                 }),
                             ]
@@ -231,7 +232,7 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Inputs.Tools.FileClearBroom() ,
+                                        UiCategories.Icons.Inputs.Tools.ClearBroom() ,
                                     ]
                                 }),
                             ]
@@ -242,8 +243,8 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Inputs.Select.InputSelectColumn() ,
-                                        UiCategories.Icons.Inputs.Select.InputSelectOption() ,
+                                        UiCategories.Icons.Inputs.Select.Column() ,
+                                        UiCategories.Icons.Inputs.Select.Option() ,
                                     ]
                                 }),
                             ]
@@ -254,7 +255,7 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Inputs.Text.InputTitle() ,
+                                        UiCategories.Icons.Inputs.Text.Title() ,
                                     ]
                                 }),
                             ]
@@ -265,7 +266,7 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Inputs.Number.InputNumber() ,
+                                        UiCategories.Icons.Inputs.Number.Number() ,
                                     ]
                                 }),
                             ]
@@ -286,10 +287,10 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Files.Toolbars.Zoom.FilesZoom() ,
-                                        UiCategories.Icons.Files.Toolbars.Zoom.FilesZoomIn() ,
-                                        UiCategories.Icons.Files.Toolbars.Zoom.FilesZoomOut() ,
-                                        UiCategories.Icons.Files.Toolbars.Zoom.FilesZoomRefresh() ,
+                                        UiCategories.Icons.Files.Toolbars.Zoom.Zoom() ,
+                                        UiCategories.Icons.Files.Toolbars.Zoom.ZoomIn() ,
+                                        UiCategories.Icons.Files.Toolbars.Zoom.ZoomOut() ,
+                                        UiCategories.Icons.Files.Toolbars.Zoom.ZoomRefresh() ,
                                     ]
                                 }),
                             ]
@@ -300,8 +301,8 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Files.Toolbars.Export.FilesPrint() ,
-                                        UiCategories.Icons.Files.Toolbars.Export.FilesExcel() ,
+                                        UiCategories.Icons.Files.Toolbars.Export.Print() ,
+                                        UiCategories.Icons.Files.Toolbars.Export.Excel() ,
                                     ]
                                 }),
                             ]
@@ -312,9 +313,9 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Files.Toolbars.Pin.StatusPinOpen() ,
-                                        UiCategories.Icons.Files.Toolbars.Pin.StatusPinClose() ,
-                                        UiCategories.Icons.Files.Toolbars.Pin.StatusPin2Open() ,
+                                        UiCategories.Icons.Files.Toolbars.Pin.Open() ,
+                                        UiCategories.Icons.Files.Toolbars.Pin.Close() ,
+                                        UiCategories.Icons.Files.Toolbars.Pin.Open2() ,
                                     ]
                                 }),
                             ]
@@ -325,10 +326,10 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Files.Toolbars.Window.FileWindowClose() ,
-                                        UiCategories.Icons.Files.Toolbars.Window.FileWindowResizeMax() ,
-                                        UiCategories.Icons.Files.Toolbars.Window.FileWindowResizeMin() ,
-                                        UiCategories.Icons.Files.Toolbars.Window.FileWindowMinimize() ,
+                                        UiCategories.Icons.Files.Toolbars.Window.Close() ,
+                                        UiCategories.Icons.Files.Toolbars.Window.ResizeMax() ,
+                                        UiCategories.Icons.Files.Toolbars.Window.ResizeMin() ,
+                                        UiCategories.Icons.Files.Toolbars.Window.Minimize() ,
                                     ]
                                 }),
                             ]
@@ -339,14 +340,14 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Files.Toolbars.Header.FileMenu() ,
-                                        UiCategories.Icons.Files.Toolbars.Header.FileSetting() ,
-                                        UiCategories.Icons.Files.Toolbars.Header.FileSearch() ,
-                                        UiCategories.Icons.Files.Toolbars.Header.FileFilter() ,
-                                        UiCategories.Icons.Files.Toolbars.Header.FileReload() ,
-                                        UiCategories.Icons.Files.Toolbars.Header.FileEmpty() ,
-                                        UiCategories.Icons.Files.Toolbars.Header.FileClearBroom() ,
-                                        UiCategories.Icons.Files.Toolbars.Header.InputTitle() ,
+                                        UiCategories.Icons.Files.Toolbars.Header.Menu() ,
+                                        UiCategories.Icons.Files.Toolbars.Header.Setting() ,
+                                        UiCategories.Icons.Files.Toolbars.Header.Search() ,
+                                        UiCategories.Icons.Files.Toolbars.Header.Filter() ,
+                                        UiCategories.Icons.Files.Toolbars.Header.Reload() ,
+                                        UiCategories.Icons.Files.Toolbars.Header.Empty() ,
+                                        UiCategories.Icons.Files.Toolbars.Header.ClearBroom() ,
+                                        UiCategories.Icons.Files.Toolbars.Header.Title() ,
                                     ]
                                 }),
                             ]
@@ -357,9 +358,9 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Files.Actions.FilesEdit() ,
-                                        UiCategories.Icons.Files.Actions.FilesDelete() ,
-                                        UiCategories.Icons.Files.Actions.FileAttachment() ,
+                                        UiCategories.Icons.Files.Actions.Edit() ,
+                                        UiCategories.Icons.Files.Actions.Delete() ,
+                                        UiCategories.Icons.Files.Actions.Attachment() ,
                                     ]
                                 }),
                             ]
@@ -370,7 +371,7 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Files.Logo.FileApplication() ,
+                                        UiCategories.Icons.Files.Logo.Application() ,
                                     ]
                                 }),
                             ]
@@ -381,7 +382,7 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Files.Category.FileCategory() ,
+                                        UiCategories.Icons.Files.Category.Category() ,
                                     ]
                                 }),
                             ]
@@ -392,7 +393,8 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Files.Type.FileType() ,
+                                        UiCategories.Icons.Files.Type.Type() ,
+                                        UiCategories.Icons.Files.Type.TypeNote() ,
                                     ]
                                 }),
                             ]
@@ -403,7 +405,7 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Files.Type.FileTypeNote() ,
+                                        UiCategories.Icons.Files.Tag.Tage() ,
                                     ]
                                 }),
                             ]
@@ -414,18 +416,7 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Files.Tag.FileTage() ,
-                                    ]
-                                }),
-                            ]
-                        }),
-                        CoreReactive.App.div({
-                            className:["col-3" , "row" , "p-0" , "m-0"] ,
-                            children:[
-                                CoreReactive.App.div({
-                                    className:["border"] ,
-                                    children:[
-                                        UiCategories.Icons.Files.Status.FileStatusComplete() ,
+                                        UiCategories.Icons.Files.Status.Complete() ,
                                     ]
                                 }),
                             ]
@@ -445,9 +436,9 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Loadings.Circle.Loading() ,
-                                        UiCategories.Icons.Loadings.Circle.LoadingOrbit() ,
-                                        UiCategories.Icons.Loadings.Circle.LoadingPulse() ,
+                                        UiCategories.Icons.Loadings.Circle.Simple() ,
+                                        UiCategories.Icons.Loadings.Circle.Orbit() ,
+                                        UiCategories.Icons.Loadings.Circle.Pulse() ,
                                     ]
                                 }),
                             ]
@@ -458,8 +449,8 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Loadings.Horizontal.LoadingDotsHorizontal() ,
-                                        UiCategories.Icons.Loadings.Horizontal.LoadingBarsHorizontal()
+                                        UiCategories.Icons.Loadings.Horizontal.Dots() ,
+                                        UiCategories.Icons.Loadings.Horizontal.Bars()
                                     ]
                                 }),
                             ]
@@ -470,8 +461,8 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Loadings.Vertical.LoadingDotsVertical() ,
-                                        UiCategories.Icons.Loadings.Vertical.LoadingBarsVertical()
+                                        UiCategories.Icons.Loadings.Vertical.Dots() ,
+                                        UiCategories.Icons.Loadings.Vertical.Bars()
                                     ]
                                 }),
                             ]
@@ -491,10 +482,10 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Payments.Types.PaymentCash() ,
-                                        UiCategories.Icons.Payments.Types.PaymentRial() ,
-                                        UiCategories.Icons.Payments.Types.PaymentTether() ,
-                                        UiCategories.Icons.Payments.Types.PaymentDerham() ,
+                                        UiCategories.Icons.Payments.Types.Cash() ,
+                                        UiCategories.Icons.Payments.Types.Rial() ,
+                                        UiCategories.Icons.Payments.Types.Tether() ,
+                                        UiCategories.Icons.Payments.Types.Derham() ,
                                     ]
                                 }),
                             ]
@@ -505,10 +496,10 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Payments.Actions.PaymentDeposit() ,
-                                        UiCategories.Icons.Payments.Actions.PaymentTransaction() ,
-                                        UiCategories.Icons.Payments.Actions.PaymentWithDrawal() ,
-                                        UiCategories.Icons.Payments.Actions.PaymentWalletAdd() ,
+                                        UiCategories.Icons.Payments.Actions.Deposit() ,
+                                        UiCategories.Icons.Payments.Actions.Transaction() ,
+                                        UiCategories.Icons.Payments.Actions.Withdrawal() ,
+                                        UiCategories.Icons.Payments.Actions.WalletAdd() ,
                                     ]
                                 }),
                             ]
@@ -519,9 +510,9 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Payments.Cash.PaymentAmount() ,
-                                        UiCategories.Icons.Payments.Cash.PaymentCashCurrency() ,
-                                        UiCategories.Icons.Payments.Cash.PaymentCoinCurrency() ,
+                                        UiCategories.Icons.Payments.Cash.Amount() ,
+                                        UiCategories.Icons.Payments.Cash.CashCurrency() ,
+                                        UiCategories.Icons.Payments.Cash.CoinCurrency() ,
                                     ]
                                 }),
                             ]
@@ -532,8 +523,8 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Payments.Leverage.PaymentLeverage() ,
-                                        UiCategories.Icons.Payments.Leverage.PaymentLeverage2() ,
+                                        UiCategories.Icons.Payments.Leverage.Leverage() ,
+                                        UiCategories.Icons.Payments.Leverage.Leverage2() ,
                                     ]
                                 }),
                             ]
@@ -544,9 +535,9 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Payments.Input.PaymentWallet1() ,
-                                        UiCategories.Icons.Payments.Input.PaymentWallet2() ,
-                                        UiCategories.Icons.Payments.Input.PaymentCardNumber() ,
+                                        UiCategories.Icons.Payments.Input.Wallet1() ,
+                                        UiCategories.Icons.Payments.Input.Wallet2() ,
+                                        UiCategories.Icons.Payments.Input.CardNumber() ,
                                     ]
                                 }),
                             ]
@@ -557,7 +548,7 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Payments.Rate.PaymentRate() ,
+                                        UiCategories.Icons.Payments.Rate.Simple() ,
                                     ]
                                 }),
                             ]
@@ -577,11 +568,11 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Users.Account.UserAccount() ,
-                                        UiCategories.Icons.Users.Account.UserAccountAdd() ,
-                                        UiCategories.Icons.Users.Account.UserAccountGroupAdd() ,
-                                        UiCategories.Icons.Users.Account.UserAccountReference() ,
-                                        UiCategories.Icons.Users.Account.UserAccountReffrence() ,
+                                        UiCategories.Icons.Users.Account.Simple() ,
+                                        UiCategories.Icons.Users.Account.Add() ,
+                                        UiCategories.Icons.Users.Account.GroupAdd() ,
+                                        UiCategories.Icons.Users.Account.Reference() ,
+                                        UiCategories.Icons.Users.Account.Destination() ,
                                     ]
                                 }),
                             ]
@@ -592,8 +583,8 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Users.Emails.UserEmail1() ,
-                                        UiCategories.Icons.Users.Emails.UserEmail2() ,
+                                        UiCategories.Icons.Users.Emails.Email1() ,
+                                        UiCategories.Icons.Users.Emails.Email2() ,
                                     ]
                                 }),
                             ]
@@ -604,7 +595,7 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Users.Phone.UserPhone() ,
+                                        UiCategories.Icons.Users.Phone.Phone() ,
                                     ]
                                 }),
                             ]
@@ -615,8 +606,8 @@ export class ClIconPage implements ITemplate {
                                 CoreReactive.App.div({
                                     className:["border"] ,
                                     children:[
-                                        UiCategories.Icons.Users.Password.UserPassword() ,
-                                        UiCategories.Icons.Users.Password.UserChangePassword() ,
+                                        UiCategories.Icons.Users.Password.Password() ,
+                                        UiCategories.Icons.Users.Password.ChangePassword() ,
                                     ]
                                 }),
                             ]

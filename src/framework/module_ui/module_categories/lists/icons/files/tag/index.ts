@@ -1,1 +1,1 @@
-export {Definition, FileTage} from "./Definition";
+export {Definition, Tage} from "./Definition";

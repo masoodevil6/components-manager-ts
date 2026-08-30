@@ -1,1 +1,5 @@
-export {Definition, StatusPinOpen, StatusPinClose, StatusPin2Open} from "./Definition";
+export {
+    Definition,
+    Open, Close,
+    Open2
+} from "./Definition";

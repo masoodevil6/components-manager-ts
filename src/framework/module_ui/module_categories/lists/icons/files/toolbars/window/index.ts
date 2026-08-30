@@ -1,1 +1,6 @@
-export {Definition, FileWindowClose, FileWindowResizeMax, FileWindowResizeMin, FileWindowMinimize} from "./Definition";
+export {
+    Definition,
+    Close,
+    ResizeMax, ResizeMin,
+    Minimize
+} from "./Definition";

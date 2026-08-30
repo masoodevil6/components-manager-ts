@@ -7,8 +7,8 @@ import {TCategoryIconTotality} from "./TCategoryIconTotality";
 
 export type TCategoryIconDefinition = {
     id:                string;
-    name:              CoreObservable.App<string>;
-    description?:      CoreObservable.App<string>;
+    name:              UtilBrands.TranslationKey;
+    description?:      UtilBrands.TranslationKey;
     source?:           () => UtilBrands.Icons ,
     children?:         TCategoryIconDefinition[];
     icons?:            TCategoryIconTotality[] | UiIcons.IIconDefinition[]

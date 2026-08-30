@@ -11,8 +11,8 @@ import {Keys}                              from "../../../languages";
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Payment" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.payments.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.payments.name ) ,
+    name:            Keys.category.icons.payments.name ,
+    description:     Keys.category.icons.payments.description  ,
     children:        [
         TypeDefinition ,
         ActionsDefinition ,

@@ -7,16 +7,16 @@ import {CreateCategoryIcon}        from "../../../../basic/methods";
 import {Keys}                      from "../../../../languages";
 
 
-export const FileType             : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FileType.Definition);
-export const FileTypeNote         : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FileTypeNote.Definition);
+export const Type             : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FileType.Definition);
+export const TypeNote         : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FileTypeNote.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Type" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.filesType.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.filesType.name ) ,
+    name:            Keys.category.icons.filesType.name ,
+    description:     Keys.category.icons.filesType.description  ,
     icons:          [
-        FileType,
-        FileTypeNote
+        Type,
+        TypeNote
     ]
 }

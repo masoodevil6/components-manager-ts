@@ -40,7 +40,7 @@ Icons
 │   │   ├── Basic     → فلش‌های ساده
 │   │   ├── Chevron   → فلش‌های پیکانی
 │   │   └── Double    → فلش‌های دوبل
-│   └── Exclumation   → علامت تعجب و هشدار
+│   └── Exclamation   → علامت تعجب و هشدار
 │
 ├── 📁 Calc (ایکون‌های ماشین‌حساب)
 │   └── Symbol        → عملگرها (جمع/تفریق/ضرب/تقسیم)
@@ -130,8 +130,8 @@ Icons
 | Arrows › Double | `ArrowDoubleLeft` | دوبل چپ | فلش دوبل رو به چپ |
 | Arrows › Double | `ArrowDoubleUp` | دوبل بالا | فلش دوبل رو به بالا |
 | Arrows › Double | `ArrowDoubleDown` | دوبل پایین | فلش دوبل رو به پایین |
-| Exclumation | `SymbolExclumationSquare` | تعجب کادری | علامت تعجب داخل کادر |
-| Exclumation | `SymbolExclumationWarning` | هشدار | علامت تعجب مثلثی هشدار |
+| Exclamation | `SymbolExclumationSquare` | تعجب کادری | علامت تعجب داخل کادر |
+| Exclamation | `SymbolExclumationWarning` | هشدار | علامت تعجب مثلثی هشدار |
 
 #### ۳. Calc — ایکون‌های ماشین‌حساب
 

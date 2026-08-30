@@ -1,3 +1,4 @@
 export {
-    Definition, FileApplication
+    Definition,
+    Application
 } from "./Definition";

@@ -1,1 +1,4 @@
-export {Definition, PaymentWalletAdd, PaymentWithDrawal, PaymentDeposit, PaymentTransaction} from "./Definition";
+export {
+    Definition,
+    WalletAdd, Withdrawal, Deposit, Transaction
+} from "./Definition";

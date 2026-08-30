@@ -7,15 +7,15 @@ import {CreateCategoryIcon}        from "../../../../basic/methods";
 import {Keys}                      from "../../../../languages";
 
 
-export const InputClock     : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.InputClock.Definition);
-export const InputCalender  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.InputCalender.Definition);
+export const Clock     : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.InputClock.Definition);
+export const Calender  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.InputCalender.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
     id:              "Time" ,
-    name:            CoreLanguage.App.translate(Keys.category.icons.inputsTime.name) ,
-    description:     CoreLanguage.App.translate(Keys.category.icons.inputsTime.name ) ,
+    name:            Keys.category.icons.inputsTime.name ,
+    description:     Keys.category.icons.inputsTime.description  ,
     icons:          [
-        InputClock, InputCalender
+        Clock, Calender
     ]
 }

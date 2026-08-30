@@ -1,1 +1,4 @@
-export {Definition, StatusLockedClose, StatusLockedOpen} from "./Definition";
+export {
+    Definition,
+    Close, Open
+} from "./Definition";
