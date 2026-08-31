@@ -22,6 +22,7 @@ src/
 │   │   ├── module_configs/                #   تنظیمات فریم‌ورک (class, interface, states)
 │   │   ├── module_languages/              #   مدیریت چند زبانه (class, definition)
 │   │   ├── module_observable/             #   الگوی Observer (انتشار/اشتراک رویداد)
+│   │   ├── module_event/                  #   کنترل سیستم ایونت ها به شکل workflow
 │   │   ├── module_reactive/               #   موتور Reactive و متدهای ساخت DOM
 │   │   └── module_route/                  #   مسیریابی (Router)
 │   │

@@ -4,11 +4,14 @@ UI , Icons
 
 export type {
     CategoryIconDefinition      as TCategoryIconDefinition ,
-    CategoryComponentDefinition as TCategoryComponentDefinition
+    CategoryComponentDefinition as TCategoryComponentDefinition ,
+    CategoryComponentTotality   as TCategoryComponentTotality ,
+    CategoryIconTotality        as TCategoryIconTotality
 } from "./basic/types"
 
 export {
-    CreateCategoryIcon
+    CreateCategoryIcon,
+    CreateCategoryComponent
 } from "./basic/methods"
 
 export {

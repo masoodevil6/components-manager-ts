@@ -1,4 +1,6 @@
 import * as UtilBrands from "@/util_brands";
+// ------------------
+import {TCategoryComponentTotality} from "./TCategoryComponentTotality";
 
 export type TCategoryComponentDefinition = {
     id: string;
@@ -7,4 +9,5 @@ export type TCategoryComponentDefinition = {
     description?:      UtilBrands.TranslationKey;
 
     children?:         TCategoryComponentDefinition[];
+    components?:       TCategoryComponentTotality[];
 }

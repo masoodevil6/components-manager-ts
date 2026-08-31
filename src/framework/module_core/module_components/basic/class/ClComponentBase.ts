@@ -1,6 +1,7 @@
 import * as CoreConfigs                                                                      from "@/core_configs";
 import * as CoreObservable                                                                   from "@/core_observable";
 import * as CoreReactive                                                                     from "@/core_reactive";
+import * as CoreEvent                                                                        from "@/core_event";
 // --------------------------------
 import {AbComponentConnector        as ComponentConnector}                                   from "../abstract/AbComponentConnector";
 import {TPartAttrDefault            as PartAttrDefault}                                      from "../../basic/types/TPartAttrDefault";
@@ -22,15 +23,15 @@ export class ClComponentBase<
     TMethods extends Record<string, MethodCallback<any , any>>
     > extends ComponentConnector{
 
-    private _renderScope = new CoreObservable.Scope();
+    protected _renderScope = new CoreObservable.Scope();
 
-    _COMPONENT_PATTERN! : { [K in    PropType<TProp>]?:            PropInterface<TProp[K]> }
+    protected _COMPONENT_PATTERN! : { [K in    PropType<TProp>]?:            PropInterface<TProp[K]> }
 
-    _COMPONENT_SCHEMA! :   { [K in   SchemaType<TSchemas>]:        SchemaInterface<TSchemas[K] , TProp> }
+    protected _COMPONENT_SCHEMA! :   { [K in   SchemaType<TSchemas>]:        SchemaInterface<TSchemas[K] , TProp> }
 
-    _COMPONENT_METHODS! :   { [K in  MethodType<TMethods>]:        MethodInterface<TProp> }
+    protected _COMPONENT_METHODS! :   { [K in  MethodType<TMethods>]:        MethodInterface<TProp> }
 
-    _COMPONENT_TEMPLATES! : { [K in  TemplateType<TTemplate>]?:    TemplateInterface<TProp> } ;
+    protected _COMPONENT_TEMPLATES! : { [K in  TemplateType<TTemplate>]?:    TemplateInterface<TProp> } ;
 
     _COMPONENT_PROPS_BIND: Record<string, CoreObservable.App<any>> = {};
 
@@ -46,6 +47,9 @@ export class ClComponentBase<
     //_COMPONENT_SLOTS: any[] = [];
 
     _unsubscribeDirection: any;
+
+    _COMPONENT_UNIQUE: CoreEvent.TStepRef | null = null;
+    _COMPONENT_EMIT: CoreEvent.TEmitHandler | null = null;
 
     //--------------------------------------------------
     // construct
@@ -66,7 +70,10 @@ export class ClComponentBase<
         //this._COMPONENT_ELEMENT = this.#getComponentElement();
     }
 
-    renderComponent(config: TProp , methods: TMethods , events = null) {
+    renderComponent(config: TProp , methods: TMethods , events = null , unique: CoreEvent.TStepRef | null = null , emit: CoreEvent.TEmitHandler | null = null) {
+
+        this._COMPONENT_UNIQUE = unique;
+        this._COMPONENT_EMIT = emit;
 
         this.connectedCallback();
 
@@ -180,7 +187,7 @@ export class ClComponentBase<
     // create element
     //--------------------------------------------------
 
-    private createComponentElement(){
+    protected createComponentElement(){
         this._renderScope.dispose();
         this._renderScope = new CoreObservable.Scope();
 

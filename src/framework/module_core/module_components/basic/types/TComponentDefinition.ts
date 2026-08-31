@@ -1,8 +1,8 @@
-import * as UI from "@/ui"
+import * as UICategories from "@/ui_categories"
 
 export type TComponentDefinition ={
     id:       string;
     name:     string;
     version:  string;
-    category: UI.Category.Basic.Types.CategoryComponentDefinition
+    category?: UICategories.TCategoryComponentDefinition
 }

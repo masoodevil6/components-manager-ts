@@ -1,161 +1,104 @@
 import { ITemplate }          from "@/core_route";
 import { App as ReactiveApp } from "@/core_reactive";
+import * as UiComponents      from "@/ui_components";
 ///------------------------------
 
 export class ClTestsPage implements ITemplate {
 
     render(query?: Record<string,string> ,extra?: Record<string, any>): HTMLElement {
 
-        /*const rtl = AppConfig.observable("directionRtl")
+        /* -------------------------------------------------------------
+           پلن 6.1 — قرارداد سه‌آرگومانی ComponentBase (Core)
+           constructor(props, methods, identity)
 
-        const primary = AppConfig.color.get("primary")
+           معیار موفقیت (بخش ۵ پلن 6.1):
+             Componentهای Structure/Button/Collapse با قرارداد جدید
+             بدون کرش کار می‌کنند.
+        ------------------------------------------------------------- */
 
-        const isActive = new Observable(false);
-        const status = new Observable("error");
-
-        const colorObs = new  Observable("red");
-
-        const el= ReactiveElement.section({
-            styles: {
-                //backgroundColor: "red" ,
-                cursor: "pointer" ,
-                //color: "var(--primary)"
-            } ,
-            stylesBind: el => ({
-                //color: colorObs ,
-                direction: rtl.mapBoolean("rtl" , "ltr") ,
-                color: el.active.mapBoolean("var(--shanColor3)", "var(--successColor2)")
-            }) ,
-            className: [
-                "rounded" , "shadow-sm" , "p-2" , "btn"
-            ] ,
-            classBind:[
-                isActive.mapBoolean("active" , "di-active") ,
-
-                status.mapList({
-                    error: "btn-danger" ,
-                    success: "btn-success" ,
-                    warning: "btn-warning" ,
-                })
-            ] ,
-            children: [
-                /!* (() => {
-                     const style = document.createElement("style");
-                     style.textContent = `
-                     #test {
-                         color: red;
-                     } `;
-                     return style;
-                 })(),*!/
-                Language.translate("test.login", { name:"Ali" })
-            ],
-            on:{
-                click: (event) => {
-                    console.log(event)
+        // ---- 1) ComponentStructure — Structure عمومی با Composition Point ----
+        const structure =
+            new UiComponents.Lists.ComponentStructure.Component(
+                {
+                    classList:      ["border", "p-2", "mb-3"],
+                    structureClass: ["bg-light", "rounded"],
+                    content: () => {
+                        return ReactiveApp.button({
+                            className: ["btn", "btn-outline-secondary"],
+                            children:  ["Structure content button"],
+                        });
+                    },
                 },
-            }
-        })
+                {}, // methods
+            );
 
-        colorObs.set("white" )
-        isActive.set(true )
-        status.set("success" )
+        // ---- 2) ComponentButton — Component مستقل ----
+        const button =
+            new UiComponents.Lists.ComponentButton.Component(
+                {
+                    btnTitle: "Save",
+                    variant:  "primary",
+                },
+                {}, // methods
+                {
+                    events: {
+                        click: () => {
+                            console.log("[ComponentButton] clicked");
+                        },
+                    },
+                },
+            );
 
-        //
+        // ---- 3) ComponentCollapse — معیار موفقیت (State + Method + Composition) ----
+        const collapse =
+            new UiComponents.Lists.ComponentCollapse.Component(
+                {
+                    headerTitle: "Collapse — click header",
+                    classList:   ["mb-3"],
+                    content: () => {
+                        return ReactiveApp.button({
+                            className: ["btn", "btn-outline-primary"],
+                            children:  ["Toggle (from content)"],
+                            on: {
+                                click: () => {
+                                    collapse.toggle();
+                                    console.log("[ComponentCollapse] open =", collapse.isOpen());
+                                },
+                            },
+                        });
+                    },
+                },
+                {
+                    onToggle: (open: boolean) => {
+                        console.log("[ComponentCollapse] onToggle =", open);
+                    },
+                },
+            );
 
-        AppConfig.color.set("primary" , "#fff")
-        Language.setLanguage("en")
-
-        return el.getElement()*/
-
+        // ---- 4) Toggle بیرونی برای state بیرونی Collapse ----
+        const externalToggleButton = ReactiveApp.button({
+            className: ["btn", "btn-outline-warning", "m-2"],
+            children:  ["External toggle collapse"],
+            on: {
+                click: () => {
+                    collapse.toggle();
+                },
+            },
+        });
 
         const content = ReactiveApp.section(
             {
                 className: [
-                    "row" , "p-0" , "m-0"
+                    "row" , "p-3" , "m-0"
                 ],
                 children:[
-                    /*ReactiveElement.section({
-                        className: [
-                            "col-md-3" , "col-12" , "border" , "p-2" ,
-                        ],
-                        children: [
-                            ReactiveElement.section({
-                                attrs: {
-                                    id: "test-element"
-                                },
-                                className: [
-                                    "position-relative"
-                                ],
-                                children: [
-                                    "main"
-                                ],
-                            }) ,
-                        ],
-                    }) ,*/
-
-
-
-                    //TOOLS.COMPONENT.SIMPLE.components.ComponentButtonSimple.renderExampleComponent() ,
-                    //TOOLS.COMPONENT.SIMPLE.components.ComponentInputSimple.renderExampleComponent() ,
-                    //TOOLS.COMPONENT.SIMPLE.components.ComponentSelectCustomSimple.renderExampleComponent() ,
-
-
-                    //TOOLS.COMPONENT.INPUT.components.ComponentInput.renderExampleComponent() ,
-
-
-                    //TOOLS.COMPONENT.ComponentBorder.renderExampleComponent() ,
-
-                    // TOOLS.COMPONENT.ComponentElementPosition.renderExampleComponent() ,
-                    // TOOLS.COMPONENT.ComponentDraggableOrdersY.renderExampleComponent() ,
-                    // TOOLS.COMPONENT.ComponentListSelectedScroller.renderExampleComponent() ,
-                    //
-                    // TOOLS.COMPONENT.ComponentMessages.renderExampleComponent() ,
-                    // TOOLS.COMPONENT.ComponentErrorIsEmpty.renderExampleComponent() ,
-                    //
-                    //
-                    // TOOLS.COMPONENT.ComponentIcon.renderExampleComponent() ,
-                    //
-                    //
-                    // TOOLS.COMPONENT.ComponentRecyclerView.renderExampleComponent() ,
-                    //
-                    // TOOLS.COMPONENT.ComponentFloatMenu.renderExampleComponent() ,
-                    //TOOLS.COMPONENT.ComponentPositionMenu.renderExampleComponent() ,
-                    //
-                    // TOOLS.COMPONENT.ComponentTooltipDescription.renderExampleComponent() ,
-                    //
-                    // TOOLS.COMPONENT.ComponentLabel.renderExampleComponent() ,
-                    //
-                    // TOOLS.COMPONENT.ComponentCollapse.renderExampleComponent() ,
-                    // TOOLS.COMPONENT.ComponentTabs.renderExampleComponent() ,
-                    //
-                    //TOOLS.COMPONENT.ComponentInputListSelector.renderExampleComponent() ,
-                    // TOOLS.COMPONENT.ComponentInputCheckBox.renderExampleComponent() ,
-                    // TOOLS.COMPONENT.ComponentInputAgreementCheckBox.renderExampleComponent() ,
-                    // TOOLS.COMPONENT.ComponentValidate.renderExampleComponent() ,
-                    //
-                    // TOOLS.COMPONENT.ComponentWindow.renderExampleComponent() ,
-                    // TOOLS.COMPONENT.ComponentWindowConfirm.renderExampleComponent() ,
-                    // TOOLS.COMPONENT.ComponentLoading.renderExampleComponent() ,
-                    // TOOLS.COMPONENT.ComponentWebCode.renderExampleComponent() ,
-
-                    //TOOLS.COMPONENT.ComponentTable.renderExampleComponent() ,
-
-
-                    // TOOLS.COMPONENT.ComponentInputPassword.renderExampleComponent() ,
-                    // TOOLS.COMPONENT.ComponentInputEmail.renderExampleComponent() ,
-                    //TOOLS.COMPONENT.ComponentInputPhone.renderExampleComponent() ,
-                    //TOOLS.COMPONENT.ComponentInputSize.renderExampleComponent() ,
-                    // TOOLS.COMPONENT.ComponentInputColor.renderExampleComponent() ,
-
-                    //TOOLS.COMPONENT.ComponentSelectOption.renderExampleComponent() ,
-
-                    // TOOLS.COMPONENT.ComponentInputOtp.renderExampleComponent() ,
-
-                    //TOOLS.COMPONENT.ComponentTimerDown.renderExampleComponent() ,
-                    //TOOLS.COMPONENT.ComponentMouseScroller.renderExampleComponent() ,
-                    //TOOLS.COMPONENT.ComponentSidebar.renderExampleComponent() ,
+                    externalToggleButton,
+                    button.getElement(),
+                    structure.getElement(),
+                    collapse.getElement(),
                 ]
-            })
+            }
+        )
 
 
 
@@ -164,16 +107,12 @@ export class ClTestsPage implements ITemplate {
 
 
 
+
     onLoad(pageElement: HTMLElement): void {
 
-         //TOOLS.COMPONENT.ComponentSelector.renderExampleComponent({selector: "#test-element"})
-         //TOOLS.COMPONENT.ComponentSelector.renderExampleComponent({selector: "component-error-is-empty section[data-part-name=part_border_content_title]"})
+
 
     }
-
-
-
-
 
 
 

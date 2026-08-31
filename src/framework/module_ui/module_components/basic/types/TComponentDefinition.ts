@@ -4,5 +4,5 @@ export type TComponentDefinition ={
     id:       string;
     name:     string;
     version:  string;
-    category: UICategories.Basic.Types.CategoryComponentDefinition
+    category?: UICategories.TCategoryComponentDefinition
 }

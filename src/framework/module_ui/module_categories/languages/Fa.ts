@@ -560,4 +560,138 @@ export const Fa =
         ],
 
 
+        /// Components -> Basic
+        [
+            Keys.category.components.basic.name,
+            "کامپوننت‌های پایه"
+        ],
+        [
+            Keys.category.components.basic.description,
+            "لیستی از کامپوننت‌های پایه و ساختاری"
+        ],
+
+        /// Components -> Basic -> Props -> selector
+        [
+            Keys.category.components.basic.props.selector.name,
+            "سلکتور"
+        ],
+        [
+            Keys.category.components.basic.props.selector.description,
+            "سلکتور عنصر هدف برای جای‌گذاری کامپوننت"
+        ],
+        /// Components -> Basic -> Props -> append
+        [
+            Keys.category.components.basic.props.append.name,
+            "افزودن"
+        ],
+        [
+            Keys.category.components.basic.props.append.description,
+            "اگر فعال باشد، کامپوننت به عنصر هدف اضافه می‌شود، در غیر این صورت جایگزین می‌کند"
+        ],
+        /// Components -> Basic -> Props -> classList
+        [
+            Keys.category.components.basic.props.classList.name,
+            "کلاس‌ها"
+        ],
+        [
+            Keys.category.components.basic.props.classList.description,
+            "لیست کلاس‌های CSS اعمال شده روی کامپوننت"
+        ],
+        /// Components -> Basic -> Props -> styles
+        [
+            Keys.category.components.basic.props.styles.name,
+            "استایل‌ها"
+        ],
+        [
+            Keys.category.components.basic.props.styles.description,
+            "استایل‌های CSS اعمال شده روی کامپوننت"
+        ],
+        /// Components -> Basic -> Props -> prop_show
+        [
+            Keys.category.components.basic.props.prop_show.name,
+            "نمایش"
+        ],
+        [
+            Keys.category.components.basic.props.prop_show.description,
+            "وضعیت نمایش یا مخفی بودن کامپوننت"
+        ],
+        /// Components -> Basic -> Props -> prop_structureClass
+        [
+            Keys.category.components.basic.props.prop_structureClass.name,
+            "کلاس‌های ساختار"
+        ],
+        [
+            Keys.category.components.basic.props.prop_structureClass.description,
+            "لیست کلاس‌های CSS اعمال شده روی لایه ساختار"
+        ],
+        /// Components -> Basic -> Props -> prop_structureStyles
+        [
+            Keys.category.components.basic.props.prop_structureStyles.name,
+            "استایل‌های ساختار"
+        ],
+        [
+            Keys.category.components.basic.props.prop_structureStyles.description,
+            "استایل‌های CSS اعمال شده روی لایه ساختار"
+        ],
+
+        /// Components -> Basic -> Schemas -> component
+        [
+            Keys.category.components.basic.schemas.component.name,
+            "کامپوننت"
+        ],
+        [
+            Keys.category.components.basic.schemas.component.description,
+            "لایه خارجی کامپوننت با RTL و کلاس‌ها و استایل‌ها"
+        ],
+        /// Components -> Basic -> Schemas -> structure
+        [
+            Keys.category.components.basic.schemas.structure.name,
+            "ساختار"
+        ],
+        [
+            Keys.category.components.basic.schemas.structure.description,
+            "لایه داخلی ساختار با نمایش/مخفی و کلاس‌ها و استایل‌های ساختار"
+        ],
+
+        /// Components -> Contents
+        [
+            Keys.category.components.contents.name,
+            "کامپوننت‌های محتوایی"
+        ],
+        [
+            Keys.category.components.contents.description,
+            "لیستی از کامپوننت‌های نمایش محتوا"
+        ],
+
+        /// Components -> Inputs
+        [
+            Keys.category.components.inputs.name,
+            "کامپوننت‌های ورودی"
+        ],
+        [
+            Keys.category.components.inputs.description,
+            "لیستی از کامپوننت‌های دریافت ورودی کاربر"
+        ],
+
+        /// Components -> Positions
+        [
+            Keys.category.components.positions.name,
+            "کامپوننت‌های موقعیتی"
+        ],
+        [
+            Keys.category.components.positions.description,
+            "لیستی از کامپوننت‌های مدیریت موقعیت و چینش"
+        ],
+
+        /// Components -> Simples
+        [
+            Keys.category.components.simples.name,
+            "کامپوننت‌های ساده"
+        ],
+        [
+            Keys.category.components.simples.description,
+            "لیستی از کامپوننت‌های ساده و پایه"
+        ],
+
+
     ]);

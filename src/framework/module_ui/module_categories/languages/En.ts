@@ -552,4 +552,138 @@ export const En =
             "A list of icons related to rate and value measurement"
         ],
 
+
+        /// Components -> Basic
+        [
+            Keys.category.components.basic.name,
+            "Basic Components"
+        ],
+        [
+            Keys.category.components.basic.description,
+            "A list of basic and structural components"
+        ],
+
+        /// Components -> Basic -> Props -> selector
+        [
+            Keys.category.components.basic.props.selector.name,
+            "Selector"
+        ],
+        [
+            Keys.category.components.basic.props.selector.description,
+            "Target element selector for component placement"
+        ],
+        /// Components -> Basic -> Props -> append
+        [
+            Keys.category.components.basic.props.append.name,
+            "Append"
+        ],
+        [
+            Keys.category.components.basic.props.append.description,
+            "If enabled, component is appended to target element, otherwise replaces it"
+        ],
+        /// Components -> Basic -> Props -> classList
+        [
+            Keys.category.components.basic.props.classList.name,
+            "Class List"
+        ],
+        [
+            Keys.category.components.basic.props.classList.description,
+            "List of CSS classes applied to the component"
+        ],
+        /// Components -> Basic -> Props -> styles
+        [
+            Keys.category.components.basic.props.styles.name,
+            "Styles"
+        ],
+        [
+            Keys.category.components.basic.props.styles.description,
+            "CSS styles applied to the component"
+        ],
+        /// Components -> Basic -> Props -> prop_show
+        [
+            Keys.category.components.basic.props.prop_show.name,
+            "Show"
+        ],
+        [
+            Keys.category.components.basic.props.prop_show.description,
+            "Visibility state of the component"
+        ],
+        /// Components -> Basic -> Props -> prop_structureClass
+        [
+            Keys.category.components.basic.props.prop_structureClass.name,
+            "Structure Class"
+        ],
+        [
+            Keys.category.components.basic.props.prop_structureClass.description,
+            "List of CSS classes applied to the structure layer"
+        ],
+        /// Components -> Basic -> Props -> prop_structureStyles
+        [
+            Keys.category.components.basic.props.prop_structureStyles.name,
+            "Structure Styles"
+        ],
+        [
+            Keys.category.components.basic.props.prop_structureStyles.description,
+            "CSS styles applied to the structure layer"
+        ],
+
+        /// Components -> Basic -> Schemas -> component
+        [
+            Keys.category.components.basic.schemas.component.name,
+            "Component"
+        ],
+        [
+            Keys.category.components.basic.schemas.component.description,
+            "Outer component layer with RTL, classes and styles"
+        ],
+        /// Components -> Basic -> Schemas -> structure
+        [
+            Keys.category.components.basic.schemas.structure.name,
+            "Structure"
+        ],
+        [
+            Keys.category.components.basic.schemas.structure.description,
+            "Inner structure layer with show/hide and structure classes and styles"
+        ],
+
+        /// Components -> Contents
+        [
+            Keys.category.components.contents.name,
+            "Content Components"
+        ],
+        [
+            Keys.category.components.contents.description,
+            "A list of content display components"
+        ],
+
+        /// Components -> Inputs
+        [
+            Keys.category.components.inputs.name,
+            "Input Components"
+        ],
+        [
+            Keys.category.components.inputs.description,
+            "A list of user input components"
+        ],
+
+        /// Components -> Positions
+        [
+            Keys.category.components.positions.name,
+            "Position Components"
+        ],
+        [
+            Keys.category.components.positions.description,
+            "A list of position and layout components"
+        ],
+
+        /// Components -> Simples
+        [
+            Keys.category.components.simples.name,
+            "Simple Components"
+        ],
+        [
+            Keys.category.components.simples.description,
+            "A list of simple and basic components"
+        ],
+
     ]);

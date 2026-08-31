@@ -546,10 +546,12 @@ export class ComponentButton extends ComponentButtonBase{
     constructor(
         config: ComponentButtonPropsType ,
         methods : ComponentButtonMethodsType ,
-        events = null
+        events = null ,
+        unique: any = null ,
+        emit: any = null
     ) {
         super("button" , null);
-        super.renderComponent(config , methods , events);
+        super.renderComponent(config , methods , events , unique , emit);
     }
 
 
@@ -648,6 +650,8 @@ export class ComponentButton extends ComponentButtonBase{
                     attrs: {
                         "id":     `component-button-${this._COMPONENT_RANDOM_ID}`,
                     },
+                    unique:  this._COMPONENT_UNIQUE ?? undefined,
+                    emit:     this._COMPONENT_EMIT ?? undefined,
                     className: [
                         "shadow-sm" , // "border-0" ,
                     ] ,

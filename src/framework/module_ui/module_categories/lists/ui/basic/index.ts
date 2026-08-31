@@ -1,1 +1,1 @@
-export {Definition} from "./Definition"
+export {Definition, ComponentStructureTotality as ComponentStructure} from "./Definition"

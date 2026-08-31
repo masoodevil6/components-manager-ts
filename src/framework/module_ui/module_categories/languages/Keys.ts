@@ -323,6 +323,78 @@ export const Keys = {
 
         components: {
 
+            /// Basic
+            basic: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+
+                props: {
+                    selector: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    append: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    classList: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    styles: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    prop_show: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    prop_structureClass: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    prop_structureStyles: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                },
+
+                schemas: {
+                    component: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    structure: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                },
+            },
+
+            /// Contents
+            contents: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+
+            /// Inputs
+            inputs: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+
+            /// Positions
+            positions: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+
+            /// Simples
+            simples: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
+
         }
     }
 }
