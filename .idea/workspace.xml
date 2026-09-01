@@ -4,44 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="88c33080-fd23-4a2f-9df9-e50b68f92fd3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/documents/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/documents/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/documents/ui/module_components.md" beforeDir="false" afterPath="$PROJECT_DIR$/documents/ui/module_components.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/last/tools/components/ComponentButton.ts" beforeDir="false" afterPath="$PROJECT_DIR$/last/tools/components/ComponentButton.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_core/module_components/basic/class/ClComponentBase.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_core/module_components/basic/class/ClComponentBase.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_core/module_components/basic/class/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_core/module_components/basic/class/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_core/module_components/basic/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_core/module_components/basic/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_core/module_components/basic/types/TComponentDefinition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_core/module_components/basic/types/TComponentDefinition.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_core/module_components/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_core/module_components/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_core/module_components/tools/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_core/module_components/tools/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_core/module_components/tools/schema/Interface_ComponentSchema.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_core/module_components/tools/schema/Interface_ComponentSchema.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/basic/methods/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/basic/methods/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/basic/types/TCategoryComponentDefinition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/basic/types/TCategoryComponentDefinition.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/basic/types/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/basic/types/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/languages/En.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/languages/En.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/languages/Fa.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/languages/Fa.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/languages/Keys.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/languages/Keys.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/ui/basic/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/ui/basic/Definition.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/ui/basic/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/ui/basic/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/ui/contents/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/ui/contents/Definition.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/ui/inputs/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/ui/inputs/Definition.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/ui/positions/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/ui/positions/Definition.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/ui/simples/Definition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_categories/lists/ui/simples/Definition.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_components/basic/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_components/basic/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_components/basic/types/TComponentDefinition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_components/basic/types/TComponentDefinition.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_components/basic/types/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_components/basic/types/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_components/lists/basic/component/Component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_components/lists/basic/component/Definition.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_components/lists/basic/component/index.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_components/lists/basic/componentStructure/ComponentStructure.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_components/lists/basic/componentStructure/Definition.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_components/lists/basic/componentStructure/index.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_components/lists/basic/index.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_components/lists/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_components/lists/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/framework/module_ui/module_pages/pages/tests/ClTestsPage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/framework/module_ui/module_pages/pages/tests/ClTestsPage.ts" afterDir="false" />
-    </list>
+    <list default="true" id="88c33080-fd23-4a2f-9df9-e50b68f92fd3" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -51,7 +14,7 @@
     <execution />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="1790" />
+    <option name="cachedIndexableFilesCount" value="1758" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -77,26 +40,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/projects/components/master/src/framework/module_ui/module_categories/lists/icons/symbols&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;D:\\Projects\\js\\component-exp\\master\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "develop",
+    "last_opened_file_path": "D:/projects/components/master/src/framework/module_ui/module_categories/lists/icons/symbols",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "D:\\projects\\components\\master\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\projects\components\master\src\framework\module_ui\module_categories\lists\icons\symbols" />
@@ -138,7 +101,6 @@
       <workItem from="1788074091156" duration="4185000" />
       <workItem from="1788081420097" duration="11425000" />
       <workItem from="1788151969048" duration="1906000" />
-      <workItem from="1788198074223" duration="7178000" />
     </task>
     <servers />
   </component>

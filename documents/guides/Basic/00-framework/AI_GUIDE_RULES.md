@@ -28,7 +28,7 @@
 
 ### R-ARCH-01: Component Inheritance
 
-**MUST** هر Component از `ClComponentBase` ارث‌بری کند.
+**MUST** هر Component از `ClComponentBase` (alias: `CoreComponents.App`) ارث‌بری کند.
 
 ```typescript
 // ✅ Correct
@@ -37,6 +37,8 @@ class MyComponent extends ClComponentBase<TProp, TSchema, TTemplate, TMethods> {
 // ❌ Incorrect
 class MyComponent extends SomeOtherBase { ... }
 ```
+
+> **Note (Plan 8.1.4):** Componentها از `CoreComponents.App` (یعنی `ClComponentBase`) ارث می‌برند، **نه** از `ComponentStructure`. `ComponentStructureTrait` در پوشه `traits/` قرار دارد و ۷ prop پایه آن در `_COMPONENT_PATTERN` کامپوننت‌ها spread می‌شود. متد `renderContent` این Trait برای ساخت `ComponentStructure` به‌عنوان فرزند استفاده می‌شود.
 
 **Source:** `ClComponentBase.ts` — تمام زیرساخت رندر در این کلاس است.
 
@@ -239,21 +241,27 @@ constructor(config, methods, events?) {
 
 ### R-METH-01: Method Name Matching
 
-**MUST** نام متد در `_COMPONENT_METHODS` با نام در شیء methods پاس‌داده‌شده به `renderComponent` یکسان باشد.
+**MUST** نام متد در `_COMPONENT_METHODS` (semantic key) با کلید در شیء methods پاس‌داده‌شده به `renderComponent` یکسان باشد.
 
 ```typescript
-// Definition
+// Definition — semantic key (Public API)
 _COMPONENT_METHODS = Define_ComponentMethod({
-    onClick: { args: { ... } },
+    CLICK: { args: { ... } },       // semantic key → Public API
 });
 
-// Usage — key must match "onClick"
+// Usage — key must match semantic key "CLICK"
 component.renderComponent(config, {
-    onClick: (event, dataArgs, componentArgs) => { ... },
+    CLICK: (event, dataArgs, componentArgs) => { ... },
 });
 ```
 
-**Source:** `ClComponentBase.#getReadyComponentMethods` — تطبیق با `keyMethod == methodName`.
+> **Note (Plan 8.1.4):**
+> - **Semantic keys** (مثل `CLICK`, `HOVER`) متعلق به **Public API** هستند — مصرف‌کننده با این کلیدها متصل می‌شود.
+> - **Runtime name** (مثل `fn_onClickIcon`) متعلق به **implementation** است — نام داخلی تابع.
+> - `#getReadyComponentMethods` حالا **semantic key lookup مستقیم** انجام می‌دهد (double loop حذف شده است).
+> - `Callback_ComponentMethod` امضا: `(this: TThis, event, dataArgs, componentArgs) => void` — `TThis` پیش‌فرض `any` است.
+
+**Source:** `ClComponentBase.#getReadyComponentMethods` — تطبیق مستقیم با semantic key.
 
 ---
 
@@ -269,7 +277,41 @@ this.executeMethod("onClick", event, dataArgs);
 this._COMPONENT_METHODS.onClick.destination?.call(this, event, null, null);
 ```
 
+> **Note (Plan 8.1.4):** `Callback_ComponentMethod` امضا: `(this: TThis, event, dataArgs, componentArgs) => void`. پارامتر `this` با پیش‌فرض `any` به callback اجازه می‌دهد به Component instance دسترسی داشته باشد. `MethodsConfigType<TThis>` تایپ کل شیء methods را با `TThis` مشخص می‌کند.
+
 **Source:** `ClComponentBase.executeMethod` — componentArgs را به‌صورت خودکار از `_COMPONENT_PROPS_BIND` استخراج می‌کند.
+
+---
+
+## 6.5. Emit Rules (Plan 8.1.4)
+
+### R-EMIT-01: emit Auto-Bind
+
+**MUST** `emit` فقط با `request` صدا زده شود — خودبه‌خود با کلیک صدا زده نمی‌شود.
+
+`ClComponentBase.renderComponent` حالا `emit` را در `CoreEvent.App.registerEmit` ثبت می‌کند. `emit.bind(this)` باعث می‌شود `this` در emit به **Component instance** اشاره کند.
+
+```typescript
+// ✅ Correct — emit با function تعریف شود
+emit = function(event, data) { ... }
+
+// ❌ Incorrect — arrow function با .call() کار نمی‌کند
+emit = (event, data) => { ... }   // this قابل bind نیست
+```
+
+### R-EMIT-02: Bind Precedence
+
+**MUST NOT** اگر مصرف‌کننده `.bind(parentInstance)` کرده باشد، bind دوم (`emit.bind(this)` در renderComponent) **تاثیری ندارد** — bind اول اولویت دارد.
+
+```typescript
+// مصرف‌کننده:
+const boundEmit = myEmit.bind(parentInstance);
+component.renderComponent(config, methods, { emit: boundEmit });
+// → renderComponent از emit.bind(this) استفاده می‌کند ولی تاثیری ندارد
+// → this در emit همچنان parentInstance است
+```
+
+**Source:** `ClComponentBase.renderComponent` — `CoreEvent.App.registerEmit(emit.bind(this))`.
 
 ---
 
@@ -390,3 +432,7 @@ _COMPONENT_TEMPLATES = Define_ComponentTemplate({
 | R-RENDER-02 | `ClReactiveElement.ts` | 14-28 (Options) |
 | R-METH-01 | `ClComponentBase.ts` | 163-173 |
 | R-PROP-01 | `ClComponentBase.ts` | 114-157 |
+
+---
+
+*آخرین به‌روزرسانی: ۲۰۲۶-۰۹-۰۱ — Plan 8.1.4*

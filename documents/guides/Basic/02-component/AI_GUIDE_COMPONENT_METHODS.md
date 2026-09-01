@@ -49,10 +49,15 @@ export interface Interface_ComponentMethod<TPropTypes> {
 
 ### 3.2. Callback_ComponentMethod
 
-تعریف تایپ callback در `tools/method/Callback_ComponentMethod.ts` (lines 3-7):
+تعریف تایپ callback در `tools/method/Callback_ComponentMethod.ts`:
 
 ```typescript
-export type Callback_ComponentMethod<TComponentArgs, TDataArgs> = (
+export type Callback_ComponentMethod<
+    TComponentArgs,
+    TDataArgs,
+    TThis = any
+> = (
+    this: TThis,
     event:            Event,
     dataArgs:         TDataArgs | null,
     componentArgs:    TComponentArgs | null,
@@ -61,9 +66,12 @@ export type Callback_ComponentMethod<TComponentArgs, TDataArgs> = (
 
 | پارامتر | تایپ | توضیح |
 |:---|:---|:---|
+| `this` | `TThis` (default: `any`) | Component instance — فقط در `function` کار می‌کند، نه arrow |
 | `event` | `Event` | شی رویداد DOM |
 | `dataArgs` | `TDataArgs \| null` | داده‌های اضافی پاس‌شده به `executeMethod` |
 | `componentArgs` | `TComponentArgs \| null` | مقادیر props که به‌صورت خودکار از `_COMPONENT_PROPS_BIND` resolve شده‌اند |
+
+**نکته `TThis = any`:** Default شدن `TThis` به `any` باعث می‌شود مصرف‌کنندگان فعلی که Generic مربوط به `this` را مشخص نمی‌کنند، دچار breaking change نشوند. در Componentهای جدید، مقدار دقیق `TThis` باید به Component instance متصل شود.
 
 ### 3.3. Define_ComponentMethod
 
@@ -83,25 +91,30 @@ export function Define_ComponentMethod<TMethod, TPropTypes>(
 
 ## 4. Architecture
 
-### 4.1. #getReadyComponentMethods (lines 163-173)
+### 4.1. #getReadyComponentMethods
 
 این متد در زمان `renderComponent` اجرا می‌شود و توابع پاس‌شده توسط مصرف‌کننده را به `destination` متصل می‌کند:
 
 ```typescript
-#getReadyComponentMethods(methods: Record<string, MethodCallback<any, any>>) {
-    for (const keyMethod in this._COMPONENT_METHODS) {
-        for (const methodName in methods) {
-            const fn = methods[keyMethod];
-            if (keyMethod == methodName && fn != null && typeof fn === "function") {
-                const itemMethod: MethodInterface<TProp> = this._COMPONENT_METHODS[keyMethod];
-                itemMethod.destination = fn;
+// Plan 8.1.4: semantic key → _COMPONENT_METHODS[semanticKey].destination
+// double loop حذف شد — lookup مستقیم با semantic key
+#getReadyComponentMethods(methods: Record<string, MethodCallback<any , any>>) {
+    for (const semanticKey in methods) {
+        const fn = methods[semanticKey];
+        if (fn != null && typeof fn === "function") {
+            const methodMeta = this._COMPONENT_METHODS[semanticKey];
+            if (methodMeta) {
+                methodMeta.destination = fn;
             }
         }
     }
 }
 ```
 
-الگوریتم: برای هر کلید در `_COMPONENT_METHODS`، کلید متناظر در `methods` (پاس‌شده توسط مصرف‌کننده) را پیدا کرده و `destination` را set می‌کند.
+الگوریتم: برای هر semantic key در `methods` (پاس‌شده توسط مصرف‌کننده)،
+مستقیماً `_COMPONENT_METHODS[semanticKey]` را پیدا کرده و `destination` را set می‌کند.
+
+**Plan 8.1.4:** double loop حذف شد. lookup مستقیم با semantic key (O(n) به‌جای O(n²)).
 
 ### 4.2. executeMethod (lines 301-307)
 
@@ -179,9 +192,11 @@ executeMethod(methodName, event, dataArgs)
 
 ### MUST
 
-- **MUST** نام کلید در `_COMPONENT_METHODS` با نام کلید در `methods` پاس‌شده به `renderComponent` مطابقت داشته باشد — تطبیق با `==` انجام می‌شود.
+- **MUST** نام کلید در `_COMPONENT_METHODS` (semantic key) با نام کلید در `methods` پاس‌شده به `renderComponent` مطابقت داشته باشد — تطبیق با `===` انجام می‌شود.
 - **MUST** `destination` فقط از طریق `renderComponent(methods)` set شود — مستقیماً `destination` را دستکاری نکنید.
 - **MUST** هر arg در `args` به یک prop موجود در `_COMPONENT_PATTERN` اشاره کند (`argProp.prop` باید در `_COMPONENT_PROPS_BIND` وجود داشته باشد).
+- **MUST** semantic keys (CLICK, HOVER, ...) متعلق به Public API باشند — runtime `name` نباید به Public API نشت کند.
+- **MUST** برای استفاده از `this` در callback از `function` استفاده شود — arrow function با `.call()` نمی‌تواند `this` را تغییر دهد.
 
 ### MUST NOT
 
@@ -265,84 +280,134 @@ args: {
 
 ## 8. Examples
 
-### 8.1. تعریف Methods
+### 8.1. تعریف Methods (Plan 8.1.4)
 
 ```typescript
-type MyMethods = {
-    onClick: (event: Event, dataArgs: null, componentArgs: { title: string; disabled: boolean }) => void;
-    onFocus: (event: Event, dataArgs: null, componentArgs: null) => void;
+import {Props as MyProps} from "./Props";
+
+export const Methods = {
+    CLICK: {
+        name:        "fn_onClick",
+        description: "Callback when clicked",
+
+        // componentArgs — prop reference‌ها
+        args: {
+            TITLE:    MyProps.prop_title,
+            DISABLED: MyProps.prop_disabled,
+        },
+
+        // dataArgs — type تعریف‌شده برای داده‌های runtime
+        dataArgs: {} as const,
+    },
+    FOCUS: {
+        name:        "fn_onFocus",
+        description: "Callback when focused",
+        args: {},     // بدون args — componentArgs خالی خواهد بود
+        dataArgs: {} as const,
+    },
+} as const;
+
+// استخراج typeها
+export type MethodsComponentArgs = {
+    [K in keyof typeof Methods]: {
+        [ArgKey in keyof typeof Methods[K]["args"]]:
+            typeof Methods[K]["args"][ArgKey] extends { default: infer T } ? T : any;
+    };
 };
 
-_COMPONENT_METHODS = Define_ComponentMethod<MyMethods, MyProps>({
-    onClick: {
-        args: {
-            title:    { prop: "title",    default: "" },
-            disabled: { prop: "disabled", default: false },
-        },
-        title: Observable.App("کلیک"),
-        description: Observable.App("رویداد کلیک کامپوننت"),
-    },
-    onFocus: {
-        // بدون args — componentArgs خالی خواهد بود
-        title: Observable.App("فوکوس"),
-    },
-});
+export type MethodsDataArgs = {
+    [K in keyof typeof Methods]: typeof Methods[K]["dataArgs"];
+};
+
+export type MethodsConfigType<TThis = any> = {
+    [K in keyof typeof Methods]?: (
+        this: TThis,
+        event: Event,
+        dataArgs: MethodsDataArgs[K] | null,
+        componentArgs: MethodsComponentArgs[K] | null,
+    ) => void;
+};
 ```
 
-### 8.2. پاس Methods در زمان رندر
+### 8.2. پاس Methods در زمان رندر (Category callable)
 
 ```typescript
-const comp = new MyComponent("MyComponent", "my-id");
-comp.renderComponent(
-    { title: "دکمه", disabled: false },
+const btn = UiCategory.UI.Simples.Button(
+    { prop_title: "دکمه", prop_disabled: false },
     {
-        onClick: (event, dataArgs, componentArgs) => {
-            console.log("clicked!", componentArgs.title);  // "دکمه"
-            console.log("disabled?", componentArgs.disabled);  // false
+        CLICK: function(event, dataArgs, componentArgs) {
+            console.log("clicked!", componentArgs?.TITLE);     // "دکمه"
+            console.log("disabled?", componentArgs?.DISABLED); // false
+            // this = ComponentButton instance (auto-bind)
+            this.set("prop_title", "clicked!");
         },
-        onFocus: (event, dataArgs, componentArgs) => {
+        FOCUS: function(event, dataArgs, componentArgs) {
             console.log("focused!");
         },
-    }
+    },
+    { unique: TestStep.button },
 );
 ```
 
-### 8.3. اجرای Method از داخل Schema Method
+### 8.3. اجرای Method از داخل Component
 
 ```typescript
-_COMPONENT_SCHEMA = Define_ComponentSchema<MySchemas, MyProps>({
-    Main: {
-        part: "Main",
-        props: [{ prop: "title", default: "" }],
-        method: function(attrsDefault, data, extra) {
-            return CoreReactive.App.section({
-                attrs: { ...attrsDefault, "class": "main" },
-                events: {
-                    click: (event) => {
-                        // اجرای method از داخل schema
-                        this.executeMethod("onClick", event, { source: "main" });
-                    },
+// در ComponentButton.ts
+override renderContentComponent(): CoreReactive.App {
+    return ComponentStructureTrait.renderContent(
+        this,
+        () => CoreReactive.App.button({
+            children: [this.get("prop_title")],
+            on: {
+                click: (event) => {
+                    // اجرای method از داخل Component
+                    this.executeMethod("CLICK", event, {});
                 },
-                children: [data.title],
-            });
-        },
-    },
-});
+            },
+        }),
+    );
+}
 ```
 
 ### 8.4. اجرای Method با dataArgs
 
 ```typescript
 // فراخوانی با داده‌های اضافی
-this.executeMethod("onClick", event, { itemId: 42, source: "list" });
+this.executeMethod("CLICK", event, { itemId: 42, source: "list" });
 
-// در destination:
+// در callback:
 {
-    onClick: (event, dataArgs, componentArgs) => {
-        console.log(dataArgs.itemId);       // 42
-        console.log(dataArgs.source);       // "list"
-        console.log(componentArgs.title);   // مقدار prop title
+    CLICK: function(event, dataArgs, componentArgs) {
+        console.log(dataArgs?.itemId);       // 42
+        console.log(dataArgs?.source);       // "list"
+        console.log(componentArgs?.TITLE);   // مقدار prop title
     }
+}
+```
+
+### 8.5. emit با CoreEvent — ارتباط بین Componentها
+
+```typescript
+// در Component A (Icon) — ارسال request به Component B (Structure)
+CLICK: function(event, dataArgs, componentArgs) {
+    CoreEvent.App.request(
+        CoreEvent.requestMap([
+            [TestStep.structure, { action: "toggle" }],
+        ]),
+        TestStep.icon,  // source
+    );
+}
+
+// در Component B (Structure) — emit handler
+{
+    unique: TestStep.structure,
+    emit: function(request) {
+        // this = Structure instance (auto-bind)
+        if (request?.payload?.action === "toggle") {
+            this.set("classList", ["bg-primary"]);
+        }
+        return { value: "ok", valid: true };
+    },
 }
 ```
 
@@ -350,31 +415,78 @@ this.executeMethod("onClick", event, { itemId: 42, source: "list" });
 
 ## 9. Anti-Patterns
 
-### ❌ Incorrect — عدم تطابق نام method
+### ❌ Incorrect — عدم تطابق نام method (semantic key)
 
 ```typescript
-// تعریف با نام "onClick"
+// تعریف با semantic key "CLICK"
 _COMPONENT_METHODS = Define_ComponentMethod<MyMethods, MyProps>({
-    onClick: { args: { title: { prop: "title", default: "" } } },
+    CLICK: { name: "fn_onClick", args: { TITLE: { prop: "title", default: "" } } },
 });
 
 // پاس با نام متفاوت
 comp.renderComponent(config, {
     handleClick: (event, dataArgs, componentArgs) => { ... },  // ❌ نام مطابقت ندارد
 });
-// destination هرگز set نمی‌شود → executeMethod("onClick") نتیجه null می‌دهد
+// destination هرگز set نمی‌شود → executeMethod("CLICK") نتیجه null می‌دهد
 ```
 
-### ✅ Correct — نام دقیقاً مطابقت داشته باشد
+### ✅ Correct — semantic key دقیقاً مطابقت داشته باشد
 
 ```typescript
+// تعریف با semantic key "CLICK"
 _COMPONENT_METHODS = Define_ComponentMethod<MyMethods, MyProps>({
-    onClick: { args: { title: { prop: "title", default: "" } } },
+    CLICK: { name: "fn_onClick", args: { TITLE: { prop: "title", default: "" } } },
 });
 
 comp.renderComponent(config, {
-    onClick: (event, dataArgs, componentArgs) => { ... },  // ✅
+    CLICK: function(event, dataArgs, componentArgs) { ... },  // ✅
 });
+```
+
+### ❌ Incorrect — runtime name در Public API
+
+```typescript
+// ❌ ممنوع — runtime name نباید در Public API نشت کند
+UiCategory.UI.Simples.Button(
+    { ... },
+    {
+        fn_onClick: (event, dataArgs, componentArgs) => { ... },  // ❌ implementation detail
+    }
+);
+```
+
+### ✅ Correct — semantic key در Public API
+
+```typescript
+// ✅ درست — semantic key
+UiCategory.UI.Simples.Button(
+    { ... },
+    {
+        CLICK: function(event, dataArgs, componentArgs) { ... },  // ✅ public API
+    }
+);
+```
+
+### ❌ Incorrect — arrow function در callback (اگر به this نیاز است)
+
+```typescript
+// ❌ ممنوع — arrow function با .call() نمی‌تواند this را تغییر دهد
+{
+    CLICK: (event, dataArgs, componentArgs) => {
+        this.set("prop_title", "new");  // ❌ this = lexical scope
+    }
+}
+```
+
+### ✅ Correct — function معمولی
+
+```typescript
+// ✅ درست — function معمولی
+{
+    CLICK: function(event, dataArgs, componentArgs) {
+        this.set("prop_title", "new");  // ✅ this = Component instance (auto-bind)
+    }
+}
 ```
 
 ### ❌ Incorrect — arg به prop ناموجود

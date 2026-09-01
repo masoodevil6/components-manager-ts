@@ -56,8 +56,11 @@ module_components/
 │   │   └── Type_ComponentSchema.ts
 │   ├── method/
 │   │   ├── Define_ComponentMethod.ts     # ابزار تعریف Methods
-│   │   ├── Interface_ComponentMethod.ts  # { args?, title?, description?, destination? }
-│   │   ├── Callback_ComponentMethod.ts   # (event, dataArgs, componentArgs) => void
+│   │   ├── Interface_ComponentMethod.ts  # { args?, dataArgs?, title?, description?, destination? }
+│   │   ├── Callback_ComponentMethod.ts   # (this: TThis, event, dataArgs, componentArgs) => void  (TThis = any)
+│   │   ├── MethodsComponentArgs.ts       # تایپ componentArgs استخراج‌شده از PATTERN
+│   │   ├── MethodsDataArgs.ts            # تایپ dataArgs استخراج‌شده از args
+│   │   ├── MethodsConfigType.ts          # MethodsConfigType<TThis> — تایپ کل شیء methods
 │   │   └── Type_ComponentMethod.ts
 │   └── template/
 │       ├── Define_ComponentTemplate.ts   # ابزار تعریف Templates
@@ -76,8 +79,8 @@ AbComponentConnector (abstract)
     ▲
     │ extends
     │
-ClComponentBase<TProp, TSchemas, TTemplate, TMethods>
-    │   renderComponent()           → main render entry
+ClComponentBase<TProp, TSchemas, TTemplate, TMethods>  (alias: CoreComponents.App)
+    │   renderComponent()           → main render entry (ثبت emit در CoreEvent.App.registerEmit)
     │   connectedCallback()         → subscribe directionRtl
     │   createComponentElement()    → build DOM from Schema
     │   executeSchemaPart()         → render a specific part
@@ -89,6 +92,8 @@ ClComponentBase<TProp, TSchemas, TTemplate, TMethods>
     │
 ComponentXxx (Implementation)
 ```
+
+> **Note (Plan 8.1.4):** Componentها از `CoreComponents.App` (یعنی `ClComponentBase`) ارث می‌برند، **نه** از `ComponentStructure`. ساختار `ComponentStructure` به‌عنوان فرزند توسط `ComponentStructureTrait` (در پوشه `traits/`) ساخته می‌شود. ۷ prop پایه از `ComponentStructureTrait.props` در `_COMPONENT_PATTERN` کامپوننت‌ها spread می‌شوند.
 
 ### ۲.۴. ماژولهای دیگر Core
 
@@ -145,6 +150,23 @@ export const Definition: ComponentDefinition = {
     category: UiCategory.Lists.UI.Basic.Definition
 }
 ```
+
+### ۳.۴. Category callable (Plan 8.1.4)
+
+`TCategoryComponentTotality<TInstance, TConfig, TMethods>` تایپ دسته‌بندی callable است. پارامتر `TInstance` اضافه شده تا callable به‌جای `HTMLElement`، **Component instance** برگرداند.
+
+```typescript
+// ✅ callable برمی‌گرداند Component instance
+const instance = UiCategory.Lists.UI.Basic.Component(config, methods);
+instance.set("title", "Hello");       // دسترسی به API کامپوننت
+instance.get("title");
+instance.executeMethod("onClick", event);
+
+// برای دسترسی به DOM:
+const el: HTMLElement = instance.getElement();
+```
+
+مصرف‌کننده می‌تواند مستقیماً `set`/`get`/`executeMethod` را روی instance صدا بزند — نیازی به دسترسی دستی به HTMLElement نیست.
 
 ---
 
@@ -224,7 +246,8 @@ ClComponentBase.renderComponent()
     │
     ├── connectedCallback()                    # subscribe directionRtl
     ├── #getReadyUserConfigAndDefaultConfig()  # merge config + defaults + templates → _COMPONENT_PROPS_BIND
-    ├── #getReadyComponentMethods()            # bind callbacks → _COMPONENT_METHODS.destination
+    ├── #getReadyComponentMethods()            # semantic key lookup مستقیم (double loop حذف شد) → _COMPONENT_METHODS.destination
+    ├── CoreEvent.App.registerEmit()           # ثبت emit → emit.bind(this) → this = Component instance
     └── createComponentElement()               # dispose old scope → new scope → executeSchemaPart(root)
             │
             ▼
@@ -326,3 +349,7 @@ import * as CoreEvent        from "@/core_event";          // module_event
 | Module index | `src/framework/module_core/index.ts` |
 | UI Definition | `src/framework/module_ui/module_components/lists/basic/component/Definition.ts` |
 | Implementation نمونه | `last/tools/components/ComponentButton.ts` |
+
+---
+
+*آخرین به‌روزرسانی: ۲۰۲۶-۰۹-۰۱ — Plan 8.1.4*

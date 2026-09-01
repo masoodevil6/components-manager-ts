@@ -12,7 +12,9 @@
 
 ## 1. Definition
 
-هر کامپوننت در این Framework کلاسی است که از `ClComponentBase` ارث‌بری می‌کند و چهار بخش تعریفی `_COMPONENT_*` را مقداردهی می‌کند. این چهار بخش به‌ترتیب ورودی‌ها، بخش‌های بصری، callbackها و variantهای کامپوننت را تعریف می‌کنند.
+هر کامپوننت در این Framework کلاسی است که از `ClComponentBase` (alias: `CoreComponents.App`) ارث‌بری می‌کند و چهار بخش تعریفی `_COMPONENT_*` را مقداردهی می‌کند. این چهار بخش به‌ترتیب ورودی‌ها، بخش‌های بصری، callbackها و variantهای کامپوننت را تعریف می‌کنند.
+
+> **Note (Plan 8.1.4):** Componentها از `CoreComponents.App` (یعنی `ClComponentBase`) ارث می‌برند، **نه** از `ComponentStructure`. `ComponentStructureTrait` در پوشه `traits/` قرار دارد و ۷ prop پایه آن (`ComponentStructureTrait.props`) در `_COMPONENT_PATTERN` کامپوننت‌ها spread می‌شوند. متد `renderContent` این Trait برای ساخت `ComponentStructure` به‌عنوان فرزند استفاده می‌شود.
 
 کلاس پایه در مسیر زیر قرار دارد:
 
@@ -93,6 +95,9 @@ _COMPONENT_TEMPLATES! : { [K in TemplateType<TTemplate>]?: TemplateInterface<TPr
 | `TTemplate` | — | تایپ کلیدهای templates |
 | `TMethods` | `extends Record<string, MethodCallback<any, any>>` | تایپ کلیدهای methods و signatureهای آنها |
 
+> **Plan 8.1.4:** `Callback_ComponentMethod` حالا `TThis` (با default `any`) دارد
+> که در `MethodsConfigType<TThis>` به Component instance متصل می‌شود.
+
 ---
 
 ## 4. Architecture
@@ -101,9 +106,11 @@ _COMPONENT_TEMPLATES! : { [K in TemplateType<TTemplate>]?: TemplateInterface<TPr
 
 ```
 AbComponentConnector (abstract)
-    └── ClComponentBase<TProp, TSchemas, TTemplate, TMethods>
+    └── ClComponentBase<TProp, TSchemas, TTemplate, TMethods>  (alias: CoreComponents.App)
             └── MyComponent (subclass)
 ```
+
+> **Note (Plan 8.1.4):** `ComponentStructureTrait` (در پوشه `traits/`) یک Trait جداگانه است که Componentها از آن ارث نمی‌برند. این Trait ۷ prop پایه را در `_COMPONENT_PATTERN` spread می‌کند و متد `renderContent` برای ساخت `ComponentStructure` به‌عنوان فرزند فراهم می‌کند.
 
 `AbComponentConnector` متد `renderManagerComponent` را به‌صورت abstract فراهم می‌کند که در صورت نبود `method` در یک schema part، به‌عنوان fallback رندر استفاده می‌شود:
 
@@ -114,10 +121,32 @@ renderManagerComponent(partName, attrsDefault, data, extra): CoreReactive.App {
 }
 ```
 
+### 4.1.1. الگوی Trait (Plan 8.1.4)
+
+Componentها از `CoreComponents.App` (ClComponentBase) ارث می‌برند، **نه** از `ComponentStructure`. `ComponentStructureTrait` در پوشه `traits/` قرار دارد و capabilityهای ساختار را به‌صورت Trait فراهم می‌کند:
+
+```
+AbComponentConnector (abstract)
+    └── ClComponentBase  (alias: CoreComponents.App)
+            └── ComponentButton (با Trait)
+                    ├── extends CoreComponents.App
+                    └── spreads ComponentStructureTrait.props into _COMPONENT_PATTERN
+```
+
+این الگو از "MegaComponent" anti-pattern جلوگیری می‌کند:
+- Componentها capability از Traitها می‌گیرند (نه ارث‌بری عمیق)
+- `ComponentStructure` به‌عنوان فرزند توسط متد `renderContent` (متد Trait) ساخته می‌شود
+- ۷ prop پایه از `ComponentStructureTrait.props` در `_COMPONENT_PATTERN` spread می‌شوند تا کاربر بتواند set کند
+
 ### 4.2. نمودار جریان رندر
 
 ```
-renderComponent(config, methods, events)
+renderComponent(config, methods, events, unique?, emit?)
+    │
+    ├── 0. ثبت emit در CoreEvent.App (Plan 8.1.4)
+    │       └── if (unique && emit):
+    │           CoreEvent.App.registerEmit(unique, emit.bind(this))
+    │           ← this در emit به Component instance اشاره می‌کند
     │
     ├── 1. connectedCallback()
     │       └── subscribe to directionRtl config
@@ -130,7 +159,9 @@ renderComponent(config, methods, events)
     │       └── wrap در Observable → ذخیره در _COMPONENT_PROPS_BIND
     │
     ├── 3. #getReadyComponentMethods(methods)
-    │       └── تطبیق کلیدها → تنظیم destination
+    │       └── برای هر semantic key در methods:
+    │           _COMPONENT_METHODS[semanticKey].destination = fn
+    │           ← Plan 8.1.4: double loop حذف، lookup مستقیم
     │
     ├── 4. createComponentElement()
     │       ├── dispose _renderScope قدیمی
@@ -198,10 +229,16 @@ constructor(componentName: string, elId: string | null) {
 نقطه ورود رندر:
 
 ```typescript
-renderComponent(config: TProp, methods: TMethods, events = null) {
+renderComponent(config: TProp, methods: TMethods, events = null, unique?: string, emit?: Function) {
+    // Plan 8.1.4: ثبت emit در CoreEvent.App
+    if (unique && emit) {
+        CoreEvent.App.registerEmit(unique, emit.bind(this));
+        // ← this در emit به Component instance اشاره می‌کند
+        // ← اگر مصرف‌کننده .bind(parentInstance) کرده، bind دوم تاثیری ندارد
+    }
     this.connectedCallback();
     this.#getReadyUserConfigAndDefaultConfig(config);
-    this.#getReadyComponentMethods(methods);
+    this.#getReadyComponentMethods(methods);  // semantic key lookup مستقیم (double loop حذف)
     this.createComponentElement();
     if (events) {
         Object.keys(events).forEach(key => {
@@ -210,6 +247,8 @@ renderComponent(config: TProp, methods: TMethods, events = null) {
     }
 }
 ```
+
+> **Note (Plan 8.1.4):** `emit` فقط با `request` صدا زده می‌شود (خودبه‌خود با کلیک صدا زده نمی‌شود). برای emit حتماً از `function` استفاده کنید — arrow function با `.call()` کار نمی‌کند.
 
 ### 6.3. connectedCallback (lines 101-112)
 
@@ -258,7 +297,7 @@ private createComponentElement() {
 
 | متد | امضا | توضیح |
 |:---|:---|:---|
-| `renderComponent` | `(config, methods, events?) => void` | نقطه ورود رندر |
+| `renderComponent` | `(config, methods, events?, unique?, emit?) => void` | نقطه ورود رندر (Plan 8.1.4: ثبت emit) |
 | `connectedCallback` | `() => void` | subscribe به directionRtl |
 | `executeSchemaPart` | `(partName: string, extra?: any) => CoreReactive.App \| null` | رندر یک schema part |
 | `getSchemaPropsInPart` | `(props: PropInterface[]) => Record<string, Observable>` | استخراج Observableهای props یک part |
@@ -428,3 +467,8 @@ comp.renderComponent(config, methods);
 | `src/framework/module_core/module_components/basic/class/ClComponentBase.ts` | 289-295 | `getScope` / `getPartId` |
 | `src/framework/module_core/module_components/basic/class/ClComponentBase.ts` | 301-333 | `executeMethod` |
 | `src/framework/module_core/module_components/basic/abstract/AbComponentConnector.ts` | 5-27 | کلاس پایه انتزاعی |
+| `traits/ComponentStructureTrait.ts` | — | Trait ساختار (۷ prop پایه + renderContent) |
+
+---
+
+*آخرین به‌روزرسانی: ۲۰۲۶-۰۹-۰۱ — Plan 8.1.4*

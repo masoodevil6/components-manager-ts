@@ -51,7 +51,12 @@
 
 ### In This Framework
 
-کلاسی در `module_core/module_components/basic/class/ClComponentBase.ts` که چهار Generic می‌گیرد (`TProp`, `TSchemas`, `TTemplate`, `TMethods`) و از `AbComponentConnector` ارث‌بری می‌کند. متدهای اصلی: `renderComponent`, `connectedCallback`, `createComponentElement`, `executeSchemaPart`, `set`, `get`, `getObservable`, `getScope`, `executeMethod`.
+کلاسی در `module_core/module_components/basic/class/ClComponentBase.ts` که چهار Generic می‌گیرد (`TProp`, `TSchemas`, `TTemplate`, `TMethods`) و از `AbComponentConnector` ارث‌بری می‌کند. متدهای اصلی: `renderComponent`, `connectedCallback`, `createComponentElement`, `executeSchemaPart`, `set`, `get`, `getObservable`, `getScope`, `executeMethod`. Alias: `CoreComponents.App`.
+
+> **Plan 8.1.4:**
+> - Componentها از `CoreComponents.App` (یعنی `ClComponentBase`) ارث می‌برند، **نه** از `ComponentStructure`.
+> - `renderComponent` حالا `emit` را در `CoreEvent.App.registerEmit` ثبت می‌کند (`emit.bind(this)` → this = Component instance).
+> - `ComponentStructureTrait` (در پوشه `traits/`) ۷ prop پایه را در `_COMPONENT_PATTERN` spread می‌کند و متد `renderContent` برای ساخت `ComponentStructure` به‌عنوان فرزند فراهم می‌کند.
 
 ### Not
 
@@ -146,7 +151,13 @@
 
 ### In This Framework
 
-فیلد `_COMPONENT_METHODS` در `ClComponentBase` — یک Record از `Interface_ComponentMethod` که با `Define_ComponentMethod` تعریف می‌شود. هر method شامل `args` (آرگومان‌هایی که به callback پاس داده می‌شوند)، `destination` (تابع callback که توسط کاربر set می‌شود)، `title`، `description` است. Callback امضا: `(event, dataArgs, componentArgs) => void`.
+فیلد `_COMPONENT_METHODS` در `ClComponentBase` — یک Record از `Interface_ComponentMethod` که با `Define_ComponentMethod` تعریف می‌شود. هر method شامل `args` (آرگومان‌های data که به callback پاس داده می‌شوند)، `dataArgs` (تایپ استخراج‌شده از args)، `destination` (تابع callback که توسط کاربر set می‌شود)، `title`، `description` است. Callback امضا: `(this: TThis, event, dataArgs, componentArgs) => void` — `TThis` پیش‌فرض `any` است و به Component instance اشاره می‌کند.
+
+> **Plan 8.1.4:**
+> - **Semantic keys** (مثل `CLICK`, `HOVER`) متعلق به **Public API** هستند — مصرف‌کننده با این کلیدها متصل می‌شود.
+> - **Runtime name** (مثل `fn_onClickIcon`) متعلق به **implementation** است — نام داخلی تابع.
+> - `#getReadyComponentMethods` حالا **semantic key lookup مستقیم** انجام می‌دهد (double loop حذف شده است).
+> - تایپ‌های کمکی: `MethodsComponentArgs` (componentArgs از PATTERN)، `MethodsDataArgs` (dataArgs از args)، `MethodsConfigType<TThis>` (کل شیء methods).
 
 ### Not
 
@@ -425,6 +436,59 @@
 
 ---
 
+## ComponentStructureTrait (Plan 8.1.4)
+
+### Definition
+
+یک Trait برای فراهم کردن capabilityهای ساختار (ComponentStructure) به کامپوننت‌ها بدون ارث‌بری عمیق.
+
+### In This Framework
+
+فایلی در پوشه `traits/` که ۷ prop پایه (`ComponentStructureTrait.props`) را فراهم می‌کند. این props در `_COMPONENT_PATTERN` کامپوننت‌ها spread می‌شوند. متد `renderContent` این Trait برای ساخت `ComponentStructure` به‌عنوان فرزند استفاده می‌شود. Componentها از `CoreComponents.App` (ClComponentBase) ارث می‌برند، نه از `ComponentStructure`.
+
+### Not
+
+- یک کلاس پایه نیست — یک Trait است.
+- Componentها از آن ارث نمی‌برند — props آن‌ها را spread می‌کنند.
+
+### Related
+
+`Component`, `ClComponentBase`, `ComponentStructure`, `Pattern`
+
+---
+
+## Category callable (Plan 8.1.4)
+
+### Definition
+
+الگوی callable در دسته‌بندی UI که به‌جای HTMLElement، Component instance برمی‌گرداند.
+
+### In This Framework
+
+تایپ `TCategoryComponentTotality<TInstance, TConfig, TMethods>` — پارامتر `TInstance` اضافه شده تا callable برمی‌گرداند Component instance. مصرف‌کننده می‌تواند مستقیماً `set`/`get`/`executeMethod` را روی instance صدا بزند. برای دسترسی به DOM از `instance.getElement()` استفاده می‌شود.
+
+### Related
+
+`Component`, `UI Definition`, `ClComponentBase`
+
+---
+
+## emit (Plan 8.1.4)
+
+### Definition
+
+تابعی برای ارسال رویداد به سیستم Event از طریق `request`.
+
+### In This Framework
+
+`ClComponentBase.renderComponent` حالا `emit` را در `CoreEvent.App.registerEmit` ثبت می‌کند. `emit.bind(this)` باعث می‌شود `this` در emit به Component instance اشاره کند. emit فقط با `request` صدا زده می‌شود (خودبه‌خود با کلیک صدا زده نمی‌شود). برای emit باید از `function` استفاده کرد — arrow function با `.call()` کار نمی‌کند. اگر مصرف‌کننده `.bind(parentInstance)` کرده، bind دوم تاثیری ندارد.
+
+### Related
+
+`Event`, `Request`, `Step`, `ClComponentBase`
+
+---
+
 ## Related Guides
 
 - [AI_GUIDE_RULES.md](./AI_GUIDE_RULES.md) — قوانین غیرقابل نقض Framework
@@ -447,3 +511,8 @@
 | `ClScope` | `src/framework/module_core/module_observable/class/ClScope.ts` |
 | `ClReactiveElement` | `src/framework/module_core/module_reactive/class/ClReactiveElement.ts` |
 | `ClEventDispatcher` | `src/framework/module_core/module_event/class/ClEventDispatcher.ts` |
+| `ComponentStructureTrait` | `traits/ComponentStructureTrait.ts` |
+
+---
+
+*آخرین به‌روزرسانی: ۲۰۲۶-۰۹-۰۱ — Plan 8.1.4*

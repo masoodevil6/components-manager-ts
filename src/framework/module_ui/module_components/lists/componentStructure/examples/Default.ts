@@ -1,31 +1,33 @@
-import {ComponentExampleDefinition} from "@/core_components";
+import {ComponentExample} from "@/core_components";
+import * as UiCategory  from "@/ui_categories";
+import {Keys}           from "../../../../module_categories/languages";
+// --------------------------------
 
 
 /**
  * Default Example برای ComponentStructure
  *
- * بر اساس پلن 6.1 (قرارداد سه‌آرگومانی):
- *   Example فقط Data است — props + methods + identity.
- *   رندر توسط ExampleRenderer انجام می‌شود:
- *     Example → new Component(props, methods, identity) → getElement()
+ * ساختار پایه بدون محتوا — فقط border + padding.
+ * برنامه‌نویس با خواندن این فایل می‌بیند:
+ *   - چه Componentی ساخته می‌شود (UiCategory.UI.Basic.ComponentStructure)
+ *   - چه propهایی پاس می‌شود (classList, prop_show, prop_structureClass)
+ *   - content خالی است (ساختار بدون فرزند)
  */
-export const DefaultExample: ComponentExampleDefinition = {
+export const DefaultExample: ComponentExample = {
 
-    id:          "component_structure_example_default",
+    id:          "structure_default",
 
-    name:        "Default Structure",
+    name:        Keys.category.components.basic.examples.default.name,
 
-    description: "Default ComponentStructure example — pure data, rendered via ExampleRenderer",
+    description: Keys.category.components.basic.examples.default.description,
 
-    config: {
-        classList:      [
-            "p-2",
-            "border",
-        ],
-        structureClass: ["bg-light", "rounded"],
-        structureStyles: {},
-    },
-
-    methods: {},
+    render: (): HTMLElement => UiCategory.UI.Basic.ComponentStructure(
+        {
+            classList:           ["p-3", "border", "rounded"],
+            prop_show:           true,
+            prop_structureClass: ["bg-light"],
+        },
+        {},
+    ).getElement() as HTMLElement,
 
 };

@@ -2,6 +2,10 @@
 
 > `TProp` , `TSchemas` , `TTemplate` , `TMethods`
 
+> **Note (Plan 8.1.4):** این proposal قدیمی است. الگوی فعلی به‌جای ارث‌بری از `ComponentStructure`
+> از `CoreComponents.App` (ClComponentBase) ارث‌بری می‌کند و از `ComponentStructureTrait` استفاده می‌کند.
+> برای الگوی به‌روز به `../component-create.md` مراجعه کنید.
+
 ---
 
 ## ۱. مقدمه — چرا این چهار پارامتر؟

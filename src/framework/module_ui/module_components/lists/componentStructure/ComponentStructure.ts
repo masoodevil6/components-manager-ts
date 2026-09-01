@@ -1,131 +1,100 @@
-import * as CoreReactive   from "@/core_reactive";
-import * as CoreObservable from "@/core_observable";
-import * as CoreConfigs    from "@/core_configs";
+﻿import * as CoreReactive     from "@/core_reactive";
+import * as CoreObservable   from "@/core_observable";
+import * as CoreConfigs      from "@/core_configs";
 // --------------------------------
-import {ComponentBase}     from "@/core_components";
-import type {
-    ComponentPropConfig,
-    ComponentSchemaConfig,
-    ComponentMethodConfig,
-    ComponentIdentity,
-}                          from "@/core_components";
+import {ComponentStructureBase}  from "./ComponentStructureBase";
+import {Schemas}                 from "./Schemas";
+// --------------------------------
+import {PropsType}           from "./Props";
+import {SchemasType}         from "./Schemas";
+import {MethodsType}         from "./Methods";
+import {ComponentIdentity}   from "@/core_components";
+// --------------------------------
+import {PartAttrDefault}     from "@/core_components";
 
 
 /**
- * ComponentStructureProps — Props اختصاصی ComponentStructure (آرگومان اول)
+ * ComponentStructure — کلاس نهایی (Concrete)
  *
- * ترکیبی از گزینه‌های ساختاری + propهای اختصاصی + Composition Point
+ * مسئولیت: پیاده‌سازی render برای Base Runtime مشترک تمام UI Componentها
+ *   - renderComponentSchema  → لایه خارجی <component-{name}> با RTL + classList + styles
+ *   - renderStructureSchema  → لایه داخلی <section> با show/hide + structureClass + structureStyles
+ *   - renderContentComponent → content تزریق‌شده (از _CONTENT_RENDERER یا super)
+ *   - renderManagerComponent → routing بر اساس partName
+ *   - static create()        → API راحت برای ساخت Component
  *
- * @example
- *   new ComponentStructure(
- *       {
- *           classList:  ["p-2", "border"],
- *           structureClass: ["bg-light", "rounded"],
- *           content:    () => ReactiveApp.button({children: ["Toggle"]}),
- *       },
- *       methods,
- *       identity,
- *   );
- */
-export type ComponentStructureProps = ComponentPropConfig & {
-
-    /** structureClass — کلاس‌های Reactive لایه Structure */
-    structureClass?:  string[] | CoreObservable.App<string[]>;
-
-    /** structureStyles — استایل‌های Reactive لایه Structure */
-    structureStyles?: Record<string, string> | CoreObservable.App<Record<string, string>>;
-
-    /** Composition Point — محتوای داخل Structure */
-    content?:         () => CoreReactive.App | CoreReactive.App[] | null;
-
-};
-
-
-/**
- * ComponentStructureSchema — Schema اختصاصی (جنریک دوم — فقط Metadata)
- */
-export type ComponentStructureSchema = ComponentSchemaConfig & {
-
-    /** Metadata بخش‌های Structure — برای Scope/مستندسازی */
-    sections?: Record<string, any>;
-
-};
-
-
-/**
- * ComponentStructureMethods — Methods اختصاصی (آرگومان دوم)
- */
-export type ComponentStructureMethods = ComponentMethodConfig & {
-
-    /** کال‌بک تغییر وضعیت نمایش (اختیاری) */
-    onShowChange?: (show: boolean) => void;
-
-};
-
-
-/**
- * ComponentStructure — Component عمومی برای ساخت یک Structure قابل استفاده
+ * اصل معماری (پلن ۵.۸):
+ *   Schema فقط تعریف می‌کند Part چیست — نه چگونه رندر شود.
+ *   Rendering در خود ComponentStructure قرار دارد (دسترسی مستقیم به this).
+ *   SchemaHandler جداگانه وجود ندارد — جلوی تبدیل شدن آن به renderManagerComponent جدید را می‌گیرد.
  *
- * بر اساس پلن 6.1 (قرارداد سه‌آرگومانی):
- *   - extends ComponentBase از Core (سه‌جنریکی)
- *   - constructor(props, methods, identity)
- *   - خودش State (prop observables) و Rendering خودش را دارد
- *   - content یک Composition Point است — نه Prop و نه Schema Handler
- *   - بدون SchemaHandler، بدون renderManagerComponent، بدون Routing
+ * جریان رندر:
+ *   executeSchemaPart("part-component")
+ *       → no handler, no method → renderManagerComponent(...)  [fallback]
+ *       → ComponentStructure.renderManagerComponent() override
+ *       → partName === "part-component" → this.renderComponentSchema(attrsDefault, data)
+ *           → children: [this.executeSchemaPart("part-component-structure")]
+ *               → renderManagerComponent() override
+ *               → partName === "part-component-structure" → this.renderStructureSchema(attrsDefault, data)
+ *                   → children: [this.renderContentComponent()]
+ *                       → ComponentButton.renderContentComponent() override
+ *                       → this.renderForm()  (مستقیم، بدون executeSchemaPart)
  *
- * @example
- *   const structure = new ComponentStructure(
- *       {classList: ["p-2", "border"], content: () => ReactiveApp.button({children: ["Toggle"]})},
- *       {},
- *       {events: {click: handler}},
- *   );
+ * الگوی ارث‌بری:
+ *   CoreComponents.App (ClComponentBase)
+ *       ▲
+ *       │ extends
+ *       │
+ *   ComponentStructureBase (abstract — config + identity)
+ *       ▲
+ *       │ extends
+ *       │
+ *   ComponentStructure (concrete — render + create)
  *
- *   document.body.append(structure.getElement()!);
+ * کامپوننت‌های فرزند (مثل ComponentButton):
+ *   ComponentButtonBase extends ComponentStructure  →  اضافه‌کردن config اختصاصی
+ *   ComponentButton      extends ComponentButtonBase →  override renderContentComponent + render اختصاصی
  */
 export class ComponentStructure<
-    TProp   extends ComponentStructureProps   = ComponentStructureProps,
-    TSchema extends ComponentStructureSchema  = ComponentStructureSchema,
-    TMethod extends ComponentStructureMethods = ComponentStructureMethods
-> extends ComponentBase<TProp, TSchema, TMethod> {
+    TProp extends Record<string, any>      = PropsType,
+    TSchemas                               = SchemasType,
+    TMethods extends Record<string, any>   = MethodsType,
+    TIdentity extends ComponentIdentity    = ComponentIdentity
+> extends ComponentStructureBase<
+    TProp,
+    TSchemas,
+    TMethods,
+    TIdentity
+> {
 
 
     /* ---------------------------------------------
-       State — observable های internal این Component
-       (دسترسی protected برای فرزندهایی که گسترش می‌دهند)
+       Rendering — COMPONENT (لایه خارجی)
+       <component-{name}> با RTL + classList + styles
+       children: STRUCTURE
     --------------------------------------------- */
-    protected readonly state = {
-
-        /** نمایش/عدم نمایش Structure */
-        show: new CoreObservable.App<boolean>(true),
-
-    };
-
-
-    /* ---------------------------------------------
-       render — ساخت مستقیم ReactiveElement بدون Schema
-       لایه خارجی: <component-structure> با RTL + classList + styles
-       لایه داخلی:  <section> با show/hide + structureClass + structureStyles
-    --------------------------------------------- */
-    protected render(): CoreReactive.App {
+    protected renderComponentSchema(
+        attrsDefault: PartAttrDefault,
+        data:         Record<string, CoreObservable.App<any>>,
+    ): CoreReactive.App {
 
         const rtl =
             CoreConfigs.Settings.DirectionRtl.observable();
 
         const classList =
-            this.bindProp("classList");
+            data?.classList ??
+            new CoreObservable.App([]);
 
         const styles =
-            this.bindProp("styles");
-
-        const structureClass =
-            this.bindProp("structureClass");
-
-        const structureStyles =
-            this.bindProp("structureStyles");
+            data?.styles ??
+            new CoreObservable.App({});
 
         return CoreReactive.App.component(
-            "structure",
+            this._COMPONENT_NAME,
             {
+                attrs: {
+                    ...attrsDefault,
+                },
                 classBind: [
                     classList,
                 ],
@@ -134,18 +103,8 @@ export class ComponentStructure<
                     styles:    styles,
                 },
                 children: [
-                    CoreReactive.App.part(
-                        "section",
-                        {
-                            classBind: [
-                                structureClass,
-                                this.state.show.mapBoolean("show", "d-none"),
-                            ],
-                            stylesBind: {
-                                structureStyles: structureStyles,
-                            },
-                            children: this.renderContent(),
-                        }
+                    this.executeSchemaPart(
+                        Schemas.STRUCTURE.part
                     ),
                 ],
             }
@@ -154,41 +113,130 @@ export class ComponentStructure<
 
 
     /* ---------------------------------------------
-       renderContent — اجرای Composition Point
+       Rendering — STRUCTURE (لایه داخلی)
+       <section> با show/hide + structureClass + structureStyles
+       children: renderContentComponent()
     --------------------------------------------- */
-    protected renderContent(): CoreReactive.App[] {
+    protected renderStructureSchema(
+        attrsDefault: PartAttrDefault,
+        data:         Record<string, CoreObservable.App<any>>,
+    ): CoreReactive.App {
 
-        const content = this.prop("content");
+        const prop_show =
+            data?.prop_show ??
+            new CoreObservable.App(true);
 
-        if (typeof content !== "function") {
-            return [];
-        }
+        const prop_structureClass =
+            data?.prop_structureClass ??
+            new CoreObservable.App([]);
 
-        const result = (content as ComponentStructureProps["content"])();
+        const prop_structureStyles =
+            data?.prop_structureStyles ??
+            new CoreObservable.App({});
 
-        if (!result) {
-            return [];
-        }
-
-        return Array.isArray(result)
-            ? result
-            : [result];
+        return CoreReactive.App.part(
+            "section",
+            {
+                classBind: [
+                    prop_structureClass,
+                    prop_show.mapBoolean("show", "d-none"),
+                ],
+                attrs: {
+                    ...attrsDefault,
+                },
+                stylesBind: {
+                    prop_structureStyles,
+                },
+                children: [
+                    this.renderContentComponent(),
+                ],
+            }
+        );
     }
 
 
     /* ---------------------------------------------
-       show / hide — Runtime Methods (State API)
+       renderContentComponent — override
+       اگر _CONTENT_RENDERER set شده باشد، از آن استفاده می‌کند.
+       در غیر این صورت به super (متد پایه) برمی‌گرداند.
     --------------------------------------------- */
-    show(): void {
-        this.state.show.set(true);
+    override renderContentComponent(): CoreReactive.App {
+        if (this._CONTENT_RENDERER) {
+            return this._CONTENT_RENDERER();
+        }
+        return super.renderContentComponent();
     }
 
-    hide(): void {
-        this.state.show.set(false);
+
+    /* ---------------------------------------------
+       Static Factory — create()
+       API راحت برای ساخت Component — مثل CoreReactive.App.section({...})
+
+       الگو:
+           ComponentStructure.create(
+               { classList, prop_show, content: () => ... },
+               { CLICK: { name: "fn_onClick" } },
+               { unique, emit, events },
+           )
+
+       خروجی: CoreReactive.App
+       (از API رسمی getReactiveElement() استفاده می‌کند — نه getElement)
+
+       نکته: مصرف‌کنندگان قبلی که HTMLElement نیاز داشتند باید از
+       create(...).getElement() استفاده کنند.
+    --------------------------------------------- */
+    static create(
+        config:  Record<string, any> & { content?: () => CoreReactive.App },
+        methods: Record<string, any> = {},
+        identity: { unique?: any; emit?: any; events?: Record<string, any> } = {},
+    ): CoreReactive.App {
+
+        const { content, ...props } = config;
+
+        const instance = new ComponentStructure(
+            "structure",
+            null,
+            identity as any,
+        );
+
+        if (typeof content === "function") {
+            instance._CONTENT_RENDERER = content;
+        }
+
+        instance.renderComponent(
+            props as any,
+            methods as any,
+        );
+
+        return instance.getReactiveElement() as CoreReactive.App;
     }
 
-    toggle(): void {
-        this.state.show.set(!this.state.show.get());
+
+    /* ---------------------------------------------
+       renderManagerComponent — Routing
+       executeSchemaPart وقتی handler/method ندارد، این متد را صدا می‌زند.
+       ComponentStructure آن را override می‌کند و بر اساس partName
+       به renderComponentSchema یا renderStructureSchema routing می‌کند.
+       فرزندها می‌توانند override کنند و partهای اختصاصی اضافه کنند.
+    --------------------------------------------- */
+    override renderManagerComponent(
+        partName:     string,
+        attrsDefault: PartAttrDefault,
+        data:         Record<string, CoreObservable.App<any>>,
+        extra:        any,
+    ): CoreReactive.App {
+
+        switch (partName) {
+
+            case Schemas.COMPONENT.part:
+                return this.renderComponentSchema(attrsDefault, data);
+
+            case Schemas.STRUCTURE.part:
+                return this.renderStructureSchema(attrsDefault, data);
+
+            default:
+                return super.renderManagerComponent(partName, attrsDefault, data, extra);
+        }
     }
 
 

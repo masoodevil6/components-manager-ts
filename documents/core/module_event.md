@@ -38,7 +38,7 @@ module_event/
 | متد/ویژگی | توضیحات |
 | :--- | :--- |
 | `register(step)` | ثبت یک Step در رجیستری (خودکار در factory `Step`). |
-| `registerEmit(step, handler)` | ثبت emit handler یک المان متصل. |
+| `registerEmit(step, handler)` | ثبت emit handler یک المان متصل. `ClComponentBase.renderComponent` این متد را به‌صورت خودکار با `emit.bind(this)` فراخوانی می‌کند تا `this` در emit به Component instance اشاره کند. |
 | `request(map, source?)` | اجرای requestMap و بازگرداندن `TResponseMap`. |
 | `monitor(callback)` | اتصال تابع مانیتورینگ برای دریافت رکوردهای Trace. |
 | `getTrace()` | خواندن بافر Trace فعلی (آخرین ۱۰۰ رکورد). |
@@ -111,8 +111,6 @@ Request #100  (یک event.request)
 | `target` | `TStepRef?` | Step هدف این Dispatch. |
 | `source` | `TStepRef?` | Step آغازگر Request (برای trace). |
 | `payload` | `Record<string, any>` | داده Request. |
-
-> اگر `requestId` از بیرون داده نشود (مثل factory ‏`Request()`)، خودکار تولید می‌شود — حالت مستقل از Dispatcher.
 
 ### `ClResponse`
 
@@ -356,63 +354,6 @@ CoreEvent.App.dispose(User.Account.Simple);
 
 ---
 
-## 🔗 یکپارچگی با CoreReactive و Componentها
-
-### گزینه‌های `unique` و `emit` در CoreReactive
-
-هر المان CoreReactive (`ClReactiveElement`) دو گزینه اختیاری مرتبط با CoreEvent دارد:
-
-| گزینه | نوع | توضیحات |
-| :--- | :--- | :--- |
-| `unique` | `CoreEvent.TStepRef` | اتصال اعلانی المان به یک Step (رشته ممنوع — هویت فقط با identity). |
-| `emit` | `CoreEvent.TEmitHandler` | Request Handler این المان — دریافت Request از CoreEvents و بازگرداندن Response. |
-
-```typescript
-CoreReactive.App.input({
-    unique: User.Account.Email1,   // اتصال به Step — بدون رشته
-    emit: (request) => {
-        // این المان «دریافت‌کننده» Request است (بخش ۱۴ سند Clarification)
-        return { value: request.payload, valid: true };
-    }
-});
-```
-
-### چرخه حیات (Lifecycle)
-
-| فاز | محل در `ClReactiveElement` | عملیات |
-| :--- | :--- | :--- |
-| ساخت | انتهای constructor | اگر `unique && emit` → `CoreEvent.App.registerEmit(unique, emit)` |
-| حذف | متد `remove()` | اگر `unique && emit` → `CoreEvent.App.dispose(unique)` (جلوگیری از memory leak) |
-
-### تزریق `event` helper به on handlerها
-
-پارامتر دوم همه `on` handlerها، helper با متد `request` است — المان با این متد «آغازگر» Request می‌شود و خودش به‌صورت `source` در Trace ثبت می‌گردد:
-
-```typescript
-CoreReactive.App.button({
-    on: {
-        click: (e, event) => {
-            event.request(
-                CoreEvent.requestMap([[User.Account.Email1, { action: "validate" }]]),
-                User.Account.Submit   // source — Step آغازگر (اختیاری)
-            );
-        }
-    }
-});
-```
-
-> دو نقش متمایز: المانِ دارای `emit` **دریافت‌کننده** Request است؛ المانی که در `on` خود `event.request(...)` صدا می‌زند **آغازگر** است. یک المان می‌تواند هر دو نقش را داشته باشد.
-
-### یکپارچگی با module_components (لایه UI)
-
-لایه Component همان قرارداد را مستقیماً expose می‌کند:
-
-- `ClComponentBase.renderComponent(config, methods, events, unique?, emit?)` — دو پارامتر آخر همان `TStepRef` و `TEmitHandler` هستند.
-- `TComponentIdentity.unique: CoreEvent.TStepRef | null` — هویت Instance در درخت Workflow.
-- تعریف مثال‌ها (`Interface_ComponentExampleDefinition`) نیز `unique` و `emit` را می‌پذیرد.
-
----
-
 ## 🛠 مفاهیم کلیدی (Key Concepts)
 
 ### Symbol Identity
@@ -429,6 +370,14 @@ Dispatcher یک بافر حلقوی از آخرین ۱۰۰ رکورد dispatch �
 
 ### Async-Ready Contract
 `TEmitHandler` خروجی `any` دارد — هم sync و هم async پشتیبانی می‌شود. در فاز فعلی Runtime sync است، اما Contract نیازی به تغییر ندارد برای پشتیبانی async در آینده.
+
+### Emit Auto-Bind (Plan 8.1.4)
+`ClComponentBase.renderComponent` هنگام رندر، `emit` را در `CoreEvent.App.registerEmit` ثبت می‌کند. نکات کلیدی:
+
+- **`emit.bind(this)`** → `this` در emit به **Component instance** اشاره می‌کند (نه HTMLElement).
+- اگر مصرف‌کننده قبلاً `.bind(parentInstance)` کرده باشد، bind دوم **تاثیری ندارد** (bind اول اولویت دارد).
+- **arrow function** با `.call()` کار نمی‌کند — برای emit باید از `function` استفاده شود.
+- emit **فقط با `request`** صدا زده می‌شود — خودبه‌خود با کلیک یا رویداد DOM صدا زده نمی‌شود.
 
 ---
 
@@ -462,3 +411,4 @@ Dispatcher یک بافر حلقوی از آخرین ۱۰۰ رکورد dispatch �
 
 ---
 *مستندات بر اساس کدهای ماژول `module_core/module_event` تولید شده است.*
+*آخرین به‌روزرسانی: ۲۰۲۶-۰۹-۰۱ — Plan 8.1.4*

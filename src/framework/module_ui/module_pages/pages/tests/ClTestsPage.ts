@@ -1,123 +1,102 @@
-import { ITemplate }          from "@/core_route";
+﻿import { ITemplate } from "@/core_route";
 import { App as ReactiveApp } from "@/core_reactive";
-import * as UiComponents      from "@/ui_components";
+import * as CoreComponents from "@/core_components";
 ///------------------------------
 
+
+/**
+ * ClTestsPage — صفحه تست Componentها
+ *
+ * این صفحه به‌صورت خودکار تمام Componentهای ثبت‌شده در ComponentManager را
+ * کشف می‌کند و Exampleهای آن‌ها را نمایش می‌دهد.
+ *
+ * هر Component جدید که در ComponentManager ثبت شود و Example داشته باشد،
+ * خودش در این صفحه ظاهر می‌شود — بدون نیاز به کد دستی.
+ *
+ * جریان:
+ *   ComponentManager.list()
+ *       → برای هر entry: ComponentManager.getExamples(id)
+ *       → برای هر example: example.render()  →  HTMLElement
+ *       → نمایش در section اختصاصی آن Component
+ */
 export class ClTestsPage implements ITemplate {
 
-    render(query?: Record<string,string> ,extra?: Record<string, any>): HTMLElement {
+    render(query?: Record<string, string>, extra?: Record<string, any>): HTMLElement {
 
-        /* -------------------------------------------------------------
-           پلن 6.1 — قرارداد سه‌آرگومانی ComponentBase (Core)
-           constructor(props, methods, identity)
+        const sections: any[] = [];
 
-           معیار موفقیت (بخش ۵ پلن 6.1):
-             Componentهای Structure/Button/Collapse با قرارداد جدید
-             بدون کرش کار می‌کنند.
-        ------------------------------------------------------------- */
 
-        // ---- 1) ComponentStructure — Structure عمومی با Composition Point ----
-        const structure =
-            new UiComponents.Lists.ComponentStructure.Component(
-                {
-                    classList:      ["border", "p-2", "mb-3"],
-                    structureClass: ["bg-light", "rounded"],
-                    content: () => {
-                        return ReactiveApp.button({
-                            className: ["btn", "btn-outline-secondary"],
-                            children:  ["Structure content button"],
-                        });
-                    },
-                },
-                {}, // methods
+        /* ------------------------------------------------
+           کشف خودکار تمام Componentهای ثبت‌شده
+        ------------------------------------------------ */
+        const entries = CoreComponents.ComponentManager.list();
+
+        for (const entry of entries) {
+
+            const examples = CoreComponents.ComponentManager.getExamples(entry.definition.id);
+
+            // Componentهایی که Example ندارند رد شوند
+            if (examples.length === 0) continue;
+
+
+            /* ------------------------------------------------
+               Section اختصاصی هر Component
+               - عنوان: نام Component
+               - محتوا: تمام Exampleهای آن Component
+            ------------------------------------------------ */
+            const exampleCards: any[] = examples.map(example =>
+                ReactiveApp.section({
+                    className: ["border", "rounded", "p-2", "d-flex", "flex-column", "align-items-center", "gap-2"],
+                    children: [
+                        `<h6 class="small text-muted mb-0">${example.id}</h6>`,
+                        example.render(),   // ← مستقیم HTMLElement
+                    ],
+                }),
             );
 
-        // ---- 2) ComponentButton — Component مستقل ----
-        const button =
-            new UiComponents.Lists.ComponentButton.Component(
-                {
-                    btnTitle: "Save",
-                    variant:  "primary",
-                },
-                {}, // methods
-                {
-                    events: {
-                        click: () => {
-                            console.log("[ComponentButton] clicked");
-                        },
-                    },
-                },
+            sections.push(
+                ReactiveApp.section({
+                    className: ["col-12", "p-2"],
+                    children: [
+                        `<h5>${entry.definition.name}</h5>`,
+                        `<hr/>`,
+                        ReactiveApp.section({
+                            className: ["d-flex", "flex-wrap", "gap-3", "p-2"],
+                            children: exampleCards,
+                        }),
+                    ],
+                }),
             );
-
-        // ---- 3) ComponentCollapse — معیار موفقیت (State + Method + Composition) ----
-        const collapse =
-            new UiComponents.Lists.ComponentCollapse.Component(
-                {
-                    headerTitle: "Collapse — click header",
-                    classList:   ["mb-3"],
-                    content: () => {
-                        return ReactiveApp.button({
-                            className: ["btn", "btn-outline-primary"],
-                            children:  ["Toggle (from content)"],
-                            on: {
-                                click: () => {
-                                    collapse.toggle();
-                                    console.log("[ComponentCollapse] open =", collapse.isOpen());
-                                },
-                            },
-                        });
-                    },
-                },
-                {
-                    onToggle: (open: boolean) => {
-                        console.log("[ComponentCollapse] onToggle =", open);
-                    },
-                },
-            );
-
-        // ---- 4) Toggle بیرونی برای state بیرونی Collapse ----
-        const externalToggleButton = ReactiveApp.button({
-            className: ["btn", "btn-outline-warning", "m-2"],
-            children:  ["External toggle collapse"],
-            on: {
-                click: () => {
-                    collapse.toggle();
-                },
-            },
-        });
-
-        const content = ReactiveApp.section(
-            {
-                className: [
-                    "row" , "p-3" , "m-0"
-                ],
-                children:[
-                    externalToggleButton,
-                    button.getElement(),
-                    structure.getElement(),
-                    collapse.getElement(),
-                ]
-            }
-        )
+        }
 
 
+        /* ------------------------------------------------
+           صفحه نهایی
+        ------------------------------------------------ */
+        return ReactiveApp.section({
+            className: ["row", "p-0", "m-0"],
+            children: [
 
-        return content.getElement();
+                ReactiveApp.section({
+                    className: ["col-12", "p-2", "m-2"],
+                    children: [
+                        `<h3>Component Tests</h3>`,
+                        `<hr/>`,
+                    ],
+                }),
+
+                ...sections,
+
+            ],
+        }).getElement();
     }
-
 
 
 
     onLoad(pageElement: HTMLElement): void {
-
-
-
+        console.log("[TestsPage] onLoad — page element:", pageElement);
     }
 
 
 
-
-
 }
-
-///Set-ExecutionPolicy RemoteSigned

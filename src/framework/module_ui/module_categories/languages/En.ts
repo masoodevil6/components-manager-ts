@@ -646,6 +646,36 @@ export const En =
             "Inner structure layer with show/hide and structure classes and styles"
         ],
 
+        /// Components -> Basic -> Examples -> default
+        [
+            Keys.category.components.basic.examples.default.name,
+            "Default"
+        ],
+        [
+            Keys.category.components.basic.examples.default.description,
+            "Basic structure without content"
+        ],
+
+        /// Components -> Basic -> Examples -> withContent
+        [
+            Keys.category.components.basic.examples.withContent.name,
+            "With Content"
+        ],
+        [
+            Keys.category.components.basic.examples.withContent.description,
+            "Structure with injected inner content"
+        ],
+
+        /// Components -> Basic -> Examples -> hidden
+        [
+            Keys.category.components.basic.examples.hidden.name,
+            "Hidden"
+        ],
+        [
+            Keys.category.components.basic.examples.hidden.description,
+            "Structure with prop_show = false (hidden)"
+        ],
+
         /// Components -> Contents
         [
             Keys.category.components.contents.name,

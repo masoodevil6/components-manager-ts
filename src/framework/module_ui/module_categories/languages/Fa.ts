@@ -653,6 +653,36 @@ export const Fa =
             "لایه داخلی ساختار با نمایش/مخفی و کلاس‌ها و استایل‌های ساختار"
         ],
 
+        /// Components -> Basic -> Examples -> default
+        [
+            Keys.category.components.basic.examples.default.name,
+            "پیش‌فرض"
+        ],
+        [
+            Keys.category.components.basic.examples.default.description,
+            "ساختار پایه بدون محتوا"
+        ],
+
+        /// Components -> Basic -> Examples -> withContent
+        [
+            Keys.category.components.basic.examples.withContent.name,
+            "با محتوا"
+        ],
+        [
+            Keys.category.components.basic.examples.withContent.description,
+            "ساختار با محتوای داخلی تزریق‌شده"
+        ],
+
+        /// Components -> Basic -> Examples -> hidden
+        [
+            Keys.category.components.basic.examples.hidden.name,
+            "مخفی"
+        ],
+        [
+            Keys.category.components.basic.examples.hidden.description,
+            "ساختار با prop_show = false (مخفی)"
+        ],
+
         /// Components -> Contents
         [
             Keys.category.components.contents.name,

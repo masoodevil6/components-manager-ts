@@ -72,8 +72,19 @@ export class ClComponentBase<
 
     renderComponent(config: TProp , methods: TMethods , events = null , unique: CoreEvent.TStepRef | null = null , emit: CoreEvent.TEmitHandler | null = null) {
 
-        this._COMPONENT_UNIQUE = unique;
-        this._COMPONENT_EMIT = emit;
+        // اگر unique/emit پاس داده شد، override کن؛ وگرنه از مقادیر قبلی استفاده کن
+        // (برای Componentهایی که identity را در constructor set می‌کنند)
+        this._COMPONENT_UNIQUE = unique   ?? this._COMPONENT_UNIQUE;
+        this._COMPONENT_EMIT   = emit     ?? this._COMPONENT_EMIT;
+
+        // ثبت emit handler در CoreEvent dispatcher
+        // auto-bind(this) → this در emit به این Component instance اشاره می‌کند
+        // نکته: اگر مصرف‌کننده قبلاً .bind(parentInstance) کرده،
+        // bind دوم اینجا تاثیری ندارد — bind اول باقی می‌ماند.
+        // پس مصرف‌کننده می‌تواند با .bind(this) به Parent Component دسترسی داشته باشد.
+        if (this._COMPONENT_UNIQUE && this._COMPONENT_EMIT) {
+            CoreEvent.App.registerEmit(this._COMPONENT_UNIQUE, this._COMPONENT_EMIT.bind(this));
+        }
 
         this.connectedCallback();
 
@@ -168,12 +179,12 @@ export class ClComponentBase<
     // GET Ready ==> _COMPONENT_METHODS
     //--------------------------------------------------
     #getReadyComponentMethods(methods: Record<string, MethodCallback<any , any>>) {
-        for (const keyMethod in this._COMPONENT_METHODS){
-            for (const methodName in  methods){
-                const fn = methods[keyMethod];
-                if (keyMethod == methodName && fn != null && typeof fn === "function"){
-                    const itemMethod: MethodInterface<TProp> = this._COMPONENT_METHODS[keyMethod];
-                    itemMethod.destination = fn;
+        for (const semanticKey in methods) {
+            const fn = methods[semanticKey];
+            if (fn != null && typeof fn === "function") {
+                const methodMeta = this._COMPONENT_METHODS[semanticKey];
+                if (methodMeta) {
+                    methodMeta.destination = fn;
                 }
             }
         }

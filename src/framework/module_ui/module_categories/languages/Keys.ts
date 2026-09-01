@@ -369,6 +369,21 @@ export const Keys = {
                         description: CreateTranslationKey() ,
                     },
                 },
+
+                examples: {
+                    default: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    withContent: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    hidden: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                },
             },
 
             /// Contents
@@ -393,6 +408,49 @@ export const Keys = {
             simples: {
                 name:        CreateTranslationKey() ,
                 description: CreateTranslationKey() ,
+            },
+
+            /// Icon
+            icon: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+
+                props: {
+                    icon: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    iconTitle: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    iconClass: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    iconStyles: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                },
+
+                schemas: {
+                    icon: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                },
+
+                examples: {
+                    default: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    clickable: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                },
             },
 
         }

@@ -1,7 +1,8 @@
-export type {TComponentDefinition  as ComponentDefinition}  from "./TComponentDefinition"
-export type {TComponentPropEntry   as ComponentPropEntry}   from "./TComponentPropEntry"
-export type {TComponentProps       as ComponentProps}       from "./TComponentProps"
-export type {TComponentSchemaEntry as ComponentSchemaEntry} from "./TComponentSchemaEntry"
-export type {TComponentSchemas     as ComponentSchemas}     from "./TComponentSchemas"
-export type {ComponentExampleDefinition}                    from "./TComponentExampleDefinition"
-export type {ComponentIdentity}                             from "./TComponentIdentity"
+// Re-export از Core — تمام Types در module_core تعریف شده‌اند
+export type {ComponentDefinition}    from "@/core_components";
+export type {ComponentPropEntry}     from "@/core_components";
+export type {ComponentProps}         from "@/core_components";
+export type {ComponentSchemaEntry}   from "@/core_components";
+export type {ComponentSchemas}       from "@/core_components";
+export type {ComponentIdentity}      from "@/core_components";
+export type {ComponentExample} from "@/core_components";

@@ -1,28 +1,33 @@
-import {ComponentExampleDefinition} from "@/core_components";
+import {ComponentExample} from "@/core_components";
 // --------------------------------
-import {DefaultExample}              from "./Default";
+import {DefaultExample}     from "./Default";
+import {WithContentExample} from "./WithContent";
+import {HiddenExample}      from "./Hidden";
 
 
 /**
  * Examples Registry برای ComponentStructure
  *
  * تمام Exampleهای ComponentStructure از این نقطه قابل دسترسی هستند.
- * ComponentManager آینده می‌تواند این Registry را بخواند و
- * Exampleها را بدون instantiate کردن Component نمایش دهد.
+ * ComponentManager می‌تواند این Registry را بخواند و
+ * Exampleها را با example.render() نمایش دهد.
  *
  * @example
- *   Examples.DEFAULT                    // → Example Definition
- *   ExampleRenderer.render(Component, Examples.DEFAULT)  // → HTMLElement
+ *   Examples.DEFAULT.render()           // → HTMLElement
+ *   Examples.WITH_CONTENT.render()      // → HTMLElement
+ *   Examples.HIDDEN.render()            // → HTMLElement
  */
 export const Examples = {
 
-    DEFAULT: DefaultExample,
+    DEFAULT:      DefaultExample,
+    WITH_CONTENT: WithContentExample,
+    HIDDEN:       HiddenExample,
 
-} satisfies Record<string, ComponentExampleDefinition>;
+} satisfies Record<string, ComponentExample>;
 
 
 /**
  * Type تمام Exampleهای ComponentStructure
- * برای type-safety در ComponentManager آینده
+ * برای type-safety در ComponentManager
  */
 export type ComponentStructureExamplesType = typeof Examples;

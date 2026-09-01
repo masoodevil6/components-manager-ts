@@ -1,11 +1,3 @@
-/**
- * Basic — زیرساخت مشترک Componentها (UI)
- *
- *   manager  → ComponentManager (Registry — بدون Runtime)
- *   types    → تایپ‌های Metadata
- *
- * نکته (پلن 6.1): Base Componentها به Core منتقل شدند —
- *   ComponentBase → @/core_components (module_core/module_components)
- */
-export * as Manager from "./manager";
-export * as Types   from "./types";
+// Re-export از Core — تمام Types و Manager در module_core تعریف شده‌اند
+export * as Types   from  "./types";
+export * as Manager from  "@/core_components";

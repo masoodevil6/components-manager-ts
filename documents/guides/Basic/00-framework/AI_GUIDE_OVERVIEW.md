@@ -41,7 +41,9 @@
 
 ### ۳.۳. Component Lifecycle
 
-هر کامپوننت چرخه حیات مشخصی دارد: `constructor` → `renderComponent` → `connectedCallback` → آماده‌سازی Props → آماده‌سازی Methods → `createComponentElement` → ثبت Events.
+هر کامپوننت چرخه حیات مشخصی دارد: `constructor` → `renderComponent` → `connectedCallback` → آماده‌سازی Props → آماده‌سازی Methods → ثبت `emit` در `CoreEvent.App.registerEmit` → `createComponentElement` → ثبت Events.
+
+> **Note (Plan 8.1.4):** `renderComponent` حالا `emit` را در `CoreEvent.App.registerEmit` ثبت می‌کند. `emit.bind(this)` باعث می‌شود `this` در emit به Component instance اشاره کند. emit فقط با request صدا زده می‌شود (خودبه‌خود با کلیک صدا زده نمی‌شود).
 
 > برای تعریف دقیق اصطلاحات به [AI_GUIDE_TERMINOLOGY.md](./AI_GUIDE_TERMINOLOGY.md) مراجعه کنید.
 
@@ -94,8 +96,9 @@ Implementation (ComponentButton, ComponentInput, ...)
 
 ### MUST
 
-- هر Component از `ClComponentBase` ارث‌بری کند → [R-ARCH-01](./AI_GUIDE_RULES.md#r-arch-01-component-inheritance)
+- هر Component از `ClComponentBase` (alias: `CoreComponents.App`) ارث‌بری کند → [R-ARCH-01](./AI_GUIDE_RULES.md#r-arch-01-component-inheritance)
 - چهار بخش `_COMPONENT_*` تعریف شوند → [R-ARCH-02](./AI_GUIDE_RULES.md#r-arch-02-four-component-sections)
+- ۷ prop پایه از `ComponentStructureTrait.props` در `_COMPONENT_PATTERN` spread شوند (Plan 8.1.4)
 - Scope قبل از re-render dispose شود → [R-SCOPE-01](./AI_GUIDE_RULES.md#r-scope-01-dispose-before-re-render)
 
 ### MUST NOT
@@ -167,3 +170,7 @@ Implementation (ComponentButton, ComponentInput, ...)
 | کلاس پایه | `src/framework/module_core/module_components/basic/class/ClComponentBase.ts` |
 | ساختار ماژولها | `src/framework/module_core/index.ts` |
 | کامپوننت نمونه | `last/tools/components/ComponentButton.ts` |
+
+---
+
+*آخرین به‌روزرسانی: ۲۰۲۶-۰۹-۰۱ — Plan 8.1.4*

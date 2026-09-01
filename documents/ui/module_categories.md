@@ -274,10 +274,18 @@ Icons
 import { UI } from "@/framework/ui";
 
 // استفاده از یک کامپوننت از دسته ورودی‌ها
+// callable برمی‌گرداند: Component instance (نه HTMLElement)
 const myInput = new UI.Lists.Inputs.InputText({
     label: "نام کاربری",
     placeholder: "نام خود را وارد کنید..."
 });
+
+// مصرف‌کننده می‌تواند set/get/executeMethod صدا بزند:
+myInput.set("label", "نام جدید");
+const currentLabel = myInput.get("label");
+
+// برای دسترسی به DOM:
+const el: HTMLElement = myInput.getElement();
 ```
 
 ### ۲. پیمایش در گروه‌های مختلف
@@ -290,6 +298,23 @@ const availableBasics = UI.Lists.Basic.allComponents;
 
 ---
 
+## 🔗 Category Callable (Plan 8.1.4)
+
+هر دسته‌بندی کامپوننت از تایپ **`TCategoryComponentTotality<TInstance, TConfig, TMethods>`** استفاده می‌کند:
+
+| پارامتر تایپ | توضیحات |
+| :--- | :--- |
+| `TInstance` | نوع Component instance که callable برمی‌گرداند (جدید در Plan 8.1.4). |
+| `TConfig` | تایپ پیکربندی (config) کامپوننت. |
+| `TMethods` | تایپ متدهای کامپوننت. |
+
+**رفتار callable:**
+- فراخوانی دسته (مثلاً `new UI.Lists.Inputs.InputText({...})`) برمی‌گرداند **Component instance** — نه `HTMLElement`.
+- مصرف‌کننده می‌تواند مستقیماً `set(prop, value)`, `get(prop)`, و `executeMethod(...)` را روی خروجی صدا بزند.
+- برای دسترسی به المان DOM: `instance.getElement()`.
+
+---
+
 ## 🛠 ساختار داخلی (Internal Architecture)
 
 * **Logical Grouping:** این ماژول فاقد منطق محاسباتی سنگین است و تمرکز اصلی آن بر روی **Namespace Management** برای جلوگیری از آشفتگی در سطح `UI` است.
@@ -297,3 +322,4 @@ const availableBasics = UI.Lists.Basic.allComponents;
 
 ---
 *مستندات توسط Mindbase تولید شده است.*
+*آخرین به‌روزرسانی: ۲۰۲۶-۰۹-۰۱ — Plan 8.1.4*

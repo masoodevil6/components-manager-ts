@@ -1,16 +1,5 @@
-/// Class — Legacy
+/// Class
 export {ClComponentBase as App} from "./basic/class/ClComponentBase"
-
-/// Class — ComponentBase (پلن 6.1 — قرارداد واحد Base)
-export {ComponentBase}                                     from "./basic/class/ComponentBase"
-export type {ComponentPropConfig}                          from "./basic/class/ComponentPropConfig"
-export type {ComponentSchemaConfig}                        from "./basic/class/ComponentSchemaConfig"
-export type {ComponentMethodConfig}                        from "./basic/class/ComponentMethodConfig"
-export type {ComponentIdentity}                            from "./basic/class/ComponentIdentity"
-export type {ComponentPropConfig   as PropConfig}   from "./basic/class/ComponentPropConfig"
-export type {ComponentSchemaConfig as SchemaConfig} from "./basic/class/ComponentSchemaConfig"
-export type {ComponentMethodConfig as MethodConfig} from "./basic/class/ComponentMethodConfig"
-export type {ComponentIdentity     as Identity}     from "./basic/class/ComponentIdentity"
 
 /// Abstract
 export {AbComponentConnector as ComponentConnector} from "./basic/abstract/AbComponentConnector"
@@ -20,6 +9,11 @@ export {MtSetValue as SetValue} from "./basic/methods/MtSetValue"
 
 /// Types
 export type {TComponentDefinition  as ComponentDefinition}  from "./basic/types/TComponentDefinition"
+export type {TComponentPropEntry   as ComponentPropEntry}   from "./basic/types/TComponentPropEntry"
+export type {TComponentProps       as ComponentProps}       from "./basic/types/TComponentProps"
+export type {TComponentSchemaEntry as ComponentSchemaEntry} from "./basic/types/TComponentSchemaEntry"
+export type {TComponentSchemas     as ComponentSchemas}     from "./basic/types/TComponentSchemas"
+export type {ComponentIdentity}                              from "./basic/types/TComponentIdentity"
 export type {TExtractName          as ExtractName}          from "./basic/types/TExtractName"
 export type {TExtractNameAndValue  as ExtractNameAndValue}  from "./basic/types/TExtractNameAndValue"
 export type {TTypeOf               as TypeOf}               from "./basic/types/TTypeOf"
@@ -48,10 +42,12 @@ export type {Callback_ComponentMethod  as MethodCallback}  from "./tools/method/
 export      {Define_ComponentMethod    as DefineMethod}    from "./tools/method/Define_ComponentMethod"
 
 /// Tools -> Example
-export      {ExampleRenderer}                          from "./tools/example/ExampleRenderer"
-export type {ExampleRendererComponentConstructor}      from "./tools/example/ExampleRenderer"
-export type {ExampleRendererComponent}                 from "./tools/example/ExampleRenderer"
-export type {Interface_ComponentExampleDefinition as ComponentExampleDefinition} from "./tools/example/Interface_ComponentExampleDefinition"
+export type {Interface_ComponentExample as ComponentExample} from "./tools/example/Interface_ComponentExample"
+
+/// Manager
+export      {ComponentManager}            from "./basic/manager/ComponentManager"
+export type {ComponentRegistryEntry}      from "./basic/manager/ComponentManager"
+export type {ComponentConstructor}        from "./basic/manager/ComponentManager"
 
 /// Namespaces (backward compatibility)
 export * as Basic from "./basic"

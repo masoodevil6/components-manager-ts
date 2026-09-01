@@ -1,37 +1,49 @@
-import * as UICategories                from "@/ui_categories"
+﻿import * as UICategories                from "@/ui_categories"
 import * as UIComponents               from "@/ui_components"
 import {Keys}                          from "../../../languages"
 
 
 /**
  * ComponentStructure — به عنوان یک component قابل instantiate در category basic ثبت می‌شود
+ * قابل دسترسی از طریق: UiCategory.UI.Basic.ComponentStructure(config, methods, identity)
  *
- * پلن 5.11 — Componentهای جدید مستقل:
- *   ComponentStructure  → Structure عمومی + Composition Point
- *   ComponentButton     → دکمه مستقل
- *   ComponentCollapse   → آکاردئون (State validation)
+ * نکته: callable برمی‌گرداند ComponentStructure instance (نه HTMLElement)
+ *   — consumer می‌تواند set/get/executeMethod را صدا بزند
+ *   — برای افزودن به DOM: instance.getElement()
  */
-export const ComponentStructureTotality = UICategories.CreateCategoryComponent(
-    UIComponents.Lists.ComponentStructure.Definition,
-    UIComponents.Lists.ComponentStructure.Component as any
-);
 
-export const ComponentButtonTotality = UICategories.CreateCategoryComponent(
-    {
-        id:       "component_button",
-        name:     "componentButton",
-        version:  "v1.0.0",
+const ComponentStructureCallable = (
+    config?:   Record<string, any>,
+    methods?:  Record<string, any>,
+    identity?: {
+        unique?: any;
+        emit?:   any;
+        events?: Record<string, any>;
     },
-    UIComponents.Lists.ComponentButton.Component as any
-);
+): UIComponents.Lists.ComponentStructure.Component => {
+    const { content, ...props } = config ?? {};
 
-export const ComponentCollapseTotality = UICategories.CreateCategoryComponent(
-    {
-        id:       "component_collapse",
-        name:     "componentCollapse",
-        version:  "v1.0.0",
-    },
-    UIComponents.Lists.ComponentCollapse.Component as any
+    const instance = new UIComponents.Lists.ComponentStructure.Component(
+        "structure",
+        null,
+        identity as any,
+    );
+
+    if (typeof content === "function") {
+        instance._CONTENT_RENDERER = content;
+    }
+
+    instance.renderComponent(
+        props as any,
+        methods as any,
+    );
+
+    return instance;
+};
+
+export const ComponentStructureTotality = Object.assign(
+    ComponentStructureCallable,
+    { info: UIComponents.Lists.ComponentStructure.Definition }
 );
 
 
@@ -41,8 +53,6 @@ export const Definition : UICategories.TCategoryComponentDefinition = {
     description: Keys.category.components.basic.description,
 
     components: [
-        ComponentStructureTotality,
-        ComponentButtonTotality,
-        ComponentCollapseTotality,
+        ComponentStructureTotality
     ]
 }

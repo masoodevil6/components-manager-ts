@@ -1,0 +1,258 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 980" dir="rtl" font-family="Segoe UI, IRANSans, Tahoma, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f0f4ff"/>
+      <stop offset="100%" stop-color="#f9fafb"/>
+    </linearGradient>
+    <linearGradient id="rootGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="plan815Grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
+    </linearGradient>
+    <linearGradient id="compGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/>
+      <stop offset="100%" stop-color="#5eead4"/>
+    </linearGradient>
+    <linearGradient id="callbackGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#fbbf24"/>
+    </linearGradient>
+    <linearGradient id="eventGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#dc2626"/>
+      <stop offset="100%" stop-color="#f87171"/>
+    </linearGradient>
+    <linearGradient id="docGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#60a5fa"/>
+    </linearGradient>
+    <linearGradient id="goalGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.1"/>
+    </filter>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-opacity="0.06"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="980" fill="url(#bg)"/>
+
+  <!-- ===== ROOT ===== -->
+  <rect x="280" y="20" width="400" height="50" rx="14" fill="url(#rootGrad)" filter="url(#shadow)"/>
+  <text x="480" y="52" text-anchor="middle" fill="#fff" font-size="16" font-weight="700">گزارش کار کامپوننت‌ها — ۹/۱/۲۶ (گزارش دوم)</text>
+
+  <!-- Root to 5 branches -->
+  <path d="M 480 70 L 480 90 L 100 90 L 100 110" fill="none" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 480 70 L 480 90 L 290 90 L 290 110" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 480 70 L 480 90 L 480 110" fill="none" stroke="#d97706" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 480 70 L 480 90 L 670 90 L 670 110" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 480 70 L 480 90 L 860 90 L 860 110" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- ===== PLAN 8.1.5 BRANCH ===== -->
+  <rect x="20" y="110" width="160" height="42" rx="12" fill="url(#plan815Grad)" filter="url(#shadow)"/>
+  <text x="100" y="137" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">پلن ۸.۱.۵ — Example System</text>
+
+  <line x1="100" y1="152" x2="100" y2="470" stroke="#c4b5fd" stroke-width="2" stroke-linecap="round"/>
+
+  <g font-size="11" font-weight="600">
+    <path d="M 100 170 L 60 170 L 60 180" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="10" y="180" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="100" y="201" text-anchor="middle" fill="#15803d">✅ ComponentExample با render()</text>
+
+    <path d="M 100 222 L 60 222 L 60 232" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="10" y="232" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="100" y="253" text-anchor="middle" fill="#15803d">✅ حذف ExampleRenderer</text>
+
+    <path d="M 100 274 L 60 274 L 60 284" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="10" y="284" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="100" y="305" text-anchor="middle" fill="#15803d">✅ ComponentManager به‌روز</text>
+
+    <path d="M 100 326 L 60 326 L 60 336" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="10" y="336" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="100" y="357" text-anchor="middle" fill="#15803d">✅ حذف componentStructure/examples</text>
+
+    <path d="M 100 378 L 60 378 L 60 388" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="10" y="388" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="100" y="409" text-anchor="middle" fill="#15803d">✅ بازنویسی Exampleهای Icon</text>
+
+    <path d="M 100 430 L 60 430 L 60 440" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="10" y="440" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="100" y="461" text-anchor="middle" fill="#15803d">✅ TestsPage کشف خودکار</text>
+  </g>
+
+  <!-- ===== COMPONENTS BRANCH ===== -->
+  <rect x="210" y="110" width="160" height="42" rx="12" fill="url(#compGrad)" filter="url(#shadow)"/>
+  <text x="290" y="137" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">ساخت کامپوننت‌ها</text>
+
+  <line x1="290" y1="152" x2="290" y2="600" stroke="#5eead4" stroke-width="2" stroke-linecap="round"/>
+
+  <g font-size="11" font-weight="600">
+    <!-- ComponentStructure -->
+    <path d="M 290 170 L 250 170 L 250 180" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+    <rect x="200" y="180" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="290" y="201" text-anchor="middle" fill="#15803d">✅ ComponentStructure ایجاد</text>
+
+    <path d="M 290 222 L 250 222 L 250 232" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+    <rect x="200" y="232" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="290" y="253" text-anchor="middle" fill="#15803d">✅ ComponentStructureBase (abstract)</text>
+
+    <path d="M 290 274 L 250 274 L 250 284" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+    <rect x="200" y="284" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="290" y="305" text-anchor="middle" fill="#15803d">✅ Base/Concrete Split الگو</text>
+
+    <path d="M 290 326 L 250 326 L 250 336" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+    <rect x="200" y="336" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="290" y="357" text-anchor="middle" fill="#15803d">✅ ۳ Example: Default/Content/Hidden</text>
+
+    <!-- ComponentIcon -->
+    <path d="M 290 378 L 250 378 L 250 388" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+    <rect x="200" y="388" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="290" y="409" text-anchor="middle" fill="#15803d">✅ ComponentIcon ایجاد</text>
+
+    <path d="M 290 430 L 250 430 L 250 440" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+    <rect x="200" y="440" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="290" y="461" text-anchor="middle" fill="#15803d">✅ ComponentIconBase (abstract)</text>
+
+    <path d="M 290 482 L 250 482 L 250 492" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+    <rect x="200" y="492" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="290" y="513" text-anchor="middle" fill="#15803d">✅ ۲ Example: Default/Clickable</text>
+
+    <path d="M 290 534 L 250 534 L 250 544" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+    <rect x="200" y="544" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="290" y="565" text-anchor="middle" fill="#15803d">✅ ثبت در ComponentManager</text>
+
+    <path d="M 290 586 L 250 586 L 250 596" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+    <rect x="200" y="596" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="290" y="617" text-anchor="middle" fill="#15803d">✅ ثبت در Category System</text>
+  </g>
+
+  <!-- ===== CALLBACKS BRANCH ===== -->
+  <rect x="400" y="110" width="160" height="42" rx="12" fill="url(#callbackGrad)" filter="url(#shadow)"/>
+  <text x="480" y="137" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Callbackهای کامپوننت</text>
+
+  <line x1="480" y1="152" x2="480" y2="470" stroke="#fcd34d" stroke-width="2" stroke-linecap="round"/>
+
+  <g font-size="11" font-weight="600">
+    <path d="M 480 180 L 440 180 L 440 190" fill="none" stroke="#fcd34d" stroke-width="1.5"/>
+    <rect x="390" y="190" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="480" y="211" text-anchor="middle" fill="#15803d">✅ Methods با args + dataArgs</text>
+
+    <path d="M 480 232 L 440 232 L 440 242" fill="none" stroke="#fcd34d" stroke-width="1.5"/>
+    <rect x="390" y="242" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="480" y="263" text-anchor="middle" fill="#15803d">✅ MethodsConfigType&lt;TThis&gt;</text>
+
+    <path d="M 480 284 L 440 284 L 440 294" fill="none" stroke="#fcd34d" stroke-width="1.5"/>
+    <rect x="390" y="294" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="480" y="315" text-anchor="middle" fill="#15803d">✅ this: TThis (function نه arrow)</text>
+
+    <path d="M 480 336 L 440 336 L 440 346" fill="none" stroke="#fcd34d" stroke-width="1.5"/>
+    <rect x="390" y="346" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="480" y="367" text-anchor="middle" fill="#15803d">✅ Semantic Keys (CLICK/HOVER)</text>
+
+    <path d="M 480 388 L 440 388 L 440 398" fill="none" stroke="#fcd34d" stroke-width="1.5"/>
+    <rect x="390" y="398" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="480" y="419" text-anchor="middle" fill="#15803d">✅ executeMethod routing</text>
+
+    <path d="M 480 440 L 440 440 L 440 450" fill="none" stroke="#fcd34d" stroke-width="1.5"/>
+    <rect x="390" y="450" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="480" y="471" text-anchor="middle" fill="#15803d">✅ Clickable Example با CLICK واقعی</text>
+  </g>
+
+  <!-- ===== COREEVENT BRANCH ===== -->
+  <rect x="590" y="110" width="160" height="42" rx="12" fill="url(#eventGrad)" filter="url(#shadow)"/>
+  <text x="670" y="137" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">CoreEvent در کامپوننت</text>
+
+  <line x1="670" y1="152" x2="670" y2="470" stroke="#fca5a5" stroke-width="2" stroke-linecap="round"/>
+
+  <g font-size="11" font-weight="600">
+    <path d="M 670 180 L 710 180 L 710 190" fill="none" stroke="#fca5a5" stroke-width="1.5"/>
+    <rect x="620" y="190" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="710" y="211" text-anchor="middle" fill="#15803d">✅ Step Node (Workflow داخلی)</text>
+
+    <path d="M 670 232 L 710 232 L 710 242" fill="none" stroke="#fca5a5" stroke-width="1.5"/>
+    <rect x="620" y="242" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="710" y="263" text-anchor="middle" fill="#15803d">✅ _COMPONENT_STEP field</text>
+
+    <path d="M 670 284 L 710 284 L 710 294" fill="none" stroke="#fca5a5" stroke-width="1.5"/>
+    <rect x="620" y="294" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="710" y="315" text-anchor="middle" fill="#15803d">✅ Identity (unique/emit/events)</text>
+
+    <path d="M 670 336 L 710 336 L 710 346" fill="none" stroke="#fca5a5" stroke-width="1.5"/>
+    <rect x="620" y="346" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="710" y="367" text-anchor="middle" fill="#15803d">✅ TestsPage با تست واقعی</text>
+
+    <path d="M 670 388 L 710 388 L 710 398" fill="none" stroke="#fca5a5" stroke-width="1.5"/>
+    <rect x="620" y="398" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="710" y="419" text-anchor="middle" fill="#15803d">✅ Constructor با step param</text>
+
+    <path d="M 670 440 L 710 440 L 710 450" fill="none" stroke="#fca5a5" stroke-width="1.5"/>
+    <rect x="620" y="450" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="710" y="471" text-anchor="middle" fill="#15803d">✅ emit با function (auto-bind this)</text>
+  </g>
+
+  <!-- ===== DOCS BRANCH ===== -->
+  <rect x="780" y="110" width="160" height="42" rx="12" fill="url(#docGrad)" filter="url(#shadow)"/>
+  <text x="860" y="137" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">مستندات</text>
+
+  <line x1="860" y1="152" x2="860" y2="470" stroke="#93c5fd" stroke-width="2" stroke-linecap="round"/>
+
+  <g font-size="11" font-weight="600">
+    <path d="M 860 180 L 900 180 L 900 190" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
+    <rect x="810" y="190" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="900" y="211" text-anchor="middle" fill="#15803d">✅ Guide به‌روزرسانی ۸.۱.۵</text>
+
+    <path d="M 860 232 L 900 232 L 900 242" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
+    <rect x="810" y="242" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="900" y="263" text-anchor="middle" fill="#15803d">✅ الگوی Example با render()</text>
+
+    <path d="M 860 284 L 900 284 L 900 294" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
+    <rect x="810" y="294" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="900" y="315" text-anchor="middle" fill="#15803d">✅ Base/Concrete Split مستند</text>
+
+    <path d="M 860 336 L 900 336 L 900 346" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
+    <rect x="810" y="346" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="900" y="367" text-anchor="middle" fill="#15803d">✅ TestsPage Section جدید</text>
+
+    <path d="M 860 388 L 900 388 L 900 398" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
+    <rect x="810" y="398" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="900" y="419" text-anchor="middle" fill="#15803d">✅ Anti-Patterns جدید</text>
+
+    <path d="M 860 440 L 900 440 L 900 450" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
+    <rect x="810" y="450" width="180" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="900" y="471" text-anchor="middle" fill="#15803d">✅ چک‌لیست به‌روزرسانی</text>
+  </g>
+
+  <!-- ===== STATS BOX ===== -->
+  <rect x="40" y="660" width="880" height="80" rx="14" fill="#fff" stroke="#e5e7eb" stroke-width="1.5" filter="url(#softShadow)"/>
+  <text x="480" y="688" text-anchor="middle" fill="#1e3a8a" font-size="14" font-weight="700">📊 آمار کلی</text>
+  <text x="160" y="715" text-anchor="middle" fill="#374151" font-size="12" font-weight="600">۲ کامپوننت ایجاد شد</text>
+  <text x="380" y="715" text-anchor="middle" fill="#374151" font-size="12" font-weight="600">۵ Example ایجاد شد</text>
+  <text x="600" y="715" text-anchor="middle" fill="#374151" font-size="12" font-weight="600">۲ Base کلاس ایجاد شد</text>
+  <text x="800" y="715" text-anchor="middle" fill="#374151" font-size="12" font-weight="600">Vite Build ✅</text>
+
+  <!-- ===== GOAL BOX ===== -->
+  <rect x="120" y="770" width="720" height="140" rx="16" fill="url(#goalGrad)" filter="url(#shadow)"/>
+  <text x="480" y="802" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">🎯 هدف‌های بعدی</text>
+  <text x="480" y="830" text-anchor="middle" fill="#bfdbfe" font-size="13" font-weight="600">۱. ساخت ComponentMessages</text>
+  <text x="480" y="852" text-anchor="middle" fill="#dbeafe" font-size="11">پیام‌های سیستمی (success/error/warning/info) با Step + Props + Schemas + Methods</text>
+  <text x="480" y="876" text-anchor="middle" fill="#bfdbfe" font-size="13" font-weight="600">۲. ساخت ComponentButton</text>
+  <text x="480" y="898" text-anchor="middle" fill="#dbeafe" font-size="11">دکمه با CLICK/HOVER/BLUR + آیکون + type (button/submit/reset)</text>
+
+  <!-- ===== LEGEND ===== -->
+  <g font-size="10" fill="#6b7280">
+    <rect x="40" y="940" width="14" height="14" rx="3" fill="#dcfce7" stroke="#16a34a" stroke-width="1"/>
+    <text x="60" y="951">تکمیل‌شده</text>
+    <rect x="140" y="940" width="14" height="14" rx="3" fill="#fef3c7" stroke="#d97706" stroke-width="1"/>
+    <text x="160" y="951">در حال توسعه</text>
+    <rect x="250" y="940" width="14" height="14" rx="3" fill="#fee2e2" stroke="#dc2626" stroke-width="1" stroke-dasharray="3,2"/>
+    <text x="270" y="951">مراحل اولیه</text>
+    <rect x="370" y="940" width="14" height="14" rx="3" fill="#ede9fe" stroke="#7c3aed" stroke-width="1"/>
+    <text x="390" y="951">پلن ۸.۱.۵</text>
+  </g>
+</svg>
