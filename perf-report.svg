@@ -1,0 +1,598 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="3128" font-family="monospace" style="background:#1a1a2e">
+  <line x1="400" y1="80" x2="400" y2="3118" stroke="#252535" stroke-width="1"/>
+  <text x="403" y="3126" fill="#555" font-size="10">0ms</text>
+  <line x1="515.3081656484145" y1="80" x2="515.3081656484145" y2="3118" stroke="#252535" stroke-width="1"/>
+  <text x="518.3081656484145" y="3126" fill="#555" font-size="10">10ms</text>
+  <line x1="400" y1="80" x2="400" y2="3118" stroke="#444" stroke-width="1.5"/>
+  <text x="40" y="35" fill="#e0e0e0" font-size="20" font-weight="bold">Performance Report</text>
+  <text x="40" y="58" fill="#888" font-size="12">2026-09-07 12:57:17 — 18 targets</text>
+  <line x1="40" y1="75" x2="1260" y2="75" stroke="#333" stroke-width="1"/>
+  <text x="40" y="110" fill="#7ec8e3" font-size="16" font-weight="bold">Pages</text>
+  <line x1="40" y1="118" x2="1260" y2="118" stroke="#333" stroke-width="1"/>
+  <text x="40" y="160" fill="#e0e0e0" font-size="13" font-weight="bold">HomePage</text>
+  <text x="392" y="176" fill="#888" font-size="10" text-anchor="end">median</text>
+  <line x1="400" y1="172" x2="403.70946368891435" y2="172" stroke="#4ecca3" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="403.70946368891435" cy="172" r="4" fill="#4ecca3"/>
+  <text x="411.70946368891435" y="176" fill="#4ecca3" font-size="11">0.32 ms</text>
+  <text x="392" y="198" fill="#888" font-size="10" text-anchor="end">p95</text>
+  <line x1="400" y1="194" x2="406.94962314358173" y2="194" stroke="#e8a838" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="406.94962314358173" cy="194" r="4" fill="#e8a838"/>
+  <text x="414.94962314358173" y="198" fill="#e8a838" font-size="11">0.60 ms</text>
+  <text x="392" y="220" fill="#888" font-size="10" text-anchor="end">max</text>
+  <line x1="400" y1="216" x2="414.8955088385352" y2="216" stroke="#e85d75" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="414.8955088385352" cy="216" r="4" fill="#e85d75"/>
+  <text x="422.8955088385352" y="220" fill="#e85d75" font-size="11">1.29 ms</text>
+  <text x="392" y="242" fill="#888" font-size="10" text-anchor="end">min</text>
+  <line x1="400" y1="238" x2="403" y2="238" stroke="#6ba3e8" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="403" cy="238" r="4" fill="#6ba3e8"/>
+  <text x="411" y="242" fill="#6ba3e8" font-size="11">0.20 ms</text>
+  <text x="400" y="266" fill="#666" font-size="10">renderExecutionMs: 0.53 ms  |  onLoadExecutionMs: 0.03 ms  |  domElementCount: 3.00 count  |  componentCount: unsupported  |  memoryHeapDeltaMB: +0.01 MB</text>
+  <rect x="1130" y="172" width="22" height="14" fill="#4ecca3" rx="2" opacity="0.85"/>
+  <rect x="1155" y="172" width="22" height="14" fill="#4ecca3" rx="2" opacity="0.85"/>
+  <rect x="1180" y="172" width="22" height="14" fill="#4ecca3" rx="2" opacity="0.85"/>
+  <rect x="1205" y="172" width="22" height="14" fill="#4ecca3" rx="2" opacity="0.85"/>
+  <rect x="1230" y="172" width="22" height="14" fill="#4ecca3" rx="2" opacity="0.85"/>
+  <text x="1130" y="200" fill="#4ecca3" font-size="11" font-weight="bold">excellent</text>
+  <text x="1130" y="216" fill="#555" font-size="10">no baseline</text>
+  <text x="40" y="300" fill="#e0e0e0" font-size="13" font-weight="bold">IconPage</text>
+  <text x="392" y="316" fill="#888" font-size="10" text-anchor="end">median</text>
+  <line x1="400" y1="312" x2="753.2263865349173" y2="312" stroke="#4ecca3" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="753.2263865349173" cy="312" r="4" fill="#4ecca3"/>
+  <text x="761.2263865349173" y="316" fill="#4ecca3" font-size="11">30.63 ms</text>
+  <text x="392" y="338" fill="#888" font-size="10" text-anchor="end">p95</text>
+  <line x1="400" y1="334" x2="921.7913581105827" y2="334" stroke="#e8a838" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="921.7913581105827" cy="334" r="4" fill="#e8a838"/>
+  <text x="929.7913581105827" y="338" fill="#e8a838" font-size="11">45.25 ms</text>
+  <text x="392" y="360" fill="#888" font-size="10" text-anchor="end">max</text>
+  <line x1="400" y1="356" x2="1030" y2="356" stroke="#e85d75" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="1030" cy="356" r="4" fill="#e85d75"/>
+  <text x="1038" y="360" fill="#e85d75" font-size="11">54.64 ms</text>
+  <text x="392" y="382" fill="#888" font-size="10" text-anchor="end">min</text>
+  <line x1="400" y1="378" x2="681.2054828117826" y2="378" stroke="#6ba3e8" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="681.2054828117826" cy="378" r="4" fill="#6ba3e8"/>
+  <text x="689.2054828117826" y="382" fill="#6ba3e8" font-size="11">24.39 ms</text>
+  <text x="400" y="406" fill="#666" font-size="10">renderExecutionMs: 28.73 ms  |  onLoadExecutionMs: 0.05 ms  |  domElementCount: 980.00 count  |  componentCount: unsupported  |  memoryHeapDeltaMB: +8.67 MB</text>
+  <rect x="1130" y="312" width="22" height="14" fill="#e8a838" rx="2" opacity="0.85"/>
+  <rect x="1155" y="312" width="22" height="14" fill="#e8a838" rx="2" opacity="0.85"/>
+  <rect x="1180" y="312" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <rect x="1205" y="312" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <rect x="1230" y="312" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <text x="1130" y="340" fill="#e8a838" font-size="11" font-weight="bold">bad</text>
+  <text x="1130" y="356" fill="#555" font-size="10">no baseline</text>
+  <text x="40" y="440" fill="#e0e0e0" font-size="13" font-weight="bold">TestsPage</text>
+  <text x="392" y="456" fill="#888" font-size="10" text-anchor="end">median</text>
+  <line x1="400" y1="452" x2="770.7151760188137" y2="452" stroke="#4ecca3" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="770.7151760188137" cy="452" r="4" fill="#4ecca3"/>
+  <text x="778.7151760188137" y="456" fill="#4ecca3" font-size="11">32.15 ms</text>
+  <text x="392" y="478" fill="#888" font-size="10" text-anchor="end">p95</text>
+  <line x1="400" y1="474" x2="957.4584799089007" y2="474" stroke="#e8a838" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="957.4584799089007" cy="474" r="4" fill="#e8a838"/>
+  <text x="965.4584799089007" y="478" fill="#e8a838" font-size="11">48.35 ms</text>
+  <text x="392" y="500" fill="#888" font-size="10" text-anchor="end">max</text>
+  <line x1="400" y1="496" x2="986.1160183175044" y2="496" stroke="#e85d75" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="986.1160183175044" cy="496" r="4" fill="#e85d75"/>
+  <text x="994.1160183175044" y="500" fill="#e85d75" font-size="11">50.83 ms</text>
+  <text x="392" y="522" fill="#888" font-size="10" text-anchor="end">min</text>
+  <line x1="400" y1="518" x2="668.6853221856692" y2="518" stroke="#6ba3e8" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="668.6853221856692" cy="518" r="4" fill="#6ba3e8"/>
+  <text x="676.6853221856692" y="522" fill="#6ba3e8" font-size="11">23.30 ms</text>
+  <text x="400" y="546" fill="#666" font-size="10">renderExecutionMs: 30.99 ms  |  onLoadExecutionMs: 0.83 ms  |  domElementCount: 199.00 count  |  componentCount: unsupported  |  memoryHeapDeltaMB: +7.90 MB</text>
+  <rect x="1130" y="452" width="22" height="14" fill="#e8a838" rx="2" opacity="0.85"/>
+  <rect x="1155" y="452" width="22" height="14" fill="#e8a838" rx="2" opacity="0.85"/>
+  <rect x="1180" y="452" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <rect x="1205" y="452" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <rect x="1230" y="452" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <text x="1130" y="480" fill="#e8a838" font-size="11" font-weight="bold">bad</text>
+  <text x="1130" y="496" fill="#555" font-size="10">no baseline</text>
+  <text x="40" y="566" fill="#7ec8e3" font-size="16" font-weight="bold">Components</text>
+  <line x1="40" y1="574" x2="1260" y2="574" stroke="#333" stroke-width="1"/>
+  <text x="40" y="616" fill="#e0e0e0" font-size="13" font-weight="bold">componentBorder/border_default</text>
+  <text x="392" y="632" fill="#888" font-size="10" text-anchor="end">median</text>
+  <line x1="400" y1="628" x2="413.3463436329618" y2="628" stroke="#4ecca3" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="413.3463436329618" cy="628" r="4" fill="#4ecca3"/>
+  <text x="421.3463436329618" y="632" fill="#4ecca3" font-size="11">1.16 ms</text>
+  <text x="392" y="654" fill="#888" font-size="10" text-anchor="end">p95</text>
+  <line x1="400" y1="650" x2="423.852647146016" y2="650" stroke="#e8a838" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="423.852647146016" cy="650" r="4" fill="#e8a838"/>
+  <text x="431.852647146016" y="654" fill="#e8a838" font-size="11">2.07 ms</text>
+  <text x="392" y="676" fill="#888" font-size="10" text-anchor="end">max</text>
+  <line x1="400" y1="672" x2="455.7261302946093" y2="672" stroke="#e85d75" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="455.7261302946093" cy="672" r="4" fill="#e85d75"/>
+  <text x="463.7261302946093" y="676" fill="#e85d75" font-size="11">4.83 ms</text>
+  <text x="392" y="698" fill="#888" font-size="10" text-anchor="end">min</text>
+  <line x1="400" y1="694" x2="409.54059762577225" y2="694" stroke="#6ba3e8" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="409.54059762577225" cy="694" r="4" fill="#6ba3e8"/>
+  <text x="417.54059762577225" y="698" fill="#6ba3e8" font-size="11">0.83 ms</text>
+  <text x="400" y="722" fill="#666" font-size="10">domElementCount: 3.00 count  |  memoryHeapDeltaMB: +0.24 MB</text>
+  <rect x="1130" y="628" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1155" y="628" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1180" y="628" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1205" y="628" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <rect x="1230" y="628" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <text x="1130" y="656" fill="#e8d838" font-size="11" font-weight="bold">good</text>
+  <text x="1130" y="672" fill="#555" font-size="10">no baseline</text>
+  <text x="40" y="756" fill="#e0e0e0" font-size="13" font-weight="bold">componentBorder/border_arrow</text>
+  <text x="392" y="772" fill="#888" font-size="10" text-anchor="end">median</text>
+  <line x1="400" y1="768" x2="412.2664826617191" y2="768" stroke="#4ecca3" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="412.2664826617191" cy="768" r="4" fill="#4ecca3"/>
+  <text x="420.2664826617191" y="772" fill="#4ecca3" font-size="11">1.06 ms</text>
+  <text x="392" y="794" fill="#888" font-size="10" text-anchor="end">p95</text>
+  <line x1="400" y1="790" x2="417.15324272186257" y2="790" stroke="#e8a838" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="417.15324272186257" cy="790" r="4" fill="#e8a838"/>
+  <text x="425.15324272186257" y="794" fill="#e8a838" font-size="11">1.49 ms</text>
+  <text x="392" y="816" fill="#888" font-size="10" text-anchor="end">max</text>
+  <line x1="400" y1="812" x2="465.1468074280324" y2="812" stroke="#e85d75" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="465.1468074280324" cy="812" r="4" fill="#e85d75"/>
+  <text x="473.1468074280324" y="816" fill="#e85d75" font-size="11">5.65 ms</text>
+  <text x="392" y="838" fill="#888" font-size="10" text-anchor="end">min</text>
+  <line x1="400" y1="834" x2="408.97558761410573" y2="834" stroke="#6ba3e8" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="408.97558761410573" cy="834" r="4" fill="#6ba3e8"/>
+  <text x="416.97558761410573" y="838" fill="#6ba3e8" font-size="11">0.78 ms</text>
+  <text x="400" y="862" fill="#666" font-size="10">domElementCount: 3.00 count  |  memoryHeapDeltaMB: +0.28 MB</text>
+  <rect x="1130" y="768" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1155" y="768" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1180" y="768" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1205" y="768" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <rect x="1230" y="768" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <text x="1130" y="796" fill="#e8d838" font-size="11" font-weight="bold">good</text>
+  <text x="1130" y="812" fill="#555" font-size="10">no baseline</text>
+  <text x="40" y="896" fill="#e0e0e0" font-size="13" font-weight="bold">componentButton/button_default</text>
+  <text x="392" y="912" fill="#888" font-size="10" text-anchor="end">median</text>
+  <line x1="400" y1="908" x2="412.5270791160873" y2="908" stroke="#4ecca3" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="412.5270791160873" cy="908" r="4" fill="#4ecca3"/>
+  <text x="420.5270791160873" y="912" fill="#4ecca3" font-size="11">1.09 ms</text>
+  <text x="392" y="934" fill="#888" font-size="10" text-anchor="end">p95</text>
+  <line x1="400" y1="930" x2="431.89885094498237" y2="930" stroke="#e8a838" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="431.89885094498237" cy="930" r="4" fill="#e8a838"/>
+  <text x="439.89885094498237" y="934" fill="#e8a838" font-size="11">2.77 ms</text>
+  <text x="392" y="956" fill="#888" font-size="10" text-anchor="end">max</text>
+  <line x1="400" y1="952" x2="488.39408670441765" y2="952" stroke="#e85d75" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="488.39408670441765" cy="952" r="4" fill="#e85d75"/>
+  <text x="496.39408670441765" y="956" fill="#e85d75" font-size="11">7.67 ms</text>
+  <text x="392" y="978" fill="#888" font-size="10" text-anchor="end">min</text>
+  <line x1="400" y1="974" x2="410.5714526266358" y2="974" stroke="#6ba3e8" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="410.5714526266358" cy="974" r="4" fill="#6ba3e8"/>
+  <text x="418.5714526266358" y="978" fill="#6ba3e8" font-size="11">0.92 ms</text>
+  <text x="400" y="1002" fill="#666" font-size="10">domElementCount: 4.00 count  |  memoryHeapDeltaMB: +0.29 MB</text>
+  <rect x="1130" y="908" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1155" y="908" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1180" y="908" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1205" y="908" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <rect x="1230" y="908" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <text x="1130" y="936" fill="#e8d838" font-size="11" font-weight="bold">good</text>
+  <text x="1130" y="952" fill="#555" font-size="10">no baseline</text>
+  <text x="40" y="1036" fill="#e0e0e0" font-size="13" font-weight="bold">componentButton/button_clickable</text>
+  <text x="392" y="1052" fill="#888" font-size="10" text-anchor="end">median</text>
+  <line x1="400" y1="1048" x2="420.8465632675744" y2="1048" stroke="#4ecca3" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="420.8465632675744" cy="1048" r="4" fill="#4ecca3"/>
+  <text x="428.8465632675744" y="1052" fill="#4ecca3" font-size="11">1.81 ms</text>
+  <text x="392" y="1074" fill="#888" font-size="10" text-anchor="end">p95</text>
+  <line x1="400" y1="1070" x2="429.5811568154385" y2="1070" stroke="#e8a838" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="429.5811568154385" cy="1070" r="4" fill="#e8a838"/>
+  <text x="437.5811568154385" y="1074" fill="#e8a838" font-size="11">2.57 ms</text>
+  <text x="392" y="1096" fill="#888" font-size="10" text-anchor="end">max</text>
+  <line x1="400" y1="1092" x2="498.71186136665915" y2="1092" stroke="#e85d75" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="498.71186136665915" cy="1092" r="4" fill="#e85d75"/>
+  <text x="506.71186136665915" y="1096" fill="#e85d75" font-size="11">8.56 ms</text>
+  <text x="392" y="1118" fill="#888" font-size="10" text-anchor="end">min</text>
+  <line x1="400" y1="1114" x2="416.1512147623541" y2="1114" stroke="#6ba3e8" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="416.1512147623541" cy="1114" r="4" fill="#6ba3e8"/>
+  <text x="424.1512147623541" y="1118" fill="#6ba3e8" font-size="11">1.40 ms</text>
+  <text x="400" y="1142" fill="#666" font-size="10">domElementCount: 9.00 count  |  memoryHeapDeltaMB: +0.48 MB</text>
+  <rect x="1130" y="1048" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1155" y="1048" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1180" y="1048" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1205" y="1048" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <rect x="1230" y="1048" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <text x="1130" y="1076" fill="#e8d838" font-size="11" font-weight="bold">good</text>
+  <text x="1130" y="1092" fill="#555" font-size="10">no baseline</text>
+  <text x="40" y="1176" fill="#e0e0e0" font-size="13" font-weight="bold">componentButton/button_variants</text>
+  <text x="392" y="1192" fill="#888" font-size="10" text-anchor="end">median</text>
+  <line x1="400" y1="1188" x2="443.6937232091999" y2="1188" stroke="#4ecca3" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="443.6937232091999" cy="1188" r="4" fill="#4ecca3"/>
+  <text x="451.6937232091999" y="1192" fill="#4ecca3" font-size="11">3.79 ms</text>
+  <text x="392" y="1214" fill="#888" font-size="10" text-anchor="end">p95</text>
+  <line x1="400" y1="1210" x2="687.1692211391423" y2="1210" stroke="#e8a838" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="687.1692211391423" cy="1210" r="4" fill="#e8a838"/>
+  <text x="695.1692211391423" y="1214" fill="#e8a838" font-size="11">24.90 ms</text>
+  <text x="392" y="1236" fill="#888" font-size="10" text-anchor="end">max</text>
+  <line x1="400" y1="1232" x2="785.0843030810798" y2="1232" stroke="#e85d75" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="785.0843030810798" cy="1232" r="4" fill="#e85d75"/>
+  <text x="793.0843030810798" y="1236" fill="#e85d75" font-size="11">33.40 ms</text>
+  <text x="392" y="1258" fill="#888" font-size="10" text-anchor="end">min</text>
+  <line x1="400" y1="1254" x2="432.5826283672028" y2="1254" stroke="#6ba3e8" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="432.5826283672028" cy="1254" r="4" fill="#6ba3e8"/>
+  <text x="440.5826283672028" y="1258" fill="#6ba3e8" font-size="11">2.83 ms</text>
+  <text x="400" y="1282" fill="#666" font-size="10">domElementCount: 20.00 count  |  memoryHeapDeltaMB: +1.09 MB</text>
+  <rect x="1130" y="1188" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1155" y="1188" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1180" y="1188" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1205" y="1188" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <rect x="1230" y="1188" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <text x="1130" y="1216" fill="#e8d838" font-size="11" font-weight="bold">good</text>
+  <text x="1130" y="1232" fill="#555" font-size="10">no baseline</text>
+  <text x="40" y="1316" fill="#e0e0e0" font-size="13" font-weight="bold">componentFloatMenu/float_menu_default</text>
+  <text x="392" y="1332" fill="#888" font-size="10" text-anchor="end">median</text>
+  <line x1="400" y1="1328" x2="406.03753555335607" y2="1328" stroke="#4ecca3" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="406.03753555335607" cy="1328" r="4" fill="#4ecca3"/>
+  <text x="414.03753555335607" y="1332" fill="#4ecca3" font-size="11">0.52 ms</text>
+  <text x="392" y="1354" fill="#888" font-size="10" text-anchor="end">p95</text>
+  <line x1="400" y1="1350" x2="416.73236791722303" y2="1350" stroke="#e8a838" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="416.73236791722303" cy="1350" r="4" fill="#e8a838"/>
+  <text x="424.73236791722303" y="1354" fill="#e8a838" font-size="11">1.45 ms</text>
+  <text x="392" y="1376" fill="#888" font-size="10" text-anchor="end">max</text>
+  <line x1="400" y1="1372" x2="417.22819302957026" y2="1372" stroke="#e85d75" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="417.22819302957026" cy="1372" r="4" fill="#e85d75"/>
+  <text x="425.22819302957026" y="1376" fill="#e85d75" font-size="11">1.49 ms</text>
+  <text x="392" y="1398" fill="#888" font-size="10" text-anchor="end">min</text>
+  <line x1="400" y1="1394" x2="404.73340019992986" y2="1394" stroke="#6ba3e8" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="404.73340019992986" cy="1394" r="4" fill="#6ba3e8"/>
+  <text x="412.73340019992986" y="1398" fill="#6ba3e8" font-size="11">0.41 ms</text>
+  <text x="400" y="1422" fill="#666" font-size="10">domElementCount: 3.00 count  |  memoryHeapDeltaMB: +0.15 MB</text>
+  <rect x="1130" y="1328" width="22" height="14" fill="#7ee87a" rx="2" opacity="0.85"/>
+  <rect x="1155" y="1328" width="22" height="14" fill="#7ee87a" rx="2" opacity="0.85"/>
+  <rect x="1180" y="1328" width="22" height="14" fill="#7ee87a" rx="2" opacity="0.85"/>
+  <rect x="1205" y="1328" width="22" height="14" fill="#7ee87a" rx="2" opacity="0.85"/>
+  <rect x="1230" y="1328" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <text x="1130" y="1356" fill="#7ee87a" font-size="11" font-weight="bold">very good</text>
+  <text x="1130" y="1372" fill="#555" font-size="10">no baseline</text>
+  <text x="40" y="1456" fill="#e0e0e0" font-size="13" font-weight="bold">componentIcon/icon_default</text>
+  <text x="392" y="1472" fill="#888" font-size="10" text-anchor="end">median</text>
+  <line x1="400" y1="1468" x2="405.38489133578736" y2="1468" stroke="#4ecca3" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="405.38489133578736" cy="1468" r="4" fill="#4ecca3"/>
+  <text x="413.38489133578736" y="1472" fill="#4ecca3" font-size="11">0.47 ms</text>
+  <text x="392" y="1494" fill="#888" font-size="10" text-anchor="end">p95</text>
+  <line x1="400" y1="1490" x2="487.1556770053447" y2="1490" stroke="#e8a838" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="487.1556770053447" cy="1490" r="4" fill="#e8a838"/>
+  <text x="495.1556770053447" y="1494" fill="#e8a838" font-size="11">7.56 ms</text>
+  <text x="392" y="1516" fill="#888" font-size="10" text-anchor="end">max</text>
+  <line x1="400" y1="1512" x2="498.00617539284775" y2="1512" stroke="#e85d75" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="498.00617539284775" cy="1512" r="4" fill="#e85d75"/>
+  <text x="506.00617539284775" y="1516" fill="#e85d75" font-size="11">8.50 ms</text>
+  <text x="392" y="1538" fill="#888" font-size="10" text-anchor="end">min</text>
+  <line x1="400" y1="1534" x2="404.06000051252335" y2="1534" stroke="#6ba3e8" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="404.06000051252335" cy="1534" r="4" fill="#6ba3e8"/>
+  <text x="412.06000051252335" y="1538" fill="#6ba3e8" font-size="11">0.35 ms</text>
+  <text x="400" y="1562" fill="#666" font-size="10">domElementCount: 5.00 count  |  memoryHeapDeltaMB: +0.14 MB</text>
+  <rect x="1130" y="1468" width="22" height="14" fill="#4ecca3" rx="2" opacity="0.85"/>
+  <rect x="1155" y="1468" width="22" height="14" fill="#4ecca3" rx="2" opacity="0.85"/>
+  <rect x="1180" y="1468" width="22" height="14" fill="#4ecca3" rx="2" opacity="0.85"/>
+  <rect x="1205" y="1468" width="22" height="14" fill="#4ecca3" rx="2" opacity="0.85"/>
+  <rect x="1230" y="1468" width="22" height="14" fill="#4ecca3" rx="2" opacity="0.85"/>
+  <text x="1130" y="1496" fill="#4ecca3" font-size="11" font-weight="bold">excellent</text>
+  <text x="1130" y="1512" fill="#555" font-size="10">no baseline</text>
+  <text x="40" y="1596" fill="#e0e0e0" font-size="13" font-weight="bold">componentIcon/icon_clickable</text>
+  <text x="392" y="1612" fill="#888" font-size="10" text-anchor="end">median</text>
+  <line x1="400" y1="1608" x2="405.94471247996296" y2="1608" stroke="#4ecca3" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="405.94471247996296" cy="1608" r="4" fill="#4ecca3"/>
+  <text x="413.94471247996296" y="1612" fill="#4ecca3" font-size="11">0.52 ms</text>
+  <text x="392" y="1634" fill="#888" font-size="10" text-anchor="end">p95</text>
+  <line x1="400" y1="1630" x2="415.0719303318832" y2="1630" stroke="#e8a838" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="415.0719303318832" cy="1630" r="4" fill="#e8a838"/>
+  <text x="423.0719303318832" y="1634" fill="#e8a838" font-size="11">1.31 ms</text>
+  <text x="392" y="1656" fill="#888" font-size="10" text-anchor="end">max</text>
+  <line x1="400" y1="1652" x2="418.2463641321973" y2="1652" stroke="#e85d75" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="418.2463641321973" cy="1652" r="4" fill="#e85d75"/>
+  <text x="426.2463641321973" y="1656" fill="#e85d75" font-size="11">1.58 ms</text>
+  <text x="392" y="1678" fill="#888" font-size="10" text-anchor="end">min</text>
+  <line x1="400" y1="1674" x2="404.1084299421307" y2="1674" stroke="#6ba3e8" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="404.1084299421307" cy="1674" r="4" fill="#6ba3e8"/>
+  <text x="412.1084299421307" y="1678" fill="#6ba3e8" font-size="11">0.36 ms</text>
+  <text x="400" y="1702" fill="#666" font-size="10">domElementCount: 5.00 count  |  memoryHeapDeltaMB: +0.14 MB</text>
+  <rect x="1130" y="1608" width="22" height="14" fill="#7ee87a" rx="2" opacity="0.85"/>
+  <rect x="1155" y="1608" width="22" height="14" fill="#7ee87a" rx="2" opacity="0.85"/>
+  <rect x="1180" y="1608" width="22" height="14" fill="#7ee87a" rx="2" opacity="0.85"/>
+  <rect x="1205" y="1608" width="22" height="14" fill="#7ee87a" rx="2" opacity="0.85"/>
+  <rect x="1230" y="1608" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <text x="1130" y="1636" fill="#7ee87a" font-size="11" font-weight="bold">very good</text>
+  <text x="1130" y="1652" fill="#555" font-size="10">no baseline</text>
+  <text x="40" y="1736" fill="#e0e0e0" font-size="13" font-weight="bold">componentMessages/messages_success</text>
+  <text x="392" y="1752" fill="#888" font-size="10" text-anchor="end">median</text>
+  <line x1="400" y1="1748" x2="426.9100431582172" y2="1748" stroke="#4ecca3" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="426.9100431582172" cy="1748" r="4" fill="#4ecca3"/>
+  <text x="434.9100431582172" y="1752" fill="#4ecca3" font-size="11">2.33 ms</text>
+  <text x="392" y="1774" fill="#888" font-size="10" text-anchor="end">p95</text>
+  <line x1="400" y1="1770" x2="510.8307495762176" y2="1770" stroke="#e8a838" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="510.8307495762176" cy="1770" r="4" fill="#e8a838"/>
+  <text x="518.8307495762176" y="1774" fill="#e8a838" font-size="11">9.61 ms</text>
+  <text x="392" y="1796" fill="#888" font-size="10" text-anchor="end">max</text>
+  <line x1="400" y1="1792" x2="542.8114693189235" y2="1792" stroke="#e85d75" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="542.8114693189235" cy="1792" r="4" fill="#e85d75"/>
+  <text x="550.8114693189235" y="1796" fill="#e85d75" font-size="11">12.39 ms</text>
+  <text x="392" y="1818" fill="#888" font-size="10" text-anchor="end">min</text>
+  <line x1="400" y1="1814" x2="419.14922706923636" y2="1814" stroke="#6ba3e8" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="419.14922706923636" cy="1814" r="4" fill="#6ba3e8"/>
+  <text x="427.14922706923636" y="1818" fill="#6ba3e8" font-size="11">1.66 ms</text>
+  <text x="400" y="1842" fill="#666" font-size="10">domElementCount: 18.00 count  |  memoryHeapDeltaMB: +0.56 MB</text>
+  <rect x="1130" y="1748" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1155" y="1748" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1180" y="1748" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1205" y="1748" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <rect x="1230" y="1748" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <text x="1130" y="1776" fill="#e8d838" font-size="11" font-weight="bold">good</text>
+  <text x="1130" y="1792" fill="#555" font-size="10">no baseline</text>
+  <text x="40" y="1876" fill="#e0e0e0" font-size="13" font-weight="bold">componentMessages/messages_warning</text>
+  <text x="392" y="1892" fill="#888" font-size="10" text-anchor="end">median</text>
+  <line x1="400" y1="1888" x2="424.7670408996222" y2="1888" stroke="#4ecca3" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="424.7670408996222" cy="1888" r="4" fill="#4ecca3"/>
+  <text x="432.7670408996222" y="1892" fill="#4ecca3" font-size="11">2.15 ms</text>
+  <text x="392" y="1914" fill="#888" font-size="10" text-anchor="end">p95</text>
+  <line x1="400" y1="1910" x2="489.2070092721739" y2="1910" stroke="#e8a838" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="489.2070092721739" cy="1910" r="4" fill="#e8a838"/>
+  <text x="497.2070092721739" y="1914" fill="#e8a838" font-size="11">7.74 ms</text>
+  <text x="392" y="1936" fill="#888" font-size="10" text-anchor="end">max</text>
+  <line x1="400" y1="1932" x2="541.9708727912717" y2="1932" stroke="#e85d75" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="541.9708727912717" cy="1932" r="4" fill="#e85d75"/>
+  <text x="549.9708727912717" y="1936" fill="#e85d75" font-size="11">12.31 ms</text>
+  <text x="392" y="1958" fill="#888" font-size="10" text-anchor="end">min</text>
+  <line x1="400" y1="1954" x2="418.0837796187132" y2="1954" stroke="#6ba3e8" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="418.0837796187132" cy="1954" r="4" fill="#6ba3e8"/>
+  <text x="426.0837796187132" y="1958" fill="#6ba3e8" font-size="11">1.57 ms</text>
+  <text x="400" y="1982" fill="#666" font-size="10">domElementCount: 18.00 count  |  memoryHeapDeltaMB: +0.55 MB</text>
+  <rect x="1130" y="1888" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1155" y="1888" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1180" y="1888" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1205" y="1888" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <rect x="1230" y="1888" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <text x="1130" y="1916" fill="#e8d838" font-size="11" font-weight="bold">good</text>
+  <text x="1130" y="1932" fill="#555" font-size="10">no baseline</text>
+  <text x="40" y="2016" fill="#e0e0e0" font-size="13" font-weight="bold">componentMessages/messages_error</text>
+  <text x="392" y="2032" fill="#888" font-size="10" text-anchor="end">median</text>
+  <line x1="400" y1="2028" x2="423.03395916991326" y2="2028" stroke="#4ecca3" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="423.03395916991326" cy="2028" r="4" fill="#4ecca3"/>
+  <text x="431.03395916991326" y="2032" fill="#4ecca3" font-size="11">2.00 ms</text>
+  <text x="392" y="2054" fill="#888" font-size="10" text-anchor="end">p95</text>
+  <line x1="400" y1="2050" x2="517.2026788099803" y2="2050" stroke="#e8a838" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="517.2026788099803" cy="2050" r="4" fill="#e8a838"/>
+  <text x="525.2026788099803" y="2054" fill="#e8a838" font-size="11">10.16 ms</text>
+  <text x="392" y="2076" fill="#888" font-size="10" text-anchor="end">max</text>
+  <line x1="400" y1="2072" x2="525.9983856856882" y2="2072" stroke="#e85d75" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="525.9983856856882" cy="2072" r="4" fill="#e85d75"/>
+  <text x="533.9983856856882" y="2076" fill="#e85d75" font-size="11">10.93 ms</text>
+  <text x="392" y="2098" fill="#888" font-size="10" text-anchor="end">min</text>
+  <line x1="400" y1="2094" x2="417.3227457253625" y2="2094" stroke="#6ba3e8" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="417.3227457253625" cy="2094" r="4" fill="#6ba3e8"/>
+  <text x="425.3227457253625" y="2098" fill="#6ba3e8" font-size="11">1.50 ms</text>
+  <text x="400" y="2122" fill="#666" font-size="10">domElementCount: 18.00 count  |  memoryHeapDeltaMB: +0.53 MB</text>
+  <rect x="1130" y="2028" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1155" y="2028" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1180" y="2028" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1205" y="2028" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <rect x="1230" y="2028" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <text x="1130" y="2056" fill="#e8d838" font-size="11" font-weight="bold">good</text>
+  <text x="1130" y="2072" fill="#555" font-size="10">no baseline</text>
+  <text x="40" y="2156" fill="#e0e0e0" font-size="13" font-weight="bold">componentPositionMenu/position_menu_default</text>
+  <text x="392" y="2172" fill="#888" font-size="10" text-anchor="end">median</text>
+  <line x1="400" y1="2168" x2="430.3370018412983" y2="2168" stroke="#4ecca3" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="430.3370018412983" cy="2168" r="4" fill="#4ecca3"/>
+  <text x="438.3370018412983" y="2172" fill="#4ecca3" font-size="11">2.63 ms</text>
+  <text x="392" y="2194" fill="#888" font-size="10" text-anchor="end">p95</text>
+  <line x1="400" y1="2190" x2="508.99504357915714" y2="2190" stroke="#e8a838" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="508.99504357915714" cy="2190" r="4" fill="#e8a838"/>
+  <text x="516.9950435791571" y="2194" fill="#e8a838" font-size="11">9.45 ms</text>
+  <text x="392" y="2216" fill="#888" font-size="10" text-anchor="end">max</text>
+  <line x1="400" y1="2212" x2="510.59898016333034" y2="2212" stroke="#e85d75" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="510.59898016333034" cy="2212" r="4" fill="#e85d75"/>
+  <text x="518.5989801633303" y="2216" fill="#e85d75" font-size="11">9.59 ms</text>
+  <text x="392" y="2238" fill="#888" font-size="10" text-anchor="end">min</text>
+  <line x1="400" y1="2234" x2="425.1406393563237" y2="2234" stroke="#6ba3e8" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="425.1406393563237" cy="2234" r="4" fill="#6ba3e8"/>
+  <text x="433.1406393563237" y="2238" fill="#6ba3e8" font-size="11">2.18 ms</text>
+  <text x="400" y="2262" fill="#666" font-size="10">domElementCount: 6.00 count  |  memoryHeapDeltaMB: +0.82 MB</text>
+  <rect x="1130" y="2168" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1155" y="2168" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1180" y="2168" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1205" y="2168" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <rect x="1230" y="2168" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <text x="1130" y="2196" fill="#e8d838" font-size="11" font-weight="bold">good</text>
+  <text x="1130" y="2212" fill="#555" font-size="10">no baseline</text>
+  <text x="40" y="2296" fill="#e0e0e0" font-size="13" font-weight="bold">componentStructure/structure_default</text>
+  <text x="392" y="2312" fill="#888" font-size="10" text-anchor="end">median</text>
+  <line x1="400" y1="2308" x2="407.476004919809" y2="2308" stroke="#4ecca3" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="407.476004919809" cy="2308" r="4" fill="#4ecca3"/>
+  <text x="415.476004919809" y="2312" fill="#4ecca3" font-size="11">0.65 ms</text>
+  <text x="392" y="2334" fill="#888" font-size="10" text-anchor="end">p95</text>
+  <line x1="400" y1="2330" x2="422.29598690973893" y2="2330" stroke="#e8a838" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="422.29598690973893" cy="2330" r="4" fill="#e8a838"/>
+  <text x="430.29598690973893" y="2334" fill="#e8a838" font-size="11">1.93 ms</text>
+  <text x="392" y="2356" fill="#888" font-size="10" text-anchor="end">max</text>
+  <line x1="400" y1="2352" x2="424.8039395125785" y2="2352" stroke="#e85d75" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="424.8039395125785" cy="2352" r="4" fill="#e85d75"/>
+  <text x="432.8039395125785" y="2356" fill="#e85d75" font-size="11">2.15 ms</text>
+  <text x="392" y="2378" fill="#888" font-size="10" text-anchor="end">min</text>
+  <line x1="400" y1="2374" x2="405.71467268955865" y2="2374" stroke="#6ba3e8" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="405.71467268955865" cy="2374" r="4" fill="#6ba3e8"/>
+  <text x="413.71467268955865" y="2378" fill="#6ba3e8" font-size="11">0.50 ms</text>
+  <text x="400" y="2402" fill="#666" font-size="10">domElementCount: 3.00 count  |  memoryHeapDeltaMB: +0.12 MB</text>
+  <rect x="1130" y="2308" width="22" height="14" fill="#7ee87a" rx="2" opacity="0.85"/>
+  <rect x="1155" y="2308" width="22" height="14" fill="#7ee87a" rx="2" opacity="0.85"/>
+  <rect x="1180" y="2308" width="22" height="14" fill="#7ee87a" rx="2" opacity="0.85"/>
+  <rect x="1205" y="2308" width="22" height="14" fill="#7ee87a" rx="2" opacity="0.85"/>
+  <rect x="1230" y="2308" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <text x="1130" y="2336" fill="#7ee87a" font-size="11" font-weight="bold">very good</text>
+  <text x="1130" y="2352" fill="#555" font-size="10">no baseline</text>
+  <text x="40" y="2436" fill="#e0e0e0" font-size="13" font-weight="bold">componentStructure/structure_with_content</text>
+  <text x="392" y="2452" fill="#888" font-size="10" text-anchor="end">median</text>
+  <line x1="400" y1="2448" x2="414.25612505993274" y2="2448" stroke="#4ecca3" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="414.25612505993274" cy="2448" r="4" fill="#4ecca3"/>
+  <text x="422.25612505993274" y="2452" fill="#4ecca3" font-size="11">1.24 ms</text>
+  <text x="392" y="2474" fill="#888" font-size="10" text-anchor="end">p95</text>
+  <line x1="400" y1="2470" x2="425.13256778468053" y2="2470" stroke="#e8a838" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="425.13256778468053" cy="2470" r="4" fill="#e8a838"/>
+  <text x="433.13256778468053" y="2474" fill="#e8a838" font-size="11">2.18 ms</text>
+  <text x="392" y="2496" fill="#888" font-size="10" text-anchor="end">max</text>
+  <line x1="400" y1="2492" x2="494.963192901408" y2="2492" stroke="#e85d75" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="494.963192901408" cy="2492" r="4" fill="#e85d75"/>
+  <text x="502.963192901408" y="2496" fill="#e85d75" font-size="11">8.24 ms</text>
+  <text x="392" y="2518" fill="#888" font-size="10" text-anchor="end">min</text>
+  <line x1="400" y1="2514" x2="409.6293849132599" y2="2514" stroke="#6ba3e8" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="409.6293849132599" cy="2514" r="4" fill="#6ba3e8"/>
+  <text x="417.6293849132599" y="2518" fill="#6ba3e8" font-size="11">0.84 ms</text>
+  <text x="400" y="2542" fill="#666" font-size="10">domElementCount: 5.00 count  |  memoryHeapDeltaMB: +0.23 MB</text>
+  <rect x="1130" y="2448" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1155" y="2448" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1180" y="2448" width="22" height="14" fill="#e8d838" rx="2" opacity="0.85"/>
+  <rect x="1205" y="2448" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <rect x="1230" y="2448" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <text x="1130" y="2476" fill="#e8d838" font-size="11" font-weight="bold">good</text>
+  <text x="1130" y="2492" fill="#555" font-size="10">no baseline</text>
+  <text x="40" y="2576" fill="#e0e0e0" font-size="13" font-weight="bold">componentStructure/structure_hidden</text>
+  <text x="392" y="2592" fill="#888" font-size="10" text-anchor="end">median</text>
+  <line x1="400" y1="2588" x2="405.69334067890725" y2="2588" stroke="#4ecca3" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="405.69334067890725" cy="2588" r="4" fill="#4ecca3"/>
+  <text x="413.69334067890725" y="2592" fill="#4ecca3" font-size="11">0.49 ms</text>
+  <text x="392" y="2614" fill="#888" font-size="10" text-anchor="end">p95</text>
+  <line x1="400" y1="2610" x2="408.06811235038947" y2="2610" stroke="#e8a838" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="408.06811235038947" cy="2610" r="4" fill="#e8a838"/>
+  <text x="416.06811235038947" y="2614" fill="#e8a838" font-size="11">0.70 ms</text>
+  <text x="392" y="2636" fill="#888" font-size="10" text-anchor="end">max</text>
+  <line x1="400" y1="2632" x2="409.2154285985523" y2="2632" stroke="#e85d75" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="409.2154285985523" cy="2632" r="4" fill="#e85d75"/>
+  <text x="417.2154285985523" y="2636" fill="#e85d75" font-size="11">0.80 ms</text>
+  <text x="392" y="2658" fill="#888" font-size="10" text-anchor="end">min</text>
+  <line x1="400" y1="2654" x2="405.00091514410406" y2="2654" stroke="#6ba3e8" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="405.00091514410406" cy="2654" r="4" fill="#6ba3e8"/>
+  <text x="413.00091514410406" y="2658" fill="#6ba3e8" font-size="11">0.43 ms</text>
+  <text x="400" y="2682" fill="#666" font-size="10">domElementCount: 3.00 count  |  memoryHeapDeltaMB: +0.12 MB</text>
+  <rect x="1130" y="2588" width="22" height="14" fill="#4ecca3" rx="2" opacity="0.85"/>
+  <rect x="1155" y="2588" width="22" height="14" fill="#4ecca3" rx="2" opacity="0.85"/>
+  <rect x="1180" y="2588" width="22" height="14" fill="#4ecca3" rx="2" opacity="0.85"/>
+  <rect x="1205" y="2588" width="22" height="14" fill="#4ecca3" rx="2" opacity="0.85"/>
+  <rect x="1230" y="2588" width="22" height="14" fill="#4ecca3" rx="2" opacity="0.85"/>
+  <text x="1130" y="2616" fill="#4ecca3" font-size="11" font-weight="bold">excellent</text>
+  <text x="1130" y="2632" fill="#555" font-size="10">no baseline</text>
+  <text x="40" y="2702" fill="#7ec8e3" font-size="16" font-weight="bold">Heavy SVG Creation Scaling</text>
+  <line x1="40" y1="2710" x2="1260" y2="2710" stroke="#333" stroke-width="1"/>
+  <line x1="90" y1="2948" x2="1260" y2="2948" stroke="#252535" stroke-width="1"/>
+  <text x="82" y="2952" fill="#555" font-size="10" text-anchor="end">0ms</text>
+  <line x1="90" y1="2919.301049692804" x2="1260" y2="2919.301049692804" stroke="#252535" stroke-width="1"/>
+  <text x="82" y="2923.301049692804" fill="#555" font-size="10" text-anchor="end">10ms</text>
+  <line x1="90" y1="2890.602099385608" x2="1260" y2="2890.602099385608" stroke="#252535" stroke-width="1"/>
+  <text x="82" y="2894.602099385608" fill="#555" font-size="10" text-anchor="end">20ms</text>
+  <line x1="90" y1="2861.9031490784123" x2="1260" y2="2861.9031490784123" stroke="#252535" stroke-width="1"/>
+  <text x="82" y="2865.9031490784123" fill="#555" font-size="10" text-anchor="end">30ms</text>
+  <line x1="90" y1="2833.2041987712164" x2="1260" y2="2833.2041987712164" stroke="#252535" stroke-width="1"/>
+  <text x="82" y="2837.2041987712164" fill="#555" font-size="10" text-anchor="end">40ms</text>
+  <line x1="90" y1="2804.5052484640205" x2="1260" y2="2804.5052484640205" stroke="#252535" stroke-width="1"/>
+  <text x="82" y="2808.5052484640205" fill="#555" font-size="10" text-anchor="end">50ms</text>
+  <line x1="90" y1="2775.8062981568246" x2="1260" y2="2775.8062981568246" stroke="#252535" stroke-width="1"/>
+  <text x="82" y="2779.8062981568246" fill="#555" font-size="10" text-anchor="end">60ms</text>
+  <line x1="90" y1="2748" x2="90" y2="2948" stroke="#252535" stroke-width="1"/>
+  <text x="90" y="2964" fill="#555" font-size="10" text-anchor="middle">0</text>
+  <line x1="324" y1="2748" x2="324" y2="2948" stroke="#252535" stroke-width="1"/>
+  <text x="324" y="2964" fill="#555" font-size="10" text-anchor="middle">20</text>
+  <line x1="558" y1="2748" x2="558" y2="2948" stroke="#252535" stroke-width="1"/>
+  <text x="558" y="2964" fill="#555" font-size="10" text-anchor="middle">40</text>
+  <line x1="792" y1="2748" x2="792" y2="2948" stroke="#252535" stroke-width="1"/>
+  <text x="792" y="2964" fill="#555" font-size="10" text-anchor="middle">60</text>
+  <line x1="1026" y1="2748" x2="1026" y2="2948" stroke="#252535" stroke-width="1"/>
+  <text x="1026" y="2964" fill="#555" font-size="10" text-anchor="middle">80</text>
+  <line x1="1260" y1="2748" x2="1260" y2="2948" stroke="#252535" stroke-width="1"/>
+  <text x="1260" y="2964" fill="#555" font-size="10" text-anchor="middle">100</text>
+  <line x1="90" y1="2748" x2="90" y2="2948" stroke="#444" stroke-width="1.5"/>
+  <line x1="90" y1="2948" x2="1260" y2="2948" stroke="#444" stroke-width="1.5"/>
+  <text x="55" y="2848" fill="#888" font-size="11" text-anchor="middle" transform="rotate(-90 55 2848)">time (ms)</text>
+  <text x="675" y="2980" fill="#888" font-size="11" text-anchor="middle">count (SVG)</text>
+  <polyline points="90.0,2947.9 207.0,2922.4 324.0,2919.9 441.0,2911.6 558.0,2891.1 675.0,2894.6 792.0,2894.8 909.0,2869.9 1026.0,2871.2 1143.0,2809.1 1260.0,2848.3" fill="none" stroke="#e8a838" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="90.0" cy="2947.9" r="3" fill="#e8a838"/>
+  <circle cx="207.0" cy="2922.4" r="3" fill="#e8a838"/>
+  <circle cx="324.0" cy="2919.9" r="3" fill="#e8a838"/>
+  <circle cx="441.0" cy="2911.6" r="3" fill="#e8a838"/>
+  <circle cx="558.0" cy="2891.1" r="3" fill="#e8a838"/>
+  <circle cx="675.0" cy="2894.6" r="3" fill="#e8a838"/>
+  <circle cx="792.0" cy="2894.8" r="3" fill="#e8a838"/>
+  <circle cx="909.0" cy="2869.9" r="3" fill="#e8a838"/>
+  <circle cx="1026.0" cy="2871.2" r="3" fill="#e8a838"/>
+  <circle cx="1143.0" cy="2809.1" r="3" fill="#e8a838"/>
+  <circle cx="1260.0" cy="2848.3" r="3" fill="#e8a838"/>
+  <text x="1165.5" y="2851.3385902157247" fill="#e8a838" font-size="9">B (Repeated) p95=34.7</text>
+  <polyline points="90.0,2947.9 207.0,2912.5 324.0,2913.0 441.0,2901.2 558.0,2888.9 675.0,2839.7 792.0,2879.5 909.0,2849.7 1026.0,2828.9 1143.0,2766.2 1260.0,2843.7" fill="none" stroke="#e85d75" stroke-width="2" opacity="0.9"/>
+  <circle cx="90.0" cy="2947.9" r="3" fill="#e85d75"/>
+  <circle cx="207.0" cy="2912.5" r="3" fill="#e85d75"/>
+  <circle cx="324.0" cy="2913.0" r="3" fill="#e85d75"/>
+  <circle cx="441.0" cy="2901.2" r="3" fill="#e85d75"/>
+  <circle cx="558.0" cy="2888.9" r="3" fill="#e85d75"/>
+  <circle cx="675.0" cy="2839.7" r="3" fill="#e85d75"/>
+  <circle cx="792.0" cy="2879.5" r="3" fill="#e85d75"/>
+  <circle cx="909.0" cy="2849.7" r="3" fill="#e85d75"/>
+  <circle cx="1026.0" cy="2828.9" r="3" fill="#e85d75"/>
+  <circle cx="1143.0" cy="2766.2" r="3" fill="#e85d75"/>
+  <circle cx="1260.0" cy="2843.7" r="3" fill="#e85d75"/>
+  <text x="1165.5" y="2846.66353121068" fill="#e85d75" font-size="9">B (Repeated) max=36.4</text>
+  <polyline points="90.0,2947.9 207.0,2943.4 324.0,2934.7 441.0,2932.1 558.0,2915.1 675.0,2911.6 792.0,2907.8 909.0,2897.5 1026.0,2895.6 1143.0,2883.9 1260.0,2878.4" fill="none" stroke="#4ecca3" stroke-width="2" opacity="0.9"/>
+  <circle cx="90.0" cy="2947.9" r="3" fill="#4ecca3"/>
+  <circle cx="207.0" cy="2943.4" r="3" fill="#4ecca3"/>
+  <circle cx="324.0" cy="2934.7" r="3" fill="#4ecca3"/>
+  <circle cx="441.0" cy="2932.1" r="3" fill="#4ecca3"/>
+  <circle cx="558.0" cy="2915.1" r="3" fill="#4ecca3"/>
+  <circle cx="675.0" cy="2911.6" r="3" fill="#4ecca3"/>
+  <circle cx="792.0" cy="2907.8" r="3" fill="#4ecca3"/>
+  <circle cx="909.0" cy="2897.5" r="3" fill="#4ecca3"/>
+  <circle cx="1026.0" cy="2895.6" r="3" fill="#4ecca3"/>
+  <circle cx="1143.0" cy="2883.9" r="3" fill="#4ecca3"/>
+  <circle cx="1260.0" cy="2878.4" r="3" fill="#4ecca3"/>
+  <text x="1152" y="2881.404328031279" fill="#4ecca3" font-size="9">B (Repeated) median=24.3</text>
+  <polyline points="90.0,2947.6 207.0,2923.5 324.0,2919.0 441.0,2909.7 558.0,2920.6 675.0,2909.1 792.0,2907.6 909.0,2903.4 1026.0,2881.3 1143.0,2836.3 1260.0,2855.4" fill="none" stroke="#e8a838" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="90.0" cy="2947.6" r="3" fill="#e8a838"/>
+  <circle cx="207.0" cy="2923.5" r="3" fill="#e8a838"/>
+  <circle cx="324.0" cy="2919.0" r="3" fill="#e8a838"/>
+  <circle cx="441.0" cy="2909.7" r="3" fill="#e8a838"/>
+  <circle cx="558.0" cy="2920.6" r="3" fill="#e8a838"/>
+  <circle cx="675.0" cy="2909.1" r="3" fill="#e8a838"/>
+  <circle cx="792.0" cy="2907.6" r="3" fill="#e8a838"/>
+  <circle cx="909.0" cy="2903.4" r="3" fill="#e8a838"/>
+  <circle cx="1026.0" cy="2881.3" r="3" fill="#e8a838"/>
+  <circle cx="1143.0" cy="2836.3" r="3" fill="#e8a838"/>
+  <circle cx="1260.0" cy="2855.4" r="3" fill="#e8a838"/>
+  <text x="1174.5" y="2858.432970731658" fill="#e8a838" font-size="9">A (Unique) p95=32.3</text>
+  <polyline points="90.0,2947.6 207.0,2915.6 324.0,2918.7 441.0,2904.7 558.0,2918.6 675.0,2901.8 792.0,2906.1 909.0,2902.5 1026.0,2870.3 1143.0,2826.2 1260.0,2855.0" fill="none" stroke="#e85d75" stroke-width="2" opacity="0.9"/>
+  <circle cx="90.0" cy="2947.6" r="3" fill="#e85d75"/>
+  <circle cx="207.0" cy="2915.6" r="3" fill="#e85d75"/>
+  <circle cx="324.0" cy="2918.7" r="3" fill="#e85d75"/>
+  <circle cx="441.0" cy="2904.7" r="3" fill="#e85d75"/>
+  <circle cx="558.0" cy="2918.6" r="3" fill="#e85d75"/>
+  <circle cx="675.0" cy="2901.8" r="3" fill="#e85d75"/>
+  <circle cx="792.0" cy="2906.1" r="3" fill="#e85d75"/>
+  <circle cx="909.0" cy="2902.5" r="3" fill="#e85d75"/>
+  <circle cx="1026.0" cy="2870.3" r="3" fill="#e85d75"/>
+  <circle cx="1143.0" cy="2826.2" r="3" fill="#e85d75"/>
+  <circle cx="1260.0" cy="2855.0" r="3" fill="#e85d75"/>
+  <text x="1174.5" y="2858.009374225123" fill="#e85d75" font-size="9">A (Unique) max=32.4</text>
+  <polyline points="90.0,2947.9 207.0,2939.3 324.0,2936.7 441.0,2927.8 558.0,2926.8 675.0,2924.4 792.0,2920.7 909.0,2908.9 1026.0,2904.0 1143.0,2889.7 1260.0,2886.0" fill="none" stroke="#4ecca3" stroke-width="2" opacity="0.9"/>
+  <circle cx="90.0" cy="2947.9" r="3" fill="#4ecca3"/>
+  <circle cx="207.0" cy="2939.3" r="3" fill="#4ecca3"/>
+  <circle cx="324.0" cy="2936.7" r="3" fill="#4ecca3"/>
+  <circle cx="441.0" cy="2927.8" r="3" fill="#4ecca3"/>
+  <circle cx="558.0" cy="2926.8" r="3" fill="#4ecca3"/>
+  <circle cx="675.0" cy="2924.4" r="3" fill="#4ecca3"/>
+  <circle cx="792.0" cy="2920.7" r="3" fill="#4ecca3"/>
+  <circle cx="909.0" cy="2908.9" r="3" fill="#4ecca3"/>
+  <circle cx="1026.0" cy="2904.0" r="3" fill="#4ecca3"/>
+  <circle cx="1143.0" cy="2889.7" r="3" fill="#4ecca3"/>
+  <circle cx="1260.0" cy="2886.0" r="3" fill="#4ecca3"/>
+  <text x="1161" y="2889.027773696145" fill="#4ecca3" font-size="9">A (Unique) median=21.6</text>
+  <line x1="100" y1="2742" x2="120" y2="2742" stroke="#e8a838" stroke-width="2.5"/>
+  <text x="126" y="2746" fill="#888" font-size="10">p95</text>
+  <line x1="180" y1="2742" x2="200" y2="2742" stroke="#e85d75" stroke-width="2"/>
+  <text x="206" y="2746" fill="#888" font-size="10">max</text>
+  <line x1="260" y1="2742" x2="280" y2="2742" stroke="#4ecca3" stroke-width="2"/>
+  <text x="286" y="2746" fill="#888" font-size="10">median</text>
+  <text x="40" y="2998" fill="#e8a838" font-size="11">B (Repeated): p95 slope=0.3728 ms/SVG, R²=0.848</text>
+  <text x="40" y="3014" fill="#e85d75" font-size="11">B (Repeated): max slope=0.4660 ms/SVG, R²=0.767</text>
+  <text x="40" y="3030" fill="#888" font-size="11">B (Repeated): p95@100 = 34.73 ms</text>
+  <rect x="1130" y="3018" width="22" height="14" fill="#e8a838" rx="2" opacity="0.85"/>
+  <rect x="1155" y="3018" width="22" height="14" fill="#e8a838" rx="2" opacity="0.85"/>
+  <rect x="1180" y="3018" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <rect x="1205" y="3018" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <rect x="1230" y="3018" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <text x="1130" y="3046" fill="#e8a838" font-size="11" font-weight="bold">bad</text>
+  <text x="40" y="3050" fill="#e8a838" font-size="11">A (Unique): p95 slope=0.3004 ms/SVG, R²=0.799</text>
+  <text x="40" y="3066" fill="#e85d75" font-size="11">A (Unique): max slope=0.3112 ms/SVG, R²=0.761</text>
+  <text x="40" y="3082" fill="#888" font-size="11">A (Unique): p95@100 = 32.25 ms</text>
+  <rect x="1130" y="3070" width="22" height="14" fill="#e8a838" rx="2" opacity="0.85"/>
+  <rect x="1155" y="3070" width="22" height="14" fill="#e8a838" rx="2" opacity="0.85"/>
+  <rect x="1180" y="3070" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <rect x="1205" y="3070" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <rect x="1230" y="3070" width="22" height="14" fill="#2a2a3e" rx="2" opacity="0.5"/>
+  <text x="1130" y="3098" fill="#e8a838" font-size="11" font-weight="bold">bad</text>
+</svg>

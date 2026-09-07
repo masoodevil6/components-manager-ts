@@ -34,6 +34,9 @@ export default defineConfig({
       { find: '@/util_tools', replacement: path.resolve(__dirname, './src/framework/module_util/module_tools') },
       { find: '@/util', replacement: path.resolve(__dirname, './src/framework/module_util') },
 
+      // ─── PERFORMANCE ────────────────────────────────────────
+      { find: '@/performance', replacement: path.resolve(__dirname, './src/framework/module_performance') },
+
       // ─── FRAMEWORK (پیش از @ قرار دارد) ─────────────────────
       { find: '@/framework', replacement: path.resolve(__dirname, './src/framework') },
 

@@ -55,6 +55,7 @@ src/
 |---|---|---|
 | `module_components` | [Module Components](./core/module_components.md) | موتور ساخت و مدیریت کامپوننت‌ها |
 | `module_configs` | [Module Configs](./core/module_configs.md) | تنظیمات و پیکربندی فریم‌ورک |
+| `module_event` | [Module Event](./core/module_event.md) | سیستم رویداد و ارتباط بین‌المانی (Step, Request, Response, SubEvent, Inspector) |
 | `module_languages` | [Module Languages](./core/module_languages.md) | سیستم چند زبانه (i18n) |
 | `module_observable` | [Module Observable](./core/module_observable.md) | مدیریت رویدادها با الگوی Observer |
 | `module_reactive` | [Module Reactive](./core/module_reactive.md) | موتور Reactive و رندر DOM |
@@ -74,6 +75,12 @@ src/
 | ماژول | مستندات | شرح |
 |---|---|---|
 | `module_util` | [Module Util](./util/module_util.md) | توابع و کلاس‌های کمکی مشترک |
+
+### ۴. ابزارهای مانیتورینگ (Inspectors)
+
+| ابزار | مستندات | شرح |
+|---|---|---|
+| Event Inspector | [Event Inspector](./inspectors/event-inspector.md) | مشاهده درخت Event، جریان dispatch، سلامت Engine و live stream از Console (Plan 8.2.9) |
 
 ---
 *ساخته شده توسط Mindbase سیستم مستندسازی خودکار.*

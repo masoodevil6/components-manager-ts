@@ -1,0 +1,341 @@
+The CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.
+
+[1m[46m RUN [49m[22m [36mv4.0.18 [39m[90mD:/projects/components/master[39m
+
+[90mstdout[2m | tests/perf/diagnostic.test.ts[2m > [22m[2mDiagnostic ΓÇö Isolate Scaling Anomaly
+[22m[39m
+=== Selection info ===
+heaviest: SymbolExclumationWarning score=19
+median:   ArrowDown score=2
+lightest: StatusVisit score=1
+heavy[1]: PaymentWalletAdd score=15
+heavy[2]: PaymentCash score=14
+
+[90mstdout[2m | tests/perf/diagnostic.test.ts[2m > [22m[2mDiagnostic ΓÇö Isolate Scaling Anomaly[2m > [22m[2mD1 ΓÇö CreateIcon only (no div wrapper), heaviest ├ù100
+[22m[39mD1 CreateIcon heaviest ├ù100 (no div)          median=28.82ms  p95=41.29ms  max=44.86ms
+
+[90mstdout[2m | tests/perf/diagnostic.test.ts[2m > [22m[2mDiagnostic ΓÇö Isolate Scaling Anomaly[2m > [22m[2mD2 ΓÇö CreateIcon only (no div wrapper), median ├ù100
+[22m[39mD2 CreateIcon median ├ù100 (no div)            median=5.32ms  p95=10.22ms  max=11.50ms
+
+[90mstdout[2m | tests/perf/diagnostic.test.ts[2m > [22m[2mDiagnostic ΓÇö Isolate Scaling Anomaly[2m > [22m[2mD3 ΓÇö CreateIcon only, heaviest ├ù100, with div wrapper
+[22m[39mD3 CreateIcon heaviest ├ù100 + div             median=37.16ms  p95=50.94ms  max=55.02ms
+
+[90mstdout[2m | tests/perf/diagnostic.test.ts[2m > [22m[2mDiagnostic ΓÇö Isolate Scaling Anomaly[2m > [22m[2mD4 ΓÇö CreateIcon only, median ├ù100, with div wrapper
+[22m[39mD4 CreateIcon median ├ù100 + div               median=10.23ms  p95=18.90ms  max=20.02ms
+
+[90mstdout[2m | tests/perf/diagnostic.test.ts[2m > [22m[2mDiagnostic ΓÇö Isolate Scaling Anomaly[2m > [22m[2mD5 ΓÇö CreateIcon, unique cycle ├ù100, with div wrapper
+[22m[39mD5 CreateIcon unique-cycle ├ù100 + div         median=21.59ms  p95=30.63ms  max=41.79ms
+
+[90mstdout[2m | tests/perf/diagnostic.test.ts[2m > [22m[2mDiagnostic ΓÇö Isolate Scaling Anomaly[2m > [22m[2mD6 ΓÇö CreateIcon, heaviest ├ù100, NO div, isolated (no accumulation)
+[22m[39mD6 CreateIcon heaviest ├ù100 (isolated, no div) median=37.26ms  p95=61.77ms  max=66.62ms
+
+[90mstdout[2m | tests/perf/diagnostic.test.ts[2m > [22m[2mDiagnostic ΓÇö Isolate Scaling Anomaly[2m > [22m[2mD7 ΓÇö cloneNode only (raw DOM, no CreateIcon), heaviest template ├ù100
+[22m[39mD7 raw cloneNode ├ù100 (no ClReactiveElement)  median=29.39ms  p95=32.82ms  max=32.97ms
+
+[90mstdout[2m | tests/perf/diagnostic.test.ts[2m > [22m[2mDiagnostic ΓÇö Isolate Scaling Anomaly[2m > [22m[2mD8 ΓÇö CoreReactive.App.svg wrapper only ├ù100 (no children)
+[22m[39mD8 CoreReactive.App.svg wrapper ├ù100          median=2.12ms  p95=5.00ms  max=5.06ms
+
+[90mstdout[2m | tests/perf/diagnostic.test.ts[2m > [22m[2mDiagnostic ΓÇö Isolate Scaling Anomaly[2m > [22m[2mD9 ΓÇö CoreReactive.App.div with 100 string children
+[22m[39mD9 div + 100 string children                  median=0.39ms  p95=0.78ms  max=2.19ms
+
+[90mstdout[2m | tests/perf/diagnostic.test.ts[2m > [22m[2mDiagnostic ΓÇö Isolate Scaling Anomaly[2m > [22m[2mD10 ΓÇö CreateIcon heaviest ├ù10 (smaller scale)
+[22m[39mD10 CreateIcon heaviest ├ù10                   median=2.78ms  p95=10.17ms  max=14.20ms
+
+[90mstdout[2m | tests/perf/diagnostic.test.ts[2m > [22m[2mDiagnostic ΓÇö Isolate Scaling Anomaly[2m > [22m[2mD11 ΓÇö CreateIcon heaviest ├ù50
+[22m[39mD11 CreateIcon heaviest ├ù50                   median=19.76ms  p95=27.89ms  max=30.75ms
+
+[90mstdout[2m | tests/perf/diagnostic.test.ts[2m > [22m[2mDiagnostic ΓÇö Isolate Scaling Anomaly[2m > [22m[2mD12 ΓÇö CreateIcon median ├ù50
+[22m[39mD12 CreateIcon median ├ù50                     median=2.88ms  p95=10.09ms  max=10.46ms
+
+[90mstdout[2m | tests/perf/diagnostic.test.ts[2m > [22m[2mDiagnostic ΓÇö Isolate Scaling Anomaly[2m > [22m[2mD13 ΓÇö innerHTML serialization + set ├ù100 (heaviest)
+[22m[39mD13 innerHTML set ├ù100 (heaviest)             median=74.59ms  p95=84.60ms  max=88.06ms
+
+[90mstdout[2m | tests/perf/diagnostic.test.ts[2m > [22m[2mDiagnostic ΓÇö Isolate Scaling Anomaly[2m > [22m[2mD14 ΓÇö shallow cloneNode + innerHTML ├ù100 (heaviest)
+[22m[39mD14 shallow clone + innerHTML ├ù100 (heaviest) median=72.81ms  p95=80.84ms  max=80.95ms
+
+ [32mΓ£ô[39m tests/perf/diagnostic.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 12211[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m D1 ΓÇö CreateIcon only (no div wrapper), heaviest ├ù100 [33m 1096[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m D3 ΓÇö CreateIcon only, heaviest ├ù100, with div wrapper [33m 1311[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m D4 ΓÇö CreateIcon only, median ├ù100, with div wrapper [33m 305[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m D5 ΓÇö CreateIcon, unique cycle ├ù100, with div wrapper [33m 795[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m D6 ΓÇö CreateIcon, heaviest ├ù100, NO div, isolated (no accumulation) [33m 1295[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m D7 ΓÇö cloneNode only (raw DOM, no CreateIcon), heaviest template ├ù100 [33m 967[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m D11 ΓÇö CreateIcon heaviest ├ù50 [33m 681[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m D13 ΓÇö innerHTML serialization + set ├ù100 (heaviest) [33m 2601[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m D14 ΓÇö shallow cloneNode + innerHTML ├ù100 (heaviest) [33m 2393[2mms[22m[39m
+[90mstdout[2m | tests/perf/scaling.test.ts[2m > [22m[2mScaling Benchmark ΓÇö Icon Creation[2m > [22m[2mScenario A (Unique) ΓÇö 1 icons
+[22m[39m[Scaling A] 1 icons | median: 0.54ms | p95: 1.02ms | min: 0.26ms | max: 1.05ms | DOM: 4
+
+[90mstdout[2m | tests/perf/scaling.test.ts[2m > [22m[2mScaling Benchmark ΓÇö Icon Creation[2m > [22m[2mScenario B (Repeated) ΓÇö 1 icons
+[22m[39m[Scaling B] 1 icons | median: 0.18ms | p95: 0.39ms | min: 0.16ms | max: 6.24ms | DOM: 4
+
+[90mstdout[2m | tests/perf/scaling.test.ts[2m > [22m[2mScaling Benchmark ΓÇö Icon Creation[2m > [22m[2mScenario A (Unique) ΓÇö 10 icons
+[22m[39m[Scaling A] 10 icons | median: 1.26ms | p95: 6.04ms | min: 0.97ms | max: 19.88ms | DOM: 27
+
+[90mstdout[2m | tests/perf/scaling.test.ts[2m > [22m[2mScaling Benchmark ΓÇö Icon Creation[2m > [22m[2mScenario B (Repeated) ΓÇö 10 icons
+[22m[39m[Scaling B] 10 icons | median: 0.83ms | p95: 1.12ms | min: 0.63ms | max: 8.07ms | DOM: 31
+
+[90mstdout[2m | tests/perf/scaling.test.ts[2m > [22m[2mScaling Benchmark ΓÇö Icon Creation[2m > [22m[2mScenario A (Unique) ΓÇö 25 icons
+[22m[39m[Scaling A] 25 icons | median: 2.23ms | p95: 14.35ms | min: 1.60ms | max: 32.26ms | DOM: 89
+
+[90mstdout[2m | tests/perf/scaling.test.ts[2m > [22m[2mScaling Benchmark ΓÇö Icon Creation[2m > [22m[2mScenario B (Repeated) ΓÇö 25 icons
+[22m[39m[Scaling B] 25 icons | median: 1.54ms | p95: 8.75ms | min: 1.25ms | max: 9.47ms | DOM: 76
+
+[90mstdout[2m | tests/perf/scaling.test.ts[2m > [22m[2mScaling Benchmark ΓÇö Icon Creation[2m > [22m[2mScenario A (Unique) ΓÇö 50 icons
+[22m[39m[Scaling A] 50 icons | median: 16.17ms | p95: 27.33ms | min: 6.68ms | max: 57.71ms | DOM: 350
+
+[90mstdout[2m | tests/perf/scaling.test.ts[2m > [22m[2mScaling Benchmark ΓÇö Icon Creation[2m > [22m[2mScenario B (Repeated) ΓÇö 50 icons
+[22m[39m[Scaling B] 50 icons | median: 3.62ms | p95: 21.62ms | min: 2.59ms | max: 24.28ms | DOM: 151
+
+[90mstdout[2m | tests/perf/scaling.test.ts[2m > [22m[2mScaling Benchmark ΓÇö Icon Creation[2m > [22m[2mScenario A (Unique) ΓÇö 100 icons
+[22m[39m[Scaling A] 100 icons | median: 22.74ms | p95: 30.68ms | min: 19.00ms | max: 44.98ms | DOM: 765
+
+[90mstdout[2m | tests/perf/scaling.test.ts[2m > [22m[2mScaling Benchmark ΓÇö Icon Creation[2m > [22m[2mScenario B (Repeated) ΓÇö 100 icons
+[22m[39m[Scaling B] 100 icons | median: 9.37ms | p95: 16.26ms | min: 5.10ms | max: 16.80ms | DOM: 301
+
+[90mstdout[2m | tests/perf/scaling.test.ts[2m > [22m[2mScaling Benchmark ΓÇö Icon Creation[2m > [22m[2mScenario A (Unique) ΓÇö 200 icons
+[22m[39m[Scaling A] 200 icons | median: 46.19ms | p95: 78.09ms | min: 40.24ms | max: 87.60ms | DOM: 1552
+
+[90mstdout[2m | tests/perf/scaling.test.ts[2m > [22m[2mScaling Benchmark ΓÇö Icon Creation[2m > [22m[2mScenario B (Repeated) ΓÇö 200 icons
+[22m[39m[Scaling B] 200 icons | median: 17.21ms | p95: 19.43ms | min: 11.29ms | max: 20.94ms | DOM: 601
+
+[90mstdout[2m | tests/perf/scaling.test.ts[2m > [22m[2mScaling Benchmark ΓÇö Icon Creation[2m > [22m[2mScaling Slope Analysis
+[22m[39m
+=== Scaling Slope Analysis ===
+Icons | Unique median | Repeated median | Slope A (unique) | Slope B (repeated)
+    1 |           0.07ms |             0.07ms |           0.0000 ms/icon |         0.0000 ms/icon
+   10 |           0.61ms |             0.56ms |           0.0597 ms/icon |         0.0539 ms/icon
+   25 |           2.24ms |             1.68ms |           0.1086 ms/icon |         0.0750 ms/icon
+   50 |          13.52ms |             3.39ms |           0.4512 ms/icon |         0.0683 ms/icon
+  100 |          24.72ms |             6.52ms |           0.2240 ms/icon |         0.0626 ms/icon
+  200 |          42.99ms |            17.61ms |           0.1827 ms/icon |         0.1108 ms/icon
+
+Overall slope (1ΓåÆ200):
+  Unique:   0.2157 ms/icon
+  Repeated: 0.0881 ms/icon
+  A/B ratio: 2.45x
+
+ [32mΓ£ô[39m tests/perf/scaling.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 6528[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m Scenario A (Unique) ΓÇö 50 icons [33m 405[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m Scenario A (Unique) ΓÇö 100 icons [33m 640[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m Scenario A (Unique) ΓÇö 200 icons [33m 1265[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m Scenario B (Repeated) ΓÇö 200 icons [33m 415[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m Scaling Slope Analysis [33m 2938[2mms[22m[39m
+[90mstdout[2m | tests/perf/heavy-svg.test.ts[2m > [22m[2mHeavy SVG Creation Scaling[2m > [22m[2mHeavy SVG selection ΓÇö deterministic
+[22m[39m
+Selection statistics:
+  K=100, heaviest score=19, median score=3, avg score=4.5
+  Repeated scenario uses: LoadingDotsVertical (score=3)
+
+Top 10 heavy definitions (by primitive count):
+  SymbolExclumationWarning       score=19
+  PaymentWalletAdd               score=15
+  PaymentCash                    score=14
+  PaymentDeposit                 score=14
+  PaymentLeverage2               score=14
+  PaymentTransaction             score=14
+  PaymentWithDrawal              score=14
+  InputQrCode                    score=12
+  PaymentCashCurrency            score=12
+  PaymentWallet2                 score=11
+
+[90mstdout[2m | tests/perf/heavy-svg.test.ts[2m > [22m[2mHeavy SVG Creation Scaling[2m > [22m[2mScenario A (Unique) ΓÇö 0 to 100 heavy SVGs
+[22m[39m
+=== heavy-svg-unique ===
+count | median  | p95     | max     | min
+------|---------|---------|---------|---------
+    0 |    0.03 |    0.13 |    0.15 |    0.02
+   10 |    3.03 |    8.54 |   11.28 |    2.31
+   20 |    3.92 |   10.12 |   10.21 |    3.48
+   30 |    7.04 |   13.36 |   15.10 |    4.62
+   40 |    7.40 |    9.55 |   10.25 |    5.61
+   50 |    8.23 |   13.57 |   16.10 |    6.74
+   60 |    9.50 |   14.07 |   14.59 |    7.47
+   70 |   13.63 |   15.54 |   15.85 |    7.86
+   80 |   15.32 |   23.25 |   27.09 |   10.05
+   90 |   20.30 |   38.93 |   42.44 |   17.66
+  100 |   21.59 |   32.25 |   32.40 |   19.50
+
+Slopes (linear regression):
+  median: slope=0.2058 ms/SVG | intercept=-0.29ms | R┬▓=0.959
+  p95   : slope=0.3004 ms/SVG | intercept=1.28ms | R┬▓=0.799
+  max   : slope=0.3112 ms/SVG | intercept=2.21ms | R┬▓=0.761
+
+[90mstdout[2m | tests/perf/heavy-svg.test.ts[2m > [22m[2mHeavy SVG Creation Scaling[2m > [22m[2mScenario B (Repeated) ΓÇö 0 to 100 heavy SVGs
+[22m[39m
+=== heavy-svg-repeated ===
+count | median  | p95     | max     | min
+------|---------|---------|---------|---------
+    0 |    0.03 |    0.03 |    0.04 |    0.02
+   10 |    1.62 |    8.91 |   12.38 |    1.47
+   20 |    4.62 |    9.80 |   12.19 |    2.87
+   30 |    5.54 |   12.68 |   16.31 |    4.25
+   40 |   11.46 |   19.84 |   20.60 |    5.97
+   50 |   12.67 |   18.61 |   37.75 |    7.15
+   60 |   14.00 |   18.53 |   23.86 |    8.82
+   70 |   17.59 |   27.22 |   34.25 |   12.19
+   80 |   18.27 |   26.75 |   41.52 |   15.78
+   90 |   22.33 |   48.41 |   63.35 |   18.10
+  100 |   24.25 |   34.73 |   36.36 |   19.44
+
+Slopes (linear regression):
+  median: slope=0.2469 ms/SVG | intercept=-0.31ms | R┬▓=0.987
+  p95   : slope=0.3728 ms/SVG | intercept=1.86ms | R┬▓=0.848
+  max   : slope=0.4660 ms/SVG | intercept=3.85ms | R┬▓=0.767
+
+ [32mΓ£ô[39m tests/perf/heavy-svg.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 6425[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m Scenario A (Unique) ΓÇö 0 to 100 heavy SVGs [33m 2886[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m Scenario B (Repeated) ΓÇö 0 to 100 heavy SVGs [33m 3309[2mms[22m[39m
+[90mstdout[2m | tests/perf/attribution.test.ts[2m > [22m[2mAttribution ΓÇö MtCreateIcon Stage Timing[2m > [22m[2mLevel 1: Coarse Stage Attribution
+[22m[39m
+=== Level 1 Attribution (per icon, median) ===
+Stage                    | Time (ms) | % of total
+-------------------------|-----------|----------
+Scope creation           |    0.0010 |    0.2%
+Computed setup (9 comp)  |    0.2089 |   45.1%
+definition.render()      |    0.1900 |   41.0%
+svg() construction       |    0.0721 |   15.6%
+-------------------------|-----------|----------
+Accounted                |    0.4720 |  101.9%
+Overhead (loop/timing)   |   -0.0088 |   -1.9%
+Total per icon           |    0.4632 | 100.0%
+
+For 100 icons: ~46.32ms total
+
+[90mstdout[2m | tests/perf/attribution.test.ts[2m > [22m[2mAttribution ΓÇö MtCreateIcon Stage Timing[2m > [22m[2mLevel 1: Full MtCreateIcon vs Staged (overhead check)
+[22m[39m
+=== Overhead Check ===
+Direct MtCreateIcon (100 icons): 15.49ms
+Staged replication   (100 icons): 25.20ms
+Ratio: 1.63x
+
+[90mstdout[2m | tests/perf/attribution.test.ts[2m > [22m[2mAttribution ΓÇö MtCreateIcon Stage Timing[2m > [22m[2mLevel 1: definition.render() isolated cost
+[22m[39m
+=== definition.render() isolated ===
+definition.render() (100x, 6 paths each): 16.93ms
+  ΓåÆ per icon: 0.1693ms
+6x svgPath() only (100x): 17.45ms
+  ΓåÆ per icon: 0.1745ms
+render() overhead beyond SVG creation: -0.0052ms/icon
+
+[90mstdout[2m | tests/perf/attribution.test.ts[2m > [22m[2mAttribution ΓÇö MtCreateIcon Stage Timing[2m > [22m[2mLevel 1: ClReactiveElement constructor cost
+[22m[39m
+=== ClReactiveElement constructor ===
+svg() ├ù 100: 1.49ms ΓåÆ 0.0149ms/element
+div() ├ù 100: 1.77ms ΓåÆ 0.0177ms/element
+
+Estimated constructor cost for 7 elements/icon: 0.1046ms/icon
+
+[90mstdout[2m | tests/perf/attribution.test.ts[2m > [22m[2mAttribution ΓÇö MtCreateIcon Stage Timing[2m > [22m[2mLevel 1: Computed() creation cost
+[22m[39m
+=== Computed() creation ===
+9├ù computed() + scope (100 icons): 0.57ms ΓåÆ 0.0057ms/icon
+9├ù new Observable() (100 icons): 0.12ms ΓåÆ 0.0012ms/icon
+
+ [32mΓ£ô[39m tests/perf/attribution.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 3177[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m Level 1: Coarse Stage Attribution [33m 1208[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m Level 1: Full MtCreateIcon vs Staged (overhead check) [33m 911[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m Level 1: definition.render() isolated cost [33m 768[2mms[22m[39m
+[90mstdout[2m | tests/perf/pages.test.ts[2m > [22m[2mPage Performance[2m > [22m[2mIconPage ΓÇö benchmark
+[22m[39m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[90mstdout[2m | tests/perf/pages.test.ts
+[22m[39m
+========== PERFORMANCE REPORT ==========
+
+HomePage
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  Benchmark
+    median  0.32 ms
+    p95     0.60 ms
+    min     0.20 ms
+    max     1.29 ms
+    samples 30
+  Metrics
+    renderExecutionMs      0.53 ms
+    onLoadExecutionMs      0.03 ms
+    domElementCount        3.00 count
+    componentCount         unsupported
+    memoryHeapDeltaMB      +0.01 MB
+  Regression
+    (no baseline ΓÇö first run)
+
+IconPage
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  Benchmark
+    median  30.63 ms
+    p95     45.25 ms
+    min     24.39 ms
+    max     54.64 ms
+    samples 30
+  Metrics
+    renderExecutionMs      28.73 ms
+    onLoadExecutionMs      0.05 ms
+    domElementCount        980.00 count
+    componentCount         unsupported
+    memoryHeapDeltaMB      +8.67 MB
+  Regression
+    (no baseline ΓÇö first run)
+
+========================================
+
+
+ [32mΓ£ô[39m tests/perf/pages.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 1569[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m IconPage ΓÇö benchmark [33m 1396[2mms[22m[39m
+[90mstdout[2m | tests/perf/stress.test.ts[2m > [22m[2mStress ΓÇö TestsPage[2m > [22m[2mTestsPage ΓÇö benchmark
+[22m[39m[TestsPage] onLoad ΓÇö page element: HTMLElement {}
+
+ [32mΓ£ô[39m tests/perf/stress.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 1635[2mms[22m[39m
+     [33m[2mΓ£ô[22m[39m TestsPage ΓÇö benchmark [33m 1493[2mms[22m[39m
+ [32mΓ£ô[39m tests/perf/components.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1293[2mms[22m[39m
+ [32mΓ£ô[39m tests/perf/behavioral.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 225[2mms[22m[39m
+[90mstdout[2m | tests/perf/zz-report.test.ts[2m > [22m[2mReport Aggregation
+[22m[39m
+≡ƒôè SVG report saved to: D:\projects\components\master\perf-report.svg
+
+
+ [32mΓ£ô[39m tests/perf/zz-report.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 185[2mms[22m[39m
+ [32mΓ£ô[39m tests/perf/benchmark-engine.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 92[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m10 passed[39m[22m[90m (10)[39m
+[2m      Tests [22m [1m[32m78 passed[39m[22m[90m (78)[39m
+[2m   Start at [22m 16:26:26
+[2m   Duration [22m 52.88s[2m (transform 4.65s, setup 0ms, import 16.93s, tests 33.34s, environment 2ms)[22m
+

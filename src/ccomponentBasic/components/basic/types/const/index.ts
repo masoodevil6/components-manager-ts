@@ -1,1 +1,0 @@
-export {TComponentDefinition} from "./TComponentDefinition"

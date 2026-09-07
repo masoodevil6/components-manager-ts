@@ -26,5 +26,9 @@
 - ساختار پوشه‌ها و Namespaceها.
 - نحوه اجرای تست‌ها و Build کردن پروژه.
 
+## 🔍 ابزارهای مانیتورینگ (Inspectors)
+[Event Inspector](./inspectors/event-inspector.md)
+*مشاهده درخت Event، جریان dispatch، سلامت Engine و live stream از تب Console مرورگر (Plan 8.2.9).*
+
 ---
 *آخرین به‌روزرسانی: $(date)*

@@ -251,9 +251,11 @@ export class ClObservable<T> {
         mapper: (
             item: T,
             index: number,
-            context: Record<string, any>
+            context: Record<string, any>,
+            consts:  Record<string, any>,
         ) => TResult,
         context: Record<string, ClObservable<any>> = {},
+        consts:  Record<string, any> = {},
         scope?:  Scope
     ): ClObservable<TResult[]> {
 
@@ -276,7 +278,8 @@ export class ClObservable<T> {
                 mapper(
                     item,
                     index,
-                    contextValues
+                    contextValues,
+                    consts
                 )
             );
         };
@@ -316,9 +319,11 @@ export class ClObservable<T> {
             key: keyof TObject,
             value: TObject[keyof TObject],
             index: number,
-            context: Record<string, any>
+            context: Record<string, any>,
+            consts:  Record<string, any>,
         ) => TResult,
         context: Record<string, ClObservable<any>> = {},
+        consts:  Record<string, any> = {},
         scope?:  Scope
     ): ClObservable<TResult[]> {
 
@@ -343,7 +348,8 @@ export class ClObservable<T> {
                         key as keyof TObject,
                         value as TObject[keyof TObject],
                         index,
-                        contextValues
+                        contextValues,
+                        consts
                     )
             );
         };

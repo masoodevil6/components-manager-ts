@@ -27,7 +27,8 @@ src/framework/module_ui/module_components/lists/componentButton/
 │
 ├── examples/
 │   ├── Default.ts             ← Example پیش‌فرض (با render() callable)
-│   ├── Icon.ts                ← Example با آیکون (با render() callable)
+│   ├── Clickable.ts           ← Example با CLICK callback + آیکون
+│   ├── Variants.ts            ← Example با چند variant (primary/secondary/ghost)
 │   └── index.ts               ← Registry Examples (satisfies Record<string, ComponentExample>)
 │
 └── index.ts                   ← Public API
@@ -147,47 +148,147 @@ export const Definition: CoreComponents.ComponentDefinition = {
 
 ```typescript
 import * as CoreComponents from "@/core_components";
-import {Keys}              from "../../../module_categories/languages";
+import {DefineProp as Define_ComponentProp} from "@/core_components";
+import {Keys}                from "../../../module_categories/languages";
+import * as UiIcons          from "@/ui_icons";
+import type {
+    ExtractPropsType,
+    ExtractPropsConfigType,
+} from "../../tools/type/TypeHelpers";
 // --------------------------------
 
 
 /**
- * Props اختصاصی ComponentButton
+ * Enums اختصاصی ComponentButton
+ */
+export enum ButtonSemantic {
+    CUSTOM =    "custom",
+    SUBMIT =    "submit",
+    CANCEL =    "cancel",
+    BACK =      "back"
+}
+
+export enum ButtonVariants {
+    PRIMARY =   "primary",
+    SECONDARY = "secondary",
+    GHOST =     "ghost",
+    ICON =      "icon",
+}
+
+export enum ButtonAction {
+    SUBMIT =    "submit",
+    BUTTON =    "button",
+}
+
+
+/**
+ * Props اختصاصی ComponentButton (Plan 9.1.1 — بازیابی کامل ۲۴ prop Legacy)
+ *
  * این Props به ۷ prop پایه ComponentStructure اضافه می‌شوند.
+ *
+ * Plan 9.1.3 — Define_ComponentProp<T>:
+ *   از helper به‌جای satisfies استفاده می‌شود تا نوع T در return type
+ *   حفظ شود و از literal narrowing جلوگیری شود.
  */
 export const Props = {
 
-    prop_btnTitle: {
-        prop:         "prop_btnTitle",
-        default:      "" as string,
-        name:         Keys.category.components.button.props.btnTitle.name,
-        description:  Keys.category.components.button.props.btnTitle.description,
-    },
-
-    prop_btnType: {
+    prop_btnType: Define_ComponentProp<ButtonAction>({
         prop:         "prop_btnType",
-        default:      "button" as string,
+        default:      ButtonAction.BUTTON,
         name:         Keys.category.components.button.props.btnType.name,
         description:  Keys.category.components.button.props.btnType.description,
-    },
+    }),
 
-    prop_btnIcon: {
+    prop_btnVariant: Define_ComponentProp<ButtonVariants>({
+        prop:         "prop_btnVariant",
+        default:      ButtonVariants.PRIMARY,
+        name:         Keys.category.components.button.props.btnVariant.name,
+        description:  Keys.category.components.button.props.btnVariant.description,
+    }),
+
+    prop_btnTitle: Define_ComponentProp<string>({
+        prop:         "prop_btnTitle",
+        default:      "",
+        name:         Keys.category.components.button.props.btnTitle.name,
+        description:  Keys.category.components.button.props.btnTitle.description,
+    }),
+
+    prop_btnClass: Define_ComponentProp<string[]>({
+        prop:         "prop_btnClass",
+        default:      [],
+        name:         Keys.category.components.button.props.btnClass.name,
+        description:  Keys.category.components.button.props.btnClass.description,
+    }),
+
+    prop_btnStyles: Define_ComponentProp<Record<string, string>>({
+        prop:         "prop_btnStyles",
+        default:      {},
+        name:         Keys.category.components.button.props.btnStyles.name,
+        description:  Keys.category.components.button.props.btnStyles.description,
+    }),
+
+    prop_btnDisabled: Define_ComponentProp<boolean>({
+        prop:         "prop_btnDisabled",
+        default:      false,
+        name:         Keys.category.components.button.props.btnDisabled.name,
+        description:  Keys.category.components.button.props.btnDisabled.description,
+    }),
+
+    prop_btnSemantic: Define_ComponentProp<ButtonSemantic>({
+        prop:         "prop_btnSemantic",
+        default:      ButtonSemantic.SUBMIT,
+        name:         Keys.category.components.button.props.btnSemantic.name,
+        description:  Keys.category.components.button.props.btnSemantic.description,
+    }),
+
+    prop_btnWidth: Define_ComponentProp<string | null>({
+        prop:         "prop_btnWidth",
+        default:      null,
+        name:         Keys.category.components.button.props.btnWidth.name,
+        description:  Keys.category.components.button.props.btnWidth.description,
+    }),
+
+    prop_btnHeight: Define_ComponentProp<string | null>({
+        prop:         "prop_btnHeight",
+        default:      null,
+        name:         Keys.category.components.button.props.btnHeight.name,
+        description:  Keys.category.components.button.props.btnHeight.description,
+    }),
+
+    // ... سایر propهای اختصاصی (borderColor, borderRadius, titleColor, icon, ...)
+
+    prop_btnIcon: Define_ComponentProp<UiIcons.IIconDefinition | null>({
         prop:         "prop_btnIcon",
-        default:      null as string | null,
+        default:      null,
         name:         Keys.category.components.button.props.btnIcon.name,
         description:  Keys.category.components.button.props.btnIcon.description,
-    },
+    }),
 
 } satisfies CoreComponents.ComponentProps;
 
 
 /**
  * نوع propهای ComponentButton — برای استفاده در TProp
+ *
+ * Plan 9.1.3 — ExtractPropsType از TypeHelpers:
+ *   به‌جای تعریف inline، از helper آماده استفاده می‌شود.
+ *   این helper از TProps[K]["default"] استفاده می‌کند که با
+ *   Define_ComponentProp<T> به‌درستی نوع T را استخراج می‌کند.
  */
-export type PropsType = {
-    [K in keyof typeof Props]: typeof Props[K]["default"]
-};
+export type PropsType = ExtractPropsType<typeof Props>;
+
+
+/**
+ * نوع config قابل‌قبول constructor — هر prop می‌تواند:
+ *   - مقدار خام (مطابق default)
+ *   - یا Observable همان مقدار (ClObservable<T>)
+ */
+export type PropsConfigType = ExtractPropsConfigType<typeof Props>;
 ```
+
+### نکته — Enums اختصاصی
+
+اگر Component نیاز به enumهای اختصاصی دارد (مثل `ButtonSemantic`, `ButtonVariants`, `ButtonAction`)، آن‌ها را در همان `Props.ts` تعریف کنید — قبل از `Props` const. این الگو از کپسوله کردن نوع‌های اختصاصی Component در یک فایل جلوگیری می‌کند.
 
 ### قوانین
 
@@ -196,10 +297,16 @@ export type PropsType = {
 | هر prop شامل `prop`, `default`, `name`, `description` باشد | **MUST** |
 | `prop` با `prop_` شروع شود (برای propهای اختصاصی) | **SHOULD** |
 | `default` type-correct باشد | **MUST** |
+| **(Plan 9.1.3)** هر prop با `Define_ComponentProp<T>(...)` تعریف شود — نه `satisfies TComponentPropEntry<T>` | **MUST** |
+| **(Plan 9.1.3)** Generic `<T>` صریحاً پاس شود — type inference کافی نیست | **MUST** |
+| **(Plan 9.1.3)** اگر `default: null` است، نوع باید `T \| null` باشد | **MUST** |
+| **(Plan 9.1.3)** `PropsType` با `ExtractPropsType<typeof Props>` تعریف شود — نه inline | **MUST** |
+| **(Plan 9.1.3)** `PropsConfigType` با `ExtractPropsConfigType<typeof Props>` تعریف شود | **MUST** |
 | `name` و `description` از `Keys` (سیستم ترجمه) استفاده کنند | **MUST** |
 | Props نباید Rendering انجام دهد | **MUST NOT** |
 | Props نباید به Runtime وابسته باشد | **MUST NOT** |
-| `satisfies CoreComponents.ComponentProps` استفاده شود | **MUST** |
+| `satisfies CoreComponents.ComponentProps` در آبجکت نهایی استفاده شود | **MUST** |
+| از `satisfies TComponentPropEntry<T>` در propهای فردی استفاده **نشود** — **MUST NOT** (Plan 9.1.3) |
 
 ### نکته
 
@@ -222,23 +329,54 @@ export type PropsType = {
 import * as CoreComponents from "@/core_components";
 import {Keys}              from "../../../module_categories/languages";
 import {Props}             from "./Props";
+import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
+import type {ExtractSchemasType} from "../../tools/type/TypeHelpers";
 // --------------------------------
 
 
 /**
- * Schemas اختصاصی ComponentButton
- * این Schemas به ۲ schema پایه (COMPONENT, STRUCTURE) اضافه می‌شوند.
+ * Schemas اختصاصی ComponentButton (Plan 9.1.1 — بازیابی ۴ schema Legacy)
+ *
+ * Plan 11.2 — Schema پایه (COMPONENT + STRUCTURE) از ComponentStructureTrait
+ * به‌عنوان اولین ورودی‌ها اضافه شده‌اند تا لایه <component-button> + <section>
+ * به‌صورت خودکار رندر شوند.
  *
  * Schema فقط تعریف می‌کند Part چیست — نه چگونه رندر شود.
  * Rendering در خود ComponentButton قرار دارد.
  */
 export const Schemas = {
 
-    FORM: {
-        part:         "part-button-form",
-        props:        [Props.prop_btnTitle, Props.prop_btnType, Props.prop_btnIcon],
-        name:         Keys.category.components.button.schemas.form.name,
-        description:  Keys.category.components.button.schemas.form.description,
+    // --- Plan 11.2: Schema پایه (الزامی — اولین ورودی) ---
+    COMPONENT: ComponentStructureTrait.schemas.COMPONENT,
+    STRUCTURE: ComponentStructureTrait.schemas.STRUCTURE,
+
+    // --- Schema اختصاصی ---
+    BUTTON: {
+        part:         "part-button",
+        props:        [Props.prop_btnTitle, Props.prop_btnType, Props.prop_btnSemantic, ...],
+        name:         Keys.category.components.button.schemas.button.name,
+        description:  Keys.category.components.button.schemas.button.description,
+    },
+
+    BUTTON_TITLE: {
+        part:         "part-button-title",
+        props:        [Props.prop_btnTitle, Props.prop_btnSemantic, Props.prop_btnTitleColor, ...],
+        name:         Keys.category.components.button.schemas.buttonTitle.name,
+        description:  Keys.category.components.button.schemas.buttonTitle.description,
+    },
+
+    BUTTON_ICON: {
+        part:         "part-button-icon",
+        props:        [Props.prop_btnIcon, Props.prop_btnIconStyles, Props.prop_btnIconClass, ...],
+        name:         Keys.category.components.button.schemas.buttonIcon.name,
+        description:  Keys.category.components.button.schemas.buttonIcon.description,
+    },
+
+    WRAPPER: {
+        part:         "part-button-wrapper",
+        props:        [Props.prop_btnWidth, Props.prop_btnHeight],
+        name:         Keys.category.components.button.schemas.wrapper.name,
+        description:  Keys.category.components.button.schemas.wrapper.description,
     },
 
 } satisfies CoreComponents.ComponentSchemas;
@@ -246,16 +384,18 @@ export const Schemas = {
 
 /**
  * نوع schemaهای ComponentButton — برای استفاده در TSchemas
+ *
+ * Plan 11.2 — ExtractSchemasType از TypeHelpers:
+ *   به‌جای تعریف inline، از helper آماده استفاده می‌شود.
  */
-export type SchemasType = {
-    [K in keyof typeof Schemas]: typeof Schemas[K]["part"]
-};
+export type SchemasType = ExtractSchemasType<typeof Schemas>;
 ```
 
 ### قوانین
 
 | قانون | سطح |
 |:---|:---|
+| **(Plan 11.2)** `COMPONENT` و `STRUCTURE` از `ComponentStructureTrait.schemas` به‌عنوان اولین ورودی‌ها اضافه شوند | **MUST** |
 | هر schema شامل `part`, `props` باشد | **MUST** |
 | `part` با `part-` شروع شود و یکتا باشد | **MUST** |
 | `props` به entryهای `Props` اشاره کند (نه string) | **MUST** |
@@ -264,11 +404,13 @@ export type SchemasType = {
 | Schema به CoreReactive وابسته نباشد | **MUST NOT** |
 | Schema به Component کلاس وابسته نباشد | **MUST NOT** |
 | `satisfies CoreComponents.ComponentSchemas` استفاده شود | **MUST** |
+| **(Plan 11.2)** `SchemasType` با `ExtractSchemasType<typeof Schemas>` تعریف شود — نه inline | **MUST** |
 
 ### نکته
 
-۲ schema پایه (`COMPONENT`, `STRUCTURE`) از `ComponentStructure` ارث می‌رسند.
-شما فقط schemaهای **اخصاصی** Component را تعریف می‌کنید.
+۲ schema پایه (`COMPONENT`, `STRUCTURE`) از `ComponentStructureTrait.schemas` به‌عنوان اولین ورودی‌ها اضافه می‌شوند.
+این باعث می‌شود لایه `<component-{name}>` و `<section>` به‌صورت خودکار رندر شوند.
+شما فقط schemaهای **اختصاصی** Component را تعریف می‌کنید.
 
 ---
 
@@ -288,6 +430,12 @@ export type SchemasType = {
 
 ```typescript
 import {Props as ButtonProps} from "./Props";
+import type {
+    ExtractMethodsType,
+    ExtractMethodsComponentArgs,
+    ExtractMethodsDataArgs,
+    ExtractMethodsConfigType,
+} from "../../tools/type/TypeHelpers";
 // --------------------------------
 
 
@@ -301,6 +449,11 @@ import {Props as ButtonProps} from "./Props";
  *   - semantic keys متعلق به Public API هستند (CLICK, HOVER, ...)
  *   - runtime name متعلق به implementation است (fn_onClickButton, ...)
  *   - args و dataArgs در اینجا تعریف می‌شوند و type‌ها از آنجا استخراج می‌شوند
+ *
+ * Plan 9.1.3:
+ *   - type extraction از TypeHelpers استفاده می‌کند — نه inline تعریف
+ *   - args به prop entryها اشاره می‌کند که با Define_ComponentProp<T> تعریف شده‌اند
+ *   - ExtractMethodsComponentArgs به‌درستی نوع T (نه literal) را استخراج می‌کند
  */
 export const Methods = {
 
@@ -311,11 +464,38 @@ export const Methods = {
         // componentArgs — prop reference‌ها
         // در زمان اجرا resolve می‌شوند به مقادیر فعلی props
         args: {
-            TITLE: ButtonProps.prop_btnTitle,
-            TYPE:  ButtonProps.prop_btnType,
+            TITLE:    ButtonProps.prop_btnTitle,
+            VARIANT:  ButtonProps.prop_btnVariant,
+            SEMANTIC: ButtonProps.prop_btnSemantic,
         },
 
         // dataArgs — type تعریف‌شده برای داده‌های runtime
+        dataArgs: {} as const,
+    },
+
+    HOVER: {
+        name:        "fn_onHoverButton",
+        description: "Callback when mouse enters button",
+
+        args: {
+            TITLE:    ButtonProps.prop_btnTitle,
+            VARIANT:  ButtonProps.prop_btnVariant,
+            SEMANTIC: ButtonProps.prop_btnSemantic,
+        },
+
+        dataArgs: {} as const,
+    },
+
+    BLUR: {
+        name:        "fn_onBlurButton",
+        description: "Callback when mouse leaves button",
+
+        args: {
+            TITLE:    ButtonProps.prop_btnTitle,
+            VARIANT:  ButtonProps.prop_btnVariant,
+            SEMANTIC: ButtonProps.prop_btnSemantic,
+        },
+
         dataArgs: {} as const,
     },
 
@@ -324,28 +504,19 @@ export const Methods = {
 
 /**
  * نوع methodهای ComponentButton — برای استفاده در TMethods (داخلی Component)
+ *
+ * Plan 9.1.3 — از ExtractMethodsType در TypeHelpers استفاده می‌شود
  */
-export type MethodsType = {
-    [K in keyof typeof Methods]: (event: Event, dataArgs: any, componentArgs: any) => void
-};
+export type MethodsType = ExtractMethodsType<typeof Methods>;
 
 
 /**
  * Component Args type برای هر method
  * از args (prop reference) استخراج می‌شود
  *
- * مثال: MethodsComponentArgs["CLICK"] = { TITLE: string, TYPE: string }
+ * مثال: MethodsComponentArgs["CLICK"]["SEMANTIC"] = ButtonSemantic (نه ButtonSemantic.SUBMIT)
  */
-export type MethodsComponentArgs = {
-    [K in keyof typeof Methods]: {
-        [ArgKey in keyof typeof Methods[K]["args"]]:
-            typeof Methods[K]["args"][ArgKey] extends {
-                default: infer T
-            }
-                ? T
-                : any;
-    };
-};
+export type MethodsComponentArgs = ExtractMethodsComponentArgs<typeof Methods>;
 
 
 /**
@@ -354,9 +525,7 @@ export type MethodsComponentArgs = {
  *
  * مثال: MethodsDataArgs["CLICK"] = {}
  */
-export type MethodsDataArgs = {
-    [K in keyof typeof Methods]: typeof Methods[K]["dataArgs"];
-};
+export type MethodsDataArgs = ExtractMethodsDataArgs<typeof Methods>;
 
 
 /**
@@ -375,8 +544,9 @@ export type MethodsDataArgs = {
  *       {
  *           CLICK: function(event, dataArgs, componentArgs) {
  *               // autocomplete:
- *               //   componentArgs?.TITLE  ← string
- *               //   componentArgs?.TYPE   ← string
+ *               //   componentArgs?.TITLE    ← string
+ *               //   componentArgs?.VARIANT  ← ButtonVariants (نه literal)
+ *               //   componentArgs?.SEMANTIC ← ButtonSemantic (نه literal)
  *               //   dataArgs              ← {}
  *               //   this                  ← ComponentButton (fn.call(this, ...))
  *           },
@@ -389,14 +559,7 @@ export type MethodsDataArgs = {
  */
 export type MethodsConfigType<
     TThis = any,
-> = {
-    [K in keyof typeof Methods]?: (
-        this: TThis,
-        event: Event,
-        dataArgs: MethodsDataArgs[K] | null,
-        componentArgs: MethodsComponentArgs[K] | null,
-    ) => void;
-};
+> = ExtractMethodsConfigType<typeof Methods, TThis>;
 ```
 
 ### قوانین
@@ -408,7 +571,7 @@ export type MethodsConfigType<
 | runtime `name` متعلق به implementation باشد — نباید به Public API نشت کند | **MUST** |
 | `args` به propهای موجود در `Props` اشاره کند | **MUST** |
 | `dataArgs` با `as const` تعریف شود | **MUST** |
-| `MethodsComponentArgs` و `MethodsDataArgs` استخراج شوند | **MUST** |
+| **(Plan 9.1.3)** `MethodsType`, `MethodsComponentArgs`, `MethodsDataArgs`, `MethodsConfigType` از `TypeHelpers` استخراج شوند — نه inline | **MUST** |
 | `MethodsConfigType<TThis>` با `this: TThis` تعریف شود | **MUST** |
 | Methods نباید Rendering انجام دهد | **MUST NOT** |
 | Methods نباید به Runtime وابسته باشد | **MUST NOT** |
@@ -455,23 +618,37 @@ import * as CoreEvent from "@/core_event";
 
 
 /**
- * Step Node — درخت Workflow داخلی ComponentButton
+ * Step Factory — درخت Workflow داخلی ComponentButton
  *
- * این Step در constructor ComponentButton به ComponentStructure پاس داده می‌شود.
- * در متدهای render به reactiveElementها متصل می‌شود.
+ * Plan 9.1 — factory function (نه ثابت):
+ *   هر ComponentButton Instance باید Step Instance مستقل داشته باشد.
  *
- * تفاوت با identity:
- *   identity = بیرونی — والد به این Component
- *   step     = داخلی — این Component به فرزندانش
+ *   ComponentButton #1 → createButtonStep() → Step #1
+ *   ComponentButton #2 → createButtonStep() → Step #2
+ *
+ * click / hover / blur:
+ *   click    ← Event Engine endpoint (unique روی <button>)
+ *   hover    ← DOM → Method API (ساختار Step برای آینده)
+ *   blur     ← DOM → Method API (ساختار Step برای آینده)
  */
-export const ButtonStep = CoreEvent.Step({
-    children: {
-        click: CoreEvent.Step({
-            request:  CoreEvent.Request(),
-            response: CoreEvent.Response({ value: "" }),
-        }),
-    }
-});
+export function createButtonStep() {
+    return CoreEvent.Step({
+        children: {
+            click: CoreEvent.Step({
+                request:  CoreEvent.Request(),
+                response: CoreEvent.Response({ value: "" }),
+            }),
+            hover: CoreEvent.Step({
+                request:  CoreEvent.Request(),
+                response: CoreEvent.Response({ value: "" }),
+            }),
+            blur: CoreEvent.Step({
+                request:  CoreEvent.Request(),
+                response: CoreEvent.Response({ value: "" }),
+            }),
+        }
+    });
+}
 ```
 
 ### قوانین
@@ -482,11 +659,54 @@ export const ButtonStep = CoreEvent.Step({
 | هر child Step شامل `request` و `response` باشد | **SHOULD** |
 | Step در فایل جدا (نه در Component کلاس) تعریف شود | **MUST** |
 | Step به Component کلاس وابسته نباشد | **MUST NOT** |
+| **(Plan 9.1)** Step به‌صورت **factory function** تعریف شود (نه ثابت) — هر Instance Step مستقل داشته باشد | **MUST** |
+| **(Plan 8.2.7)** `children` مستقیم mutate نشود — از `SubEvent` استفاده شود | **MUST NOT** |
+| **(Plan 8.2.8)** Step factory `createMessagesStep()` باشد (نه `createStep`) اگر Component چندین Instance Event Scope دارد | **SHOULD** |
 
 ### نکته
 
 اگر Component نیاز به Workflow داخلی ندارد (مثلاً یک Component display-only)،
 می‌توانید این فایل نسازید و `step` را در constructor پاس ندهید.
+
+### نکته — Plan 8.2.7 (SubEvent)
+
+اگر Component دارای Parent Step است (یعنی `identity.unique` در constructor پاس داده می‌شود)،
+Base کلاس به‌صورت خودکار `CoreEvent.SubEvent(identity.unique, componentName, step)` را صدا می‌زند.
+
+این یعنی:
+- Step داخلی Component به‌عنوان فرزند با `componentName` به Parent Step متصل می‌شود.
+- همه نسل‌های Step در رجیستری App ثبت می‌شوند.
+- `dispose(step)` کل subtree را پاک می‌کند (بازگشتی).
+
+```typescript
+// در Base constructor (Plan 8.2.7):
+if (step && identity?.unique) {
+    CoreEvent.SubEvent(identity.unique, componentName, step);
+}
+```
+
+### نکته — Plan 8.2.8 (Per-Message Event Scope)
+
+اگر Component دارای فرزندهای dynamic است (مثل `ComponentMessages` که هر پیام یک Scope مستقل دارد)،
+Step factory باید یک تابع باشد که هر بار صدا زده می‌شود، یک Step درخت جدید بسازد:
+
+```typescript
+// Step.ts — factory function (نه ثابت)
+export function createMessagesStep() {
+    return CoreEvent.Step({
+        children: {
+            messages: CoreEvent.Step({
+                children: {
+                    // message scopes در runtime از طریق SubEvent اضافه می‌شوند
+                },
+            }),
+        },
+    });
+}
+```
+
+> **قانون طلایی (Plan 8.2.8):** State changes ≠ Event identity changes
+> Message Identity باید قبل از Render تثبیت شود — نه در render cycle.
 
 ---
 
@@ -500,13 +720,14 @@ Base کلاس — ترکیب Props/Schemas/Methods/Definition پایه با اخ
 
 ```typescript
 import * as CoreComponents   from "@/core_components";
+import * as CoreEvent        from "@/core_event";
 // --------------------------------
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 // --------------------------------
-import {Props as ButtonProps,     PropsType     as ButtonPropsType}     from "./Props";
-import {Schemas as ButtonSchemas, SchemasType   as ButtonSchemasType}   from "./Schemas";
-import {Methods as ButtonMethods, MethodsType   as ButtonMethodsType}   from "./Methods";
-import {Definition}          from "./Definition";
+import {Props,     PropsType}     from "./Props";
+import {Schemas,   SchemasType}   from "./Schemas";
+import {Methods,   MethodsType}   from "./Methods";
+import {Definition}               from "./Definition";
 
 
 /**
@@ -519,28 +740,86 @@ import {Definition}          from "./Definition";
  * ۷ prop پایه ComponentStructure از ComponentStructureTrait.props در _COMPONENT_PATTERN
  * ثبت می‌شوند تا کاربر بتواند آن‌ها را set کند — سپس در renderContentComponent
  * به ComponentStructure.create() forward می‌شوند.
+ *
+ * Plan 11.2 — Schema پایه (COMPONENT + STRUCTURE) از ComponentStructureTrait.schemas
+ * در _COMPONENT_SCHEMA spread می‌شوند تا لایه <component-button> + <section> رندر شوند.
+ *
+ * Plan 8.2.7 / 9.1 — SubEvent + Event Scope Ownership:
+ *   هر ComponentButton مالک Step Instance خودش است.
+ *   disposal یک Component فقط باید Event resources متعلق به همان Component را آزاد کند.
  */
 export class ComponentButtonBase extends CoreComponents.App<
-    ButtonPropsType & Record<string, any>,
-    ButtonSchemasType,
+    PropsType & Record<string, any>,
+    SchemasType,
     any,
-    ButtonMethodsType
+    MethodsType
 > {
+
+    /**
+     * Step Node — درخت Workflow داخلی ComponentButton
+     */
+    protected _COMPONENT_STEP: CoreEvent.TStepInstance<any> | null = null;
+
+
+    /**
+     * constructor (Plan 8.2.7)
+     *
+     * @param componentName — نام Component (default: "button")
+     * @param elId          — شناسه المان (default: null)
+     * @param identity      — بیرونی { unique?, emit?, events? }
+     * @param step          — داخلی (Workflow خاص این Component)
+     */
+    constructor(
+        componentName: string = "button",
+        elId: string | null   = null,
+        identity?: {
+            unique?: CoreEvent.TStepRef | null;
+            emit?:   CoreEvent.TEmitHandler | null;
+            events?: Record<string, any> | null;
+        },
+        step?: CoreEvent.TStepInstance<any>,
+    ) {
+        super(componentName, elId);
+
+        this._COMPONENT_UNIQUE = identity?.unique ?? null;
+        this._COMPONENT_EMIT   = identity?.emit ?? null;
+
+        this._COMPONENT_STEP   = step ?? null;
+
+        // Plan 8.2.7 — SubEvent
+        // Guard: identity.unique باید یک Step واقعی باشد (symbol identity داشته باشد).
+        if (step && identity?.unique && typeof (identity.unique as any).identity === "symbol") {
+            CoreEvent.SubEvent(identity.unique as CoreEvent.TStepRef, componentName, step);
+        }
+    }
+
+
+    /**
+     * Disposal — پاک‌سازی کل subtree از رجیستری CoreEvent (Plan 8.2.7 / 9.1)
+     */
+    disposeStep(): void {
+        if (this._COMPONENT_STEP) {
+            CoreEvent.dispose(this._COMPONENT_STEP);
+            this._COMPONENT_STEP = null;
+        }
+    }
 
     protected _COMPONENT_DEFINITION = Definition;
 
     // ۷ prop پایه (از Trait) + propهای اختصاصی ComponentButton
-    protected _COMPONENT_PATTERN = CoreComponents.DefineProp<ButtonPropsType & Record<string, any>>({
+    protected _COMPONENT_PATTERN = CoreComponents.DefineProp<PropsType & Record<string, any>>({
         ...ComponentStructureTrait.props,
-        ...ButtonProps,
+        ...Props,
     } as any);
 
-    protected _COMPONENT_SCHEMA = CoreComponents.DefineSchema<ButtonSchemasType, ButtonPropsType & Record<string, any>>({
-        ...ButtonSchemas,
+    // Plan 11.2 — Schema پایه (از Trait) + schemaهای اختصاصی
+    protected _COMPONENT_SCHEMA = CoreComponents.DefineSchema<SchemasType, PropsType & Record<string, any>>({
+        ...ComponentStructureTrait.schemas,
+        ...Schemas,
     } as any);
 
-    protected _COMPONENT_METHODS = CoreComponents.DefineMethod<ButtonMethodsType, ButtonPropsType & Record<string, any>>({
-        ...ButtonMethods,
+    protected _COMPONENT_METHODS = CoreComponents.DefineMethod<MethodsType, PropsType & Record<string, any>>({
+        ...Methods,
     } as any);
 
 }
@@ -550,6 +829,9 @@ export class ComponentButtonBase extends CoreComponents.App<
 
 `ComponentStructureTrait` یک capability مشترک است که:
 - ۷ prop پایه (`classList`, `prop_show`, `prop_structureClass`, ...) را در `props` نگه می‌دارد
+- ۲ schema پایه (`COMPONENT`, `STRUCTURE`) را در `schemas` نگه می‌دارد (Plan 11.2)
+- متد `renderComponentSchema` برای رندر لایه `<component-{name}>` فراهم می‌کند (Plan 11.2)
+- متد `renderStructureSchema` برای رندر لایه `<section>` فراهم می‌کند (Plan 11.2)
 - متد `renderContent` برای ساخت ComponentStructure به‌عنوان فرزند فراهم می‌کند
 - در `traits/` folder قرار دارد (نه در `componentStructure/`)
 
@@ -563,6 +845,9 @@ export class ComponentButtonBase extends CoreComponents.App<
 | از `CoreComponents.App` (ClComponentBase) ارث‌بری کند | **MUST** |
 | چهار فیلد `_COMPONENT_*` را override کند | **MUST** |
 | `ComponentStructureTrait.props` در `_COMPONENT_PATTERN` spread شود | **MUST** |
+| **(Plan 11.2)** `ComponentStructureTrait.schemas` در `_COMPONENT_SCHEMA` spread شود | **MUST** |
+| **(Plan 9.1)** `disposeStep()` در Base پیاده‌سازی شود | **MUST** |
+| **(Plan 8.2.7)** SubEvent guard: `typeof (identity.unique as any).identity === "symbol"` چک شود | **MUST** |
 | Rendering در این کلاس نباشد | **MUST NOT** |
 | `renderContentComponent` در این کلاس نباشد | **MUST NOT** |
 
@@ -577,8 +862,10 @@ protected _COMPONENT_PATTERN = CoreComponents.DefineProp({
     ...CustomProps,                    // اختصاصی
 } as any);
 
+// Plan 11.2 — Schema پایه از Trait + schemaهای اختصاصی
 protected _COMPONENT_SCHEMA = CoreComponents.DefineSchema({
-    ...CustomSchemas,  // اختصاصی
+    ...ComponentStructureTrait.schemas,  // از Trait (COMPONENT + STRUCTURE)
+    ...CustomSchemas,                     // اختصاصی
 } as any);
 
 protected _COMPONENT_METHODS = CoreComponents.DefineMethod({
@@ -599,20 +886,27 @@ protected _COMPONENT_METHODS = CoreComponents.DefineMethod({
 ```typescript
 import * as CoreReactive   from "@/core_reactive";
 import * as CoreObservable from "@/core_observable";
+import * as CoreConfig     from "@/core_configs";
+import * as UtilStyle      from "@/util_styles";
+import * as UtilConst      from "@/util_consts";
+import * as UiIcons        from "@/ui_icons";
 // --------------------------------
-import {ComponentButtonBase}  from "./ComponentButtonBase";
-import {ButtonStep}           from "./Step";
-import {Schemas}              from "./Schemas";
-// --------------------------------
-import {ButtonPropsType}      from "./Props";
-import {MethodsConfigType}    from "./Methods";
+import {ComponentButtonBase}    from "./ComponentButtonBase";
+import {Schemas}                from "./Schemas";
+import {MethodsType,
+        MethodsConfigType}      from "./Methods";
+import {ButtonSemantic, Props}  from "./Props";
+import {PartAttrDefault}        from "@/core_components";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
-import {PropsType as StructurePropsType} from "../componentStructure/Props";
-import {PropsType as ButtonPropsType}     from "./Props";
+import {PropsType as StructurePropsType}      from "../componentStructure/Props";
+import {PropsConfigType as ButtonPropsConfigType} from "./Props";
+import {createButtonStep}                from "./Step";
+// --------------------------------
+import * as ComponentIcon from "../componentIcon";
 
 
 /**
- * ComponentButton — کلاس نهایی
+ * ComponentButton — کلاس نهایی (Plan 9.1.1 — بازیابی کامل Behavior Legacy)
  *
  * معماری Composition:
  *   ComponentButton HAS-A ComponentStructure (نه IS-A)
@@ -620,14 +914,24 @@ import {PropsType as ButtonPropsType}     from "./Props";
  *   و content آن = renderButton (محتوای اختصاصی ComponentButton)
  *
  * Constructor امضا: (config, methods, identity?)
- *   config  — شامل propهای پایه (classList, prop_show, ...) + propهای اختصاصی (prop_btnTitle, ...)
- *   methods — methodهای اختصاصی (CLICK, ...) با type-safe callback
+ *   config  — شامل propهای پایه + propهای اختصاصی (prop_btnTitle, ...)
+ *   methods — methodهای اختصاصی (CLICK, HOVER, BLUR)
  *   identity — { unique?, emit?, events? }
+ *
+ * Plan 9.1 — Step داخلی در constructor ساخته می‌شود (factory function).
+ * Plan 11.2 — لایه <component-button> + <section> از Schema پایه (COMPONENT + STRUCTURE) رندر می‌شود.
  */
 export class ComponentButton extends ComponentButtonBase {
 
+    /* ---------------------------------------------
+       Hover State — معادل el.hover قدیمی (Plan 9.1.1)
+       Observable داخلی کلاس — توسط on: {mouseenter/mouseleave} تغذیه می‌شود
+    --------------------------------------------- */
+    private readonly _HOVER_STATE = new CoreObservable.App<boolean>(false);
+
+
     constructor(
-        config?:  Partial<StructurePropsType & ButtonPropsType>,
+        config?:  Partial<StructurePropsType & ButtonPropsConfigType>,
         methods?: MethodsConfigType<ComponentButton>,
         identity?: {
             unique?: any;
@@ -635,11 +939,10 @@ export class ComponentButton extends ComponentButtonBase {
             events?: Record<string, any> | null;
         },
     ) {
-        super("button", null);
+        // Plan 9.1 — Step داخلی در constructor ساخته می‌شود (factory function)
+        const step = createButtonStep();
 
-        // identity را manual set می‌کنیم (ClComponentBase constructor identity نمی‌گیرد)
-        this._COMPONENT_UNIQUE = identity?.unique ?? null;
-        this._COMPONENT_EMIT   = identity?.emit ?? null;
+        super("button", null, identity, step);
 
         this.renderComponent(
             config as any,
@@ -650,52 +953,225 @@ export class ComponentButton extends ComponentButtonBase {
 
 
     /* ---------------------------------------------
-       Rendering اختصاصی
-       این متد توسط renderStructureSchema صدا زده می‌شود.
+       Plan 9.1 — Component Disposal
     --------------------------------------------- */
-    override renderContentComponent(): CoreReactive.App {
-
-        return this.renderForm();
+    dispose(): void {
+        this.disposeStep();
     }
 
 
     /* ---------------------------------------------
-       renderForm — رندر Part FORM
-       مستقیم، بدون executeSchemaPart
+       Plan 11.2 — renderContentComponent
+       لایه ساختار از طریق Schema پایه (COMPONENT + STRUCTURE) رندر می‌شود.
+       renderContentComponent فقط محتوای اختصاصی را رندر می‌کند.
     --------------------------------------------- */
-    protected renderForm(): CoreReactive.App {
+    override renderContentComponent(
+        attrsDefault: PartAttrDefault,
+        data:         Record<string, CoreObservable.App<any>>,
+        extra?:       any,
+    ): CoreReactive.App {
+        return this.executeSchemaPart(Schemas.BUTTON.part, {});
+    }
 
-        const prop_btnTitle = this._COMPONENT_PROPS_BIND.prop_btnTitle;
-        const prop_btnType  = this._COMPONENT_PROPS_BIND.prop_btnType;
+
+    /* ---------------------------------------------
+       renderManagerComponent — Routing
+       Plan 11.2 — COMPONENT + STRUCTURE از Trait، بقیه اختصاصی
+    --------------------------------------------- */
+    override renderManagerComponent(
+        partName:     string,
+        attrsDefault: PartAttrDefault,
+        data:         Record<string, CoreObservable.App<any>>,
+        extra?:       any,
+    ): CoreReactive.App {
+
+        switch (partName) {
+            // --- Plan 11.2: Schema پایه ---
+            case ComponentStructureTrait.schemas.COMPONENT.part:
+                return ComponentStructureTrait.renderComponentSchema(this, attrsDefault, data);
+            case ComponentStructureTrait.schemas.STRUCTURE.part:
+                return ComponentStructureTrait.renderStructureSchema(this, attrsDefault, data);
+            // --- Schema اختصاصی ---
+            case Schemas.BUTTON.part:
+                return this.renderButton(attrsDefault, data, extra);
+            case Schemas.BUTTON_TITLE.part:
+                return this.renderButtonTitle(attrsDefault, data, extra);
+            case Schemas.BUTTON_ICON.part:
+                return this.renderButtonIcon(attrsDefault, data, extra);
+            default:
+                return super.renderManagerComponent(partName, attrsDefault, data, extra);
+        }
+    }
+
+
+    /* ---------------------------------------------
+       renderButton — رندر Part BUTTON اصلی
+       مستقیم، با attrsBind/stylesBind/classBind + computed styles
+    --------------------------------------------- */
+    protected renderButton(
+        attrsDefault?: PartAttrDefault,
+        data?:         Record<string, CoreObservable.App<any>>,
+        extra?:        any,
+    ): CoreReactive.App {
+
+        const bind = this._COMPONENT_PROPS_BIND;
+
+        const prop_btnTitle   = data?.["prop_btnTitle"]   ?? bind.prop_btnTitle;
+        const prop_btnSemantic = data?.["prop_btnSemantic"] ?? bind.prop_btnSemantic;
+        const prop_btnVariant = data?.["prop_btnVariant"] ?? bind.prop_btnVariant;
+        // ... سایر propهای bind شده
 
         return CoreReactive.App.button({
-            className: ["btn"],
-            attrs: {
-                type: prop_btnType,
+            attrs: { ...attrsDefault },
+            attrsBind: {
+                title:    prop_btnTitle,
+                disabled: bind.prop_btnDisabled,
             },
+            className: ["btn"],
+            styles: {
+                "transition":   "background-color 200ms ease, color 200ms ease",
+                "display":      "inline-flex",
+                "align-items":  "center",
+                "cursor":       "pointer",
+                "border-style": "solid",
+            },
+            stylesBind: {
+                "width":           bind.prop_btnWidth,
+                "height":          this.getStyleBtnHeight(bind.prop_btnHeight),
+                "background-color": this.getStyleBtnBackgroundColor(
+                    prop_btnSemantic, bind.prop_btnBackgroundColor, bind.prop_btnBackgroundColor_hover
+                ),
+                // ... سایر style‌های computed
+            },
+            classBind: [prop_btnVariant, bind.prop_btnClass],
             unique: this._COMPONENT_STEP?.click,
             emit: (request) => {
                 return { value: prop_btnTitle.get(), valid: true };
             },
             on: {
-                click: (e, event) => {
-                    this.executeMethod("CLICK", event, { event: e });
+                click: (event: Event) => {
+                    event.preventDefault();
+                    this.executeMethod("CLICK", event, {});
+                },
+                mouseenter: (event: Event) => {
+                    this._HOVER_STATE.set(true);
+                    this.executeMethod("HOVER", event, {});
+                },
+                mouseleave: (event: Event) => {
+                    this._HOVER_STATE.set(false);
+                    this.executeMethod("BLUR", event, {});
                 },
             },
             children: [
-                prop_btnTitle,
+                this.executeSchemaPart(Schemas.BUTTON_TITLE.part, {}),
+                this.executeSchemaPart(Schemas.BUTTON_ICON.part, {}),
             ],
         });
     }
 
 
     /* ---------------------------------------------
-       Helper methods — متدهای کمکی اختصاصی
+       renderButtonTitle — رندر Part BUTTON_TITLE
     --------------------------------------------- */
-    protected getButtonBackgroundColor(): string {
-        // ...
-        return "blue";
+    protected renderButtonTitle(
+        attrsDefault?: PartAttrDefault,
+        data?:         Record<string, CoreObservable.App<any>>,
+        extra?:        any,
+    ): CoreReactive.App {
+        const bind = this._COMPONENT_PROPS_BIND;
+        const prop_btnTitle    = data?.["prop_btnTitle"]    ?? bind.prop_btnTitle;
+        const prop_btnSemantic = data?.["prop_btnSemantic"] ?? bind.prop_btnSemantic;
+
+        return CoreReactive.App.part("b", {
+            attrs: { ...attrsDefault },
+            stylesBind: {
+                "color": this.getStyleBtnTitleColor(
+                    prop_btnSemantic, bind.prop_btnTitleColor, bind.prop_btnTitleColor_hover
+                ),
+            },
+            classBind: [bind.prop_btnTitleClass],
+            children: [prop_btnTitle],
+        });
     }
+
+
+    /* ---------------------------------------------
+       renderButtonIcon — رندر Part BUTTON_ICON
+       رندر شرطی آیکون با conditionWhen
+    --------------------------------------------- */
+    protected renderButtonIcon(
+        attrsDefault?: PartAttrDefault,
+        data?:         Record<string, CoreObservable.App<any>>,
+        extra?:        any,
+    ): CoreReactive.App {
+        const bind = this._COMPONENT_PROPS_BIND;
+        const prop_btnIcon = data?.["prop_btnIcon"] ?? bind.prop_btnIcon;
+        const prop_btnSemantic = data?.["prop_btnSemantic"] ?? bind.prop_btnSemantic;
+
+        return CoreObservable.App.conditionWhen(
+            [prop_btnIcon],
+            (iconSource) => iconSource != null,
+            () => new ComponentIcon.Component({
+                prop_icon: UiIcons.CreateIcon(prop_btnIcon, {
+                    primaryColor: this.getStyleBtnTitleColor(
+                        prop_btnSemantic, bind.prop_btnTitleColor, bind.prop_btnTitleColor_hover
+                    ),
+                    size: this.getStyleBtnIconSize(bind.prop_btnHeight),
+                }),
+                prop_iconStyles: bind.prop_btnIconStyles,
+                prop_iconClass:  bind.prop_btnIconClass,
+            }, {}).getReactiveElement(),
+            () => this.renderEmptyContent(attrsDefault),
+            this.getScope(),
+        );
+    }
+
+
+    /* ---------------------------------------------
+       Computed Style Helpers — متدهای کمکی اختصاصی
+       هر متد یک CoreObservable.App.computed برمی‌گرداند
+    --------------------------------------------- */
+    private getStyleBtnHeight(prop_btnHeight) {
+        return CoreObservable.App.computed(
+            (heightProp, sizeName) => heightProp ?? UtilStyle.Css_Height(sizeName),
+            [prop_btnHeight, CoreConfig.Settings.SizeName.observable()],
+            this.getScope(),
+        );
+    }
+
+    private getStyleBtnBackgroundColor(semantic, bg, bgHover) {
+        return CoreObservable.App.computed(
+            (semantic, bg, bgHover, hovered) => {
+                const normal = ComponentButton.resolveSemantic(
+                    semantic as ButtonSemantic, ComponentButton._semanticBackground, bg
+                );
+                if (!hovered) return normal;
+                const hover = ComponentButton.resolveSemantic(
+                    semantic as ButtonSemantic, ComponentButton._semanticBackgroundHover, bgHover
+                );
+                return hover ?? normal;
+            },
+            [semantic, bg, bgHover, this._HOVER_STATE],
+            this.getScope(),
+        );
+    }
+
+    // ... سایر getStyle* متدها (borderColor, borderRadius, titleColor, iconSize, ...)
+
+    private static resolveSemantic(
+        semantic: ButtonSemantic,
+        map: Record<ButtonSemantic, string | null>,
+        customValue: string | null,
+    ): string | null {
+        return semantic === ButtonSemantic.CUSTOM ? customValue : map[semantic];
+    }
+
+    // Static lookup maps برای semantic colors
+    private static readonly _semanticBackground: Record<ButtonSemantic, string | null> = { /* ... */ };
+    private static readonly _semanticBackgroundHover: Record<ButtonSemantic, string | null> = { /* ... */ };
+    private static readonly _semanticBorder: Record<ButtonSemantic, string | null> = { /* ... */ };
+    private static readonly _semanticTitleColor: Record<ButtonSemantic, string | null> = { /* ... */ };
+    private static readonly _semanticTitleColorHover: Record<ButtonSemantic, string | null> = { /* ... */ };
 
 }
 ```
@@ -708,12 +1184,17 @@ export class ComponentButton extends ComponentButtonBase {
 | constructor امضا `(config, methods, identity?)` داشته باشد | **MUST** |
 | constructor شامل `super(name, null, identity, step)` باشد | **MUST** |
 | constructor شامل `this.renderComponent(config, methods)` باشد | **MUST** |
-| `renderContentComponent` override شود | **MUST** |
+| **(Plan 9.1)** Step در constructor با factory function ساخته شود — نه در render cycle | **MUST** |
+| **(Plan 11.2)** `renderManagerComponent` برای COMPONENT/STRUCTURE از Trait methods استفاده کند | **MUST** |
+| **(Plan 11.2)** `renderManagerComponent` برای schemaهای اختصاصی به render methods مربوطه routing کند | **MUST** |
+| **(Plan 11.2)** `renderContentComponent` محتوای اختصاصی را با `executeSchemaPart` رندر کند | **MUST** |
+| **(Plan 8.2.7)** `dispose()` متد پیاده‌سازی شود — `this.disposeStep()` صدا بزند | **MUST** |
 | Rendering اختصاصی در متدهای `protected` باشد | **MUST** |
 | Rendering از `this._COMPONENT_PROPS_BIND` استفاده کند | **MUST** |
 | Rendering از `this._COMPONENT_STEP` برای اتصال reactiveElement استفاده کند | **SHOULD** |
 | Rendering از `this.executeMethod()` برای فراخوانی Methodها استفاده کند | **MUST** |
-| State در این کلاس باشد (نه در Schema) | **MUST** |
+| **(Plan 9.1.1)** Computed styles با `CoreObservable.App.computed` و `this.getScope()` ساخته شوند | **MUST** |
+| **(Plan 9.1.1)** State داخلی (مثل `_HOVER_STATE`) در این کلاس باشد — نه در Schema | **MUST** |
 | Helper methods در این کلاس باشند (نه در Schema) | **MUST** |
 | `ComponentIdentity` از `@/core_components` import شود | **MUST** |
 
@@ -731,23 +1212,46 @@ new ComponentButton(config, methods, identity)
 //                 سازگار با CreateCategoryComponent
 ```
 
-### جریان رندر
+### جریان رندر (Plan 11.2)
 
 ```
 new ComponentButton(config, methods, identity)
     ↓
-super("button", null, identity, ButtonStep)
+super("button", null, identity, createButtonStep())
     ↓
 this.renderComponent(config, methods)
     ↓
-executeSchemaPart("part-component")
-    → renderManagerComponent() override
-    → renderComponentSchema()  ← <component-button> با RTL + classList
-        → executeSchemaPart("part-component-structure")
-            → renderManagerComponent() override
-            → renderStructureSchema()  ← <section> با show/hide
-                → renderContentComponent() override
-                    → renderForm()  ← <button> اختصاصی
+createComponentElement()
+    → executeSchemaPart(COMPONENT.part)                    ← Plan 11.2: Schema پایه
+    → renderManagerComponent(COMPONENT.part)
+        → ComponentStructureTrait.renderComponentSchema()  ← <component-button>
+            → executeSchemaPart(STRUCTURE.part)
+            → renderManagerComponent(STRUCTURE.part)
+                → ComponentStructureTrait.renderStructureSchema()  ← <section>
+                    → renderContentComponent()              ← content اختصاصی
+                        → executeSchemaPart(BUTTON.part)
+                        → renderManagerComponent(BUTTON.part)
+                            → renderButton()                ← <button>...</button>
+                                → executeSchemaPart(BUTTON_TITLE.part)
+                                    → renderButtonTitle()   ← <b>title</b>
+                                → executeSchemaPart(BUTTON_ICON.part)
+                                    → renderButtonIcon()    ← <icon> (شرطی)
+```
+
+> **نکته مهم (Plan 11.2):** `renderManagerComponent` برای COMPONENT و STRUCTURE از Trait methods استفاده می‌کند.
+> برای schemaهای اختصاصی (BUTTON, BUTTON_TITLE, BUTTON_ICON) به render methods مربوطه routing می‌کند.
+>
+> ```typescript
+> // ✅ درست — Plan 11.2 routing
+> case ComponentStructureTrait.schemas.COMPONENT.part:
+>     return ComponentStructureTrait.renderComponentSchema(this, attrsDefault, data);
+> case Schemas.BUTTON.part:
+>     return this.renderButton(attrsDefault, data, extra);
+>
+> // ❌ غلط — مستقیم بدون routing
+> case Schemas.BUTTON.part:
+>     return super.renderManagerComponent(partName, attrsDefault, data, extra);
+> ```
 ```
 
 ---
@@ -773,18 +1277,15 @@ Example Definitions — نحوه استفاده/نمایش Component.
 ```typescript
 import {ComponentExample} from "@/core_components";
 import * as UiCategory  from "@/ui_categories";
-import {Keys}           from "../../../module_categories/languages";
+import {Keys}           from "../../../../module_categories/languages";
+import {ButtonVariants} from "../Props";
 // --------------------------------
 
 
 /**
  * Default Example برای ComponentButton
  *
- * نمایش یک Button ساده با styling پیش‌فرض.
- * برنامه‌نویس با خواندن این فایل می‌بیند:
- *   - چه Componentی ساخته می‌شود (UiCategory.UI.Simples.Button)
- *   - چه propهایی پاس می‌شود (prop_btnTitle, prop_btnType)
- *   - چه Methodهایی فراخوانی می‌شود (CLICK با Function Callback)
+ * نمایش یک Button ساده (primary) بدون behavior.
  */
 export const DefaultExample: ComponentExample = {
 
@@ -796,12 +1297,49 @@ export const DefaultExample: ComponentExample = {
 
     render: (): HTMLElement => UiCategory.UI.Simples.Button(
         {
-            prop_btnTitle: "Submit",
-            prop_btnType:  "submit",
+            prop_btnTitle:   "Click Me",
+            prop_btnVariant: ButtonVariants.PRIMARY,
+        },
+        {},
+    ).getElement() as HTMLElement,
+
+};
+```
+
+### الگو — Clickable.ts
+
+```typescript
+import {ComponentExample} from "@/core_components";
+import * as UiIcons     from "@/ui_icons";
+import * as UiCategory  from "@/ui_categories";
+import {Keys}           from "../../../../module_categories/languages";
+import {ButtonSemantic, ButtonVariants} from "../Props";
+// --------------------------------
+
+
+/**
+ * Clickable Example برای ComponentButton
+ *
+ * نمایش یک Button قابل کلیک با CLICK callback واقعی + آیکون.
+ */
+export const ClickableExample: ComponentExample = {
+
+    id:          "button_clickable",
+
+    name:        Keys.category.components.button.examples.clickable.name,
+
+    description: Keys.category.components.button.examples.clickable.description,
+
+    render: (): HTMLElement => UiCategory.UI.Simples.Button(
+        {
+            prop_btnTitle:    "Submit",
+            prop_btnVariant:   ButtonVariants.PRIMARY,
+            prop_btnClass:    ["w-100"],
+            prop_btnIcon:      UiIcons.Src.ArrowUp.Definition,
         },
         {
-            CLICK: function(event, dataArgs, componentArgs) {
-                console.log("[DefaultExample] button clicked", event, dataArgs, componentArgs);
+            CLICK: function (event, dataArgs, componentArgs) {
+                console.log("[ClickableExample] button clicked", event, dataArgs, componentArgs);
             },
         },
     ).getElement() as HTMLElement,
@@ -809,36 +1347,58 @@ export const DefaultExample: ComponentExample = {
 };
 ```
 
-### الگو — Icon.ts
+### الگو — Variants.ts
 
 ```typescript
 import {ComponentExample} from "@/core_components";
 import * as UiCategory  from "@/ui_categories";
-import {Keys}           from "../../../module_categories/languages";
+import {Keys}           from "../../../../module_categories/languages";
+import {ButtonSemantic, ButtonVariants} from "../Props";
+import * as CoreReactive from "@/core_reactive";
 // --------------------------------
 
 
 /**
- * Icon Example برای ComponentButton
+ * Variants Example برای ComponentButton
  *
- * نمایش یک Button با آیکون.
+ * نمایش چند Button با variant/semantic مختلف (primary, secondary, ghost, custom).
+ * این Example نشان می‌دهد که می‌توان چند Component را در یک Example ترکیب کرد.
  */
-export const IconExample: ComponentExample = {
+export const VariantsExample: ComponentExample = {
 
-    id:          "button_icon",
+    id:          "button_variants",
 
-    name:        Keys.category.components.button.examples.icon.name,
+    name:        Keys.category.components.button.examples.variants.name,
 
-    description: Keys.category.components.button.examples.icon.description,
+    description: Keys.category.components.button.examples.variants.description,
 
-    render: (): HTMLElement => UiCategory.UI.Simples.Button(
-        {
-            prop_btnTitle: "Reload",
-            prop_btnType:  "button",
-            prop_btnIcon:  "icon-reload",
-        },
-        {},
-    ).getElement() as HTMLElement,
+    render: (): HTMLElement => {
+        return CoreReactive.App.div({
+                styles: {
+                    "display":     "flex",
+                    "gap":          "8px",
+                    "flexWrap":     "wrap",
+                },
+                children: [
+                    UiCategory.UI.Simples.Button(
+                        { prop_btnTitle: "PRIMARY", prop_btnVariant: ButtonVariants.PRIMARY },
+                        {},
+                    ).getElement(),
+                    UiCategory.UI.Simples.Button(
+                        { prop_btnTitle: "SECONDARY", prop_btnSemantic: ButtonSemantic.BACK },
+                        {},
+                    ).getElement(),
+                    UiCategory.UI.Simples.Button(
+                        { prop_btnTitle: "GHOST", prop_btnSemantic: ButtonSemantic.CANCEL },
+                        {},
+                    ).getElement(),
+                    UiCategory.UI.Simples.Button(
+                        { prop_btnTitle: "ICON", prop_btnSemantic: ButtonSemantic.CUSTOM },
+                        {},
+                    ).getElement(),
+                ],
+            }).getElement();
+    },
 
 };
 ```
@@ -848,25 +1408,24 @@ export const IconExample: ComponentExample = {
 ```typescript
 import {ComponentExample} from "@/core_components";
 // --------------------------------
-import {DefaultExample}  from "./Default";
-import {IconExample}    from "./Icon";
+import {DefaultExample}   from "./Default";
+import {ClickableExample} from "./Clickable";
+import {VariantsExample}  from "./Variants";
 
 
 /**
  * Examples Registry برای ComponentButton
  *
- * تمام Exampleهای ComponentButton از این نقطه قابل دسترسی هستند.
- * ComponentManager می‌تواند این Registry را بخواند و
- * Exampleها را با example.render() نمایش دهد.
- *
  * @example
- *   Examples.DEFAULT.render()   // → HTMLElement
- *   Examples.ICON.render()      // → HTMLElement
+ *   Examples.DEFAULT.render()                    // → HTMLElement
+ *   Examples.CLICKABLE.render()                  // → HTMLElement
+ *   Examples.VARIANTS.render()                   // → HTMLElement
  */
 export const Examples = {
 
-    DEFAULT: DefaultExample,
-    ICON:    IconExample,
+    DEFAULT:   DefaultExample,
+    CLICKABLE: ClickableExample,
+    VARIANTS:  VariantsExample,
 
 } satisfies Record<string, ComponentExample>;
 
@@ -925,19 +1484,19 @@ Public API Component.
 ```typescript
 export {ComponentButton      as Component} from "./ComponentButton"
 export {ComponentButtonBase  as Base}      from "./ComponentButtonBase"
-export {Props}                             from "./Props"
-export type {PropsType}                    from "./Props"
-export {Schemas}                           from "./Schemas"
-export type {SchemasType}                  from "./Schemas"
-export {Methods}                           from "./Methods"
-export type {MethodsType}                  from "./Methods"
+export {Props}                            from "./Props"
+export type {PropsType}                   from "./Props"
+export {Schemas}                          from "./Schemas"
+export type {SchemasType}                 from "./Schemas"
+export {Methods}                          from "./Methods"
+export type {MethodsType}                 from "./Methods"
 export type {MethodsConfigType,
              MethodsComponentArgs,
-             MethodsDataArgs}              from "./Methods"
-export {Definition}                        from "./Definition"
-export {ButtonStep   as Step}              from "./Step"
-export {Examples}                          from "./examples"
-export type {ComponentButtonExamplesType}  from "./examples"
+             MethodsDataArgs}             from "./Methods"
+export {Definition}                       from "./Definition"
+export {createButtonStep}                 from "./Step"
+export {Examples}                         from "./examples"
+export type {ComponentButtonExamplesType} from "./examples"
 ```
 
 ### قوانین
@@ -946,7 +1505,7 @@ export type {ComponentButtonExamplesType}  from "./examples"
 |:---|:---|
 | `Component` alias برای کلاس نهایی | **MUST** |
 | `Base` alias برای Base کلاس | **SHOULD** |
-| `Step` alias برای Step Node | **SHOULD** |
+| **(Plan 9.1)** Step factory function (مثل `createButtonStep`) با نام خود export شود — نه `as Step` | **MUST** |
 | SchemaHandlers را export نکند | **MUST NOT** (چون وجود ندارد) |
 
 ---
@@ -1222,6 +1781,75 @@ ButtonStep = CoreEvent.Step({
 });
 ```
 
+### Plan 8.2.7 — SubEvent اتصال رسمی
+
+در constructor Base، اگر `identity.unique` و `step` هر دو وجود دارند،
+Step داخلی به‌عنوان فرزند با `componentName` به Parent Step متصل می‌شود:
+
+```typescript
+// در Base constructor:
+if (step && identity?.unique) {
+    CoreEvent.SubEvent(identity.unique, componentName, step);
+}
+```
+
+این یعنی درخت Event به این شکل در می‌آید:
+
+```text
+ParentStep (مثلاً FormStep)
+  └── button (componentName)     ← SubEvent
+        └── click                ← ButtonStep.click
+```
+
+### Plan 8.2.7 — Disposal بازگشتی
+
+`CoreEvent.dispose(step)` کل subtree را پاک می‌کند:
+
+```typescript
+// در ComponentButton.dispose():
+dispose(): void {
+    this.disposeStep();  // ← CoreEvent.dispose(this._COMPONENT_STEP) — بازگشتی
+}
+```
+
+1. همه نسل‌ها (click, ...) از App پاک می‌شوند.
+2. خود step از App پاک می‌شود.
+3. از parent قطع می‌شود.
+4. ساختار درخت پاک می‌شود.
+
+### Plan 8.2.8 — Per-Message Event Scope (برای Componentهای dynamic)
+
+اگر Component دارای فرزندهای dynamic است (مثل `ComponentMessages` که هر پیام یک Scope مستقل دارد)،
+الگوی متفاوتی نیاز است:
+
+```typescript
+// ۱. Registry — نگاشت Message ID → Event Scope
+private _MESSAGE_EVENT_SCOPES = new Map<string, MessageEventScope>();
+
+// ۲. Reconciliation — هماهنگی Registry با state فعلی
+private syncMessageEventScopes(messages: MessageItem[]): void {
+    // dispose: Scopeهایی که دیگر در current IDs نیستن
+    // create: Messageهای جدید که Scope ندارن
+    // reuse: Messageهای موجود — هیچ کاری نیاز نیست
+}
+
+// ۳. Lookup — گرفتن Scope برای یک Message
+private getMessageEventScope(messageId: string): MessageEventScope | undefined {
+    return this._MESSAGE_EVENT_SCOPES.get(messageId);
+}
+
+// ۴. Disposal — پاک‌سازی Registry محلی + disposal بازگشتی
+dispose(): void {
+    this.disposeStep();              // ← CoreEvent.dispose بازگشتی
+    this._MESSAGE_EVENT_SCOPES.clear();
+}
+```
+
+> **قانون طلایی (Plan 8.2.8):** State changes ≠ Event identity changes
+> - Message موجود → Scope reuse (identity حفظ می‌شود)
+> - Message جدید → Scope create
+> - Message حذف‌شده → Scope dispose
+
 ### تفاوت
 
 | مفهوم | جهت | کاربرد |
@@ -1366,12 +1994,29 @@ export {ComponentStructureBase as Base}      from "./ComponentStructureBase"
 
 ## ۱۵. Static Factory — ComponentStructure.create()
 
-`ComponentStructure` یک static factory دارد برای استفاده راحت (مثل `CoreReactive.App.section({...})`):
+`ComponentStructure` یک static factory دارد برای استفاده راحت (مثل `CoreReactive.App.section({...})`).
+
+### Plan 8.2.10 — signature جدید
+
+`componentName` به‌عنوان پارامتر اول (identity) اضافه شده — نه در config:
+
+```typescript
+// Plan 8.2.10 — signature جدید:
+static create(
+    componentName: string,        // ← identity (نام کامپوننت)
+    config:  Record<string, any> & { content?: () => CoreReactive.App },
+    methods: Record<string, any> = {},
+    identity: { unique?, emit?, events? } = {},
+): CoreReactive.App
+```
+
+### استفاده
 
 ```typescript
 const { create } = UiComponents.Lists.ComponentStructure.Component;
 
 const el = create(
+    "messages",                   // ← componentName (identity) — Plan 8.2.10
     {
         classList:           ["p-3", "border", "rounded", "m-2"],
         prop_show:           true,
@@ -1388,19 +2033,52 @@ const el = create(
     },
 );
 // → CoreReactive.App (ReactiveElement)
+// → <component-messages><section>...</section></component-messages>
 ```
+
+### چرا componentName به‌عنوان پارامتر اول؟ (Plan 8.2.10)
+
+تفکیک identity از configuration:
+
+```typescript
+create(
+    componentName,   // ← identity (نام کامپوننت)
+    { ... },         // ← configuration (propها و content)
+)
+```
+
+- `componentName` جزء **identity** است — اجباری
+- `classList`, `styles`, `prop_show`, `content` جزء **configuration** هستند
+
+اگر `componentName` در config بود، ممکن است فراموش شود و default `"structure"` استفاده شود —
+همان bug قدیمی که همه Componentها `component-structure` نمایش داده می‌شدند.
 
 ### قوانین
 
 | قانون | سطح |
 |:---|:---|
 | `create()` خروجی `CoreReactive.App` می‌دهد | **MUST** |
+| **(Plan 8.2.10)** `componentName` به‌عنوان پارامتر اول — اجباری | **MUST** |
 | `content` اختیاری است — اگر نباشد، fallback به `renderContentComponent()` | **MAY** |
 | `methods` و `identity` اختیاری هستند | **MAY** |
 
+### ComponentStructureTrait.renderContent (Plan 8.2.10)
+
+Trait نام کامپوننت را از `component._COMPONENT_NAME` می‌خواند و به `create()` پاس می‌دهد:
+
+```typescript
+// Trait.ts — Plan 8.2.10:
+renderContent(component, content) {
+    const componentName = component._COMPONENT_NAME;
+    return ComponentStructure.create(componentName, { ... });
+}
+```
+
+این یعنی Component مصرف‌کننده نیازی ندارد نام را دستی پاس دهد — Trait خودش می‌خواند.
+
 ### توجه
 
-`create()` فقط برای `ComponentStructure` مستقیم است.
+`create()` فقط برای `ComponentStructure` مستقیم است (یا از طریق Trait).
 فرزندها (مثل `ComponentButton`) constructor خودشان دارند و مستقیماً `new` می‌شوند.
 
 ### Category callable vs create()
@@ -1420,21 +2098,23 @@ const el = create(
 ### مرحله ۱: Declarative Layer
 
 - [ ] `Definition.ts` — `id`, `name`, `version`
-- [ ] `Props.ts` — propهای اختصاصی + `PropsType`
-- [ ] `Schemas.ts` — schemaهای اختصاصی + `SchemasType`
-- [ ] `Methods.ts` — methodهای اختصاصی با `args`, `dataArgs` + `MethodsType`, `MethodsComponentArgs`, `MethodsDataArgs`, `MethodsConfigType<TThis>`
-- [ ] `Step.ts` — درخت Workflow داخلی (اگر نیاز است)
+- [ ] `Props.ts` — propهای اختصاصی با `Define_ComponentProp<T>(...)` + `PropsType` با `ExtractPropsType`
+- [ ] `Schemas.ts` — schemaهای اختصاصی + `COMPONENT`/`STRUCTURE` از Trait + `SchemasType` با `ExtractSchemasType`
+- [ ] `Methods.ts` — methodهای اختصاصی با `args`, `dataArgs` + `MethodsType`, `MethodsComponentArgs`, `MethodsDataArgs`, `MethodsConfigType<TThis>` (همگی از `TypeHelpers` استخراج شوند)
+- [ ] `Step.ts` — درخت Workflow داخلی به‌صورت **factory function** (Plan 9.1)
 
 ### مرحله ۲: Runtime Layer
 
-- [ ] `ComponentButtonBase.ts` — extends CoreComponents.App + ComponentStructureTrait.props + ۴ فیلد protected
-- [ ] `ComponentButton.ts` — extends ComponentButtonBase + constructor + renderContentComponent + MethodsConfigType<ComponentButton>
+- [ ] `ComponentButtonBase.ts` — extends CoreComponents.App + ComponentStructureTrait.props + ComponentStructureTrait.schemas + ۴ فیلد protected + `disposeStep()`
+- [ ] `ComponentButton.ts` — extends ComponentButtonBase + constructor + `renderManagerComponent` routing + `renderContentComponent` + MethodsConfigType<ComponentButton>
 
 ### مرحله ۳: Examples (Plan 8.1.5 — الگوی جدید با render())
 
 - [ ] کلیدهای زبان در `Keys.ts` (در `examples` section کامپوننت مربوطه) اضافه شود
 - [ ] ترجمه‌ها در `Fa.ts` و `En.ts` اضافه شود
 - [ ] `examples/Default.ts` — Example با `render(): () => HTMLElement` (الگوی `ComponentExample`)
+- [ ] `examples/Clickable.ts` — Example با CLICK callback + آیکون
+- [ ] `examples/Variants.ts` — Example با چند variant (ترکیب چند Component)
 - [ ] `examples/index.ts` — Registry Examples با `satisfies Record<string, ComponentExample>`
 
 ### مرحله ۴: Public API
@@ -1462,6 +2142,20 @@ const el = create(
 - [ ] State در کلاس Component است (نه در Schema)
 - [ ] Helper methods در کلاس Component است
 - [ ] Types از `CoreComponents.*` import شده‌اند (نه `UiComponents.Basic.Types.*`)
+- [ ] **(Plan 9.1.3)** propها با `Define_ComponentProp<T>(...)` تعریف شده‌اند (نه `satisfies TComponentPropEntry<T>`)
+- [ ] **(Plan 9.1.3)** Generic `<T>` صریحاً به `Define_ComponentProp` پاس شده است
+- [ ] **(Plan 9.1.3)** اگر `default: null` است، نوع `T | null` است
+- [ ] **(Plan 9.1.3)** `PropsType` با `ExtractPropsType<typeof Props>` تعریف شده است
+- [ ] **(Plan 11.2)** `COMPONENT` و `STRUCTURE` از `ComponentStructureTrait.schemas` در `Schemas` اضافه شده‌اند
+- [ ] **(Plan 11.2)** `ComponentStructureTrait.schemas` در `_COMPONENT_SCHEMA` spread شده است
+- [ ] **(Plan 11.2)** `SchemasType` با `ExtractSchemasType<typeof Schemas>` تعریف شده است
+- [ ] **(Plan 9.1)** Step به‌صورت factory function تعریف شده (نه ثابت)
+- [ ] **(Plan 9.1)** `createButtonStep()` در constructor صدا زده می‌شود
+- [ ] **(Plan 9.1)** `disposeStep()` در Base پیاده‌سازی شده است
+- [ ] **(Plan 11.2)** `renderManagerComponent` برای COMPONENT/STRUCTURE از Trait methods استفاده می‌کند
+- [ ] **(Plan 11.2)** `renderManagerComponent` برای schemaهای اختصاصی به render methods routing می‌کند
+- [ ] **(Plan 9.1.1)** Computed styles با `CoreObservable.App.computed` و `this.getScope()` ساخته شده‌اند
+- [ ] **(Plan 9.1.1)** State داخلی (مثل `_HOVER_STATE`) در کلاس Component است (نه در Schema)
 - [ ] Component در ComponentManager ثبت شده
 - [ ] Component در Category ثبت شده
 - [ ] `MethodsConfigType<TThis>` با `this: TThis` تعریف شده
@@ -1521,11 +2215,41 @@ export const Schemas = {
 ```typescript
 // ❌ ممنوع
 export const Props = {
-    prop_btnTitle: {
+    prop_btnTitle: Define_ComponentProp<string>({
         prop: "prop_btnTitle",
         render() { ... },  // ← ممنوع
-    }
+    }),
 };
+```
+
+### ۱۷.۴.۱. استفاده از satisfies به‌جای Define_ComponentProp (Plan 9.1.3)
+
+```typescript
+// ❌ ممنوع — satisfies باعث literal narrowing می‌شود
+prop_btnSemantic: {
+    prop:         "prop_btnSemantic",
+    default:      ButtonSemantic.SUBMIT,
+} satisfies TComponentPropEntry<ButtonSemantic>,
+
+// ✅ درست — Define_ComponentProp<T> نوع T را در return type حفظ می‌کند
+prop_btnSemantic: Define_ComponentProp<ButtonSemantic>({
+    prop:         "prop_btnSemantic",
+    default:      ButtonSemantic.SUBMIT,
+}),
+```
+
+### ۱۷.۴.۲. فراموش کردن `T | null` برای nullable props (Plan 9.1.3)
+
+```typescript
+// ❌ ممنوع — default null اما نوع null ندارد
+prop_btnIcon: Define_ComponentProp<UiIcons.IIconDefinition>({
+    default:      null,  // ❌ null به IIconDefinition انتساب ندارد
+}),
+
+// ✅ درست — نوع باید null را هم شامل شود
+prop_btnIcon: Define_ComponentProp<UiIcons.IIconDefinition | null>({
+    default:      null,  // ✅ null به IIconDefinition | null انتساب دارد
+}),
 ```
 
 ### ۱۷.۵. State در Schema
@@ -1634,6 +2358,80 @@ ReactiveApp.section({
 });
 ```
 
+### ۱۷.۱۳. mutate مستقیم children Step (Plan 8.2.7)
+
+```typescript
+// ❌ ممنوع — children encapsulated است
+step.children["newChild"] = childStep;  // ← ممنوع
+delete step.children["oldChild"];       // ← ممنوع
+```
+
+```typescript
+// ✅ درست — از API رسمی SubEvent استفاده کن
+CoreEvent.SubEvent(parentStep, "newChild", childStep);
+CoreEvent.removeChild(parentStep, "oldChild");
+```
+
+### ۱۷.۱۴. Step در render cycle ساختن (Plan 8.2.7/8.2.8)
+
+```typescript
+// ❌ ممنوع — Step باید در constructor ساخته شود، نه در render
+override renderContentComponent() {
+    const step = CoreEvent.Step({ ... });  // ❌ هر render یک Step جدید!
+    return ...;
+}
+```
+
+```typescript
+// ✅ درست — Step در constructor ساخته شود
+constructor(config, methods, identity) {
+    const step = createButtonStep();       // ✅ یک‌بار
+    super("button", null, identity, step);
+}
+```
+
+### ۱۷.۱۵. routing مستقیم بدون Trait methods (Plan 11.2)
+
+```typescript
+// ❌ ممنوع — COMPONENT/STRUCTURE نباید مستقیم رندر شوند
+override renderManagerComponent(partName, ...) {
+    switch (partName) {
+        case ComponentStructureTrait.schemas.COMPONENT.part:
+            return super.renderManagerComponent(partName, ...);  // ❌ لایه <component-{name}> ساخته نمی‌شود
+        case Schemas.BUTTON.part:
+            return this.renderButton(...);  // ❌ اگر BUTTON root است، لایه structure هم نیست
+    }
+}
+```
+
+```typescript
+// ✅ درست — Plan 11.2: COMPONENT/STRUCTURE از Trait، اختصاصی از render methods
+override renderManagerComponent(partName, ...) {
+    switch (partName) {
+        case ComponentStructureTrait.schemas.COMPONENT.part:
+            return ComponentStructureTrait.renderComponentSchema(this, ...);  // ✅ <component-button>
+        case ComponentStructureTrait.schemas.STRUCTURE.part:
+            return ComponentStructureTrait.renderStructureSchema(this, ...);  // ✅ <section>
+        case Schemas.BUTTON.part:
+            return this.renderButton(...);  // ✅ content اختصاصی
+    }
+}
+```
+
+### ۱۷.۱۶. فراموش کردن dispose (Plan 8.2.7)
+
+```typescript
+// ❌ ممنوع — Component بدون dispose → memory leak در Event Tree
+// Component از DOM حذف می‌شود ولی Stepها در رجیستری باقی می‌مانند
+```
+
+```typescript
+// ✅ درست — dispose پیاده‌سازی شود
+dispose(): void {
+    this.disposeStep();  // ← CoreEvent.dispose بازگشتی
+}
+```
+
 ---
 
 ## ۱۷.۱۲. استفاده از ComponentExampleDefinition (منسوخ — Plan 8.1.5)
@@ -1732,11 +2530,19 @@ src/framework/module_ui/module_pages/pages/tests/ClTestsPage.ts
 | Callback_ComponentMethod | `src/framework/module_core/module_components/tools/method/Callback_ComponentMethod.ts` |
 | Interface_ComponentMethod | `src/framework/module_core/module_components/tools/method/Interface_ComponentMethod.ts` |
 | Define_ComponentMethod | `src/framework/module_core/module_components/tools/method/Define_ComponentMethod.ts` |
+| Define_ComponentProp | `src/framework/module_core/module_components/tools/prop/Define_ComponentProp.ts` |
+| Interface_ComponentProp (ComponentPropEntry) | `src/framework/module_core/module_components/tools/prop/Interface_ComponentProp.ts` |
+| TypeHelpers (ExtractPropsType, ExtractPropsConfigType, ExtractMethodsType, ...) | `src/framework/module_ui/module_components/tools/type/TypeHelpers.ts` |
+| Type Verification Proofs (Plan 9.1.3) | `src/framework/module_ui/module_components/tools/type/__verify__/` |
 | CreateCategoryComponent | `src/framework/module_ui/module_categories/basic/methods/MtCreateCategoryComponent.ts` |
 | TCategoryComponentTotality | `src/framework/module_ui/module_categories/basic/types/TCategoryComponentTotality.ts` |
 | Category UI Lists | `src/framework/module_ui/module_categories/lists/ui/` |
-| ComponentStructureTrait | `src/framework/module_ui/module_components/traits/componentStructureTrait.ts` |
+| ComponentStructureTrait | `src/framework/module_ui/module_components/traits/componentStructureTrait/Trait.ts` |
 | ClTestsPage (automatic discovery) | `src/framework/module_ui/module_pages/pages/tests/ClTestsPage.ts` |
+| SubEvent / getChild / dispose (Plan 8.2.7) | `src/framework/module_core/module_event/index.ts` |
+| ClStep API (addChild, removeChild, getParent, ...) (Plan 8.2.7) | `src/framework/module_core/module_event/class/ClStep.ts` |
+| Inspector (inspect, trace, find, stats, monitor) (Plan 8.2.9) | `src/framework/module_core/module_event/index.ts` |
+| Event Inspector Docs (Plan 8.2.9) | `documents/inspectors/event-inspector.md` |
 
 ---
 
@@ -1745,7 +2551,75 @@ src/framework/module_ui/module_pages/pages/tests/ClTestsPage.ts
 - [Basic/index.md](./Basic/index.md) — نقشه راه اصلی
 - [Basic/02-component/AI_GUIDE_COMPONENT_STRUCTURE.md](./Basic/02-component/AI_GUIDE_COMPONENT_STRUCTURE.md) — ساختار Component
 - [Basic/00-framework/AI_GUIDE_RULES.md](./Basic/00-framework/AI_GUIDE_RULES.md) — قوانین طلایی
+- [Basic/01-systems/AI_GUIDE_EVENT.md](./Basic/01-systems/AI_GUIDE_EVENT.md) — سیستم Event (CoreEvent)
+- [inspectors/event-inspector.md](./inspectors/event-inspector.md) — Console Inspector & Flow Monitor (Plan 8.2.9)
 
 ---
 
-*آخرین به‌روزرسانی: ۲۰۲۶-۰۹-۱۵ — Plan 8.1.5 (ComponentExample با render() + حذف ExampleRenderer + Base/Concrete split ComponentStructure + TestsPage automatic discovery)*
+*آخرین به‌روزرسانی: ۲۰۲۶-۰۹-۰۵ — Plan 11.2 (Schema پایه از Trait) + Plan 9.1 (Step Factory) + Plan 9.1.1 (Behavior Legacy)*
+
+---
+
+## ۲۱. Plan 9.1.3 — Enum Type Narrowing (`Define_ComponentProp<T>`)
+
+### مشکل
+
+الگوی قدیمی `satisfies TComponentPropEntry<T>` باعث می‌شد TypeScript نوع `default` را به‌صورت **literal** استنتاج کند (مثلاً `ButtonSemantic.SUBMIT` به‌جای `ButtonSemantic`). این باعث می‌شد:
+
+- `ExtractPropsType` نوع اشتباه استخراج کند — literal به‌جای enum کامل
+- مصرف‌کننده فقط می‌توانست همان مقدار default را پاس دهد، نه هر مقدار از enum
+- `ExtractMethodsComponentArgs` هم literal استخراج می‌کرد
+
+### راه‌حل — `Define_ComponentProp<T>`
+
+به‌جای `satisfies TComponentPropEntry<T>`، از helper `Define_ComponentProp<T>(...)` استفاده می‌شود:
+
+```typescript
+// ❌ قدیمی — literal narrowing
+prop_btnSemantic: {
+    prop:         "prop_btnSemantic",
+    default:      ButtonSemantic.SUBMIT,
+} satisfies TComponentPropEntry<ButtonSemantic>,
+
+// ✅ جدید — type widening via helper
+prop_btnSemantic: Define_ComponentProp<ButtonSemantic>({
+    prop:         "prop_btnSemantic",
+    default:      ButtonSemantic.SUBMIT,
+}),
+```
+
+`Define_ComponentProp<T>` یک identity function است که نوع `T` را در return type حفظ می‌کند — `default` در خروجی نوع `T` دارد (نه literal).
+
+### Overloadها
+
+`Define_ComponentProp` دو overload دارد:
+
+1. **Whole-object** (قدیمی — برای `as any` در Base):
+   ```typescript
+   Define_ComponentProp<TPropTypes>({ ...patterns } as any)
+   ```
+
+2. **Per-entry** (جدید — برای Props.ts):
+   ```typescript
+   Define_ComponentProp<T>(entry: ComponentPropEntry<T>): ComponentPropEntry<T>
+   ```
+
+Overload 1 اول است تا فراخوانی‌های قدیمی `as any` بدون تغییر کار کنند.
+
+### نکات مهم
+
+- **Generic `<T>` اجباری است** — بدون `<T>`، type preservation کار نمی‌کند. مصرف‌کننده باید همیشه نوع را صریحاً پاس دهد.
+- **`default: null`** — اگر default مقدار `null` است، نوع باید `T | null` باشد (مثلاً `Define_ComponentProp<IIconDefinition | null>({ default: null })`).
+- **`ExtractPropsType` بدون تغییر** — این helper از `TProps[K]["default"]` استفاده می‌کند و با خروجی `Define_ComponentProp<T>` به‌درستی کار می‌کند.
+- **`ExtractMethodsComponentArgs` بدون تغییر** — چون `args` به prop entryها اشاره می‌کند و `default` از نوع `T` است، استخراج درست انجام می‌شود.
+
+### فایل‌های Proof
+
+| فایل | مسیر | هدف |
+|:---|:---|:---|
+| `DefinePropProof.ts` | `tools/type/__verify__/` | Phase 1C+1D: contract + overload proofs |
+| `DefinePropRuntimeProof.ts` | `tools/type/__verify__/` | Phase 1E: runtime identity |
+| `ExtractPropsTypeProof.ts` | `tools/type/__verify__/` | Phase 2+3: extraction + regression |
+| `ButtonPropsExtractionProof.ts` | `tools/type/__verify__/` | Phase 4: real migrated ButtonProps |
+| `MethodsExtractionProof.ts` | `tools/type/__verify__/` | Phase 6: Methods chain |
+| `Phase7Invariant.ts` | `tools/type/__verify__/` | Phase 7: public type vs runtime default |

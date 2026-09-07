@@ -1,4 +1,5 @@
 import * as CoreComponents   from "@/core_components";
+import * as CoreEvent        from "@/core_event";
 // --------------------------------
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 // --------------------------------
@@ -18,6 +19,25 @@ import {Definition}               from "./Definition";
  * ۷ prop پایه ComponentStructure از ComponentStructureTrait.props در _COMPONENT_PATTERN
  * ثبت می‌شوند تا کاربر بتواند آن‌ها را set کند — سپس در renderContentComponent
  * به ComponentStructure.create() forward می‌شوند.
+ *
+ * Step Node (Plan 9.1 + 8.2.7):
+ *   _COMPONENT_STEP — درخت Workflow داخلی Component (داخلی)
+ *   در constructor از طریق super پاس داده می‌شود.
+ *   در متدهای render به reactiveElementها متصل می‌شود.
+ *
+ *   تفاوت با identity:
+ *     identity = بیرونی — والد به این Component
+ *     step     = داخلی — این Component به فرزندانش
+ *
+ * Plan 8.2.7 — SubEvent:
+ *   اگر Parent Step (identity.unique) و Child Step (step) هر دو وجود دارند،
+ *   Child به‌عنوان SubEvent زیر Parent ثبت می‌شود — از طریق CoreEvent.SubEvent API.
+ *   هیچ mutate مستقیمی روی children انجام نمی‌شود.
+ *   هر Instance Step خودش را دارد (factory) — identity یکتا، تداخل ندارد.
+ *
+ * Plan 9.1 — Event Scope Ownership:
+ *   هر ComponentIcon مالک Step Instance خودش است.
+ *   disposal یک Component فقط باید Event resources متعلق به همان Component را آزاد کند.
  */
 export class ComponentIconBase extends CoreComponents.App<
     PropsType & Record<string, any>,
@@ -25,6 +45,53 @@ export class ComponentIconBase extends CoreComponents.App<
     any,
     MethodsType
 > {
+
+    /**
+     * Step Node — درخت Workflow داخلی ComponentIcon
+     * فرزند در constructor از طریق super پاس می‌دهد.
+     * در متدهای render به reactiveElementها متصل می‌شود.
+     */
+    protected _COMPONENT_STEP: CoreEvent.TStepInstance<any> | null = null;
+
+
+    /**
+     * constructor (Plan 8.2.7)
+     *
+     * @param componentName — نام Component (default: "icon")
+     * @param elId          — شناسه المان (default: null)
+     * @param identity      — بیرونی { unique?, emit?, events? } — والد به این Component
+     * @param step          — داخلی (Workflow خاص این Component) — این Component به فرزندهایش
+     */
+    constructor(
+        componentName: string = "icon",
+        elId: string | null   = null,
+        identity?: {
+            unique?: CoreEvent.TStepRef | null;
+            emit?:   CoreEvent.TEmitHandler | null;
+            events?: Record<string, any> | null;
+        },
+        step?: CoreEvent.TStepInstance<any>,
+    ) {
+        super(componentName, elId);
+
+        this._COMPONENT_UNIQUE = identity?.unique ?? null;
+        this._COMPONENT_EMIT   = identity?.emit ?? null;
+
+        this._COMPONENT_STEP   = step ?? null;
+
+        if (step && identity?.unique && typeof (identity.unique as any).identity === "symbol") {
+            CoreEvent.SubEvent(identity.unique as CoreEvent.TStepRef, componentName, step);
+        }
+    }
+
+
+
+    disposeStep(): void {
+        if (this._COMPONENT_STEP) {
+            CoreEvent.dispose(this._COMPONENT_STEP);
+            this._COMPONENT_STEP = null;
+        }
+    }
 
     protected _COMPONENT_DEFINITION = Definition;
 
@@ -35,6 +102,7 @@ export class ComponentIconBase extends CoreComponents.App<
     } as any);
 
     protected _COMPONENT_SCHEMA = CoreComponents.DefineSchema<SchemasType, PropsType & Record<string, any>>({
+        ...ComponentStructureTrait.schemas,
         ...Schemas,
     } as any);
 

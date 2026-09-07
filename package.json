@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "perf": "npx vitest run --config vitest.config.ts",
+    "perf:update": "set PERF_UPDATE_BASELINE=1&& npx vitest run --config vitest.config.ts"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +18,7 @@
     "@typescript-eslint/parser": "^8.57.0",
     "esbuild": "^0.27.3",
     "eslint": "^9.39.4",
-    "jsdom": "^27.0.1",
+    "jsdom": "^26.1.0",
     "lightningcss": "^1.32.0",
     "prettier": "^3.8.1",
     "rollup": "^4.59.0",

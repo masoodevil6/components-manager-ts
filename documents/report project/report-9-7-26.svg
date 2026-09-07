@@ -1,0 +1,346 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 1400" dir="rtl" font-family="Segoe UI, IRANSans, Tahoma, sans-serif">
+  <defs>
+    <style>
+      text { direction: rtl; unicode-bidi: embed; }
+      text.ltr { direction: ltr; unicode-bidi: embed; }
+    </style>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f0f4ff"/>
+      <stop offset="100%" stop-color="#f9fafb"/>
+    </linearGradient>
+    <linearGradient id="rootGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="stepA_Grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#dc2626"/>
+      <stop offset="100%" stop-color="#f87171"/>
+    </linearGradient>
+    <linearGradient id="stepB_Grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#fbbf24"/>
+    </linearGradient>
+    <linearGradient id="stepC_Grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
+    </linearGradient>
+    <linearGradient id="stepD_Grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/>
+      <stop offset="100%" stop-color="#5eead4"/>
+    </linearGradient>
+    <linearGradient id="testGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#16a34a"/>
+      <stop offset="100%" stop-color="#86efac"/>
+    </linearGradient>
+    <linearGradient id="goalGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.1"/>
+    </filter>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-opacity="0.06"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="1400" fill="url(#bg)"/>
+
+  <!-- ===== ROOT ===== -->
+  <rect x="140" y="20" width="680" height="50" rx="14" fill="url(#rootGrad)" filter="url(#shadow)"/>
+  <text x="480" y="52" text-anchor="middle" fill="#fff" font-size="16" font-weight="700">گزارش کار کامپوننت‌ها — ۹/۷/۲۶ (۱۲.۲.۴ cloneNode + ۱۲.۳ Real-World Validation)</text>
+
+  <!-- Root to 5 branches -->
+  <path d="M 480 70 L 480 90 L 110 90 L 110 110" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 480 70 L 480 90 L 320 90 L 320 110" fill="none" stroke="#d97706" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 480 70 L 480 90 L 530 90 L 530 110" fill="none" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 480 70 L 480 90 L 740 90 L 740 110" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 480 70 L 480 90 L 870 90 L 870 110" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- ===== STEP A: 12.2.4-A cloneNode optimization ===== -->
+  <rect x="30" y="110" width="160" height="42" rx="12" fill="url(#stepA_Grad)" filter="url(#shadow)"/>
+  <text x="110" y="137" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">۱۲.۲.۴-A — cloneNode</text>
+
+  <line x1="110" y1="152" x2="110" y2="420" stroke="#f87171" stroke-width="2" stroke-linecap="round"/>
+
+  <g font-size="11" font-weight="600">
+    <path d="M 110 170 L 70 170 L 70 180" fill="none" stroke="#f87171" stroke-width="1.5"/>
+    <rect x="10" y="180" width="200" height="32" rx="9" fill="#dbeafe" stroke="#2563eb" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="110" y="201" text-anchor="middle" fill="#1e40af">🔍 D1≈D7 → cloneNode bottleneck</text>
+
+    <path d="M 110 222 L 70 222 L 70 232" fill="none" stroke="#f87171" stroke-width="1.5"/>
+    <rect x="10" y="232" width="200" height="32" rx="9" fill="#fef3c7" stroke="#d97706" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="110" y="253" text-anchor="middle" fill="#92400e">💡 Strategy D: innerHTML cache</text>
+
+    <path d="M 110 274 L 70 274 L 70 284" fill="none" stroke="#f87171" stroke-width="1.5"/>
+    <rect x="10" y="284" width="200" height="32" rx="9" fill="#fef3c7" stroke="#d97706" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="110" y="305" text-anchor="middle" fill="#92400e">💡 Strategy E: shallow+innerHTML</text>
+
+    <path d="M 110 326 L 70 326 L 70 336" fill="none" stroke="#f87171" stroke-width="1.5"/>
+    <rect x="10" y="336" width="200" height="32" rx="9" fill="#fee2e2" stroke="#dc2626" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="110" y="357" text-anchor="middle" fill="#991b1b">❌ D13: 3.06x کندتر</text>
+
+    <path d="M 110 378 L 70 378 L 70 388" fill="none" stroke="#f87171" stroke-width="1.5"/>
+    <rect x="10" y="388" width="200" height="32" rx="9" fill="#fee2e2" stroke="#dc2626" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="110" y="409" text-anchor="middle" fill="#991b1b">❌ D14: 2.98x کندتر → FAILED</text>
+  </g>
+
+  <!-- ===== STEP B: 12.2.4-B complexity reduction (EXPERIMENTAL — REVERTED) ===== -->
+  <rect x="240" y="110" width="160" height="42" rx="12" fill="url(#stepB_Grad)" filter="url(#shadow)"/>
+  <text x="320" y="137" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">۱۲.۲.۴-B — Experimental</text>
+
+  <line x1="320" y1="152" x2="320" y2="540" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
+
+  <g font-size="11" font-weight="600">
+    <path d="M 320 170 L 280 170 L 280 180" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+    <rect x="220" y="180" width="200" height="32" rx="9" fill="#fef3c7" stroke="#d97706" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="320" y="201" text-anchor="middle" fill="#92400e">⚠ EXPERIMENT — نه نهایی</text>
+
+    <path d="M 320 222 L 280 222 L 280 232" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+    <rect x="220" y="232" width="200" height="32" rx="9" fill="#fef3c7" stroke="#d97706" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="320" y="253" text-anchor="middle" fill="#92400e">💡 ۳ آیکون: score 30/29/29</text>
+
+    <path d="M 320 274 L 280 274 L 280 284" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+    <rect x="220" y="284" width="200" height="32" rx="9" fill="#fef3c7" stroke="#d97706" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="320" y="305" text-anchor="middle" fill="#92400e">💡 ترکیب path + arc تبدیل</text>
+
+    <path d="M 320 326 L 280 326 L 280 336" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+    <rect x="220" y="336" width="200" height="32" rx="9" fill="#fef3c7" stroke="#d97706" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="320" y="357" text-anchor="middle" fill="#92400e">📊 exp: score 30→14 (53%)</text>
+
+    <path d="M 320 378 L 280 378 L 280 388" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+    <rect x="220" y="388" width="200" height="32" rx="9" fill="#fef3c7" stroke="#d97706" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="320" y="409" text-anchor="middle" fill="#92400e">📊 exp: D1 50→30ms (39%)</text>
+
+    <path d="M 320 430 L 280 430 L 280 440" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+    <rect x="220" y="440" width="200" height="32" rx="9" fill="#fee2e2" stroke="#dc2626" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="320" y="461" text-anchor="middle" fill="#991b1b">⚠ ریسک: visual regression</text>
+
+    <path d="M 320 482 L 280 482 L 280 492" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+    <rect x="220" y="492" width="200" height="32" rx="9" fill="#fee2e2" stroke="#dc2626" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="320" y="513" text-anchor="middle" fill="#991b1b">⚠ jsdom ≠ browser</text>
+
+    <path d="M 320 534 L 280 534 L 280 544" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+    <rect x="220" y="544" width="200" height="32" rx="9" fill="#fee2e2" stroke="#dc2626" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="320" y="565" text-anchor="middle" fill="#991b1b">↩ REVERTED — fidelity &gt; bench</text>
+
+    <path d="M 320 586 L 280 586 L 280 596" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+    <rect x="220" y="596" width="200" height="32" rx="9" fill="#dbeafe" stroke="#2563eb" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="320" y="617" text-anchor="middle" fill="#1e40af">→ Final: baseline restored</text>
+  </g>
+
+  <!-- ===== STEP C: 12.3 Real-World Validation ===== -->
+  <rect x="450" y="110" width="160" height="42" rx="12" fill="url(#stepC_Grad)" filter="url(#shadow)"/>
+  <text x="530" y="137" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">۱۲.۳ — Real-World</text>
+
+  <line x1="530" y1="152" x2="530" y2="630" stroke="#c4b5fd" stroke-width="2" stroke-linecap="round"/>
+
+  <g font-size="11" font-weight="600">
+    <path d="M 530 170 L 490 170 L 490 180" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="430" y="180" width="200" height="32" rx="9" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="530" y="201" text-anchor="middle" fill="#5b21b6">🔍 Library vs Raw DOM vs SVG</text>
+
+    <path d="M 530 222 L 490 222 L 490 232" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="430" y="232" width="200" height="32" rx="9" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="530" y="253" text-anchor="middle" fill="#5b21b6">🔍 ۵/۲۰/۵۰/۱۰۰/۵۰۰ mixed icons</text>
+
+    <path d="M 530 274 L 490 274 L 490 284" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="430" y="284" width="200" height="32" rx="9" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="530" y="305" text-anchor="middle" fill="#5b21b6">🔍 create + mount + update + destroy</text>
+
+    <path d="M 530 326 L 490 326 L 490 336" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="430" y="336" width="200" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="530" y="357" text-anchor="middle" fill="#15803d">✅ ۱۱۴ icons pool، avg score 4.5</text>
+
+    <path d="M 530 378 L 490 378 L 490 388" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="430" y="388" width="200" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="530" y="409" text-anchor="middle" fill="#15803d">✅ ۱۷ suites / ۷۸ tests — all pass</text>
+
+    <path d="M 530 430 L 490 430 L 490 440" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="430" y="440" width="200" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="530" y="461" text-anchor="middle" fill="#15803d">✅ Memory: ۰ retained nodes</text>
+
+    <path d="M 530 482 L 490 482 L 490 492" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="430" y="492" width="200" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="530" y="513" text-anchor="middle" fill="#15803d">✅ Update: 0ms (reactive) vs 1.27ms</text>
+
+    <path d="M 530 534 L 490 534 L 490 544" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="430" y="544" width="200" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="530" y="565" text-anchor="middle" fill="#15803d">✅ No memory leak</text>
+
+    <path d="M 530 586 L 490 586 L 490 596" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="430" y="596" width="200" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="530" y="617" text-anchor="middle" fill="#15803d">🏆 Library سریع‌تر از Raw DOM!</text>
+  </g>
+
+  <!-- ===== STEP D: Key Finding ===== -->
+  <rect x="660" y="110" width="160" height="42" rx="12" fill="url(#stepD_Grad)" filter="url(#shadow)"/>
+  <text x="740" y="137" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">کشف کلیدی</text>
+
+  <line x1="740" y1="152" x2="740" y2="470" stroke="#5eead4" stroke-width="2" stroke-linecap="round"/>
+
+  <g font-size="11" font-weight="600">
+    <path d="M 740 170 L 700 170 L 700 180" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+    <rect x="640" y="180" width="200" height="32" rx="9" fill="#ccfbf1" stroke="#0d9488" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="740" y="201" text-anchor="middle" fill="#115e59">💡 cache + cloneNode &gt; build</text>
+
+    <path d="M 740 222 L 700 222 L 700 232" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+    <rect x="640" y="232" width="200" height="32" rx="9" fill="#ccfbf1" stroke="#0d9488" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="740" y="253" text-anchor="middle" fill="#115e59">💡 Library سریع‌تر از Raw DOM</text>
+
+    <path d="M 740 274 L 700 274 L 700 284" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+    <rect x="640" y="284" width="200" height="32" rx="9" fill="#ccfbf1" stroke="#0d9488" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="740" y="305" text-anchor="middle" fill="#115e59">💡 jsdom ≠ browser</text>
+
+    <path d="M 740 326 L 700 326 L 700 336" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+    <rect x="640" y="336" width="200" height="32" rx="9" fill="#ccfbf1" stroke="#0d9488" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="740" y="357" text-anchor="middle" fill="#115e59">💡 benchmark مصنوعی ≠ production</text>
+
+    <path d="M 740 378 L 700 378 L 700 388" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+    <rect x="640" y="388" width="200" height="32" rx="9" fill="#ccfbf1" stroke="#0d9488" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="740" y="409" text-anchor="middle" fill="#115e59">💡 value = DX + reactive + a11y</text>
+
+    <path d="M 740 430 L 700 430 L 700 440" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+    <rect x="640" y="440" width="200" height="32" rx="9" fill="#ccfbf1" stroke="#0d9488" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="740" y="461" text-anchor="middle" fill="#115e59">💡 نه صرفاً speed</text>
+  </g>
+
+  <!-- ===== FINAL REGRESSION BRANCH ===== -->
+  <rect x="800" y="110" width="140" height="42" rx="12" fill="url(#testGrad)" filter="url(#shadow)"/>
+  <text x="870" y="137" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Regression</text>
+
+  <line x1="870" y1="152" x2="870" y2="400" stroke="#86efac" stroke-width="2" stroke-linecap="round"/>
+
+  <g font-size="11" font-weight="600">
+    <path d="M 870 170 L 910 170 L 910 180" fill="none" stroke="#86efac" stroke-width="1.5"/>
+    <rect x="780" y="180" width="170" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="865" y="201" text-anchor="middle" fill="#15803d">✅ ۳ icons reverted</text>
+
+    <path d="M 870 222 L 910 222 L 910 232" fill="none" stroke="#86efac" stroke-width="1.5"/>
+    <rect x="780" y="232" width="170" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="865" y="253" text-anchor="middle" fill="#15803d">✅ ۲۲ behavioral pass</text>
+
+    <path d="M 870 274 L 910 274 L 910 284" fill="none" stroke="#86efac" stroke-width="1.5"/>
+    <rect x="780" y="284" width="170" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="865" y="305" text-anchor="middle" fill="#15803d">✅ ۱۴ diagnostic pass</text>
+
+    <path d="M 870 326 L 910 326 L 910 336" fill="none" stroke="#86efac" stroke-width="1.5"/>
+    <rect x="780" y="336" width="170" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="865" y="357" text-anchor="middle" fill="#15803d">✅ ۱۷ realistic pass</text>
+
+    <path d="M 870 378 L 910 378 L 910 388" fill="none" stroke="#86efac" stroke-width="1.5"/>
+    <rect x="780" y="388" width="170" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="865" y="409" text-anchor="middle" fill="#15803d">✅ score=30 (baseline)</text>
+  </g>
+
+  <!-- ===== PERFORMANCE TABLE ===== -->
+  <rect x="40" y="660" width="880" height="220" rx="14" fill="#fff" stroke="#e5e7eb" stroke-width="1.5" filter="url(#softShadow)"/>
+  <text x="480" y="688" text-anchor="middle" fill="#1e3a8a" font-size="14" font-weight="700">📊 نتایج Real-World Benchmark — Library vs Raw DOM vs Raw SVG</text>
+
+  <!-- Table header -->
+  <rect x="60" y="700" width="840" height="28" rx="6" fill="#f1f5f9"/>
+  <text x="140" y="719" text-anchor="middle" fill="#475569" font-size="11" font-weight="700" class="ltr">Workload</text>
+  <text x="340" y="719" text-anchor="middle" fill="#475569" font-size="11" font-weight="700" class="ltr">Library</text>
+  <text x="500" y="719" text-anchor="middle" fill="#475569" font-size="11" font-weight="700" class="ltr">Raw DOM</text>
+  <text x="660" y="719" text-anchor="middle" fill="#475569" font-size="11" font-weight="700" class="ltr">Raw SVG</text>
+  <text x="830" y="719" text-anchor="middle" fill="#475569" font-size="11" font-weight="700" class="ltr">Library ratio</text>
+
+  <!-- Row 1: create ×5 -->
+  <text x="140" y="748" text-anchor="middle" fill="#374151" font-size="11" font-weight="600" class="ltr">create ×5</text>
+  <text x="340" y="748" text-anchor="middle" fill="#374151" font-size="11" class="ltr">2.27ms</text>
+  <text x="500" y="748" text-anchor="middle" fill="#374151" font-size="11" class="ltr">3.38ms</text>
+  <text x="660" y="748" text-anchor="middle" fill="#374151" font-size="11" class="ltr">6.37ms</text>
+  <text x="830" y="748" text-anchor="middle" fill="#15803d" font-size="11" font-weight="700" class="ltr">0.67x ✓</text>
+
+  <!-- Row 2: create ×20 -->
+  <text x="140" y="772" text-anchor="middle" fill="#374151" font-size="11" font-weight="600" class="ltr">create ×20</text>
+  <text x="340" y="772" text-anchor="middle" fill="#374151" font-size="11" class="ltr">5.36ms</text>
+  <text x="500" y="772" text-anchor="middle" fill="#374151" font-size="11" class="ltr">7.50ms</text>
+  <text x="660" y="772" text-anchor="middle" fill="#374151" font-size="11" class="ltr">12.92ms</text>
+  <text x="830" y="772" text-anchor="middle" fill="#15803d" font-size="11" font-weight="700" class="ltr">0.72x ✓</text>
+
+  <!-- Row 3: create ×50 -->
+  <text x="140" y="796" text-anchor="middle" fill="#374151" font-size="11" font-weight="600" class="ltr">create ×50</text>
+  <text x="340" y="796" text-anchor="middle" fill="#374151" font-size="11" class="ltr">8.67ms</text>
+  <text x="500" y="796" text-anchor="middle" fill="#374151" font-size="11" class="ltr">15.30ms</text>
+  <text x="660" y="796" text-anchor="middle" fill="#374151" font-size="11" class="ltr">27.45ms</text>
+  <text x="830" y="796" text-anchor="middle" fill="#15803d" font-size="11" font-weight="700" class="ltr">0.57x ✓</text>
+
+  <!-- Row 4: create ×100 -->
+  <text x="140" y="820" text-anchor="middle" fill="#374151" font-size="11" font-weight="600" class="ltr">create ×100</text>
+  <text x="340" y="820" text-anchor="middle" fill="#374151" font-size="11" class="ltr">19.09ms</text>
+  <text x="500" y="820" text-anchor="middle" fill="#374151" font-size="11" class="ltr">26.06ms</text>
+  <text x="660" y="820" text-anchor="middle" fill="#374151" font-size="11" class="ltr">55.17ms</text>
+  <text x="830" y="820" text-anchor="middle" fill="#15803d" font-size="11" font-weight="700" class="ltr">0.73x ✓</text>
+
+  <!-- Row 5: create+mount ×100 -->
+  <text x="140" y="844" text-anchor="middle" fill="#374151" font-size="11" font-weight="600" class="ltr">create+mount ×100</text>
+  <text x="340" y="844" text-anchor="middle" fill="#374151" font-size="11" class="ltr">30.75ms</text>
+  <text x="500" y="844" text-anchor="middle" fill="#374151" font-size="11" class="ltr">43.63ms</text>
+  <text x="660" y="844" text-anchor="middle" fill="#374151" font-size="11" class="ltr">60.45ms</text>
+  <text x="830" y="844" text-anchor="middle" fill="#15803d" font-size="11" font-weight="700" class="ltr">0.70x ✓</text>
+
+  <!-- Row 6: update -->
+  <text x="140" y="868" text-anchor="middle" fill="#374151" font-size="11" font-weight="600" class="ltr">update ×20 (reactive)</text>
+  <text x="340" y="868" text-anchor="middle" fill="#15803d" font-size="11" font-weight="700" class="ltr">&lt; resolution*</text>
+  <text x="500" y="868" text-anchor="middle" fill="#374151" font-size="11" class="ltr">1.27ms</text>
+  <text x="660" y="868" text-anchor="middle" fill="#6b7280" font-size="11" class="ltr">N/A</text>
+  <text x="830" y="868" text-anchor="middle" fill="#15803d" font-size="11" font-weight="700">— ✓</text>
+
+  <!-- ===== VALUE PROPOSITION TABLE ===== -->
+  <rect x="40" y="900" width="880" height="150" rx="14" fill="#fff" stroke="#e5e7eb" stroke-width="1.5" filter="url(#softShadow)"/>
+  <text x="480" y="928" text-anchor="middle" fill="#1e3a8a" font-size="14" font-weight="700">🏆 Value Proposition — چرا کتابخانه؟</text>
+
+  <!-- Table header -->
+  <rect x="60" y="940" width="840" height="26" rx="6" fill="#f1f5f9"/>
+  <text x="200" y="958" text-anchor="middle" fill="#475569" font-size="11" font-weight="700">قابلیت</text>
+  <text x="450" y="958" text-anchor="middle" fill="#475569" font-size="11" font-weight="700" class="ltr">Library</text>
+  <text x="620" y="958" text-anchor="middle" fill="#475569" font-size="11" font-weight="700" class="ltr">Raw DOM</text>
+  <text x="800" y="958" text-anchor="middle" fill="#475569" font-size="11" font-weight="700" class="ltr">Raw SVG</text>
+
+  <!-- Rows -->
+  <text x="200" y="986" text-anchor="middle" fill="#374151" font-size="11" class="ltr">typed API</text>
+  <text x="450" y="986" text-anchor="middle" fill="#15803d" font-size="12" font-weight="700">✓</text>
+  <text x="620" y="986" text-anchor="middle" fill="#dc2626" font-size="12">✗</text>
+  <text x="800" y="986" text-anchor="middle" fill="#dc2626" font-size="12">✗</text>
+
+  <text x="200" y="1008" text-anchor="middle" fill="#374151" font-size="11" class="ltr">reactive props</text>
+  <text x="450" y="1008" text-anchor="middle" fill="#15803d" font-size="12" font-weight="700">✓</text>
+  <text x="620" y="1008" text-anchor="middle" fill="#d97706" font-size="11">دستی</text>
+  <text x="800" y="1008" text-anchor="middle" fill="#dc2626" font-size="12">✗</text>
+
+  <text x="200" y="1030" text-anchor="middle" fill="#374151" font-size="11" class="ltr">accessibility (aria/role)</text>
+  <text x="450" y="1030" text-anchor="middle" fill="#15803d" font-size="12" font-weight="700" class="ltr">✓ auto</text>
+  <text x="620" y="1030" text-anchor="middle" fill="#d97706" font-size="11">دستی</text>
+  <text x="800" y="1030" text-anchor="middle" fill="#d97706" font-size="11">دستی</text>
+
+  <text x="200" y="1052" text-anchor="middle" fill="#374151" font-size="11" class="ltr">template caching</text>
+  <text x="450" y="1052" text-anchor="middle" fill="#15803d" font-size="12" font-weight="700" class="ltr">✓ auto</text>
+  <text x="620" y="1052" text-anchor="middle" fill="#dc2626" font-size="12">✗</text>
+  <text x="800" y="1052" text-anchor="middle" fill="#dc2626" font-size="12">✗</text>
+
+  <!-- ===== KEY FINDING BOX ===== -->
+  <rect x="40" y="1070" width="880" height="100" rx="14" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5" filter="url(#softShadow)"/>
+  <text x="480" y="1098" text-anchor="middle" fill="#15803d" font-size="13" font-weight="700">🔒 نتیجه کلیدی (در این benchmark jsdom)</text>
+  <text x="480" y="1122" text-anchor="middle" fill="#166534" font-size="11" font-weight="600">در workload نماینده ۲۰ آیکون، Library در این benchmark حدود ۲۸٪ سریع‌تر از Raw DOM بود</text>
+  <text x="480" y="1140" text-anchor="middle" fill="#166534" font-size="11" font-weight="600">cache + cloneNode از build-from-scratch کارآمدتر • reactive update زیر resolution • ۰ memory leak</text>
+  <text x="480" y="1158" text-anchor="middle" fill="#6b7280" font-size="10" font-style="italic">* ۰.۰۰ms نشان‌دهنده زیر resolution ابزار اندازه‌گیری است، نه صفر واقعی</text>
+
+  <!-- ===== NEXT VALIDATION BOX ===== -->
+  <rect x="40" y="1185" width="880" height="90" rx="14" fill="#fffbeb" stroke="#d97706" stroke-width="1.5" filter="url(#softShadow)"/>
+  <text x="480" y="1213" text-anchor="middle" fill="#92400e" font-size="13" font-weight="700">⏳ مرحله بعدی — Browser Benchmark</text>
+  <text x="480" y="1237" text-anchor="middle" fill="#92400e" font-size="11" font-weight="600" class="ltr">Library vs Raw DOM vs Raw SVG • 5/20/50/100/500 icons • create + mount + update + destroy</text>
+  <text x="480" y="1257" text-anchor="middle" fill="#a16207" font-size="11" font-weight="600">هدف: تأیید اینکه نتایج jsdom در browser واقعی هم برقرار است</text>
+
+  <!-- ===== GOAL BOX ===== -->
+  <rect x="80" y="1290" width="800" height="90" rx="16" fill="url(#goalGrad)" filter="url(#shadow)"/>
+  <text x="480" y="1320" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">🎯 نتیجه ۱۲.۲.۴ + ۱۲.۳</text>
+
+  <text x="240" y="1348" text-anchor="middle" fill="#bfdbfe" font-size="12" font-weight="700">۱۲.۲.۴: cloneNode بهینه نیست</text>
+  <text x="240" y="1368" text-anchor="middle" fill="#dbeafe" font-size="10">innerHTML ۳x کندتر • complexity reduction reverted</text>
+
+  <text x="720" y="1348" text-anchor="middle" fill="#bfdbfe" font-size="12" font-weight="700">۱۲.۳: کتابخانه value دارد</text>
+  <text x="720" y="1368" text-anchor="middle" fill="#dbeafe" font-size="10">سریع‌تر از raw در jsdom • DX + a11y + caching • browser pending</text>
+
+</svg>

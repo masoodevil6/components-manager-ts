@@ -10,6 +10,6 @@ export type {MethodsConfigType,
              MethodsComponentArgs,
              MethodsDataArgs}           from "./Methods"
 export {Definition}                     from "./Definition"
-export {IconStep   as Step}             from "./Step"
+export {createIconStep}                 from "./Step"
 export {Examples}                       from "./examples"
 export type {ComponentIconExamplesType} from "./examples"

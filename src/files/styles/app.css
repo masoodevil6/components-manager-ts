@@ -3,16 +3,16 @@
 
     /* [Colors] */
     --primaryColor1:   #15244b;
-    --primaryColor2:   rgb(51 71 131 / 0.75);
-    --primaryColor3:   rgb(120 135 178 / 0.4);
-    --primaryColor4:   rgb(140 154 194 / 0.2);
-    --primaryColor5:   rgb(157 170 208 / 0.04);
+    --primaryColor2:   #334783FF;
+    --primaryColor3: #6c80b6;
+    --primaryColor4: #99aad3;
+    --primaryColor5: #c9d3e4;
 
-    --secondaryColor1: #fab01b;
-    --secondaryColor2: #f5bf53;
-    --secondaryColor3: #f6d086;
-    --secondaryColor4: #efdcb3;
-    --secondaryColor5: #fcf5e7;
+    --secondaryColor1: #ffab00;
+    --secondaryColor2: #ffc348;
+    --secondaryColor3: #ffd680;
+    --secondaryColor4: #ffebbe;
+    --secondaryColor5: #fffdf8;
 
     --errorColor1:     #691d21;
     --errorColor2:     #ab5258;
@@ -94,12 +94,12 @@
 
 
     /* [Height] */
-    --heightXSmall:           12px;
-    --heightSmall:            13px;
-    --heightMedium:           14px;
-    --heightLarge:            16px;
-    --heightXLarge:           18px;
-    --heightXXLarge:          20px;
+    --heightXSmall:           16px;
+    --heightSmall:            20px;
+    --heightMedium:           24px;
+    --heightLarge:            30px;
+    --heightXLarge:           34px;
+    --heightXXLarge:          38px;
 
 
     /* [FontSize] */

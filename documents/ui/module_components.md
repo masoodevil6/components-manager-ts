@@ -133,5 +133,82 @@ export class MyComponent extends App<MyProps, any, any, any> {
 - emit **فقط با `request`** صدا زده می‌شود — خودبه‌خود با کلیک یا رویداد DOM صدا زده نمی‌شود.
 
 ---
+
+## 🔧 Define_ComponentProp (Plan 9.1.3 — Enum Type Narrowing)
+
+الگوی تعریف propها از `satisfies TComponentPropEntry<T>` به `Define_ComponentProp<T>(...)` تغییر کرده است.
+
+### مشکل
+
+الگوی قدیمی `satisfies TComponentPropEntry<T>` باعث می‌شد TypeScript نوع `default` را به‌صورت **literal** استنتاج کند (مثلاً `ButtonSemantic.SUBMIT` به‌جای `ButtonSemantic`). این باعث می‌شد مصرف‌کننده فقط بتواند همان مقدار default را پاس دهد.
+
+### راه‌حل
+
+```typescript
+// ❌ قدیمی — literal narrowing
+prop_btnSemantic: {
+    prop:         "prop_btnSemantic",
+    default:      ButtonSemantic.SUBMIT,
+} satisfies TComponentPropEntry<ButtonSemantic>,
+
+// ✅ جدید — type widening via helper
+prop_btnSemantic: Define_ComponentProp<ButtonSemantic>({
+    prop:         "prop_btnSemantic",
+    default:      ButtonSemantic.SUBMIT,
+}),
+```
+
+`Define_ComponentProp<T>` یک identity function است که نوع `T` را در return type حفظ می‌کند.
+
+**Export:** `CoreComponents.DefineProp` (alias برای `Define_ComponentProp`)
+
+### قوانین
+
+| قانون | سطح |
+|:---|:---|
+| هر prop با `Define_ComponentProp<T>(...)` تعریف شود | **MUST** |
+| Generic `<T>` صریحاً پاس شود | **MUST** |
+| اگر `default: null` است، نوع باید `T \| null` باشد | **MUST** |
+| از `satisfies TComponentPropEntry<T>` در propهای فردی استفاده **نشود** | **MUST NOT** |
+
+---
+
+## 🔧 TypeHelpers (Plan 9.1.3 — Type Extraction)
+
+فایل `TypeHelpers.ts` helperهای استخراج نوع فراهم می‌کند:
+
+| Helper | توضیحات |
+| :--- | :--- |
+| `ExtractPropsType<TProps>` | استخراج نوع `default` از هر prop entry. |
+| `ExtractPropsConfigType<TProps>` | استخراج نوع config قابل‌قبول constructor (Partial). |
+| `ExtractMethodsType<TMethods>` | استخراج نوع methodهای داخلی Component. |
+| `ExtractMethodsComponentArgs<TMethods>` | استخراج نوع componentArgs از `args`. |
+| `ExtractMethodsDataArgs<TMethods>` | استخراج نوع dataArgs. |
+| `ExtractMethodsConfigType<TMethods, TThis>` | استخراج نوع config methods با `this: TThis`. |
+
+### الگوی استفاده
+
+```typescript
+// Props.ts
+import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
+
+export type PropsType = ExtractPropsType<typeof Props>;
+export type PropsConfigType = ExtractPropsConfigType<typeof Props>;
+
+// Methods.ts
+import type {
+    ExtractMethodsType,
+    ExtractMethodsComponentArgs,
+    ExtractMethodsDataArgs,
+    ExtractMethodsConfigType,
+} from "../../tools/type/TypeHelpers";
+
+export type MethodsType = ExtractMethodsType<typeof Methods>;
+export type MethodsComponentArgs = ExtractMethodsComponentArgs<typeof Methods>;
+export type MethodsDataArgs = ExtractMethodsDataArgs<typeof Methods>;
+export type MethodsConfigType<TThis = any> = ExtractMethodsConfigType<typeof Methods, TThis>;
+```
+
+---
 *مستندات توسط Mindbase تولید شده است.*
-*آخرین به‌روزرسانی: ۲۰۲۶-۰۹-۰۱ — Plan 8.1.4*
+*آخرین به‌روزرسانی: ۲۰۲۶-۰۹-۰۵ — Plan 9.1.3 (Define_ComponentProp + TypeHelpers)*

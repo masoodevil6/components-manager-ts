@@ -1,1 +1,0 @@
-export type Type_ValueOf<T> = T[keyof T]

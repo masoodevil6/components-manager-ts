@@ -134,8 +134,8 @@ export class ComponentStructure<
             data?.prop_structureStyles ??
             new CoreObservable.App({});
 
-        return CoreReactive.App.part(
-            "section",
+        return CoreReactive.App.component(
+            "structure",
             {
                 classBind: [
                     prop_structureClass,
@@ -160,7 +160,11 @@ export class ComponentStructure<
        اگر _CONTENT_RENDERER set شده باشد، از آن استفاده می‌کند.
        در غیر این صورت به super (متد پایه) برمی‌گرداند.
     --------------------------------------------- */
-    override renderContentComponent(): CoreReactive.App {
+    override renderContentComponent(
+        attrsDefault: PartAttrDefault,
+        data:         Record<string, CoreObservable.App<any>>,
+        extra:        any,
+    ): CoreReactive.App {
         if (this._CONTENT_RENDERER) {
             return this._CONTENT_RENDERER();
         }
@@ -186,6 +190,7 @@ export class ComponentStructure<
        create(...).getElement() استفاده کنند.
     --------------------------------------------- */
     static create(
+        componentName: string,
         config:  Record<string, any> & { content?: () => CoreReactive.App },
         methods: Record<string, any> = {},
         identity: { unique?: any; emit?: any; events?: Record<string, any> } = {},
@@ -194,7 +199,7 @@ export class ComponentStructure<
         const { content, ...props } = config;
 
         const instance = new ComponentStructure(
-            "structure",
+            componentName,
             null,
             identity as any,
         );
@@ -227,7 +232,6 @@ export class ComponentStructure<
     ): CoreReactive.App {
 
         switch (partName) {
-
             case Schemas.COMPONENT.part:
                 return this.renderComponentSchema(attrsDefault, data);
 

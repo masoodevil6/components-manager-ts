@@ -1,5 +1,6 @@
 import * as CoreComponents from "@/core_components";
 import {Keys}              from "../../../module_categories/languages";
+import type {ExtractPropsType} from "../../tools/type/TypeHelpers";
 // --------------------------------
 
 
@@ -66,6 +67,4 @@ export const Props = {
  *   import {PropsType} from "@/ui_components/lists/componentStructure/Props"
  *   class ComponentButton extends ComponentStructure<PropsType, ...>
  */
-export type PropsType = {
-    [K in keyof typeof Props]: typeof Props[K]["default"]
-};
+export type PropsType = ExtractPropsType<typeof Props>;

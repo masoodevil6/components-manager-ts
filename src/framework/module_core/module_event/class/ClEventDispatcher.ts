@@ -57,7 +57,11 @@ export class ClEventDispatcher {
 
     /** ثبت Step در رجیستری (خودکار در factory Step) */
     register(step: TStepRef): void {
+        const isNew = !this.registry.has(step.identity);
         this.registry.set(step.identity, step);
+        if (isNew) {
+            ClEventDispatcher._createdCount++;
+        }
     }
 
     /**
@@ -160,6 +164,7 @@ export class ClEventDispatcher {
     dispose(step: TStepRef): void {
         this.emits.delete(step.identity);
         this.registry.delete(step.identity);
+        ClEventDispatcher._disposedCount++;
     }
 
     /** شمارنده مرکزی requestId — استاتیک تا در همه Dispatcherها یکتا باشد */
@@ -167,4 +172,55 @@ export class ClEventDispatcher {
     private static _newRequestId(): number {
         return ClEventDispatcher._requestCounter++;
     }
+
+    /* ---------------------------------------------
+       Plan 8.2.9 — Inspector accessorها (خواندنی)
+       Inspector از این accessorها استفاده می‌کند —
+       به internals دسترسی ندارد.
+    --------------------------------------------- */
+
+    /** لیست همه Stepهای ثبت‌شده در رجیستری — برای inspect و find */
+    getRegistry(): readonly TStepRef[] {
+        return Array.from(this.registry.values());
+    }
+
+    /** تعداد emit handlerهای ثبت‌شده — برای stats */
+    getEmitCount(): number {
+        return this.emits.size;
+    }
+
+    /** بررسی وجود emit handler برای یک Step — برای inspect */
+    hasEmit(step: TStepRef): boolean {
+        return this.emits.has(step.identity);
+    }
+
+    /** ظرفیت بافر trace — برای stats */
+    getTraceCapacity(): number {
+        return ClEventDispatcher.TRACE_LIMIT;
+    }
+
+    /** تعداد کل Stepهای ساخته‌شده از ابتدا — برای stats (lifecycle) */
+    getCreatedCount(): number {
+        return ClEventDispatcher._createdCount;
+    }
+
+    /** تعداد کل Stepهای disposeشده از ابتدا — برای stats (lifecycle) */
+    getDisposedCount(): number {
+        return ClEventDispatcher._disposedCount;
+    }
+
+    /** شمارش dispatchهای success/error از trace — برای stats */
+    getDispatchStats(): { success: number; errors: number } {
+        let success = 0;
+        let errors  = 0;
+        for (const record of this._trace) {
+            if (record.status === "success") success++;
+            else errors++;
+        }
+        return { success, errors };
+    }
+
+    /** شمارنده‌های lifecycle استاتیک — در register و dispose آپدیت می‌شوند */
+    private static _createdCount: number   = 0;
+    private static _disposedCount: number  = 0;
 }

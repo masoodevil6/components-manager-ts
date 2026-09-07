@@ -46,7 +46,7 @@ export class ClTestsPage implements ITemplate {
             ------------------------------------------------ */
             const exampleCards: any[] = examples.map(example =>
                 ReactiveApp.section({
-                    className: ["border", "rounded", "p-2", "d-flex", "flex-column", "align-items-center", "gap-2"],
+                    className: ["border", "rounded", "p-2", "col-4"],
                     children: [
                         `<h6 class="small text-muted mb-0">${example.id}</h6>`,
                         example.render(),   // ← مستقیم HTMLElement
@@ -61,7 +61,7 @@ export class ClTestsPage implements ITemplate {
                         `<h5>${entry.definition.name}</h5>`,
                         `<hr/>`,
                         ReactiveApp.section({
-                            className: ["d-flex", "flex-wrap", "gap-3", "p-2"],
+                            className: ["row", "p-2"],
                             children: exampleCards,
                         }),
                     ],

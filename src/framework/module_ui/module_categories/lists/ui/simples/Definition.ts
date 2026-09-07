@@ -2,6 +2,9 @@ import * as UICategories from "@/ui_categories"
 import {Keys}            from "../../../languages"
 // --------------------------------
 import {Icon}             from "./icon";
+import {Button}           from "./button";
+import {Messages}         from "./messages";
+import {Label}            from "./label";
 
 export const Definition : UICategories.TCategoryComponentDefinition = {
     id:          "simples",
@@ -10,5 +13,8 @@ export const Definition : UICategories.TCategoryComponentDefinition = {
 
     components:  [
         Icon,
+        Button,
+        Messages,
+        Label,
     ],
 }

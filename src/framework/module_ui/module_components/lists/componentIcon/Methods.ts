@@ -1,4 +1,10 @@
 import {Props as IconProps} from "./Props";
+import type {
+    ExtractMethodsType,
+    ExtractMethodsComponentArgs,
+    ExtractMethodsDataArgs,
+    ExtractMethodsConfigType,
+} from "../../tools/type/TypeHelpers";
 // --------------------------------
 
 
@@ -59,9 +65,7 @@ export const Methods = {
 /**
  * نوع methodهای ComponentIcon — برای استفاده در TMethods (داخلی Component)
  */
-export type MethodsType = {
-    [K in keyof typeof Methods]: (event: Event, dataArgs: any, componentArgs: any) => void
-};
+export type MethodsType = ExtractMethodsType<typeof Methods>;
 
 
 /**
@@ -70,16 +74,7 @@ export type MethodsType = {
  *
  * مثال: MethodsComponentArgs["CLICK"] = { ICON: IconsType | null }
  */
-export type MethodsComponentArgs = {
-    [K in keyof typeof Methods]: {
-        [ArgKey in keyof typeof Methods[K]["args"]]:
-            typeof Methods[K]["args"][ArgKey] extends {
-                default: infer T
-            }
-                ? T
-                : any;
-    };
-};
+export type MethodsComponentArgs = ExtractMethodsComponentArgs<typeof Methods>;
 
 
 /**
@@ -88,9 +83,7 @@ export type MethodsComponentArgs = {
  *
  * مثال: MethodsDataArgs["CLICK"] = {}
  */
-export type MethodsDataArgs = {
-    [K in keyof typeof Methods]: typeof Methods[K]["dataArgs"];
-};
+export type MethodsDataArgs = ExtractMethodsDataArgs<typeof Methods>;
 
 
 /**
@@ -122,11 +115,4 @@ export type MethodsDataArgs = {
  */
 export type MethodsConfigType<
     TThis = any,
-> = {
-    [K in keyof typeof Methods]?: (
-        this: TThis,
-        event: Event,
-        dataArgs: MethodsDataArgs[K] | null,
-        componentArgs: MethodsComponentArgs[K] | null,
-    ) => void;
-};
+> = ExtractMethodsConfigType<typeof Methods, TThis>;

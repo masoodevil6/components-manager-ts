@@ -41,6 +41,8 @@
 - `ComponentStructureTrait` در پوشه **`traits/`** قرار دارد.
 - **۷ prop پایه** از `ComponentStructureTrait.props` در `_COMPONENT_PATTERN` به‌صورت spread قرار می‌گیرند (`...ComponentStructureTrait.props`).
 - متد **`renderContent`** (متد Trait) مسئول ساخت `ComponentStructure` به‌عنوان فرزند است.
+- **(Plan 8.2.10)** `renderContent` نام کامپوننت را از `component._COMPONENT_NAME` می‌خواند و به `ComponentStructure.create(componentName, ...)` پاس می‌دهد — خروجی `<component-{name}>` با نام درست.
+- **(Plan 8.2.10)** `ComponentStructure.create(componentName, config, methods?, identity?)` — `componentName` به‌عنوان پارامتر اول (identity) اجباری است.
 
 ### `emit` (auto-bind در `renderComponent`)
 
@@ -51,6 +53,35 @@
 - **arrow function** با `.call()` کار نمی‌کند — باید از `function` استفاده شود.
 - emit **فقط با `request`** صدا زده می‌شود (خودبه‌خود با کلیک صدا زده نمی‌شود).
 
+### `Define_ComponentProp` (Plan 9.1.3 — Enum Type Narrowing)
+
+Helper function برای تعریف prop entryها با حفظ نوع Generic `<T>` در return type.
+
+| متد/ویژگی | توضیحات |
+| :--- | :--- |
+| `Define_ComponentProp<T>(entry)` | Identity function — ورودی `ComponentPropEntry<T>` را بدون تغییر برمی‌گرداند، اما نوع `T` در return type حفظ می‌شود (نه literal). |
+| Overload 1 (Whole-object) | `Define_ComponentProp<TPropTypes>({ ...patterns } as any)` — برای استفاده در Base با `as any`. |
+| Overload 2 (Per-entry) | `Define_ComponentProp<T>(entry: ComponentPropEntry<T>): ComponentPropEntry<T>` — برای استفاده در Props.ts. |
+
+**Export:** `CoreComponents.DefineProp` (alias برای `Define_ComponentProp`)
+
+**مشکل حل‌شده:** الگوی قدیمی `satisfies TComponentPropEntry<T>` باعث literal narrowing می‌شد (مثلاً `ButtonSemantic.SUBMIT` به‌جای `ButtonSemantic`). `Define_ComponentProp<T>` این مشکل را با حفظ نوع `T` در return type حل می‌کند.
+
+### `TypeHelpers` (Plan 9.1.3 — Type Extraction)
+
+فایل `TypeHelpers.ts` در `module_ui/module_components/tools/type/` helperهای استخراج نوع فراهم می‌کند:
+
+| Helper | توضیحات |
+| :--- | :--- |
+| `ExtractPropsType<TProps>` | استخراج نوع `default` از هر prop entry — `TProps[K]["default"]`. |
+| `ExtractPropsConfigType<TProps>` | استخراج نوع config قابل‌قبول constructor (Partial). |
+| `ExtractMethodsType<TMethods>` | استخراج نوع methodهای داخلی Component. |
+| `ExtractMethodsComponentArgs<TMethods>` | استخراج نوع componentArgs از `args` (prop referenceها). |
+| `ExtractMethodsDataArgs<TMethods>` | استخراج نوع dataArgs از `dataArgs`. |
+| `ExtractMethodsConfigType<TMethods, TThis>` | استخراج نوع config methods برای مصرف‌کننده با `this: TThis`. |
+
+**نکته:** این helperها با خروجی `Define_ComponentProp<T>` به‌درستی کار می‌کنند — نوع `T` (نه literal) استخراج می‌شود.
+
 ## 🛠 ساختار داخلی (Internal Architecture)
 
 * **Abstraction Layer:** جداسازی کامل بین "منطق یک کامپوننت" و "نحوه رندر شدن آن".
@@ -59,4 +90,4 @@
 
 ---
 *مستندات توسط Mindbase تولید شده است.*
-*آخرین به‌روزرسانی: ۲۰۲۶-۰۹-۰۱ — Plan 8.1.4*
+*آخرین به‌روزرسانی: ۲۰۲۶-۰۹-۰۵ — Plan 9.1.3 (Define_ComponentProp + TypeHelpers)*

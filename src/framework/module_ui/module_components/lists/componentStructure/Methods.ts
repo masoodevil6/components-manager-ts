@@ -1,4 +1,5 @@
 // --------------------------------
+import type {ExtractMethodsType} from "../../tools/type/TypeHelpers";
 
 
 /**
@@ -22,6 +23,4 @@ export const Methods = {
  *   import {MethodsType} from "@/ui_components/lists/componentStructure/Methods"
  *   class ComponentButton extends ComponentStructure<..., ..., ..., MethodsType>
  */
-export type MethodsType = {
-    [K in keyof typeof Methods]: (event: Event, dataArgs: any, componentArgs: any) => void
-};
+export type MethodsType = ExtractMethodsType<typeof Methods>;

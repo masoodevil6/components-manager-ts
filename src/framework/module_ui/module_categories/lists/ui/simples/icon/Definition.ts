@@ -1,4 +1,4 @@
-﻿import * as UICategories    from "@/ui_categories"
+﻿import { CreateCategoryComponent } from "../../../../basic/methods"
 import * as UIComponents    from "@/ui_components"
 // --------------------------------
 
@@ -20,7 +20,7 @@ import * as UIComponents    from "@/ui_components"
  * قابل import نیست (circular dependency). autocomplete برای this در constructor
  * ComponentIcon با MethodsConfigType<ComponentIcon> فعال است.
  */
-export const Icon = UICategories.CreateCategoryComponent<
+export const Icon = CreateCategoryComponent<
     UIComponents.Lists.ComponentIcon.Component,
     UIComponents.Lists.ComponentStructure.PropsType &
     UIComponents.Lists.ComponentIcon.PropsType,

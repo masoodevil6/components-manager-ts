@@ -1,0 +1,60 @@
+{
+  "version": "1",
+  "updatedAt": "2026-09-07T19:36:47.553Z",
+  "entries": {
+    "HomePage": {
+      "medianMs": 0.2642500000001746
+    },
+    "IconPage": {
+      "medianMs": 30.84
+    },
+    "TestsPage": {
+      "medianMs": 27.55565000000024
+    },
+    "componentBorder/border_default": {
+      "medianMs": 1.0620000000003529
+    },
+    "componentBorder/border_arrow": {
+      "medianMs": 0.9118500000004133
+    },
+    "componentButton/button_default": {
+      "medianMs": 1.316450000000259
+    },
+    "componentButton/button_clickable": {
+      "medianMs": 1.620350000000144
+    },
+    "componentButton/button_variants": {
+      "medianMs": 3.8566500000001724
+    },
+    "componentFloatMenu/float_menu_default": {
+      "medianMs": 0.41899999999986903
+    },
+    "componentIcon/icon_default": {
+      "medianMs": 0.46265000000039436
+    },
+    "componentIcon/icon_clickable": {
+      "medianMs": 0.47985000000016953
+    },
+    "componentMessages/messages_success": {
+      "medianMs": 1.903099999999995
+    },
+    "componentMessages/messages_warning": {
+      "medianMs": 1.7930499999997664
+    },
+    "componentMessages/messages_error": {
+      "medianMs": 1.5519499999995787
+    },
+    "componentPositionMenu/position_menu_default": {
+      "medianMs": 2.2083999999999833
+    },
+    "componentStructure/structure_default": {
+      "medianMs": 0.7546999999999571
+    },
+    "componentStructure/structure_with_content": {
+      "medianMs": 1.2023499999995693
+    },
+    "componentStructure/structure_hidden": {
+      "medianMs": 0.4667999999996937
+    }
+  }
+}

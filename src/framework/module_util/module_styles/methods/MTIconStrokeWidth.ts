@@ -3,7 +3,7 @@ import * as UtilConsts        from "@/util_consts";
 import {TCSizes}              from "../types/const/TCSizes";
 import {MTBorderWidth}        from "./MTBorderWidth";
 
-const ICON_STROKE_RATIO = 0.2;
+const ICON_STROKE_RATIO = 1; // 0.2;
 
 export const MTIconStrokeWidth = (
     size: TCSizes | number = UtilConsts.Sizes.M,

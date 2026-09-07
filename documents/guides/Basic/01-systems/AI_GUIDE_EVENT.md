@@ -50,9 +50,47 @@ const responses = CoreEvent.App.request(map, source?);
 |:---|:---|:---|
 | `identity` | `symbol` | هویت یکتا و غیرقابل جعل |
 | `unique` | `string` | مسیر خوانا برای debug/logging |
-| `children` | `Record<string, ClStep>` | فرزندان (درخت Step) |
+
+> **Plan 8.2.7:** `children` از بیرون قابل mutate نیست — encapsulated است.
+> فقط از طریق API عمومی (`addChild`, `removeChild`, `getChild`, `getChildEntries`) قابل دسترسی است.
 
 Stepها با factory `CoreEvent.Step(definition)` ساخته می‌شوند و به‌صورت خودکار در `App.register` ثبت می‌گردند. ساختار درختی با `children` امکان دسترسی نوع‌ایمن (type-safe) به فرزندان را از طریق Proxy فراهم می‌کند.
+
+#### SubEvent (Plan 8.2.7)
+
+`SubEvent` رابط رسمی اتصال Child Step به Parent Step است:
+
+```typescript
+CoreEvent.SubEvent(parentStep, "messages", childStep);
+```
+
+قرارداد:
+- Parent و Child هر دو Step ساخته‌شده هستند.
+- Child به‌عنوان فرزند با `key` مشخص به Parent متصل می‌شود.
+- همه نسل‌های Child در رجیستری App ثبت می‌شوند.
+- هیچ لایه‌ای مستقیماً `children` را mutate نمی‌کند — فقط از طریق این API.
+
+#### Disposal بازگشتی (Plan 8.2.7)
+
+`CoreEvent.dispose(step)` کل subtree را پاک می‌کند:
+
+1. همه نسل‌ها از App (رجیستری + emits) پاک می‌شوند.
+2. خود step از App پاک می‌شود.
+3. اگر step دارای parent است، از parent قطع می‌شود.
+4. ساختار درخت پاک می‌شود (`clearChildren`).
+
+#### ClStep API عمومی (Plan 8.2.7)
+
+| متد | توضیح |
+|:---|:---|
+| `addChild(key, child)` | اتصال رسمی یک Child Step |
+| `getChild(key)` | دسترسی read-only به child |
+| `removeChild(key)` | قطع اتصال یک child |
+| `getChildEntries()` | لیست همه children |
+| `getParent()` | parent این step |
+| `getParentKey()` | کلید این step در parent |
+| `getAllDescendants()` | جمع‌آوری همه نسل‌ها (بازگشتی) |
+| `clearChildren()` | پاک‌سازی کل subtree |
 
 ### 3.2 TStepRef
 
@@ -132,7 +170,14 @@ module_event
 ├── ClStep
 │       ├── identity: symbol
 │       ├── unique: string
-│       ├── children: Record<string, ClStep>
+│       ├── (children: encapsulated — Plan 8.2.7)
+│       ├── addChild(key, child)                   — اتصال رسمی Child (Plan 8.2.7)
+│       ├── getChild(key)                          — دسترسی read-only
+│       ├── removeChild(key)                       — قطع اتصال
+│       ├── getChildEntries()                      — لیست children
+│       ├── getParent() / getParentKey()           — parent linkage
+│       ├── getAllDescendants()                    — جمع‌آوری نسل‌ها
+│       ├── clearChildren()                        — پاک‌سازی subtree
 │       └── static create(definition, path?)       — ساخت درختی با Proxy
 │
 ├── ClRequest
@@ -151,7 +196,15 @@ module_event
         ├── Step(definition) → TStepInstance       — factory + auto-register
         ├── Request() → ClRequest                  — factory
         ├── Response(value?) → ClResponse          — factory
-        └── requestMap(entries) → entries           — helper
+        ├── requestMap(entries) → entries           — helper
+        ├── SubEvent(parent, key, child)           — اتصال Child به Parent (Plan 8.2.7)
+        ├── getChild(parent, key)                  — دسترسی read-only (Plan 8.2.7)
+        ├── dispose(step)                          — disposal بازگشتی (Plan 8.2.7)
+        ├── inspect()                              — Tree Snapshot در Console (Plan 8.2.9)
+        ├── trace() / trace(id)                    — Event Flow در Console (Plan 8.2.9)
+        ├── find(query)                            — Identity Search (Plan 8.2.9)
+        ├── stats()                                — Health State (Plan 8.2.9)
+        └── monitor() / monitor(false)             — Live Stream toggle (Plan 8.2.9)
 ```
 
 ---
@@ -317,19 +370,53 @@ export const requestMap = (entries: readonly TRequestMapEntry[]) => entries;
 
 ثبت emit handler برای یک المان متصل. ابتدا Step را در رجیستری ثبت می‌کند و سپس handler را در `emits` Map ذخیره می‌کند.
 
-### 7.7 `App.dispose(step): void`
+### 7.7 `App.dispose(step): void` (Plan 8.2.7 — بازگشتی)
 
-حذف Step و emit handler آن از رجیستری‌ها. برای جلوگیری از memory leak در زمان `remove()` المان.
+حذف Step و کل subtree آن از رجیستری‌ها. **Disposal بازگشتی**:
 
-### 7.8 `App.monitor(callback): void`
+1. همه نسل‌ها از App (رجیستری + emits) پاک می‌شوند.
+2. خود step از App پاک می‌شود.
+3. اگر step دارای parent است، از parent قطع می‌شود.
+4. ساختار درخت پاک می‌شود (`clearChildren`).
+
+برای جلوگیری از memory leak در زمان `remove()` المان.
+
+### 7.8 `SubEvent(parent, key, child): void` (Plan 8.2.7)
+
+رابط رسمی اتصال Child Step به Parent Step. تنها راه mutate ساختار درخت Step.
+
+```typescript
+CoreEvent.SubEvent(parentStep, "messages", childStep);
+```
+
+### 7.9 `getChild(parent, key): TStepRef | null` (Plan 8.2.7)
+
+دسترسی read-only به child یک Step.
+
+### 7.10 `App.monitor(callback): void`
 
 اتصال یک تابع مانیتورینگ. هر رکورد Trace جدید به callback پاس داده می‌شود.
 
-### 7.9 `App.getTrace(): readonly TTraceRecord[]`
+### 7.11 `App.getTrace(): readonly TTraceRecord[]`
 
 خواندن بافر Trace فعلی.
 
-### 7.10 TEmitHandler
+### 7.12 Console Inspector (Plan 8.2.9)
+
+| تابع | توضیح |
+|:---|:---|
+| `inspect()` | درخت Event را در Console نمایش می‌دهد (Tree Snapshot) |
+| `trace()` | جریان اخیر Event را در Console نمایش می‌دهد |
+| `trace(dispatchId)` | یک Event خاص با dispatchId مشخص را نمایش می‌دهد |
+| `find(query)` | جستجوی Step بر اساس `unique` (substring match) |
+| `stats()` | آمار سلامت CoreEvent — Steps, Handlers, Trace, Dispatch, Lifecycle, Integrity |
+| `monitor()` | فعال‌کردن live logging در Console |
+| `monitor(false)` | خاموش‌کردن live logging |
+
+> **دسترسی در Console مرورگر:** `Framework.Core.Event.inspect()` و سایر توابع.
+> مستندات کامل: [../../inspectors/event-inspector.md](../../inspectors/event-inspector.md)
+
+### 7.13 TEmitHandler
 
 ```typescript
 export type TEmitHandler = (request: ClRequest) => any;
@@ -337,7 +424,7 @@ export type TEmitHandler = (request: ClRequest) => any;
 
 تابع handler که Request دریافت و Response تولید می‌کند. خروجی آن در `Response.value` قرار می‌گیرد.
 
-### 7.11 TEventHelper
+### 7.14 TEventHelper
 
 ```typescript
 export type TEventHelper = {
@@ -540,6 +627,33 @@ Steps.load;  // Error: Step "" کلید/فرزندی با نام "load" ندار
 Steps.save;  // ✅ ClStep
 ```
 
+### ❌ mutate مستقیم children (Plan 8.2.7)
+
+```typescript
+// ❌ Incorrect — children encapsulated است
+step.children["newChild"] = childStep;  // ممنوع
+delete step.children["oldChild"];       // ممنوع
+```
+
+```typescript
+// ✅ Correct — از API رسمی SubEvent استفاده کن
+CoreEvent.SubEvent(parentStep, "newChild", childStep);
+CoreEvent.removeChild(parentStep, "oldChild");
+```
+
+### ❌ dispose غیربازگشتی (Plan 8.2.7)
+
+```typescript
+// ❌ Incorrect — فقط root پاک می‌شود، children leak می‌کنند
+CoreEvent.App.dispose(rootStep);  // قدیمی — فقط خود step
+// children در رجیستری باقی می‌مانند
+```
+
+```typescript
+// ✅ Correct — dispose بازگشتی کل subtree را پاک می‌کند
+CoreEvent.dispose(rootStep);  // Plan 8.2.7 — کل subtree
+```
+
 ---
 
 ## 10. Dependencies
@@ -561,6 +675,9 @@ Steps.save;  // ✅ ClStep
 6. برای دیباگ از `App.getTrace()` یا `App.monitor(callback)` استفاده کن.
 7. خطای emit به‌صورت خودکار مدیریت می‌شود — Runtime crash نمی‌کند. اما `status: "error"` را در Response بررسی کن.
 8. برای جزئیات جریان اجرا به [AI_GUIDE_WORKFLOW.md](./AI_GUIDE_WORKFLOW.md) مراجعه کن.
+9. **(Plan 8.2.7)** برای اتصال Child Step به Parent، از `CoreEvent.SubEvent(parent, key, child)` استفاده کن — نه mutate مستقیم `children`.
+10. **(Plan 8.2.7)** برای dispose، از `CoreEvent.dispose(step)` استفاده کن — بازگشتی کل subtree را پاک می‌کند.
+11. **(Plan 8.2.9)** برای دیباگ در Console مرورگر، از `Framework.Core.Event.inspect()` / `trace()` / `find()` / `stats()` / `monitor()` استفاده کن.
 
 ---
 
@@ -571,6 +688,7 @@ Steps.save;  // ✅ ClStep
 - [AI_GUIDE_OBSERVABLE.md](./AI_GUIDE_OBSERVABLE.md) — سیستم Observable
 - [../00-framework/AI_GUIDE_TERMINOLOGY.md](../00-framework/AI_GUIDE_TERMINOLOGY.md) — تعریف اصطلاحات
 - [../00-framework/AI_GUIDE_RULES.md](../00-framework/AI_GUIDE_RULES.md) — قوانین Framework
+- [../../inspectors/event-inspector.md](../../inspectors/event-inspector.md) — Console Inspector & Flow Monitor (Plan 8.2.9)
 
 ---
 
@@ -597,3 +715,10 @@ Steps.save;  // ✅ ClStep
 | `TResponseMap` | `src/framework/module_core/module_event/types/TResponseMap.ts` | 5 |
 | `TEmitHandler` | `src/framework/module_core/module_event/types/TEmitHandler.ts` | 16 |
 | `TEventHelper` | `src/framework/module_core/module_event/types/TEventHelper.ts` | 13-14 |
+| `SubEvent` / `getChild` / `dispose` (Plan 8.2.7) | `src/framework/module_core/module_event/index.ts` | — |
+| `ClStep` API (`addChild`, `removeChild`, `getParent`, ...) | `src/framework/module_core/module_event/class/ClStep.ts` | — |
+| Inspector (`inspect`, `trace`, `find`, `stats`, `monitor`) (Plan 8.2.9) | `src/framework/module_core/module_event/index.ts` | — |
+
+---
+
+*آخرین به‌روزرسانی: ۲۰۲۶-۰۹-۰۱ — Plan 8.2.7 (SubEvent) + Plan 8.2.9 (Console Inspector)*

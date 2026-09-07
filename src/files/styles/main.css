@@ -3,7 +3,9 @@ body{
 }
 
 
-
+cursor-pointer{
+    cursor: pointer;
+}
 
 .d-flow-root{
     display: flow-root !important;

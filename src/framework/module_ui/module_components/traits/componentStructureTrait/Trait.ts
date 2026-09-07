@@ -1,8 +1,11 @@
 import * as CoreReactive    from "@/core_reactive";
+import * as CoreObservable  from "@/core_observable";
+import * as CoreConfigs     from "@/core_configs";
 import * as CoreComponents  from "@/core_components";
 // --------------------------------
-import {Props as StructureProps} from "../../lists/componentStructure/Props";
-import {ComponentStructure}      from "../../lists/componentStructure/ComponentStructure";
+import {Props   as StructureProps}   from "../../lists/componentStructure/Props";
+import {Schemas as StructureSchemas} from "../../lists/componentStructure/Schemas";
+import {PartAttrDefault}             from "@/core_components";
 
 
 /**
@@ -11,9 +14,14 @@ import {ComponentStructure}      from "../../lists/componentStructure/ComponentS
  * Shared Capability برای Componentهایی که از ComponentStructure به‌عنوان
  * wrapper اصلی استفاده می‌کنند.
  *
- * Trait فقط دو چیز ارائه می‌دهد:
- *   1. props  — propهای پایه ComponentStructure (برای merge در _COMPONENT_PATTERN)
- *   2. renderContent — ساخت ComponentStructure با content اختصاصی
+ * Trait چهار چیز ارائه می‌دهد:
+ *   1. props   — propهای پایه ComponentStructure (برای merge در _COMPONENT_PATTERN)
+ *   2. schemas — schemaهای پایه COMPONENT + STRUCTURE (برای merge در _COMPONENT_SCHEMA)
+ *   3. renderComponentSchema — رندر لایه خارجی <component-{name}>
+ *   4. renderStructureSchema — رندر لایه داخلی <section> با show/hide
+ *
+ * Plan 11.2 — renderContent منسوخ شد. به‌جای آن، Componentها از schemas +
+ * renderComponentSchema + renderStructureSchema استفاده می‌کنند.
  *
  * قوانین (Plan 8.1.2):
  *   - Trait کلاس نیست
@@ -23,11 +31,6 @@ import {ComponentStructure}      from "../../lists/componentStructure/ComponentS
  *   - Trait Registry ندارد
  *   - Trait از Public API استفاده می‌کند (getObservable)
  *   - Silent Failure ممنوع — Missing required prop باید throw کند
- *
- * قرارداد خروجی (Plan 8.1.3):
- *   - ComponentStructure.create() یک CoreReactive.App برمی‌گرداند
- *   - Trait wrapper اضافی ایجاد نمی‌کند — خروجی create() مستقیم برمی‌گردد
- *   - Trait مجاز نیست HTMLElement را خودش به Reactive App تبدیل یا wrap کند
  */
 export const ComponentStructureTrait = {
 
@@ -44,78 +47,125 @@ export const ComponentStructureTrait = {
 
 
     /**
-     * ساخت ComponentStructure با content اختصاصی
+     * Schemaهای پایه ComponentStructure (COMPONENT + STRUCTURE)
+     * برای merge در _COMPONENT_SCHEMA کامپوننت مصرف‌کننده:
      *
-     * @param component — Component instance (this)
-     * @param content   — callback محتوای اختصاصی Component
-     * @returns CoreReactive.App — مستقیم ComponentStructure (بدون wrapper اضافی)
+     *   protected _COMPONENT_SCHEMA = CoreComponents.DefineSchema({
+     *       ...ComponentStructureTrait.schemas,   // ← COMPONENT + STRUCTURE (اول)
+     *       ...Schemas,                           // ← schemaهای اختصاصی (بعد)
+     *   } as any);
      *
-     * استفاده:
-     *   override renderContentComponent() {
-     *       return ComponentStructureTrait.renderContent(this, () => this.renderIcon());
-     *   }
-     *
-     * Error Contract:
-     *   اگر propهای پایه در _COMPONENT_PATTERN ثبت نشده باشند،
-     *   خطای صریح throw می‌شود — نه silent fallback.
+     * Plan 11.2 — ترتیب Object Keys مهم است:
+     *   COMPONENT و STRUCTURE باید قبل از schemaهای اختصاصی باشند
+     *   تا ClComponentBase.createComponentElement() آن‌ها را به‌عنوان Root رندر کند.
      */
-    renderContent(
-        component: CoreComponents.App<any, any, any, any>,
-        content:   () => CoreReactive.App,
+    schemas: StructureSchemas,
+
+
+    /**
+     * رندر لایه خارجی <component-{name}> با RTL + classList + styles
+     * children: STRUCTURE
+     *
+     * @param component    — Component instance (this)
+     * @param attrsDefault — attributeهای پیش‌فرض از executeSchemaPart
+     * @param data         — observableهای این part
+     * @returns CoreReactive.App
+     *
+     * استفاده در renderManagerComponent:
+     *   case ComponentStructureTrait.schemas.COMPONENT.part:
+     *       return ComponentStructureTrait.renderComponentSchema(this, attrsDefault, data);
+     */
+    renderComponentSchema(
+        component:    CoreComponents.App<any, any, any, any>,
+        attrsDefault: PartAttrDefault,
+        data:         Record<string, CoreObservable.App<any>>,
     ): CoreReactive.App {
 
-        const classList            = component.getObservable("classList");
-        const styles               = component.getObservable("styles");
-        const prop_show            = component.getObservable("prop_show");
-        const prop_structureClass  = component.getObservable("prop_structureClass");
-        const prop_structureStyles = component.getObservable("prop_structureStyles");
+        const rtl =
+            CoreConfigs.Settings.DirectionRtl.observable();
 
-        // Error Contract — Missing required prop باید صریح باشد
-        if (!classList) {
-            throw new Error(
-                "[ComponentStructureTrait] Missing required prop: classList — " +
-                "Component must include ComponentStructureTrait.props in _COMPONENT_PATTERN",
-            );
-        }
-        if (!styles) {
-            throw new Error(
-                "[ComponentStructureTrait] Missing required prop: styles — " +
-                "Component must include ComponentStructureTrait.props in _COMPONENT_PATTERN",
-            );
-        }
-        if (!prop_show) {
-            throw new Error(
-                "[ComponentStructureTrait] Missing required prop: prop_show — " +
-                "Component must include ComponentStructureTrait.props in _COMPONENT_PATTERN",
-            );
-        }
-        if (!prop_structureClass) {
-            throw new Error(
-                "[ComponentStructureTrait] Missing required prop: prop_structureClass — " +
-                "Component must include ComponentStructureTrait.props in _COMPONENT_PATTERN",
-            );
-        }
-        if (!prop_structureStyles) {
-            throw new Error(
-                "[ComponentStructureTrait] Missing required prop: prop_structureStyles — " +
-                "Component must include ComponentStructureTrait.props in _COMPONENT_PATTERN",
-            );
-        }
+        const classList =
+            data?.classList ??
+            new CoreObservable.App([]);
 
-        // ComponentStructure.create() طبق Output Contract یک CoreReactive.App برمی‌گرداند.
-        // Trait فقط یک bridge/capability است — مالک خروجی نیست و wrapper ایجاد نمی‌کند.
-        //
-        // Observableها مستقیم پاس می‌شوند (نه .get()) تا reactive binding حفظ شود.
-        // renderComponent در ClComponentBase تشخیص می‌دهد value یک Observable است و
-        // مستقیم در _COMPONENT_PROPS_BIND قرار می‌دهد — نه اینکه در Observable جدید wrap کند.
-        return ComponentStructure.create({
-            classList:            classList,
-            styles:               styles,
-            prop_show:            prop_show,
-            prop_structureClass:  prop_structureClass,
-            prop_structureStyles: prop_structureStyles,
-            content,
-        });
+        const styles =
+            data?.styles ??
+            new CoreObservable.App({});
+
+        const componentName = (component as any)._COMPONENT_NAME;
+
+        return CoreReactive.App.component(
+            componentName,
+            {
+                attrs: {
+                    ...attrsDefault,
+                },
+                classBind: [
+                    classList,
+                ],
+                stylesBind: {
+                    direction: rtl.mapBoolean("rtl", "ltr"),
+                    styles:    styles,
+                },
+                children: [
+                    component.executeSchemaPart(
+                        StructureSchemas.STRUCTURE.part,
+                    ),
+                ],
+            }
+        );
+    },
+
+
+    /**
+     * رندر لایه داخلی <section> با show/hide + structureClass + structureStyles
+     * children: renderContentComponent()
+     *
+     * @param component    — Component instance (this)
+     * @param attrsDefault — attributeهای پیش‌فرض از executeSchemaPart
+     * @param data         — observableهای این part
+     * @returns CoreReactive.App
+     *
+     * استفاده در renderManagerComponent:
+     *   case ComponentStructureTrait.schemas.STRUCTURE.part:
+     *       return ComponentStructureTrait.renderStructureSchema(this, attrsDefault, data);
+     */
+    renderStructureSchema(
+        component:    CoreComponents.App<any, any, any, any>,
+        attrsDefault: PartAttrDefault,
+        data:         Record<string, CoreObservable.App<any>>,
+    ): CoreReactive.App {
+
+        const prop_show =
+            data?.prop_show ??
+            new CoreObservable.App(true);
+
+        const prop_structureClass =
+            data?.prop_structureClass ??
+            new CoreObservable.App([]);
+
+        const prop_structureStyles =
+            data?.prop_structureStyles ??
+            new CoreObservable.App({});
+
+        return CoreReactive.App.component(
+            "structure",
+            {
+                classBind: [
+                    prop_structureClass,
+                    prop_show.mapBoolean("show", "d-none"),
+                ],
+                attrs: {
+                    ...attrsDefault,
+                },
+                stylesBind: {
+                    prop_structureStyles,
+                },
+                children: [
+                    (component as any).renderContentComponent(undefined as any, undefined as any, undefined as any),
+                ],
+            }
+        );
     },
 
 };

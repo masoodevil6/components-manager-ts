@@ -1,3 +1,8 @@
+import type { Sizes } from "./types/const";
+import type { SizeUnit } from "./types/var";
+
+
+
 export {
     StyleImportant   as Style_Important ,
 
@@ -17,11 +22,17 @@ export {
 } from "./methods";
 
 
+
+
+
 export {
     StyleValue as ClStyleValue
 } from "./class"
 
-
 export type {
-    Sizes as TCSizes
-} from "./types/const"
+    TVColor as TColor
+} from "./types/var/TVColor"
+
+
+
+export type TSizeExp = Sizes | SizeUnit;

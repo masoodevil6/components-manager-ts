@@ -1,5 +1,5 @@
 
 ///------------------------------
-import {TCUnits as Units} from "../../types/const/TCUnits";
+import {TCSizes as Sizes} from "../../types/const/TCSizes";
 
-export type TVIconSize = `var(--iconSize${Units})`
+export type TVIconSize = `var(--iconSize${Sizes})`

@@ -1,6 +1,7 @@
 import * as CoreComponents from "@/core_components";
 import {Keys}              from "../../../module_categories/languages";
 import {Props}             from "./Props";
+import type {ExtractSchemasType} from "../../tools/type/TypeHelpers";
 // --------------------------------
 
 
@@ -43,6 +44,4 @@ export const Schemas = {
  *   import {SchemasType} from "@/ui_components/lists/componentStructure/Schemas"
  *   class ComponentButton extends ComponentStructure<..., SchemasType, ...>
  */
-export type SchemasType = {
-    [K in keyof typeof Schemas]: typeof Schemas[K]["part"]
-};
+export type SchemasType = ExtractSchemasType<typeof Schemas>;

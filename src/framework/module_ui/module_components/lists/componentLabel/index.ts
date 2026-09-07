@@ -1,0 +1,16 @@
+export {ComponentLabel     as Component} from "./ComponentLabel"
+export {ComponentLabelBase as Base}      from "./ComponentLabelBase"
+export {Props}                           from "./Props"
+export type {PropsType}                  from "./Props"
+export {Schemas}                         from "./Schemas"
+export type {SchemasType}                from "./Schemas"
+export {Methods}                         from "./Methods"
+export type {MethodsType}                from "./Methods"
+export type {MethodsConfigType,
+             MethodsComponentArgs,
+             MethodsDataArgs}            from "./Methods"
+export {Definition}                      from "./Definition"
+export {createLabelStep}                 from "./Step"
+export {Examples}                        from "./examples"
+export type {ComponentLabelExamplesType} from "./examples"
+export {TooltipDirectionTypes}           from "./Props"

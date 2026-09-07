@@ -7,13 +7,15 @@ export {AbComponentConnector as ComponentConnector} from "./basic/abstract/AbCom
 /// Methods
 export {MtSetValue as SetValue} from "./basic/methods/MtSetValue"
 
-/// Types
-export type {TComponentDefinition  as ComponentDefinition}  from "./basic/types/TComponentDefinition"
-export type {TComponentPropEntry   as ComponentPropEntry}   from "./basic/types/TComponentPropEntry"
-export type {TComponentProps       as ComponentProps}       from "./basic/types/TComponentProps"
-export type {TComponentSchemaEntry as ComponentSchemaEntry} from "./basic/types/TComponentSchemaEntry"
-export type {TComponentSchemas     as ComponentSchemas}     from "./basic/types/TComponentSchemas"
-export type {ComponentIdentity}                              from "./basic/types/TComponentIdentity"
+/// Types (moved to tools)
+export type {Type_ComponentDefinition    as ComponentDefinition}  from "./tools/defination/Type_ComponentDefinition"
+export type {Interface_ComponentIdentity as ComponentIdentity}    from "./tools/Idetify/Interface_ComponentIdentity"
+export type {Interface_ComponentProp     as ComponentPropEntry}   from "./tools/prop/Interface_ComponentProp"
+export type {Interface_ComponentSchema   as ComponentSchemaEntry} from "./tools/schema/Interface_ComponentSchema"
+export type ComponentProps   = Record<string, import("./tools/prop/Interface_ComponentProp").Interface_ComponentProp<any>>;
+export type ComponentSchemas = Record<string, import("./tools/schema/Interface_ComponentSchema").Interface_ComponentSchema<any, any>>;
+
+/// Types (remaining in basic/types)
 export type {TExtractName          as ExtractName}          from "./basic/types/TExtractName"
 export type {TExtractNameAndValue  as ExtractNameAndValue}  from "./basic/types/TExtractNameAndValue"
 export type {TTypeOf               as TypeOf}               from "./basic/types/TTypeOf"

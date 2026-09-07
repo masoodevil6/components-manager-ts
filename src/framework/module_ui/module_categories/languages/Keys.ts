@@ -404,6 +404,83 @@ export const Keys = {
                 description: CreateTranslationKey() ,
             },
 
+            /// FloatMenu
+            floatMenu: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+
+                props: {
+                    selectorContent:          { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    selectorClass:            { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    selectorStyles:           { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    selectorShowType:         { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    floatClass:               { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    floatStyles:              { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    floatContent:             { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    floatDirectionType:       { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    floatArrowWidth:          { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    floatDistance:            { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    floatBorderWidth:         { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    floatBorderColor:         { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    floatBorderRadius:        { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    floatWidth:               { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    floatMinWidth:            { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    floatPosition:            { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    floatArrowPosition:       { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    floatBackground:          { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    floatColor:               { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    floatShowControlWithSelf: { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    floatIsShow:              { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                },
+
+                schemas: {
+                    selector:               { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    selectorPosition:       { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    selectorPositionBorder: { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                },
+
+                examples: {
+                    default: { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                },
+            },
+
+            /// PositionMenu
+            positionMenu: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+
+                props: {
+                    menuBackgroundColor:  { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    menuBorderColor:      { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    menuSelector:         { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    menuBody:             { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    menuBodyWidth:        { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    menuBodyHeight:       { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    menuBorderWidth:      { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    menuBtnRejectHas:     { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    menuBtnRejectIcon:    { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    menuBtnRejectTitle:   { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    menuBtnAcceptHas:     { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    menuBtnAcceptIcon:    { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    menuBtnAcceptTitle:   { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    menuIsOpen:           { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                },
+
+                schemas: {
+                    formFloatMenu:                  { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    formFloatMenuSelector:          { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    formFloatMenuBody:              { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    formFloatMenuBodyContent:       { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    formFloatMenuBodyButtons:       { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    formFloatMenuBodyButtonsAccept: { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    formFloatMenuBodyButtonsReject: { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                },
+
+                examples: {
+                    default: { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                },
+            },
+
             /// Simples
             simples: {
                 name:        CreateTranslationKey() ,
@@ -450,6 +527,295 @@ export const Keys = {
                         name:        CreateTranslationKey() ,
                         description: CreateTranslationKey() ,
                     },
+                },
+            },
+
+            /// Button
+            button: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+
+                props: {
+                    btnTitle: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnType: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnClass: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnStyles: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnDisabled: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnVariant: {
+                         name:        CreateTranslationKey() ,
+                         description: CreateTranslationKey() ,
+                     },
+                    btnSemantic: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnWidth: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnHeight: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnBorderColor: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnBorderWidth: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnBackgroundColor: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnBackgroundColorHover: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnTitleStyles: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnTitleClass: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnTitleColor: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnTitleColorHover: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnIcon: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnIconStyles: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnIconClass: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnBorderRadius: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnBorderRadiusStartTop: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnBorderRadiusStartBottom: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnBorderRadiusEndTop: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    btnBorderRadiusEndBottom: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                 },
+ 
+                 schemas: {
+                     button: {
+                         name:        CreateTranslationKey() ,
+                         description: CreateTranslationKey() ,
+                     },
+                    buttonTitle: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    buttonIcon: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    wrapper: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                 },
+
+                examples: {
+                    default: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    clickable: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    variants: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                },
+            },
+
+            /// Messages
+            messages: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+
+                props: {
+                    type: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    messages: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    borderWidth: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    iconColor: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    borderColor: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    backgroundColor: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    textColor: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                },
+
+                schemas: {
+                    message: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    icon: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                },
+
+                examples: {
+                    success: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    warning: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                    error: {
+                        name:        CreateTranslationKey() ,
+                        description: CreateTranslationKey() ,
+                    },
+                },
+            },
+
+            /// Label
+            label: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+
+                props: {
+                    labelShow:                    { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelBackground:              { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelRadius:                  { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelMinWidth:                { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelTitle:                   { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelFor:                     { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelStyle:                   { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelClass:                   { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelColor:                   { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelTooltipIcon:             { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelTooltipDescription:      { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelTooltipBackground:       { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelTooltipColor:            { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelTooltipPosition:         { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelTooltipDirection:        { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                },
+
+                schemas: {
+                    border:               { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderContent:        { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderContentTitle:   { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderContentTooltip: { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                },
+
+                methods: {
+                    click: { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                },
+
+                examples: {
+                    default:   { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    clickable: { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                },
+            },
+
+            /// Border
+            border: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+
+                props: {
+                    content:                      { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    contentSize:                  { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    contentColor:                 { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    contentColor_hover:           { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    contentBackgroundColor:       { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    contentBackgroundColor_hover: { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderColor:                  { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderColor_hover:            { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderClass:                  { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderStyles:                 { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderType:                   { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderOpacity:                { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderArrowType:              { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderArrowWidth:             { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderArrowPosition:          { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    minWidth:                     { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    width:                        { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderTopLeftRadiusHas:       { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderTopRightRadiusHas:      { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderBottomLeftRadiusHas:    { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderBottomRightRadiusHas:   { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderTopHas:                 { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderRightHas:               { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderBottomHas:              { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderLeftHas:                { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                },
+
+                schemas: {
+                    border: { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                },
+
+                examples: {
+                    default: { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    arrow:   { name: CreateTranslationKey() , description: CreateTranslationKey() },
                 },
             },
 

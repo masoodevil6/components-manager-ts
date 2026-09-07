@@ -1,0 +1,286 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 1080" dir="rtl" font-family="Segoe UI, IRANSans, Tahoma, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f0f4ff"/>
+      <stop offset="100%" stop-color="#f9fafb"/>
+    </linearGradient>
+    <linearGradient id="rootGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="step0Grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/>
+      <stop offset="100%" stop-color="#5eead4"/>
+    </linearGradient>
+    <linearGradient id="step1Grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#60a5fa"/>
+    </linearGradient>
+    <linearGradient id="step3Grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#fbbf24"/>
+    </linearGradient>
+    <linearGradient id="step4Grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
+    </linearGradient>
+    <linearGradient id="testGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#16a34a"/>
+      <stop offset="100%" stop-color="#86efac"/>
+    </linearGradient>
+    <linearGradient id="goalGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.1"/>
+    </filter>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-opacity="0.06"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="1080" fill="url(#bg)"/>
+
+  <!-- ===== ROOT ===== -->
+  <rect x="200" y="20" width="560" height="50" rx="14" fill="url(#rootGrad)" filter="url(#shadow)"/>
+  <text x="480" y="52" text-anchor="middle" fill="#fff" font-size="16" font-weight="700">گزارش کار کامپوننت‌ها — ۹/۵/۲۶ (بهینه‌سازی IconPage ۱۲.۲.۱)</text>
+
+  <!-- Root to 5 branches -->
+  <path d="M 480 70 L 480 90 L 110 90 L 110 110" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 480 70 L 480 90 L 320 90 L 320 110" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 480 70 L 480 90 L 530 90 L 530 110" fill="none" stroke="#d97706" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 480 70 L 480 90 L 740 90 L 740 110" fill="none" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 480 70 L 480 90 L 880 90 L 880 110" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- ===== STEP 0 BRANCH ===== -->
+  <rect x="30" y="110" width="160" height="42" rx="12" fill="url(#step0Grad)" filter="url(#shadow)"/>
+  <text x="110" y="137" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Step ۰ — Baseline</text>
+
+  <line x1="110" y1="152" x2="110" y2="470" stroke="#5eead4" stroke-width="2" stroke-linecap="round"/>
+
+  <g font-size="11" font-weight="600">
+    <path d="M 110 170 L 70 170 L 70 180" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+    <rect x="10" y="180" width="200" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="110" y="201" text-anchor="middle" fill="#15803d">✅ scaling.test.ts — ۶ count × ۲ scenario</text>
+
+    <path d="M 110 222 L 70 222 L 70 232" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+    <rect x="10" y="232" width="200" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="110" y="253" text-anchor="middle" fill="#15803d">✅ median, p95, min, max, DOM count</text>
+
+    <path d="M 110 274 L 70 274 L 70 284" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+    <rect x="10" y="284" width="200" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="110" y="305" text-anchor="middle" fill="#15803d">✅ attribution.test.ts — ۴ stage</text>
+
+    <path d="M 110 326 L 70 326 L 70 336" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+    <rect x="10" y="336" width="200" height="32" rx="9" fill="#fef3c7" stroke="#d97706" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="110" y="357" text-anchor="middle" fill="#92400e">📊 render() ۴۱٪ • computed ۴۴٪</text>
+
+    <path d="M 110 378 L 70 378 L 70 388" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+    <rect x="10" y="388" width="200" height="32" rx="9" fill="#fef3c7" stroke="#d97706" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="110" y="409" text-anchor="middle" fill="#92400e">📊 svg() ۱۲٪ • slope ۰.۴۶ ms/icon</text>
+
+    <path d="M 110 430 L 70 430 L 70 440" fill="none" stroke="#5eead4" stroke-width="1.5"/>
+    <rect x="10" y="440" width="200" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="110" y="461" text-anchor="middle" fill="#15803d">✅ A/B ratio: ۲.۳x (cache signal)</text>
+  </g>
+
+  <!-- ===== STEP 1 BRANCH ===== -->
+  <rect x="240" y="110" width="160" height="42" rx="12" fill="url(#step1Grad)" filter="url(#shadow)"/>
+  <text x="320" y="137" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Step ۱ — Static Fast Path</text>
+
+  <line x1="320" y1="152" x2="320" y2="630" stroke="#93c5fd" stroke-width="2" stroke-linecap="round"/>
+
+  <g font-size="11" font-weight="600">
+    <path d="M 320 170 L 280 170 L 280 180" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
+    <rect x="220" y="180" width="200" height="32" rx="9" fill="#dbeafe" stroke="#2563eb" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="320" y="201" text-anchor="middle" fill="#1e40af">✅ resolveIconCreationMode()</text>
+
+    <path d="M 320 222 L 280 222 L 280 232" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
+    <rect x="220" y="232" width="200" height="32" rx="9" fill="#dbeafe" stroke="#2563eb" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="320" y="253" text-anchor="middle" fill="#1e40af">✅ createStaticIcon() — bypass scope</text>
+
+    <path d="M 320 274 L 280 274 L 280 284" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
+    <rect x="220" y="284" width="200" height="32" rx="9" fill="#dbeafe" stroke="#2563eb" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="320" y="305" text-anchor="middle" fill="#1e40af">✅ createReactiveIcon() — unchanged</text>
+
+    <path d="M 320 326 L 280 326 L 280 336" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
+    <rect x="220" y="336" width="200" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="320" y="357" text-anchor="middle" fill="#15803d">✅ Bug fix: aria-label .get()</text>
+
+    <path d="M 320 378 L 280 378 L 280 388" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
+    <rect x="220" y="388" width="200" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="320" y="409" text-anchor="middle" fill="#15803d">✅ ۲۲ behavioral tests — ۸ icons</text>
+
+    <path d="M 320 430 L 280 430 L 280 440" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
+    <rect x="220" y="440" width="200" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="320" y="461" text-anchor="middle" fill="#15803d">✅ SVG structure ≡ reactive path</text>
+
+    <path d="M 320 482 L 280 482 L 280 492" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
+    <rect x="220" y="492" width="200" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="320" y="513" text-anchor="middle" fill="#15803d">✅ attrs ≡ children ≡ outerHTML</text>
+
+    <path d="M 320 534 L 280 534 L 280 544" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
+    <rect x="220" y="544" width="200" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="320" y="565" text-anchor="middle" fill="#15803d">✅ Reactive path: observable update</text>
+
+    <path d="M 320 586 L 280 586 L 280 596" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
+    <rect x="220" y="596" width="200" height="32" rx="9" fill="#fef3c7" stroke="#d97706" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="320" y="617" text-anchor="middle" fill="#92400e">📊 ۴۸ms → ۴۰ms (۱۷٪)</text>
+  </g>
+
+  <!-- ===== STEP 3 BRANCH ===== -->
+  <rect x="450" y="110" width="160" height="42" rx="12" fill="url(#step3Grad)" filter="url(#shadow)"/>
+  <text x="530" y="137" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Step ۳ — Decision Gate</text>
+
+  <line x1="530" y1="152" x2="530" y2="370" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
+
+  <g font-size="11" font-weight="600">
+    <path d="M 530 170 L 490 170 L 490 180" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+    <rect x="430" y="180" width="200" height="32" rx="9" fill="#fef3c7" stroke="#d97706" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="530" y="201" text-anchor="middle" fill="#92400e">⚠ median ≥ ۱۰ms → optimize</text>
+
+    <path d="M 530 222 L 490 222 L 490 232" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+    <rect x="430" y="232" width="200" height="32" rx="9" fill="#fef3c7" stroke="#d97706" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="530" y="253" text-anchor="middle" fill="#92400e">🔍 render() هنوز bottleneck</text>
+
+    <path d="M 530 274 L 490 274 L 490 284" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+    <rect x="430" y="284" width="200" height="32" rx="9" fill="#fef3c7" stroke="#d97706" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="530" y="305" text-anchor="middle" fill="#92400e">🔍 ClReactiveElement × ۶/icon</text>
+
+    <path d="M 530 326 L 490 326 L 490 336" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+    <rect x="430" y="336" width="200" height="32" rx="9" fill="#dbeafe" stroke="#2563eb" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="530" y="357" text-anchor="middle" fill="#1e40af">→ Step 4: Template Cache</text>
+  </g>
+
+  <!-- ===== STEP 4 BRANCH ===== -->
+  <rect x="660" y="110" width="160" height="42" rx="12" fill="url(#step4Grad)" filter="url(#shadow)"/>
+  <text x="740" y="137" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Step ۴ — Template Cache</text>
+
+  <line x1="740" y1="152" x2="740" y2="520" stroke="#c4b5fd" stroke-width="2" stroke-linecap="round"/>
+
+  <g font-size="11" font-weight="600">
+    <path d="M 740 170 L 700 170 L 700 180" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="640" y="180" width="200" height="32" rx="9" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="740" y="201" text-anchor="middle" fill="#5b21b6">✅ WeakMap&lt;def, Map&lt;key, SVG&gt;&gt;</text>
+
+    <path d="M 740 222 L 700 222 L 700 232" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="640" y="232" width="200" height="32" rx="9" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="740" y="253" text-anchor="middle" fill="#5b21b6">✅ buildStaticSvg() — first render</text>
+
+    <path d="M 740 274 L 700 274 L 700 284" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="640" y="284" width="200" height="32" rx="9" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="740" y="305" text-anchor="middle" fill="#5b21b6">✅ cloneNode(true) — cache hit</text>
+
+    <path d="M 740 326 L 700 326 L 700 336" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="640" y="336" width="200" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="740" y="357" text-anchor="middle" fill="#15803d">✅ ۶ ClReactiveElement حذف/icon</text>
+
+    <path d="M 740 378 L 700 378 L 700 388" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="640" y="388" width="200" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="740" y="409" text-anchor="middle" fill="#15803d">✅ ۱۸ observable + ۳۰ listener حذف</text>
+
+    <path d="M 740 430 L 700 430 L 700 440" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="640" y="440" width="200" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="740" y="461" text-anchor="middle" fill="#15803d">✅ ۲۲ behavioral tests pass</text>
+
+    <path d="M 740 482 L 700 482 L 700 492" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+    <rect x="640" y="492" width="200" height="32" rx="9" fill="#fef3c7" stroke="#d97706" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="740" y="513" text-anchor="middle" fill="#92400e">📊 ۴۰ms → ۳۱ms (۲۳٪)</text>
+  </g>
+
+  <!-- ===== FINAL REGRESSION BRANCH ===== -->
+  <rect x="800" y="110" width="140" height="42" rx="12" fill="url(#testGrad)" filter="url(#shadow)"/>
+  <text x="870" y="137" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Step ۵ — Regression</text>
+
+  <line x1="870" y1="152" x2="870" y2="400" stroke="#86efac" stroke-width="2" stroke-linecap="round"/>
+
+  <g font-size="11" font-weight="600">
+    <path d="M 870 170 L 910 170 L 910 180" fill="none" stroke="#86efac" stroke-width="1.5"/>
+    <rect x="780" y="180" width="170" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="865" y="201" text-anchor="middle" fill="#15803d">✅ ۶ test file — ۵۹ tests</text>
+
+    <path d="M 870 222 L 910 222 L 910 232" fill="none" stroke="#86efac" stroke-width="1.5"/>
+    <rect x="780" y="232" width="170" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="865" y="253" text-anchor="middle" fill="#15803d">✅ ۰ failure</text>
+
+    <path d="M 870 274 L 910 274 L 910 284" fill="none" stroke="#86efac" stroke-width="1.5"/>
+    <rect x="780" y="284" width="170" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="865" y="305" text-anchor="middle" fill="#15803d">✅ baseline.json updated</text>
+
+    <path d="M 870 326 L 910 326 L 910 336" fill="none" stroke="#86efac" stroke-width="1.5"/>
+    <rect x="780" y="336" width="170" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="865" y="357" text-anchor="middle" fill="#15803d">✅ Stable: ۳۱ms median</text>
+
+    <path d="M 870 378 L 910 378 L 910 388" fill="none" stroke="#86efac" stroke-width="1.5"/>
+    <rect x="780" y="388" width="170" height="32" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.3" filter="url(#softShadow)"/>
+    <text x="865" y="409" text-anchor="middle" fill="#15803d">✅ Memory: ۱۲→۹.۶ MB</text>
+  </g>
+
+  <!-- ===== PERFORMANCE TABLE ===== -->
+  <rect x="40" y="560" width="880" height="170" rx="14" fill="#fff" stroke="#e5e7eb" stroke-width="1.5" filter="url(#softShadow)"/>
+  <text x="480" y="588" text-anchor="middle" fill="#1e3a8a" font-size="14" font-weight="700">📊 نتایج بهینه‌سازی</text>
+
+  <!-- Table header -->
+  <rect x="60" y="600" width="840" height="28" rx="6" fill="#f1f5f9"/>
+  <text x="160" y="619" text-anchor="middle" fill="#475569" font-size="11" font-weight="700">Metric</text>
+  <text x="380" y="619" text-anchor="middle" fill="#475569" font-size="11" font-weight="700">Baseline</text>
+  <text x="540" y="619" text-anchor="middle" fill="#475569" font-size="11" font-weight="700">Step ۱</text>
+  <text x="700" y="619" text-anchor="middle" fill="#475569" font-size="11" font-weight="700">Step ۴ (Cache)</text>
+  <text x="850" y="619" text-anchor="middle" fill="#475569" font-size="11" font-weight="700">Total</text>
+
+  <!-- Row 1 -->
+  <text x="160" y="648" text-anchor="middle" fill="#374151" font-size="11" font-weight="600">IconPage median</text>
+  <text x="380" y="648" text-anchor="middle" fill="#374151" font-size="11">۴۸.۰ms</text>
+  <text x="540" y="648" text-anchor="middle" fill="#374151" font-size="11">۴۰.۰ms</text>
+  <text x="700" y="648" text-anchor="middle" fill="#374151" font-size="11">۳۱.۰ms</text>
+  <text x="850" y="648" text-anchor="middle" fill="#15803d" font-size="11" font-weight="700">۳۵٪</text>
+
+  <!-- Row 2 -->
+  <text x="160" y="672" text-anchor="middle" fill="#374151" font-size="11" font-weight="600">Repeated 200 median</text>
+  <text x="380" y="672" text-anchor="middle" fill="#374151" font-size="11">۳۷.۱ms</text>
+  <text x="540" y="672" text-anchor="middle" fill="#374151" font-size="11">۲۱.۴ms</text>
+  <text x="700" y="672" text-anchor="middle" fill="#374151" font-size="11">۲۳.۵ms</text>
+  <text x="850" y="672" text-anchor="middle" fill="#15803d" font-size="11" font-weight="700">۳۷٪</text>
+
+  <!-- Row 3 -->
+  <text x="160" y="696" text-anchor="middle" fill="#374151" font-size="11" font-weight="600">Unique 200 median</text>
+  <text x="380" y="696" text-anchor="middle" fill="#374151" font-size="11">۸۸.۵ms</text>
+  <text x="540" y="696" text-anchor="middle" fill="#374151" font-size="11">۶۶.۴ms</text>
+  <text x="700" y="696" text-anchor="middle" fill="#374151" font-size="11">۵۳.۸ms</text>
+  <text x="850" y="696" text-anchor="middle" fill="#15803d" font-size="11" font-weight="700">۳۹٪</text>
+
+  <!-- Row 4 -->
+  <text x="160" y="720" text-anchor="middle" fill="#374151" font-size="11" font-weight="600">Memory heap delta</text>
+  <text x="380" y="720" text-anchor="middle" fill="#374151" font-size="11">+۱۲.۰ MB</text>
+  <text x="540" y="720" text-anchor="middle" fill="#374151" font-size="11">—</text>
+  <text x="700" y="720" text-anchor="middle" fill="#374151" font-size="11">+۹.۶ MB</text>
+  <text x="850" y="720" text-anchor="middle" fill="#15803d" font-size="11" font-weight="700">۲۰٪</text>
+
+  <!-- ===== STATS BOX ===== -->
+  <rect x="40" y="750" width="880" height="80" rx="14" fill="#fff" stroke="#e5e7eb" stroke-width="1.5" filter="url(#softShadow)"/>
+  <text x="480" y="778" text-anchor="middle" fill="#1e3a8a" font-size="14" font-weight="700">📋 آمار کلی</text>
+  <text x="140" y="805" text-anchor="middle" fill="#374151" font-size="12" font-weight="600">۲ فایل سورس تغییر</text>
+  <text x="340" y="805" text-anchor="middle" fill="#374151" font-size="12" font-weight="600">۳ فایل تست (۱ جدید)</text>
+  <text x="540" y="805" text-anchor="middle" fill="#374151" font-size="12" font-weight="600">۵۹ tests all pass</text>
+  <text x="740" y="805" text-anchor="middle" fill="#374151" font-size="12" font-weight="600">۱ Bug fix (aria-label)</text>
+
+  <!-- ===== INVARIANTS BOX ===== -->
+  <rect x="40" y="850" width="880" height="70" rx="14" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5" filter="url(#softShadow)"/>
+  <text x="480" y="875" text-anchor="middle" fill="#15803d" font-size="13" font-weight="700">🔒 Invariantهای تأیید شده</text>
+  <text x="480" y="898" text-anchor="middle" fill="#166534" font-size="11" font-weight="600">Static ≡ Reactive SVG • NO Scope در Static • NO computed در Static • Reactive path unchanged • Cache: immutable template نه reactive node • cloneNode مستقل</text>
+
+  <!-- ===== GOAL BOX ===== -->
+  <rect x="80" y="940" width="800" height="120" rx="16" fill="url(#goalGrad)" filter="url(#shadow)"/>
+  <text x="480" y="972" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">🎯 هدف‌های بعدی</text>
+
+  <text x="240" y="1002" text-anchor="middle" fill="#bfdbfe" font-size="13" font-weight="700">۱. Challenge ۱۲.۲.۲ — DOM Optimization</text>
+  <text x="240" y="1024" text-anchor="middle" fill="#dbeafe" font-size="10">۱۰۲۶ DOM element در هر render — bottleneck بعدی</text>
+  <text x="240" y="1042" text-anchor="middle" fill="#dbeafe" font-size="10">ClReactiveElement wrapper برای &lt;svg&gt; حذف شود</text>
+
+  <text x="720" y="1002" text-anchor="middle" fill="#bfdbfe" font-size="13" font-weight="700">۲. Target &lt; ۱۰ms</text>
+  <text x="720" y="1024" text-anchor="middle" fill="#dbeafe" font-size="10">۳۱ms → هنوز ۳x تا primary target</text>
+  <text x="720" y="1042" text-anchor="middle" fill="#dbeafe" font-size="10">DOM creation/insertion زمان غالب</text>
+
+</svg>

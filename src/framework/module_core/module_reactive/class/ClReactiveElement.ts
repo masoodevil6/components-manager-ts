@@ -25,6 +25,7 @@ type Options = {
     on?: EventMap;
     unique?: CoreEvent.TStepRef;            // اتصال اعلانی المان به Step (رشته ممنوع — بخش ۳۰ پلن)
     emit?: CoreEvent.TEmitHandler;          // Request Handler این المان — دریافت Request از CoreEvents و بازگرداندن Response (بخش ۱۴ Clarification پلن)
+    existingElement?: HTMLElement | SVGElement;  // injection یک DOM element موجود به‌جای createElement
 };
 
 type EventListenerRecord = {
@@ -62,7 +63,9 @@ export class ClReactiveElement {
         this._options = options;
 
 
-        if (namespace === EnElementNamespace.SVG) {
+        if (options.existingElement) {
+            this.element = options.existingElement;
+        } else if (namespace === EnElementNamespace.SVG) {
             this.element = document.createElementNS(
                 "http://www.w3.org/2000/svg",
                 this.tagName
@@ -85,8 +88,10 @@ export class ClReactiveElement {
         this.element.addEventListener("mouseleave", () => this.active.set(false));
 
         // Phase 7 (بخش ۳.۱ ب پلن): ثبت emit handler این المان در CoreEvents
+        // bind(this) → this در emit به این ClReactiveElement instance اشاره می‌کند
+        // تا مصرف‌کننده بتواند از getAttr/getStyle/getClassName استفاده کند
         if (this._options.unique && this._options.emit) {
-            CoreEvent.App.registerEmit(this._options.unique, this._options.emit);
+            CoreEvent.App.registerEmit(this._options.unique, this._options.emit.bind(this));
         }
 
         this._applyOptions();
@@ -502,6 +507,77 @@ export class ClReactiveElement {
         return this._removeEvent(event , handler);
     }
 
+
+    //--------------------------------------------------
+    // Getters — خواندن مقادیر فعلی (Plan 8.2.5)
+    //--------------------------------------------------
+
+    // --- Attr ---
+
+    /**
+     * خواندن مقدار یک attribute
+     * @param name — نام attribute (مثل "role", "data-id")
+     * @returns مقدار attribute یا null اگر وجود نداشته باشد
+     */
+    getAttr(name: string): string | null {
+        return this.element.getAttribute(name);
+    }
+
+    /**
+     * بررسی وجود یک attribute
+     * @param name — نام attribute
+     * @returns true اگر attribute وجود داشته باشد
+     */
+    hasAttr(name: string): boolean {
+        return this.element.hasAttribute(name);
+    }
+
+    // --- Style ---
+
+    /**
+     * خواندن مقدار یک style property
+     * @param key — نام CSS property (مثل "color", "border-width", "--custom")
+     * @returns مقدار style یا رشته خالی اگر تنظیم نشده باشد
+     *
+     * نکته: برای CSS custom properties (--var) از getPropertyValue استفاده می‌شود.
+     *       برای regular properties از style[key] خوانده می‌شود.
+     */
+    getStyle(key: string): string {
+        if (key.startsWith("--")) {
+            return this.element.style.getPropertyValue(key);
+        }
+        // تبدیل kebab-case به camelCase برای دسترسی via style object
+        const camelKey = key.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+        return (this.element.style as any)[camelKey] || "";
+    }
+
+    /**
+     * بررسی وجود یک style property (تنظیم‌شده و غیر خالی)
+     * @param key — نام CSS property
+     * @returns true اگر style تنظیم شده و مقدار غیر خالی داشته باشد
+     */
+    hasStyle(key: string): boolean {
+        return this.getStyle(key) !== "";
+    }
+
+    // --- ClassName ---
+
+    /**
+     * خواندن لیست classهای فعلی
+     * @returns آرایه از class names
+     */
+    getClassName(): string[] {
+        return Array.from(this.element.classList);
+    }
+
+    /**
+     * بررسی وجود یک class
+     * @param name — نام class
+     * @returns true اگر class وجود داشته باشد
+     */
+    hasClass(name: string): boolean {
+        return this.element.classList.contains(name);
+    }
 
 
     private _applyOptions() {
