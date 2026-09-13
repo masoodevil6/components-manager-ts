@@ -29,6 +29,25 @@ export class ClLanguageApp {
     }
 
 
+    static registerDictionary(
+        directory: TLanguageDirectory
+    ): void {
+
+        for (const code in directory) {
+            const incoming = directory[code];
+            if (!incoming) continue;
+
+            if (!this._directory[code]) {
+                this._directory[code] = new Map();
+            }
+
+            for (const [key, value] of incoming) {
+                this._directory[code].set(key, value);
+            }
+        }
+    }
+
+
     static setLanguage(
         language: Core.Language.Types.LanguageDefinition
     ): void {

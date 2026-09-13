@@ -13,3 +13,4 @@ export  {MTBorderRadius as BorderRadius} from "./MTBorderRadius";
 export  {MTBorderWidth as BorderWidth} from "./MTBorderWidth";
 export  {MTIconSize as IconSize} from "./MTIconSize";
 export  {MTIconStrokeWidth as IconStrokeWidth} from "./MTIconStrokeWidth";
+export  {invalidateIconStrokeCache as InvalidateIconStrokeCache} from "./MTIconStrokeWidth";

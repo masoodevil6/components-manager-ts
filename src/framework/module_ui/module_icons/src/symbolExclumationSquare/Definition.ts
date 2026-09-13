@@ -46,9 +46,9 @@ export const Definition: IconDefinition = {
 
             CoreReactive.App.svgCircle({
                 attrs: {
-                    cx: "150.49",
-                    cy: "225.52",
-                    r:  "15"
+                    cx: "12",
+                    cy: "17",
+                    r:  "1"
                 },
                 attrsBind: {
                     fill: context.primaryColor

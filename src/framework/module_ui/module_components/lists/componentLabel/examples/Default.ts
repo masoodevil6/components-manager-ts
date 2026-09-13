@@ -38,10 +38,10 @@ export const DefaultExample: ComponentExample = {
                 /// --- Tooltip (همه اپشن‌ها برای تست کامل) ---
                 prop_labelTooltipIcon:         UiIcons.Src.StatusIsTrue.Definition,
                 prop_labelTooltipDescription:  "More information about this field",
-                prop_labelTooltipBackground:   UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
-                prop_labelTooltipColor:        UtilStyle.Css_Color(UtilConst.ColorMain.DARK, UtilConst.ColorGrad.GRADE_2),
+                //prop_labelTooltipBackground:   UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
+                //prop_labelTooltipColor:        UtilStyle.Css_Color(UtilConst.ColorMain.DARK, UtilConst.ColorGrad.GRADE_2),
                 prop_labelTooltipPosition:     UtilStyle.Css_SizeUnit(5, UtilConst.Units.PERCENT),
-                prop_labelTooltipDirection:    TooltipDirectionTypes.TOP,
+                prop_labelTooltipDirection:    TooltipDirectionTypes.BOTTOM,
             },
             {},
         ).getElement() as HTMLElement;

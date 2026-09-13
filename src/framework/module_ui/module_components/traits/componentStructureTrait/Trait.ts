@@ -100,6 +100,10 @@ export const ComponentStructureTrait = {
                 attrs: {
                     ...attrsDefault,
                 },
+                styles: {
+                    display: "block",
+                    width:   "100%",
+                },
                 classBind: [
                     classList,
                 ],
@@ -157,6 +161,10 @@ export const ComponentStructureTrait = {
                 ],
                 attrs: {
                     ...attrsDefault,
+                },
+                styles: {
+                    display: "block",
+                    width:   "100%",
                 },
                 stylesBind: {
                     prop_structureStyles,

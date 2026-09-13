@@ -25,7 +25,7 @@ export const ClickableExample: ComponentExample = {
             prop_labelTitle: "Clickable Label",
 
             /// --- Tooltip (ترکیب CLICK + tooltip) ---
-            prop_labelTooltipIcon:        UiIcons.Src.SymbolExclumationWarning.Definition,
+           // prop_labelTooltipIcon:        UiIcons.Src.SymbolExclumationWarning.Definition,
             prop_labelTooltipDescription: "Click the label to trigger the CLICK callback",
             prop_labelTooltipDirection:   TooltipDirectionTypes.BOTTOM,
         },

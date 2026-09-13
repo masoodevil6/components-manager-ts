@@ -1,0 +1,1100 @@
+import * as CoreReactive   from "@/core_reactive";
+import * as CoreObservable from "@/core_observable";
+import * as CoreConfig     from "@/core_configs";
+import * as UtilStyle      from "@/util_styles";
+import * as UtilConst      from "@/util_consts";
+import * as UiIcons        from "@/ui_icons";
+// --------------------------------
+import {ComponentMouseScrollerBase}    from "./ComponentMouseScrollerBase";
+import {createMouseScrollerStep}       from "./Step";
+import {Schemas}                       from "./Schemas";
+import {MethodsConfigType}             from "./Methods";
+import {PropsType as StructurePropsType} from "../componentStructure/Props";
+import {PropsConfigType as MouseScrollerPropsConfigType, MouseScrollerColorMode} from "./Props";
+import {SidebarDirection}                                          from "../componentSidebar/Props";
+import {PartAttrDefault}               from "@/core_components";
+import {ComponentStructureTrait}   from "../../traits/componentStructureTrait";
+// --------------------------------
+import * as UiCategory             from "@/ui_categories";
+import {ButtonAction} from "../componentButton/Props";
+
+
+/**
+ * ComponentMouseScroller — کلاس نهایی
+ *
+ * یک scroller با قابلیت zoom، drag-to-pan، wheel-to-zoom و sidebars.
+ * از ComponentBorder و ComponentSidebar (به‌عنوان فرزند) استفاده می‌کند.
+ *
+ * Constructor امضا: (config, methods, identity?)
+ *   config  — شامل propهای پایه + propهای اختصاصی
+ *   methods — methodهای اختصاصی
+ *   identity — { unique?, emit?, events? }
+ */
+export class ComponentMouseScroller extends ComponentMouseScrollerBase {
+
+    private _SCROLL_IS_DOWN:    CoreObservable.App<boolean> = new CoreObservable.App(false);
+    private _DEFAULT_OPACITY:   CoreObservable.App<any> | null = null;
+    private _POINTER_CAPTURED:  boolean = false;
+    private _START_CLIENT_X:    number = 0;
+    private _START_CLIENT_Y:    number = 0;
+    private _SCROLL_LEFT:       number = 0;
+    private _SCROLL_TOP:        number = 0;
+    private _DRAG_THRESHOLD:    number = 5;
+
+    private _ELEMENT_CONTAINER: CoreReactive.App | null = null;
+    private _ELEMENT_SCROLLER:  CoreReactive.App | null = null;
+
+
+    constructor(
+        config?:  Partial<StructurePropsType & MouseScrollerPropsConfigType>,
+        methods?: MethodsConfigType<ComponentMouseScroller>,
+        identity?: {
+            unique?: any;
+            emit?:   any;
+            events?: Record<string, any> | null;
+        },
+    ) {
+        const step = createMouseScrollerStep();
+
+        super("mouse-scroller", null, identity, step);
+
+        this.renderComponent(
+            config as any,
+            methods as any,
+            identity?.events ?? null,
+        );
+    }
+
+
+    /* ---------------------------------------------
+       Plan 9.1 — Component Disposal
+    --------------------------------------------- */
+    dispose(): void {
+        this.disposeStep();
+    }
+
+
+    /* ---------------------------------------------
+       Plan 11.2 — renderContentComponent
+       لایه ساختار از طریق Schema پایه (COMPONENT + STRUCTURE) رندر می‌شود.
+       renderContentComponent فقط محتوای اختصاصی را رندر می‌کند.
+    --------------------------------------------- */
+    override renderContentComponent(
+        attrsDefault: PartAttrDefault,
+        data:         Record<string, CoreObservable.App<any>>,
+        extra?:       any,
+    ): CoreReactive.App {
+        return this.executeSchemaPart(Schemas.BORDER.part, {});
+    }
+
+
+    /* ---------------------------------------------
+       renderManagerComponent — Routing
+    --------------------------------------------- */
+    override renderManagerComponent(
+        partName:     string,
+        attrsDefault: PartAttrDefault,
+        data:         Record<string, CoreObservable.App<any>>,
+        extra?:       any,
+    ): CoreReactive.App {
+
+        switch (partName) {
+            // --- Plan 11.2: Schema پایه ---
+            case ComponentStructureTrait.schemas.COMPONENT.part:
+                return ComponentStructureTrait.renderComponentSchema(this, attrsDefault, data);
+            case ComponentStructureTrait.schemas.STRUCTURE.part:
+                return ComponentStructureTrait.renderStructureSchema(this, attrsDefault, data);
+            // --- Schema اختصاصی ---
+            case Schemas.BORDER.part:
+                return this.renderBorder(attrsDefault, data, extra);
+            case Schemas.BORDER_CONTENT.part:
+                return this.renderBorderContent(attrsDefault, data, extra);
+            case Schemas.BORDER_CONTENT_VIEW.part:
+                return this.renderBorderContentView(attrsDefault, data, extra);
+            case Schemas.BORDER_CONTENT_SIDEBAR.part:
+                return this.renderBorderContentSidebar(attrsDefault, data, extra);
+            case Schemas.BORDER_CONTENT_SIDEBARTOP.part:
+                return this.renderBorderContentSidebarTop(attrsDefault, data, extra);
+            case Schemas.BORDER_CONTENT_SIDEBARBOTTOM.part:
+                return this.renderBorderContentSidebarBottom(attrsDefault, data, extra);
+            case Schemas.BORDER_CONTENT_POSITIONZOOM.part:
+                return this.renderBorderContentPositionZoom(attrsDefault, data, extra);
+            case Schemas.BORDER_CONTENT_POSITIONZOOM_BORDER.part:
+                return this.renderBorderContentPositionZoomBorder(attrsDefault, data, extra);
+            case Schemas.BORDER_CONTENT_TOOLS.part:
+                return this.renderBorderContentTools(attrsDefault, data, extra);
+            case Schemas.BORDER_CONTENT_TOOLS_CONTENT.part:
+                return this.renderBorderContentToolsContent(attrsDefault, data, extra);
+            case Schemas.BORDER_CONTENT_TOOLS_CONTENT_ZOOMING.part:
+                return this.renderBorderContentToolsContentZooming(attrsDefault, data, extra);
+            case Schemas.BORDER_CONTENT_TOOLS_CONTENT_ZOOMING_IN.part:
+                return this.renderBorderContentToolsContentZoomingIn(attrsDefault, data, extra);
+            case Schemas.BORDER_CONTENT_TOOLS_CONTENT_ZOOMING_REFRESH.part:
+                return this.renderBorderContentToolsContentZoomingRefresh(attrsDefault, data, extra);
+            case Schemas.BORDER_CONTENT_TOOLS_CONTENT_ZOOMING_OUT.part:
+                return this.renderBorderContentToolsContentZoomingOut(attrsDefault, data, extra);
+            case Schemas.BORDER_CONTENT_TOOLS_CONTENT_COLORING.part:
+                return this.renderBorderContentToolsContentColoring(attrsDefault, data, extra);
+            case Schemas.BORDER_CONTENT_TOOLS_CONTENT_COLORING_LIGHT.part:
+                return this.renderBorderContentToolsContentColoringLight(attrsDefault, data, extra);
+            case Schemas.BORDER_CONTENT_TOOLS_CONTENT_COLORING_DARK.part:
+                return this.renderBorderContentToolsContentColoringDark(attrsDefault, data, extra);
+            default:
+                return super.renderManagerComponent(partName, attrsDefault, data, extra);
+        }
+    }
+
+
+    /* ---------------------------------------------
+       renderBorder — بخش اصلی (Border wrapper)
+    --------------------------------------------- */
+    protected renderBorder(
+        attrsDefault?: PartAttrDefault,
+        data?:         Record<string, CoreObservable.App<any>>,
+        extra?:        any,
+    ): CoreReactive.App {
+
+        const bind = this._COMPONENT_PROPS_BIND;
+
+        const prop_toolsOpacity          = data?.["prop_toolsOpacity"]          ?? bind.prop_toolsOpacity;
+        const prop_colorMode             = data?.["prop_colorMode"]             ?? bind.prop_colorMode;
+        const prop_borderBackgroundColor_light = data?.["prop_borderBackgroundColor_light"] ?? bind.prop_borderBackgroundColor_light;
+        const prop_borderBackgroundColor_dark  = data?.["prop_borderBackgroundColor_dark"]  ?? bind.prop_borderBackgroundColor_dark;
+        const prop_borderWidth           = data?.["prop_borderWidth"]           ?? bind.prop_borderWidth;
+        const prop_borderRadius          = data?.["prop_borderRadius"]          ?? bind.prop_borderRadius;
+        const prop_borderColor           = data?.["prop_borderColor"]           ?? bind.prop_borderColor;
+
+        const initOpacity = prop_toolsOpacity?.get() ?? 40;
+        this._DEFAULT_OPACITY = new CoreObservable.App(initOpacity);
+
+        const backgroundColor = CoreObservable.App.computed(
+            (mode, bgLight, bgDark) => {
+                return mode === MouseScrollerColorMode.DARK
+                    ? (bgDark ?? UtilStyle.Css_Color(UtilConst.ColorMain.SHADOW, UtilConst.ColorGrad.GRADE_3))
+                    : (bgLight ?? UtilStyle.Css_Color(UtilConst.ColorMain.SHADOW, UtilConst.ColorGrad.GRADE_5));
+            },
+            [prop_colorMode, prop_borderBackgroundColor_light, prop_borderBackgroundColor_dark],
+            this.getScope(),
+        );
+
+        const borderInstance = UiCategory.UI.Contents.Border(
+            {
+                prop_contentSize:  UtilConst.Sizes.S as any,
+                classList:         [] as any,
+                styles: {
+                    height:            UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
+                    overflow:          "hidden",
+                    WebkitUserSelect:  "none",
+                    MozUserSelect:     "none",
+                    msUserSelect:      "none",
+                    msOverflowStyle:   "none",
+                    scrollbarWidth:    "none",
+                } as any,
+                prop_structureStyles: {
+                    height: UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
+                } as any,
+                prop_borderClass:    ["p-0"] as any,
+                prop_borderStyles:    CoreObservable.App.computed(
+                    (width, radius, color) => {
+                        const s: Record<string, string> = {
+                            height: UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT) as any,
+                        };
+                        if (width != null)  s["borderWidth"]   = typeof width === "number" ? `${width}px` : String(width);
+                        if (radius != null) s["borderRadius"]  = typeof radius === "number" ? `${radius}px` : String(radius);
+                        if (color != null)  s["borderColor"]   = String(color);
+                        return s;
+                    },
+                    [prop_borderWidth, prop_borderRadius, prop_borderColor],
+                    this.getScope(),
+                ) as any,
+                prop_contentBackgroundColor:  backgroundColor as any,
+                prop_content: [
+                    this.executeSchemaPart(Schemas.BORDER_CONTENT.part, {}),
+                ],
+            } as any,
+            {} as any,
+            {
+                mouseenter: () => {
+                    this._DEFAULT_OPACITY?.set(100);
+                },
+                mouseleave: () => {
+                    const val = this._COMPONENT_PROPS_BIND.prop_toolsOpacity?.get();
+                    this._DEFAULT_OPACITY?.set(val ?? 40);
+                },
+            } as any,
+        );
+
+        return borderInstance.getElement() as any;
+    }
+
+
+    /* ---------------------------------------------
+       renderBorderContent — محتوای داخل Border
+    --------------------------------------------- */
+    protected renderBorderContent(
+        attrsDefault?: PartAttrDefault,
+        data?:         Record<string, CoreObservable.App<any>>,
+        extra?:        any,
+    ): CoreReactive.App {
+
+        const bind = this._COMPONENT_PROPS_BIND;
+
+        this._ELEMENT_CONTAINER = CoreReactive.App.section({
+            attrs: {
+                ...attrsDefault,
+            },
+            className: ["position-relative"],
+            styles: {
+                height:          UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
+                overflow:        "hidden",
+                cursor:          "all-scroll",
+                scrollBehavior:  "smooth",
+            },
+            on: {
+                wheel:        (e: any) => this.fn_scrollerWheel(e),
+                pointerdown:  (e: any) => this.fn_scrollerMouseDown(e),
+                pointermove:  (e: any) => this.fn_scrollerMouseMove(e),
+                pointerup:    (e: any) => this.fn_scrollerMouseUp(e),
+                pointerleave: (e: any) => this.fn_scrollerMouseLeave(e),
+            },
+            children: [
+                CoreReactive.App.div({
+                    className: ["ms-scroller-hidden"],
+                    styles: {
+                        width:    "100%",
+                        height:   "100%",
+                        overflow: "scroll",
+                        scrollbarWidth:   "none",
+                        msOverflowStyle: "none",
+                    },
+                    propsBind: {
+                        scrollTop:  bind.prop_scrollTop  ?? new CoreObservable.App(0),
+                        scrollLeft: bind.prop_scrollLeft ?? new CoreObservable.App(0),
+                    } as any,
+                    children: [
+                        this.executeSchemaPart(Schemas.BORDER_CONTENT_VIEW.part, {}),
+                    ],
+                }),
+                this.executeSchemaPart(Schemas.BORDER_CONTENT_SIDEBARTOP.part, {}),
+                this.executeSchemaPart(Schemas.BORDER_CONTENT_SIDEBARBOTTOM.part, {}),
+                this.executeSchemaPart(Schemas.BORDER_CONTENT_SIDEBAR.part, {}),
+                this.executeSchemaPart(Schemas.BORDER_CONTENT_TOOLS.part, {}),
+                this.executeSchemaPart(Schemas.BORDER_CONTENT_POSITIONZOOM.part, {}),
+            ],
+        });
+
+        return this._ELEMENT_CONTAINER;
+    }
+
+
+    /* ---------------------------------------------
+       renderBorderContentView — ناحیه قابل zoom/scroll
+    --------------------------------------------- */
+    protected renderBorderContentView(
+        attrsDefault?: PartAttrDefault,
+        data?:         Record<string, CoreObservable.App<any>>,
+        extra?:        any,
+    ): CoreReactive.App {
+
+        const bind = this._COMPONENT_PROPS_BIND;
+
+        const prop_content    = data?.["prop_content"]    ?? bind.prop_content;
+        const prop_zoom       = data?.["prop_zoom"]       ?? bind.prop_zoom;
+        const prop_scrollLeft = data?.["prop_scrollLeft"] ?? bind.prop_scrollLeft;
+        const prop_scrollTop  = data?.["prop_scrollTop"]  ?? bind.prop_scrollTop;
+
+        this._ELEMENT_SCROLLER = CoreReactive.App.section({
+            attrs: {
+                ...attrsDefault,
+            },
+            styles: {
+                width:          "100%",
+                height:         "100%",
+                zIndex:         "0",
+                position:       "relative",
+                transformOrigin: "0 0",
+                overflow:       "unset",
+                userSelect:     "none",
+            },
+            stylesBind: {
+                transform: CoreObservable.App.computed(
+                    (zoom) => `scale(${zoom})`,
+                    [prop_zoom],
+                    this.getScope(),
+                ),
+            },
+            children: [
+                CoreReactive.App.div({
+                    children: [prop_content],
+                }),
+            ],
+        });
+
+        return this._ELEMENT_SCROLLER;
+    }
+
+
+    /* ---------------------------------------------
+       renderBorderContentSidebar — sidebar (left/right)
+    --------------------------------------------- */
+    protected renderBorderContentSidebar(
+        attrsDefault?: PartAttrDefault,
+        data?:         Record<string, CoreObservable.App<any>>,
+        extra?:        any,
+    ): CoreReactive.App {
+
+        const bind = this._COMPONENT_PROPS_BIND;
+
+        const prop_sideBarsMargin    = data?.["prop_sideBarsMargin"]    ?? bind.prop_sideBarsMargin;
+        const prop_sideBarHas        = data?.["prop_sideBarHas"]        ?? bind.prop_sideBarHas;
+        const prop_sideBarWidth      = data?.["prop_sideBarWidth"]      ?? bind.prop_sideBarWidth;
+        const prop_sideBarBtnOpenHas = data?.["prop_sideBarBtnOpenHas"] ?? bind.prop_sideBarBtnOpenHas;
+        const prop_sideBarContent    = data?.["prop_sideBarContent"]    ?? bind.prop_sideBarContent;
+        const prop_sideBarTopHas     = data?.["prop_sideBarTopHas"]     ?? bind.prop_sideBarTopHas;
+        const prop_sideBarTopWidth   = data?.["prop_sideBarTopWidth"]   ?? bind.prop_sideBarTopWidth;
+        const prop_sideBarBottomHas  = data?.["prop_sideBarBottomHas"]  ?? bind.prop_sideBarBottomHas;
+        const prop_sideBarBottomWidth = data?.["prop_sideBarBottomWidth"] ?? bind.prop_sideBarBottomWidth;
+
+        const sidebarInstance = UiCategory.UI.Contents.Sidebar(
+            {
+                classList: [] as any,
+                styles: CoreObservable.App.computed(
+                    (sidebarOpacity, sideBarWidth, sideBarBtnOpenHas, sideBarTopHas, sideBarTopWidth, sideBarBottomHas, sideBarBottomWidth, sideBarsMargin) => {
+                        const height: string[] = ["100%"];
+                        const top: string[] = [];
+                        if (sideBarTopHas) {
+                            height.push("-");
+                            height.push(`${sideBarTopWidth}px`);
+                            top.push(`${sideBarTopWidth}px`);
+                        }
+                        if (sideBarBottomHas) {
+                            height.push("-");
+                            height.push(`${sideBarBottomWidth}px`);
+                        }
+                        if (sideBarsMargin) {
+                            height.push("-");
+                            height.push(`${2 * sideBarsMargin}px`);
+                            top.push("+");
+                            top.push(`${sideBarsMargin}px`);
+                        }
+                        const btnExtra = sideBarBtnOpenHas ? 30 : 0;
+                        return {
+                            transition: "opacity 500ms",
+                            opacity:   sidebarOpacity != null ? String(sidebarOpacity / 100) : "1",
+                            width:     `${sideBarWidth + btnExtra}px`,
+                            height:    `calc(${height.join(" ")})`,
+                            position:  "absolute",
+                            top:       top.length ? `calc(${top.join(" ")})` : "0",
+                        };
+                    },
+                    [
+                        this._DEFAULT_OPACITY!,
+                        prop_sideBarWidth,
+                        prop_sideBarBtnOpenHas,
+                        prop_sideBarTopHas, prop_sideBarTopWidth,
+                        prop_sideBarBottomHas, prop_sideBarBottomWidth,
+                        prop_sideBarsMargin,
+                    ],
+                    this.getScope(),
+                ) as any,
+
+                prop_blurHas:           false as any,
+                prop_sidebarBtnOpenHas: prop_sideBarBtnOpenHas as any,
+                prop_sidebarIsOpen:     true as any,
+
+                prop_show: CoreObservable.App.computed(
+                    (sideBarHas, isDown) => sideBarHas && !isDown,
+                    [prop_sideBarHas, this._SCROLL_IS_DOWN],
+                    this.getScope(),
+                ) as any,
+
+                prop_sidebarDirection: CoreObservable.App.computed(
+                    (dir) => dir ? SidebarDirection.RTL : SidebarDirection.LTR,
+                    [CoreConfig.Settings.DirectionRtl.observable()],
+                    this.getScope(),
+                ) as any,
+
+                prop_sidebarWidth: CoreObservable.App.computed(
+                    (sideBarWidth) => sideBarWidth || 0,
+                    [prop_sideBarWidth],
+                    this.getScope(),
+                ) as any,
+
+                prop_sidebarPositionStart: "0px" as any,
+                prop_sidebarPositionEnd:   "0px" as any,
+                prop_sidebarBorderRadius:  UtilConst.Sizes.M as any,
+                prop_sidebarContent:        prop_sideBarContent as any,
+            } as any,
+            {} as any,
+        );
+
+        return CoreReactive.App.section({
+            attrs: { ...attrsDefault },
+            children: [sidebarInstance.getElement()],
+        });
+    }
+
+
+    /* ---------------------------------------------
+       renderBorderContentSidebarTop — sidebar top
+    --------------------------------------------- */
+    protected renderBorderContentSidebarTop(
+        attrsDefault?: PartAttrDefault,
+        data?:         Record<string, CoreObservable.App<any>>,
+        extra?:        any,
+    ): CoreReactive.App {
+
+        const bind = this._COMPONENT_PROPS_BIND;
+
+        const prop_sideBarTopHas    = data?.["prop_sideBarTopHas"]    ?? bind.prop_sideBarTopHas;
+        const prop_sideBarTopWidth  = data?.["prop_sideBarTopWidth"]  ?? bind.prop_sideBarTopWidth;
+        const prop_sideBarTopContent = data?.["prop_sideBarTopContent"] ?? bind.prop_sideBarTopContent;
+
+        const sidebarInstance = UiCategory.UI.Contents.Sidebar(
+            {
+                classList: [] as any,
+                styles: CoreObservable.App.computed(
+                    (sidebarOpacity, sideBarTopWidth) => ({
+                        transition: "opacity 500ms",
+                        opacity:   sidebarOpacity != null ? String(sidebarOpacity / 100) : "1",
+                        width:     "100%",
+                        height:    `${sideBarTopWidth}px`,
+                        position:  "absolute",
+                        top:       "0px",
+                    }),
+                    [this._DEFAULT_OPACITY!, prop_sideBarTopWidth],
+                    this.getScope(),
+                ) as any,
+
+                prop_show: CoreObservable.App.computed(
+                    (sideBarTopHas, isDown) => sideBarTopHas && !isDown,
+                    [prop_sideBarTopHas, this._SCROLL_IS_DOWN],
+                    this.getScope(),
+                ) as any,
+
+                prop_blurHas:           false as any,
+                prop_sidebarBtnOpenHas: false as any,
+                prop_sidebarIsOpen:     true as any,
+                prop_sidebarDirection:  SidebarDirection.TTB as any,
+
+                prop_sidebarWidth: CoreObservable.App.computed(
+                    (sideBarTopWidth) => sideBarTopWidth || 0,
+                    [prop_sideBarTopWidth],
+                    this.getScope(),
+                ) as any,
+
+                prop_sidebarPositionStart: "0px" as any,
+                prop_sidebarPositionEnd:   "0px" as any,
+                prop_sidebarContent:        prop_sideBarTopContent as any,
+            } as any,
+            {} as any,
+        );
+
+        return CoreReactive.App.section({
+            attrs: { ...attrsDefault },
+            children: [sidebarInstance.getElement()],
+        });
+    }
+
+
+    /* ---------------------------------------------
+       renderBorderContentSidebarBottom — sidebar bottom
+    --------------------------------------------- */
+    protected renderBorderContentSidebarBottom(
+        attrsDefault?: PartAttrDefault,
+        data?:         Record<string, CoreObservable.App<any>>,
+        extra?:        any,
+    ): CoreReactive.App {
+
+        const bind = this._COMPONENT_PROPS_BIND;
+
+        const prop_sideBarBottomHas    = data?.["prop_sideBarBottomHas"]    ?? bind.prop_sideBarBottomHas;
+        const prop_sideBarBottomWidth  = data?.["prop_sideBarBottomWidth"]  ?? bind.prop_sideBarBottomWidth;
+        const prop_sideBarBottomContent = data?.["prop_sideBarBottomContent"] ?? bind.prop_sideBarBottomContent;
+
+        const sidebarInstance = UiCategory.UI.Contents.Sidebar(
+            {
+                classList: [] as any,
+                styles: CoreObservable.App.computed(
+                    (sidebarOpacity, sideBarBottomWidth) => ({
+                        transition: "opacity 500ms",
+                        opacity:   sidebarOpacity != null ? String(sidebarOpacity / 100) : "1",
+                        width:     "100%",
+                        height:    `${sideBarBottomWidth}px`,
+                        position:  "absolute",
+                        bottom:    "0px",
+                    }),
+                    [this._DEFAULT_OPACITY!, prop_sideBarBottomWidth],
+                    this.getScope(),
+                ) as any,
+
+                prop_show: CoreObservable.App.computed(
+                    (sideBarBottomHas, isDown) => sideBarBottomHas && !isDown,
+                    [prop_sideBarBottomHas, this._SCROLL_IS_DOWN],
+                    this.getScope(),
+                ) as any,
+
+                prop_blurHas:           false as any,
+                prop_sidebarBtnOpenHas: false as any,
+                prop_sidebarIsOpen:     true as any,
+                prop_sidebarDirection:  SidebarDirection.BTT as any,
+
+                prop_sidebarWidth: CoreObservable.App.computed(
+                    (sideBarBottomWidth) => sideBarBottomWidth || 0,
+                    [prop_sideBarBottomWidth],
+                    this.getScope(),
+                ) as any,
+
+                prop_sidebarPositionStart: "0px" as any,
+                prop_sidebarPositionEnd:   "0px" as any,
+                prop_sidebarContent:        prop_sideBarBottomContent as any,
+            } as any,
+            {} as any,
+        );
+
+        return CoreReactive.App.section({
+            attrs: { ...attrsDefault },
+            children: [sidebarInstance.getElement()],
+        });
+    }
+
+
+    /* ---------------------------------------------
+       renderBorderContentPositionZoom — zoom indicator
+    --------------------------------------------- */
+    protected renderBorderContentPositionZoom(
+        attrsDefault?: PartAttrDefault,
+        data?:         Record<string, CoreObservable.App<any>>,
+        extra?:        any,
+    ): CoreReactive.App {
+
+        const zoomPositionSide = "50px";
+
+        return CoreReactive.App.section({
+            attrs: { ...attrsDefault },
+            styles: {
+                position: "absolute",
+                top: "45px",
+                width: "50px",
+                height: "30px",
+                zIndex: String(UtilStyle.Css_ZIndex(UtilConst.ZIndex.tools)),
+            },
+            stylesBind: {
+                opacity: CoreObservable.App.computed(
+                    (v) => v != null ? String(v / 100) : "1",
+                    [this._DEFAULT_OPACITY!],
+                    this.getScope(),
+                ),
+                left: CoreObservable.App.computed(
+                    (dir) => dir ? zoomPositionSide : null as any,
+                    [CoreConfig.Settings.DirectionRtl.observable()],
+                    this.getScope(),
+                ),
+                right: CoreObservable.App.computed(
+                    (dir) => dir ? null as any : zoomPositionSide,
+                    [CoreConfig.Settings.DirectionRtl.observable()],
+                    this.getScope(),
+                ),
+            },
+            children: [
+                this.executeSchemaPart(Schemas.BORDER_CONTENT_POSITIONZOOM_BORDER.part, {}),
+            ],
+        });
+    }
+
+
+    /* ---------------------------------------------
+       renderBorderContentPositionZoomBorder — zoom border
+    --------------------------------------------- */
+    protected renderBorderContentPositionZoomBorder(
+        attrsDefault?: PartAttrDefault,
+        data?:         Record<string, CoreObservable.App<any>>,
+        extra?:        any,
+    ): CoreReactive.App {
+
+        const bind = this._COMPONENT_PROPS_BIND;
+        const prop_zoom = data?.["prop_zoom"] ?? bind.prop_zoom;
+
+        const borderInstance = UiCategory.UI.Contents.Border(
+            {
+                prop_borderClass: ["p-0"] as any,
+                prop_contentBackgroundColor: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1) as any,
+                prop_content: [
+                    CoreReactive.App.b({
+                        attrs: { ...attrsDefault },
+                        className: ["text-center", "d-block", "text-white"],
+                        children: CoreObservable.App.computed(
+                            (zoom) => `${Number((zoom * 100).toFixed(0))}%`,
+                            [prop_zoom],
+                            this.getScope(),
+                        ),
+                    }),
+                ] as any,
+            } as any,
+            {
+                CLICK_BORDER: (event: any, dataArgs: any, componentArgs: any) => {
+                    this.pr_setChangeValue(event);
+                },
+            } as any,
+        );
+
+        return CoreReactive.App.section({
+            attrs: { ...attrsDefault },
+            children: [borderInstance.getElement()],
+        });
+    }
+
+
+    /* ---------------------------------------------
+       renderBorderContentTools — tools sidebar
+    --------------------------------------------- */
+    protected renderBorderContentTools(
+        attrsDefault?: PartAttrDefault,
+        data?:         Record<string, CoreObservable.App<any>>,
+        extra?:        any,
+    ): CoreReactive.App {
+
+        const bind = this._COMPONENT_PROPS_BIND;
+
+        const prop_sideBarsMargin    = data?.["prop_sideBarsMargin"]    ?? bind.prop_sideBarsMargin;
+        const prop_sideBarTopHas     = data?.["prop_sideBarTopHas"]     ?? bind.prop_sideBarTopHas;
+        const prop_sideBarTopWidth   = data?.["prop_sideBarTopWidth"]   ?? bind.prop_sideBarTopWidth;
+        const prop_sideBarBottomHas  = data?.["prop_sideBarBottomHas"]  ?? bind.prop_sideBarBottomHas;
+        const prop_sideBarBottomWidth = data?.["prop_sideBarBottomWidth"] ?? bind.prop_sideBarBottomWidth;
+
+        const sidebarInstance = UiCategory.UI.Contents.Sidebar(
+            {
+                classList: [] as any,
+                styles: CoreObservable.App.computed(
+                    (sidebarOpacity, dir, sideBarTopHas, sideBarTopWidth, sideBarBottomHas, sideBarBottomWidth, sideBarsMargin) => {
+                        const height: string[] = ["100%"];
+                        const top: string[] = [];
+                        if (sideBarTopHas) {
+                            height.push("-");
+                            height.push(`${sideBarTopWidth}px`);
+                            top.push(`${sideBarTopWidth}px`);
+                        }
+                        if (sideBarBottomHas) {
+                            height.push("-");
+                            height.push(`${sideBarBottomWidth}px`);
+                        }
+                        if (sideBarsMargin) {
+                            height.push("-");
+                            height.push(`${2 * sideBarsMargin}px`);
+                            top.push("+");
+                            top.push(`${sideBarsMargin}px`);
+                        }
+                        return {
+                            transition: "opacity 500ms",
+                            opacity:   sidebarOpacity != null ? String(sidebarOpacity / 100) : "1",
+                            width:     `${40 + 2 * sideBarsMargin}px`,
+                            height:    `calc(${height.join(" ")})`,
+                            position:  "absolute",
+                            top:       top.length ? `calc(${top.join(" ")})` : "0",
+                            [dir ? "left" : "right"]: "0px",
+                        };
+                    },
+                    [
+                        this._DEFAULT_OPACITY!,
+                        CoreConfig.Settings.DirectionRtl.observable(),
+                        prop_sideBarTopHas, prop_sideBarTopWidth,
+                        prop_sideBarBottomHas, prop_sideBarBottomWidth,
+                        prop_sideBarsMargin,
+                    ],
+                    this.getScope(),
+                ) as any,
+
+                prop_blurHas:           false as any,
+                prop_sidebarBtnOpenHas: false as any,
+                prop_sidebarIsOpen:     true as any,
+                prop_show: CoreObservable.App.computed(
+                    (isDown) => !isDown,
+                    [this._SCROLL_IS_DOWN],
+                    this.getScope(),
+                ) as any,
+
+                prop_sidebarDirection: CoreObservable.App.computed(
+                    (dir) => dir ? SidebarDirection.LTR : SidebarDirection.RTL,
+                    [CoreConfig.Settings.DirectionRtl.observable()],
+                    this.getScope(),
+                ) as any,
+
+                prop_sidebarWidth:      40 as any,
+                prop_sidebarMargin: CoreObservable.App.computed(
+                    (sideBarsMargin) => sideBarsMargin ? `${sideBarsMargin}px` : "0px",
+                    [prop_sideBarsMargin],
+                    this.getScope(),
+                ) as any,
+
+                prop_sidebarPositionStart: "0px" as any,
+                prop_sidebarPositionEnd:   "0px" as any,
+                prop_sidebarBorderRadius:  UtilConst.Sizes.M as any,
+                prop_sidebarContent: [
+                    this.executeSchemaPart(Schemas.BORDER_CONTENT_TOOLS_CONTENT.part, {}),
+                ] as any,
+            } as any,
+            {} as any,
+        );
+
+        return CoreReactive.App.section({
+            attrs: { ...attrsDefault },
+            children: [sidebarInstance.getElement()],
+        });
+    }
+
+
+    /* ---------------------------------------------
+       renderBorderContentToolsContent — tools content
+    --------------------------------------------- */
+    protected renderBorderContentToolsContent(
+        attrsDefault?: PartAttrDefault,
+        data?:         Record<string, CoreObservable.App<any>>,
+        extra?:        any,
+    ): CoreReactive.App {
+
+        return CoreReactive.App.section({
+            attrs: { ...attrsDefault },
+            className: ["p-1"],
+            children: [
+                this.executeSchemaPart(Schemas.BORDER_CONTENT_TOOLS_CONTENT_ZOOMING.part, {}),
+                this.executeSchemaPart(Schemas.BORDER_CONTENT_TOOLS_CONTENT_COLORING.part, {}),
+            ],
+        });
+    }
+
+
+    /* ---------------------------------------------
+       renderBorderContentToolsContentZooming — zooming section
+    --------------------------------------------- */
+    protected renderBorderContentToolsContentZooming(
+        attrsDefault?: PartAttrDefault,
+        data?:         Record<string, CoreObservable.App<any>>,
+        extra?:        any,
+    ): CoreReactive.App {
+
+        const bind = this._COMPONENT_PROPS_BIND;
+        const prop_toolsZoomHas = data?.["prop_toolsZoomHas"] ?? bind.prop_toolsZoomHas;
+
+        return CoreReactive.App.section({
+            attrs: { ...attrsDefault },
+            className: ["border-2", "border-bottom", "mb-2"],
+            children: CoreObservable.App.conditionSwitch(
+                prop_toolsZoomHas,
+                {
+                    true: () => CoreReactive.App.div({
+                        children: [
+                            this.executeSchemaPart(Schemas.BORDER_CONTENT_TOOLS_CONTENT_ZOOMING_IN.part, {}),
+                            this.executeSchemaPart(Schemas.BORDER_CONTENT_TOOLS_CONTENT_ZOOMING_REFRESH.part, {}),
+                            this.executeSchemaPart(Schemas.BORDER_CONTENT_TOOLS_CONTENT_ZOOMING_OUT.part, {}),
+                        ],
+                    }),
+                    false: () => null,
+                },
+                this.getScope(),
+            ),
+        });
+    }
+
+
+    /* ---------------------------------------------
+       renderBorderContentToolsContentZoomingIn — zoom in icon
+    --------------------------------------------- */
+    protected renderBorderContentToolsContentZoomingIn(
+        attrsDefault?: PartAttrDefault,
+        data?:         Record<string, CoreObservable.App<any>>,
+        extra?:        any,
+    ): CoreReactive.App {
+
+        const iconInstance = UiCategory.UI.Simples.Icon(
+            {
+                classList: ["mb-1", "d-block"] as any,
+                styles: { cursor: "pointer" } as any,
+                prop_icon: UiIcons.CreateIcon(UiIcons.Src.FilesZoomIn.Definition, {
+                    size: UtilConst.Sizes.M,
+                    primaryColor:   UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
+                    secondaryColor: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_4),
+                }),
+            } as any,
+            {
+                CLICK: (event: any, dataArgs: any, componentArgs: any) => {
+                    const scroller = this._ELEMENT_SCROLLER?.getElement();
+                    const rect = scroller.getBoundingClientRect();
+                    this.fn_scrollerScaleProgress(rect.left, rect.top, -100);
+                },
+            } as any,
+        );
+
+        return CoreReactive.App.section({
+            attrs: { ...attrsDefault },
+            children: [iconInstance.getElement()],
+        });
+    }
+
+
+    /* ---------------------------------------------
+       renderBorderContentToolsContentZoomingRefresh — zoom refresh icon
+    --------------------------------------------- */
+    protected renderBorderContentToolsContentZoomingRefresh(
+        attrsDefault?: PartAttrDefault,
+        data?:         Record<string, CoreObservable.App<any>>,
+        extra?:        any,
+    ): CoreReactive.App {
+
+        const iconInstance = UiCategory.UI.Simples.Icon(
+            {
+                classList: ["mb-1", "d-block"] as any,
+                styles: { cursor: "pointer" } as any,
+                prop_icon: UiIcons.CreateIcon(UiIcons.Src.FilesZoomRefresh.Definition, {
+                    size: UtilConst.Sizes.M,
+                    primaryColor:   UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
+                    secondaryColor: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_4),
+                }),
+            } as any,
+            {
+                CLICK: (event: any, dataArgs: any, componentArgs: any) => {
+                    const scroller = this._ELEMENT_SCROLLER?.getElement();
+                    const rect = scroller.getBoundingClientRect();
+                    this.fn_scrollerScaleProgress(rect.left, rect.top);
+                },
+            } as any,
+        );
+
+        return CoreReactive.App.section({
+            attrs: { ...attrsDefault },
+            children: [iconInstance.getElement()],
+        });
+    }
+
+
+    /* ---------------------------------------------
+       renderBorderContentToolsContentZoomingOut — zoom out icon
+    --------------------------------------------- */
+    protected renderBorderContentToolsContentZoomingOut(
+        attrsDefault?: PartAttrDefault,
+        data?:         Record<string, CoreObservable.App<any>>,
+        extra?:        any,
+    ): CoreReactive.App {
+
+        const iconInstance = UiCategory.UI.Simples.Icon(
+            {
+                classList: ["mb-1", "d-block"] as any,
+                styles: { cursor: "pointer" } as any,
+                prop_icon: UiIcons.CreateIcon(UiIcons.Src.FilesZoomOut.Definition, {
+                    size: UtilConst.Sizes.M,
+                    primaryColor:   UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
+                    secondaryColor: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_4),
+                }),
+            } as any,
+            {
+                CLICK: (event: any, dataArgs: any, componentArgs: any) => {
+                    const scroller = this._ELEMENT_SCROLLER?.getElement();
+                    const rect = scroller.getBoundingClientRect();
+                    this.fn_scrollerScaleProgress(rect.left, rect.top, 100);
+                },
+            } as any,
+        );
+
+        return CoreReactive.App.section({
+            attrs: { ...attrsDefault },
+            children: [iconInstance.getElement()],
+        });
+    }
+
+
+    /* ---------------------------------------------
+       renderBorderContentToolsContentColoring — coloring section
+    --------------------------------------------- */
+    protected renderBorderContentToolsContentColoring(
+        attrsDefault?: PartAttrDefault,
+        data?:         Record<string, CoreObservable.App<any>>,
+        extra?:        any,
+    ): CoreReactive.App {
+
+        const bind = this._COMPONENT_PROPS_BIND;
+        const prop_toolsColorModeHas = data?.["prop_toolsColorModeHas"] ?? bind.prop_toolsColorModeHas;
+
+        return CoreReactive.App.section({
+            attrs: { ...attrsDefault },
+            className: ["border-2", "border-bottom", "mb-2"],
+            children: CoreObservable.App.conditionSwitch(
+                prop_toolsColorModeHas,
+                {
+                    true: () => CoreReactive.App.div({
+                        children: [
+                            this.executeSchemaPart(Schemas.BORDER_CONTENT_TOOLS_CONTENT_COLORING_LIGHT.part, {}),
+                            this.executeSchemaPart(Schemas.BORDER_CONTENT_TOOLS_CONTENT_COLORING_DARK.part, {}),
+                        ],
+                    }),
+                    false: () => null,
+                },
+                this.getScope(),
+            ),
+        });
+    }
+
+
+    /* ---------------------------------------------
+       renderBorderContentToolsContentColoringLight — light mode icon
+    --------------------------------------------- */
+    protected renderBorderContentToolsContentColoringLight(
+        attrsDefault?: PartAttrDefault,
+        data?:         Record<string, CoreObservable.App<any>>,
+        extra?:        any,
+    ): CoreReactive.App {
+
+        const iconInstance = UiCategory.UI.Simples.Icon(
+            {
+                classList: ["mb-1", "d-block"] as any,
+                styles: { cursor: "pointer" } as any,
+                prop_icon: UiIcons.CreateIcon(UiIcons.Src.StatusSun.Definition, {
+                    size: UtilConst.Sizes.M,
+                    primaryColor:   UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
+                    secondaryColor: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_4),
+                }),
+            } as any,
+            {
+                CLICK: (event: any, dataArgs: any, componentArgs: any) => {
+                    this.set("prop_colorMode", MouseScrollerColorMode.LIGHT);
+                },
+            } as any,
+        );
+
+        return CoreReactive.App.section({
+            attrs: { ...attrsDefault },
+            children: [iconInstance.getElement()],
+        });
+    }
+
+
+    /* ---------------------------------------------
+       renderBorderContentToolsContentColoringDark — dark mode icon
+    --------------------------------------------- */
+    protected renderBorderContentToolsContentColoringDark(
+        attrsDefault?: PartAttrDefault,
+        data?:         Record<string, CoreObservable.App<any>>,
+        extra?:        any,
+    ): CoreReactive.App {
+
+        const iconInstance = UiCategory.UI.Simples.Icon(
+            {
+                classList: ["mb-1", "d-block"] as any,
+                styles: { cursor: "pointer" } as any,
+                prop_icon: UiIcons.CreateIcon(UiIcons.Src.StatusMoon.Definition, {
+                    size: UtilConst.Sizes.M,
+                    primaryColor:   UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
+                    secondaryColor: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_4),
+                }),
+            } as any,
+            {
+                CLICK: (event: any, dataArgs: any, componentArgs: any) => {
+                    this.set("prop_colorMode", MouseScrollerColorMode.DARK);
+                },
+            } as any,
+        );
+
+        return CoreReactive.App.section({
+            attrs: { ...attrsDefault },
+            children: [iconInstance.getElement()],
+        });
+    }
+
+
+    /* ---------------------------------------------
+       Event Handlers — Mouse / Wheel
+    --------------------------------------------- */
+    private fn_scrollerMouseDown(event: any): void {
+        if (event.target?.closest?.('component-sidebar')) return;
+        this._SCROLL_IS_DOWN.set(true);
+        this._POINTER_CAPTURED = false;
+        this._START_CLIENT_X = event.clientX;
+        this._START_CLIENT_Y = event.clientY;
+        this._SCROLL_LEFT = this._COMPONENT_PROPS_BIND["prop_scrollLeft"]?.get() ?? 0;
+        this._SCROLL_TOP  = this._COMPONENT_PROPS_BIND["prop_scrollTop"]?.get()  ?? 0;
+    }
+
+    private fn_scrollerMouseMove(event: any): void {
+        if (!this._SCROLL_IS_DOWN.get()) return;
+        const dx = event.clientX - this._START_CLIENT_X;
+        const dy = event.clientY - this._START_CLIENT_Y;
+
+        if (!this._POINTER_CAPTURED && (Math.abs(dx) > this._DRAG_THRESHOLD || Math.abs(dy) > this._DRAG_THRESHOLD)) {
+            this._POINTER_CAPTURED = true;
+            const el = this._ELEMENT_CONTAINER?.getElement();
+            if (el && event.pointerId != null) {
+                try { el.setPointerCapture(event.pointerId); } catch(e) {}
+            }
+        }
+
+        if (this._POINTER_CAPTURED) {
+            this._COMPONENT_PROPS_BIND["prop_scrollLeft"]?.set(this._SCROLL_LEFT - dx);
+            this._COMPONENT_PROPS_BIND["prop_scrollTop"]?.set(this._SCROLL_TOP - dy);
+        }
+    }
+
+    private fn_scrollerMouseLeave(event: any): void {
+        this._SCROLL_IS_DOWN.set(false);
+    }
+
+    private fn_scrollerMouseUp(event: any): void {
+        this._SCROLL_IS_DOWN.set(false);
+
+        if (this._POINTER_CAPTURED) {
+            this._POINTER_CAPTURED = false;
+            const el = this._ELEMENT_CONTAINER?.getElement();
+            if (el && event.pointerId != null) {
+                try { el.releasePointerCapture(event.pointerId); } catch(e) {}
+            }
+        }
+    }
+
+    private fn_scrollerWheel(event: any): void {
+        if (event.target?.closest?.('component-sidebar')) return;
+        event.preventDefault();
+        event.stopPropagation();
+        this.fn_scrollerScaleProgress(event.clientX, event.clientY, event.deltaY);
+    }
+
+    private fn_scrollerScaleProgress(x: number, y: number, zoomStep: number | null = null): void {
+
+        const container = this._ELEMENT_CONTAINER?.getElement();
+        const rect = container?.getBoundingClientRect();
+        const mouseX = rect ? x - rect.left : 0;
+        const mouseY = rect ? y - rect.top : 0;
+
+        const bind = this._COMPONENT_PROPS_BIND;
+
+        const scale       = bind["prop_zoom"]?.get()       ?? 1;
+        const min         = bind?.["prop_zoomMin"]?.get()   ?? 0.4;
+        const max         = bind?.["prop_zoomMax"]?.get()   ?? 3.0;
+        const step        = bind?.["prop_zoomStep"]?.get()  ?? 1.0015;
+        const scrollLeft  = bind?.["prop_scrollLeft"]?.get() ?? 0;
+        const scrollTop   = bind?.["prop_scrollTop"]?.get()  ?? 0;
+
+        let newScale = scale;
+        if (zoomStep != null) {
+            newScale = Math.min(Math.max(scale * Math.pow(step, -zoomStep), min), max);
+            newScale = newScale > min ? newScale : min;
+        }
+
+        const scaleRatio = newScale / scale;
+        const newScrollLeft = (scrollLeft + mouseX) * scaleRatio - mouseX;
+        const newScrollTop  = (scrollTop  + mouseY) * scaleRatio - mouseY;
+
+        bind["prop_zoom"]?.set(newScale);
+        bind["prop_scrollLeft"]?.set(newScrollLeft);
+        bind["prop_scrollTop"]?.set(newScrollTop);
+    }
+
+
+    /* ---------------------------------------------
+       pr_setChangeValue — helper for zoom border click
+    --------------------------------------------- */
+    private pr_setChangeValue(event: any): void {
+        const bind = this._COMPONENT_PROPS_BIND;
+        const currentZoom = bind["prop_zoom"]?.get() ?? 1;
+        bind["prop_zoom"]?.set(1);
+        bind["prop_scrollLeft"]?.set(0);
+        bind["prop_scrollTop"]?.set(0);
+    }
+
+}

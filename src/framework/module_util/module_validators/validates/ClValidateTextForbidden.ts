@@ -1,6 +1,8 @@
 ///------------------------------
 import {AbstractValidatorRule as ValidatorRule}     from "../abstract/AbstractValidatorRule";
 import {TValidatorResult      as ValidatorResult}   from "../types/TValidatorResult";
+import {Keys}                                         from "../language/keys";
+import type {ValidatorDescription}                  from "../abstract/AbstractValidatorRule";
 
 
 type ValidatorTextForbiddenParams = {
@@ -11,10 +13,12 @@ export class ClValidateTextForbidden
     extends ValidatorRule<ValidatorTextForbiddenParams> {
 
     constructor(
-        description: string,
+        title:       ValidatorDescription = Keys.textForbidden.title,
+        description: ValidatorDescription = Keys.textForbidden.description,
         chars: string[] = []
     ) {
         super(
+            title,
             description,
             { chars }
         );

@@ -121,6 +121,9 @@ import {createIconStep}                   from "./Step";
             attrsBind: {
                 title: prop_iconTitle,
             },
+            styles: {
+                outline: "none",
+            },
             stylesBind: prop_iconStyles,
             classBind: [
                 prop_iconClass,

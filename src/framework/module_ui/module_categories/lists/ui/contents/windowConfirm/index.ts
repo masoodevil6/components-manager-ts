@@ -1,0 +1,1 @@
+export {WindowConfirm} from "./Definition"

@@ -68,6 +68,7 @@ function buildStaticSvg(
     svg.setAttribute("viewBox", viewBox);
     svg.setAttribute("width", size);
     svg.setAttribute("height", size);
+    svg.style.outline = "none";
 
     for (const child of content) {
         if (child && child.getElement) {
@@ -126,13 +127,10 @@ function createStaticIcon(
             ? (options.secondaryColor as string)
             : UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1);
 
-    const borderWidth =
+    const strokeWidth =
         options.strokeWidth !== undefined
             ? (options.strokeWidth as number)
-            : UtilStyle.Css_BorderWidth(sizeName);
-
-    const strokeWidth =
-        UtilStyle.Css_IconStrokeWidth(borderWidth as any, definition.viewBoxX, definition.viewBoxY);
+            : UtilStyle.Css_IconStrokeWidth(sizeName as any, definition.viewBoxX, definition.viewBoxY);
 
     const variant =
         options.variant !== undefined
@@ -187,26 +185,16 @@ function createReactiveIcon(
         options.secondaryColor ??
         UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1);
 
-    const borderWidth =
-        options.strokeWidth ??
-        CoreObservable.App.computed(
-            (sizeName) => {
-                return UtilStyle.Css_BorderWidth(sizeName)
-            } ,
-            [
-                sizeName
-            ],
-            scope
-        );
-
     const strokeWidth =
-        CoreObservable.App.computed(
-            (borderWidth, definition) => {
-                return UtilStyle.Css_IconStrokeWidth(borderWidth , definition.viewBoxX  , definition.viewBoxY)
-            } ,
-            [borderWidth , definition] ,
-            scope
-        )
+        options.strokeWidth !== undefined
+            ? (options.strokeWidth as number)
+            : CoreObservable.App.computed(
+                (sizeName, definition) => {
+                    return UtilStyle.Css_IconStrokeWidth(sizeName , definition.viewBoxX  , definition.viewBoxY)
+                } ,
+                [sizeName , definition] ,
+                scope
+            );
 
     const variant =
         options.variant ??
@@ -242,6 +230,9 @@ function createReactiveIcon(
             "role" :        "img" ,
             "fill" :        "none"
         } ,
+        styles: {
+            outline: "none",
+        },
         attrsBind: {
             "aria-label"  :      CoreObservable.App.computed(
                 (definition)=> {

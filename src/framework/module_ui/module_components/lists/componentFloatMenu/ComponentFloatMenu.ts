@@ -172,6 +172,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
             },
             styles: {
                 cursor: "pointer",
+                outline: "none",
             },
             stylesBind: {
                 lineHeight: this.getStyleSelectorLineHeight(),
@@ -182,7 +183,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                 prop_selectorClass,
             ],
             className: [
-                "d-block", "w-100", "h-100",
+                "d-inline-block",
             ],
             on: {
                 click: (event: Event) => {
@@ -250,24 +251,42 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
         const prop_floatDirectionType       = data?.["prop_floatDirectionType"]       ?? bind.prop_floatDirectionType;
         const prop_floatArrowWidth          = data?.["prop_floatArrowWidth"]          ?? bind.prop_floatArrowWidth;
         const prop_floatPosition            = data?.["prop_floatPosition"]            ?? bind.prop_floatPosition;
+        const prop_floatMinWidth            = data?.["prop_floatMinWidth"]            ?? bind.prop_floatMinWidth;
         const prop_floatShowControlWithSelf = data?.["prop_floatShowControlWithSelf"] ?? bind.prop_floatShowControlWithSelf;
         const prop_floatIsShow              = data?.["prop_floatIsShow"]              ?? bind.prop_floatIsShow;
 
+        // Plan 11.1 fix — showObservable:
+        //   floatShowControlWithSelf=true  → returns floatIsShow (controlled by prop)
+        //   floatShowControlWithSelf=false → returns true (popup همیشه در DOM)
+        //     visibility واقعی از طریق prop_show روی border کنترل می‌شه
+        //     (mouseenter/mouseleave/click handlers روی _BORDER_INSTANCE.set("prop_show", ...) صدا می‌زنند)
+        //   قبلاً false برمی‌گرداند که باعث می‌شد conditionWhen popup را اصلاً نسازد
+        //   و _BORDER_INSTANCE null می‌شد و hover handlers بی‌اثیر می‌شدند
         const showObservable = CoreObservable.App.computed(
             (floatShowControlWithSelf, floatIsShow) => {
                 if (floatShowControlWithSelf) {
                     return floatIsShow;
                 }
-                return false;
+                return true;
             },
             [prop_floatShowControlWithSelf, prop_floatIsShow],
             this.getScope(),
         );
 
-        const positionStyles = this.getStylePositionStyles(
-            prop_floatDirectionType,
-            prop_floatArrowWidth,
-            prop_floatPosition,
+        const positionStyles = CoreObservable.App.computed(
+            (positionStyles, minWidth) => ({
+                ...positionStyles,
+                "min-width": minWidth ?? "350px",
+            }),
+            [
+                this.getStylePositionStyles(
+                    prop_floatDirectionType,
+                    prop_floatArrowWidth,
+                    prop_floatPosition,
+                ),
+                prop_floatMinWidth,
+            ],
+            this.getScope(),
         );
 
         return CoreObservable.App.conditionWhen(
@@ -281,7 +300,6 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                     styles: {
                         position: "absolute",
                         display:  "block",
-                        "min-width": "350px",
                         "z-index": `${UtilStyle.Css_ZIndex(UtilConst.ZIndex.notify)}`,
                     },
                     stylesBind: positionStyles as any,
@@ -323,6 +341,8 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
         const prop_floatArrowPosition = data?.["prop_floatArrowPosition"] ?? bind.prop_floatArrowPosition;
         const prop_floatBackground   = data?.["prop_floatBackground"]   ?? bind.prop_floatBackground;
         const prop_floatColor        = data?.["prop_floatColor"]        ?? bind.prop_floatColor;
+        const prop_floatShowControlWithSelf = data?.["prop_floatShowControlWithSelf"] ?? bind.prop_floatShowControlWithSelf;
+        const prop_floatIsShow       = data?.["prop_floatIsShow"]              ?? bind.prop_floatIsShow;
 
         const borderArrowType = CoreObservable.App.computed(
             (direction: DirectionTypes) => {
@@ -331,6 +351,14 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
             [prop_floatDirection],
             this.getScope(),
         );
+
+        // Plan 11.1 fix — وقتی floatShowControlWithSelf=false (HOVER/CLICK mode):
+        //   border با prop_show:false شروع می‌شه (hidden)
+        //   hover/click handlers با _BORDER_INSTANCE.set("prop_show", true/false) آن را toggle می‌کنند
+        //   وقتی floatShowControlWithSelf=true: prop_show از prop_floatIsShow کنترل می‌شه
+        const initialShow = prop_floatShowControlWithSelf
+            ? (prop_floatIsShow?.get?.() ?? false)
+            : false;
 
         const borderInstance = UiCategory.UI.Contents.Border(
             {
@@ -347,6 +375,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                 prop_contentBackgroundColor:  prop_floatBackground,
                 prop_borderColor:             prop_floatBorderColor,
                 prop_contentColor:            prop_floatColor,
+                prop_show:                    initialShow,
             } as any,
             {} as any,
         );
@@ -451,9 +480,9 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                             UtilStyle.Css_SizeUnit(10, UtilConst.Units.PEXEL),
                         );
                         if (dirRtl) {
-                            styles["right"] = position ? UtilStyle.Css_SizeUnit(parseFloat(position), UtilConst.Units.PERCENT) : "0px";
-                        } else {
                             styles["left"] = position ? UtilStyle.Css_SizeUnit(parseFloat(position), UtilConst.Units.PERCENT) : "0px";
+                        } else {
+                            styles["right"] = position ? UtilStyle.Css_SizeUnit(parseFloat(position), UtilConst.Units.PERCENT) : "0px";
                         }
                         break;
 
@@ -464,9 +493,9 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                             UtilStyle.Css_SizeUnit(20, UtilConst.Units.PEXEL),
                         );
                         if (dirRtl) {
-                            styles["right"] = position ? UtilStyle.Css_SizeUnit(parseFloat(position), UtilConst.Units.PERCENT) : "0px";
-                        } else {
                             styles["left"] = position ? UtilStyle.Css_SizeUnit(parseFloat(position), UtilConst.Units.PERCENT) : "0px";
+                        } else {
+                            styles["right"] = position ? UtilStyle.Css_SizeUnit(parseFloat(position), UtilConst.Units.PERCENT) : "0px";
                         }
                         break;
 

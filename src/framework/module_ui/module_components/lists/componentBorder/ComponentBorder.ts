@@ -153,7 +153,7 @@ export class ComponentBorder extends ComponentBorderBase {
             },
             stylesCustom: this.getArrowCssCustom(attrsDefault?.id),
             styles: {
-                "transition": "background-color 1000ms ease, color 1000ms ease, border-color 1000ms ease",
+                "transition": "background-color 150ms ease, color 150ms ease, border-color 150ms ease",
             },
             stylesBind: {
                 prop_borderStyles,

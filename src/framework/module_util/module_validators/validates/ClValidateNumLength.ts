@@ -1,14 +1,17 @@
 ///------------------------------
 import {AbstractValidatorRule as ValidatorRule}     from "../abstract/AbstractValidatorRule";
 import {TValidatorResult      as ValidatorResult}   from "../types/TValidatorResult";
+import {Keys}                                         from "../language/keys";
+import type {ValidatorDescription}                  from "../abstract/AbstractValidatorRule";
 
 export class ClValidateNumLength
     extends ValidatorRule {
 
     constructor(
-        description: string
+        title:       ValidatorDescription = Keys.numLength.title,
+        description: ValidatorDescription = Keys.numLength.description
     ) {
-        super(description, undefined);
+        super(title, description, undefined);
     }
 
     validate(

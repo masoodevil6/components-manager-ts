@@ -358,7 +358,12 @@ export class ClReactiveElement {
                 return;
             }
 
-            if (child instanceof CoreObservable.App) {
+            if (CoreObservable.App.isObservable(child)) {
+                if (!(child instanceof CoreObservable.App)) {
+                    console.log("[DEBUG _setChildren] instanceof FAILED but isObservable PASSED — module duplication!", { child, value: child.get(), tagName: this.element.tagName });
+                } else {
+                    console.log("[DEBUG _setChildren] instanceof CoreObservable.App PASSED", { child, value: child.get(), tagName: this.element.tagName });
+                }
                 const start = document.createComment("obs-start");
                 const end = document.createComment("obs-end");
 

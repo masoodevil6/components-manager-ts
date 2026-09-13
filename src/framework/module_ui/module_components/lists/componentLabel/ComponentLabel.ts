@@ -2,20 +2,18 @@ import * as CoreReactive   from "@/core_reactive";
 import * as CoreObservable from "@/core_observable";
 import * as CoreConfig     from "@/core_configs";
 import * as UtilStyle      from "@/util_styles";
-import * as UtilConst      from "@/util_consts";
 // --------------------------------
 import {ComponentLabelBase}     from "./ComponentLabelBase";
 import {createLabelStep}        from "./Step";
 import {Schemas}                from "./Schemas";
 import {MethodsConfigType}      from "./Methods";
-import {TooltipDirectionTypes}  from "./Props";
 import {PropsType}              from "./Props";
 import {PartAttrDefault}        from "@/core_components";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
+import {ComponentTooltipTrait}  from "../../traits/componentTooltipTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
 // --------------------------------
-import * as UiCategory from "@/ui_categories";
-import * as UiIcons    from "@/ui_icons";
+import * as ComponentBorder from "../componentBorder";
 
 
 /**
@@ -23,8 +21,8 @@ import * as UiIcons    from "@/ui_icons";
  *
  * معماری Composition:
  *   ComponentLabel HAS-A ComponentBorder (نه IS-A)
- *   ComponentBorder مهاجرت‌شده در renderLabelBorder از طریق Category callable
- *   (UiCategory.UI.Simples.Border) ساخته می‌شود — نه new مستقیم.
+ *   ComponentBorder مهاجرت‌شده در renderLabelBorder از طریق مستقیم
+ *   new ComponentBorder.Component ساخته می‌شود — نه new مستقیم.
  *
  * Constructor امضا: (config, methods, identity?)
  *   config  — شامل propهای پایه + propهای اختصاصی
@@ -37,6 +35,11 @@ import * as UiIcons    from "@/ui_icons";
  *   - renderContentComponent = executeSchemaPart(BORDER) — قرارداد 11.2 §۲.۵ (Plan 13.1.1)
  *   - prop_labelShow در renderLabelBorder اعمال می‌شود — مسیر رندر BORDER یکتاست
  *     (فقط renderManagerComponent("part-label-border")) — Plan 13.1.1
+ *
+ * Plan 13.1.2 — رفع باگ‌های بحرانی:
+ *   - Tooltip parameter mismatch (desc/icon جابجا + show بدون observable) اصلاح شد
+ *   - Composition با ComponentFloatMenu (مثل legacy) — popup کامل با ComponentBorder
+ *   - Composition: new ComponentBorder.Component (مستقیم — بدون UiCategory)
  *
  * بازیابی Behavior از Legacy:
  *   - label قابل‌کلیک → CLICK method روی Border composition
@@ -129,14 +132,17 @@ export class ComponentLabel extends ComponentLabelBase {
 
     /* ---------------------------------------------
       renderLabelBorder — رندر Part BORDER
-      Composition: UiCategory.UI.Contents.Border (مهاجرت‌شده — Plan 12.1)
+      Composition: new ComponentBorder.Component (مستقیم — مهاجرت‌شده Plan 12.1)
       + click → this.executeMethod("CLICK", ...)
-   
+
       Plan 13.1.1 — منطق show از renderContentComponent به اینجا منتقل شد:
-      prop_labelShow=false → borderElement=null (رفتار Legacy حفظ می‌شود) و
+      prop_labelShow=false → null (رفتار Legacy حفظ می‌شود) و
       هر دو مسیر رسیدن به این متد (STRUCTURE→content→executeSchemaPart و
       renderManagerComponent مستقیم) دقیقاً یک رفتار دارند.
-   
+
+      Plan 13.1.2 — wrapper span لازم است چون computed خروجی ClObservable است
+      (نه ClReactiveElement) — span observable را به‌عنوان children میزبانی می‌کند.
+
       نکته prop_labelRadius: ComponentBorder جدید radius را از SizeName سراسری
       محاسبه می‌کند (prop روش radius ندارد) — پس radius اختصاصی Label از طریق
       prop_borderStyles computed تزریق می‌شود.
@@ -153,18 +159,34 @@ export class ComponentLabel extends ComponentLabelBase {
           const prop_labelBackground  = data?.["prop_labelBackground"]  ?? bind.prop_labelBackground;
           const prop_labelRadius      = data?.["prop_labelRadius"]      ?? bind.prop_labelRadius;
           const prop_labelMinWidth    = data?.["prop_labelMinWidth"]    ?? bind.prop_labelMinWidth;
-   
-          // Plan 13.1.1 — شرط show در نقطه رندر BORDER (بدون تغییر رفتار Legacy)
+
+          console.log("[DEBUG renderLabelBorder]", {
+              prop_labelShow_value: CoreObservable.App.isObservable(prop_labelShow) ? prop_labelShow.get() : prop_labelShow,
+              hasData: !!data,
+              dataKeys: data ? Object.keys(data) : [],
+          });
+
+          // Plan 13.1.2 — computed خروجی ClObservable است نه ClReactiveElement؛
+          // wrapper span لازم است تا observable را به‌عنوان children میزبانی کند.
+          // prop_labelShow=false → children: [null] (محتوای خالی) — رفتار Legacy حفظ
           const borderElement = CoreObservable.App.computed(
-              (show) => show ? this.buildBorderElement(data, {
-                  labelBackground: prop_labelBackground,
-                  labelRadius:     prop_labelRadius,
-                  labelMinWidth:   prop_labelMinWidth,
-              }) : null,
+              (show) => {
+                  console.log("[DEBUG borderElement computed]", { show, willRender: !!show });
+                  return show ? this.buildBorderElement(data, {
+                      labelBackground: prop_labelBackground,
+                      labelRadius:     prop_labelRadius,
+                      labelMinWidth:   prop_labelMinWidth,
+                  }) : null;
+              },
               [prop_labelShow],
               this.getScope(),
           );
-   
+
+          console.log("[DEBUG borderElement after creation]", {
+              value: borderElement.get(),
+              isReactiveElement: borderElement.get() && typeof borderElement.get().getReactiveElement === "function",
+          });
+
           return CoreReactive.App.span({
               children: [borderElement],
           });
@@ -198,9 +220,8 @@ export class ComponentLabel extends ComponentLabelBase {
          // تزریق propهای Observable خود Label به config کامپوننت Border —
          // در runtime، #getReadyUserConfigAndDefaultConfig خودش Observable را
          // تشخیص می‌دهد و مستقیم ذخیره می‌کند («if Observable → store directly»)
-         // type-level: TConfig خروجی CreateCategoryComponent فقط مقدار خام را
-         // تعریف می‌کند — cast الگوی پروژه (مثل Legacy templateFn_render_border)
-         return UiCategory.UI.Contents.Border(
+         // مستقیم از ComponentBorder.Component — بدون وابستگی به UiCategory
+         return new ComponentBorder.Component(
              {
                  prop_borderClass:            ["position-relative", "py-0", "px-2"],
                  prop_borderStyles:           prop_borderStyles,
@@ -217,7 +238,7 @@ export class ComponentLabel extends ComponentLabelBase {
                  // Plan 8.2.7/9.1 — identity: Step داخلی Label برای click
                  unique: (this as any)._COMPONENT_STEP?.click ?? undefined,
              },
-         ).getElement();
+         ).getReactiveElement() as CoreReactive.App;
       }
 
 
@@ -225,6 +246,9 @@ export class ComponentLabel extends ComponentLabelBase {
        renderLabelContent — رندر Part BORDER_CONTENT
        section.position-relative + cursor: pointer + children [TITLE, TOOLTIP]
        (Legacy: templateFn_render_borderContent)
+
+       Plan 13.1.3 — بازگشت به layout legacy:
+       tooltip نباید وارد flow متن شود؛ خود schema tooltip absolute می‌شود.
     --------------------------------------------- */
     protected renderLabelContent(
         attrsDefault?: PartAttrDefault,
@@ -271,6 +295,14 @@ export class ComponentLabel extends ComponentLabelBase {
         const prop_labelClass = data?.["prop_labelClass"] ?? bind.prop_labelClass;
         const prop_labelColor = data?.["prop_labelColor"] ?? bind.prop_labelColor;
 
+        console.log("[DEBUG renderLabelTitle]", {
+            hasData: !!data,
+            dataKeys: data ? Object.keys(data) : [],
+            prop_labelTitle,
+            isObservable: CoreObservable.App.isObservable(prop_labelTitle),
+            value: CoreObservable.App.isObservable(prop_labelTitle) ? prop_labelTitle.get() : prop_labelTitle,
+        });
+
         return CoreReactive.App.section({
             attrs: {
                 ...attrsDefault,
@@ -310,9 +342,7 @@ export class ComponentLabel extends ComponentLabelBase {
 
     /* ---------------------------------------------
        renderLabelTooltip — رندر Part BORDER_CONTENT_TOOLTIP
-       رندر شرطی: conditionWhen(prop_labelTooltipDescription != null)
-       wrapper span (position از prop) با آیکون + popup CSS-only (:hover)
-       (Legacy: templateFn_render_borderContentTooltip — بدون ComponentTooltipDescription)
+       Plan 13.1.5 — استخراج به ComponentTooltipTrait
     --------------------------------------------- */
     protected renderLabelTooltip(
         attrsDefault?: PartAttrDefault,
@@ -322,98 +352,14 @@ export class ComponentLabel extends ComponentLabelBase {
 
         const bind = this._COMPONENT_PROPS_BIND;
 
-        const prop_labelTooltipIcon        = data?.["prop_labelTooltipIcon"]        ?? bind.prop_labelTooltipIcon;
-        const prop_labelTooltipDescription = data?.["prop_labelTooltipDescription"] ?? bind.prop_labelTooltipDescription;
-        const prop_labelTooltipBackground  = data?.["prop_labelTooltipBackground"]  ?? bind.prop_labelTooltipBackground;
-        const prop_labelTooltipColor       = data?.["prop_labelTooltipColor"]       ?? bind.prop_labelTooltipColor;
-        const prop_labelTooltipPosition    = data?.["prop_labelTooltipPosition"]    ?? bind.prop_labelTooltipPosition;
-        const prop_labelTooltipDirection   = data?.["prop_labelTooltipDirection"]   ?? bind.prop_labelTooltipDirection;
-
-        // رندر شرطی — Legacy: if (desc == null) return null
-        const tooltip = CoreObservable.App.computed(
-            (desc, icon, bg, color, pos, dir, show) => {
-                if (!show || desc == null) return null;
-
-                // آیکون — data-only descriptor → widget
-                const iconElement = UiCategory.UI.Simples.Icon(
-                    {
-                        prop_icon:       UiIcons.CreateIcon(icon ?? UiIcons.Src.SymbolExclumationSquare.Definition),
-                        prop_iconStyles: { "top": "0" },
-                    },
-                    {},
-                    {},
-                ).getElement();
-
-               // popup CSS-only — :hover روی wrapper (کلاس component-label-tooltip)
-               // styleها مستقیم از مقدار فعلی propها (closure) — بدون API ناموجود observable
-               const popup = CoreReactive.App.span({
-                   className: ["component-label-tooltip-popup", dir === TooltipDirectionTypes.TOP ? "top" : "bottom"],
-                   styles: {
-                       "background-color": bg,
-                       "color":            color,
-                   },
-                   children: [desc],
-               });
-
-               return CoreReactive.App.span({
-                   className: ["component-label-tooltip"],
-                   styles: {
-                       // آفست عمودی آیکون — legacy: prop_iconPosition
-                       "top": pos,
-                   },
-                   children: [iconElement, popup],
-               });
-           },
-           [
-               prop_labelTooltipIcon,
-               prop_labelTooltipDescription,
-               prop_labelTooltipBackground,
-               prop_labelTooltipColor,
-               prop_labelTooltipPosition,
-               prop_labelTooltipDirection,
-           ],
-           this.getScope(),
-       );
-
-        return CoreReactive.App.section({
-            attrs: {...attrsDefault},
-            children: [tooltip],
+        return ComponentTooltipTrait.renderTooltip(this, attrsDefault as PartAttrDefault, {
+            tooltipIcon:         data?.["prop_labelTooltipIcon"]        ?? bind.prop_labelTooltipIcon,
+            tooltipDescription:  data?.["prop_labelTooltipDescription"] ?? bind.prop_labelTooltipDescription,
+            tooltipBackground:   data?.["prop_labelTooltipBackground"]  ?? bind.prop_labelTooltipBackground,
+            tooltipColor:        data?.["prop_labelTooltipColor"]       ?? bind.prop_labelTooltipColor,
+            tooltipIconPosition: data?.["prop_labelTooltipPosition"]    ?? bind.prop_labelTooltipPosition,
+            tooltipDirection:    data?.["prop_labelTooltipDirection"]   ?? bind.prop_labelTooltipDirection,
         });
-    }
-
-
-    /* ---------------------------------------------
-       Tooltip CSS — popup CSS-only
-       :hover روی wrapper → نمایش popup (بدون state/listener JS)
-       RTL-safe: inset-inline-start (logical property) — نه left/right خام
-    --------------------------------------------- */
-    protected getTooltipCssCustom(elementId?: string): string {
-        const selector = elementId ?? this.getPartId(Schemas.BORDER_CONTENT_TOOLTIP.part);
-        return `
-#${selector} .component-label-tooltip{
-    position:      absolute;
-    display:       inline-flex;
-    inset-inline-end: 5px;
-}
-#${selector} .component-label-tooltip-popup{
-    display:       none;
-    position:      absolute;
-    padding:       5px 8px;
-    border-radius: 5px;
-    white-space:   nowrap;
-    z-index:       10;
-}
-#${selector} .component-label-tooltip-popup.bottom{
-    top: 100%;
-    inset-inline-start: 0;
-}
-#${selector} .component-label-tooltip-popup.top{
-    bottom: 100%;
-    inset-inline-start: 0;
-}
-#${selector} .component-label-tooltip:hover .component-label-tooltip-popup{
-    display: inline-block;
-}`;
     }
 
 
@@ -429,6 +375,8 @@ export class ComponentLabel extends ComponentLabelBase {
             this.getScope(),
         );
     }
+
+
 }
 
 export default ComponentLabel;

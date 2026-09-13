@@ -9,18 +9,8 @@ import type {
     ExtractPropsConfigType,
 } from "../../tools/type/TypeHelpers";
 // --------------------------------
-
-
-/**
- * TooltipDirectionTypes — جهت نمایش popup توضیحات tooltip نسبت به آیکون
- *
- * Legacy: ComponentLabel_TooltipPositionTypes (نام مضرس — در واقع direction بود)
- * Plan 13.1.0 — اصلاح نام‌گذاری
- */
-export enum TooltipDirectionTypes {
-    TOP    = "top",
-    BOTTOM = "bottom",
-}
+import {TooltipDirectionTypes} from "../componentTooltip/Props";
+export {TooltipDirectionTypes} from "../componentTooltip/Props";
 
 
 /**
@@ -129,12 +119,13 @@ export const Props = {
 
     prop_labelTooltipColor: Define_ComponentProp<string | null>({
         prop:         "prop_labelTooltipColor",
+        // Plan 13.1.2 — رنگ متن tooltip: SHAN GRADE_1 (روی پس‌زمینه SECONDARY کنتراست داره)
         default:      UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1),
         name:         Keys.category.components.label.props.labelTooltipColor.name,
         description:  Keys.category.components.label.props.labelTooltipColor.description,
     }),
 
-    prop_labelTooltipPosition: Define_ComponentProp<string>({
+    prop_labelTooltipPosition: Define_ComponentProp<ReturnType<typeof UtilStyle.Css_SizeUnit>>({
         prop:         "prop_labelTooltipPosition",
         default:      UtilStyle.Css_SizeUnit(2.5, UtilConst.Units.PERCENT),
         name:         Keys.category.components.label.props.labelTooltipPosition.name,

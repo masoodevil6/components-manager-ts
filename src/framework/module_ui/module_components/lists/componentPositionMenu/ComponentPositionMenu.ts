@@ -14,8 +14,10 @@ import {PropsType as StructurePropsType} from "../componentStructure/Props";
 // --------------------------------
 import * as UiCategory  from "@/ui_categories";
 import * as UiIcons     from "@/ui_icons";
+import * as CoreLanguage from "@/core_languages";
 import {ShowTypes, DirectionTypes} from "../componentFloatMenu";
-import {ButtonAction} from "../componentButton/Props";
+import {ButtonAction, ButtonSemantic} from "../componentButton/Props";
+import {Keys} from "../../../module_categories/languages";
 
 
 /**
@@ -160,6 +162,7 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
                 prop_floatIsShow:              prop_menuIsOpen,
                 prop_floatStyles: {
                     display: "block",
+                    marginTop: UtilStyle.Css_SizeUnit(10, UtilConst.Units.PEXEL),
                 },
                 prop_floatWidth:               prop_menuBodyWidth,
                 prop_floatBackground:          prop_menuBackgroundColor,
@@ -169,7 +172,14 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
             {},
         );
 
-        return floatMenu.getReactiveElement();
+        // Preserve attrsDefault (id/class/...) on a wrapper so outside-click can detect by part id
+        return CoreReactive.App.part("section", {
+            attrs: { ...attrsDefault },
+            className: ["position-relative", "d-block", "w-100", "h-100"],
+            children: [
+                floatMenu.getReactiveElement(),
+            ],
+        });
     }
 
 
@@ -197,14 +207,24 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
             ],
             on: {
                 click: (event: Event) => {
-                    const prop_menuIsOpen = this.get("prop_menuIsOpen");
-                    if (prop_menuIsOpen) {
+                    const wasOpen = this.get("prop_menuIsOpen");
+                    const willOpen = !wasOpen;
+
+                    // Notify only when opening
+                    if (willOpen) {
                         this.executeMethod("CLICK_OPEN", event, {});
                     }
-                    this.set("prop_menuIsOpen", !prop_menuIsOpen);
 
-                    this._ON_MENU_OPEN = this.pr_handleMenuClose.bind(this, true);
-                    document.addEventListener("click", this._ON_MENU_OPEN);
+                    this.set("prop_menuIsOpen", willOpen);
+
+                    // Manage outside-click listener correctly
+                    if (willOpen) {
+                        this._ON_MENU_OPEN = this._ON_MENU_OPEN ?? this.pr_handleMenuClose.bind(this, true);
+                        document.addEventListener("click", this._ON_MENU_OPEN as any);
+                        requestAnimationFrame(() => this.pr_adjustFloatPosition());
+                    } else {
+                        this.pr_cleanupDocumentListener();
+                    }
                 },
             },
         });
@@ -255,9 +275,7 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
             attrs: {
                 ...attrsDefault,
             },
-            className: [
-                "overflow-y-auto",
-            ],
+            className: [],
             stylesBind: {
                 height: this.getStyleBodyContentHeight(prop_menuBodyHeight),
                 borderBottomColor: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
@@ -295,8 +313,14 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
                         ...attrsDefault,
                     },
                     className: [
-                        "row", "p-0", "mx-1",
+                        "p-0", "mx-1",
                     ],
+                    styles: {
+                        display:        "flex",
+                        flexDirection:  "row",
+                        justifyContent: "center",
+                        gap:            "0.5rem",
+                    },
                     stylesBind: {
                         height:      this.getStyleButtonsHeight(),
                         marginTop:   this.getStyleButtonsMargin(),
@@ -335,12 +359,27 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
         const prop_menuBtnAcceptIcon  = data?.["prop_menuBtnAcceptIcon"]  ?? bind.prop_menuBtnAcceptIcon;
         const prop_menuBtnAcceptTitle = data?.["prop_menuBtnAcceptTitle"] ?? bind.prop_menuBtnAcceptTitle;
 
+        const defaultAcceptTitle = CoreLanguage.App.translate(
+            Keys.category.components.positionMenu.texts.btnAcceptTitle,
+        );
+        const resolvedAcceptTitle = CoreObservable.App.computed(
+            (title, defaultTitle) => title ?? defaultTitle,
+            [prop_menuBtnAcceptTitle, defaultAcceptTitle],
+            this.getScope(),
+        );
+        const resolvedAcceptIcon = CoreObservable.App.computed(
+            (icon) => icon ?? UiIcons.Src.StatusIsTrue.Definition,
+            [prop_menuBtnAcceptIcon],
+            this.getScope(),
+        );
+
         const acceptBtn = UiCategory.UI.Simples.Button(
             {
-                classList: ["col-md-6"],
-                prop_btnTitle: prop_menuBtnAcceptTitle,
+                styles: { flex: "0 1 auto", width: "auto" },
+                prop_btnTitle: resolvedAcceptTitle as any,
                 prop_btnType:  ButtonAction.SUBMIT,
-                prop_btnIcon:  prop_menuBtnAcceptIcon,
+                prop_btnSemantic: ButtonSemantic.SUBMIT,
+                prop_btnIcon:  resolvedAcceptIcon as any,
                 prop_show:     prop_menuBtnAcceptHas,
             },
             {
@@ -373,12 +412,27 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
         const prop_menuBtnRejectIcon  = data?.["prop_menuBtnRejectIcon"]  ?? bind.prop_menuBtnRejectIcon;
         const prop_menuBtnRejectTitle = data?.["prop_menuBtnRejectTitle"] ?? bind.prop_menuBtnRejectTitle;
 
+        const defaultRejectTitle = CoreLanguage.App.translate(
+            Keys.category.components.positionMenu.texts.btnRejectTitle,
+        );
+        const resolvedRejectTitle = CoreObservable.App.computed(
+            (title, defaultTitle) => title ?? defaultTitle,
+            [prop_menuBtnRejectTitle, defaultRejectTitle],
+            this.getScope(),
+        );
+        const resolvedRejectIcon = CoreObservable.App.computed(
+            (icon) => icon ?? UiIcons.Src.FileWindowClose.Definition,
+            [prop_menuBtnRejectIcon],
+            this.getScope(),
+        );
+
         const rejectBtn = UiCategory.UI.Simples.Button(
             {
-                classList: ["col-md-6"],
-                prop_btnTitle: prop_menuBtnRejectTitle,
+                styles: { flex: "0 1 auto", width: "auto" },
+                prop_btnTitle: resolvedRejectTitle as any,
                 prop_btnType:  ButtonAction.BUTTON,
-                prop_btnIcon:  prop_menuBtnRejectIcon,
+                prop_btnSemantic: ButtonSemantic.CANCEL,
+                prop_btnIcon:  resolvedRejectIcon as any,
                 prop_show:     prop_menuBtnRejectHas,
             },
             {
@@ -481,6 +535,33 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
         if (this._ON_MENU_OPEN) {
             document.removeEventListener("click", this._ON_MENU_OPEN);
             this._ON_MENU_OPEN = null;
+        }
+    }
+
+    private pr_adjustFloatPosition() {
+        const rootEl = this.getElement() as HTMLElement | null;
+        if (!rootEl) return;
+
+        const popup = rootEl.querySelector('[data-part-name="part-selector-position"]') as HTMLElement | null;
+        if (!popup) return;
+
+        const popupRect  = popup.getBoundingClientRect();
+        const viewportW  = window.innerWidth || document.documentElement.clientWidth;
+
+        const isRtl = CoreConfig.Settings.DirectionRtl.get();
+
+        if (isRtl) {
+            // RTL: default is left:0 (extends right). If overflows right edge, flip to right:0
+            if (popupRect.right > viewportW) {
+                popup.style.left   = "auto";
+                popup.style.right   = "0px";
+            }
+        } else {
+            // LTR: default is right:0 (extends left). If overflows left edge, flip to left:0
+            if (popupRect.left < 0) {
+                popup.style.right   = "auto";
+                popup.style.left     = "0px";
+            }
         }
     }
 }

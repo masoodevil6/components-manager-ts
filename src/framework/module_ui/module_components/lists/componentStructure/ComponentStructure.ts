@@ -95,6 +95,9 @@ export class ComponentStructure<
                 attrs: {
                     ...attrsDefault,
                 },
+                styles: {
+                    display: "block",
+                },
                 classBind: [
                     classList,
                 ],
@@ -143,6 +146,9 @@ export class ComponentStructure<
                 ],
                 attrs: {
                     ...attrsDefault,
+                },
+                styles: {
+                    display: "block",
                 },
                 stylesBind: {
                     prop_structureStyles,

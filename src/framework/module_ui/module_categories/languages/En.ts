@@ -696,6 +696,728 @@ export const En =
             "A list of user input components"
         ],
 
+        /// Components -> InputCheckBox
+        [
+            Keys.category.components.inputCheckBox.name,
+            "Input CheckBox"
+        ],
+        [
+            Keys.category.components.inputCheckBox.description,
+            "Checkbox component with select and disable capability"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.value.name,
+            "Value"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.value.description,
+            "Boolean value of the checkbox (checked or not)"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.isDisable.name,
+            "Is Disable"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.isDisable.description,
+            "Whether the checkbox is disabled"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.name.name,
+            "Name"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.name.description,
+            "Internal name of the checkbox"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelShow.name,
+            "Label Show"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelShow.description,
+            "Show or hide the checkbox label"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelBackground.name,
+            "Label Background"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelBackground.description,
+            "Background color of the checkbox label"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelRadius.name,
+            "Label Radius"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelRadius.description,
+            "Border radius of the checkbox label corners"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelMinWidth.name,
+            "Label Min Width"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelMinWidth.description,
+            "Minimum width of the checkbox label"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelTitle.name,
+            "Label Title"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelTitle.description,
+            "Title of the checkbox label"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelFor.name,
+            "Label For"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelFor.description,
+            "Label for attribute to connect to input"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelStyle.name,
+            "Label Style"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelStyle.description,
+            "CSS styles for the checkbox label"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelClass.name,
+            "Label Class"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelClass.description,
+            "CSS classes for the checkbox label"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelColor.name,
+            "Label Color"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelColor.description,
+            "Text color of the checkbox label"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelTooltipIcon.name,
+            "Label Tooltip Icon"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelTooltipIcon.description,
+            "Tooltip icon of the checkbox label"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelTooltipDescription.name,
+            "Label Tooltip"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelTooltipDescription.description,
+            "Tooltip description of the checkbox label"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelTooltipBackground.name,
+            "Label Tooltip Background"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelTooltipBackground.description,
+            "Tooltip background color of the checkbox label"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelTooltipColor.name,
+            "Label Tooltip Color"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelTooltipColor.description,
+            "Tooltip text color of the checkbox label"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelTooltipPosition.name,
+            "Label Tooltip Position"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelTooltipPosition.description,
+            "Tooltip position of the checkbox label"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelTooltipDirection.name,
+            "Label Tooltip Direction"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.labelTooltipDirection.description,
+            "Tooltip direction of the checkbox label"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.borderIconClass.name,
+            "Border Icon Class"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.borderIconClass.description,
+            "CSS classes for the checkbox border icon"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.borderIconStyles.name,
+            "Border Icon Styles"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.borderIconStyles.description,
+            "CSS styles for the checkbox border icon"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.borderIconColor_selected.name,
+            "Border Color Selected"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.borderIconColor_selected.description,
+            "Border color when checkbox is selected"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.borderIconColor_unSelected.name,
+            "Border Color Unselected"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.borderIconColor_unSelected.description,
+            "Border color when checkbox is not selected"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.borderIconColor_disable.name,
+            "Border Color Disabled"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.borderIconColor_disable.description,
+            "Border color when checkbox is disabled"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.borderIconWidth.name,
+            "Border Icon Width"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.borderIconWidth.description,
+            "Border width of the icon box"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.borderIconRadius.name,
+            "Border Icon Radius"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.borderIconRadius.description,
+            "Border radius of the icon box corners"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.borderIconOpacity.name,
+            "Border Icon Opacity"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.borderIconOpacity.description,
+            "Opacity level of the icon box"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.borderIconBackground_selected.name,
+            "Background Selected"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.borderIconBackground_selected.description,
+            "Background color when checkbox is selected"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.borderIconBackground_unSelected.name,
+            "Background Unselected"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.borderIconBackground_unSelected.description,
+            "Background color when checkbox is not selected"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.borderIconBackground_disable.name,
+            "Background Disabled"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.borderIconBackground_disable.description,
+            "Background color when checkbox is disabled"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.icon.name,
+            "Icon"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.icon.description,
+            "Icon displayed inside the checkbox box"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.iconClass.name,
+            "Icon Class"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.iconClass.description,
+            "CSS classes for the icon"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.iconStyles.name,
+            "Icon Styles"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.iconStyles.description,
+            "CSS styles for the icon"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.title.name,
+            "Title"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.title.description,
+            "Title text of the checkbox"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.titleShow.name,
+            "Show Title"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.titleShow.description,
+            "Whether to show the title"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.titleClass.name,
+            "Title Class"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.titleClass.description,
+            "CSS classes for the title"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.titleStyles.name,
+            "Title Styles"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.titleStyles.description,
+            "CSS styles for the title"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.titleColor_selected.name,
+            "Title Color Selected"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.titleColor_selected.description,
+            "Title color when checkbox is selected"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.titleColor_unSelected.name,
+            "Title Color Unselected"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.titleColor_unSelected.description,
+            "Title color when checkbox is not selected"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.titleColor_disable.name,
+            "Title Color Disabled"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.titleColor_disable.description,
+            "Title color when checkbox is disabled"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.listRules.name,
+            "Rules List"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.listRules.description,
+            "Array of validation rules to check the checkbox value"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.msgRules.name,
+            "Custom Messages"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.msgRules.description,
+            "Dictionary of alternative messages for rules"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.validateSize.name,
+            "Validate Size"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.validateSize.description,
+            "Size of validation rule icons and fonts"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.iconSuccess.name,
+            "Success Icon"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.iconSuccess.description,
+            "Icon displayed when validation passes"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.iconError.name,
+            "Error Icon"
+        ],
+        [
+            Keys.category.components.inputCheckBox.props.iconError.description,
+            "Icon displayed when validation fails"
+        ],
+        [
+            Keys.category.components.inputCheckBox.schemas.main.name,
+            "Main"
+        ],
+        [
+            Keys.category.components.inputCheckBox.schemas.main.description,
+            "Main section of the checkbox"
+        ],
+        [
+            Keys.category.components.inputCheckBox.schemas.label.name,
+            "Label"
+        ],
+        [
+            Keys.category.components.inputCheckBox.schemas.label.description,
+            "Label section of the checkbox"
+        ],
+        [
+            Keys.category.components.inputCheckBox.schemas.mainIcon.name,
+            "Icon Box"
+        ],
+        [
+            Keys.category.components.inputCheckBox.schemas.mainIcon.description,
+            "Icon box of the checkbox"
+        ],
+        [
+            Keys.category.components.inputCheckBox.schemas.mainIconCheckbox.name,
+            "Check Icon"
+        ],
+        [
+            Keys.category.components.inputCheckBox.schemas.mainIconCheckbox.description,
+            "Check icon inside the box"
+        ],
+        [
+            Keys.category.components.inputCheckBox.schemas.mainTitle.name,
+            "Title"
+        ],
+        [
+            Keys.category.components.inputCheckBox.schemas.mainTitle.description,
+            "Title section of the checkbox"
+        ],
+        [
+            Keys.category.components.inputCheckBox.methods.click.description,
+            "Callback when the checkbox is clicked"
+        ],
+        [
+            Keys.category.components.inputCheckBox.examples.default.name,
+            "Default"
+        ],
+        [
+            Keys.category.components.inputCheckBox.examples.default.description,
+            "Display a simple checkbox"
+        ],
+
+        /// Components -> InputAgreementCheckBox
+        [
+            Keys.category.components.inputAgreementCheckBox.name,
+            "Agreement Checkbox"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.description,
+            "Agreement checkbox component with select-all and ordering support"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.props.value.name,
+            "Value"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.props.value.description,
+            "Array of selected item IDs"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.props.isDisable.name,
+            "Disabled"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.props.isDisable.description,
+            "Whether all checkboxes are disabled"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.props.name.name,
+            "Name"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.props.name.description,
+            "Internal name of the component"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.props.labelShow.name,
+            "Label Show"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.props.labelShow.description,
+            "Whether the component label is visible"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.props.labelTitle.name,
+            "Label Title"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.props.labelTitle.description,
+            "Title of the component label"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.props.labelTooltipDescription.name,
+            "Label Tooltip Description"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.props.labelTooltipDescription.description,
+            "Tooltip description of the component label"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.props.checkBoxAllTitle.name,
+            "Select All Title"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.props.checkBoxAllTitle.description,
+            "Title for the 'select all' checkbox"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.props.checkBoxList.name,
+            "Checkbox List"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.props.checkBoxList.description,
+            "Array of checkbox items with id and title"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.props.checkBoxOrderStatus.name,
+            "Order Status"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.props.checkBoxOrderStatus.description,
+            "Whether checkbox ordering is enabled"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.props.checkBoxOrder.name,
+            "Checkbox Order"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.props.checkBoxOrder.description,
+            "Array of IDs to determine display order"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.props.maxHeightItems.name,
+            "Max Height Items"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.props.maxHeightItems.description,
+            "Maximum height of the checkbox list section"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.schemas.main.name,
+            "Main Section"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.schemas.main.description,
+            "Main container of the component"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.schemas.mainInputOrder.name,
+            "Order Input"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.schemas.mainInputOrder.description,
+            "Hidden input for submitting order to form"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.schemas.mainCheckBoxAll.name,
+            "Select All Checkbox"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.schemas.mainCheckBoxAll.description,
+            "Checkbox for selecting all items"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.schemas.mainCheckBoxList.name,
+            "Checkbox List"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.schemas.mainCheckBoxList.description,
+            "Section for displaying individual checkboxes"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.schemas.mainCheckBoxListCheckBoxItem.name,
+            "Checkbox Item"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.schemas.mainCheckBoxListCheckBoxItem.description,
+            "A single checkbox item in the list"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.methods.clickAll.description,
+            "Callback when the select-all checkbox is clicked"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.methods.clickItem.description,
+            "Callback when an individual checkbox is clicked"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.examples.default.name,
+            "Default"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.examples.default.description,
+            "Display an agreement checkbox with several items"
+        ],
+        [
+            Keys.category.components.inputAgreementCheckBox.texts.checkBoxAllTitle,
+            "Select All"
+        ],
+
+        [
+            Keys.category.components.inputAgreementCheckBox.texts.checkBoxAllLabel,
+            "Select All (label)"
+        ],
+
+        [ Keys.category.components.draggableOrdersY.name, "Draggable Orders Y" ],
+        [ Keys.category.components.draggableOrdersY.description, "Vertical list with pin support and drag reordering" ],
+
+        [ Keys.category.components.draggableOrdersY.props.draggableOrderStatus.name, "Order Status" ],
+        [ Keys.category.components.draggableOrdersY.props.draggableOrderStatus.description, "Enable drag to reorder" ],
+        [ Keys.category.components.draggableOrdersY.props.draggablePinStatus.name, "Pin Status" ],
+        [ Keys.category.components.draggableOrdersY.props.draggablePinStatus.description, "Show pin icon and support pin behavior" ],
+        [ Keys.category.components.draggableOrdersY.props.draggableItems.name, "Items" ],
+        [ Keys.category.components.draggableOrdersY.props.draggableItems.description, "List of items with id/body/pin" ],
+        [ Keys.category.components.draggableOrdersY.props.draggableOrders.name, "Orders" ],
+        [ Keys.category.components.draggableOrdersY.props.draggableOrders.description, "Explicit order of item ids (unpinned appended)" ],
+
+        [ Keys.category.components.draggableOrdersY.schemas.main.name, "Main" ],
+        [ Keys.category.components.draggableOrdersY.schemas.main.description, "Main container" ],
+        [ Keys.category.components.draggableOrdersY.schemas.mainListItem.name, "Item" ],
+        [ Keys.category.components.draggableOrdersY.schemas.mainListItem.description, "Single list item" ],
+
+        [ Keys.category.components.draggableOrdersY.methods.update.description, "Triggered when order is updated" ],
+
+        [ Keys.category.components.draggableOrdersY.examples.default.name, "Default" ],
+        [ Keys.category.components.draggableOrdersY.examples.default.description, "Basic vertical list with a pinned item" ],
+
+        // DraggableOrdersY helper texts
+        [ Keys.category.components.draggableOrdersY.texts.placeholderInsertHere, "Drop here" ],
+
+        /// Components -> InputListSelector
+        [ Keys.category.components.inputListSelector.name, "Input List Selector" ],
+        [ Keys.category.components.inputListSelector.description, "Select columns via float menu with checkboxes" ],
+
+        [ Keys.category.components.inputListSelector.props.inputBackgroundColor.name, "Input Background Color" ],
+        [ Keys.category.components.inputListSelector.props.inputBackgroundColor.description, "Background color of the main selector" ],
+        [ Keys.category.components.inputListSelector.props.menuBackgroundColor.name, "Menu Background Color" ],
+        [ Keys.category.components.inputListSelector.props.menuBackgroundColor.description, "Background color of the float menu" ],
+        [ Keys.category.components.inputListSelector.props.menuBorderColor.name, "Menu Border Color" ],
+        [ Keys.category.components.inputListSelector.props.menuBorderColor.description, "Border color of the float menu" ],
+        [ Keys.category.components.inputListSelector.props.columns.name, "Columns" ],
+        [ Keys.category.components.inputListSelector.props.columns.description, "List of selectable columns" ],
+        [ Keys.category.components.inputListSelector.props.icon.name, "Icon" ],
+        [ Keys.category.components.inputListSelector.props.icon.description, "Icon displayed to open the menu" ],
+        [ Keys.category.components.inputListSelector.props.showListSelected.name, "Show Selected List" ],
+        [ Keys.category.components.inputListSelector.props.showListSelected.description, "Whether to show the selected items list" ],
+        [ Keys.category.components.inputListSelector.props.labelShow.name, "Show Label" ],
+        [ Keys.category.components.inputListSelector.props.labelShow.description, "Whether to show the label" ],
+        [ Keys.category.components.inputListSelector.props.widthBody.name, "Body Width" ],
+        [ Keys.category.components.inputListSelector.props.widthBody.description, "Width of the float menu" ],
+        [ Keys.category.components.inputListSelector.props.heightBody.name, "Body Height" ],
+        [ Keys.category.components.inputListSelector.props.heightBody.description, "Height of the float menu" ],
+        [ Keys.category.components.inputListSelector.props.heightItems.name, "Items Height" ],
+        [ Keys.category.components.inputListSelector.props.heightItems.description, "Height of each checkbox item" ],
+        [ Keys.category.components.inputListSelector.props.titleAll.name, "Select All Title" ],
+        [ Keys.category.components.inputListSelector.props.titleAll.description, "Text for the select all button" ],
+        [ Keys.category.components.inputListSelector.props.draggable.name, "Draggable" ],
+        [ Keys.category.components.inputListSelector.props.draggable.description, "Whether items can be reordered by dragging" ],
+        [ Keys.category.components.inputListSelector.props.backgroundColorIcon.name, "Icon Background Color" ],
+        [ Keys.category.components.inputListSelector.props.backgroundColorIcon.description, "Background color of the selector icon" ],
+        [ Keys.category.components.inputListSelector.props.colorIcon.name, "Icon Color" ],
+        [ Keys.category.components.inputListSelector.props.colorIcon.description, "Color of the selector icon" ],
+
+        [ Keys.category.components.inputListSelector.schemas.main.name, "Main" ],
+        [ Keys.category.components.inputListSelector.schemas.main.description, "Main selector section" ],
+        [ Keys.category.components.inputListSelector.schemas.mainFormFloatMenu.name, "Float Menu" ],
+        [ Keys.category.components.inputListSelector.schemas.mainFormFloatMenu.description, "Float menu for column selection" ],
+        [ Keys.category.components.inputListSelector.schemas.mainFormFloatMenuIconList.name, "Menu Icon" ],
+        [ Keys.category.components.inputListSelector.schemas.mainFormFloatMenuIconList.description, "Icon to open the float menu" ],
+        [ Keys.category.components.inputListSelector.schemas.mainFormFloatMenuCheckBoxes.name, "Checkboxes" ],
+        [ Keys.category.components.inputListSelector.schemas.mainFormFloatMenuCheckBoxes.description, "List of checkboxes for column selection" ],
+        [ Keys.category.components.inputListSelector.schemas.mainFormListSelected.name, "Selected List" ],
+        [ Keys.category.components.inputListSelector.schemas.mainFormListSelected.description, "Scroller of selected items" ],
+
+        [ Keys.category.components.inputListSelector.methods.clickIcon.description, "Click on selector icon" ],
+        [ Keys.category.components.inputListSelector.methods.clickAccept.description, "Accept column selection" ],
+        [ Keys.category.components.inputListSelector.methods.clickReject.description, "Reject column selection" ],
+        [ Keys.category.components.inputListSelector.methods.callbackColSelector.description, "Callback after column order is finalized" ],
+        [ Keys.category.components.inputListSelector.methods.deleteSelectedItem.description, "Delete item from selected list" ],
+
+        [ Keys.category.components.inputListSelector.examples.default.name, "Default" ],
+        [ Keys.category.components.inputListSelector.examples.default.description, "Default input list selector example" ],
+
+        /// Components -> ListSelectedScroller
+        [ Keys.category.components.listSelectedScroller.name, "List Selected Scroller" ],
+        [ Keys.category.components.listSelectedScroller.description, "Display selected items list with scroll and delete support" ],
+
+        [ Keys.category.components.listSelectedScroller.props.value.name, "Selected Values" ],
+        [ Keys.category.components.listSelectedScroller.props.value.description, "Array of selected item IDs" ],
+        [ Keys.category.components.listSelectedScroller.props.name.name, "Name" ],
+        [ Keys.category.components.listSelectedScroller.props.name.description, "Input field name" ],
+        [ Keys.category.components.listSelectedScroller.props.borderBackgroundColor.name, "Border Background Color" ],
+        [ Keys.category.components.listSelectedScroller.props.borderBackgroundColor.description, "Outer border background color" ],
+        [ Keys.category.components.listSelectedScroller.props.borderColor.name, "Border Color" ],
+        [ Keys.category.components.listSelectedScroller.props.borderColor.description, "Outer border color" ],
+        [ Keys.category.components.listSelectedScroller.props.borderClass.name, "Border Class" ],
+        [ Keys.category.components.listSelectedScroller.props.borderClass.description, "CSS classes for outer border" ],
+        [ Keys.category.components.listSelectedScroller.props.borderStyles.name, "Border Styles" ],
+        [ Keys.category.components.listSelectedScroller.props.borderStyles.description, "Inline styles for outer border" ],
+        [ Keys.category.components.listSelectedScroller.props.borderWidth.name, "Border Width" ],
+        [ Keys.category.components.listSelectedScroller.props.borderWidth.description, "Outer border width" ],
+        [ Keys.category.components.listSelectedScroller.props.borderRadius.name, "Border Radius" ],
+        [ Keys.category.components.listSelectedScroller.props.borderRadius.description, "Outer border corner radius" ],
+        [ Keys.category.components.listSelectedScroller.props.list.name, "List" ],
+        [ Keys.category.components.listSelectedScroller.props.list.description, "Full list of items" ],
+        [ Keys.category.components.listSelectedScroller.props.listMaxShow.name, "Max Show" ],
+        [ Keys.category.components.listSelectedScroller.props.listMaxShow.description, "Maximum number of items to display" ],
+        [ Keys.category.components.listSelectedScroller.props.listType.name, "List Type" ],
+        [ Keys.category.components.listSelectedScroller.props.listType.description, "Display type (active or freeze)" ],
+        [ Keys.category.components.listSelectedScroller.props.listFreezeSeparator.name, "Freeze Separator" ],
+        [ Keys.category.components.listSelectedScroller.props.listFreezeSeparator.description, "Text separator in freeze mode" ],
+        [ Keys.category.components.listSelectedScroller.props.listBorderBackgroundColor.name, "Item Border Background" ],
+        [ Keys.category.components.listSelectedScroller.props.listBorderBackgroundColor.description, "Background color of each item border" ],
+        [ Keys.category.components.listSelectedScroller.props.listBorderColor.name, "Item Border Color" ],
+        [ Keys.category.components.listSelectedScroller.props.listBorderColor.description, "Border color of each item" ],
+        [ Keys.category.components.listSelectedScroller.props.listBorderClass.name, "Item Border Class" ],
+        [ Keys.category.components.listSelectedScroller.props.listBorderClass.description, "CSS classes for each item border" ],
+        [ Keys.category.components.listSelectedScroller.props.listBorderStyles.name, "Item Border Styles" ],
+        [ Keys.category.components.listSelectedScroller.props.listBorderStyles.description, "Inline styles for each item border" ],
+        [ Keys.category.components.listSelectedScroller.props.listBorderWidth.name, "Item Border Width" ],
+        [ Keys.category.components.listSelectedScroller.props.listBorderWidth.description, "Border width of each item" ],
+        [ Keys.category.components.listSelectedScroller.props.listBorderRadius.name, "Item Border Radius" ],
+        [ Keys.category.components.listSelectedScroller.props.listBorderRadius.description, "Border corner radius of each item" ],
+        [ Keys.category.components.listSelectedScroller.props.listTitleColor.name, "Item Title Color" ],
+        [ Keys.category.components.listSelectedScroller.props.listTitleColor.description, "Text color of each item title" ],
+        [ Keys.category.components.listSelectedScroller.props.listTitleClass.name, "Item Title Class" ],
+        [ Keys.category.components.listSelectedScroller.props.listTitleClass.description, "CSS classes for each item title" ],
+        [ Keys.category.components.listSelectedScroller.props.listTitleStyles.name, "Item Title Styles" ],
+        [ Keys.category.components.listSelectedScroller.props.listTitleStyles.description, "Inline styles for each item title" ],
+        [ Keys.category.components.listSelectedScroller.props.listIconCloseClass.name, "Close Icon Class" ],
+        [ Keys.category.components.listSelectedScroller.props.listIconCloseClass.description, "CSS classes for close icon" ],
+        [ Keys.category.components.listSelectedScroller.props.listIconCloseStyles.name, "Close Icon Styles" ],
+        [ Keys.category.components.listSelectedScroller.props.listIconCloseStyles.description, "Inline styles for close icon" ],
+
+        [ Keys.category.components.listSelectedScroller.schemas.border.name, "Border" ],
+        [ Keys.category.components.listSelectedScroller.schemas.border.description, "Outer scroller border" ],
+        [ Keys.category.components.listSelectedScroller.schemas.borderList.name, "List" ],
+        [ Keys.category.components.listSelectedScroller.schemas.borderList.description, "Scrollable list content" ],
+        [ Keys.category.components.listSelectedScroller.schemas.listItem.name, "Item" ],
+        [ Keys.category.components.listSelectedScroller.schemas.listItem.description, "A single list item" ],
+        [ Keys.category.components.listSelectedScroller.schemas.itemTitle.name, "Item Title" ],
+        [ Keys.category.components.listSelectedScroller.schemas.itemTitle.description, "Title of each list item" ],
+        [ Keys.category.components.listSelectedScroller.schemas.itemIconClose.name, "Close Icon" ],
+        [ Keys.category.components.listSelectedScroller.schemas.itemIconClose.description, "Close icon for each item" ],
+
+        [ Keys.category.components.listSelectedScroller.methods.deleteItem.description, "Delete item from list" ],
+
+        [ Keys.category.components.listSelectedScroller.examples.default.name, "Default" ],
+        [ Keys.category.components.listSelectedScroller.examples.default.description, "Display a scrollable list with several items" ],
+
         /// Components -> Positions
         [
             Keys.category.components.positions.name,
@@ -1100,6 +1822,14 @@ export const En =
         [
             Keys.category.components.positionMenu.examples.default.description,
             "Display a position menu with default settings"
+        ],
+        [
+            Keys.category.components.positionMenu.texts.btnAcceptTitle,
+            "Confirm"
+        ],
+        [
+            Keys.category.components.positionMenu.texts.btnRejectTitle,
+            "Cancel"
         ],
 
         /// Components -> Simples
@@ -1724,6 +2454,753 @@ export const En =
             "Display a border with an upward arrow"
         ],
 
+        /// Components -> RecyclerView
+        [
+            Keys.category.components.recyclerView.name,
+            "Recycler View Component"
+        ],
+        [
+            Keys.category.components.recyclerView.description,
+            "Display a list of items with horizontal or vertical direction"
+        ],
+        [
+            Keys.category.components.recyclerView.props.formClass.name,
+            "Form Class"
+        ],
+        [
+            Keys.category.components.recyclerView.props.formClass.description,
+            "CSS classes applied to the main container"
+        ],
+        [
+            Keys.category.components.recyclerView.props.formStyles.name,
+            "Form Styles"
+        ],
+        [
+            Keys.category.components.recyclerView.props.formStyles.description,
+            "CSS styles applied to the main container"
+        ],
+        [
+            Keys.category.components.recyclerView.props.formDirection.name,
+            "Direction"
+        ],
+        [
+            Keys.category.components.recyclerView.props.formDirection.description,
+            "Layout direction: vertical, vertical_reverse, horizontal, horizontal_reverse"
+        ],
+        [
+            Keys.category.components.recyclerView.props.formComponents.name,
+            "Components"
+        ],
+        [
+            Keys.category.components.recyclerView.props.formComponents.description,
+            "List of child elements to display"
+        ],
+        [
+            Keys.category.components.recyclerView.schemas.components.name,
+            "Components Section"
+        ],
+        [
+            Keys.category.components.recyclerView.schemas.components.description,
+            "Render main container with direction and items"
+        ],
+        [
+            Keys.category.components.recyclerView.examples.horizontal.name,
+            "Horizontal List"
+        ],
+        [
+            Keys.category.components.recyclerView.examples.horizontal.description,
+            "Display RecyclerView with horizontal direction (flex-row)"
+        ],
+        [
+            Keys.category.components.recyclerView.examples.vertical.name,
+            "Vertical List"
+        ],
+        [
+            Keys.category.components.recyclerView.examples.vertical.description,
+            "Display RecyclerView with vertical direction (flex-column)"
+        ],
+
+
+        /// Components -> Tabs
+        [
+            Keys.category.components.tabs.name,
+            "Tabs Component"
+        ],
+        [
+            Keys.category.components.tabs.description,
+            "Display tabs with title, icon and body with selection support"
+        ],
+        [
+            Keys.category.components.tabs.props.borderBackgroundSelected.name,
+            "Selected Tab Background"
+        ],
+        [
+            Keys.category.components.tabs.props.borderBackgroundSelected.description,
+            "Background color of the active tab"
+        ],
+        [
+            Keys.category.components.tabs.props.borderBackgroundUnselected.name,
+            "Unselected Tab Background"
+        ],
+        [
+            Keys.category.components.tabs.props.borderBackgroundUnselected.description,
+            "Background color of unselected tabs"
+        ],
+        [
+            Keys.category.components.tabs.props.borderBackgroundBefore.name,
+            "Before Background"
+        ],
+        [
+            Keys.category.components.tabs.props.borderBackgroundBefore.description,
+            "Background color of the shape before the tab"
+        ],
+        [
+            Keys.category.components.tabs.props.borderBackgroundAfter.name,
+            "After Background"
+        ],
+        [
+            Keys.category.components.tabs.props.borderBackgroundAfter.description,
+            "Background color of the shape after the tab"
+        ],
+        [
+            Keys.category.components.tabs.props.borderClass.name,
+            "Border Class"
+        ],
+        [
+            Keys.category.components.tabs.props.borderClass.description,
+            "CSS classes applied to the tab border"
+        ],
+        [
+            Keys.category.components.tabs.props.borderStyles.name,
+            "Border Styles"
+        ],
+        [
+            Keys.category.components.tabs.props.borderStyles.description,
+            "CSS styles applied to the tab border"
+        ],
+        [
+            Keys.category.components.tabs.props.borderColor.name,
+            "Border Color"
+        ],
+        [
+            Keys.category.components.tabs.props.borderColor.description,
+            "Color of the tab border"
+        ],
+        [
+            Keys.category.components.tabs.props.borderWidth.name,
+            "Border Width"
+        ],
+        [
+            Keys.category.components.tabs.props.borderWidth.description,
+            "Width of the tab border"
+        ],
+        [
+            Keys.category.components.tabs.props.borderRadius.name,
+            "Border Radius"
+        ],
+        [
+            Keys.category.components.tabs.props.borderRadius.description,
+            "Corner radius of the tab border"
+        ],
+        [
+            Keys.category.components.tabs.props.borderMinWidth.name,
+            "Border Min Width"
+        ],
+        [
+            Keys.category.components.tabs.props.borderMinWidth.description,
+            "Minimum width of the tab border"
+        ],
+        [
+            Keys.category.components.tabs.props.iconClass.name,
+            "Icon Class"
+        ],
+        [
+            Keys.category.components.tabs.props.iconClass.description,
+            "CSS classes applied to the tab icon"
+        ],
+        [
+            Keys.category.components.tabs.props.iconStyles.name,
+            "Icon Styles"
+        ],
+        [
+            Keys.category.components.tabs.props.iconStyles.description,
+            "CSS styles applied to the tab icon"
+        ],
+        [
+            Keys.category.components.tabs.props.titleStyles.name,
+            "Title Styles"
+        ],
+        [
+            Keys.category.components.tabs.props.titleStyles.description,
+            "CSS styles applied to the tab title"
+        ],
+        [
+            Keys.category.components.tabs.props.titleClass.name,
+            "Title Class"
+        ],
+        [
+            Keys.category.components.tabs.props.titleClass.description,
+            "CSS classes applied to the tab title"
+        ],
+        [
+            Keys.category.components.tabs.props.titleColorSelected.name,
+            "Selected Title Color"
+        ],
+        [
+            Keys.category.components.tabs.props.titleColorSelected.description,
+            "Text color of the active tab title"
+        ],
+        [
+            Keys.category.components.tabs.props.titleColorUnselected.name,
+            "Unselected Title Color"
+        ],
+        [
+            Keys.category.components.tabs.props.titleColorUnselected.description,
+            "Text color of the inactive tab title"
+        ],
+        [
+            Keys.category.components.tabs.props.bodyStyles.name,
+            "Body Styles"
+        ],
+        [
+            Keys.category.components.tabs.props.bodyStyles.description,
+            "CSS styles applied to the tab body"
+        ],
+        [
+            Keys.category.components.tabs.props.bodyClass.name,
+            "Body Class"
+        ],
+        [
+            Keys.category.components.tabs.props.bodyClass.description,
+            "CSS classes applied to the tab body"
+        ],
+        [
+            Keys.category.components.tabs.props.bodyBackgroundColor.name,
+            "Body Background"
+        ],
+        [
+            Keys.category.components.tabs.props.bodyBackgroundColor.description,
+            "Background color of the tab body"
+        ],
+        [
+            Keys.category.components.tabs.props.bodyBorderColor.name,
+            "Body Border Color"
+        ],
+        [
+            Keys.category.components.tabs.props.bodyBorderColor.description,
+            "Border color of the tab body"
+        ],
+        [
+            Keys.category.components.tabs.props.bodyBorderWidth.name,
+            "Body Border Width"
+        ],
+        [
+            Keys.category.components.tabs.props.bodyBorderWidth.description,
+            "Border width of the tab body"
+        ],
+        [
+            Keys.category.components.tabs.props.bodyBorderRadius.name,
+            "Body Border Radius"
+        ],
+        [
+            Keys.category.components.tabs.props.bodyBorderRadius.description,
+            "Corner radius of the tab body border"
+        ],
+        [
+            Keys.category.components.tabs.props.tabs.name,
+            "Tabs List"
+        ],
+        [
+            Keys.category.components.tabs.props.tabs.description,
+            "Array of tabs with id, title, icon and body"
+        ],
+        [
+            Keys.category.components.tabs.props.tabsView.name,
+            "View Type"
+        ],
+        [
+            Keys.category.components.tabs.props.tabsView.description,
+            "Tab view type: full_width or float"
+        ],
+        [
+            Keys.category.components.tabs.props.tabSelected.name,
+            "Selected Tab"
+        ],
+        [
+            Keys.category.components.tabs.props.tabSelected.description,
+            "id of the currently selected tab"
+        ],
+        [
+            Keys.category.components.tabs.schemas.form.name,
+            "Main Form"
+        ],
+        [
+            Keys.category.components.tabs.schemas.form.description,
+            "Main container holding tabs and bodies"
+        ],
+        [
+            Keys.category.components.tabs.schemas.formTabs.name,
+            "Tabs Section"
+        ],
+        [
+            Keys.category.components.tabs.schemas.formTabs.description,
+            "Render the list of tabs"
+        ],
+        [
+            Keys.category.components.tabs.schemas.formTabsBorder.name,
+            "Tab Border"
+        ],
+        [
+            Keys.category.components.tabs.schemas.formTabsBorder.description,
+            "Render ComponentBorder for each tab"
+        ],
+        [
+            Keys.category.components.tabs.schemas.formTabsBorderContent.name,
+            "Tab Border Content"
+        ],
+        [
+            Keys.category.components.tabs.schemas.formTabsBorderContent.description,
+            "Render content inside the tab border (title + icon)"
+        ],
+        [
+            Keys.category.components.tabs.schemas.formTabsBorderContentIcon.name,
+            "Tab Icon"
+        ],
+        [
+            Keys.category.components.tabs.schemas.formTabsBorderContentIcon.description,
+            "Render ComponentIcon for the tab icon"
+        ],
+        [
+            Keys.category.components.tabs.schemas.formTabsBorderContentTitle.name,
+            "Tab Title"
+        ],
+        [
+            Keys.category.components.tabs.schemas.formTabsBorderContentTitle.description,
+            "Render tab title with reactive color"
+        ],
+        [
+            Keys.category.components.tabs.schemas.formBodys.name,
+            "Bodies Section"
+        ],
+        [
+            Keys.category.components.tabs.schemas.formBodys.description,
+            "Render the list of bodies"
+        ],
+        [
+            Keys.category.components.tabs.schemas.formBodysBorder.name,
+            "Body Border"
+        ],
+        [
+            Keys.category.components.tabs.schemas.formBodysBorder.description,
+            "Render ComponentBorder for body with show/hide"
+        ],
+        [
+            Keys.category.components.tabs.methods.clickTab.description,
+            "Tab click event"
+        ],
+        [
+            Keys.category.components.tabs.methods.clickBody.description,
+            "Body click event"
+        ],
+        [
+            Keys.category.components.tabs.examples.fullWidth.name,
+            "Full Width Tabs"
+        ],
+        [
+            Keys.category.components.tabs.examples.fullWidth.description,
+            "Display tabs in full_width mode"
+        ],
+        [
+            Keys.category.components.tabs.examples.float.name,
+            "Float Tabs"
+        ],
+        [
+            Keys.category.components.tabs.examples.float.description,
+            "Display tabs in float mode"
+        ],
+
+
+        /// Components -> Tooltip
+        [
+            Keys.category.components.tooltip.name,
+            "Tooltip Component"
+        ],
+        [
+            Keys.category.components.tooltip.description,
+            "Display description as a tooltip with an icon trigger and popup"
+        ],
+        [
+            Keys.category.components.tooltip.props.tooltipIcon.name,
+            "Icon"
+        ],
+        [
+            Keys.category.components.tooltip.props.tooltipIcon.description,
+            "Trigger icon for showing the tooltip"
+        ],
+        [
+            Keys.category.components.tooltip.props.tooltipIconClass.name,
+            "Icon Class"
+        ],
+        [
+            Keys.category.components.tooltip.props.tooltipIconClass.description,
+            "CSS classes applied to the trigger icon"
+        ],
+        [
+            Keys.category.components.tooltip.props.tooltipIconStyles.name,
+            "Icon Styles"
+        ],
+        [
+            Keys.category.components.tooltip.props.tooltipIconStyles.description,
+            "CSS styles applied to the trigger icon"
+        ],
+        [
+            Keys.category.components.tooltip.props.tooltipIconTitle.name,
+            "Icon Title"
+        ],
+        [
+            Keys.category.components.tooltip.props.tooltipIconTitle.description,
+            "Title text of the icon (attribute)"
+        ],
+        [
+            Keys.category.components.tooltip.props.tooltipIconPosition.name,
+            "Icon Position"
+        ],
+        [
+            Keys.category.components.tooltip.props.tooltipIconPosition.description,
+            "Horizontal position of the trigger icon (percentage from right/left)"
+        ],
+        [
+            Keys.category.components.tooltip.props.tooltipDescription.name,
+            "Description"
+        ],
+        [
+            Keys.category.components.tooltip.props.tooltipDescription.description,
+            "Tooltip text displayed in the popup"
+        ],
+        [
+            Keys.category.components.tooltip.props.tooltipDirection.name,
+            "Direction"
+        ],
+        [
+            Keys.category.components.tooltip.props.tooltipDirection.description,
+            "Direction of the popup relative to the icon (top/bottom)"
+        ],
+        [
+            Keys.category.components.tooltip.props.tooltipBackground.name,
+            "Background"
+        ],
+        [
+            Keys.category.components.tooltip.props.tooltipBackground.description,
+            "Background color of the tooltip popup"
+        ],
+        [
+            Keys.category.components.tooltip.props.tooltipColor.name,
+            "Border Color"
+        ],
+        [
+            Keys.category.components.tooltip.props.tooltipColor.description,
+            "Border color of the tooltip popup"
+        ],
+        [
+            Keys.category.components.tooltip.schemas.floatMenu.name,
+            "Float Menu Part"
+        ],
+        [
+            Keys.category.components.tooltip.schemas.floatMenu.description,
+            "Render FloatMenu with icon trigger and popup"
+        ],
+        [
+            Keys.category.components.tooltip.schemas.icon.name,
+            "Icon Part"
+        ],
+        [
+            Keys.category.components.tooltip.schemas.icon.description,
+            "Render trigger icon with absolute position"
+        ],
+        [
+            Keys.category.components.tooltip.examples.default.name,
+            "Default Tooltip"
+        ],
+        [
+            Keys.category.components.tooltip.examples.default.description,
+            "Display a tooltip with description and bottom direction"
+        ],
+
+        /// Components -> Collapse
+        [
+            Keys.category.components.collapse.name,
+            "Collapse Component"
+        ],
+        [
+            Keys.category.components.collapse.description,
+            "Collapsible panel with title, icon and arrow"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBorderBackground.name,
+            "Border Background"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBorderBackground.description,
+            "Background color of the title border"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBorderClass.name,
+            "Border Class"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBorderClass.description,
+            "CSS classes applied to the title border"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBorderStyles.name,
+            "Border Styles"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBorderStyles.description,
+            "CSS styles applied to the title border"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBorderColor.name,
+            "Border Color"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBorderColor.description,
+            "Border color of the title border"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBorderWidth.name,
+            "Border Width"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBorderWidth.description,
+            "Border width of the title border"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBorderRadius.name,
+            "Border Radius"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBorderRadius.description,
+            "Border radius of the title border corners"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBorderMinWidth.name,
+            "Border Min Width"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBorderMinWidth.description,
+            "Minimum width of the title border"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseIcon.name,
+            "Icon"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseIcon.description,
+            "Icon displayed in the title"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseIconClass.name,
+            "Icon Class"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseIconClass.description,
+            "CSS classes applied to the icon"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseIconStyles.name,
+            "Icon Styles"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseIconStyles.description,
+            "CSS styles applied to the icon"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseTitle.name,
+            "Title"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseTitle.description,
+            "Title text of the collapse panel"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseTitleStyles.name,
+            "Title Styles"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseTitleStyles.description,
+            "CSS styles applied to the title"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseTitleClass.name,
+            "Title Class"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseTitleClass.description,
+            "CSS classes applied to the title"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseTitleColor.name,
+            "Title Color"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseTitleColor.description,
+            "Color of the title text"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseArrowStyles.name,
+            "Arrow Styles"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseArrowStyles.description,
+            "CSS styles applied to the arrow"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseArrowClass.name,
+            "Arrow Class"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseArrowClass.description,
+            "CSS classes applied to the arrow"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBody.name,
+            "Body Content"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBody.description,
+            "Content displayed in the collapse body"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBodyStyles.name,
+            "Body Styles"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBodyStyles.description,
+            "CSS styles applied to the body"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBodyClass.name,
+            "Body Class"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBodyClass.description,
+            "CSS classes applied to the body"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBodyIsOpen.name,
+            "Body Is Open"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBodyIsOpen.description,
+            "Open/closed state of the collapse body"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBodyBorderColor.name,
+            "Body Border Color"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBodyBorderColor.description,
+            "Border color of the collapse body"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBodyBorderWidth.name,
+            "Body Border Width"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBodyBorderWidth.description,
+            "Border width of the collapse body"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBodyBorderRadius.name,
+            "Body Border Radius"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseBodyBorderRadius.description,
+            "Border radius of the collapse body corners"
+        ],
+        [
+            Keys.category.components.collapse.schemas.form.name,
+            "Form Section"
+        ],
+        [
+            Keys.category.components.collapse.schemas.form.description,
+            "Main container of the collapse including border and body"
+        ],
+        [
+            Keys.category.components.collapse.schemas.formBorder.name,
+            "Form Border Section"
+        ],
+        [
+            Keys.category.components.collapse.schemas.formBorder.description,
+            "Clickable title border"
+        ],
+        [
+            Keys.category.components.collapse.schemas.formBorderContent.name,
+            "Form Border Content"
+        ],
+        [
+            Keys.category.components.collapse.schemas.formBorderContent.description,
+            "Container for icon, title and arrow"
+        ],
+        [
+            Keys.category.components.collapse.schemas.formBorderContentIcon.name,
+            "Icon Section"
+        ],
+        [
+            Keys.category.components.collapse.schemas.formBorderContentIcon.description,
+            "Icon displayed in the title"
+        ],
+        [
+            Keys.category.components.collapse.schemas.formBorderContentTitle.name,
+            "Title Section"
+        ],
+        [
+            Keys.category.components.collapse.schemas.formBorderContentTitle.description,
+            "Title text of the collapse panel"
+        ],
+        [
+            Keys.category.components.collapse.schemas.formBorderContentArrow.name,
+            "Arrow Section"
+        ],
+        [
+            Keys.category.components.collapse.schemas.formBorderContentArrow.description,
+            "Arrow indicating open/closed direction"
+        ],
+        [
+            Keys.category.components.collapse.schemas.formBody.name,
+            "Body Section"
+        ],
+        [
+            Keys.category.components.collapse.schemas.formBody.description,
+            "Content of the collapse body"
+        ],
+        [
+            Keys.category.components.collapse.methods.click.name,
+            "Click"
+        ],
+        [
+            Keys.category.components.collapse.methods.click.description,
+            "Callback when collapse title is clicked"
+        ],
+        [
+            Keys.category.components.collapse.examples.default.name,
+            "Default Collapse"
+        ],
+        [
+            Keys.category.components.collapse.examples.default.description,
+            "Display a collapse with title and body"
+        ],
+        [
+            Keys.category.components.collapse.examples.clickable.name,
+            "Clickable Collapse"
+        ],
+        [
+            Keys.category.components.collapse.examples.clickable.description,
+            "Display a collapse with click callback and icon"
+        ],
+
+
         /// Components -> Label
         [
             Keys.category.components.label.name,
@@ -1909,5 +3386,1960 @@ export const En =
             Keys.category.components.label.examples.clickable.description,
             "Label with a real click callback"
         ],
+
+
+        /// Components -> Validate
+        [
+            Keys.category.components.validate.name,
+            "Validate Component"
+        ],
+        [
+            Keys.category.components.validate.description,
+            "Input validation with configurable rules and message display"
+        ],
+        [
+            Keys.category.components.validate.props.listRules.name,
+            "Rules List"
+        ],
+        [
+            Keys.category.components.validate.props.listRules.description,
+            "Array of validation rules (AbstractValidatorRule or legacy object)"
+        ],
+        [
+            Keys.category.components.validate.props.msgRules.name,
+            "Custom Messages"
+        ],
+        [
+            Keys.category.components.validate.props.msgRules.description,
+            "Dictionary of override messages for rules"
+        ],
+        [
+            Keys.category.components.validate.props.reference.name,
+            "Reference ID"
+        ],
+        [
+            Keys.category.components.validate.props.reference.description,
+            "ID of the input element to validate"
+        ],
+        [
+            Keys.category.components.validate.props.referenceComponent.name,
+            "Reference Component"
+        ],
+        [
+            Keys.category.components.validate.props.referenceComponent.description,
+            "Input component instance to read value from"
+        ],
+        [
+            Keys.category.components.validate.props.isAbsolute.name,
+            "Absolute Position"
+        ],
+        [
+            Keys.category.components.validate.props.isAbsolute.description,
+            "Whether the rules form is positioned absolutely"
+        ],
+        [
+            Keys.category.components.validate.props.title.name,
+            "Title"
+        ],
+        [
+            Keys.category.components.validate.props.title.description,
+            "Title displayed in validation data"
+        ],
+        [
+            Keys.category.components.validate.props.iconSuccess.name,
+            "Success Icon"
+        ],
+        [
+            Keys.category.components.validate.props.iconSuccess.description,
+            "Icon shown when validation passes"
+        ],
+        [
+            Keys.category.components.validate.props.iconError.name,
+            "Error Icon"
+        ],
+        [
+            Keys.category.components.validate.props.iconError.description,
+            "Icon shown when validation fails"
+        ],
+        [
+            Keys.category.components.validate.props.size.name,
+            "Size"
+        ],
+        [
+            Keys.category.components.validate.props.size.description,
+            "Icon and font size for rules (xs, s, m, l, xl)"
+        ],
+        [
+            Keys.category.components.validate.props.value.name,
+            "Value"
+        ],
+        [
+            Keys.category.components.validate.props.value.description,
+            "Input value to validate (string or Observable)"
+        ],
+        [
+            Keys.category.components.validate.schemas.form.name,
+            "Form Part"
+        ],
+        [
+            Keys.category.components.validate.schemas.form.description,
+            "Main container with rules and validation data"
+        ],
+        [
+            Keys.category.components.validate.schemas.rulesHtml.name,
+            "Rules HTML Part"
+        ],
+        [
+            Keys.category.components.validate.schemas.rulesHtml.description,
+            "Renders validation rules as HTML with status icons"
+        ],
+        [
+            Keys.category.components.validate.schemas.validatesData.name,
+            "Validates Data Part"
+        ],
+        [
+            Keys.category.components.validate.schemas.validatesData.description,
+            "Renders validation data as JSON script tag"
+        ],
+        [
+            Keys.category.components.validate.schemas.statusIcon.name,
+            "Status Icon Part"
+        ],
+        [
+            Keys.category.components.validate.schemas.statusIcon.description,
+            "Success/error icon based on validation state"
+        ],
+        [
+            Keys.category.components.validate.methods.change.description,
+            "Triggered on value change; receives IS_VALID, MESSAGES, VALUE"
+        ],
+        [
+            Keys.category.components.validate.examples.default.name,
+            "Default Validate"
+        ],
+        [
+            Keys.category.components.validate.examples.default.description,
+            "Validate with input and not_empty + text_length rules"
+        ],
+
+        /// Components -> ErrorIsEmpty
+        [
+            Keys.category.components.errorIsEmpty.name,
+            "Error Is Empty"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.description,
+            "Component for displaying empty error message with icon, title and retry button"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.borderClass.name,
+            "Border Class"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.borderClass.description,
+            "CSS classes applied to the border"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.borderStyles.name,
+            "Border Styles"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.borderStyles.description,
+            "CSS styles applied to the border"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.borderColor.name,
+            "Border Color"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.borderColor.description,
+            "Color of the border"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.icon.name,
+            "Icon"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.icon.description,
+            "Icon displayed in the center of the component"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.iconClass.name,
+            "Icon Class"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.iconClass.description,
+            "CSS classes applied to the icon"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.iconStyles.name,
+            "Icon Styles"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.iconStyles.description,
+            "CSS styles applied to the icon"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.title.name,
+            "Title"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.title.description,
+            "Title text displayed in the component"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.titleColor.name,
+            "Title Color"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.titleColor.description,
+            "Color of the title text"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.titleClass.name,
+            "Title Class"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.titleClass.description,
+            "CSS classes applied to the title"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.titleStyles.name,
+            "Title Styles"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.titleStyles.description,
+            "CSS styles applied to the title"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.btnHas.name,
+            "Show Button"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.btnHas.description,
+            "Whether to show the retry button"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.btnClass.name,
+            "Button Class"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.btnClass.description,
+            "CSS classes applied to the button"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.btnStyles.name,
+            "Button Styles"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.btnStyles.description,
+            "CSS styles applied to the button"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.btnTitle.name,
+            "Button Title"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.btnTitle.description,
+            "Text of the retry button"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.btnIcon.name,
+            "Button Icon"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.props.btnIcon.description,
+            "Icon displayed on the button"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.schemas.form.name,
+            "Form"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.schemas.form.description,
+            "Main form section of the component"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.schemas.border.name,
+            "Border"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.schemas.border.description,
+            "Border around the content"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.schemas.borderContent.name,
+            "Border Content"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.schemas.borderContent.description,
+            "Content section inside the border"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.schemas.borderContentIcon.name,
+            "Content Icon"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.schemas.borderContentIcon.description,
+            "Icon section inside the content"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.schemas.borderContentTitle.name,
+            "Content Title"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.schemas.borderContentTitle.description,
+            "Title section inside the content"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.schemas.borderContentBtn.name,
+            "Content Button"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.schemas.borderContentBtn.description,
+            "Button section inside the content"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.methods.btnClick.name,
+            "Button Click"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.methods.btnClick.description,
+            "Triggered when the retry button is clicked"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.examples.default.name,
+            "Default Error Is Empty"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.examples.default.description,
+            "Display empty error message with warning icon and retry button"
+        ],
+        [
+            Keys.category.components.errorIsEmpty.texts.btnTitle,
+            "Retry"
+        ],
+
+        /// Components -> WebCode
+        [
+            Keys.category.components.webCode.name,
+            "Web Code"
+        ],
+        [
+            Keys.category.components.webCode.description,
+            "Component for displaying web error code with icon and retry button"
+        ],
+        [
+            Keys.category.components.webCode.props.icon.name,
+            "Icon"
+        ],
+        [
+            Keys.category.components.webCode.props.icon.description,
+            "Icon displayed in the center of the component"
+        ],
+        [
+            Keys.category.components.webCode.props.iconClass.name,
+            "Icon Class"
+        ],
+        [
+            Keys.category.components.webCode.props.iconClass.description,
+            "CSS classes applied to the icon"
+        ],
+        [
+            Keys.category.components.webCode.props.iconStyles.name,
+            "Icon Styles"
+        ],
+        [
+            Keys.category.components.webCode.props.iconStyles.description,
+            "CSS styles applied to the icon"
+        ],
+        [
+            Keys.category.components.webCode.props.background.name,
+            "Background"
+        ],
+        [
+            Keys.category.components.webCode.props.background.description,
+            "Background color of the blur layer"
+        ],
+        [
+            Keys.category.components.webCode.props.btnRetryHas.name,
+            "Show Retry Button"
+        ],
+        [
+            Keys.category.components.webCode.props.btnRetryHas.description,
+            "Whether to show the retry button"
+        ],
+        [
+            Keys.category.components.webCode.props.btnRetryTitle.name,
+            "Retry Button Title"
+        ],
+        [
+            Keys.category.components.webCode.props.btnRetryTitle.description,
+            "Text of the retry button"
+        ],
+        [
+            Keys.category.components.webCode.props.btnRetryClass.name,
+            "Retry Button Class"
+        ],
+        [
+            Keys.category.components.webCode.props.btnRetryClass.description,
+            "CSS classes applied to the retry button"
+        ],
+        [
+            Keys.category.components.webCode.props.btnRetryIcon.name,
+            "Retry Button Icon"
+        ],
+        [
+            Keys.category.components.webCode.props.btnRetryIcon.description,
+            "Icon displayed on the retry button"
+        ],
+        [
+            Keys.category.components.webCode.schemas.content.name,
+            "Content"
+        ],
+        [
+            Keys.category.components.webCode.schemas.content.description,
+            "Main content section of the component"
+        ],
+        [
+            Keys.category.components.webCode.schemas.contentBlur.name,
+            "Content Blur"
+        ],
+        [
+            Keys.category.components.webCode.schemas.contentBlur.description,
+            "Blur background layer of the content"
+        ],
+        [
+            Keys.category.components.webCode.schemas.contentBlurPosition.name,
+            "Content Blur Position"
+        ],
+        [
+            Keys.category.components.webCode.schemas.contentBlurPosition.description,
+            "Positioning section inside the blur"
+        ],
+        [
+            Keys.category.components.webCode.schemas.contentBlurPositionIcon.name,
+            "Content Blur Position Icon"
+        ],
+        [
+            Keys.category.components.webCode.schemas.contentBlurPositionIcon.description,
+            "Icon section inside the blur position"
+        ],
+        [
+            Keys.category.components.webCode.schemas.contentBlurPositionRetry.name,
+            "Content Blur Position Retry"
+        ],
+        [
+            Keys.category.components.webCode.schemas.contentBlurPositionRetry.description,
+            "Retry button section inside the blur position"
+        ],
+        [
+            Keys.category.components.webCode.methods.retryClick.name,
+            "Retry Click"
+        ],
+        [
+            Keys.category.components.webCode.methods.retryClick.description,
+            "Triggered when the retry button is clicked"
+        ],
+        [
+            Keys.category.components.webCode.examples.default.name,
+            "Default Web Code"
+        ],
+        [
+            Keys.category.components.webCode.examples.default.description,
+            "Display web code 404 error with icon and retry button"
+        ],
+
+        /// Window
+        [
+            Keys.category.components.window.name,
+            "Window"
+        ],
+        [
+            Keys.category.components.window.description,
+            "Window component for displaying content in a popup"
+        ],
+        [
+            Keys.category.components.window.props.blurBackgroundColor.name,
+            "Blur Background Color"
+        ],
+        [
+            Keys.category.components.window.props.blurBackgroundColor.description,
+            "Background color of the blur layer behind the window"
+        ],
+        [
+            Keys.category.components.window.props.windowBackgroundColor.name,
+            "Window Background Color"
+        ],
+        [
+            Keys.category.components.window.props.windowBackgroundColor.description,
+            "Background color of the window body"
+        ],
+        [
+            Keys.category.components.window.props.windowWidth.name,
+            "Window Width"
+        ],
+        [
+            Keys.category.components.window.props.windowWidth.description,
+            "Width of the window in pixels"
+        ],
+        [
+            Keys.category.components.window.props.windowHeight.name,
+            "Window Height"
+        ],
+        [
+            Keys.category.components.window.props.windowHeight.description,
+            "Height of the window in pixels"
+        ],
+        [
+            Keys.category.components.window.props.windowRound.name,
+            "Window Border Radius"
+        ],
+        [
+            Keys.category.components.window.props.windowRound.description,
+            "Border radius of the window corners"
+        ],
+        [
+            Keys.category.components.window.props.headerBackgroundColor.name,
+            "Header Background Color"
+        ],
+        [
+            Keys.category.components.window.props.headerBackgroundColor.description,
+            "Background color of the window header bar"
+        ],
+        [
+            Keys.category.components.window.props.headerTitleColor.name,
+            "Header Title Color"
+        ],
+        [
+            Keys.category.components.window.props.headerTitleColor.description,
+            "Text color of the title in the header bar"
+        ],
+        [
+            Keys.category.components.window.props.header.name,
+            "Header"
+        ],
+        [
+            Keys.category.components.window.props.header.description,
+            "Custom content for the window header"
+        ],
+        [
+            Keys.category.components.window.props.body.name,
+            "Body"
+        ],
+        [
+            Keys.category.components.window.props.body.description,
+            "Custom content for the window body"
+        ],
+        [
+            Keys.category.components.window.props.footer.name,
+            "Footer"
+        ],
+        [
+            Keys.category.components.window.props.footer.description,
+            "Custom content for the window footer"
+        ],
+        [
+            Keys.category.components.window.props.showBtnResize.name,
+            "Show Resize Button"
+        ],
+        [
+            Keys.category.components.window.props.showBtnResize.description,
+            "Show or hide the window resize button"
+        ],
+        [
+            Keys.category.components.window.props.showBtnClose.name,
+            "Show Close Button"
+        ],
+        [
+            Keys.category.components.window.props.showBtnClose.description,
+            "Show or hide the window close button"
+        ],
+        [
+            Keys.category.components.window.props.isVisible.name,
+            "Is Visible"
+        ],
+        [
+            Keys.category.components.window.props.isVisible.description,
+            "Whether the window is visible"
+        ],
+        [
+            Keys.category.components.window.props.isFullSize.name,
+            "Is Full Size"
+        ],
+        [
+            Keys.category.components.window.props.isFullSize.description,
+            "Whether the window opens in full size"
+        ],
+        [
+            Keys.category.components.window.props.title.name,
+            "Title"
+        ],
+        [
+            Keys.category.components.window.props.title.description,
+            "Title of the window"
+        ],
+        [
+            Keys.category.components.window.props.content.name,
+            "Content"
+        ],
+        [
+            Keys.category.components.window.props.content.description,
+            "Text content of the window"
+        ],
+        [
+            Keys.category.components.window.props.acceptText.name,
+            "Accept Text"
+        ],
+        [
+            Keys.category.components.window.props.acceptText.description,
+            "Text for the accept button in the footer"
+        ],
+        [
+            Keys.category.components.window.props.cancelText.name,
+            "Cancel Text"
+        ],
+        [
+            Keys.category.components.window.props.cancelText.description,
+            "Text for the cancel button in the footer"
+        ],
+        [
+            Keys.category.components.window.props.showCancel.name,
+            "Show Cancel"
+        ],
+        [
+            Keys.category.components.window.props.showCancel.description,
+            "Show or hide the cancel button"
+        ],
+        [
+            Keys.category.components.window.props.showAccept.name,
+            "Show Accept"
+        ],
+        [
+            Keys.category.components.window.props.showAccept.description,
+            "Show or hide the accept button"
+        ],
+        [
+            Keys.category.components.window.props.closeOnOverlay.name,
+            "Close On Overlay"
+        ],
+        [
+            Keys.category.components.window.props.closeOnOverlay.description,
+            "Close the window when clicking on the blur layer"
+        ],
+        [
+            Keys.category.components.window.schemas.structure.name,
+            "Structure"
+        ],
+        [
+            Keys.category.components.window.schemas.structure.description,
+            "Main structure of the window"
+        ],
+        [
+            Keys.category.components.window.schemas.blur.name,
+            "Blur"
+        ],
+        [
+            Keys.category.components.window.schemas.blur.description,
+            "Blur layer behind the window"
+        ],
+        [
+            Keys.category.components.window.schemas.window.name,
+            "Window"
+        ],
+        [
+            Keys.category.components.window.schemas.window.description,
+            "Window body"
+        ],
+        [
+            Keys.category.components.window.schemas.windowHeader.name,
+            "Window Header"
+        ],
+        [
+            Keys.category.components.window.schemas.windowHeader.description,
+            "Window title bar"
+        ],
+        [
+            Keys.category.components.window.schemas.windowHeaderTitle.name,
+            "Header Title"
+        ],
+        [
+            Keys.category.components.window.schemas.windowHeaderTitle.description,
+            "Title text in the header bar"
+        ],
+        [
+            Keys.category.components.window.schemas.windowHeaderIcons.name,
+            "Header Icons"
+        ],
+        [
+            Keys.category.components.window.schemas.windowHeaderIcons.description,
+            "Close and resize icons"
+        ],
+        [
+            Keys.category.components.window.schemas.windowHeaderIconsClose.name,
+            "Close Icon"
+        ],
+        [
+            Keys.category.components.window.schemas.windowHeaderIconsClose.description,
+            "Window close icon"
+        ],
+        [
+            Keys.category.components.window.schemas.windowHeaderIconsResize.name,
+            "Resize Icon"
+        ],
+        [
+            Keys.category.components.window.schemas.windowHeaderIconsResize.description,
+            "Window resize icon"
+        ],
+        [
+            Keys.category.components.window.schemas.windowBody.name,
+            "Window Body"
+        ],
+        [
+            Keys.category.components.window.schemas.windowBody.description,
+            "Window body content"
+        ],
+        [
+            Keys.category.components.window.schemas.windowFooter.name,
+            "Window Footer"
+        ],
+        [
+            Keys.category.components.window.schemas.windowFooter.description,
+            "Window footer with accept and cancel buttons"
+        ],
+        [
+            Keys.category.components.window.methods.close.name,
+            "Close"
+        ],
+        [
+            Keys.category.components.window.methods.close.description,
+            "Callback when window is closed"
+        ],
+        [
+            Keys.category.components.window.methods.open.name,
+            "Open"
+        ],
+        [
+            Keys.category.components.window.methods.open.description,
+            "Callback when window is opened"
+        ],
+        [
+            Keys.category.components.window.methods.resize.name,
+            "Resize"
+        ],
+        [
+            Keys.category.components.window.methods.resize.description,
+            "Callback when window is resized"
+        ],
+        [
+            Keys.category.components.window.methods.minimize.name,
+            "Minimize"
+        ],
+        [
+            Keys.category.components.window.methods.minimize.description,
+            "Callback when window is minimized"
+        ],
+        [
+            Keys.category.components.window.methods.clickWindow.name,
+            "Click Window"
+        ],
+        [
+            Keys.category.components.window.methods.clickWindow.description,
+            "Callback when clicking on the window body"
+        ],
+        [
+            Keys.category.components.window.methods.clickOverlay.name,
+            "Click Overlay"
+        ],
+        [
+            Keys.category.components.window.methods.clickOverlay.description,
+            "Callback when clicking on the blur layer"
+        ],
+        [
+            Keys.category.components.window.methods.accept.name,
+            "Accept"
+        ],
+        [
+            Keys.category.components.window.methods.accept.description,
+            "Callback when window is accepted"
+        ],
+        [
+            Keys.category.components.window.methods.cancel.name,
+            "Cancel"
+        ],
+        [
+            Keys.category.components.window.methods.cancel.description,
+            "Callback when window is cancelled"
+        ],
+        [
+            Keys.category.components.window.examples.default.name,
+            "Default"
+        ],
+        [
+            Keys.category.components.window.examples.default.description,
+            "Display a simple window"
+        ],
+        [
+            Keys.category.components.window.examples.confirm.name,
+            "Confirm"
+        ],
+        [
+            Keys.category.components.window.examples.confirm.description,
+            "Display a confirm window"
+        ],
+
+        // ── WindowConfirm ──
+        [
+            Keys.category.components.windowConfirm.name,
+            "Window Confirm Component"
+        ],
+        [
+            Keys.category.components.windowConfirm.description,
+            "Confirm window for getting user confirmation or cancellation"
+        ],
+        [
+            Keys.category.components.windowConfirm.props.icon.name,
+            "Icon"
+        ],
+        [
+            Keys.category.components.windowConfirm.props.icon.description,
+            "Icon displayed in the confirm window"
+        ],
+        [
+            Keys.category.components.windowConfirm.props.message.name,
+            "Message"
+        ],
+        [
+            Keys.category.components.windowConfirm.props.message.description,
+            "Message displayed in the confirm window"
+        ],
+        [
+            Keys.category.components.windowConfirm.props.title.name,
+            "Title"
+        ],
+        [
+            Keys.category.components.windowConfirm.props.title.description,
+            "Title of the confirm window"
+        ],
+        [
+            Keys.category.components.windowConfirm.props.acceptText.name,
+            "Accept Text"
+        ],
+        [
+            Keys.category.components.windowConfirm.props.acceptText.description,
+            "Text for the accept button"
+        ],
+        [
+            Keys.category.components.windowConfirm.props.cancelText.name,
+            "Cancel Text"
+        ],
+        [
+            Keys.category.components.windowConfirm.props.cancelText.description,
+            "Text for the cancel button"
+        ],
+        [
+            Keys.category.components.windowConfirm.props.showCancel.name,
+            "Show Cancel"
+        ],
+        [
+            Keys.category.components.windowConfirm.props.showCancel.description,
+            "Show or hide the cancel button"
+        ],
+        [
+            Keys.category.components.windowConfirm.props.showAccept.name,
+            "Show Accept"
+        ],
+        [
+            Keys.category.components.windowConfirm.props.showAccept.description,
+            "Show or hide the accept button"
+        ],
+        [
+            Keys.category.components.windowConfirm.props.closeOnOverlay.name,
+            "Close On Overlay"
+        ],
+        [
+            Keys.category.components.windowConfirm.props.closeOnOverlay.description,
+            "Close the window when clicking on the overlay"
+        ],
+        [
+            Keys.category.components.windowConfirm.props.windowWidth.name,
+            "Window Width"
+        ],
+        [
+            Keys.category.components.windowConfirm.props.windowWidth.description,
+            "Width of the window in pixels"
+        ],
+        [
+            Keys.category.components.windowConfirm.props.windowHeight.name,
+            "Window Height"
+        ],
+        [
+            Keys.category.components.windowConfirm.props.windowHeight.description,
+            "Height of the window in pixels"
+        ],
+        [
+            Keys.category.components.windowConfirm.schemas.structure.name,
+            "Structure"
+        ],
+        [
+            Keys.category.components.windowConfirm.schemas.structure.description,
+            "Main structure of the confirm window"
+        ],
+        [
+            Keys.category.components.windowConfirm.methods.confirm.description,
+            "Callback when confirmed"
+        ],
+        [
+            Keys.category.components.windowConfirm.methods.cancel.description,
+            "Callback when cancelled"
+        ],
+        [
+            Keys.category.components.windowConfirm.examples.default.name,
+            "Default"
+        ],
+        [
+            Keys.category.components.windowConfirm.examples.default.description,
+            "Display a simple confirm window"
+        ],
+
+        // ── Table ──
+        [
+            Keys.category.components.table.name,
+            "Table Component"
+        ],
+        [
+            Keys.category.components.table.description,
+            "Table for displaying data with row and column selection"
+        ],
+        [
+            Keys.category.components.table.props.size.name,
+            "Size"
+        ],
+        [
+            Keys.category.components.table.props.size.description,
+            "Size of the table"
+        ],
+        [
+            Keys.category.components.table.props.hasColNumber.name,
+            "Has Column Number"
+        ],
+        [
+            Keys.category.components.table.props.hasColNumber.description,
+            "Show row number in the first column"
+        ],
+        [
+            Keys.category.components.table.props.tableClass.name,
+            "Table Class"
+        ],
+        [
+            Keys.category.components.table.props.tableClass.description,
+            "CSS classes applied to the table"
+        ],
+        [
+            Keys.category.components.table.props.tableStyles.name,
+            "Table Styles"
+        ],
+        [
+            Keys.category.components.table.props.tableStyles.description,
+            "CSS styles applied to the table"
+        ],
+        [
+            Keys.category.components.table.props.tableBordered.name,
+            "Table Bordered"
+        ],
+        [
+            Keys.category.components.table.props.tableBordered.description,
+            "Show table borders"
+        ],
+        [
+            Keys.category.components.table.props.tableStriped.name,
+            "Table Striped"
+        ],
+        [
+            Keys.category.components.table.props.tableStriped.description,
+            "Alternate row coloring of the table"
+        ],
+        [
+            Keys.category.components.table.props.tableHover.name,
+            "Table Hover"
+        ],
+        [
+            Keys.category.components.table.props.tableHover.description,
+            "Change row color on hover"
+        ],
+        [
+            Keys.category.components.table.props.tableBorderless.name,
+            "Table Borderless"
+        ],
+        [
+            Keys.category.components.table.props.tableBorderless.description,
+            "Remove table borders"
+        ],
+        [
+            Keys.category.components.table.props.tableHeadClass.name,
+            "Table Head Class"
+        ],
+        [
+            Keys.category.components.table.props.tableHeadClass.description,
+            "CSS classes applied to the table header"
+        ],
+        [
+            Keys.category.components.table.props.tableHeadStyles.name,
+            "Table Head Styles"
+        ],
+        [
+            Keys.category.components.table.props.tableHeadStyles.description,
+            "CSS styles applied to the table header"
+        ],
+        [
+            Keys.category.components.table.props.tableItemHeadClass.name,
+            "Table Item Head Class"
+        ],
+        [
+            Keys.category.components.table.props.tableItemHeadClass.description,
+            "CSS classes applied to each header item"
+        ],
+        [
+            Keys.category.components.table.props.tableItemHeadStyles.name,
+            "Table Item Head Styles"
+        ],
+        [
+            Keys.category.components.table.props.tableItemHeadStyles.description,
+            "CSS styles applied to each header item"
+        ],
+        [
+            Keys.category.components.table.props.order.name,
+            "Column Order"
+        ],
+        [
+            Keys.category.components.table.props.order.description,
+            "Display order of columns by id"
+        ],
+        [
+            Keys.category.components.table.props.header.name,
+            "Table Header"
+        ],
+        [
+            Keys.category.components.table.props.header.description,
+            "Table header items"
+        ],
+        [
+            Keys.category.components.table.props.headerIconSize.name,
+            "Header Icon Size"
+        ],
+        [
+            Keys.category.components.table.props.headerIconSize.description,
+            "Size of header icons"
+        ],
+        [
+            Keys.category.components.table.props.headerIconColor.name,
+            "Header Icon Color"
+        ],
+        [
+            Keys.category.components.table.props.headerIconColor.description,
+            "Color of header icons"
+        ],
+        [
+            Keys.category.components.table.props.tableBodyClass.name,
+            "Table Body Class"
+        ],
+        [
+            Keys.category.components.table.props.tableBodyClass.description,
+            "CSS classes applied to the table body"
+        ],
+        [
+            Keys.category.components.table.props.tableBodyStyles.name,
+            "Table Body Styles"
+        ],
+        [
+            Keys.category.components.table.props.tableBodyStyles.description,
+            "CSS styles applied to the table body"
+        ],
+        [
+            Keys.category.components.table.props.tableItemBodyClass.name,
+            "Table Item Body Class"
+        ],
+        [
+            Keys.category.components.table.props.tableItemBodyClass.description,
+            "CSS classes applied to each body item"
+        ],
+        [
+            Keys.category.components.table.props.tableItemBodyStyles.name,
+            "Table Item Body Styles"
+        ],
+        [
+            Keys.category.components.table.props.tableItemBodyStyles.description,
+            "CSS styles applied to each body item"
+        ],
+        [
+            Keys.category.components.table.props.data.name,
+            "Data"
+        ],
+        [
+            Keys.category.components.table.props.data.description,
+            "Table data as an array of objects"
+        ],
+        [
+            Keys.category.components.table.props.valueType.name,
+            "Value Type"
+        ],
+        [
+            Keys.category.components.table.props.valueType.description,
+            "Selection type (none, row, col, both)"
+        ],
+        [
+            Keys.category.components.table.props.valueRow.name,
+            "Value Row"
+        ],
+        [
+            Keys.category.components.table.props.valueRow.description,
+            "Index of the selected row"
+        ],
+        [
+            Keys.category.components.table.props.valueCol.name,
+            "Value Col"
+        ],
+        [
+            Keys.category.components.table.props.valueCol.description,
+            "Index of the selected column"
+        ],
+        [
+            Keys.category.components.table.props.valueRowBackgroundColor.name,
+            "Value Row Background Color"
+        ],
+        [
+            Keys.category.components.table.props.valueRowBackgroundColor.description,
+            "Background color of the selected row"
+        ],
+        [
+            Keys.category.components.table.props.valueColBackgroundColor.name,
+            "Value Col Background Color"
+        ],
+        [
+            Keys.category.components.table.props.valueColBackgroundColor.description,
+            "Background color of the selected column"
+        ],
+        [
+            Keys.category.components.table.props.valueColTextColor.name,
+            "Value Col Text Color"
+        ],
+        [
+            Keys.category.components.table.props.valueColTextColor.description,
+            "Text color of the selected column"
+        ],
+        [
+            Keys.category.components.table.props.rowOptions.name,
+            "Row Options"
+        ],
+        [
+            Keys.category.components.table.props.rowOptions.description,
+            "Clickable options for each row"
+        ],
+        [
+            Keys.category.components.table.props.rowOptionsColor.name,
+            "Row Options Color"
+        ],
+        [
+            Keys.category.components.table.props.rowOptionsColor.description,
+            "Overall color of row options"
+        ],
+        [
+            Keys.category.components.table.props.rowOptionsItemColor.name,
+            "Row Options Item Color"
+        ],
+        [
+            Keys.category.components.table.props.rowOptionsItemColor.description,
+            "Color of each row option item"
+        ],
+        [
+            Keys.category.components.table.props.hasColSelector.name,
+            "Column Selector"
+        ],
+        [
+            Keys.category.components.table.props.hasColSelector.description,
+            "Show column selector for the table"
+        ],
+        [
+            Keys.category.components.table.props.doColSelector.name,
+            "Apply Column Selection"
+        ],
+        [
+            Keys.category.components.table.props.doColSelector.description,
+            "Apply column selection changes to display order"
+        ],
+        [
+            Keys.category.components.table.schemas.table.name,
+            "Table"
+        ],
+        [
+            Keys.category.components.table.schemas.table.description,
+            "Main table structure"
+        ],
+        [
+            Keys.category.components.table.schemas.header.name,
+            "Header"
+        ],
+        [
+            Keys.category.components.table.schemas.header.description,
+            "Table header"
+        ],
+        [
+            Keys.category.components.table.schemas.body.name,
+            "Body"
+        ],
+        [
+            Keys.category.components.table.schemas.body.description,
+            "Table body"
+        ],
+        [
+            Keys.category.components.table.methods.selectCol.description,
+            "Callback when a column is selected"
+        ],
+        [
+            Keys.category.components.table.methods.clickOptionCard.description,
+            "Callback when a row option is clicked"
+        ],
+        [
+            Keys.category.components.table.methods.callbackColSelector.description,
+            "Callback after column selection order is finalized"
+        ],
+        [
+            Keys.category.components.table.examples.default.name,
+            "Default"
+        ],
+        [
+            Keys.category.components.table.examples.default.description,
+            "Display a simple table with sample data"
+        ],
+
+
+        /// Components -> Loading
+        [
+            Keys.category.components.loading.name,
+            "Loading"
+        ],
+        [
+            Keys.category.components.loading.description,
+            "Loading and spinner component with circular animation and cancel button"
+        ],
+        [
+            Keys.category.components.loading.props.type.name,
+            "Loading Type"
+        ],
+        [
+            Keys.category.components.loading.props.type.description,
+            "Type of loading animation (circle)"
+        ],
+        [
+            Keys.category.components.loading.props.icon.name,
+            "Loading Icon"
+        ],
+        [
+            Keys.category.components.loading.props.icon.description,
+            "Custom icon displayed instead of default animation"
+        ],
+        [
+            Keys.category.components.loading.props.backgroundLoading.name,
+            "Loading Background Color"
+        ],
+        [
+            Keys.category.components.loading.props.backgroundLoading.description,
+            "Color of the loading animation or icon"
+        ],
+        [
+            Keys.category.components.loading.props.backgroundShadow.name,
+            "Shadow Background Color"
+        ],
+        [
+            Keys.category.components.loading.props.backgroundShadow.description,
+            "Background color of the loading overlay layer"
+        ],
+        [
+            Keys.category.components.loading.props.loadingWidth.name,
+            "Loading Width"
+        ],
+        [
+            Keys.category.components.loading.props.loadingWidth.description,
+            "Width of the loading animation or icon in pixels"
+        ],
+        [
+            Keys.category.components.loading.props.loadingHeight.name,
+            "Loading Height"
+        ],
+        [
+            Keys.category.components.loading.props.loadingHeight.description,
+            "Height of the loading animation or icon in pixels"
+        ],
+        [
+            Keys.category.components.loading.props.showCancel.name,
+            "Show Cancel Button"
+        ],
+        [
+            Keys.category.components.loading.props.showCancel.description,
+            "Whether to show the cancel button"
+        ],
+        [
+            Keys.category.components.loading.props.cancelDelay.name,
+            "Cancel Button Delay"
+        ],
+        [
+            Keys.category.components.loading.props.cancelDelay.description,
+            "Delay before showing the cancel button in milliseconds"
+        ],
+        [
+            Keys.category.components.loading.schemas.loading.name,
+            "Loading"
+        ],
+        [
+            Keys.category.components.loading.schemas.loading.description,
+            "Main loading animation section"
+        ],
+        [
+            Keys.category.components.loading.schemas.cancelBtn.name,
+            "Cancel Button"
+        ],
+        [
+            Keys.category.components.loading.schemas.cancelBtn.description,
+            "Loading cancel button section"
+        ],
+        [
+            Keys.category.components.loading.methods.cancel.name,
+            "Cancel Loading"
+        ],
+        [
+            Keys.category.components.loading.methods.cancel.description,
+            "Triggered when the cancel button is clicked"
+        ],
+        [
+            Keys.category.components.loading.examples.default.name,
+            "Default"
+        ],
+        [
+            Keys.category.components.loading.examples.default.description,
+            "Display a circular loading with cancel button"
+        ],
+
+
+        /// Components -> Sidebar
+        [
+            Keys.category.components.sidebar.name,
+            "Sidebar"
+        ],
+        [
+            Keys.category.components.sidebar.description,
+            "Sliding sidebar component with multiple directions and open/close button"
+        ],
+        [
+            Keys.category.components.sidebar.props.blurBackground.name,
+            "Blur background color"
+        ],
+        [
+            Keys.category.components.sidebar.props.blurBackground.description,
+            "Background color of the sidebar blur layer"
+        ],
+        [
+            Keys.category.components.sidebar.props.blurHas.name,
+            "Show blur"
+        ],
+        [
+            Keys.category.components.sidebar.props.blurHas.description,
+            "Whether to show the blur layer"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarBackground.name,
+            "Sidebar background"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarBackground.description,
+            "Background color of the sidebar body"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarBorderRadius.name,
+            "Sidebar border radius"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarBorderRadius.description,
+            "Border radius of the sidebar corners"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarWidth.name,
+            "Sidebar width"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarWidth.description,
+            "Width of the sidebar in pixels"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarDirection.name,
+            "Sidebar direction"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarDirection.description,
+            "Direction of sidebar opening (RTL, LTR, TTB, BTT)"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarIsOpen.name,
+            "Sidebar is open"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarIsOpen.description,
+            "Whether the sidebar is open or closed"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarDuration.name,
+            "Animation duration"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarDuration.description,
+            "Duration of sidebar open/close animation in milliseconds"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarContent.name,
+            "Sidebar content"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarContent.description,
+            "Content inside the sidebar"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarPositionStart.name,
+            "Start position"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarPositionStart.description,
+            "Start position of the sidebar relative to the start edge"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarPositionEnd.name,
+            "End position"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarPositionEnd.description,
+            "End position of the sidebar relative to the end edge"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarMargin.name,
+            "Sidebar margin"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarMargin.description,
+            "Margin of the sidebar from the screen edge"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarOpacity.name,
+            "Sidebar opacity"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarOpacity.description,
+            "Opacity of the sidebar in percent"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarBtnOpenHas.name,
+            "Show toggle button"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarBtnOpenHas.description,
+            "Whether to show the open/close toggle button"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarBtnOpenSize.name,
+            "Toggle button size"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarBtnOpenSize.description,
+            "Size of the toggle button in pixels"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarBtnColor.name,
+            "Toggle button color"
+        ],
+        [
+            Keys.category.components.sidebar.props.sidebarBtnColor.description,
+            "Color of the toggle button"
+        ],
+        [
+            Keys.category.components.sidebar.schemas.content.name,
+            "Content"
+        ],
+        [
+            Keys.category.components.sidebar.schemas.content.description,
+            "Main content section of the sidebar"
+        ],
+        [
+            Keys.category.components.sidebar.schemas.contentBlur.name,
+            "Blur layer"
+        ],
+        [
+            Keys.category.components.sidebar.schemas.contentBlur.description,
+            "Blur background section of the sidebar"
+        ],
+        [
+            Keys.category.components.sidebar.schemas.contentSidebar.name,
+            "Sidebar body"
+        ],
+        [
+            Keys.category.components.sidebar.schemas.contentSidebar.description,
+            "Main body section of the sidebar"
+        ],
+        [
+            Keys.category.components.sidebar.schemas.contentSidebarContent.name,
+            "Sidebar inner content"
+        ],
+        [
+            Keys.category.components.sidebar.schemas.contentSidebarContent.description,
+            "Inner content section of the sidebar"
+        ],
+        [
+            Keys.category.components.sidebar.schemas.contentSidebarContentPosition.name,
+            "Button position"
+        ],
+        [
+            Keys.category.components.sidebar.schemas.contentSidebarContentPosition.description,
+            "Toggle button position section"
+        ],
+        [
+            Keys.category.components.sidebar.schemas.contentSidebarContentPositionButton.name,
+            "Toggle button"
+        ],
+        [
+            Keys.category.components.sidebar.schemas.contentSidebarContentPositionButton.description,
+            "Open/close toggle button section"
+        ],
+        [
+            Keys.category.components.sidebar.schemas.contentSidebarContentPositionButtonIcon.name,
+            "Button icon"
+        ],
+        [
+            Keys.category.components.sidebar.schemas.contentSidebarContentPositionButtonIcon.description,
+            "Toggle button icon section"
+        ],
+        [
+            Keys.category.components.sidebar.methods.toggle.name,
+            "Toggle"
+        ],
+        [
+            Keys.category.components.sidebar.methods.toggle.description,
+            "Triggered when the toggle button is clicked"
+        ],
+        [
+            Keys.category.components.sidebar.examples.default.name,
+            "Default"
+        ],
+        [
+            Keys.category.components.sidebar.examples.default.description,
+            "Display a sidebar with LTR direction and sample content"
+        ],
+
+
+        /// Components -> MouseScroller
+        [
+            Keys.category.components.mouseScroller.name,
+            "Mouse Scroller"
+        ],
+        [
+            Keys.category.components.mouseScroller.description,
+            "Scrollable component with zoom, drag-to-pan and wheel-to-zoom support"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.borderBackgroundColor_light.name,
+            "Light Background Color"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.borderBackgroundColor_light.description,
+            "Border background color in light mode"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.borderBackgroundColor_dark.name,
+            "Dark Background Color"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.borderBackgroundColor_dark.description,
+            "Border background color in dark mode"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.borderWidth.name,
+            "Border Width"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.borderWidth.description,
+            "Border width of the component"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.borderRadius.name,
+            "Border Radius"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.borderRadius.description,
+            "Border corner radius of the component"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.borderColor.name,
+            "Border Color"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.borderColor.description,
+            "Border color of the component"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.toolsZoomHas.name,
+            "Show Zoom Tools"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.toolsZoomHas.description,
+            "Whether to show zoom in/out/refresh tools"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.toolsColorModeHas.name,
+            "Show Color Mode Tools"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.toolsColorModeHas.description,
+            "Whether to show light/dark mode toggle tools"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.toolsOpacity.name,
+            "Tools Opacity"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.toolsOpacity.description,
+            "Opacity level of tools in percentage"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.colorMode.name,
+            "Color Mode"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.colorMode.description,
+            "Color mode of the component (light or dark)"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.sideBarsMargin.name,
+            "Sidebars Margin"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.sideBarsMargin.description,
+            "Margin of sidebars from component edges"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.sideBarHas.name,
+            "Show Sidebar"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.sideBarHas.description,
+            "Whether to show the side sidebar"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.sideBarWidth.name,
+            "Sidebar Width"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.sideBarWidth.description,
+            "Width of the side sidebar in pixels"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.sideBarBtnOpenHas.name,
+            "Show Sidebar Toggle Button"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.sideBarBtnOpenHas.description,
+            "Whether to show the sidebar open/close toggle button"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.sideBarContent.name,
+            "Sidebar Content"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.sideBarContent.description,
+            "Content inside the side sidebar"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.sideBarTopHas.name,
+            "Show Top Sidebar"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.sideBarTopHas.description,
+            "Whether to show the top sidebar"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.sideBarTopWidth.name,
+            "Top Sidebar Height"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.sideBarTopWidth.description,
+            "Height of the top sidebar in pixels"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.sideBarTopContent.name,
+            "Top Sidebar Content"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.sideBarTopContent.description,
+            "Content inside the top sidebar"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.sideBarBottomHas.name,
+            "Show Bottom Sidebar"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.sideBarBottomHas.description,
+            "Whether to show the bottom sidebar"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.sideBarBottomWidth.name,
+            "Bottom Sidebar Height"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.sideBarBottomWidth.description,
+            "Height of the bottom sidebar in pixels"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.sideBarBottomContent.name,
+            "Bottom Sidebar Content"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.sideBarBottomContent.description,
+            "Content inside the bottom sidebar"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.zoom.name,
+            "Zoom Scale"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.zoom.description,
+            "Current zoom value (1 = 100%)"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.zoomMin.name,
+            "Min Zoom"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.zoomMin.description,
+            "Minimum allowed zoom value"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.zoomMax.name,
+            "Max Zoom"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.zoomMax.description,
+            "Maximum allowed zoom value"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.zoomStep.name,
+            "Zoom Step"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.zoomStep.description,
+            "Zoom change step per scroll"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.scrollLeft.name,
+            "Scroll Left"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.scrollLeft.description,
+            "Horizontal scroll offset of content"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.scrollTop.name,
+            "Scroll Top"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.scrollTop.description,
+            "Vertical scroll offset of content"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.content.name,
+            "Scroller Content"
+        ],
+        [
+            Keys.category.components.mouseScroller.props.content.description,
+            "Content that can be zoomed and scrolled"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.border.name,
+            "Border"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.border.description,
+            "Main border section of the component"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContent.name,
+            "Border Content"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContent.description,
+            "Content inside the border"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentView.name,
+            "View Area"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentView.description,
+            "Zoomable and scrollable area"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentSidebar.name,
+            "Side Sidebar"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentSidebar.description,
+            "Side sidebar section"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentSidebarTop.name,
+            "Top Sidebar"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentSidebarTop.description,
+            "Top sidebar section"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentSidebarBottom.name,
+            "Bottom Sidebar"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentSidebarBottom.description,
+            "Bottom sidebar section"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentPositionZoom.name,
+            "Zoom Position"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentPositionZoom.description,
+            "Zoom percentage indicator"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentPositionZoomBorder.name,
+            "Zoom Border"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentPositionZoomBorder.description,
+            "Border displaying zoom percentage"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentTools.name,
+            "Tools"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentTools.description,
+            "Zoom and color mode tools section"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentToolsContent.name,
+            "Tools Content"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentToolsContent.description,
+            "Content inside the tools section"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentToolsContentZooming.name,
+            "Zooming Section"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentToolsContentZooming.description,
+            "Zoom tools section"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentToolsContentZoomingIn.name,
+            "Zoom In"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentToolsContentZoomingIn.description,
+            "Zoom in button"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentToolsContentZoomingRefresh.name,
+            "Zoom Refresh"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentToolsContentZoomingRefresh.description,
+            "Reset zoom to default button"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentToolsContentZoomingOut.name,
+            "Zoom Out"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentToolsContentZoomingOut.description,
+            "Zoom out button"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentToolsContentColoring.name,
+            "Coloring Section"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentToolsContentColoring.description,
+            "Color mode toggle tools section"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentToolsContentColoringLight.name,
+            "Light Mode"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentToolsContentColoringLight.description,
+            "Switch to light mode button"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentToolsContentColoringDark.name,
+            "Dark Mode"
+        ],
+        [
+            Keys.category.components.mouseScroller.schemas.borderContentToolsContentColoringDark.description,
+            "Switch to dark mode button"
+        ],
+        [
+            Keys.category.components.mouseScroller.methods.zoomIn.name,
+            "Zoom In"
+        ],
+        [
+            Keys.category.components.mouseScroller.methods.zoomIn.description,
+            "Callback when zoom in button is clicked"
+        ],
+        [
+            Keys.category.components.mouseScroller.methods.zoomOut.name,
+            "Zoom Out"
+        ],
+        [
+            Keys.category.components.mouseScroller.methods.zoomOut.description,
+            "Callback when zoom out button is clicked"
+        ],
+        [
+            Keys.category.components.mouseScroller.methods.zoomRefresh.name,
+            "Zoom Refresh"
+        ],
+        [
+            Keys.category.components.mouseScroller.methods.zoomRefresh.description,
+            "Callback when zoom refresh button is clicked"
+        ],
+        [
+            Keys.category.components.mouseScroller.methods.colorModeLight.name,
+            "Light Mode"
+        ],
+        [
+            Keys.category.components.mouseScroller.methods.colorModeLight.description,
+            "Callback when light mode button is clicked"
+        ],
+        [
+            Keys.category.components.mouseScroller.methods.colorModeDark.name,
+            "Dark Mode"
+        ],
+        [
+            Keys.category.components.mouseScroller.methods.colorModeDark.description,
+            "Callback when dark mode button is clicked"
+        ],
+        [
+            Keys.category.components.mouseScroller.examples.default.name,
+            "Default"
+        ],
+        [
+            Keys.category.components.mouseScroller.examples.default.description,
+            "Display a scroller with sample content and zoom tools"
+        ],
+
 
     ]);

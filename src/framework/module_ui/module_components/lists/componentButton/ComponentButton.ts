@@ -315,28 +315,34 @@ export class ComponentButton extends ComponentButtonBase {
         const prop_btnTitleStyles             = data?.["prop_btnTitleStyles"]             ?? bind.prop_btnTitleStyles;
         const prop_btnTitleClass              = data?.["prop_btnTitleClass"]              ?? bind.prop_btnTitleClass;
 
-        return CoreReactive.App.part(
-            "b" ,
-            {
-            attrs: {
-                ...attrsDefault,
-            },
-            attrsBind: {
-                prop_btnTitleStyles
-            },
-            styles: {
-                "transition":            "color 200ms ease",
-            },
-            stylesBind: {
-                "color":                 this.getStyleBtnTitleColor(prop_btnSemantic , prop_btnTitleColor , prop_btnTitleColor_hover),
-            },
-            classBind: [
-                prop_btnTitleClass
-            ],
-            children: [
-                prop_btnTitle
-            ],
-        });
+        return CoreObservable.App.conditionWhen(
+            [prop_btnTitle],
+            (title) => title != null && title !== "",
+            () => CoreReactive.App.part(
+                "b" ,
+                {
+                attrs: {
+                    ...attrsDefault,
+                },
+                attrsBind: {
+                    prop_btnTitleStyles
+                },
+                styles: {
+                    "transition":            "color 200ms ease",
+                },
+                stylesBind: {
+                    "color":                 this.getStyleBtnTitleColor(prop_btnSemantic , prop_btnTitleColor , prop_btnTitleColor_hover),
+                },
+                classBind: [
+                    prop_btnTitleClass
+                ],
+                children: [
+                    prop_btnTitle
+                ],
+            }),
+            () => this.renderEmptyContent(attrsDefault),
+            this.getScope()
+        );
     }
 
     /* ---------------------------------------------
