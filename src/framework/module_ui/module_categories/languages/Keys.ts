@@ -497,6 +497,86 @@ export const Keys = {
                 },
             },
 
+            /// InputSimple
+            inputSimple: {
+                name: CreateTranslationKey(),
+                description: CreateTranslationKey(),
+                props: {
+                    inputName: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    inputDisable: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    inputValue: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    inputClass: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    inputStyles: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    inputType: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    inputPlaceholder: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    inputFor: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    inputBorderTopLeftRadiusHas: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    inputBorderTopRightRadiusHas: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    inputBorderBottomLeftRadiusHas: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    inputBorderBottomRightRadiusHas: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    inputBorderTopHas: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    inputBorderRightHas: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    inputBorderBottomHas: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    inputBorderLeftHas: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                },
+                schemas: {
+                    form: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    input: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    clearIcon: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                },
+                methods: {
+                    inputChange: { description: CreateTranslationKey() },
+                    inputFocus: { description: CreateTranslationKey() },
+                    inputBlur: { description: CreateTranslationKey() },
+                },
+                examples: {
+                    default: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                },
+            },
+
+            /// SelectCustomSimple
+            selectCustomSimple: {
+                name: CreateTranslationKey(), description: CreateTranslationKey(),
+                props: {
+                    selectName: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    selectDisable: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    selectValue: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    selectClass: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    selectStyles: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    selectPlaceholder: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    selectOptions: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    selectTypeShow: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    selectBorderTopLeftRadiusHas: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    selectBorderTopRightRadiusHas: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    selectBorderBottomLeftRadiusHas: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    selectBorderBottomRightRadiusHas: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    selectBorderTopHas: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    selectBorderRightHas: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    selectBorderBottomHas: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    selectBorderLeftHas: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+                schemas: {
+                    form: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    formValue: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    select: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    selectHeader: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    selectHeaderText: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    selectHeaderIcon: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    selectBody: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    selectSearch: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    selectOptions: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    selectOption: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+                methods: {
+                    selectChange: {description: CreateTranslationKey()},
+                    selectSearch: {description: CreateTranslationKey()},
+                    selectOpen: {description: CreateTranslationKey()},
+                    selectClose: {description: CreateTranslationKey()},
+                },
+                texts: {searchPlaceholder: CreateTranslationKey()},
+                examples: {default: {name: CreateTranslationKey(), description: CreateTranslationKey()}},
+            },
+
             /// InputAgreementCheckBox
             inputAgreementCheckBox: {
                 name:        CreateTranslationKey() ,

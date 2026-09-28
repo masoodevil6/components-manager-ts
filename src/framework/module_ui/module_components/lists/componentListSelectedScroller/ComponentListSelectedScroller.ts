@@ -293,6 +293,7 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
                         if (!el) return;
                         isDragging = true;
                         el.style.cursor = "grabbing";
+                        el.style.scrollBehavior = "auto";
                         startX = e.clientX;
                         startLeft = el.scrollLeft;
                         scrollEl = el;
@@ -304,7 +305,10 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
                         };
                         const onUp = () => {
                             isDragging = false;
-                            if (scrollEl) scrollEl.style.cursor = "grab";
+                            if (scrollEl) {
+                                scrollEl.style.cursor = "grab";
+                                scrollEl.style.scrollBehavior = "smooth";
+                            }
                             startX = null;
                             startLeft = null;
                             scrollEl = null;
@@ -323,7 +327,7 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
                             overflowX:        "auto",
                             overflowY:        "hidden",
                             cursor:           "grab",
-                            scrollBehavior:   "smooth",
+                            scrollBehavior:   "auto",
                             scrollbarWidth:   "none",
                             msOverflowStyle:  "none",
                         },

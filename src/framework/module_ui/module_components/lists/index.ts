@@ -146,6 +146,20 @@ import {Schemas    as InputOtpSchemas}       from "./componentInputOtp/Schemas";
 import {Methods    as InputOtpMethods}       from "./componentInputOtp/Methods";
 import {Examples   as InputOtpExamples}       from "./componentInputOtp/examples";
 // --------------------------------
+import {Component as ComponentInputSimpleClass} from "./componentInputSimple";
+import {Definition as InputSimpleDefinition}    from "./componentInputSimple/Definition";
+import {Props      as InputSimpleProps}         from "./componentInputSimple/Props";
+import {Schemas    as InputSimpleSchemas}       from "./componentInputSimple/Schemas";
+import {Methods    as InputSimpleMethods}       from "./componentInputSimple/Methods";
+import {Examples   as InputSimpleExamples}      from "./componentInputSimple/examples";
+// --------------------------------
+import {Component as ComponentSelectCustomSimpleClass} from "./componentSelectCustomSimple";
+import {Definition as SelectCustomSimpleDefinition}    from "./componentSelectCustomSimple/Definition";
+import {Props      as SelectCustomSimpleProps}         from "./componentSelectCustomSimple/Props";
+import {Schemas    as SelectCustomSimpleSchemas}       from "./componentSelectCustomSimple/Schemas";
+import {Methods    as SelectCustomSimpleMethods}       from "./componentSelectCustomSimple/Methods";
+import {Examples   as SelectCustomSimpleExamples}      from "./componentSelectCustomSimple/examples";
+// --------------------------------
 import {Component as ComponentInputAgreementCheckBoxClass} from "./componentInputAgreementCheckBox";
 import {Definition as InputAgreementCheckBoxDefinition}    from "./componentInputAgreementCheckBox/Definition";
 import {Props      as InputAgreementCheckBoxProps}         from "./componentInputAgreementCheckBox/Props";
@@ -413,6 +427,24 @@ CoreComponents.ComponentManager.register({
     constructor: ComponentInputOtpClass as any,
 });
 
+CoreComponents.ComponentManager.register({
+    definition:  InputSimpleDefinition,
+    props:       InputSimpleProps,
+    schemas:     InputSimpleSchemas,
+    methods:     InputSimpleMethods,
+    examples:    InputSimpleExamples,
+    constructor: ComponentInputSimpleClass as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition:  SelectCustomSimpleDefinition,
+    props:       SelectCustomSimpleProps,
+    schemas:     SelectCustomSimpleSchemas,
+    methods:     SelectCustomSimpleMethods,
+    examples:    SelectCustomSimpleExamples,
+    constructor: ComponentSelectCustomSimpleClass as any,
+});
+
 
 // ثبت ComponentInputAgreementCheckBox در Component Manager
 CoreComponents.ComponentManager.register({
@@ -521,6 +553,8 @@ export * as ComponentWindowConfirm from "./componentWindowConfirm";
 export * as ComponentTable       from "./componentTable";
 export * as ComponentInputCheckBox from "./componentInputCheckBox";
 export * as ComponentInputOtp from "./componentInputOtp";
+export * as ComponentInputSimple from "./componentInputSimple";
+export * as ComponentSelectCustomSimple from "./componentSelectCustomSimple";
 export * as ComponentInputAgreementCheckBox from "./componentInputAgreementCheckBox";
 export * as ComponentDraggableOrdersY from "./componentDraggableOrdersY";
 export * as ComponentListSelectedScroller from "./componentListSelectedScroller";
