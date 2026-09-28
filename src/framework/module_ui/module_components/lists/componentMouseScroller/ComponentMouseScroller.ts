@@ -43,6 +43,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
     private _ELEMENT_CONTAINER: CoreReactive.App | null = null;
     private _ELEMENT_SCROLLER:  CoreReactive.App | null = null;
+    private _ZOOM_ANIM_ID:      number | null = null;
 
 
     constructor(
@@ -70,6 +71,10 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
        Plan 9.1 — Component Disposal
     --------------------------------------------- */
     dispose(): void {
+        if (this._ZOOM_ANIM_ID != null) {
+            cancelAnimationFrame(this._ZOOM_ANIM_ID);
+            this._ZOOM_ANIM_ID = null;
+        }
         this.disposeStep();
     }
 
@@ -248,9 +253,14 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
                 height:          UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
                 overflow:        "hidden",
                 cursor:          "all-scroll",
-                scrollBehavior:  "smooth",
+                scrollBehavior:  "auto",
             },
             on: {
+                mouseenter:    () => this._DEFAULT_OPACITY?.set(100),
+                mouseleave:    () => {
+                    const val = this._COMPONENT_PROPS_BIND.prop_toolsOpacity?.get();
+                    this._DEFAULT_OPACITY?.set(val ?? 40);
+                },
                 wheel:        (e: any) => this.fn_scrollerWheel(e),
                 pointerdown:  (e: any) => this.fn_scrollerMouseDown(e),
                 pointermove:  (e: any) => this.fn_scrollerMouseMove(e),
@@ -313,6 +323,8 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
                 zIndex:         "0",
                 position:       "relative",
                 transformOrigin: "0 0",
+                // Keep wheel zoom smooth while preserving the pointer focal point.
+                willChange:     "transform",
                 overflow:       "unset",
                 userSelect:     "none",
             },
@@ -359,7 +371,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
             {
                 classList: [] as any,
                 styles: CoreObservable.App.computed(
-                    (sidebarOpacity, sideBarWidth, sideBarBtnOpenHas, sideBarTopHas, sideBarTopWidth, sideBarBottomHas, sideBarBottomWidth, sideBarsMargin) => {
+                    (sidebarOpacity, isDown, sideBarWidth, sideBarBtnOpenHas, sideBarTopHas, sideBarTopWidth, sideBarBottomHas, sideBarBottomWidth, sideBarsMargin) => {
                         const height: string[] = ["100%"];
                         const top: string[] = [];
                         if (sideBarTopHas) {
@@ -380,7 +392,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
                         const btnExtra = sideBarBtnOpenHas ? 30 : 0;
                         return {
                             transition: "opacity 500ms",
-                            opacity:   sidebarOpacity != null ? String(sidebarOpacity / 100) : "1",
+                            opacity:   isDown ? "0" : (sidebarOpacity != null ? String(sidebarOpacity / 100) : "1"),
                             width:     `${sideBarWidth + btnExtra}px`,
                             height:    `calc(${height.join(" ")})`,
                             position:  "absolute",
@@ -389,6 +401,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
                     },
                     [
                         this._DEFAULT_OPACITY!,
+                        this._SCROLL_IS_DOWN,
                         prop_sideBarWidth,
                         prop_sideBarBtnOpenHas,
                         prop_sideBarTopHas, prop_sideBarTopWidth,
@@ -403,8 +416,8 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
                 prop_sidebarIsOpen:     true as any,
 
                 prop_show: CoreObservable.App.computed(
-                    (sideBarHas, isDown) => sideBarHas && !isDown,
-                    [prop_sideBarHas, this._SCROLL_IS_DOWN],
+                    (sideBarHas) => sideBarHas,
+                    [prop_sideBarHas],
                     this.getScope(),
                 ) as any,
 
@@ -454,21 +467,21 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
             {
                 classList: [] as any,
                 styles: CoreObservable.App.computed(
-                    (sidebarOpacity, sideBarTopWidth) => ({
+                    (sidebarOpacity, isDown, sideBarTopWidth) => ({
                         transition: "opacity 500ms",
-                        opacity:   sidebarOpacity != null ? String(sidebarOpacity / 100) : "1",
+                        opacity:   isDown ? "0" : (sidebarOpacity != null ? String(sidebarOpacity / 100) : "1"),
                         width:     "100%",
                         height:    `${sideBarTopWidth}px`,
                         position:  "absolute",
                         top:       "0px",
                     }),
-                    [this._DEFAULT_OPACITY!, prop_sideBarTopWidth],
+                    [this._DEFAULT_OPACITY!, this._SCROLL_IS_DOWN, prop_sideBarTopWidth],
                     this.getScope(),
                 ) as any,
 
                 prop_show: CoreObservable.App.computed(
-                    (sideBarTopHas, isDown) => sideBarTopHas && !isDown,
-                    [prop_sideBarTopHas, this._SCROLL_IS_DOWN],
+                    (sideBarTopHas) => sideBarTopHas,
+                    [prop_sideBarTopHas],
                     this.getScope(),
                 ) as any,
 
@@ -516,21 +529,21 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
             {
                 classList: [] as any,
                 styles: CoreObservable.App.computed(
-                    (sidebarOpacity, sideBarBottomWidth) => ({
+                    (sidebarOpacity, isDown, sideBarBottomWidth) => ({
                         transition: "opacity 500ms",
-                        opacity:   sidebarOpacity != null ? String(sidebarOpacity / 100) : "1",
+                        opacity:   isDown ? "0" : (sidebarOpacity != null ? String(sidebarOpacity / 100) : "1"),
                         width:     "100%",
                         height:    `${sideBarBottomWidth}px`,
                         position:  "absolute",
                         bottom:    "0px",
                     }),
-                    [this._DEFAULT_OPACITY!, prop_sideBarBottomWidth],
+                    [this._DEFAULT_OPACITY!, this._SCROLL_IS_DOWN, prop_sideBarBottomWidth],
                     this.getScope(),
                 ) as any,
 
                 prop_show: CoreObservable.App.computed(
-                    (sideBarBottomHas, isDown) => sideBarBottomHas && !isDown,
-                    [prop_sideBarBottomHas, this._SCROLL_IS_DOWN],
+                    (sideBarBottomHas) => sideBarBottomHas,
+                    [prop_sideBarBottomHas],
                     this.getScope(),
                 ) as any,
 
@@ -578,11 +591,12 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
                 width: "50px",
                 height: "30px",
                 zIndex: String(UtilStyle.Css_ZIndex(UtilConst.ZIndex.tools)),
+                transition: "opacity 500ms",
             },
             stylesBind: {
                 opacity: CoreObservable.App.computed(
-                    (v) => v != null ? String(v / 100) : "1",
-                    [this._DEFAULT_OPACITY!],
+                    (v, isDown) => isDown ? "0" : (v != null ? String(v / 100) : "1"),
+                    [this._DEFAULT_OPACITY!, this._SCROLL_IS_DOWN],
                     this.getScope(),
                 ),
                 left: CoreObservable.App.computed(
@@ -666,7 +680,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
             {
                 classList: [] as any,
                 styles: CoreObservable.App.computed(
-                    (sidebarOpacity, dir, sideBarTopHas, sideBarTopWidth, sideBarBottomHas, sideBarBottomWidth, sideBarsMargin) => {
+                    (sidebarOpacity, isDown, dir, sideBarTopHas, sideBarTopWidth, sideBarBottomHas, sideBarBottomWidth, sideBarsMargin) => {
                         const height: string[] = ["100%"];
                         const top: string[] = [];
                         if (sideBarTopHas) {
@@ -686,7 +700,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
                         }
                         return {
                             transition: "opacity 500ms",
-                            opacity:   sidebarOpacity != null ? String(sidebarOpacity / 100) : "1",
+                            opacity:   isDown ? "0" : (sidebarOpacity != null ? String(sidebarOpacity / 100) : "1"),
                             width:     `${40 + 2 * sideBarsMargin}px`,
                             height:    `calc(${height.join(" ")})`,
                             position:  "absolute",
@@ -696,6 +710,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
                     },
                     [
                         this._DEFAULT_OPACITY!,
+                        this._SCROLL_IS_DOWN,
                         CoreConfig.Settings.DirectionRtl.observable(),
                         prop_sideBarTopHas, prop_sideBarTopWidth,
                         prop_sideBarBottomHas, prop_sideBarBottomWidth,
@@ -707,11 +722,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
                 prop_blurHas:           false as any,
                 prop_sidebarBtnOpenHas: false as any,
                 prop_sidebarIsOpen:     true as any,
-                prop_show: CoreObservable.App.computed(
-                    (isDown) => !isDown,
-                    [this._SCROLL_IS_DOWN],
-                    this.getScope(),
-                ) as any,
+                prop_show: true as any,
 
                 prop_sidebarDirection: CoreObservable.App.computed(
                     (dir) => dir ? SidebarDirection.LTR : SidebarDirection.RTL,
@@ -852,9 +863,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
             } as any,
             {
                 CLICK: (event: any, dataArgs: any, componentArgs: any) => {
-                    const scroller = this._ELEMENT_SCROLLER?.getElement();
-                    const rect = scroller.getBoundingClientRect();
-                    this.fn_scrollerScaleProgress(rect.left, rect.top);
+                    this.pr_setChangeValue(event);
                 },
             } as any,
         );
@@ -1051,13 +1060,19 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
         if (event.target?.closest?.('component-sidebar')) return;
         event.preventDefault();
         event.stopPropagation();
-        this.fn_scrollerScaleProgress(event.clientX, event.clientY, event.deltaY);
+        this.fn_scrollerScaleProgress(event.clientX, event.clientY, event.deltaY, event);
     }
 
-    private fn_scrollerScaleProgress(x: number, y: number, zoomStep: number | null = null): void {
+    private fn_scrollerScaleProgress(
+        x: number,
+        y: number,
+        zoomStep: number | null = null,
+        event?: any,
+    ): void {
 
         const container = this._ELEMENT_CONTAINER?.getElement();
-        const rect = container?.getBoundingClientRect();
+        const viewport = event?.currentTarget?.querySelector?.(".ms-scroller-hidden") ?? container;
+        const rect = viewport?.getBoundingClientRect();
         const mouseX = rect ? x - rect.left : 0;
         const mouseY = rect ? y - rect.top : 0;
 
@@ -1080,9 +1095,30 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
         const newScrollLeft = (scrollLeft + mouseX) * scaleRatio - mouseX;
         const newScrollTop  = (scrollTop  + mouseY) * scaleRatio - mouseY;
 
-        bind["prop_zoom"]?.set(newScale);
-        bind["prop_scrollLeft"]?.set(newScrollLeft);
-        bind["prop_scrollTop"]?.set(newScrollTop);
+        if (this._ZOOM_ANIM_ID != null) {
+            cancelAnimationFrame(this._ZOOM_ANIM_ID);
+            this._ZOOM_ANIM_ID = null;
+        }
+
+        const startTime = performance.now();
+        const duration = 300;
+        const easeOut = (progress: number): number => 1 - Math.pow(1 - progress, 3);
+        const animate = (now: number): void => {
+            const progress = Math.min((now - startTime) / duration, 1);
+            const eased = easeOut(progress);
+
+            bind["prop_zoom"]?.set(scale + (newScale - scale) * eased);
+            bind["prop_scrollLeft"]?.set(scrollLeft + (newScrollLeft - scrollLeft) * eased);
+            bind["prop_scrollTop"]?.set(scrollTop + (newScrollTop - scrollTop) * eased);
+
+            if (progress < 1) {
+                this._ZOOM_ANIM_ID = requestAnimationFrame(animate);
+            } else {
+                this._ZOOM_ANIM_ID = null;
+            }
+        };
+
+        this._ZOOM_ANIM_ID = requestAnimationFrame(animate);
     }
 
 
@@ -1091,10 +1127,31 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
     --------------------------------------------- */
     private pr_setChangeValue(event: any): void {
         const bind = this._COMPONENT_PROPS_BIND;
-        const currentZoom = bind["prop_zoom"]?.get() ?? 1;
-        bind["prop_zoom"]?.set(1);
-        bind["prop_scrollLeft"]?.set(0);
-        bind["prop_scrollTop"]?.set(0);
+        const zoom = bind["prop_zoom"];
+        if (!zoom) return;
+
+        if (this._ZOOM_ANIM_ID != null) {
+            cancelAnimationFrame(this._ZOOM_ANIM_ID);
+            this._ZOOM_ANIM_ID = null;
+        }
+
+        const startZoom = zoom.get();
+        const startTime = performance.now();
+        const duration = 300;
+        const easeOut = (progress: number): number => 1 - Math.pow(1 - progress, 3);
+        const animate = (now: number): void => {
+            const progress = Math.min((now - startTime) / duration, 1);
+            zoom.set(startZoom + (1 - startZoom) * easeOut(progress));
+
+            if (progress < 1) {
+                this._ZOOM_ANIM_ID = requestAnimationFrame(animate);
+            } else {
+                zoom.set(1);
+                this._ZOOM_ANIM_ID = null;
+            }
+        };
+
+        this._ZOOM_ANIM_ID = requestAnimationFrame(animate);
     }
 
 }

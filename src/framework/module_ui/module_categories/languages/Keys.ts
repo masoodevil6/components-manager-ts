@@ -468,6 +468,35 @@ export const Keys = {
                 },
             },
 
+            /// InputOtp
+            inputOtp: {
+                name: CreateTranslationKey(),
+                description: CreateTranslationKey(),
+                props: {
+                    name: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    input: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    langs: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    length: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                },
+                schemas: {
+                    otpStructure: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    value: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    elements: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    label: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    inputs: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    timerDown: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                },
+                methods: {
+                    getNewToken: { description: CreateTranslationKey() },
+                    finishToken: { description: CreateTranslationKey() },
+                    change: { description: CreateTranslationKey() },
+                    completeInputOtp: { description: CreateTranslationKey() },
+                },
+                examples: {
+                    default: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                },
+            },
+
             /// InputAgreementCheckBox
             inputAgreementCheckBox: {
                 name:        CreateTranslationKey() ,
@@ -1118,6 +1147,49 @@ export const Keys = {
 
                 examples: {
                     default: { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                },
+            },
+
+            /// TimerDown
+            timerDown: {
+                name:        CreateTranslationKey(),
+                description: CreateTranslationKey(),
+
+                props: {
+                    backgroundColor_body:    { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    backgroundColor_timer:   { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    backgroundColor_timerEffect: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    color_timer:             { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    color_description:      { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    description:             { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    show_options:            { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    tooltipIcon:             { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    lang_on_progress_duration: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    lang_on_end_duration:      { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    lang_btn_resend:           { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                },
+
+                texts: {
+                    onProgressDuration: CreateTranslationKey(),
+                    onEndDuration: CreateTranslationKey(),
+                    btnResend: CreateTranslationKey(),
+                },
+
+                schemas: {
+                    form:       { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    tooltip:    { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    timer:      { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    text:       { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    textButton: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                },
+
+                methods: {
+                    clickRetry:   { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                    finishTimer:  { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                },
+
+                examples: {
+                    default: { name: CreateTranslationKey(), description: CreateTranslationKey() },
                 },
             },
 

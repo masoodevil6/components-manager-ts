@@ -1,5 +1,6 @@
 export {Definition} from "./Definition"
 export {Validate}  from "./validate"
 export {InputCheckBox} from "./inputCheckBox"
+export {InputOtp} from "./inputOtp"
 export {InputAgreementCheckBox} from "./inputAgreementCheckBox"
 export {InputListSelector} from "./inputListSelector"

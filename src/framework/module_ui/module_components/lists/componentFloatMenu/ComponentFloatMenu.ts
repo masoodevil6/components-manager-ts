@@ -171,7 +171,6 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                 ...attrsDefault,
             },
             styles: {
-                cursor: "pointer",
                 outline: "none",
             },
             stylesBind: {
@@ -185,51 +184,53 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
             className: [
                 "d-inline-block",
             ],
-            on: {
-                click: (event: Event) => {
-                    CoreObservable.App.computed(
-                        (selectorTypeShow, floatShowControlWithSelf) => {
-                            if (!floatShowControlWithSelf) {
-                                if (selectorTypeShow === ShowTypes.CLICK && this._BORDER_INSTANCE) {
-                                    this._IS_SHOW = !this._IS_SHOW;
-                                    this._BORDER_INSTANCE.set("prop_show", this._IS_SHOW);
-                                    if (this._IS_SHOW) {
-                                        this._addDocumentClickListener();
-                                    } else {
-                                        this._removeDocumentClickListener();
-                                    }
-                                }
-                            }
-                        },
-                        [prop_selectorShowType, prop_floatShowControlWithSelf],
-                        this.getScope(),
-                    );
-                },
-                mouseenter: (event: Event) => {
-                    CoreObservable.App.computed(
-                        (selectorTypeShow, floatShowControlWithSelf) => {
-                            if (!floatShowControlWithSelf && selectorTypeShow === ShowTypes.HOVER && this._BORDER_INSTANCE) {
-                                this._BORDER_INSTANCE.set("prop_show", true);
-                            }
-                        },
-                        [prop_selectorShowType, prop_floatShowControlWithSelf],
-                        this.getScope(),
-                    );
-                },
-                mouseleave: (event: Event) => {
-                    CoreObservable.App.computed(
-                        (selectorTypeShow, floatShowControlWithSelf) => {
-                            if (!floatShowControlWithSelf && selectorTypeShow === ShowTypes.HOVER && this._BORDER_INSTANCE) {
-                                this._BORDER_INSTANCE.set("prop_show", false);
-                            }
-                        },
-                        [prop_selectorShowType, prop_floatShowControlWithSelf],
-                        this.getScope(),
-                    );
-                },
-            },
             children: [
-                prop_selectorContent,
+                CoreReactive.App.part("span", {
+                    styles: { display: "contents", cursor: "pointer" },
+                    on: {
+                        click: (event: Event) => {
+                            CoreObservable.App.computed(
+                                (selectorTypeShow, floatShowControlWithSelf) => {
+                                    if (!floatShowControlWithSelf && selectorTypeShow === ShowTypes.CLICK && this._BORDER_INSTANCE) {
+                                        this._IS_SHOW = !this._IS_SHOW;
+                                        this._BORDER_INSTANCE.set("prop_show", this._IS_SHOW);
+                                        if (this._IS_SHOW) this._addDocumentClickListener();
+                                        else this._removeDocumentClickListener();
+                                    }
+                                },
+                                [prop_selectorShowType, prop_floatShowControlWithSelf],
+                                this.getScope(),
+                            );
+                        },
+                        mouseover: (event: MouseEvent) => {
+                            const selector = event.currentTarget as HTMLElement;
+                            if (event.relatedTarget instanceof Node && selector.contains(event.relatedTarget)) return;
+                            CoreObservable.App.computed(
+                                (selectorTypeShow, floatShowControlWithSelf) => {
+                                    if (!floatShowControlWithSelf && selectorTypeShow === ShowTypes.HOVER && this._BORDER_INSTANCE) {
+                                        this._BORDER_INSTANCE.set("prop_show", true);
+                                    }
+                                },
+                                [prop_selectorShowType, prop_floatShowControlWithSelf],
+                                this.getScope(),
+                            );
+                        },
+                        mouseout: (event: MouseEvent) => {
+                            const selector = event.currentTarget as HTMLElement;
+                            if (event.relatedTarget instanceof Node && selector.contains(event.relatedTarget)) return;
+                            CoreObservable.App.computed(
+                                (selectorTypeShow, floatShowControlWithSelf) => {
+                                    if (!floatShowControlWithSelf && selectorTypeShow === ShowTypes.HOVER && this._BORDER_INSTANCE) {
+                                        this._BORDER_INSTANCE.set("prop_show", false);
+                                    }
+                                },
+                                [prop_selectorShowType, prop_floatShowControlWithSelf],
+                                this.getScope(),
+                            );
+                        },
+                    },
+                    children: [prop_selectorContent],
+                }),
                 this.executeSchemaPart(Schemas.SELECTOR_POSITION.part, {}),
             ],
         });

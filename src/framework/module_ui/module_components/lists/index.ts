@@ -62,6 +62,12 @@ import {Props      as TooltipProps}              from "./componentTooltip/Props"
 import {Schemas    as TooltipSchemas}            from "./componentTooltip/Schemas";
 import {Methods    as TooltipMethods}            from "./componentTooltip/Methods";
 import {Examples   as TooltipExamples}           from "./componentTooltip/examples";
+import {Component as ComponentTimerDownClass}     from "./componentTimerDown";
+import {Definition as TimerDownDefinition}        from "./componentTimerDown/Definition";
+import {Props      as TimerDownProps}             from "./componentTimerDown/Props";
+import {Schemas    as TimerDownSchemas}           from "./componentTimerDown/Schemas";
+import {Methods    as TimerDownMethods}           from "./componentTimerDown/Methods";
+import {Examples   as TimerDownExamples}          from "./componentTimerDown/examples";
 // --------------------------------
 import {Component as ComponentCollapseClass}      from "./componentCollapse";
 import {Definition as CollapseDefinition}        from "./componentCollapse/Definition";
@@ -132,6 +138,13 @@ import {Props      as InputCheckBoxProps}         from "./componentInputCheckBox
 import {Schemas    as InputCheckBoxSchemas}       from "./componentInputCheckBox/Schemas";
 import {Methods    as InputCheckBoxMethods}       from "./componentInputCheckBox/Methods";
 import {Examples   as InputCheckBoxExamples}      from "./componentInputCheckBox/examples";
+// --------------------------------
+import {Component as ComponentInputOtpClass} from "./componentInputOtp";
+import {Definition as InputOtpDefinition}    from "./componentInputOtp/Definition";
+import {Props      as InputOtpProps}         from "./componentInputOtp/Props";
+import {Schemas    as InputOtpSchemas}       from "./componentInputOtp/Schemas";
+import {Methods    as InputOtpMethods}       from "./componentInputOtp/Methods";
+import {Examples   as InputOtpExamples}       from "./componentInputOtp/examples";
 // --------------------------------
 import {Component as ComponentInputAgreementCheckBoxClass} from "./componentInputAgreementCheckBox";
 import {Definition as InputAgreementCheckBoxDefinition}    from "./componentInputAgreementCheckBox/Definition";
@@ -391,6 +404,15 @@ CoreComponents.ComponentManager.register({
     constructor: ComponentInputCheckBoxClass as any,
 });
 
+CoreComponents.ComponentManager.register({
+    definition:  InputOtpDefinition,
+    props:       InputOtpProps,
+    schemas:     InputOtpSchemas,
+    methods:     InputOtpMethods,
+    examples:    InputOtpExamples,
+    constructor: ComponentInputOtpClass as any,
+});
+
 
 // ثبت ComponentInputAgreementCheckBox در Component Manager
 CoreComponents.ComponentManager.register({
@@ -469,6 +491,15 @@ CoreComponents.ComponentManager.register({
 });
 
 
+CoreComponents.ComponentManager.register({
+    definition: TimerDownDefinition,
+    props: TimerDownProps,
+    schemas: TimerDownSchemas,
+    methods: TimerDownMethods,
+    examples: TimerDownExamples,
+    constructor: ComponentTimerDownClass as any,
+});
+
 export * as ComponentStructure   from "./componentStructure";
 export * as ComponentIcon        from "./componentIcon";
 export * as ComponentButton      from "./componentButton";
@@ -478,6 +509,7 @@ export * as ComponentLabel       from "./componentLabel";
 export * as ComponentFloatMenu   from "./componentFloatMenu";
 export * as ComponentPositionMenu from "./componentPositionMenu";
 export * as ComponentTooltip     from "./componentTooltip";
+export * as ComponentTimerDown   from "./componentTimerDown";
 export * as ComponentCollapse    from "./componentCollapse";
 export * as ComponentRecyclerView from "./componentRecyclerView";
 export * as ComponentTabs       from "./componentTabs";
@@ -488,6 +520,7 @@ export * as ComponentWindow      from "./componentWindow";
 export * as ComponentWindowConfirm from "./componentWindowConfirm";
 export * as ComponentTable       from "./componentTable";
 export * as ComponentInputCheckBox from "./componentInputCheckBox";
+export * as ComponentInputOtp from "./componentInputOtp";
 export * as ComponentInputAgreementCheckBox from "./componentInputAgreementCheckBox";
 export * as ComponentDraggableOrdersY from "./componentDraggableOrdersY";
 export * as ComponentListSelectedScroller from "./componentListSelectedScroller";
