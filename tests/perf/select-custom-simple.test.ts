@@ -27,7 +27,20 @@ describe("ComponentSelectCustomSimple", () => {
 
         expect(root.querySelector('input[type="hidden"]')).not.toBeNull();
         const header = root.querySelector('[data-part-name="part-select-custom-simple-header"]') as HTMLElement;
+        const border = header.querySelector('[data-part-name="part-border"]') as HTMLElement;
+        expect(border.style.transition).toBe("background-color 1000ms, color 1000ms, border-color 1000ms");
+        expect(border.style.display).toBe("flow-root");
+        expect(border.style.opacity).toBe("1");
+        expect(border.style.borderTopLeftRadius).toBe("var(--borderRadiusMedium)");
+        expect(border.style.borderTopWidth).toBe("var(--borderWidthMedium)");
+        expect(border.style.getPropertyPriority("border-top-width")).toBe("important");
+        expect(border.style.borderColor).toBe("var(--primaryColor1)");
+        expect(border.style.backgroundColor).toBe("var(--shanColor1)");
+        const position = root.querySelector('[data-part-name="part-selector-position"]') as HTMLElement;
+        expect(position.querySelector(".d-none")).not.toBeNull();
         header.click();
+        expect(position.querySelector(".d-none")).toBeNull();
+        expect(getComputedStyle(position).top).toBe("auto");
 
         const search = root.querySelector('input[type="text"]') as HTMLInputElement;
         expect(search).not.toBeNull();
@@ -40,6 +53,7 @@ describe("ComponentSelectCustomSimple", () => {
             .find((element) => element.textContent?.includes("Banana")) as HTMLElement;
         expect(option).toBeDefined();
         option.click();
+        expect(position.querySelector(".d-none")).not.toBeNull();
 
         expect(select.get("prop_selectValue")).toBe(2);
         expect((root.querySelector('input[type="hidden"]') as HTMLInputElement).value).toBe("2");

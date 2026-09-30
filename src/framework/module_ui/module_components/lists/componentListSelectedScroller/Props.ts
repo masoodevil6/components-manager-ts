@@ -134,7 +134,7 @@ export const Props = {
     /// --- List Border ---
     prop_listBorderBackgroundColor: Define_ComponentProp<string | null>({
         prop:         "prop_listBorderBackgroundColor",
-        default:      UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_5),
+        default:      UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
         name:         Keys.category.components.listSelectedScroller.props.listBorderBackgroundColor.name,
         description:  Keys.category.components.listSelectedScroller.props.listBorderBackgroundColor.description,
     }),

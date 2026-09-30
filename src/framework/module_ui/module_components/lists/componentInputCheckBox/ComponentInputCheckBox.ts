@@ -13,11 +13,11 @@ import {PropsConfigType}           from "./Props";
 import {createInputCheckBoxStep}   from "./Step";
 import {PartAttrDefault}           from "@/core_components";
 import {ComponentStructureTrait}   from "../../traits/componentStructureTrait";
+import {ComponentLabelTrait}      from "../../traits/componentLabelTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
 // --------------------------------
 import * as ComponentBorder  from "../componentBorder";
 import * as ComponentIcon    from "../componentIcon";
-import * as ComponentLabel   from "../componentLabel";
 import * as ComponentValidate from "../componentValidate";
 
 
@@ -148,50 +148,16 @@ export class ComponentInputCheckBox extends ComponentInputCheckBoxBase {
     ): CoreReactive.App {
 
         const bind = this._COMPONENT_PROPS_BIND;
-
-        const prop_labelShow              = data?.["prop_labelShow"]              ?? bind.prop_labelShow;
-        const prop_labelBackground        = data?.["prop_labelBackground"]        ?? bind.prop_labelBackground;
-        const prop_labelRadius            = data?.["prop_labelRadius"]            ?? bind.prop_labelRadius;
-        const prop_labelMinWidth          = data?.["prop_labelMinWidth"]          ?? bind.prop_labelMinWidth;
-        const prop_labelTitle             = data?.["prop_labelTitle"]             ?? bind.prop_labelTitle;
-        const prop_labelFor               = data?.["prop_labelFor"]               ?? bind.prop_labelFor;
-        const prop_labelStyle             = data?.["prop_labelStyle"]             ?? bind.prop_labelStyle;
-        const prop_labelClass             = data?.["prop_labelClass"]             ?? bind.prop_labelClass;
-        const prop_labelColor             = data?.["prop_labelColor"]             ?? bind.prop_labelColor;
-        const prop_labelTooltipIcon       = data?.["prop_labelTooltipIcon"]       ?? bind.prop_labelTooltipIcon;
-        const prop_labelTooltipDescription= data?.["prop_labelTooltipDescription"]?? bind.prop_labelTooltipDescription;
-        const prop_labelTooltipBackground = data?.["prop_labelTooltipBackground"] ?? bind.prop_labelTooltipBackground;
-        const prop_labelTooltipColor      = data?.["prop_labelTooltipColor"]      ?? bind.prop_labelTooltipColor;
-        const prop_labelTooltipPosition   = data?.["prop_labelTooltipPosition"]   ?? bind.prop_labelTooltipPosition;
-        const prop_labelTooltipDirection  = data?.["prop_labelTooltipDirection"]  ?? bind.prop_labelTooltipDirection;
-
-        return new ComponentLabel.Component(
-            {
-                prop_labelShow:               prop_labelShow,
-                prop_labelBackground:         prop_labelBackground,
-                prop_labelRadius:             prop_labelRadius,
-                prop_labelMinWidth:           prop_labelMinWidth,
-                prop_labelTitle:              prop_labelTitle,
-                prop_labelFor:                prop_labelFor,
-                prop_labelStyle:              prop_labelStyle,
-                prop_labelClass:              prop_labelClass,
-                prop_labelColor:              prop_labelColor,
-                prop_labelTooltipIcon:        prop_labelTooltipIcon,
-                prop_labelTooltipDescription: prop_labelTooltipDescription,
-                prop_labelTooltipBackground:  prop_labelTooltipBackground,
-                prop_labelTooltipColor:       prop_labelTooltipColor,
-                prop_labelTooltipPosition:    prop_labelTooltipPosition,
-                prop_labelTooltipDirection:   prop_labelTooltipDirection,
-            } as any,
-            {
-                CLICK: (event: Event) => {
-                    this.pr_setChangeValue(event);
-                },
-            },
-            {
-                unique: (this as any)._COMPONENT_STEP?.label?.click ?? undefined,
-            },
-        ).getReactiveElement() as CoreReactive.App;
+        const labelProps: Record<string, any> = {};
+        for (const propName of Object.keys(ComponentLabelTrait.props)) {
+            labelProps[propName] = data?.[propName] ?? bind[propName];
+        }
+        const label = ComponentLabelTrait.createLabel(labelProps, {
+            CLICK: (event: Event) => this.pr_setChangeValue(event),
+        }, {
+            unique: (this as any)._COMPONENT_STEP?.label?.click ?? undefined,
+        });
+        return label.getReactiveElement() as CoreReactive.App;
     }
 
 

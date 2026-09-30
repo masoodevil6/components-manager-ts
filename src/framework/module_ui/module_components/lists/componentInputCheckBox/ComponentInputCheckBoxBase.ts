@@ -2,6 +2,7 @@ import * as CoreComponents   from "@/core_components";
 import * as CoreEvent        from "@/core_event";
 // --------------------------------
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
+import {ComponentLabelTrait} from "../../traits/componentLabelTrait";
 // --------------------------------
 import {Props,     PropsType}     from "./Props";
 import {Schemas,   SchemasType}   from "./Schemas";
@@ -56,11 +57,13 @@ export class ComponentInputCheckBoxBase extends CoreComponents.App<
 
     protected _COMPONENT_PATTERN = CoreComponents.DefineProp<PropsType & Record<string, any>>({
         ...ComponentStructureTrait.props,
+        ...ComponentLabelTrait.props,
         ...Props,
     } as any);
 
     protected _COMPONENT_SCHEMA = CoreComponents.DefineSchema<SchemasType, PropsType & Record<string, any>>({
         ...ComponentStructureTrait.schemas,
+        ...ComponentLabelTrait.schemas,
         ...Schemas,
     } as any);
 

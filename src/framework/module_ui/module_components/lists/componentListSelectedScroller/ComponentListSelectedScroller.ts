@@ -408,15 +408,7 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
         );
 
         const itemHeight = CoreObservable.App.computed(
-            (sizeName: any) => {
-                return UtilStyle.Css_SizeCalc(
-                    UtilStyle.Css_Padding(sizeName) as any,
-                    UtilConst.Operation.ADD,
-                    UtilStyle.Css_Height(sizeName) as any,
-                    UtilConst.Operation.ADD,
-                    UtilStyle.Css_Padding(sizeName) as any,
-                );
-            },
+            (sizeName: any) => UtilStyle.Css_Height(sizeName),
             [CoreConfig.Settings.SizeName.observable()],
             this.getScope(),
         );
@@ -429,6 +421,8 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
                 prop_borderRadius:            prop_listBorderRadius as any,
                 prop_borderColor:             prop_listBorderColor as any,
                 prop_contentBackgroundColor:  prop_listBorderBackgroundColor as any,
+                prop_contentBackgroundColor_hover: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_3),
+                prop_contentColor: UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
                 prop_borderClass:             borderClassComputed as any,
                 prop_borderStyles:            borderStylesComputed as any,
                 prop_content: CoreReactive.App.div({
@@ -479,9 +473,13 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
         const title = item?.title;
 
         const dataSource = data ?? extra?.data;
-        const prop_listTitleColor  = dataSource?.["prop_listTitleColor"]  ?? bind.prop_listTitleColor;
         const prop_listTitleClass  = dataSource?.["prop_listTitleClass"]  ?? bind.prop_listTitleClass;
         const prop_listTitleStyles = dataSource?.["prop_listTitleStyles"] ?? bind.prop_listTitleStyles;
+        const titleHeight = CoreObservable.App.computed(
+            (sizeName) => UtilStyle.Css_Height(sizeName),
+            [CoreConfig.Settings.SizeName.observable()],
+            this.getScope(),
+        );
 
         const getTitleText = (t: any) => {
             if (t == null) return "";
@@ -494,23 +492,21 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
         return CoreReactive.App.b({
             attrs: { ...attrsDefault },
             classBind: [prop_listTitleClass as any],
+            stylesBind: { height: titleHeight },
             children: CoreObservable.App.computed(
-                (styles: any, color: any) => {
+                (styles: any) => {
                     const computedStyles: Record<string, string> = {
                         whiteSpace:   "nowrap",
                         overflow:     "hidden",
                         textOverflow: "ellipsis",
                         ...(styles ?? {}),
                     };
-                    if (color != null) {
-                        computedStyles.color = color.toString();
-                    }
                     return [CoreReactive.App.span({
                         styles: computedStyles,
                         children: [titleText],
                     })];
                 },
-                [prop_listTitleStyles, prop_listTitleColor],
+                [prop_listTitleStyles],
                 this.getScope(),
             ),
         });
@@ -548,6 +544,7 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
                             styles: { width: "auto", flexShrink: "0" },
                             prop_icon:       UiIcons.CreateIcon(UiIcons.Src.FileWindowClose.Definition, {
                                 size: UtilConst.Sizes.S,
+                                primaryColor: UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
                             }),
                             prop_iconClass:  prop_listIconCloseClass as any,
                             prop_iconStyles: computedIconStyles as any,

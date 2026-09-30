@@ -4,6 +4,9 @@ import {Validate}        from "./validate"
 import {InputCheckBox}  from "./inputCheckBox"
 import {InputOtp}       from "./inputOtp"
 import {InputListSelector}  from "./inputListSelector"
+import {Input}       from "./input"
+import {InputPassword} from "./inputPassword"
+import {InputEmail} from "./inputEmail"
 
 export const Definition : UICategories.TCategoryComponentDefinition = {
     id:          "inputs",
@@ -15,5 +18,8 @@ export const Definition : UICategories.TCategoryComponentDefinition = {
         InputCheckBox,
         InputOtp,
         InputListSelector,
+        Input,
+        InputPassword,
+        InputEmail,
     ],
 }

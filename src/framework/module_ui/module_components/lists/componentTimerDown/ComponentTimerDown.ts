@@ -72,7 +72,18 @@ export class ComponentTimerDown extends ComponentTimerDownBase {
             attrs: { ...attrsDefault },
             styles: {
                 borderRadius: "4px",
-                padding: "4px",
+                height: UtilStyle.Css_SizeCalc(
+                    UtilStyle.Css_Height(UtilConst.Sizes.M),
+                    UtilConst.Operation.ADD,
+                    UtilStyle.Css_Padding(UtilConst.Sizes.M),
+                    UtilConst.Operation.ADD,
+                    UtilStyle.Css_Padding(UtilConst.Sizes.M),
+                    UtilConst.Operation.ADD,
+                    UtilStyle.Css_Margin(UtilConst.Sizes.M),
+                    UtilConst.Operation.ADD,
+                    UtilStyle.Css_Margin(UtilConst.Sizes.M),
+                ),
+                padding: UtilStyle.Css_Padding(UtilConst.Sizes.M),
                 paddingInlineEnd: "0",
                 display: "flex",
                 alignItems: "center",
@@ -213,7 +224,7 @@ export class ComponentTimerDown extends ComponentTimerDownBase {
             [resendText, CoreConfig.Settings.Language.observable()], this.getScope());
         return CoreReactive.App.section({ attrs: { ...attrsDefault }, styles: { display: "flex", alignItems: "center", flex: "0 0 auto", width: "auto" }, children: [
             CoreObservable.App.conditionWhen([show, this._TIMER_DOWN_FINISH], (visible, finished) => visible && finished, () =>
-                this.attachChild(UiCategory.UI.Simples.Button({ prop_btnTitle: title, prop_btnSemantic: ButtonSemantic.BACK, prop_btnType: ButtonAction.BUTTON, prop_btnClass: ["px-2", "py-1"] } as any, { CLICK: (event) => this.executeMethod("CLICK_RETRY", event, {}) })),
+                this.attachChild(UiCategory.UI.Simples.Button({ prop_btnTitle: title, prop_btnSemantic: ButtonSemantic.BACK, prop_btnType: ButtonAction.BUTTON, prop_btnClass: [] } as any, { CLICK: (event) => this.executeMethod("CLICK_RETRY", event, {}) })),
                 () => null, this.getScope()),
         ] });
     }

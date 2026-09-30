@@ -170,10 +170,7 @@ export class ComponentBorder extends ComponentBorderBase {
                 "border-bottom-right-radius":  this.getStyleBorderBottomRightRadius(prop_borderBottomRightRadiusHas),
 
                 // --- borderWidth ---
-                "border-top-width":            this.getStyleBorderTopWidth(prop_borderTopHas),
-                "border-right-width":          this.getStyleBorderRightWidth(prop_borderRightHas),
-                "border-bottom-width":         this.getStyleBorderBottomWidth(prop_borderBottomHas),
-                "border-left-width":           this.getStyleBorderLeftWidth(prop_borderLeftHas),
+                "border-width-styles":         this.getStyleBorderWidths(prop_borderTopHas, prop_borderRightHas, prop_borderBottomHas, prop_borderLeftHas),
 
                 // --- border + content colors ---
                 "border-style":                this.getStyleBorderStyle(prop_borderType, prop_borderColor),
@@ -298,34 +295,15 @@ export class ComponentBorder extends ComponentBorderBase {
         );
     }
 
-    private getStyleBorderTopWidth(prop_borderTopHas) {
+    private getStyleBorderWidths(prop_borderTopHas, prop_borderRightHas, prop_borderBottomHas, prop_borderLeftHas) {
         return CoreObservable.App.computed(
-            (sizeName, has) => has ? UtilStyle.Style_Important(UtilStyle.Css_BorderWidth(sizeName)) : UtilStyle.Style_Important(UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL)),
-            [CoreConfig.Settings.SizeName.observable(), prop_borderTopHas],
-            this.getScope(),
-        );
-    }
-
-    private getStyleBorderRightWidth(prop_borderRightHas) {
-        return CoreObservable.App.computed(
-            (sizeName, has) => has ? UtilStyle.Style_Important(UtilStyle.Css_BorderWidth(sizeName)) : UtilStyle.Style_Important(UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL)),
-            [CoreConfig.Settings.SizeName.observable(), prop_borderRightHas],
-            this.getScope(),
-        );
-    }
-
-    private getStyleBorderBottomWidth(prop_borderBottomHas) {
-        return CoreObservable.App.computed(
-            (sizeName, has) => has ? UtilStyle.Style_Important(UtilStyle.Css_BorderWidth(sizeName)) : UtilStyle.Style_Important(UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL)),
-            [CoreConfig.Settings.SizeName.observable(), prop_borderBottomHas],
-            this.getScope(),
-        );
-    }
-
-    private getStyleBorderLeftWidth(prop_borderLeftHas) {
-        return CoreObservable.App.computed(
-            (sizeName, has) => has ? UtilStyle.Style_Important(UtilStyle.Css_BorderWidth(sizeName)) : UtilStyle.Style_Important(UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL)),
-            [CoreConfig.Settings.SizeName.observable(), prop_borderLeftHas],
+            (topHas, rightHas, bottomHas, leftHas) => ({
+                "border-top-width": UtilStyle.Style_Important(topHas ? UtilStyle.Css_BorderWidth(UtilConst.Sizes.M) : UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL)),
+                "border-right-width": UtilStyle.Style_Important(rightHas ? UtilStyle.Css_BorderWidth(UtilConst.Sizes.M) : UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL)),
+                "border-bottom-width": UtilStyle.Style_Important(bottomHas ? UtilStyle.Css_BorderWidth(UtilConst.Sizes.M) : UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL)),
+                "border-left-width": UtilStyle.Style_Important(leftHas ? UtilStyle.Css_BorderWidth(UtilConst.Sizes.M) : UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL)),
+            }),
+            [prop_borderTopHas, prop_borderRightHas, prop_borderBottomHas, prop_borderLeftHas],
             this.getScope(),
         );
     }

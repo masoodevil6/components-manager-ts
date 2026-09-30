@@ -19,6 +19,7 @@ import * as ComponentBorder from "../componentBorder";
 import * as ComponentIcon from "../componentIcon";
 import * as ComponentInputSimple from "../componentInputSimple";
 import * as ComponentRecyclerView from "../componentRecyclerView";
+import {ShowTypes as FloatMenuShowTypes} from "../componentFloatMenu";
 
 export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase {
     private readonly _IS_OPEN = new CoreObservable.App(false);
@@ -88,12 +89,18 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
     private renderSelect(attrsDefault: PartAttrDefault, data: Record<string, CoreObservable.App<any>>): CoreReactive.App {
         const bind = this._COMPONENT_PROPS_BIND;
         const disabled = data?.["prop_selectDisable"] ?? bind.prop_selectDisable;
-        const body = this.executeSchemaPart(Schemas.SELECT_BODY.part, {});
+        const body = CoreObservable.App.conditionWhen(
+            [disabled],
+            (isDisabled) => !isDisabled,
+            () => this.executeSchemaPart(Schemas.SELECT_BODY.part, {}),
+            () => CoreReactive.App.section({children: []}),
+            this.getScope(),
+        );
         this._FLOAT_MENU = UiCategory.UI.Positions.FloatMenu({
             classList: ["position-relative", "d-block", "w-100"],
             prop_selectorClass: ["d-block", "w-100"],
             prop_selectorContent: this.executeSchemaPart(Schemas.SELECT_HEADER.part, {}),
-            prop_selectorShowType: "click" as any,
+            prop_selectorShowType: FloatMenuShowTypes.CLICK,
             prop_floatContent: body,
             prop_floatDirectionType: "bottom" as any,
             prop_floatWidth: UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
@@ -104,10 +111,21 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
             prop_floatBorderColor: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
             prop_floatBorderRadius: UtilConst.Sizes.S,
             prop_floatBackground: UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
-            prop_floatShowControlWithSelf: true,
+            prop_floatShowControlWithSelf: false,
             prop_floatIsShow: this._IS_OPEN,
-            prop_floatStyles: {display: "block"},
+            prop_floatStyles: {display: "block", top: "auto"},
         } as any, {});
+        this._IS_OPEN.subscribe((isOpen) => {
+            const event = new MouseEvent("click", {bubbles: true});
+            if (isOpen) {
+                this._SEARCH.set("");
+                this.executeMethod("SELECT_OPEN", event, {VALUE: this._COMPONENT_PROPS_BIND.prop_selectValue.get()} as any);
+                this._addDocumentListener();
+            } else {
+                this._removeDocumentListener();
+                this.executeMethod("SELECT_CLOSE", event, {VALUE: this._COMPONENT_PROPS_BIND.prop_selectValue.get()} as any);
+            }
+        }, this.getScope());
         const root = CoreReactive.App.section({attrs: {...attrsDefault}, className: ["d-block", "w-100"], children: [this._FLOAT_MENU.getReactiveElement()]});
         return root;
     }
@@ -117,33 +135,53 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
         const disabled = data?.["prop_selectDisable"] ?? bind.prop_selectDisable;
         const classList = data?.["prop_selectClass"] ?? bind.prop_selectClass;
         const styles = data?.["prop_selectStyles"] ?? bind.prop_selectStyles;
+        const borderStyles = CoreObservable.App.computed((sizeName, customStyles) => ({
+            transition: "background-color 1000ms, color 1000ms, border-color 1000ms",
+            display: "flow-root",
+            "border-top-width": UtilStyle.Style_Important(UtilStyle.Css_BorderWidth(sizeName)),
+            "border-right-width": UtilStyle.Style_Important(UtilStyle.Css_BorderWidth(sizeName)),
+            "border-bottom-width": UtilStyle.Style_Important(UtilStyle.Css_BorderWidth(sizeName)),
+            "border-left-width": UtilStyle.Style_Important(UtilStyle.Css_BorderWidth(sizeName)),
+            padding: UtilStyle.Css_Padding(sizeName),
+            height: UtilStyle.Css_SizeCalc(
+                UtilStyle.Css_Padding(sizeName) as any,
+                UtilConst.Operation.ADD,
+                UtilStyle.Css_Padding(sizeName) as any,
+                UtilConst.Operation.ADD,
+                UtilStyle.Css_Height(sizeName) as any,
+            ),
+            lineHeight: UtilStyle.Css_Height(sizeName),
+            ...(customStyles ?? {}),
+            "border-color": UtilStyle.Style_Important(UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1)),
+        }), [CoreConfig.Settings.SizeName.observable(), styles], this.getScope());
         const props: Record<string, any> = {
             prop_contentSize: CoreConfig.Settings.SizeName.observable() as any,
             prop_borderClass: ["position-relative", "d-flex", "align-items-center", "w-100", ...((classList.get?.() ?? classList) as string[])],
             prop_content: [this.executeSchemaPart(Schemas.SELECT_HEADER_TEXT.part, {}), this.executeSchemaPart(Schemas.SELECT_HEADER_ICON.part, {})],
             prop_contentBackgroundColor: CoreObservable.App.computed((isDisabled) => isDisabled ? UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_5) : UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1), [disabled], this.getScope()),
-            prop_borderColor: CoreObservable.App.computed((isOpen) => isOpen ? UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1) : UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1), [this._IS_OPEN], this.getScope()),
-            prop_borderColor_hover: UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1),
-            prop_borderStyles: styles,
+            prop_borderTopHas: true,
+            prop_borderRightHas: true,
+            prop_borderBottomHas: true,
+            prop_borderLeftHas: true,
+            prop_borderColor: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
+            prop_borderOpacity: 100,
+            prop_borderStyles: borderStyles,
         };
         const radiusMap: Array<[string, string]> = [["prop_selectBorderTopLeftRadiusHas", "prop_borderTopLeftRadiusHas"], ["prop_selectBorderTopRightRadiusHas", "prop_borderTopRightRadiusHas"], ["prop_selectBorderBottomLeftRadiusHas", "prop_borderBottomLeftRadiusHas"], ["prop_selectBorderBottomRightRadiusHas", "prop_borderBottomRightRadiusHas"], ["prop_selectBorderTopHas", "prop_borderTopHas"], ["prop_selectBorderRightHas", "prop_borderRightHas"], ["prop_selectBorderBottomHas", "prop_borderBottomHas"], ["prop_selectBorderLeftHas", "prop_borderLeftHas"]];
         for (const [source, target] of radiusMap) props[target] = data?.[source] ?? bind[source];
         this._BORDER = new ComponentBorder.Component(props as any);
         const headerStyles = CoreObservable.App.computed((size, isRtl) => ({
-            minHeight: UtilStyle.Css_SizeCalc(UtilStyle.Css_Padding(size) as any, UtilConst.Operation.ADD, UtilStyle.Css_Height(size) as any, UtilConst.Operation.ADD, UtilStyle.Css_Padding(size) as any),
+            padding: UtilStyle.Css_Padding(size),
             lineHeight: UtilStyle.Css_Height(size),
             fontSize: UtilStyle.Css_FontSize(size),
             direction: isRtl ? "rtl" : "ltr",
-            paddingInlineStart: UtilStyle.Css_Padding(size),
-            paddingInlineEnd: UtilStyle.Css_Padding(size),
         }), [CoreConfig.Settings.SizeName.observable(), CoreConfig.Settings.DirectionRtl.observable()], this.getScope());
         return CoreReactive.App.section({
             attrs: {...attrsDefault, role: "combobox", tabindex: "0", "aria-haspopup": "listbox"},
-            attrsBind: {"aria-expanded": CoreObservable.App.computed((open) => String(open), [this._IS_OPEN], this.getScope())},
+            attrsBind: {"aria-expanded": CoreObservable.App.computed((open) => String(open), [this._IS_OPEN], this.getScope()), "aria-disabled": CoreObservable.App.computed((isDisabled) => String(isDisabled), [disabled], this.getScope())},
             className: ["d-block", "w-100"],
             stylesBind: headerStyles,
             on: {
-                click: (event: Event) => this.toggleMenu(event, disabled),
                 keydown: (event: KeyboardEvent) => {
                     if (event.key === "Enter" || event.key === " ") this.toggleMenu(event, disabled);
                 },
@@ -177,7 +215,11 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
     }
 
     private renderBody(attrsDefault: PartAttrDefault, _data: Record<string, CoreObservable.App<any>>): CoreReactive.App {
-        return CoreReactive.App.section({attrs: {...attrsDefault}, className: ["d-flex", "flex-column", "p-2", "w-100"], children: [this.executeSchemaPart(Schemas.SELECT_SEARCH.part, {}), this.executeSchemaPart(Schemas.SELECT_OPTIONS.part, {})]});
+        return CoreReactive.App.section({
+            attrs: {...attrsDefault},
+            className: ["d-flex", "flex-column", "p-2", "w-100"],
+            children: [this.executeSchemaPart(Schemas.SELECT_SEARCH.part, {}), this.executeSchemaPart(Schemas.SELECT_OPTIONS.part, {})],
+        });
     }
 
     private renderSearch(attrsDefault: PartAttrDefault, data: Record<string, CoreObservable.App<any>>): CoreReactive.App {
@@ -204,7 +246,7 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
             return matches ? this.executeSchemaPart(Schemas.SELECT_OPTION.part, {option}) : CoreReactive.App.section({children: []});
         }, {search: this._SEARCH}, {}, this.getScope());
         this._OPTIONS_LIST = UiCategory.UI.Contents.RecyclerView({prop_formDirection: "vertical", prop_formComponents: components as any, prop_formStyles: {width: "100%"}});
-        return CoreReactive.App.section({attrs: {...attrsDefault}, className: ["d-block", "w-100", "overflow-auto"], styles: {maxHeight: "16rem"}, children: [this._OPTIONS_LIST.getReactiveElement()]});
+        return CoreReactive.App.section({attrs: {...attrsDefault}, className: ["d-block", "w-100", "overflow-y-auto"], styles: {maxHeight: "16rem"}, children: [this._OPTIONS_LIST.getReactiveElement()]});
     }
 
     private renderOption(attrsDefault: PartAttrDefault, data: Record<string, CoreObservable.App<any>>, extra?: any): CoreReactive.App {
@@ -212,24 +254,54 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
         if (!option) return CoreReactive.App.section({attrs: {...attrsDefault}});
         const selected = data?.["prop_selectValue"] ?? this._COMPONENT_PROPS_BIND.prop_selectValue;
         const isSelected = CoreObservable.App.computed((current) => String(current) === String(option.id), [selected], this.getScope());
-        return CoreReactive.App.section({attrs: {...attrsDefault, role: "option"}, attrsBind: {"aria-selected": CoreObservable.App.computed((active) => String(active), [isSelected], this.getScope())}, className: ["d-flex", "align-items-center", "gap-2", "w-100", "p-2", "cursor-pointer"],
-            styles: {borderBottom: `${UtilStyle.Css_BorderWidth(UtilConst.Sizes.S)} solid ${UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1)}`},
-            stylesBind: {
-                backgroundColor: CoreObservable.App.computed((active) => UtilStyle.Css_Color(active ? UtilConst.ColorMain.PRIMARY : UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1), [isSelected], this.getScope()),
-                color: CoreObservable.App.computed((active) => UtilStyle.Css_Color(active ? UtilConst.ColorMain.SHAN : UtilConst.ColorMain.DARK, UtilConst.ColorGrad.GRADE_1), [isSelected], this.getScope()),
+        const sizeName = CoreConfig.Settings.SizeName.observable();
+        const lineHeight = CoreObservable.App.computed((size) => `calc(${UtilStyle.Css_Height(size)})`, [sizeName], this.getScope());
+        const content = CoreReactive.App.div({className: ["d-flex", "align-items-center", "w-100"], styles: {gap: UtilStyle.Css_Margin(UtilConst.Sizes.M)}, children: [
+            CoreReactive.App.span({styles: {width: "40px", flex: "0 0 40px", opacity: "0.75", fontWeight: "600"}, children: [String(option.prefix ?? "")]}),
+            CoreReactive.App.b({className: ["text-truncate"], styles: {minWidth: "0", flex: "1", fontWeight: "500"}, children: [String(option.name ?? "---")]})
+        ]});
+        const border = new ComponentBorder.Component({
+            prop_content: content as any,
+            prop_borderClass: ["shadow-sm", "position-relative", "px-2"],
+            prop_borderStyles: CoreObservable.App.computed((height) => ({
+                transition: "background-color 180ms ease, color 180ms ease, border-color 180ms ease, box-shadow 180ms ease",
+                display: "flow-root",
+                "border-width": UtilStyle.Style_Important("0px"),
+                lineHeight: height,
+            }), [lineHeight], this.getScope()) as any,
+            prop_borderTopHas: false,
+            prop_borderRightHas: false,
+            prop_borderBottomHas: false,
+            prop_borderLeftHas: false,
+            prop_borderTopLeftRadiusHas: true,
+            prop_borderTopRightRadiusHas: true,
+            prop_borderBottomLeftRadiusHas: true,
+            prop_borderBottomRightRadiusHas: true,
+            prop_borderColor: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
+            prop_contentBackgroundColor: CoreObservable.App.computed((active) => UtilStyle.Css_Color(active ? UtilConst.ColorMain.PRIMARY : UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1), [isSelected], this.getScope()),
+            prop_contentColor: CoreObservable.App.computed((active) => UtilStyle.Css_Color(active ? UtilConst.ColorMain.SHAN : UtilConst.ColorMain.DARK, UtilConst.ColorGrad.GRADE_1), [isSelected], this.getScope()),
+            prop_contentBackgroundColor_hover: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_5),
+            prop_contentColor_hover: UtilStyle.Css_Color(UtilConst.ColorMain.DARK, UtilConst.ColorGrad.GRADE_1),
+        } as any, {
+            CLICK_BORDER: (event: Event) => {
+                if (this._COMPONENT_PROPS_BIND.prop_selectDisable.get()) return;
+                this.set("prop_selectValue", option.id);
+                this._IS_OPEN.set(false);
+                this._FLOAT_MENU?.setShow(false);
+                this._removeDocumentListener();
+                this.executeMethod("SELECT_CHANGE", event, {VALUE: option.id} as any);
             },
-            on: {
-                mouseenter: (event: MouseEvent) => { const el = event.currentTarget as HTMLElement; el.style.backgroundColor = UtilStyle.Css_Color(UtilConst.ColorMain.WARNING, UtilConst.ColorGrad.GRADE_4); el.style.color = UtilStyle.Css_Color(UtilConst.ColorMain.WARNING, UtilConst.ColorGrad.GRADE_1); },
-                mouseleave: (event: MouseEvent) => { const el = event.currentTarget as HTMLElement; el.style.backgroundColor = UtilStyle.Css_Color(isSelected.get() ? UtilConst.ColorMain.PRIMARY : UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1); el.style.color = UtilStyle.Css_Color(isSelected.get() ? UtilConst.ColorMain.SHAN : UtilConst.ColorMain.DARK, UtilConst.ColorGrad.GRADE_1); },
-                click: (event: Event) => {
-                    if (this._COMPONENT_PROPS_BIND.prop_selectDisable.get()) return;
-                    this.set("prop_selectValue", option.id);
-                    this._IS_OPEN.set(false);
-                    this._removeDocumentListener();
-                    this.executeMethod("SELECT_CHANGE", event, {VALUE: option.id} as any);
-                    this.executeMethod("SELECT_CLOSE", event, {VALUE: option.id} as any);
-                },
-            }, children: [CoreReactive.App.span({styles: {width: "40px", flex: "0 0 40px"}, children: [String(option.prefix ?? "")]}), CoreReactive.App.b({className: ["text-truncate"], styles: {minWidth: "0"}, children: [String(option.name ?? "---")]})]});
+        } as any);
+        return CoreReactive.App.part("component-border", {
+            attrs: {...attrsDefault, role: "option"},
+            attrsBind: {"aria-selected": CoreObservable.App.computed((active) => String(active), [isSelected], this.getScope())},
+            styles: {cursor: "pointer", borderRadius: UtilStyle.Css_BorderRadius(UtilConst.Sizes.M)},
+            stylesBind: {
+                marginTop: CoreObservable.App.computed((size) => UtilStyle.Css_Margin(size), [sizeName], this.getScope()),
+                lineHeight,
+            },
+            children: [border.getReactiveElement()],
+        });
     }
 
     private _addDocumentListener(): void {
@@ -253,19 +325,20 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
     private closeMenu(event: Event): void {
         if (!this._IS_OPEN.get()) return;
         this._IS_OPEN.set(false);
+        this._FLOAT_MENU?.setShow(false);
         this._removeDocumentListener();
-        this.executeMethod("SELECT_CLOSE", event, {VALUE: this._COMPONENT_PROPS_BIND.prop_selectValue.get()} as any);
     }
 
     private toggleMenu(event: Event, disabled: CoreObservable.App<boolean>): void {
         event.preventDefault();
         if (disabled.get() || this._DISPOSED) return;
-        if (this._IS_OPEN.get()) this.closeMenu(event);
+        if (this._IS_OPEN.get()) {
+            this._FLOAT_MENU?.setShow(false);
+            this.closeMenu(event);
+        }
         else {
             this._IS_OPEN.set(true);
-            this._SEARCH.set("");
-            this.executeMethod("SELECT_OPEN", event, {VALUE: this._COMPONENT_PROPS_BIND.prop_selectValue.get()} as any);
-            this._addDocumentListener();
+            this._FLOAT_MENU?.setShow(true);
         }
     }
 }

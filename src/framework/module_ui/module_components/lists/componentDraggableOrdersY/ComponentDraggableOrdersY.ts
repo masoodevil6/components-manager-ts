@@ -1,5 +1,6 @@
 import * as CoreReactive from "@/core_reactive";
 import * as CoreObservable from "@/core_observable";
+import * as CoreConfig from "@/core_configs";
 import {PartAttrDefault} from "@/core_components";
 import {ComponentDraggableOrdersYBase} from "./ComponentDraggableOrdersYBase";
 import {Schemas} from "./Schemas";
@@ -19,6 +20,7 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
 
     private _drag: any = null;
     private _dragOverId = new CoreObservable.App<any>(null);
+    private _dragOverIndex = new CoreObservable.App<number | null>(null);
 
     constructor(
         config?:  Partial<StructurePropsType & PropsType>,
@@ -75,7 +77,7 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
         const prop_orders = data?.["prop_draggableOrders"] ?? bind.prop_draggableOrders;
 
         const children = CoreObservable.App.computed(
-            (items, orders, overId) => {
+            (items, orders, overIndex) => {
                 const pinned = (items ?? []).filter((el: any) => el?.isPin);
                 const unpinned = (items ?? []).filter((el: any) => !el?.isPin);
                 const map: Record<string | number, any> = Object.fromEntries(unpinned.map((el: any) => [el.id, el]));
@@ -94,23 +96,30 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
                     children: [ placeholderText ],
                 });
                 const placeholder = new ComponentBorder.Component({
-                    prop_borderClass: ["mb-2", "p-1", "text-center", "w-100"],
+                    prop_borderClass: ["mb-2", "text-center", "w-100"],
+                    prop_borderStyles: CoreObservable.App.computed((sizeName) => ({
+                        paddingInlineStart: UtilStyle.Css_Padding(sizeName),
+                        paddingInlineEnd: UtilStyle.Css_Padding(sizeName),
+                    }), [CoreConfig.Settings.SizeName.observable()], this.getScope()) as any,
                     prop_content: placeholderContent as any,
                     prop_borderType: ComponentBorder.BorderTypes.DASHED,
                     prop_contentColor: UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
                     prop_contentBackgroundColor: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
                     prop_borderColor: UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1),
                 } as any, {} as any).getReactiveElement();
+                let unpinnedIndex = 0;
                 for (const it of sorted) {
                     // فقط قبل از آیتم‌های ناپین placeholder را قرار بده
-                    if (!it?.isPin && overId != null && it?.id === overId) {
+                    if (!it?.isPin && it?.id !== this._drag?.id && overIndex === unpinnedIndex) {
                         nodes.push(placeholder);
                     }
-                    nodes.push(this.executeSchemaPart(Schemas.MAIN_LIST_ITEM.part, { item: it }));
+                    nodes.push(this.executeSchemaPart(Schemas.MAIN_LIST_ITEM.part, {item: it, isDragging: it?.id === this._drag?.id}));
+                    if (!it?.isPin && it?.id !== this._drag?.id) unpinnedIndex++;
                 }
+                if (overIndex != null && overIndex === unpinnedIndex) nodes.push(placeholder);
                 return nodes;
             },
-            [prop_items, prop_orders, this._dragOverId],
+            [prop_items, prop_orders, this._dragOverIndex],
             this.getScope(),
         );
 
@@ -163,7 +172,8 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
                 height: "20px",
                 cursor: "pointer",
                 position: "absolute",
-                top:    "10px",
+                top:    "50%",
+                transform: "translate(0, -50%)",
                 right:  "10px",
                 opacity: op,
             }),
@@ -183,7 +193,7 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
         } as any).getReactiveElement();
 
         const content = CoreReactive.App.section({
-            className: ["position-relative", "p-1"],
+            className: ["position-relative"],
             on: {
                 mouseenter: () => iconHover.set(true),
                 mouseleave: () => iconHover.set(false),
@@ -219,7 +229,15 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
 
         const border = new ComponentBorder.Component({
             prop_borderClass: ["mb-2"],
-            prop_borderStyles: { cursor: "pointer", "user-select": "none" } as any,
+            prop_borderStyles: CoreObservable.App.computed((sizeName) => ({
+                cursor: "pointer",
+                "user-select": "none",
+                transition: "transform 180ms ease, opacity 180ms ease, background-color 180ms ease, border-color 180ms ease",
+                opacity: extra?.isDragging ? "0.4" : "1",
+                transform: extra?.isDragging ? "scale(0.98)" : "scale(1)",
+                paddingInlineStart: UtilStyle.Css_Padding(sizeName),
+                paddingInlineEnd: UtilStyle.Css_Padding(sizeName),
+            }), [CoreConfig.Settings.SizeName.observable()], this.getScope()) as any,
             prop_content: content,
             prop_borderType: ComponentBorder.BorderTypes.DASHED,
             prop_contentBackgroundColor: bgColor as any,
@@ -278,17 +296,42 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
         window.addEventListener('mousemove', move, true);
         window.addEventListener('mouseup', up, true);
 
-        this._drag = { id: item?.id, overIndex: this.pr_computeOverIndex(e.clientY, rects), rects };
-        this._dragOverId.set(this.pr_getUnpinnedIdByIndex(this._drag.overIndex, rects));
+        this._drag = { id: item?.id, overIndex: this.pr_computeOverIndex(e.clientY, rects, item?.id), rects, container };
+        this._dragOverIndex.set(this._drag.overIndex);
+        this._dragOverId.set(this.pr_getUnpinnedIdByIndex(this._drag.overIndex, rects, item?.id));
         (document.body as any).style.userSelect = 'none';
         e.preventDefault();
     }
 
     private pr_handleMove(e: MouseEvent, item: any, rects: any[]) {
         if (!this._drag) return;
-        const idx = this.pr_computeOverIndex(e.clientY, rects);
+        const idx = this.pr_computeOverIndex(e.clientY, rects, this._drag.id);
+        if (idx === this._drag.overIndex) return;
+        this.pr_animateReorderPreview(this._drag.container);
         this._drag.overIndex = idx;
-        this._dragOverId.set(this.pr_getUnpinnedIdByIndex(idx, rects));
+        this._dragOverIndex.set(idx);
+        this._dragOverId.set(this.pr_getUnpinnedIdByIndex(idx, rects, this._drag.id));
+    }
+
+    private pr_animateReorderPreview(container: HTMLElement): void {
+        const before = new Map<string, DOMRect>();
+        for (const node of Array.from(container.querySelectorAll<HTMLElement>("[data-order]"))) {
+            const id = node.getAttribute("data-order");
+            if (id != null) before.set(id, node.getBoundingClientRect());
+        }
+        requestAnimationFrame(() => {
+            for (const node of Array.from(container.querySelectorAll<HTMLElement>("[data-order]"))) {
+                const previous = before.get(node.getAttribute("data-order") ?? "");
+                if (!previous) continue;
+                const offsetY = previous.top - node.getBoundingClientRect().top;
+                if (Math.abs(offsetY) < 1) continue;
+                node.style.transition = "none";
+                node.style.transform = `translateY(${offsetY}px)`;
+                node.getBoundingClientRect();
+                node.style.transition = "transform 180ms ease";
+                node.style.transform = "";
+            }
+        });
     }
 
     private pr_handleUp(e: MouseEvent, item: any, rects: any[], move: any, up: any) {
@@ -303,8 +346,10 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
         window.addEventListener('click', suppressClick, true);
 
         const drag = this._drag;
+        if (drag) this.pr_animateReorderPreview(drag.container);
         this._drag = null;
         this._dragOverId.set(null);
+        this._dragOverIndex.set(null);
         (document.body as any).style.userSelect = '';
         if (!drag) return;
 
@@ -338,16 +383,16 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
         this.executeMethod('UPDATE', e, {} as any);
     }
 
-    private pr_computeOverIndex(y: number, rects: any[]): number {
-        const unpinnedRects = rects.filter(r => !r.isPin);
+    private pr_computeOverIndex(y: number, rects: any[], draggedId?: string | number): number {
+        const unpinnedRects = rects.filter(r => !r.isPin && r.id !== draggedId);
         for (let i = 0; i < unpinnedRects.length; i++) {
             if (y < unpinnedRects[i].mid) return i;
         }
-        return unpinnedRects.length - 1;
+        return unpinnedRects.length;
     }
 
-    private pr_getUnpinnedIdByIndex(index: number, rects: any[]): any {
-        const unpinnedRects = rects.filter(r => !r.isPin);
+    private pr_getUnpinnedIdByIndex(index: number, rects: any[], draggedId?: string | number): any {
+        const unpinnedRects = rects.filter(r => !r.isPin && r.id !== draggedId);
         const r = unpinnedRects[Math.max(0, Math.min(index, unpinnedRects.length - 1))];
         return r ? r.id : null;
     }

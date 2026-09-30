@@ -203,6 +203,12 @@ export class ComponentButton extends ComponentButtonBase {
         const prop_btnBorderRadiusStartBottom = data?.["prop_btnBorderRadiusStartBottom"] ?? bind.prop_btnBorderRadiusStartBottom;
         const prop_btnBorderRadiusEndTop      = data?.["prop_btnBorderRadiusEndTop"]      ?? bind.prop_btnBorderRadiusEndTop;
         const prop_btnBorderRadiusEndBottom   = data?.["prop_btnBorderRadiusEndBottom"]   ?? bind.prop_btnBorderRadiusEndBottom;
+        const buttonSizeName = CoreConfig.Settings.SizeName.observable();
+        const resolvedButtonBorderRadius = CoreObservable.App.computed(
+            (radius, sizeName) => radius ?? UtilStyle.Css_BorderRadius(sizeName),
+            [prop_btnBorderRadius, buttonSizeName],
+            this.getScope(),
+        );
 
 
         // const prop_btnType                    = data?.["prop_btnType"]                    ?? bind.prop_btnType;
@@ -238,24 +244,23 @@ export class ComponentButton extends ComponentButtonBase {
                 "btn"
             ] ,
             styles: {
-                "transition":                      "background-color 200ms ease, color 200ms ease, border-color 200ms ease",
+                "transition":                      "background-color 200ms, color 200ms, border-color 200ms",
                 "display":                         "inline-flex",
                 "align-items":                     "center",
                 "justify-content":                 "center",
-                "gap":                             "0.5rem",
+                "vertical-align":                  "middle",
+                "max-width":                        "100%",
+                "padding":                         "0px",
                 "cursor":                          "pointer",
-                "border-style":                    "solid"
             },
             stylesBind: {
                 "width":                            prop_btnWidth,
-                "height":                           this.getStyleBtnHeight(prop_btnHeight),
                 "background-color":                 this.getStyleBtnBackgroundColor(prop_btnSemantic , prop_btnBackgroundColor , prop_btnBackgroundColor_hover),
-                "border":                           this.getStyleBtnBorderColor(prop_btnSemantic , prop_btnBorderColor , prop_btnBorderWidth),
-                "border-radius":                    this.getStyleBtnBorderRadius(prop_btnBorderRadius),
-                "border-start-start-radius":        this.getStyleBtnBorderRadiusStartTop(prop_btnBorderRadiusStartTop , prop_btnBorderRadius),
-                "border-end-start-radius":          this.getStyleBtnBorderRadiusStartBottom(prop_btnBorderRadiusStartBottom , prop_btnBorderRadius),
-                "border-start-end-radius":          this.getStyleBtnBorderRadiusEndTop(prop_btnBorderRadiusEndTop , prop_btnBorderRadius),
-                "border-end-end-radius":            this.getStyleBtnBorderRadiusEndBottom(prop_btnBorderRadiusEndBottom , prop_btnBorderRadius),
+                "border-radius":                    resolvedButtonBorderRadius,
+                "border-start-start-radius":        this.getStyleBtnBorderRadiusStartTop(prop_btnBorderRadiusStartTop , resolvedButtonBorderRadius),
+                "border-end-start-radius":          this.getStyleBtnBorderRadiusStartBottom(prop_btnBorderRadiusStartBottom , resolvedButtonBorderRadius),
+                "border-start-end-radius":          this.getStyleBtnBorderRadiusEndTop(prop_btnBorderRadiusEndTop , resolvedButtonBorderRadius),
+                "border-end-end-radius":            this.getStyleBtnBorderRadiusEndBottom(prop_btnBorderRadiusEndBottom , resolvedButtonBorderRadius),
                 prop_btnStyles,
             },
             classBind: [
@@ -314,6 +319,21 @@ export class ComponentButton extends ComponentButtonBase {
         const prop_btnTitleColor_hover        = data?.["prop_btnTitleColor_hover"]        ?? bind.prop_btnTitleColor_hover;
         const prop_btnTitleStyles             = data?.["prop_btnTitleStyles"]             ?? bind.prop_btnTitleStyles;
         const prop_btnTitleClass              = data?.["prop_btnTitleClass"]              ?? bind.prop_btnTitleClass;
+        const titleStyles = CoreObservable.App.computed((customStyles) => ({
+            display: "block",
+            flex: "0 1 auto",
+            minWidth: "0",
+            maxWidth: "100%",
+            lineHeight: `calc(${UtilStyle.Css_Height(UtilConst.Sizes.M)})`,
+            fontSize: UtilStyle.Css_FontSize(UtilConst.Sizes.M),
+            padding: UtilStyle.Css_Padding(UtilConst.Sizes.M),
+            ...(customStyles ?? {}),
+        }), [prop_btnTitleStyles], this.getScope());
+        const titleRenderStyles = CoreObservable.App.computed(
+            (styles, color) => ({...styles, color}),
+            [titleStyles, this.getStyleBtnTitleColor(prop_btnSemantic, prop_btnTitleColor, prop_btnTitleColor_hover)],
+            this.getScope(),
+        );
 
         return CoreObservable.App.conditionWhen(
             [prop_btnTitle],
@@ -324,15 +344,10 @@ export class ComponentButton extends ComponentButtonBase {
                 attrs: {
                     ...attrsDefault,
                 },
-                attrsBind: {
-                    prop_btnTitleStyles
-                },
                 styles: {
-                    "transition":            "color 200ms ease",
+                    "transition":            "color 200ms",
                 },
-                stylesBind: {
-                    "color":                 this.getStyleBtnTitleColor(prop_btnSemantic , prop_btnTitleColor , prop_btnTitleColor_hover),
-                },
+                stylesBind: titleRenderStyles,
                 classBind: [
                     prop_btnTitleClass
                 ],
@@ -363,6 +378,36 @@ export class ComponentButton extends ComponentButtonBase {
         const prop_btnIconClass         = data?.["prop_btnIconClass"]        ?? bind.prop_btnIconClass;
         const prop_btnTitleColor        = data?.["prop_btnTitleColor"]       ?? bind.prop_btnTitleColor;
         const prop_btnTitleColor_hover  = data?.["prop_btnTitleColor_hover"] ?? bind.prop_btnTitleColor_hover;
+        const sizeName = CoreConfig.Settings.SizeName.observable();
+        const iconSize = this.getStyleBtnIconSize(prop_btnHeight);
+        const iconFrameSize = CoreObservable.App.computed(
+            (heightProp, size) => heightProp ?? UtilStyle.Css_IconSize(size),
+            [prop_btnHeight, sizeName],
+            this.getScope(),
+        );
+        const iconWrapperStyles = CoreObservable.App.computed(() => ({
+            display: "inline-flex",
+            width: iconFrameSize.get(),
+            height: iconFrameSize.get(),
+            flex: "0 0 auto",
+            alignItems: "center",
+            justifyContent: "center",
+        }), [], this.getScope());
+        const iconStyles = CoreObservable.App.computed((customStyles) => ({
+            display: "inline-flex",
+            flex: "0 0 auto",
+            alignItems: "center",
+            justifyContent: "center",
+            verticalAlign: "middle",
+            ...(customStyles ?? {}),
+        }), [prop_btnIconStyles], this.getScope());
+        const iconClass = CoreObservable.App.computed((classes) => [
+            "d-inline-flex",
+            "align-items-center",
+            "justify-content-center",
+            "flex-shrink-0",
+            ...(classes ?? []),
+        ], [prop_btnIconClass], this.getScope());
 
         return CoreObservable.App.conditionWhen(
             [prop_btnIcon] ,
@@ -375,11 +420,13 @@ export class ComponentButton extends ComponentButtonBase {
                             prop_btnIcon ,
                             {
                                 primaryColor:  this.getStyleBtnTitleColor(prop_btnSemantic , prop_btnTitleColor , prop_btnTitleColor_hover),
-                                size:          this.getStyleBtnIconSize(prop_btnHeight),
+                                size:          iconSize,
                             }
                         ),
-                        prop_iconStyles: prop_btnIconStyles ,
-                        prop_iconClass:  prop_btnIconClass ,
+                        styles: iconWrapperStyles,
+                        prop_structureStyles: iconWrapperStyles,
+                        prop_iconStyles: iconStyles as any,
+                        prop_iconClass:  iconClass,
                         //prop_icon:      UiIcons.CreateIcon(UiIcons.Src.ArrowUp.Definition, { size: 24 }),
                         prop_iconTitle: "Arrow Up",
                     },
@@ -420,13 +467,13 @@ export class ComponentButton extends ComponentButtonBase {
 
     private getStyleBtnBorderColor(prop_btnSemantic , prop_btnBorderColor , prop_btnBorderWidth){
         return  CoreObservable.App.computed(
-            (semantic, borderColorProp, borderWidthProp) => {
+            (semantic, borderColorProp, borderWidthProp, sizeName) => {
                 // CUSTOM بدون border prop → بدون border (null)
                 const color = ComponentButton.resolveSemantic(semantic as ButtonSemantic, ComponentButton._semanticBorder, borderColorProp);
                 if (color == null) return null;
-                return `${UtilStyle.Css_BorderWidth(borderWidthProp)} solid ${color}`;
+                return `${UtilStyle.Css_BorderWidth(borderWidthProp ?? sizeName)} solid ${color}`;
             },
-            [prop_btnSemantic, prop_btnBorderColor, prop_btnBorderWidth],
+            [prop_btnSemantic, prop_btnBorderColor, prop_btnBorderWidth, CoreConfig.Settings.SizeName.observable()],
             this.getScope(),
         );
     }

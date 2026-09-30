@@ -1070,8 +1070,10 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
         event?: any,
     ): void {
 
-        const container = this._ELEMENT_CONTAINER?.getElement();
-        const viewport = event?.currentTarget?.querySelector?.(".ms-scroller-hidden") ?? container;
+        const container = this._ELEMENT_CONTAINER?.getElement() as HTMLElement | undefined;
+        const viewport = container?.querySelector<HTMLElement>(".ms-scroller-hidden")
+            ?? event?.currentTarget?.querySelector?.(".ms-scroller-hidden")
+            ?? container;
         const rect = viewport?.getBoundingClientRect();
         const mouseX = rect ? x - rect.left : 0;
         const mouseY = rect ? y - rect.top : 0;
@@ -1082,8 +1084,8 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
         const min         = bind?.["prop_zoomMin"]?.get()   ?? 0.4;
         const max         = bind?.["prop_zoomMax"]?.get()   ?? 3.0;
         const step        = bind?.["prop_zoomStep"]?.get()  ?? 1.0015;
-        const scrollLeft  = bind?.["prop_scrollLeft"]?.get() ?? 0;
-        const scrollTop   = bind?.["prop_scrollTop"]?.get()  ?? 0;
+        const scrollLeft  = viewport?.scrollLeft ?? bind?.["prop_scrollLeft"]?.get() ?? 0;
+        const scrollTop   = viewport?.scrollTop  ?? bind?.["prop_scrollTop"]?.get()  ?? 0;
 
         let newScale = scale;
         if (zoomStep != null) {
@@ -1091,9 +1093,10 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
             newScale = newScale > min ? newScale : min;
         }
 
-        const scaleRatio = newScale / scale;
-        const newScrollLeft = (scrollLeft + mouseX) * scaleRatio - mouseX;
-        const newScrollTop  = (scrollTop  + mouseY) * scaleRatio - mouseY;
+        // Keep the content point under the pointer fixed throughout the animation.
+        // Interpolating scroll offsets independently from zoom causes focal-point drift.
+        const anchorContentX = (scrollLeft + mouseX) / scale;
+        const anchorContentY = (scrollTop + mouseY) / scale;
 
         if (this._ZOOM_ANIM_ID != null) {
             cancelAnimationFrame(this._ZOOM_ANIM_ID);
@@ -1106,10 +1109,27 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
         const animate = (now: number): void => {
             const progress = Math.min((now - startTime) / duration, 1);
             const eased = easeOut(progress);
+            const currentZoom = scale + (newScale - scale) * eased;
+            const requestedLeft = anchorContentX * currentZoom - mouseX;
+            const requestedTop = anchorContentY * currentZoom - mouseY;
+            bind["prop_zoom"]?.set(currentZoom);
 
-            bind["prop_zoom"]?.set(scale + (newScale - scale) * eased);
-            bind["prop_scrollLeft"]?.set(scrollLeft + (newScrollLeft - scrollLeft) * eased);
-            bind["prop_scrollTop"]?.set(scrollTop + (newScrollTop - scrollTop) * eased);
+            // Transformed content changes the scrollable extent. Clamp against the
+            // viewport's current extent so the browser cannot silently snap to 0,0.
+            let scrollLeftMin = 0;
+            let scrollLeftMax = viewport ? Math.max(0, viewport.scrollWidth - viewport.clientWidth) : Number.POSITIVE_INFINITY;
+            if (viewport && getComputedStyle(viewport).direction === "rtl") {
+                scrollLeftMin = -scrollLeftMax;
+                scrollLeftMax = 0;
+            }
+            const nextScrollLeft = Math.min(Math.max(requestedLeft, scrollLeftMin), scrollLeftMax);
+            const nextScrollTop = Math.min(
+                Math.max(requestedTop, 0),
+                viewport ? Math.max(0, viewport.scrollHeight - viewport.clientHeight) : Number.POSITIVE_INFINITY,
+            );
+
+            bind["prop_scrollLeft"]?.set(nextScrollLeft);
+            bind["prop_scrollTop"]?.set(nextScrollTop);
 
             if (progress < 1) {
                 this._ZOOM_ANIM_ID = requestAnimationFrame(animate);

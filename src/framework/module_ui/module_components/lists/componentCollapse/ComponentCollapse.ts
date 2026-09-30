@@ -166,11 +166,20 @@ export class ComponentCollapse extends ComponentCollapseBase {
         const prop_collapseBorderWidth        = data?.["prop_collapseBorderWidth"]      ?? bind.prop_collapseBorderWidth;
         const prop_collapseBorderRadius       = data?.["prop_collapseBorderRadius"]     ?? bind.prop_collapseBorderRadius;
         const prop_collapseBorderMinWidth     = data?.["prop_collapseBorderMinWidth"]   ?? bind.prop_collapseBorderMinWidth;
+        const headerBorderStyles = CoreObservable.App.computed(
+            (sizeName, customStyles) => ({
+                lineHeight: UtilStyle.Css_Height(sizeName),
+                padding: UtilStyle.Css_Padding(sizeName),
+                ...(customStyles ?? {}),
+            }),
+            [CoreConfig.Settings.SizeName.observable(), prop_collapseBorderStyles],
+            this.getScope(),
+        );
 
         return new ComponentBorder.Component(
             {
                 prop_borderClass:            prop_collapseBorderClass,
-                prop_borderStyles:           prop_collapseBorderStyles,
+                prop_borderStyles:           headerBorderStyles,
                 prop_content:                this.executeSchemaPart(Schemas.FORM_BORDER_CONTENT.part),
                 prop_contentBackgroundColor:  prop_collapseBorderBackground,
                 prop_borderColor:            prop_collapseBorderColor,
@@ -204,7 +213,7 @@ export class ComponentCollapse extends ComponentCollapseBase {
 
         return CoreReactive.App.section({
             attrs: { ...attrsDefault },
-            styles: { position: "relative", display: "flex", alignItems: "center", flexWrap: "nowrap" },
+            styles: { position: "relative", display: "flex", alignItems: "center", flexWrap: "nowrap", cursor: "pointer" },
             className: ["p-0", "m-0"],
             children: [
                 this.executeSchemaPart(Schemas.FORM_BORDER_CONTENT_ICON.part, {}),
@@ -376,7 +385,7 @@ export class ComponentCollapse extends ComponentCollapseBase {
                     : UiIcons.Src.ArrowChevronDown.Definition;
                 return UiIcons.CreateIcon(src, {
                     size: UtilConst.Sizes.L,
-                    primaryColor: UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1),
+                    primaryColor: UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
                     secondaryColor: UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
                 });
             },
@@ -443,15 +452,13 @@ export class ComponentCollapse extends ComponentCollapseBase {
         );
 
         const borderWidthComputed = CoreObservable.App.computed(
-            (width: any) => {
-                if (typeof width === "string") {
-                    return UtilStyle.Css_BorderWidth(width as UtilConst.Sizes);
-                } else if (typeof width === "number") {
+            (width: any, sizeName: UtilConst.Sizes) => {
+                if (typeof width === "number") {
                     return `${width}px`;
                 }
-                return null;
+                return UtilStyle.Css_BorderWidth(sizeName);
             },
-            [prop_collapseBodyBorderWidth],
+            [prop_collapseBodyBorderWidth, CoreConfig.Settings.SizeName.observable()],
             this.getScope(),
         );
 

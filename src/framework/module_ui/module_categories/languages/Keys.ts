@@ -498,6 +498,56 @@ export const Keys = {
             },
 
             /// InputSimple
+            input: {
+                name: CreateTranslationKey(), description: CreateTranslationKey(),
+                props: {
+                    name: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    value: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    isDisable: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    labelTitle: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    title: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    backgroundColorForm: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    formBorderRadius: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    colorIcon: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    inputClass: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    inputStyles: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    type: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    placeholder: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    icon: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    btnAddStatus: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    btnAddWidth: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    btnAddIcon: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    btnAddTitle: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    btnAddClass: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    btnColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    hasRules: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    isAbsoluteRule: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    listRules: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    msgRules: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+                schemas: {
+                    form: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    label: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    input: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    icon: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    button: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    validate: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+                methods: {
+                    inputChange: {description: CreateTranslationKey()},
+                    inputFocus: {description: CreateTranslationKey()},
+                    inputBlur: {description: CreateTranslationKey()},
+                    clickButton: {description: CreateTranslationKey()},
+                },
+                examples: {
+                    default: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    withIcon: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    withAddButton: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    withValidation: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+            },
+
+            /// InputSimple
             inputSimple: {
                 name: CreateTranslationKey(),
                 description: CreateTranslationKey(),

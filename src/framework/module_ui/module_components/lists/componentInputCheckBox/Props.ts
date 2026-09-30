@@ -4,7 +4,7 @@ import {Keys}                from "../../../module_categories/languages";
 import * as UiIcons          from "@/ui_icons";
 import * as UtilConst        from "@/util_consts";
 import * as UtilStyle        from "@/util_styles";
-import {TooltipDirectionTypes} from "../componentTooltip/Props";
+import {ComponentLabelTrait, ComponentLabelPropsType} from "../../traits/componentLabelTrait";
 import type {ValidatorRule}  from "@/util_validators";
 import type {
     ExtractPropsType,
@@ -49,111 +49,7 @@ export const Props = {
         description:  Keys.category.components.inputCheckBox.props.name.description,
     }),
 
-    /// --- FormInput Label (full label props from ComponentLabel) ---
-    prop_labelShow: Define_ComponentProp<boolean>({
-        prop:         "prop_labelShow",
-        default:      true,
-        name:         Keys.category.components.inputCheckBox.props.labelShow.name,
-        description:  Keys.category.components.inputCheckBox.props.labelShow.description,
-    }),
-
-    prop_labelBackground: Define_ComponentProp<string | null>({
-        prop:         "prop_labelBackground",
-        default:      UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
-        name:         Keys.category.components.inputCheckBox.props.labelBackground.name,
-        description:  Keys.category.components.inputCheckBox.props.labelBackground.description,
-    }),
-
-    prop_labelRadius: Define_ComponentProp<UtilConst.Sizes>({
-        prop:         "prop_labelRadius",
-        default:      UtilConst.Sizes.M,
-        name:         Keys.category.components.inputCheckBox.props.labelRadius.name,
-        description:  Keys.category.components.inputCheckBox.props.labelRadius.description,
-    }),
-
-    prop_labelMinWidth: Define_ComponentProp<string | null>({
-        prop:         "prop_labelMinWidth",
-        default:      null,
-        name:         Keys.category.components.inputCheckBox.props.labelMinWidth.name,
-        description:  Keys.category.components.inputCheckBox.props.labelMinWidth.description,
-    }),
-
-    prop_labelTitle: Define_ComponentProp<string | null>({
-        prop:         "prop_labelTitle",
-        default:      null,
-        name:         Keys.category.components.inputCheckBox.props.labelTitle.name,
-        description:  Keys.category.components.inputCheckBox.props.labelTitle.description,
-    }),
-
-    prop_labelFor: Define_ComponentProp<string | null>({
-        prop:         "prop_labelFor",
-        default:      null,
-        name:         Keys.category.components.inputCheckBox.props.labelFor.name,
-        description:  Keys.category.components.inputCheckBox.props.labelFor.description,
-    }),
-
-    prop_labelStyle: Define_ComponentProp<Record<string, string>>({
-        prop:         "prop_labelStyle",
-        default:      {},
-        name:         Keys.category.components.inputCheckBox.props.labelStyle.name,
-        description:  Keys.category.components.inputCheckBox.props.labelStyle.description,
-    }),
-
-    prop_labelClass: Define_ComponentProp<string[]>({
-        prop:         "prop_labelClass",
-        default:      [],
-        name:         Keys.category.components.inputCheckBox.props.labelClass.name,
-        description:  Keys.category.components.inputCheckBox.props.labelClass.description,
-    }),
-
-    prop_labelColor: Define_ComponentProp<string | null>({
-        prop:         "prop_labelColor",
-        default:      UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
-        name:         Keys.category.components.inputCheckBox.props.labelColor.name,
-        description:  Keys.category.components.inputCheckBox.props.labelColor.description,
-    }),
-
-    prop_labelTooltipIcon: Define_ComponentProp<UiIcons.IIconDefinition | null>({
-        prop:         "prop_labelTooltipIcon",
-        default:      UiIcons.Src.SymbolExclumationSquare.Definition,
-        name:         Keys.category.components.inputCheckBox.props.labelTooltipIcon.name,
-        description:  Keys.category.components.inputCheckBox.props.labelTooltipIcon.description,
-    }),
-
-    prop_labelTooltipDescription: Define_ComponentProp<string | null>({
-        prop:         "prop_labelTooltipDescription",
-        default:      null,
-        name:         Keys.category.components.inputCheckBox.props.labelTooltipDescription.name,
-        description:  Keys.category.components.inputCheckBox.props.labelTooltipDescription.description,
-    }),
-
-    prop_labelTooltipBackground: Define_ComponentProp<string | null>({
-        prop:         "prop_labelTooltipBackground",
-        default:      UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1),
-        name:         Keys.category.components.inputCheckBox.props.labelTooltipBackground.name,
-        description:  Keys.category.components.inputCheckBox.props.labelTooltipBackground.description,
-    }),
-
-    prop_labelTooltipColor: Define_ComponentProp<string | null>({
-        prop:         "prop_labelTooltipColor",
-        default:      UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1),
-        name:         Keys.category.components.inputCheckBox.props.labelTooltipColor.name,
-        description:  Keys.category.components.inputCheckBox.props.labelTooltipColor.description,
-    }),
-
-    prop_labelTooltipPosition: Define_ComponentProp<ReturnType<typeof UtilStyle.Css_SizeUnit>>({
-        prop:         "prop_labelTooltipPosition",
-        default:      UtilStyle.Css_SizeUnit(2.5, UtilConst.Units.PERCENT),
-        name:         Keys.category.components.inputCheckBox.props.labelTooltipPosition.name,
-        description:  Keys.category.components.inputCheckBox.props.labelTooltipPosition.description,
-    }),
-
-    prop_labelTooltipDirection: Define_ComponentProp<TooltipDirectionTypes>({
-        prop:         "prop_labelTooltipDirection",
-        default:      TooltipDirectionTypes.BOTTOM,
-        name:         Keys.category.components.inputCheckBox.props.labelTooltipDirection.name,
-        description:  Keys.category.components.inputCheckBox.props.labelTooltipDirection.description,
-    }),
+    ...ComponentLabelTrait.props,
 
     /// --- BorderIcon ---
     prop_borderIconClass: Define_ComponentProp<string[]>({
@@ -344,7 +240,7 @@ export const Props = {
 } satisfies CoreComponents.ComponentProps;
 
 
-export type PropsType = ExtractPropsType<typeof Props>;
+export type PropsType = ExtractPropsType<typeof Props> & ComponentLabelPropsType;
 
 
-export type PropsConfigType = ExtractPropsConfigType<typeof Props>;
+export type PropsConfigType = ExtractPropsConfigType<typeof Props> & ExtractPropsConfigType<typeof ComponentLabelTrait.props>;

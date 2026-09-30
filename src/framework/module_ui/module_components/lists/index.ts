@@ -153,6 +153,27 @@ import {Schemas    as InputSimpleSchemas}       from "./componentInputSimple/Sch
 import {Methods    as InputSimpleMethods}       from "./componentInputSimple/Methods";
 import {Examples   as InputSimpleExamples}      from "./componentInputSimple/examples";
 // --------------------------------
+import {Component as ComponentInputClass} from "./componentInput";
+import {Definition as InputDefinition}    from "./componentInput/Definition";
+import {Props      as InputProps}         from "./componentInput/Props";
+import {Schemas    as InputSchemas}       from "./componentInput/Schemas";
+import {Methods    as InputMethods}        from "./componentInput/Methods";
+import {Examples   as InputExamples}       from "./componentInput/examples";
+// --------------------------------
+import {Component as ComponentInputPasswordClass} from "./componentInputPassword";
+import {Definition as InputPasswordDefinition}    from "./componentInputPassword/Definition";
+import {Props      as InputPasswordProps}         from "./componentInputPassword/Props";
+import {Schemas    as InputPasswordSchemas}       from "./componentInputPassword/Schemas";
+import {Methods    as InputPasswordMethods}       from "./componentInputPassword/Methods";
+import {Examples   as InputPasswordExamples}      from "./componentInputPassword/examples";
+// --------------------------------
+import {Component as ComponentInputEmailClass} from "./componentInputEmail";
+import {Definition as InputEmailDefinition}    from "./componentInputEmail/Definition";
+import {Props      as InputEmailProps}         from "./componentInputEmail/Props";
+import {Schemas    as InputEmailSchemas}       from "./componentInputEmail/Schemas";
+import {Methods    as InputEmailMethods}       from "./componentInputEmail/Methods";
+import {Examples   as InputEmailExamples}      from "./componentInputEmail/examples";
+// --------------------------------
 import {Component as ComponentSelectCustomSimpleClass} from "./componentSelectCustomSimple";
 import {Definition as SelectCustomSimpleDefinition}    from "./componentSelectCustomSimple/Definition";
 import {Props      as SelectCustomSimpleProps}         from "./componentSelectCustomSimple/Props";
@@ -437,6 +458,33 @@ CoreComponents.ComponentManager.register({
 });
 
 CoreComponents.ComponentManager.register({
+    definition:  InputDefinition,
+    props:       InputProps,
+    schemas:     InputSchemas,
+    methods:     InputMethods,
+    examples:    InputExamples,
+    constructor: ComponentInputClass as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition:  InputPasswordDefinition,
+    props:       InputPasswordProps,
+    schemas:     InputPasswordSchemas,
+    methods:     InputPasswordMethods,
+    examples:    InputPasswordExamples,
+    constructor: ComponentInputPasswordClass as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition:  InputEmailDefinition,
+    props:       InputEmailProps,
+    schemas:     InputEmailSchemas,
+    methods:     InputEmailMethods,
+    examples:    InputEmailExamples,
+    constructor: ComponentInputEmailClass as any,
+});
+
+CoreComponents.ComponentManager.register({
     definition:  SelectCustomSimpleDefinition,
     props:       SelectCustomSimpleProps,
     schemas:     SelectCustomSimpleSchemas,
@@ -554,6 +602,9 @@ export * as ComponentTable       from "./componentTable";
 export * as ComponentInputCheckBox from "./componentInputCheckBox";
 export * as ComponentInputOtp from "./componentInputOtp";
 export * as ComponentInputSimple from "./componentInputSimple";
+export * as ComponentInput from "./componentInput";
+export * as ComponentInputPassword from "./componentInputPassword";
+export * as ComponentInputEmail from "./componentInputEmail";
 export * as ComponentSelectCustomSimple from "./componentSelectCustomSimple";
 export * as ComponentInputAgreementCheckBox from "./componentInputAgreementCheckBox";
 export * as ComponentDraggableOrdersY from "./componentDraggableOrdersY";

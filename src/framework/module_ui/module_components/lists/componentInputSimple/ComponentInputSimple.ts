@@ -67,10 +67,20 @@ export class ComponentInputSimple extends ComponentInputSimpleBase {
     private renderForm(attrsDefault: PartAttrDefault, data: Record<string, CoreObservable.App<any>>): CoreReactive.App {
         const bind = this._COMPONENT_PROPS_BIND;
         const disabled = data?.["prop_inputDisable"] ?? bind.prop_inputDisable;
+        const sizeName = CoreConfig.Settings.SizeName.observable();
         const borderProps: Record<string, any> = {
             prop_contentSize: UtilConst.Sizes.M,
-            prop_borderClass: ["position-relative", "h-100", "d-block"],
+            prop_borderClass: ["position-relative", "d-block"],
             prop_content: [this.executeSchemaPart(Schemas.INPUT.part, {}), this.executeSchemaPart(Schemas.CLEAR_ICON.part, {})],
+            prop_borderStyles: CoreObservable.App.computed((size) => ({
+                height: UtilStyle.Css_SizeCalc(
+                    UtilStyle.Css_Padding(size) as any,
+                    UtilConst.Operation.ADD,
+                    UtilStyle.Css_Padding(size) as any,
+                    UtilConst.Operation.ADD,
+                    UtilStyle.Css_Height(size) as any,
+                ),
+            }), [sizeName], this.getScope()),
             prop_borderColor: CoreObservable.App.computed((focused) => focused ? UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1) : UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1), [this._FOCUSED], this.getScope()),
             prop_contentBackgroundColor: CoreObservable.App.computed((isDisabled) => isDisabled ? UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_5) : UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1), [disabled], this.getScope()),
         };
@@ -95,8 +105,7 @@ export class ComponentInputSimple extends ComponentInputSimpleBase {
         const placeholder = data?.["prop_inputPlaceholder"] ?? bind.prop_inputPlaceholder;
         const inputFor = data?.["prop_inputFor"] ?? bind.prop_inputFor;
         const sizing = CoreObservable.App.computed((sizeName) => ({
-            height: UtilStyle.Css_SizeCalc(UtilStyle.Css_Padding(sizeName) as any, UtilConst.Operation.ADD, UtilStyle.Css_Height(sizeName) as any, UtilConst.Operation.ADD, UtilStyle.Css_Padding(sizeName) as any),
-            lineHeight: UtilStyle.Css_Height(sizeName), fontSize: UtilStyle.Css_FontSize(sizeName), padding: UtilStyle.Css_Padding(sizeName),
+            fontSize: UtilStyle.Css_FontSize(sizeName), padding: UtilStyle.Css_Padding(sizeName),
         }), [CoreConfig.Settings.SizeName.observable()], this.getScope());
 
         const input = CoreReactive.App.input({
