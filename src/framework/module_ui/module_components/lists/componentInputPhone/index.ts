@@ -1,0 +1,11 @@
+export {ComponentInputPhone as Component} from "./ComponentInputPhone";
+export {ComponentInputPhoneBase as Base} from "./ComponentInputPhoneBase";
+export {Definition} from "./Definition";
+export {Props} from "./Props";
+export type {PropsType, PropsConfigType, PhoneOption} from "./Props";
+export {Schemas} from "./Schemas";
+export type {SchemasType} from "./Schemas";
+export {Methods} from "./Methods";
+export type {MethodsType, MethodsConfigType, MethodsComponentArgs, MethodsDataArgs} from "./Methods";
+export {createInputPhoneStep} from "./Step";
+export {Examples} from "./examples";

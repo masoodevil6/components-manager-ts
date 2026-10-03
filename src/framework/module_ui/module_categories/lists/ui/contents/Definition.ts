@@ -13,6 +13,7 @@ import {ListSelectedScroller} from "./listSelectedScroller"
 import {Loading}           from "./loading"
 import {Sidebar}           from "./sidebar"
 import {MouseScroller}     from "./mouseScroller"
+import {Workflow}          from "./workflow"
 import {TimerDown}         from "./timerDown"
 
 export const Definition : UICategories.TCategoryComponentDefinition = {
@@ -34,6 +35,7 @@ export const Definition : UICategories.TCategoryComponentDefinition = {
         Loading,
         Sidebar,
         MouseScroller,
+        Workflow,
         TimerDown,
     ],
 }

@@ -145,19 +145,19 @@ export const ComponentValidateTrait = {
             children: state.ruleResults.map((results: TValidateRuleResult[]) =>
                 results.map((rule, i) => {
                     const iconDef = rule.isTrue ? prop_iconSuccess : prop_iconError;
-                    const iconValue = iconDef ? iconDef.get() : null;
+                    const iconValue = iconDef?.get() ?? (rule.isTrue
+                        ? UiIcons.Src.StatusIsTrue.Definition
+                        : UiIcons.Src.StatusIsFalse.Definition);
                     const color = rule.isTrue
                         ? UtilStyle.Css_Color(UtilConst.ColorMain.SUCCESS, UtilConst.ColorGrad.GRADE_1)
                         : UtilStyle.Css_Color(UtilConst.ColorMain.ERROR, UtilConst.ColorGrad.GRADE_1);
 
-                    const iconEl = iconValue
-                        ? new ComponentIcon.Component({
+                    const iconEl = new ComponentIcon.Component({
                             prop_icon: UiIcons.CreateIcon(iconValue as any, {
                                 size: iconSize as any,
                                 primaryColor: color,
                             }),
-                        } as any, {} as any).getReactiveElement() as CoreReactive.App
-                        : CoreReactive.App.span({}).getReactiveElement() as CoreReactive.App;
+                        } as any, {} as any).getReactiveElement() as CoreReactive.App;
 
                     return CoreReactive.App.div({
                         stylesBind: CoreObservable.App.computed(
@@ -233,11 +233,9 @@ export const ComponentValidateTrait = {
             },
             children: state.isInputCorrect.map((isCorrect: boolean) => {
                 const iconProp = isCorrect ? prop_iconSuccess : prop_iconError;
-                const iconValue = iconProp ? iconProp.get() : null;
-
-                if (!iconValue) {
-                    return CoreReactive.App.span({}).getElement();
-                }
+                const iconValue = iconProp?.get() ?? (isCorrect
+                    ? UiIcons.Src.StatusIsTrue.Definition
+                    : UiIcons.Src.StatusIsFalse.Definition);
 
                 return new ComponentIcon.Component(
                     {

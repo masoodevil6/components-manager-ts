@@ -1,4 +1,5 @@
 import * as UtilBrands from "@/util_brands";
+import type {ComponentConstructor} from "@/core_components";
 // ------------------
 import {TCategoryComponentTotality} from "./TCategoryComponentTotality";
 
@@ -9,5 +10,5 @@ export type TCategoryComponentDefinition = {
     description?:      UtilBrands.TranslationKey;
 
     children?:         TCategoryComponentDefinition[];
-    components?:       TCategoryComponentTotality[];
+    components?:       TCategoryComponentTotality<InstanceType<ComponentConstructor>>[];
 }

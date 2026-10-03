@@ -117,6 +117,10 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
         const prop_borderStyles          = data?.["prop_borderStyles"]          ?? bind.prop_borderStyles;
         const prop_borderWidth           = data?.["prop_borderWidth"]           ?? bind.prop_borderWidth;
         const prop_borderRadius          = data?.["prop_borderRadius"]          ?? bind.prop_borderRadius;
+        const prop_borderTopLeftRadiusHas = data?.["prop_borderTopLeftRadiusHas"] ?? bind.prop_borderTopLeftRadiusHas;
+        const prop_borderTopRightRadiusHas = data?.["prop_borderTopRightRadiusHas"] ?? bind.prop_borderTopRightRadiusHas;
+        const prop_borderBottomLeftRadiusHas = data?.["prop_borderBottomLeftRadiusHas"] ?? bind.prop_borderBottomLeftRadiusHas;
+        const prop_borderBottomRightRadiusHas = data?.["prop_borderBottomRightRadiusHas"] ?? bind.prop_borderBottomRightRadiusHas;
 
         const border = new ComponentBorder.Component(
             {
@@ -124,6 +128,10 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
                 prop_borderType: ComponentBorder.BorderTypes.SOLID,
                 prop_borderWidth: prop_borderWidth as any,
                 prop_borderRadius: prop_borderRadius as any,
+                prop_borderTopLeftRadiusHas: prop_borderTopLeftRadiusHas as any,
+                prop_borderTopRightRadiusHas: prop_borderTopRightRadiusHas as any,
+                prop_borderBottomLeftRadiusHas: prop_borderBottomLeftRadiusHas as any,
+                prop_borderBottomRightRadiusHas: prop_borderBottomRightRadiusHas as any,
                 prop_borderColor: prop_borderColor as any,
                 prop_contentBackgroundColor: prop_borderBackgroundColor as any,
                 prop_borderClass: prop_borderClass as any,
@@ -420,6 +428,10 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
                 prop_borderWidth:             prop_listBorderWidth as any,
                 prop_borderRadius:            prop_listBorderRadius as any,
                 prop_borderColor:             prop_listBorderColor as any,
+                prop_borderTopHas:            false,
+                prop_borderRightHas:           false,
+                prop_borderBottomHas:          false,
+                prop_borderLeftHas:           false,
                 prop_contentBackgroundColor:  prop_listBorderBackgroundColor as any,
                 prop_contentBackgroundColor_hover: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_3),
                 prop_contentColor: UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),

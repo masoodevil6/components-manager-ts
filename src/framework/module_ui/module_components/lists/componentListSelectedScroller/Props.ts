@@ -102,6 +102,31 @@ export const Props = {
         description:  Keys.category.components.listSelectedScroller.props.borderRadius.description,
     }),
 
+    prop_borderTopLeftRadiusHas: Define_ComponentProp<boolean>({
+        prop: "prop_borderTopLeftRadiusHas",
+        default: true,
+        name: Keys.category.components.border.props.borderTopLeftRadiusHas.name,
+        description: Keys.category.components.border.props.borderTopLeftRadiusHas.description,
+    }),
+    prop_borderTopRightRadiusHas: Define_ComponentProp<boolean>({
+        prop: "prop_borderTopRightRadiusHas",
+        default: true,
+        name: Keys.category.components.border.props.borderTopRightRadiusHas.name,
+        description: Keys.category.components.border.props.borderTopRightRadiusHas.description,
+    }),
+    prop_borderBottomLeftRadiusHas: Define_ComponentProp<boolean>({
+        prop: "prop_borderBottomLeftRadiusHas",
+        default: true,
+        name: Keys.category.components.border.props.borderBottomLeftRadiusHas.name,
+        description: Keys.category.components.border.props.borderBottomLeftRadiusHas.description,
+    }),
+    prop_borderBottomRightRadiusHas: Define_ComponentProp<boolean>({
+        prop: "prop_borderBottomRightRadiusHas",
+        default: true,
+        name: Keys.category.components.border.props.borderBottomRightRadiusHas.name,
+        description: Keys.category.components.border.props.borderBottomRightRadiusHas.description,
+    }),
+
     /// --- List Props ---
     prop_list: Define_ComponentProp<ListItemType[]>({
         prop:         "prop_list",

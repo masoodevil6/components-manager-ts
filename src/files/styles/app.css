@@ -76,21 +76,21 @@
 
 
     /* [Margin] */
-    --marginXSmall:           2px;
-    --marginSmall:            3px;
-    --marginMedium:           4px;
-    --marginLarge:            5px;
-    --marginXLarge:           6px;
-    --marginXXLarge:          7px;
+    --marginXSmall:           1px;
+    --marginSmall:            2px;
+    --marginMedium:           3px;
+    --marginLarge:            4px;
+    --marginXLarge:           5px;
+    --marginXXLarge:          6px;
 
 
     /* [Padding] */
-    --paddingXSmall:          2px;
-    --paddingSmall:           3px;
-    --paddingMedium:          4px;
-    --paddingLarge:           5px;
-    --paddingXLarge:          6px;
-    --paddingXXLarge:         7px;
+    --paddingXSmall:          1px;
+    --paddingSmall:           2px;
+    --paddingMedium:          3px;
+    --paddingLarge:           4px;
+    --paddingXLarge:          5px;
+    --paddingXXLarge:         6px;
 
 
     /* [Height] */

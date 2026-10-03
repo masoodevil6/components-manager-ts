@@ -54,6 +54,7 @@ export * as InputSelectColumn    from "./inputSelectColumn"
 export * as InputSelectOption    from "./inputSelectOption"
 export * as InputTitle           from "./inputTitle"
 export * as InputNumber          from "./inputNumber"
+export * as InputColorEmpty      from "./inputColorEmpty"
 
 
 

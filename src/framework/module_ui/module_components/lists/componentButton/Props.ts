@@ -19,6 +19,7 @@ import type {
  */
 export enum ButtonSemantic {
     CUSTOM =    "custom",
+    PRIMARY =   "submit",
     SUBMIT =    "submit",
     CANCEL =    "cancel",
     BACK =      "back"

@@ -7,6 +7,9 @@ import {InputListSelector}  from "./inputListSelector"
 import {Input}       from "./input"
 import {InputPassword} from "./inputPassword"
 import {InputEmail} from "./inputEmail"
+import {InputSize} from "./inputSize"
+import {InputPhone} from "./inputPhone"
+import {InputColor} from "./inputColor"
 
 export const Definition : UICategories.TCategoryComponentDefinition = {
     id:          "inputs",
@@ -21,5 +24,8 @@ export const Definition : UICategories.TCategoryComponentDefinition = {
         Input,
         InputPassword,
         InputEmail,
+        InputSize,
+        InputPhone,
+        InputColor,
     ],
 }

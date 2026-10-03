@@ -908,6 +908,14 @@ export const Fa =
             "آیکون ورودی عدد (number)"
         ],
         [
+            Keys.icons.inputColorEmpty.name,
+            "رنگ خالی"
+        ],
+        [
+            Keys.icons.inputColorEmpty.description,
+            "آیکون نشان‌دهندهٔ انتخاب‌نشدن رنگ"
+        ],
+        [
             Keys.icons.userPassword.name,
             "رمز عبور"
         ],

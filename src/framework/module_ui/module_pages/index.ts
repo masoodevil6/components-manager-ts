@@ -1,5 +1,5 @@
 
-export { Home, Tests, Icon } from "./pages";
+export { Home, Tests, Icon, Workflow } from "./pages";
 
 export {
     CtPageMaps as PageMap

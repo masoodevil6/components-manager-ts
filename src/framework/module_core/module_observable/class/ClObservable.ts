@@ -3,7 +3,7 @@ import {ClScope as Scope}     from "../class/ClScope";
 import {ObservableValue} from "../types"
 
 type Subscriber<T> = (value: T) => void;
-type Mapping<T, U> = ((value: T) => U) | { [key: string]: U | ClObservable<U>; default?: U | ClObservable<U> };
+type Mapping<T, U> = ((value: T) => U) | { [key: string]: U | ClObservable<U> | undefined; default?: U | ClObservable<U> };
 
 type ChooseMap<TKey extends PropertyKey, TResult> = {
     [K in TKey]?: () => TResult;

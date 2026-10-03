@@ -916,6 +916,14 @@ export const En =
             "Icon for a number input field"
         ],
         [
+            Keys.icons.inputColorEmpty.name,
+            "Empty Color"
+        ],
+        [
+            Keys.icons.inputColorEmpty.description,
+            "Icon indicating that no color is selected"
+        ],
+        [
             Keys.icons.userPassword.name,
             "Password"
         ],

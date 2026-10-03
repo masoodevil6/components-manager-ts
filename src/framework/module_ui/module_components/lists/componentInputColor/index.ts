@@ -1,0 +1,11 @@
+export {ComponentInputColor as Component} from "./ComponentInputColor";
+export {ComponentInputColorBase as Base} from "./ComponentInputColorBase";
+export {Definition} from "./Definition";
+export {Props} from "./Props";
+export type {PropsType, PropsConfigType} from "./Props";
+export {Schemas} from "./Schemas";
+export type {SchemasType} from "./Schemas";
+export {Methods} from "./Methods";
+export type {MethodsType, MethodsConfigType, MethodsComponentArgs, MethodsDataArgs} from "./Methods";
+export {createInputColorStep} from "./Step";
+export {Examples} from "./examples";

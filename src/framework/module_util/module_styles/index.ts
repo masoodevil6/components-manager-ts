@@ -30,6 +30,10 @@ export {
 } from "./class"
 
 export type {
+    TCSizes as TCSizes
+} from "./types/const/TCSizes"
+
+export type {
     TVColor as TColor
 } from "./types/var/TVColor"
 

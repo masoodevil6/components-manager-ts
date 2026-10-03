@@ -104,6 +104,8 @@ export class ComponentInputSimple extends ComponentInputSimpleBase {
         const type = data?.["prop_inputType"] ?? bind.prop_inputType;
         const placeholder = data?.["prop_inputPlaceholder"] ?? bind.prop_inputPlaceholder;
         const inputFor = data?.["prop_inputFor"] ?? bind.prop_inputFor;
+        const min = data?.["prop_inputMin"] ?? bind.prop_inputMin;
+        const max = data?.["prop_inputMax"] ?? bind.prop_inputMax;
         const sizing = CoreObservable.App.computed((sizeName) => ({
             fontSize: UtilStyle.Css_FontSize(sizeName), padding: UtilStyle.Css_Padding(sizeName),
         }), [CoreConfig.Settings.SizeName.observable()], this.getScope());
@@ -114,6 +116,8 @@ export class ComponentInputSimple extends ComponentInputSimpleBase {
                 name: CoreObservable.App.computed((fieldName) => fieldName == null ? null : `${fieldName}[value]`, [name], this.getScope()),
                 type: CoreObservable.App.computed((inputType) => inputType === InputSimpleTypes.STRING ? "text" : inputType ?? "text", [type], this.getScope()),
                 placeholder,
+                min,
+                max,
                 for: inputFor,
                 disabled: CoreObservable.App.computed((status) => status ? "disabled" : null, [disabled], this.getScope()),
             },
@@ -144,27 +148,24 @@ export class ComponentInputSimple extends ComponentInputSimpleBase {
 
     private renderClearIcon(attrsDefault: PartAttrDefault, data: Record<string, CoreObservable.App<any>>): CoreReactive.App {
         const disabled = data?.["prop_inputDisable"] ?? this._COMPONENT_PROPS_BIND.prop_inputDisable;
-        const iconLineHeight = UtilStyle.Css_SizeCalc(
-            UtilStyle.Css_BorderWidth(CoreConfig.Settings.SizeName.get()) as any, UtilConst.Operation.ADD, UtilStyle.Css_Padding(CoreConfig.Settings.SizeName.get()) as any,
-            UtilConst.Operation.ADD, UtilStyle.Css_Height(CoreConfig.Settings.SizeName.get()) as any, UtilConst.Operation.ADD, UtilStyle.Css_Padding(CoreConfig.Settings.SizeName.get()) as any,
-            UtilConst.Operation.ADD, UtilStyle.Css_BorderWidth(CoreConfig.Settings.SizeName.get()) as any,
-        );
-        this._CLEAR_ICON = new ComponentIcon.Component({
-            prop_structureStyles: {height: "100%"},
-            prop_icon: UiIcons.CreateIcon(UiIcons.Src.CalcCross.Definition),
-            prop_iconClass: ["d-block", "text-center", "h-100"],
-            prop_iconStyles: {cursor: "pointer", height: "100%", lineHeight: iconLineHeight},
-        }) as any;
         const sizeName = CoreConfig.Settings.SizeName.observable();
         const iconSize = CoreObservable.App.computed((size) => UtilStyle.Css_SizeCalc(
             UtilStyle.Css_BorderWidth(size) as any, UtilConst.Operation.ADD, UtilStyle.Css_Padding(size) as any,
-            UtilConst.Operation.ADD, UtilStyle.Css_Height(size) as any, UtilConst.Operation.ADD, UtilStyle.Css_Padding(size) as any,
+            UtilConst.Operation.ADD, UtilStyle.Css_Padding(size) as any, UtilConst.Operation.ADD, UtilStyle.Css_Height(size) as any,
             UtilConst.Operation.ADD, UtilStyle.Css_BorderWidth(size) as any,
         ), [sizeName], this.getScope());
+        const clearSvg = UiIcons.CreateIcon(UiIcons.Src.CalcCross.Definition);
+        clearSvg.getElement().style.height = "calc(var(--borderWidthMedium) + var(--paddingMedium) + var(--paddingMedium) + var(--heightMedium) + var(--borderWidthMedium))";
+        this._CLEAR_ICON = new ComponentIcon.Component({
+            prop_structureStyles: {height: "100%"},
+            prop_icon: clearSvg,
+            prop_iconClass: ["d-block", "text-center", "h-100"],
+            prop_iconStyles: {cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100%"},
+        }) as any;
         return CoreReactive.App.section({
             attrs: {...attrsDefault},
             className: ["component-input-simple-clear"],
-            styles: {position: "absolute", insetInlineEnd: "0", top: "50%", transform: "translateY(-50%)", zIndex: String(UtilStyle.Css_ZIndex(UtilConst.ZIndex.tools_btn)), cursor: "pointer"},
+            styles: {position: "absolute", insetInlineEnd: "0", top: "50%", transform: "translateY(-50%)", zIndex: String(UtilStyle.Css_ZIndex(UtilConst.ZIndex.tools_btn)), cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center"},
             stylesBind: {
                 width: iconSize,
                 height: iconSize,

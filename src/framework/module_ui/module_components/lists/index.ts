@@ -173,6 +173,24 @@ import {Props      as InputEmailProps}         from "./componentInputEmail/Props
 import {Schemas    as InputEmailSchemas}       from "./componentInputEmail/Schemas";
 import {Methods    as InputEmailMethods}       from "./componentInputEmail/Methods";
 import {Examples   as InputEmailExamples}      from "./componentInputEmail/examples";
+import {Component as ComponentInputSizeClass} from "./componentInputSize";
+import {Definition as InputSizeDefinition}    from "./componentInputSize/Definition";
+import {Props      as InputSizeProps}         from "./componentInputSize/Props";
+import {Schemas    as InputSizeSchemas}       from "./componentInputSize/Schemas";
+import {Methods    as InputSizeMethods}       from "./componentInputSize/Methods";
+import {Examples   as InputSizeExamples}      from "./componentInputSize/examples";
+import {Component as ComponentInputPhoneClass} from "./componentInputPhone";
+import {Definition as InputPhoneDefinition}    from "./componentInputPhone/Definition";
+import {Props      as InputPhoneProps}         from "./componentInputPhone/Props";
+import {Schemas    as InputPhoneSchemas}       from "./componentInputPhone/Schemas";
+import {Methods    as InputPhoneMethods}       from "./componentInputPhone/Methods";
+import {Examples   as InputPhoneExamples}      from "./componentInputPhone/examples";
+import {Component as ComponentInputColorClass} from "./componentInputColor";
+import {Definition as InputColorDefinition}    from "./componentInputColor/Definition";
+import {Props      as InputColorProps}         from "./componentInputColor/Props";
+import {Schemas    as InputColorSchemas}       from "./componentInputColor/Schemas";
+import {Methods    as InputColorMethods}       from "./componentInputColor/Methods";
+import {Examples   as InputColorExamples}      from "./componentInputColor/examples";
 // --------------------------------
 import {Component as ComponentSelectCustomSimpleClass} from "./componentSelectCustomSimple";
 import {Definition as SelectCustomSimpleDefinition}    from "./componentSelectCustomSimple/Definition";
@@ -229,6 +247,7 @@ import {Props      as MouseScrollerProps}             from "./componentMouseScro
 import {Schemas    as MouseScrollerSchemas}           from "./componentMouseScroller/Schemas";
 import {Methods    as MouseScrollerMethods}           from "./componentMouseScroller/Methods";
 import {Examples   as MouseScrollerExamples}          from "./componentMouseScroller/examples";
+import * as Workflow from "./componentWorkflow";
 
 
 // ثبت ComponentIcon در Component Manager
@@ -485,6 +504,33 @@ CoreComponents.ComponentManager.register({
 });
 
 CoreComponents.ComponentManager.register({
+    definition:  InputSizeDefinition,
+    props:       InputSizeProps,
+    schemas:     InputSizeSchemas,
+    methods:     InputSizeMethods,
+    examples:    InputSizeExamples,
+    constructor: ComponentInputSizeClass as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition:  InputPhoneDefinition,
+    props:       InputPhoneProps,
+    schemas:     InputPhoneSchemas,
+    methods:     InputPhoneMethods,
+    examples:    InputPhoneExamples,
+    constructor: ComponentInputPhoneClass as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition:  InputColorDefinition,
+    props:       InputColorProps,
+    schemas:     InputColorSchemas,
+    methods:     InputColorMethods,
+    examples:    InputColorExamples,
+    constructor: ComponentInputColorClass as any,
+});
+
+CoreComponents.ComponentManager.register({
     definition:  SelectCustomSimpleDefinition,
     props:       SelectCustomSimpleProps,
     schemas:     SelectCustomSimpleSchemas,
@@ -605,6 +651,9 @@ export * as ComponentInputSimple from "./componentInputSimple";
 export * as ComponentInput from "./componentInput";
 export * as ComponentInputPassword from "./componentInputPassword";
 export * as ComponentInputEmail from "./componentInputEmail";
+export * as ComponentInputSize from "./componentInputSize";
+export * as ComponentInputPhone from "./componentInputPhone";
+export * as ComponentInputColor from "./componentInputColor";
 export * as ComponentSelectCustomSimple from "./componentSelectCustomSimple";
 export * as ComponentInputAgreementCheckBox from "./componentInputAgreementCheckBox";
 export * as ComponentDraggableOrdersY from "./componentDraggableOrdersY";
@@ -613,3 +662,13 @@ export * as ComponentInputListSelector from "./componentInputListSelector";
 export * as ComponentLoading       from "./componentLoading";
 export * as ComponentSidebar       from "./componentSidebar";
 export * as ComponentMouseScroller from "./componentMouseScroller";
+export * as ComponentWorkflow from "./componentWorkflow";
+
+CoreComponents.ComponentManager.register({
+    definition: Workflow.Definition,
+    props: Workflow.Props,
+    schemas: Workflow.Schemas,
+    methods: Workflow.Methods,
+    examples: [],
+    constructor: Workflow.Component as any,
+});

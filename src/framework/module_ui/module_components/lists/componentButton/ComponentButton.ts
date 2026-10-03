@@ -380,6 +380,9 @@ export class ComponentButton extends ComponentButtonBase {
         const prop_btnTitleColor_hover  = data?.["prop_btnTitleColor_hover"] ?? bind.prop_btnTitleColor_hover;
         const sizeName = CoreConfig.Settings.SizeName.observable();
         const iconSize = this.getStyleBtnIconSize(prop_btnHeight);
+        const iconStrokeWidth = CoreObservable.App.computed((size: any, definition: UiIcons.IIconDefinition | null) =>
+            UtilStyle.Css_IconStrokeWidth(size, definition?.viewBoxX ?? 24, definition?.viewBoxY ?? 24),
+        [sizeName, prop_btnIcon], this.getScope());
         const iconFrameSize = CoreObservable.App.computed(
             (heightProp, size) => heightProp ?? UtilStyle.Css_IconSize(size),
             [prop_btnHeight, sizeName],
@@ -421,6 +424,7 @@ export class ComponentButton extends ComponentButtonBase {
                             {
                                 primaryColor:  this.getStyleBtnTitleColor(prop_btnSemantic , prop_btnTitleColor , prop_btnTitleColor_hover),
                                 size:          iconSize,
+                                strokeWidth:   iconStrokeWidth as any,
                             }
                         ),
                         styles: iconWrapperStyles,

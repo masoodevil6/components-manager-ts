@@ -62,6 +62,10 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
      * Document click listener برای close-on-outside-click
     */
     private _DOCUMENT_CLICK_HANDLER: ((event: MouseEvent) => void) | null = null;
+    private _POSITION_FRAME: number | null = null;
+    private _POSITION_RESIZE_HANDLER: (() => void) | null = null;
+    private _POSITION_OBSERVER: ResizeObserver | null = null;
+    private _POSITION_OBSERVED_POPUP: HTMLElement | null = null;
 
 
     constructor(
@@ -90,6 +94,15 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
     --------------------------------------------- */
     dispose(): void {
         this._removeDocumentClickListener();
+        if (this._POSITION_FRAME !== null) cancelAnimationFrame(this._POSITION_FRAME);
+        this._POSITION_OBSERVER?.disconnect();
+        this._POSITION_OBSERVER = null;
+        this._POSITION_OBSERVED_POPUP = null;
+        if (this._POSITION_RESIZE_HANDLER) {
+            window.removeEventListener("resize", this._POSITION_RESIZE_HANDLER);
+            window.removeEventListener("scroll", this._POSITION_RESIZE_HANDLER, true);
+            this._POSITION_RESIZE_HANDLER = null;
+        }
         this.disposeStep();
     }
 
@@ -183,6 +196,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                     this._IS_SHOW = !this._IS_SHOW;
                     prop_floatIsShow?.set?.(this._IS_SHOW);
                     this._BORDER_INSTANCE.set("prop_show", this._IS_SHOW);
+                    if (this._IS_SHOW) this.schedulePopupAdjustment();
                     if (this._IS_SHOW) this._addDocumentClickListener();
                     else this._removeDocumentClickListener();
                 },
@@ -198,7 +212,10 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                     if (event.relatedTarget instanceof Node && selector.contains(event.relatedTarget)) return;
                     CoreObservable.App.computed(
                         (selectorTypeShow, floatShowControlWithSelf) => {
-                            if (!floatShowControlWithSelf && selectorTypeShow === ShowTypes.HOVER && this._BORDER_INSTANCE) this._BORDER_INSTANCE.set("prop_show", true);
+                            if (!floatShowControlWithSelf && selectorTypeShow === ShowTypes.HOVER && this._BORDER_INSTANCE) {
+                                this._BORDER_INSTANCE.set("prop_show", true);
+                                this.schedulePopupAdjustment();
+                            }
                         },
                         [prop_selectorShowType, prop_floatShowControlWithSelf],
                         this.getScope(),
@@ -302,17 +319,24 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
             this.getScope(),
         );
 
+        if (!this._POSITION_RESIZE_HANDLER) {
+            this._POSITION_RESIZE_HANDLER = () => this.schedulePopupAdjustment();
+            window.addEventListener("resize", this._POSITION_RESIZE_HANDLER);
+            window.addEventListener("scroll", this._POSITION_RESIZE_HANDLER, true);
+        }
+
         return CoreObservable.App.conditionWhen(
             [showObservable],
             (isShow) => isShow === true,
             () => {
-                return CoreReactive.App.part("div", {
+                const popup = CoreReactive.App.part("div", {
                     attrs: {
                         ...attrsDefault,
                     },
                     styles: {
                         position: "absolute",
                         display:  "block",
+                        visibility: "hidden",
                         "z-index": `${UtilStyle.Css_ZIndex(UtilConst.ZIndex.notify)}`,
                     },
                     stylesBind: positionStyles as any,
@@ -320,6 +344,8 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                         this.executeSchemaPart(Schemas.SELECTOR_POSITION_BORDER.part, {}),
                     ],
                 });
+                this.schedulePopupAdjustment();
+                return popup;
             },
             () => {
                 return this.renderEmptyContent(attrsDefault);
@@ -427,6 +453,57 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
         }
     }
 
+    private schedulePopupAdjustment(): void {
+        if (this._POSITION_FRAME !== null) cancelAnimationFrame(this._POSITION_FRAME);
+        this._POSITION_FRAME = requestAnimationFrame(() => {
+            this._POSITION_FRAME = requestAnimationFrame(() => {
+                this._POSITION_FRAME = null;
+                this.adjustPopupToViewport();
+            });
+        });
+    }
+
+    /** Keep the popup inside the visual viewport after it is laid out. */
+    private adjustPopupToViewport(): void {
+        const root = this.getElement() as HTMLElement | null;
+        const popup = root?.querySelector('[data-part-name="part-selector-position"]') as HTMLElement | null;
+        if (!popup || !popup.isConnected) {
+            // The reactive tree can schedule its first frame before the DOM commit.
+            // Keep the popup hidden and retry so it never flashes at the unadjusted position.
+            this.schedulePopupAdjustment();
+            return;
+        }
+
+        if (this._POSITION_OBSERVED_POPUP !== popup && typeof ResizeObserver !== "undefined") {
+            this._POSITION_OBSERVER?.disconnect();
+            this._POSITION_OBSERVER = new ResizeObserver(() => this.schedulePopupAdjustment());
+            this._POSITION_OBSERVER.observe(popup);
+            const border = popup.querySelector('[data-part-name="part-border"]');
+            if (border) this._POSITION_OBSERVER.observe(border);
+            this._POSITION_OBSERVED_POPUP = popup;
+        }
+
+        const viewport = window.visualViewport;
+        const leftEdge = Math.max(0, viewport?.offsetLeft ?? 0);
+        const rightEdge = Math.min(window.innerWidth, leftEdge + (viewport?.width ?? window.innerWidth));
+        const gap = 8;
+        // `translate` is independent of the transform used for vertical placement.
+        popup.style.translate = "0px 0px";
+        const availableWidth = Math.max(0, rightEdge - leftEdge - gap * 2);
+
+        popup.style.boxSizing = "border-box";
+        popup.style.maxWidth = `${availableWidth}px`;
+        const currentMinWidth = parseFloat(getComputedStyle(popup).minWidth) || 0;
+        popup.style.minWidth = `${Math.min(currentMinWidth, availableWidth)}px`;
+
+        const adjustedRect = popup.getBoundingClientRect();
+        const overflowLeft = leftEdge + gap - adjustedRect.left;
+        const overflowRight = adjustedRect.right - (rightEdge - gap);
+        if (overflowLeft > 0) popup.style.translate = `${overflowLeft}px 0px`;
+        else if (overflowRight > 0) popup.style.translate = `${-overflowRight}px 0px`;
+        popup.style.visibility = "visible";
+    }
+
 
     /// ---------------------
     //  Style Getters — private و کوچک (الگوی componentButton)
@@ -460,10 +537,9 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
     private getStyleBorderPadding() {
         return CoreObservable.App.computed(
             (sizeName: any) => {
-                const padding = UtilStyle.Css_Padding(sizeName);
+                const margin = UtilStyle.Css_Margin(sizeName);
                 return {
-                    paddingLeft:  padding,
-                    paddingRight: padding,
+                    padding: margin,
                 };
             },
             [CoreConfig.Settings.SizeName.observable()],

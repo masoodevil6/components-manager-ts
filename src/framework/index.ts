@@ -1,6 +1,7 @@
+import '../files/styles/app.css';
+import '../files/styles/main.css';
 
 import "./bootstrap/Language";
-
 
 // core
 export * as Core           from "@/core";

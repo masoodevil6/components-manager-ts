@@ -135,7 +135,6 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
 
         const border = new ComponentBorder.Component(
             {
-                classList: ["pt-2", "d-block"],
                 prop_borderClass: [],
                 styles: {},
                 prop_content: CoreReactive.App.div({
@@ -185,7 +184,8 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
             () => {
                 const label = new ComponentLabel.Component(
                     {
-                        classList: ["border-bottom", "border-2", "pb-2"],
+                        classList: [],
+                        styles: CoreObservable.App.computed((sizeName: any) => ({marginBlockEnd: UtilStyle.Css_Margin(sizeName)}), [CoreConfig.Settings.SizeName.observable()], this.getScope()),
                         prop_labelTitle: prop_labelTitle as any,
                         prop_labelTooltipDescription: prop_labelTooltipDescription as any,
                         prop_labelShow: true,
@@ -472,6 +472,8 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
                             const selectedIds = columns
                                 .filter((c: ColumnItem) => c.selected)
                                 .map((c: ColumnItem) => c.id);
+                            const directionRtl = CoreConfig.Settings.DirectionRtl.observable();
+                            const directionLtr = directionRtl.map((isRtl: boolean) => !isRtl, this.getScope());
 
                             const scroller = new ComponentListSelectedScroller.Component(
                                 {
@@ -483,6 +485,10 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
                                     ),
                                     prop_list: selectedList,
                                     prop_value: selectedIds,
+                                    prop_borderTopLeftRadiusHas: directionRtl,
+                                    prop_borderBottomLeftRadiusHas: directionRtl,
+                                    prop_borderTopRightRadiusHas: directionLtr,
+                                    prop_borderBottomRightRadiusHas: directionLtr,
                                 } as any,
                                 {
                                     DELETE_ITEM: (event: Event, dataArgs: any) => {

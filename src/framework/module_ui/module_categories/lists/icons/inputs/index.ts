@@ -6,3 +6,4 @@ export * as Qr                from "./qr";
 export * as Select            from "./select";
 export * as Text              from "./text";
 export * as Number            from "./number";
+export * as Color             from "./color";

@@ -7,6 +7,7 @@ import {Definition as QrDefinition}        from "./qr";
 import {Definition as SelectDefinition}    from "./select";
 import {Definition as TextDefinition}      from "./text";
 import {Definition as NumberDefinition}    from "./number";
+import {Source as ColorDefinition}         from "./color";
 // ------------------------------
 import {TCategoryIconDefinition}           from "../../../basic/types/TCategoryIconDefinition";
 import {Keys}                              from "../../../languages";
@@ -21,6 +22,7 @@ export const Definition : TCategoryIconDefinition = {
         QrDefinition,
         SelectDefinition,
         TextDefinition,
-        NumberDefinition
+        NumberDefinition,
+        ColorDefinition,
     ]
 }

@@ -170,12 +170,13 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
         const radiusMap: Array<[string, string]> = [["prop_selectBorderTopLeftRadiusHas", "prop_borderTopLeftRadiusHas"], ["prop_selectBorderTopRightRadiusHas", "prop_borderTopRightRadiusHas"], ["prop_selectBorderBottomLeftRadiusHas", "prop_borderBottomLeftRadiusHas"], ["prop_selectBorderBottomRightRadiusHas", "prop_borderBottomRightRadiusHas"], ["prop_selectBorderTopHas", "prop_borderTopHas"], ["prop_selectBorderRightHas", "prop_borderRightHas"], ["prop_selectBorderBottomHas", "prop_borderBottomHas"], ["prop_selectBorderLeftHas", "prop_borderLeftHas"]];
         for (const [source, target] of radiusMap) props[target] = data?.[source] ?? bind[source];
         this._BORDER = new ComponentBorder.Component(props as any);
-        const headerStyles = CoreObservable.App.computed((size, isRtl) => ({
+        const headerStyles = CoreObservable.App.computed((size, isRtl, customStyles) => ({
             padding: UtilStyle.Css_Padding(size),
             lineHeight: UtilStyle.Css_Height(size),
             fontSize: UtilStyle.Css_FontSize(size),
             direction: isRtl ? "rtl" : "ltr",
-        }), [CoreConfig.Settings.SizeName.observable(), CoreConfig.Settings.DirectionRtl.observable()], this.getScope());
+            ...(customStyles ?? {}),
+        }), [CoreConfig.Settings.SizeName.observable(), CoreConfig.Settings.DirectionRtl.observable(), styles], this.getScope());
         return CoreReactive.App.section({
             attrs: {...attrsDefault, role: "combobox", tabindex: "0", "aria-haspopup": "listbox"},
             attrsBind: {"aria-expanded": CoreObservable.App.computed((open) => String(open), [this._IS_OPEN], this.getScope()), "aria-disabled": CoreObservable.App.computed((isDisabled) => String(isDisabled), [disabled], this.getScope())},
@@ -205,7 +206,12 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
             if (displayType === SelectTypeShow.JUST_PREFIX) return prefix;
             return prefix ? `${prefix} | ${name}` : name;
         }, [value, options, placeholder, type], this.getScope());
-        return CoreReactive.App.section({attrs: {...attrsDefault}, className: ["flex-grow-1", "text-truncate"], styles: {minWidth: "0"}, children: [text]});
+        const textStyles = CoreObservable.App.computed((sizeName) => ({
+            minWidth: "0",
+            paddingInlineStart: UtilStyle.Css_Padding(sizeName),
+            paddingInlineEnd: UtilStyle.Css_Padding(sizeName),
+        }), [CoreConfig.Settings.SizeName.observable()], this.getScope());
+        return CoreReactive.App.section({attrs: {...attrsDefault}, className: ["flex-grow-1", "text-truncate"], stylesBind: textStyles, children: [text]});
     }
 
     private renderHeaderIcon(attrsDefault: PartAttrDefault, _data: Record<string, CoreObservable.App<any>>): CoreReactive.App {

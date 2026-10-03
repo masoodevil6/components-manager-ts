@@ -1,7 +1,7 @@
 import * as CoreComponents from "@/core_components";
 // --------------------------------
 import {ComponentExample} from "@/core_components";
-import {TComponentDefinition as ComponentDefinition} from "../types/TComponentDefinition";
+import type {Type_ComponentDefinition as ComponentDefinition} from "../../tools/defination/Type_ComponentDefinition";
 
 
 /**

@@ -98,6 +98,10 @@ export const Keys = {
             name:        CreateTranslationKey() ,
             description: CreateTranslationKey() ,
         },
+        inputColorEmpty: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
 
 
 
