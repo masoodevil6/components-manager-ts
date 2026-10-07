@@ -13,4 +13,6 @@ export type {MethodsConfigType,
 export {Definition}                          from "./Definition"
 export {createInputCheckBoxStep}             from "./Step"
 export {Examples}                            from "./examples"
+export {createCheckBoxControl}               from "./Control"
+export type {CheckBoxControlOptions}          from "./Control"
 export type {ComponentInputCheckBoxExamplesType} from "./examples"

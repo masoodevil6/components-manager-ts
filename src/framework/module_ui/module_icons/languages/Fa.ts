@@ -915,6 +915,8 @@ export const Fa =
             Keys.icons.inputColorEmpty.description,
             "آیکون نشان‌دهندهٔ انتخاب‌نشدن رنگ"
         ],
+        [Keys.icons.shapeCircle.name, "دایره"],
+        [Keys.icons.shapeCircle.description, "آیکون شکل دایرهٔ توپر"],
         [
             Keys.icons.userPassword.name,
             "رمز عبور"

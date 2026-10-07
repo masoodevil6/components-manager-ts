@@ -156,8 +156,6 @@ export class ComponentBorder extends ComponentBorderBase {
                 "transition": "background-color 320ms ease-in-out, color 320ms ease-in-out, border-color 320ms ease-in-out",
             },
             stylesBind: {
-                prop_borderStyles,
-
                 // --- public ---
                 "min-width":                   prop_minWidth,
                 "width":                       prop_width,
@@ -187,6 +185,9 @@ export class ComponentBorder extends ComponentBorderBase {
                 "--arrow-border-width":        this.getStyleArrowBorderWidth(prop_borderArrowType, prop_borderArrowWidth),
                 "--arrow-transform":           this.getStyleArrowTransform(prop_borderArrowType),
                 "--arrow-border-color":        this.getStyleArrowBorderColor(prop_borderArrowType, prop_borderColor, prop_borderColor_hover),
+
+                // Explicit styles are applied last so component callers can override generated border styles.
+                prop_borderStyles,
             },
             classBind: [
                 prop_borderClass,

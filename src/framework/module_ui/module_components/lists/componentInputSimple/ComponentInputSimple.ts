@@ -68,11 +68,36 @@ export class ComponentInputSimple extends ComponentInputSimpleBase {
         const bind = this._COMPONENT_PROPS_BIND;
         const disabled = data?.["prop_inputDisable"] ?? bind.prop_inputDisable;
         const sizeName = CoreConfig.Settings.SizeName.observable();
+        const borderColor = data?.["prop_inputBorderColor"] ?? bind.prop_inputBorderColor;
+        const borderColorFocus = data?.["prop_inputBorderColorFocus"] ?? bind.prop_inputBorderColorFocus;
+        const borderWidth = data?.["prop_inputBorderWidth"] ?? bind.prop_inputBorderWidth;
+        const borderRadius = data?.["prop_inputBorderRadius"] ?? bind.prop_inputBorderRadius;
+        const radiusHas = [
+            data?.["prop_inputBorderTopLeftRadiusHas"] ?? bind.prop_inputBorderTopLeftRadiusHas,
+            data?.["prop_inputBorderTopRightRadiusHas"] ?? bind.prop_inputBorderTopRightRadiusHas,
+            data?.["prop_inputBorderBottomLeftRadiusHas"] ?? bind.prop_inputBorderBottomLeftRadiusHas,
+            data?.["prop_inputBorderBottomRightRadiusHas"] ?? bind.prop_inputBorderBottomRightRadiusHas,
+        ];
+        const customBorderStyles = CoreObservable.App.computed((size, width, radius, topLeft, topRight, bottomLeft, bottomRight) => {
+            const resolvedWidth = UtilStyle.Css_BorderWidth(width ?? size);
+            const resolvedRadius = UtilStyle.Css_BorderRadius(radius ?? size);
+            const zero = UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL);
+            return {
+                borderTopWidth: UtilStyle.Style_Important(resolvedWidth),
+                borderRightWidth: UtilStyle.Style_Important(resolvedWidth),
+                borderBottomWidth: UtilStyle.Style_Important(resolvedWidth),
+                borderLeftWidth: UtilStyle.Style_Important(resolvedWidth),
+                borderTopLeftRadius: topLeft ? resolvedRadius : zero,
+                borderTopRightRadius: topRight ? resolvedRadius : zero,
+                borderBottomLeftRadius: bottomLeft ? resolvedRadius : zero,
+                borderBottomRightRadius: bottomRight ? resolvedRadius : zero,
+            };
+        }, [sizeName, borderWidth, borderRadius, ...radiusHas], this.getScope());
         const borderProps: Record<string, any> = {
             prop_contentSize: UtilConst.Sizes.M,
             prop_borderClass: ["position-relative", "d-block"],
             prop_content: [this.executeSchemaPart(Schemas.INPUT.part, {}), this.executeSchemaPart(Schemas.CLEAR_ICON.part, {})],
-            prop_borderStyles: CoreObservable.App.computed((size) => ({
+            prop_borderStyles: CoreObservable.App.computed((heightStyles, customStyles) => ({...heightStyles, ...customStyles}), [CoreObservable.App.computed((size) => ({
                 height: UtilStyle.Css_SizeCalc(
                     UtilStyle.Css_Padding(size) as any,
                     UtilConst.Operation.ADD,
@@ -80,9 +105,11 @@ export class ComponentInputSimple extends ComponentInputSimpleBase {
                     UtilConst.Operation.ADD,
                     UtilStyle.Css_Height(size) as any,
                 ),
-            }), [sizeName], this.getScope()),
-            prop_borderColor: CoreObservable.App.computed((focused) => focused ? UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1) : UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1), [this._FOCUSED], this.getScope()),
+            }), [sizeName], this.getScope()), customBorderStyles], this.getScope()),
             prop_contentBackgroundColor: CoreObservable.App.computed((isDisabled) => isDisabled ? UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_5) : UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1), [disabled], this.getScope()),
+            prop_borderColor: CoreObservable.App.computed((focused, normal, focus) => focused
+                ? focus ?? UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1)
+                : normal ?? UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1), [this._FOCUSED, borderColor, borderColorFocus], this.getScope()),
         };
         const mapping: Array<[string, string]> = [
             ["prop_inputBorderTopLeftRadiusHas", "prop_borderTopLeftRadiusHas"], ["prop_inputBorderTopRightRadiusHas", "prop_borderTopRightRadiusHas"],

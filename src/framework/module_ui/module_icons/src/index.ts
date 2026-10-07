@@ -21,6 +21,7 @@ export * as ArrowDoubleDown      from "./arrowDoubleDown";
 
 export * as StatusIsFalse         from "./statusIsFalse";
 export * as StatusIsTrue          from "./statusIsTrue";
+export * as ShapeCircle           from "./shapeCircle";
 
 export * as StatusVisit           from "./statusVisit";
 export * as StatusUnVisit         from "./statusUnVisit";

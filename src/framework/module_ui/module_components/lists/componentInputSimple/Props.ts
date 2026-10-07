@@ -1,5 +1,6 @@
 import * as CoreComponents from "@/core_components";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
+import * as UtilConst from "@/util_consts";
 import {Keys} from "../../../module_categories/languages";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
 
@@ -13,6 +14,10 @@ export const Props = {
     prop_inputValue: Define_ComponentProp<string | null>({ prop: "prop_inputValue", default: null, name: Keys.category.components.inputSimple.props.inputValue.name, description: Keys.category.components.inputSimple.props.inputValue.description }),
     prop_inputClass: Define_ComponentProp<string[]>({ prop: "prop_inputClass", default: ["form-control"], name: Keys.category.components.inputSimple.props.inputClass.name, description: Keys.category.components.inputSimple.props.inputClass.description }),
     prop_inputStyles: Define_ComponentProp<Record<string, string>>({ prop: "prop_inputStyles", default: {}, name: Keys.category.components.inputSimple.props.inputStyles.name, description: Keys.category.components.inputSimple.props.inputStyles.description }),
+    prop_inputBorderColor: Define_ComponentProp<string | null>({ prop: "prop_inputBorderColor", default: null, name: Keys.category.components.inputSimple.props.inputBorderColor.name, description: Keys.category.components.inputSimple.props.inputBorderColor.description }),
+    prop_inputBorderColorFocus: Define_ComponentProp<string | null>({ prop: "prop_inputBorderColorFocus", default: null, name: Keys.category.components.inputSimple.props.inputBorderColorFocus.name, description: Keys.category.components.inputSimple.props.inputBorderColorFocus.description }),
+    prop_inputBorderWidth: Define_ComponentProp<UtilConst.Sizes>({ prop: "prop_inputBorderWidth", default: UtilConst.Sizes.M, name: Keys.category.components.inputSimple.props.inputBorderWidth.name, description: Keys.category.components.inputSimple.props.inputBorderWidth.description }),
+    prop_inputBorderRadius: Define_ComponentProp<UtilConst.Sizes>({ prop: "prop_inputBorderRadius", default: UtilConst.Sizes.M, name: Keys.category.components.inputSimple.props.inputBorderRadius.name, description: Keys.category.components.inputSimple.props.inputBorderRadius.description }),
     prop_inputType: Define_ComponentProp<InputSimpleTypes>({ prop: "prop_inputType", default: InputSimpleTypes.STRING, name: Keys.category.components.inputSimple.props.inputType.name, description: Keys.category.components.inputSimple.props.inputType.description }),
     prop_inputPlaceholder: Define_ComponentProp<string | null>({ prop: "prop_inputPlaceholder", default: null, name: Keys.category.components.inputSimple.props.inputPlaceholder.name, description: Keys.category.components.inputSimple.props.inputPlaceholder.description }),
     prop_inputFor: Define_ComponentProp<string | null>({ prop: "prop_inputFor", default: null, name: Keys.category.components.inputSimple.props.inputFor.name, description: Keys.category.components.inputSimple.props.inputFor.description }),

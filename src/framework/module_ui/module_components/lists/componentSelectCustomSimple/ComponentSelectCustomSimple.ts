@@ -135,6 +135,7 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
         const disabled = data?.["prop_selectDisable"] ?? bind.prop_selectDisable;
         const classList = data?.["prop_selectClass"] ?? bind.prop_selectClass;
         const styles = data?.["prop_selectStyles"] ?? bind.prop_selectStyles;
+        const headerStylesEnabled = data?.["prop_selectHeaderStylesEnabled"] ?? bind.prop_selectHeaderStylesEnabled;
         const borderStyles = CoreObservable.App.computed((sizeName, customStyles) => ({
             transition: "background-color 1000ms, color 1000ms, border-color 1000ms",
             display: "flow-root",
@@ -170,13 +171,15 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
         const radiusMap: Array<[string, string]> = [["prop_selectBorderTopLeftRadiusHas", "prop_borderTopLeftRadiusHas"], ["prop_selectBorderTopRightRadiusHas", "prop_borderTopRightRadiusHas"], ["prop_selectBorderBottomLeftRadiusHas", "prop_borderBottomLeftRadiusHas"], ["prop_selectBorderBottomRightRadiusHas", "prop_borderBottomRightRadiusHas"], ["prop_selectBorderTopHas", "prop_borderTopHas"], ["prop_selectBorderRightHas", "prop_borderRightHas"], ["prop_selectBorderBottomHas", "prop_borderBottomHas"], ["prop_selectBorderLeftHas", "prop_borderLeftHas"]];
         for (const [source, target] of radiusMap) props[target] = data?.[source] ?? bind[source];
         this._BORDER = new ComponentBorder.Component(props as any);
-        const headerStyles = CoreObservable.App.computed((size, isRtl, customStyles) => ({
+        const headerStyles = CoreObservable.App.computed((enabled: boolean, size, isRtl, customStyles) => enabled ? ({
+            display: "block",
+            width: "100%",
             padding: UtilStyle.Css_Padding(size),
             lineHeight: UtilStyle.Css_Height(size),
             fontSize: UtilStyle.Css_FontSize(size),
             direction: isRtl ? "rtl" : "ltr",
             ...(customStyles ?? {}),
-        }), [CoreConfig.Settings.SizeName.observable(), CoreConfig.Settings.DirectionRtl.observable(), styles], this.getScope());
+        }) : ({}), [headerStylesEnabled, CoreConfig.Settings.SizeName.observable(), CoreConfig.Settings.DirectionRtl.observable(), styles], this.getScope());
         return CoreReactive.App.section({
             attrs: {...attrsDefault, role: "combobox", tabindex: "0", "aria-haspopup": "listbox"},
             attrsBind: {"aria-expanded": CoreObservable.App.computed((open) => String(open), [this._IS_OPEN], this.getScope()), "aria-disabled": CoreObservable.App.computed((isDisabled) => String(isDisabled), [disabled], this.getScope())},

@@ -8,6 +8,7 @@ import * as UiIcons from "@/ui_icons";
 import {PartAttrDefault} from "@/core_components";
 import {ComponentInputColorBase} from "./ComponentInputColorBase";
 import {PropsConfigType} from "./Props";
+import {colorSelector} from "./Props";
 import {Schemas} from "./Schemas";
 import {MethodsConfigType} from "./Methods";
 import {Keys} from "../../../module_categories/languages";
@@ -28,6 +29,9 @@ type DragMode = "sl" | "hue" | "opacity" | null;
 export class ComponentInputColor extends ComponentInputColorBase {
     private readonly _VALUE = new CoreObservable.App<string | null>(null);
     private readonly _EMPTY = new CoreObservable.App(true);
+    private readonly _FORM_VALUE = new CoreObservable.App<string | null>(null);
+    private readonly _FORM_EMPTY = new CoreObservable.App(true);
+    private readonly _FORM_ALPHA = new CoreObservable.App(1);
     private readonly _HUE = new CoreObservable.App(0);
     private readonly _SAT = new CoreObservable.App(100);
     private readonly _LIGHT = new CoreObservable.App(50);
@@ -36,17 +40,20 @@ export class ComponentInputColor extends ComponentInputColorBase {
     private readonly _FORMAT_PARTS = [0, 1, 2, 3].map(() => new CoreObservable.App(""));
     private readonly _RECENT_COLORS = new CoreObservable.App<string[]>([]);
     private readonly _IS_OPEN = new CoreObservable.App(false);
+    private readonly _COPY_SUCCESS = new CoreObservable.App(false);
     private _OPENING_VALUE: string | null = null;
     private _OPENING_ALPHA = 1;
     private _PICKER_WAS_OPEN = false;
     private _PICKER_CONFIRMED = false;
     private readonly _CHILDREN: Child[] = [];
     private _FLOAT_MENU: InstanceType<typeof ComponentFloatMenu.Component> | null = null;
+    private _FORMAT_SELECT: InstanceType<typeof ComponentSelectCustomSimple.Component> | null = null;
     private _UNSUBSCRIBE: Array<() => void> = [];
     private _INITIALIZED = false;
     private _DISPOSED = false;
     private _DRAG: DragMode = null;
     private _RECENT_COLOR_TIMER: number | null = null;
+    private _COPY_SUCCESS_TIMER: number | null = null;
     private _SL_CANVAS: HTMLCanvasElement | null = null;
     private _HUE_CANVAS: HTMLCanvasElement | null = null;
     private _ALPHA_CANVAS: HTMLCanvasElement | null = null;
@@ -62,8 +69,10 @@ export class ComponentInputColor extends ComponentInputColorBase {
         super(identity, createInputColorStep());
         this._IS_OPEN.subscribe((isOpen) => {
             if (isOpen) {
-                this._OPENING_VALUE = this._VALUE.get();
-                this._OPENING_ALPHA = this._ALPHA.get();
+                this.syncValue(this._FORM_VALUE.get());
+                this._ALPHA.set(this._FORM_ALPHA.get());
+                this._OPENING_VALUE = this._FORM_VALUE.get();
+                this._OPENING_ALPHA = this._FORM_ALPHA.get();
                 this._PICKER_WAS_OPEN = true;
                 this._PICKER_CONFIRMED = false;
                 requestAnimationFrame(() => this.drawAll());
@@ -81,6 +90,7 @@ export class ComponentInputColor extends ComponentInputColorBase {
         if (this._DISPOSED) return;
         this._DISPOSED = true;
         if (this._RECENT_COLOR_TIMER !== null) window.clearTimeout(this._RECENT_COLOR_TIMER);
+        if (this._COPY_SUCCESS_TIMER !== null) window.clearTimeout(this._COPY_SUCCESS_TIMER);
         this._UNSUBSCRIBE.forEach((unsubscribe) => unsubscribe());
         window.removeEventListener("pointermove", this._MOVE);
         window.removeEventListener("pointerup", this._UP);
@@ -106,9 +116,12 @@ export class ComponentInputColor extends ComponentInputColorBase {
             case ComponentStructureTrait.schemas.STRUCTURE.part: return ComponentStructureTrait.renderStructureSchema(this, attrsDefault, data);
             case ComponentLabelTrait.schemas.LABEL.part: return this.renderLabel(data);
             case Schemas.FORM.part: return this.renderForm(attrsDefault, data);
+            case Schemas.FORM_COLOR_BOX.part:
             case Schemas.SWATCH.part: return this.renderSwatch(attrsDefault, data);
+            case Schemas.FORM_COLOR_TEXT.part:
             case Schemas.TITLE.part: return this.renderTitle(attrsDefault, data);
             case Schemas.ICON_EMPTY.part: return this.renderEmptyIcon(attrsDefault, data);
+            case Schemas.FORM_ICON.part:
             case Schemas.ICON_CLEAR.part: return this.renderClearIcon(attrsDefault, data);
             case Schemas.PICKER.part: return this.renderPicker(attrsDefault, data);
             case Schemas.SL_AREA.part: return this.renderSlArea(attrsDefault, data);
@@ -154,15 +167,17 @@ export class ComponentInputColor extends ComponentInputColorBase {
             const padding = UtilStyle.Css_Padding(size);
             return `min(calc(${contentWidth}px + ${padding} + ${padding}), calc(100vw - 16px))`;
         }, [panelWidth, CoreConfig.Settings.SizeName.observable()], this.getScope());
-        const floatMenuLayoutStyles = {width: "100%", minWidth: "0", flex: "1 1 auto"};
+        const floatMenuLayoutStyles = {width: "auto", minWidth: "0", flex: "0 0 auto"};
+        const directionRtl = CoreConfig.Settings.DirectionRtl.observable();
         this._FLOAT_MENU = new ComponentFloatMenu.Component({
             classList: ["position-relative", "d-inline-block"],
             styles: floatMenuLayoutStyles,
-            prop_structureStyles: {width: "100%", minWidth: "0"},
+            prop_structureStyles: {width: "auto", minWidth: "0"},
+            prop_floatClass: [],
             prop_selectorContent: CoreReactive.App.section({
                 className: ["d-flex", "align-items-center", "cursor-pointer"],
                 on: {click: () => requestAnimationFrame(() => this.drawAll())},
-                children: [this.executeSchemaPart(Schemas.SWATCH.part, {}), this.executeSchemaPart(Schemas.TITLE.part, {})],
+                children: [this.executeSchemaPart(Schemas.FORM_COLOR_BOX.part, {})],
             }),
             prop_selectorShowType: ComponentFloatMenu.ShowTypes.CLICK,
             prop_floatContent: this.executeSchemaPart(Schemas.PICKER.part, {}) as any,
@@ -178,41 +193,113 @@ export class ComponentInputColor extends ComponentInputColorBase {
             prop_floatColor: panelColor as any,
             prop_floatShowControlWithSelf: false,
             prop_floatIsShow: this._IS_OPEN,
-            prop_floatStyles: CoreObservable.App.computed((custom: Record<string, string>) => ({
+            prop_floatStyles: CoreObservable.App.computed((custom: Record<string, string>, rtl: boolean) => ({
                 ...(custom ?? {}),
-            }), [panelStyles], this.getScope()),
+                top: "100%",
+                left: rtl ? "auto" : "0px",
+                right: rtl ? "0px" : "auto",
+                marginTop: "0px",
+            }), [panelStyles, directionRtl], this.getScope()),
         } as any, {} as any);
         this._CHILDREN.push(this._FLOAT_MENU as any);
-        const formStyles = CoreObservable.App.computed((isDisabled: boolean) => ({
+        const formStyles = CoreObservable.App.computed((isDisabled: boolean, size: any) => ({
             display: "flex",
+            flexDirection: "row",
+            alignItems: "stretch",
             width: "100%",
-            alignItems: "center",
             position: "relative",
             cursor: isDisabled ? "not-allowed" : "pointer",
             opacity: isDisabled ? "0.65" : "1",
-        }), [disabled], this.getScope());
-        return CoreReactive.App.section({
-            attrs: {...attrs},
-            className: ["d-flex", "align-items-center", "w-100"],
-            stylesBind: formStyles,
-            children: [this._FLOAT_MENU.getReactiveElement() as CoreReactive.App, this.executeSchemaPart(Schemas.ICON_CLEAR.part, {})],
-        });
+            backgroundColor: UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1),
+            borderRadius: UtilStyle.Css_BorderRadius(size),
+        }), [disabled, CoreConfig.Settings.SizeName.observable()], this.getScope());
+        const formatSelect = this.getFormatSelect();
+        const display = data?.prop_colorSelector ?? bind.prop_colorSelector;
+        return CoreReactive.App.section({attrs: {...attrs}, children: [
+            CoreObservable.App.conditionWhen([display], (mode: colorSelector) => mode === colorSelector.Full,
+                () => CoreReactive.App.section({
+                    className: ["d-flex", "align-items-center", "w-100"],
+                    stylesBind: formStyles,
+                    children: [
+                        this._FLOAT_MENU!.getReactiveElement() as CoreReactive.App,
+                        CoreReactive.App.section({
+                            styles: {width: "80px", flex: "0 0 80px", minWidth: "80px"},
+                            children: [formatSelect.getReactiveElement() as CoreReactive.App],
+                        }),
+                        this.executeSchemaPart(Schemas.FORM_COLOR_TEXT.part, {}),
+                        this.executeSchemaPart(Schemas.FORM_ICON.part, {}),
+                    ],
+                }),
+                () => display.get() === colorSelector.COLOR_TEXT
+                    ? CoreReactive.App.section({
+                        className: ["d-inline-flex", "align-items-center"],
+                        styles: {display: "inline-flex", alignItems: "center", width: "auto", maxWidth: "100%"},
+                        children: [this._FLOAT_MENU!.getReactiveElement() as CoreReactive.App, this.executeSchemaPart(Schemas.FORM_COLOR_TEXT.part, {})],
+                    })
+                    : CoreReactive.App.section({
+                        className: ["d-inline-flex", "align-items-center"],
+                        styles: {display: "inline-flex", alignItems: "center", width: "auto"},
+                        children: [this._FLOAT_MENU!.getReactiveElement() as CoreReactive.App],
+                    }), this.getScope()),
+        ]});
+    }
+
+    private getFormatSelect(): InstanceType<typeof ComponentSelectCustomSimple.Component> {
+        if (this._FORMAT_SELECT) return this._FORMAT_SELECT;
+        const directionRtl = CoreConfig.Settings.DirectionRtl.observable();
+        this._FORMAT_SELECT = new ComponentSelectCustomSimple.Component({
+            prop_selectClass: [],
+            prop_selectHeaderStylesEnabled: false,
+            prop_selectBorderTopLeftRadiusHas: false,
+            prop_selectBorderTopRightRadiusHas: false,
+            prop_selectBorderBottomLeftRadiusHas: false,
+            prop_selectBorderBottomRightRadiusHas: false,
+            prop_selectBorderRightHas: CoreObservable.App.computed((rtl: boolean) => !!rtl, [directionRtl], this.getScope()) as any,
+            prop_selectBorderLeftHas: CoreObservable.App.computed((rtl: boolean) => !rtl, [directionRtl], this.getScope()) as any,
+            prop_selectValue: this._FORMAT as any,
+            prop_selectPlaceholder: "HEX",
+            prop_selectTypeShow: ComponentSelectCustomSimple.SelectTypeShow.JUST_NAME,
+            prop_selectOptions: ["HEX", "RGB", "RGBA", "HSL", "HSLA"].map((format) => ({id: format, name: format, prefix: format})),
+            prop_structureStyles: {width: "100%", minWidth: "0"},
+        } as any, {
+            SELECT_CHANGE: (_event, _dataArgs, componentArgs) => {
+                this._FORMAT.set(String(componentArgs.VALUE));
+                this.syncFormatParts();
+            },
+        } as any);
+        this._CHILDREN.push(this._FORMAT_SELECT as any);
+        return this._FORMAT_SELECT;
     }
 
     private renderSwatch(attrs: PartAttrDefault, data: Record<string, CoreObservable.App<any>>): CoreReactive.App {
         const bind = this._COMPONENT_PROPS_BIND;
         const sizeName = CoreConfig.Settings.SizeName.observable();
+        const directionRtl = CoreConfig.Settings.DirectionRtl.observable();
         const dimension = CoreObservable.App.computed((size: any) => UtilStyle.Css_SizeCalc(
             UtilStyle.Css_Padding(size) as any, UtilConst.Operation.ADD,
             UtilStyle.Css_Height(size) as any, UtilConst.Operation.ADD,
             UtilStyle.Css_Padding(size) as any,
         ), [sizeName], this.getScope());
-        const styles = CoreObservable.App.computed((empty: boolean, color: string, border: string, isDisabled: boolean, box: string, custom: Record<string, string>, size: any) => ({
+        const display = data?.prop_colorSelector ?? bind.prop_colorSelector;
+        const styles = CoreObservable.App.computed((empty: boolean, color: string, border: string, isDisabled: boolean, box: string, custom: Record<string, string>, size: any, rtl: boolean, mode: colorSelector) => {
+            const radius = UtilStyle.Css_BorderRadius(size);
+            const borderWidth = UtilStyle.Css_BorderWidth(size);
+            const compact = mode !== colorSelector.Full;
+            return ({
+            outline: "none",
+            cursor: "pointer",
+            margin: "auto",
             width: box,
             height: box,
+            lineHeight: box,
             boxSizing: "border-box",
-            border: UtilStyle.Css_BorderWidth(size) + " solid " + border,
-            borderRadius: UtilStyle.Css_BorderRadius(size),
+            border: borderWidth + " solid " + border,
+            borderRight: compact ? undefined : (rtl ? undefined : "none"),
+            borderLeft: compact ? undefined : (rtl ? "none" : undefined),
+            borderTopLeftRadius: compact ? radius : (rtl ? "0px" : radius),
+            borderBottomLeftRadius: compact ? radius : (rtl ? "0px" : radius),
+            borderTopRightRadius: compact ? radius : (rtl ? radius : "0px"),
+            borderBottomRightRadius: compact ? radius : (rtl ? radius : "0px"),
             backgroundColor: empty ? "transparent" : color,
             opacity: isDisabled ? "0.65" : "1",
             position: "relative",
@@ -221,7 +308,8 @@ export class ComponentInputColor extends ComponentInputColorBase {
             justifyContent: "center",
             flex: "0 0 auto",
             ...(custom ?? {}),
-        }), [this._EMPTY, this.preview(), data?.prop_borderColor ?? bind.prop_borderColor, data?.prop_isDisable ?? bind.prop_isDisable, dimension, data?.prop_formStyles ?? bind.prop_formStyles, sizeName], this.getScope());
+        });
+        }, [this._FORM_EMPTY, this.preview(), data?.prop_borderColor ?? bind.prop_borderColor, data?.prop_isDisable ?? bind.prop_isDisable, dimension, data?.prop_formStyles ?? bind.prop_formStyles, sizeName, directionRtl, display], this.getScope());
         return CoreReactive.App.section({
             attrs: {...attrs},
             className: ["position-relative", "cursor-pointer"],
@@ -232,9 +320,13 @@ export class ComponentInputColor extends ComponentInputColorBase {
     }
 
     private renderTitle(attrs: PartAttrDefault, data: Record<string, CoreObservable.App<any>>): CoreReactive.App {
-        const show = data?.prop_showTitleFront ?? this._COMPONENT_PROPS_BIND.prop_showTitleFront;
-        const color = CoreObservable.App.computed((format: string, value: string | null, empty: boolean, hue: number, sat: number, light: number, alpha: number) => {
-            if (empty) return "";
+        const configuredShow = data?.prop_showTitleFront ?? this._COMPONENT_PROPS_BIND.prop_showTitleFront;
+        const mode = data?.prop_colorSelector ?? this._COMPONENT_PROPS_BIND.prop_colorSelector;
+        const show = CoreObservable.App.computed((enabled: boolean, displayMode: colorSelector) => displayMode === colorSelector.COLOR_TEXT || enabled, [configuredShow, mode], this.getScope());
+        const empty = this._FORM_EMPTY;
+        const color = CoreObservable.App.computed((format: string, value: string | null, isEmpty: boolean, alpha: number) => {
+            if (isEmpty) return "---";
+            const [hue, sat, light] = this.hexToHsl(value ?? "#000000");
             const [red, green, blue] = this.hslToRgb(hue, sat, light);
             const opacity = Number(alpha.toFixed(2));
             switch (format) {
@@ -244,23 +336,146 @@ export class ComponentInputColor extends ComponentInputColorBase {
                 case "HSLA": return `hsla(${Math.round(hue)}, ${Math.round(sat)}%, ${Math.round(light)}%, ${opacity})`;
                 default: return value ?? "";
             }
-        }, [this._FORMAT, this._VALUE, this._EMPTY, this._HUE, this._SAT, this._LIGHT, this._ALPHA], this.getScope());
-        const lineHeight = CoreObservable.App.computed((size: any) => UtilStyle.Css_Height(size), [CoreConfig.Settings.SizeName.observable()], this.getScope());
+        }, [this._FORMAT, this._FORM_VALUE, empty, this._FORM_ALPHA], this.getScope());
+        const sizeName = CoreConfig.Settings.SizeName.observable();
+        const dimensions = CoreObservable.App.computed((size: any, displayMode: colorSelector) => {
+            const box = UtilStyle.Css_SizeCalc(
+                UtilStyle.Css_Padding(size) as any, UtilConst.Operation.ADD,
+                UtilStyle.Css_Height(size) as any, UtilConst.Operation.ADD,
+                UtilStyle.Css_Padding(size) as any,
+            );
+            const widthParts: any[] = ["100%", UtilConst.Operation.MINUS];
+            for (let index = 0; index < 3; index++) {
+                if (index > 0) widthParts.push(UtilConst.Operation.ADD);
+                widthParts.push(
+                    UtilStyle.Css_Padding(size), UtilConst.Operation.ADD,
+                    UtilStyle.Css_Height(size), UtilConst.Operation.ADD,
+                    UtilStyle.Css_Padding(size),
+                );
+            }
+            widthParts.push(UtilConst.Operation.MINUS, "80px");
+            const width = displayMode === colorSelector.COLOR_TEXT ? "auto" : UtilStyle.Css_SizeCalc(...widthParts);
+            return {box, width, borderWidth: UtilStyle.Css_BorderWidth(size)};
+        }, [sizeName, mode], this.getScope());
+        const styles = CoreObservable.App.computed((dimensions: {box: string; width: string; borderWidth: string}, copySuccess: boolean, displayMode: colorSelector) => ({
+            display: "flex",
+            alignItems: "center",
+            boxSizing: "border-box",
+            width: dimensions.width,
+            height: dimensions.box,
+            lineHeight: dimensions.box,
+            paddingLeft: UtilStyle.Css_Padding(sizeName.get()),
+            paddingRight: UtilStyle.Css_Padding(sizeName.get()),
+            borderRadius: "0",
+            backgroundColor: UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
+            color: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
+            borderColor: UtilStyle.Css_Color(copySuccess ? UtilConst.ColorMain.SUCCESS : UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
+            borderWidth: displayMode === colorSelector.COLOR_TEXT ? "0" : dimensions.borderWidth,
+            borderStyle: displayMode === colorSelector.COLOR_TEXT ? "none" : "solid",
+            transition: "border-color 160ms ease",
+            flex: displayMode === colorSelector.COLOR_TEXT ? "0 1 auto" : undefined,
+        }), [dimensions, this._COPY_SUCCESS, mode], this.getScope());
         return CoreObservable.App.conditionWhen([show], (visible) => !!visible, () => CoreReactive.App.section({
             attrs: {...attrs},
-            className: ["mx-2", "text-truncate"],
-            stylesBind: {lineHeight},
-            children: [color],
+            stylesBind: styles,
+            children: [
+                CoreReactive.App.span({
+                    styles: {minWidth: "0", flex: "1 1 auto", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"},
+                    children: [color],
+                }),
+                this.createColorCopyIcon(color, sizeName, empty),
+            ],
         }), () => CoreReactive.App.section({attrs: {...attrs}}), this.getScope()) as any;
+    }
+
+    private createColorCopyIcon(color: CoreObservable.App<string>, sizeName: CoreObservable.App<any>, empty: CoreObservable.App<boolean>): CoreReactive.App {
+        const iconSize = CoreObservable.App.computed((size: any) => UtilStyle.Css_SizeCalc(
+            UtilStyle.Css_BorderWidth(size) as any, UtilConst.Operation.ADD,
+            UtilStyle.Css_Padding(size) as any, UtilConst.Operation.ADD,
+            UtilStyle.Css_Padding(size) as any, UtilConst.Operation.ADD,
+            UtilStyle.Css_Height(size) as any, UtilConst.Operation.ADD,
+            UtilStyle.Css_BorderWidth(size) as any,
+        ), [sizeName], this.getScope());
+        const iconColor = UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1);
+        const svg = CoreReactive.App.svg({
+            attrs: {
+                xmlns: "http://www.w3.org/2000/svg",
+                role: "img",
+                fill: "none",
+                "aria-label": "Copy color",
+                viewBox: "0 0 24 24",
+                width: "var(--iconSizeMedium)",
+                height: "var(--iconSizeMedium)",
+            },
+            stylesBind: CoreObservable.App.computed((height: string) => ({outline: "none", height}), [iconSize], this.getScope()),
+            children: [CoreReactive.App.svgPath({
+                attrs: {d: "M9 9h11v12H9zM15 9V4H4v12h5", fill: "none", "stroke-linecap": "round", "stroke-linejoin": "round"},
+                attrsBind: {stroke: iconColor, "stroke-width": "2"},
+            })],
+        } as any);
+        const iconDisabledStyles = CoreObservable.App.computed((isEmpty: boolean) => ({
+            cursor: isEmpty ? "not-allowed" : "pointer",
+            opacity: isEmpty ? "0.5" : "1",
+            pointerEvents: isEmpty ? "none" : "auto",
+        }), [empty], this.getScope());
+        const icon = new ComponentIcon.Component({
+            attrsBind: {"aria-disabled": CoreObservable.App.computed((isEmpty: boolean) => String(isEmpty), [empty], this.getScope())},
+            styles: CoreObservable.App.computed((box: string) => ({display: "block", width: box, height: box, flex: "0 0 auto", textAlign: "center"}), [iconSize], this.getScope()) as any,
+            prop_structureStyles: {width: "100%", height: "100%"},
+            prop_icon: svg as any,
+            prop_iconClass: ["d-block", "text-center", "h-100"],
+            prop_iconStyles: CoreObservable.App.computed((state: Record<string, string>) => ({...state, display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100%"}), [iconDisabledStyles], this.getScope()),
+        } as any, {
+            CLICK: (event: Event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                if (empty.get()) return;
+                const value = color.get();
+                if (value && navigator.clipboard) {
+                    void navigator.clipboard.writeText(value).then(() => this.showCopySuccess(), () => undefined);
+                }
+            },
+        } as any);
+        const successColor = UtilStyle.Css_Color(UtilConst.ColorMain.SUCCESS, UtilConst.ColorGrad.GRADE_1);
+        const successIconSvg = UiIcons.CreateIcon(UiIcons.Src.StatusIsTrue.Definition, {size: sizeName as any, primaryColor: successColor});
+        successIconSvg.getElement().style.height = iconSize.get();
+        const successIcon = new ComponentIcon.Component({
+            styles: CoreObservable.App.computed((box: string) => ({display: "block", width: box, height: box, flex: "0 0 auto", textAlign: "center"}), [iconSize], this.getScope()) as any,
+            prop_structureStyles: {width: "100%", height: "100%"},
+            prop_icon: successIconSvg as any,
+            prop_iconClass: ["d-block", "text-center", "h-100"],
+            prop_iconStyles: {display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100%"},
+        } as any, {} as any);
+        this._CHILDREN.push(successIcon as any);
+        this._CHILDREN.push(icon as any);
+        return CoreObservable.App.conditionWhen([this._COPY_SUCCESS], (success) => !!success,
+            () => successIcon.getReactiveElement() as CoreReactive.App,
+            () => icon.getReactiveElement() as CoreReactive.App,
+            this.getScope()) as any;
+    }
+
+    private showCopySuccess(): void {
+        if (this._DISPOSED) return;
+        if (this._COPY_SUCCESS_TIMER !== null) window.clearTimeout(this._COPY_SUCCESS_TIMER);
+        this._COPY_SUCCESS.set(true);
+        this._COPY_SUCCESS_TIMER = window.setTimeout(() => {
+            this._COPY_SUCCESS.set(false);
+            this._COPY_SUCCESS_TIMER = null;
+        }, 1000);
     }
 
     private renderEmptyIcon(attrs: PartAttrDefault, data: Record<string, CoreObservable.App<any>>): CoreReactive.App {
         const bind = this._COMPONENT_PROPS_BIND;
-        return CoreObservable.App.conditionWhen([this._EMPTY], (empty) => !!empty, () => {
-            const color = CoreObservable.App.computed((custom: string | null) => custom || UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1), [data?.prop_colorIconEmpty ?? bind.prop_colorIconEmpty], this.getScope());
+        return CoreObservable.App.conditionWhen([this._FORM_EMPTY], (empty) => !!empty, () => {
+            const primaryColor = CoreObservable.App.computed((custom: string | null) => custom || UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1), [data?.prop_colorIconEmpty ?? bind.prop_colorIconEmpty], this.getScope());
+            const secondaryColor = UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1);
             const icon = new ComponentIcon.Component({
                 attrs: {...attrs},
-                prop_icon: UiIcons.CreateIcon(UiIcons.Src.InputColorEmpty.Definition, {size: CoreConfig.Settings.SizeName.observable() as any, primaryColor: color as any}),
+                prop_icon: UiIcons.CreateIcon(UiIcons.Src.FileEmpty.Definition, {
+                    size: CoreConfig.Settings.SizeName.observable() as any,
+                    primaryColor: primaryColor as any,
+                    secondaryColor,
+                }),
                 prop_iconStyles: {pointerEvents: "none"},
             } as any, {} as any);
             this._CHILDREN.push(icon as any);
@@ -271,29 +486,37 @@ export class ComponentInputColor extends ComponentInputColorBase {
     private renderClearIcon(attrs: PartAttrDefault, data: Record<string, CoreObservable.App<any>>): CoreReactive.App {
         const bind = this._COMPONENT_PROPS_BIND;
         const disabled = data?.prop_isDisable ?? bind.prop_isDisable;
-        return CoreObservable.App.conditionWhen([disabled, this._EMPTY], (isDisabled, empty) => !isDisabled && !empty, () => {
-            const color = CoreObservable.App.computed((custom: string | null) => custom || UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1), [data?.prop_colorIconClear ?? bind.prop_colorIconClear], this.getScope());
-            const sizeName = CoreConfig.Settings.SizeName.observable();
-            const iconBoxSize = CoreObservable.App.computed((size: any) => UtilStyle.Css_SizeCalc(
-                UtilStyle.Css_Padding(size) as any, UtilConst.Operation.ADD,
-                UtilStyle.Css_Height(size) as any, UtilConst.Operation.ADD,
-                UtilStyle.Css_Padding(size) as any,
-            ), [sizeName], this.getScope());
-            const icon = new ComponentIcon.Component({
-                attrs: {...attrs},
-                classList: ["ms-2", "cursor-pointer"],
-                styles: CoreObservable.App.computed((boxSize: string) => ({width: boxSize, height: boxSize, flex: "0 0 auto"}), [iconBoxSize], this.getScope()) as any,
-                prop_structureStyles: {width: "100%", height: "100%"},
-                prop_icon: UiIcons.CreateIcon(UiIcons.Src.FileClearBroom.Definition, {size: CoreConfig.Settings.SizeName.observable() as any, primaryColor: color as any}),
-                prop_iconStyles: {cursor: "pointer"},
-            } as any, {CLICK: (event: Event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                if (!disabled.get()) this.clearColor(event);
-            }} as any);
-            this._CHILDREN.push(icon as any);
-            return icon.getReactiveElement() as CoreReactive.App;
-        }, () => CoreReactive.App.section({attrs: {...attrs}}), this.getScope()) as any;
+        const disabledState = CoreObservable.App.computed((isDisabled: boolean, empty: boolean) => !!isDisabled || !!empty, [disabled, this._FORM_EMPTY], this.getScope());
+        const color = CoreObservable.App.computed((custom: string | null) => custom || UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1), [data?.prop_colorIconClear ?? bind.prop_colorIconClear], this.getScope());
+        const sizeName = CoreConfig.Settings.SizeName.observable();
+        const iconBoxSize = CoreObservable.App.computed((size: any) => UtilStyle.Css_SizeCalc(
+            UtilStyle.Css_Padding(size) as any, UtilConst.Operation.ADD,
+            UtilStyle.Css_Height(size) as any, UtilConst.Operation.ADD,
+            UtilStyle.Css_Padding(size) as any,
+        ), [sizeName], this.getScope());
+        const iconStyles = CoreObservable.App.computed((boxSize: string, isDisabled: boolean) => ({
+                outline: "none",
+                cursor: isDisabled ? "not-allowed" : "pointer",
+                margin: "auto",
+                width: boxSize,
+                height: boxSize,
+                lineHeight: boxSize,
+            }), [iconBoxSize, disabledState], this.getScope());
+        const icon = new ComponentIcon.Component({
+            attrs: {...attrs},
+            attrsBind: {"aria-disabled": CoreObservable.App.computed((isDisabled: boolean) => String(isDisabled), [disabledState], this.getScope())},
+            styles: CoreObservable.App.computed((boxSize: string, isDisabled: boolean) => ({display: "block", width: boxSize, height: boxSize, flex: "0 0 auto", textAlign: "center", opacity: isDisabled ? "0.5" : "1"}), [iconBoxSize, disabledState], this.getScope()) as any,
+            prop_structureStyles: {width: "100%", height: "100%"},
+            prop_icon: UiIcons.CreateIcon(UiIcons.Src.FileClearBroom.Definition, {size: sizeName as any, primaryColor: color as any}),
+            prop_iconClass: ["d-block"],
+            prop_iconStyles: iconStyles as any,
+        } as any, {CLICK: (event: Event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            if (!disabledState.get()) this.clearColor(event);
+        }} as any);
+        this._CHILDREN.push(icon as any);
+        return icon.getReactiveElement() as CoreReactive.App;
     }
 
     private renderPicker(attrs: PartAttrDefault, data: Record<string, CoreObservable.App<any>>): CoreReactive.App {
@@ -337,14 +560,16 @@ export class ComponentInputColor extends ComponentInputColorBase {
             prop_btnTitle: CoreLanguage.App.translate(Keys.category.components.inputColor.schemas.confirm) as any,
             styles: {width: "50%", flex: "1 1 0", minWidth: "0"},
             prop_btnStyles: {width: "100%"},
-        } as any, {CLICK: (event: Event) => this.confirmPickerSelection(event)} as any);
+        } as any, {} as any);
         const cancel = new ComponentButton.Component({
             prop_btnType: ButtonAction.BUTTON,
             prop_btnSemantic: ButtonSemantic.BACK,
             prop_btnTitle: CoreLanguage.App.translate(Keys.category.components.inputColor.schemas.cancel) as any,
             styles: {width: "50%", flex: "1 1 0", minWidth: "0"},
             prop_btnStyles: {width: "100%"},
-        } as any, {CLICK: (event: Event) => this.cancelPickerSelection(event)} as any);
+        } as any, {} as any);
+        (confirm.getElement() as HTMLElement).addEventListener("click", (event) => this.confirmPickerSelection(event));
+        (cancel.getElement() as HTMLElement).addEventListener("click", (event) => this.cancelPickerSelection(event));
         this._CHILDREN.push(confirm as any, cancel as any);
         return CoreReactive.App.section({
             className: ["d-flex", "align-items-center", "w-100"],
@@ -354,19 +579,28 @@ export class ComponentInputColor extends ComponentInputColorBase {
     }
 
     private confirmPickerSelection(event: Event): void {
+        event.preventDefault();
+        event.stopPropagation();
         const color = this._EMPTY.get() ? "" : this._VALUE.get() ?? "";
         const original = this._OPENING_VALUE ?? "";
         this._PICKER_CONFIRMED = true;
         this.set("prop_value", color || null);
         this.set("prop_colorSelected", color || null);
+        this._FORM_VALUE.set(color || null);
+        this._FORM_EMPTY.set(!color);
+        this._FORM_ALPHA.set(this._ALPHA.get());
         if (color) this.rememberRecentColor(color);
         if (original !== color) this.executeMethod("CHANGE", event, {COLOR: color} as any);
+        this._FLOAT_MENU?.setShow(false);
         this._IS_OPEN.set(false);
     }
 
-    private cancelPickerSelection(_event: Event): void {
-        this.restorePickerSelection();
-        this._PICKER_CONFIRMED = false;
+    private cancelPickerSelection(event: Event): void {
+        event.preventDefault();
+        event.stopPropagation();
+        // Cancel only closes the picker. The next open starts from the last committed form value.
+        this._PICKER_CONFIRMED = true;
+        this._FLOAT_MENU?.setShow(false);
         this._IS_OPEN.set(false);
     }
 
@@ -506,7 +740,8 @@ export class ComponentInputColor extends ComponentInputColorBase {
             const element = button.getElement();
             const update = (colors: string[]) => {
                 const value = colors[index] ?? "";
-                element.style.display = value ? "block" : "none";
+                element.style.display = "block";
+                element.style.visibility = value ? "visible" : "hidden";
                 element.style.backgroundColor = value || "transparent";
             };
             update(this._RECENT_COLORS.get());
@@ -662,18 +897,11 @@ export class ComponentInputColor extends ComponentInputColorBase {
     }
 
     private renderInfoFormats(attrs: PartAttrDefault, data: Record<string, CoreObservable.App<any>>): CoreReactive.App {
-        const formats = ["HEX", "RGB", "RGBA", "HSL", "HSLA"];
         const sizeName = CoreConfig.Settings.SizeName.observable();
         const isRtl = CoreConfig.Settings.DirectionRtl.observable();
-        const selectLayoutStyles = CoreObservable.App.computed((rtl: boolean) => ({
-            width: "35%",
-            flex: "0 0 35%",
-            order: rtl ? "0" : "1",
-            minWidth: "0",
-        }), [isRtl], this.getScope());
         const valueLayoutStyles = CoreObservable.App.computed((rtl: boolean) => ({
-            width: "65%",
-            flex: "0 0 65%",
+            width: "100%",
+            flex: "1 1 auto",
             order: rtl ? "1" : "0",
             minWidth: "0",
             boxSizing: "border-box",
@@ -683,29 +911,6 @@ export class ComponentInputColor extends ComponentInputColorBase {
             backgroundColor: UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1),
             color: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
         }), [sizeName], this.getScope());
-        const formatSelect = new ComponentSelectCustomSimple.Component({
-            styles: selectLayoutStyles as any,
-            prop_selectValue: this._FORMAT as any,
-            prop_selectPlaceholder: "HEX",
-            prop_selectTypeShow: ComponentSelectCustomSimple.SelectTypeShow.JUST_NAME,
-            prop_selectOptions: formats.map((format) => ({id: format, name: format, prefix: format})),
-            prop_selectStyles: CoreObservable.App.computed((size: any, rtl: boolean) => ({
-                fontSize: "0.68rem",
-                fontWeight: "700",
-                paddingTop: "0",
-                paddingBottom: "0",
-                paddingRight: rtl ? UtilStyle.Css_Padding(size) : "0",
-                paddingLeft: rtl ? "0" : UtilStyle.Css_Padding(size),
-                minHeight: "24px",
-            }), [sizeName, isRtl], this.getScope()) as any,
-            prop_structureStyles: {width: "100%", minWidth: "0"},
-        } as any, {
-            SELECT_CHANGE: (_event, _dataArgs, componentArgs) => {
-                this._FORMAT.set(String(componentArgs.VALUE));
-                this.syncFormatParts();
-            },
-        } as any);
-        this._CHILDREN.push(formatSelect as any);
         this.syncFormatParts();
         const inputStyles = CoreObservable.App.computed((size: any) => ({
             width: "100%", minWidth: "0", boxSizing: "border-box", fontFamily: "monospace", fontSize: "0.68rem", textAlign: "center",
@@ -747,7 +952,7 @@ export class ComponentInputColor extends ComponentInputColorBase {
         const suffix = CoreObservable.App.computed((format: string) => format === "HEX" ? "" : (format.startsWith("H") ? "%)" : ")"), [this._FORMAT], this.getScope());
         const fieldRow = CoreReactive.App.section({
             className: ["d-flex", "align-items-center"],
-            styles: {gap: "2px", width: "65%", minWidth: "0", order: "0", boxSizing: "border-box"},
+            styles: {gap: "2px", width: "100%", minWidth: "0", order: "0", boxSizing: "border-box"},
             stylesBind: valueLayoutStyles,
             children: [token(prefix), inputs[0],
                 token(separator1, (format) => format !== "HEX"), inputs[1],
@@ -760,7 +965,7 @@ export class ComponentInputColor extends ComponentInputColorBase {
             className: ["d-flex", "flex-row", "align-items-center", "w-100"],
             styles: {position: "relative", zIndex: "1", overflow: "visible", minWidth: "0", width: "100%", flex: "0 0 100%", boxSizing: "border-box", padding: "3px 6px", border: "1px solid rgba(127,127,127,.28)", borderRadius: "0", lineHeight: "1.2"},
             stylesBind: formatStyles,
-            children: [formatSelect.getReactiveElement() as CoreReactive.App, fieldRow],
+            children: [fieldRow],
         });
     }
 
@@ -775,7 +980,7 @@ export class ComponentInputColor extends ComponentInputColorBase {
                 prop_msgRules: (data?.prop_msgRules ?? bind.prop_msgRules) as any,
                 prop_isAbsolute: (data?.prop_isAbsoluteRule ?? bind.prop_isAbsoluteRule) as any,
                 prop_title: CoreObservable.App.computed((custom: string | null, label: string | null) => custom || label || "", [data?.prop_title ?? bind.prop_title, data?.prop_labelTitle ?? bind.prop_labelTitle], this.getScope()) as any,
-                prop_value: this._VALUE as any,
+                prop_value: this._FORM_VALUE as any,
                 prop_referenceComponent: this,
             } as any);
             this._CHILDREN.push(validator as any);
@@ -790,12 +995,12 @@ export class ComponentInputColor extends ComponentInputColorBase {
         const value = data?.prop_value ?? bind.prop_value;
         const alias = data?.prop_colorSelected ?? bind.prop_colorSelected;
         this._RECENT_COLORS.set(this.readRecentColors());
-        this.syncValue(value.get() !== null ? value.get() : alias.get());
+        this.syncCommittedValue(value.get() !== null ? value.get() : alias.get());
         const watch = (source: CoreObservable.App<any>, isAlias: boolean) => {
             if (!CoreObservable.App.isObservable(source)) return;
             this._UNSUBSCRIBE.push(source.subscribe((next: any) => {
                 if (isAlias && value.get() !== null) return;
-                this.syncValue(next);
+                this.syncCommittedValue(next);
             }, this.getScope()));
         };
         watch(value, false);
@@ -803,6 +1008,14 @@ export class ComponentInputColor extends ComponentInputColorBase {
         window.addEventListener("pointermove", this._MOVE);
         window.addEventListener("pointerup", this._UP);
         window.addEventListener("pointercancel", this._UP);
+    }
+
+    private syncCommittedValue(value: unknown): void {
+        const hex = this.normalizeHex(value);
+        this._FORM_VALUE.set(hex);
+        this._FORM_EMPTY.set(!hex);
+        this._FORM_ALPHA.set(1);
+        this.syncValue(hex);
     }
 
     private syncValue(value: unknown): void {
@@ -821,6 +1034,9 @@ export class ComponentInputColor extends ComponentInputColorBase {
     private clearColor(event: Event): void {
         this._VALUE.set("");
         this._EMPTY.set(true);
+        this._FORM_VALUE.set(null);
+        this._FORM_EMPTY.set(true);
+        this._FORM_ALPHA.set(1);
         this.syncFormatParts();
         this.set("prop_value", "");
         this.set("prop_colorSelected", "");
@@ -836,6 +1052,9 @@ export class ComponentInputColor extends ComponentInputColorBase {
         if (!this._IS_OPEN.get()) {
             this.set("prop_value", hex);
             this.set("prop_colorSelected", hex);
+            this._FORM_VALUE.set(hex);
+            this._FORM_EMPTY.set(false);
+            this._FORM_ALPHA.set(this._ALPHA.get());
             this.scheduleRecentColor(hex);
             this.executeMethod("CHANGE", event ?? new Event("change"), {COLOR: hex} as any);
         }
@@ -884,6 +1103,9 @@ export class ComponentInputColor extends ComponentInputColorBase {
         if (!this._IS_OPEN.get()) {
             this.set("prop_value", parsed.hex);
             this.set("prop_colorSelected", parsed.hex);
+            this._FORM_VALUE.set(parsed.hex);
+            this._FORM_EMPTY.set(false);
+            this._FORM_ALPHA.set(parsed.alpha);
             this.scheduleRecentColor(parsed.hex);
         }
         this.drawAll();
@@ -1051,11 +1273,12 @@ export class ComponentInputColor extends ComponentInputColorBase {
     }
 
     private preview(): CoreObservable.App<string> {
-        return CoreObservable.App.computed((empty: boolean, hue: number, sat: number, light: number, alpha: number) => {
+        return CoreObservable.App.computed((value: string | null, empty: boolean, alpha: number) => {
             if (empty) return "transparent";
+            const [hue, sat, light] = this.hexToHsl(value ?? "#000000");
             const rgb = this.hslToRgb(hue, sat, light);
             return "rgba(" + rgb.join(",") + "," + alpha + ")";
-        }, [this._EMPTY, this._HUE, this._SAT, this._LIGHT, this._ALPHA], this.getScope());
+        }, [this._FORM_VALUE, this._FORM_EMPTY, this._FORM_ALPHA], this.getScope());
     }
 
     private getColorControlRadiusStyles(): CoreObservable.App<Record<string, string>> {

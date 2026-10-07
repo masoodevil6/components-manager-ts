@@ -19,6 +19,8 @@ import {PropsType as StructurePropsType} from "../componentStructure/Props";
 import * as ComponentBorder  from "../componentBorder";
 import * as ComponentIcon    from "../componentIcon";
 import * as ComponentValidate from "../componentValidate";
+import * as ComponentElementPosition from "../componentElementPosition";
+import {createCheckBoxControl} from "./Control";
 
 
 /**
@@ -187,113 +189,31 @@ export class ComponentInputCheckBox extends ComponentInputCheckBoxBase {
         const prop_borderIconBackground_unSelected   = data?.["prop_borderIconBackground_unSelected"]   ?? bind.prop_borderIconBackground_unSelected;
         const prop_borderIconBackground_disable      = data?.["prop_borderIconBackground_disable"]       ?? bind.prop_borderIconBackground_disable;
 
-        const rtl = CoreConfig.Settings.DirectionRtl.observable();
-        const borderSize  = this.getIconBorderSize();
-        const marginSize  = this.getIconMargin();
-
-        // --- Computed border color (supports number/string/boolean value) ---
-        const borderColor = CoreObservable.App.computed(
-            (value, isDisable, cSel, cUnsel, cDis) => {
-                if (isDisable) return cDis;
-                if (typeof value == "number") {
-                    return value == 0 ? cUnsel : cSel;
-                }
-                if (typeof value == "boolean" || typeof value == "string") {
-                    return value ? cSel : cUnsel;
-                }
-                return null;
-            },
-            [prop_value, prop_isDisable, prop_borderIconColor_selected, prop_borderIconColor_unSelected, prop_borderIconColor_disable],
-            this.getScope(),
-        );
-
-        // --- Computed background color ---
-        const backgroundColor = CoreObservable.App.computed(
-            (value, isDisable, bgSel, bgUnsel, bgDis) => {
-                if (isDisable) return bgDis;
-                if (typeof value == "number") {
-                    return value == 0 ? bgUnsel : bgSel;
-                }
-                if (typeof value == "boolean" || typeof value == "string") {
-                    return value ? bgSel : bgUnsel;
-                }
-                return null;
-            },
-            [prop_value, prop_isDisable, prop_borderIconBackground_selected, prop_borderIconBackground_unSelected, prop_borderIconBackground_disable],
-            this.getScope(),
-        );
-
-        // --- Computed border styles (merge user styles + width/height/transition + border-width/radius override) ---
-        const borderStyles = CoreObservable.App.computed(
-            (baseStyles, width, radius) => {
-                const result: Record<string, any> = {
-                    ...baseStyles,
-                    width:      UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
-                    height:     UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
-                    transition: "150ms ease",
-                    boxShadow:  "#00000047 0px 0px 5px, inset 0 2px 4px #0000004d",
-                };
-                const widthVal = typeof width == "number"
-                    ? UtilStyle.Css_SizeUnit(width, UtilConst.Units.PEXEL)
-                    : UtilStyle.Css_BorderWidth(width);
-                const radiusVal = typeof radius == "number"
-                    ? UtilStyle.Css_SizeUnit(radius, UtilConst.Units.PEXEL)
-                    : UtilStyle.Css_BorderRadius(radius);
-                result["border-top-width"]    = UtilStyle.Style_Important(widthVal);
-                result["border-right-width"]  = UtilStyle.Style_Important(widthVal);
-                result["border-bottom-width"] = UtilStyle.Style_Important(widthVal);
-                result["border-left-width"]   = UtilStyle.Style_Important(widthVal);
-                result["border-top-left-radius"]     = UtilStyle.Style_Important(radiusVal);
-                result["border-top-right-radius"]    = UtilStyle.Style_Important(radiusVal);
-                result["border-bottom-left-radius"]  = UtilStyle.Style_Important(radiusVal);
-                result["border-bottom-right-radius"] = UtilStyle.Style_Important(radiusVal);
-                return result;
-            },
-            [prop_borderIconStyles, prop_borderIconWidth, prop_borderIconRadius],
-            this.getScope(),
-        );
-
-        return new ComponentBorder.Component(
-            {
-                styles: CoreObservable.App.computed(
-                    (rtl, marginSize, sizeName) => ({
-                        width:       "auto" ,
-                        float:       rtl ? "right" : "left",
-                        marginLeft:  marginSize,
-                        marginRight: marginSize,
-                        marginTop:   UtilStyle.Css_Margin(sizeName),
-                    }),
-                    [rtl, marginSize, CoreConfig.Settings.SizeName.observable()],
-                    this.getScope(),
-                ),
-                prop_structureClass:     ["position-relative"],
-                prop_structureStyles:     CoreObservable.App.computed(
-                    (borderSize) => ({
-                        cursor: "pointer",
-                        display: "block" ,
-                        width:  borderSize,
-                        height: borderSize,
-                    }),
-                    [borderSize],
-                    this.getScope(),
-                ),
-                prop_content:              this.executeSchemaPart(Schemas.MAIN_ICON_POSITION.part, {}),
-                prop_borderClass:          prop_borderIconClass,
-                prop_borderStyles:         borderStyles,
-                prop_borderOpacity:        prop_borderIconOpacity,
-                prop_borderColor:          borderColor,
-                prop_contentBackgroundColor: backgroundColor,
-            } as any,
-            {
-                CLICK_BORDER: (event: Event) => {
-                    event.preventDefault();
-                    this.pr_setChangeValue(event);
-                },
-            },
-            {
-                unique: (this as any)._COMPONENT_STEP?.click ?? undefined,
-            },
-        ).getReactiveElement() as CoreReactive.App;
+        const control = createCheckBoxControl({
+            value: prop_value,
+            isDisable: prop_isDisable,
+            borderIconClass: prop_borderIconClass,
+            borderIconStyles: prop_borderIconStyles,
+            borderIconColorSelected: prop_borderIconColor_selected,
+            borderIconColorUnSelected: prop_borderIconColor_unSelected,
+            borderIconColorDisable: prop_borderIconColor_disable,
+            borderIconWidth: prop_borderIconWidth,
+            borderIconRadius: prop_borderIconRadius,
+            borderIconOpacity: prop_borderIconOpacity,
+            borderIconBackgroundSelected: prop_borderIconBackground_selected,
+            borderIconBackgroundUnSelected: prop_borderIconBackground_unSelected,
+            borderIconBackgroundDisable: prop_borderIconBackground_disable,
+            icon: bind.prop_icon,
+            iconClass: bind.prop_iconClass,
+            iconStyles: bind.prop_iconStyles,
+            scope: this.getScope(),
+            onClick: (event) => this.pr_setChangeValue(event),
+            unique: (this as any)._COMPONENT_STEP?.click ?? undefined,
+        });
+        const element = control.getElement() as HTMLElement;
+        if (attrsDefault?.["data-part-name"]) element.setAttribute("data-part-name", attrsDefault["data-part-name"]);
+        if (attrsDefault?.id) element.id = attrsDefault.id;
+        return element as any as CoreReactive.App;
     }
 
 
@@ -307,24 +227,26 @@ export class ComponentInputCheckBox extends ComponentInputCheckBoxBase {
         extra?:        any,
     ): CoreReactive.App {
 
-        return CoreReactive.App.part("div", {
-            attrs: { ...attrsDefault },
-            className: ["d-block"],
-            styles: {
-                width:      UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
-                height:     UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
-                position:   "absolute",
-                top:        UtilStyle.Css_SizeUnit(50, UtilConst.Units.PERCENT),
-                left:       UtilStyle.Css_SizeUnit(50, UtilConst.Units.PERCENT),
-                transform:  UtilStyle.Css_Transform(
-                    UtilStyle.Css_SizeUnit(-50, UtilConst.Units.PERCENT),
-                    UtilStyle.Css_SizeUnit(-50, UtilConst.Units.PERCENT),
-                ),
+        const position = new ComponentElementPosition.Component({
+            prop_positionClass: ["d-block"],
+            prop_positionStyles: {
+                width: UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
+                height: UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
             },
-            children: [
-                this.executeSchemaPart(Schemas.MAIN_ICON_CHECKBOX.part, {}),
-            ],
+            prop_positionTop: UtilStyle.Css_SizeUnit(50, UtilConst.Units.PERCENT),
+            prop_positionLeft: UtilStyle.Css_SizeUnit(50, UtilConst.Units.PERCENT),
+            prop_positionTranslate: UtilStyle.Css_Transform(
+                UtilStyle.Css_SizeUnit(-50, UtilConst.Units.PERCENT),
+                UtilStyle.Css_SizeUnit(-50, UtilConst.Units.PERCENT),
+            ),
+            prop_positionHeight: null,
+            prop_content: this.executeSchemaPart(Schemas.MAIN_ICON_CHECKBOX.part, {}),
         });
+
+        const element = position.getElement() as HTMLElement;
+        element.setAttribute("data-part-name", attrsDefault?.["data-part-name"] ?? Schemas.MAIN_ICON_POSITION.part);
+        if (attrsDefault?.id) element.id = attrsDefault.id;
+        return element as any as CoreReactive.App;
     }
 
 

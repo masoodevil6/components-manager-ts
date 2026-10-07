@@ -3,6 +3,7 @@ import {Keys}            from "../../../languages"
 import {FloatMenu}       from "./floatMenu"
 import {PositionMenu}    from "./positionMenu"
 import {Tooltip}         from "./tooltip"
+import {ElementPosition} from "./elementPosition"
 
 export const Definition : UICategories.TCategoryComponentDefinition = {
     id:          "positions",
@@ -13,5 +14,6 @@ export const Definition : UICategories.TCategoryComponentDefinition = {
         FloatMenu,
         PositionMenu,
         Tooltip,
+        ElementPosition,
     ],
 }

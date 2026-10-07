@@ -10,6 +10,12 @@ import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/Ty
 const inputProps = Keys.category.components.input.props;
 const colorProps = Keys.category.components.inputColor.props;
 
+export enum colorSelector {
+    Full = "full",
+    COLOR = "color",
+    COLOR_TEXT = "color_text",
+}
+
 export const Props = {
     prop_name: Define_ComponentProp<string | null>({prop: "prop_name", default: null, name: inputProps.name.name, description: inputProps.name.description}),
     prop_value: Define_ComponentProp<string | null>({prop: "prop_value", default: null, name: inputProps.value.name, description: inputProps.value.description}),
@@ -17,8 +23,9 @@ export const Props = {
     prop_title: Define_ComponentProp<string | null>({prop: "prop_title", default: null, name: inputProps.title.name, description: inputProps.title.description}),
     prop_colorSelected: Define_ComponentProp<string | null>({prop: "prop_colorSelected", default: null, name: colorProps.colorSelected.name, description: colorProps.colorSelected.description}),
     prop_showTitleFront: Define_ComponentProp<boolean>({prop: "prop_showTitleFront", default: true, name: colorProps.showTitleFront.name, description: colorProps.showTitleFront.description}),
+    prop_colorSelector: Define_ComponentProp<colorSelector>({prop: "prop_colorSelector", default: colorSelector.Full, name: colorProps.colorSelector.name, description: colorProps.colorSelector.description}),
     prop_borderColor: Define_ComponentProp<string>({prop: "prop_borderColor", default: "var(--primaryColor1)", name: colorProps.borderColor.name, description: colorProps.borderColor.description}),
-    prop_formClass: Define_ComponentProp<string[]>({prop: "prop_formClass", default: ["rounded"], name: colorProps.formClass.name, description: colorProps.formClass.description}),
+    prop_formClass: Define_ComponentProp<string[]>({prop: "prop_formClass", default: [], name: colorProps.formClass.name, description: colorProps.formClass.description}),
     prop_formStyles: Define_ComponentProp<Record<string, string>>({prop: "prop_formStyles", default: {}, name: colorProps.formStyles.name, description: colorProps.formStyles.description}),
     prop_optionHeight: Define_ComponentProp<number>({prop: "prop_optionHeight", default: 500, name: colorProps.optionHeight.name, description: colorProps.optionHeight.description}),
     prop_optionWidth: Define_ComponentProp<number>({prop: "prop_optionWidth", default: 400, name: colorProps.optionWidth.name, description: colorProps.optionWidth.description}),

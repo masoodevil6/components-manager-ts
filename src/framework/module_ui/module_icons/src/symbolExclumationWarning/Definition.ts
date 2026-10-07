@@ -44,7 +44,7 @@ export const Definition: IconDefinition = {
                 attrs: {},
                 attrsBind: {
                     d:    "M239.6,30.67l5.81,8.74c1.24,1.86,0.97,4.14-0.57,4.93l-38.37,19.53c-1.36,0.69-3.24-0.03-4.33-1.67l0,0 c-1.08-1.63-1.03-3.62,0.11-4.62l32.56-28.27C236.13,28.16,238.36,28.79,239.6,30.67z",
-                    fill: context.primaryColor
+                    fill: context.secondaryColor
                 }
             }),
 
@@ -52,7 +52,7 @@ export const Definition: IconDefinition = {
                 attrs: {},
                 attrsBind: {
                     d:    "M275.91,45.98l6.54,9.85c1.39,2.1,0.66,4.95-1.58,6.17l-55.62,30.23c-1.97,1.07-4.42,0.48-5.65-1.37v0 c-1.22-1.83-0.83-4.3,0.9-5.71l49.08-40.08C271.57,43.45,274.51,43.87,275.91,45.98z",
-                    fill: context.primaryColor
+                    fill: context.secondaryColor
                 }
             }),
 
@@ -60,7 +60,7 @@ export const Definition: IconDefinition = {
                 attrs: {},
                 attrsBind: {
                     d:    "M266.21,98.05l3.85,5.25c0.82,1.12,0.54,2.67-0.6,3.36l-28.39,17c-1.01,0.6-2.33,0.31-3.05-0.67l0,0 c-0.72-0.98-0.61-2.32,0.26-3.1l24.53-22.25C263.8,96.73,265.38,96.93,266.21,98.05z",
-                    fill: context.primaryColor
+                    fill: context.secondaryColor
                 }
             }),
 
@@ -68,7 +68,7 @@ export const Definition: IconDefinition = {
                 attrs: {},
                 attrsBind: {
                     d:    "M50.63,30.67l-5.81,8.74c-1.24,1.86-0.97,4.14,0.57,4.93l38.37,19.53c1.36,0.69,3.24-0.03,4.33-1.67v0 c1.08-1.63,1.03-3.62-0.11-4.62L55.42,29.31C54.1,28.16,51.88,28.79,50.63,30.67z",
-                    fill: context.primaryColor
+                    fill: context.secondaryColor
                 }
             }),
 
@@ -76,7 +76,7 @@ export const Definition: IconDefinition = {
                 attrs: {},
                 attrsBind: {
                     d:    "M14.32,45.98l-6.54,9.85c-1.39,2.1-0.66,4.95,1.58,6.17l55.62,30.23c1.97,1.07,4.42,0.48,5.65-1.37l0,0 c1.22-1.83,0.83-4.3-0.9-5.71L20.65,45.07C18.66,43.45,15.72,43.87,14.32,45.98z",
-                    fill: context.primaryColor
+                    fill: context.secondaryColor
                 }
             }),
 
@@ -84,7 +84,7 @@ export const Definition: IconDefinition = {
                 attrs: {},
                 attrsBind: {
                     d:    "M24.02,98.05l-3.85,5.25c-0.82,1.12-0.54,2.67,0.6,3.36l28.39,17c1.01,0.6,2.33,0.31,3.05-0.67h0 c0.72-0.98,0.61-2.32-0.26-3.1L27.42,97.63C26.43,96.73,24.85,96.93,24.02,98.05z",
-                    fill: context.primaryColor
+                    fill: context.secondaryColor
                 }
             }),
 

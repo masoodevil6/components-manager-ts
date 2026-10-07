@@ -923,6 +923,8 @@ export const En =
             Keys.icons.inputColorEmpty.description,
             "Icon indicating that no color is selected"
         ],
+        [Keys.icons.shapeCircle.name, "Circle"],
+        [Keys.icons.shapeCircle.description, "A filled circle shape"],
         [
             Keys.icons.userPassword.name,
             "Password"

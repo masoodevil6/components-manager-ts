@@ -128,6 +128,10 @@ export class ComponentInput extends ComponentInputBase {
         const disabled = data?.["prop_isDisable"] ?? bind.prop_isDisable;
         const inputClasses = data?.["prop_inputClass"] ?? bind.prop_inputClass;
         const styles = data?.["prop_inputStyles"] ?? bind.prop_inputStyles;
+        const borderColor = data?.["prop_inputBorderColor"] ?? bind.prop_inputBorderColor;
+        const borderColorFocus = data?.["prop_inputBorderColorFocus"] ?? bind.prop_inputBorderColorFocus;
+        const borderWidth = data?.["prop_inputBorderWidth"] ?? bind.prop_inputBorderWidth;
+        const borderRadius = data?.["prop_inputBorderRadius"] ?? bind.prop_inputBorderRadius;
         const sizeName = CoreConfig.Settings.SizeName.observable();
         const type = data?.["prop_type"] ?? bind.prop_type;
         const placeholder = data?.["prop_placeholder"] ?? bind.prop_placeholder;
@@ -163,6 +167,10 @@ export class ComponentInput extends ComponentInputBase {
             prop_inputDisable: disabled as any,
             prop_inputClass: classes as any,
             prop_inputStyles: styles as any,
+            prop_inputBorderColor: borderColor as any,
+            prop_inputBorderColorFocus: borderColorFocus as any,
+            prop_inputBorderWidth: borderWidth as any,
+            prop_inputBorderRadius: borderRadius as any,
             prop_inputType: type as any,
             prop_inputPlaceholder: placeholder as any,
             prop_inputBorderTopLeftRadiusHas: CoreObservable.App.computed((isRtl: boolean, withIcon: boolean, withButton: boolean) => !(withIcon && !isRtl) && !(withButton && !!isRtl), [rtl, hasIcon, hasButton], this.getScope()) as any,

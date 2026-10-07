@@ -15,6 +15,7 @@ import * as UtilStyle from "@/util_styles";
 import * as UtilConst from "@/util_consts";
 import * as CoreLanguage from "@/core_languages";
 import {Keys} from "../../../module_categories/languages";
+import * as ComponentElementPosition from "../componentElementPosition";
 
 export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
 
@@ -166,31 +167,29 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
             this.getScope(),
         );
 
-        const iconStyles = CoreObservable.App.computed(
-            (op) => ({
-                width:  "20px",
-                height: "20px",
-                cursor: "pointer",
-                position: "absolute",
-                top:    "50%",
-                transform: "translate(0, -50%)",
-                right:  "10px",
-                opacity: op,
-            }),
-            [iconOpacity],
-            this.getScope(),
-        );
-
         const pinIcon = new ComponentIcon.Component({
+            prop_structureStyles: {height: "100%"},
             prop_icon:       iconDef as any,
             prop_iconTitle:  "pin",
-            prop_iconStyles: iconStyles as any,
+            prop_iconStyles: {width: "20px", height: "20px", cursor: "pointer", opacity: "1"},
         } as any, {
             CLICK: (event: Event) => {
                 event.preventDefault();
                 this.pr_togglePin(event as any as MouseEvent, item);
             },
         } as any).getReactiveElement();
+
+        const position = new ComponentElementPosition.Component({
+            prop_positionTop: UtilStyle.Css_SizeUnit(10, UtilConst.Units.PEXEL),
+            prop_positionEnd: UtilStyle.Css_SizeUnit(10, UtilConst.Units.PEXEL),
+            prop_positionTranslate: "translate(0, -50%)",
+            prop_positionZIndex: UtilStyle.Css_ZIndex(UtilConst.ZIndex.tools_btn),
+            prop_positionWidth: "20px",
+            prop_positionHeight: "20px",
+            prop_positionClass: ["position-absolute"],
+            prop_positionStyles: {opacity: iconOpacity} as any,
+            prop_content: pinIcon,
+        });
 
         const content = CoreReactive.App.section({
             className: ["position-relative"],
@@ -200,7 +199,7 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
             },
             children: [
                 item?.body,
-                pinIcon,
+                position.getElement(),
             ],
         });
 
@@ -261,10 +260,8 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
         } as any).getReactiveElement();
 
         return CoreReactive.App.section({
-            attrs: { ...attrsDefault, "data-order": item?.id },
-            children: [
-                border,
-            ],
+            attrs: {...attrsDefault, "data-order": item?.id},
+            children: [border],
         });
     }
 

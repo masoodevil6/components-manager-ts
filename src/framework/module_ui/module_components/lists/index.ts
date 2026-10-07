@@ -56,6 +56,13 @@ import {Schemas    as PositionMenuSchemas}       from "./componentPositionMenu/S
 import {Methods    as PositionMenuMethods}       from "./componentPositionMenu/Methods";
 import {Examples   as PositionMenuExamples}      from "./componentPositionMenu/examples";
 // --------------------------------
+import {Component as ComponentElementPositionClass} from "./componentElementPosition";
+import {Definition as ElementPositionDefinition} from "./componentElementPosition/Definition";
+import {Props as ElementPositionProps} from "./componentElementPosition/Props";
+import {Schemas as ElementPositionSchemas} from "./componentElementPosition/Schemas";
+import {Methods as ElementPositionMethods} from "./componentElementPosition/Methods";
+import {Examples as ElementPositionExamples} from "./componentElementPosition/examples";
+// --------------------------------
 import {Component as ComponentTooltipClass}       from "./componentTooltip";
 import {Definition as TooltipDefinition}         from "./componentTooltip/Definition";
 import {Props      as TooltipProps}              from "./componentTooltip/Props";
@@ -138,6 +145,12 @@ import {Props      as InputCheckBoxProps}         from "./componentInputCheckBox
 import {Schemas    as InputCheckBoxSchemas}       from "./componentInputCheckBox/Schemas";
 import {Methods    as InputCheckBoxMethods}       from "./componentInputCheckBox/Methods";
 import {Examples   as InputCheckBoxExamples}      from "./componentInputCheckBox/examples";
+import {Component as ComponentInputRadioBoxClass} from "./componentInputRadioBox";
+import {Definition as InputRadioBoxDefinition} from "./componentInputRadioBox/Definition";
+import {Props as InputRadioBoxProps} from "./componentInputRadioBox/Props";
+import {Schemas as InputRadioBoxSchemas} from "./componentInputRadioBox/Schemas";
+import {Methods as InputRadioBoxMethods} from "./componentInputRadioBox/Methods";
+import {Examples as InputRadioBoxExamples} from "./componentInputRadioBox/examples";
 // --------------------------------
 import {Component as ComponentInputOtpClass} from "./componentInputOtp";
 import {Definition as InputOtpDefinition}    from "./componentInputOtp/Definition";
@@ -159,6 +172,13 @@ import {Props      as InputProps}         from "./componentInput/Props";
 import {Schemas    as InputSchemas}       from "./componentInput/Schemas";
 import {Methods    as InputMethods}        from "./componentInput/Methods";
 import {Examples   as InputExamples}       from "./componentInput/examples";
+// --------------------------------
+import {Component as ComponentInputPriceClass} from "./componentInputPrice";
+import {Definition as InputPriceDefinition}    from "./componentInputPrice/Definition";
+import {Props      as InputPriceProps}         from "./componentInputPrice/Props";
+import {Schemas    as InputPriceSchemas}       from "./componentInputPrice/Schemas";
+import {Methods    as InputPriceMethods}       from "./componentInputPrice/Methods";
+import {Examples   as InputPriceExamples}      from "./componentInputPrice/examples";
 // --------------------------------
 import {Component as ComponentInputPasswordClass} from "./componentInputPassword";
 import {Definition as InputPasswordDefinition}    from "./componentInputPassword/Definition";
@@ -185,6 +205,12 @@ import {Props      as InputPhoneProps}         from "./componentInputPhone/Props
 import {Schemas    as InputPhoneSchemas}       from "./componentInputPhone/Schemas";
 import {Methods    as InputPhoneMethods}       from "./componentInputPhone/Methods";
 import {Examples   as InputPhoneExamples}      from "./componentInputPhone/examples";
+import {Component as ComponentInputFileClass} from "./componentInputFile";
+import {Definition as InputFileDefinition}    from "./componentInputFile/Definition";
+import {Props      as InputFileProps}         from "./componentInputFile/Props";
+import {Schemas    as InputFileSchemas}       from "./componentInputFile/Schemas";
+import {Methods    as InputFileMethods}       from "./componentInputFile/Methods";
+import {Examples   as InputFileExamples}      from "./componentInputFile/examples";
 import {Component as ComponentInputColorClass} from "./componentInputColor";
 import {Definition as InputColorDefinition}    from "./componentInputColor/Definition";
 import {Props      as InputColorProps}         from "./componentInputColor/Props";
@@ -248,6 +274,7 @@ import {Schemas    as MouseScrollerSchemas}           from "./componentMouseScro
 import {Methods    as MouseScrollerMethods}           from "./componentMouseScroller/Methods";
 import {Examples   as MouseScrollerExamples}          from "./componentMouseScroller/examples";
 import * as Workflow from "./componentWorkflow";
+import * as InputAcl from "./componentInputAcl";
 
 
 // ثبت ComponentIcon در Component Manager
@@ -459,6 +486,24 @@ CoreComponents.ComponentManager.register({
 });
 
 CoreComponents.ComponentManager.register({
+    definition: InputRadioBoxDefinition,
+    props: InputRadioBoxProps,
+    schemas: InputRadioBoxSchemas,
+    methods: InputRadioBoxMethods,
+    examples: InputRadioBoxExamples as any,
+    constructor: ComponentInputRadioBoxClass as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition: ElementPositionDefinition,
+    props: ElementPositionProps,
+    schemas: ElementPositionSchemas,
+    methods: ElementPositionMethods,
+    examples: ElementPositionExamples as any,
+    constructor: ComponentElementPositionClass as any,
+});
+
+CoreComponents.ComponentManager.register({
     definition:  InputOtpDefinition,
     props:       InputOtpProps,
     schemas:     InputOtpSchemas,
@@ -483,6 +528,15 @@ CoreComponents.ComponentManager.register({
     methods:     InputMethods,
     examples:    InputExamples,
     constructor: ComponentInputClass as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition:  InputPriceDefinition,
+    props:       InputPriceProps,
+    schemas:     InputPriceSchemas,
+    methods:     InputPriceMethods,
+    examples:    InputPriceExamples,
+    constructor: ComponentInputPriceClass as any,
 });
 
 CoreComponents.ComponentManager.register({
@@ -519,6 +573,24 @@ CoreComponents.ComponentManager.register({
     methods:     InputPhoneMethods,
     examples:    InputPhoneExamples,
     constructor: ComponentInputPhoneClass as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition:  InputFileDefinition,
+    props:       InputFileProps,
+    schemas:     InputFileSchemas,
+    methods:     InputFileMethods,
+    examples:    InputFileExamples,
+    constructor: ComponentInputFileClass as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition: InputAcl.Definition,
+    props: InputAcl.Props,
+    schemas: InputAcl.Schemas,
+    methods: InputAcl.Methods,
+    examples: InputAcl.Examples,
+    constructor: InputAcl.Component as any,
 });
 
 CoreComponents.ComponentManager.register({
@@ -634,6 +706,7 @@ export * as ComponentBorder      from "./componentBorder";
 export * as ComponentLabel       from "./componentLabel";
 export * as ComponentFloatMenu   from "./componentFloatMenu";
 export * as ComponentPositionMenu from "./componentPositionMenu";
+export * as ComponentElementPosition from "./componentElementPosition";
 export * as ComponentTooltip     from "./componentTooltip";
 export * as ComponentTimerDown   from "./componentTimerDown";
 export * as ComponentCollapse    from "./componentCollapse";
@@ -646,19 +719,23 @@ export * as ComponentWindow      from "./componentWindow";
 export * as ComponentWindowConfirm from "./componentWindowConfirm";
 export * as ComponentTable       from "./componentTable";
 export * as ComponentInputCheckBox from "./componentInputCheckBox";
+export * as ComponentInputRadioBox from "./componentInputRadioBox";
 export * as ComponentInputOtp from "./componentInputOtp";
 export * as ComponentInputSimple from "./componentInputSimple";
 export * as ComponentInput from "./componentInput";
+export * as ComponentInputPrice from "./componentInputPrice";
 export * as ComponentInputPassword from "./componentInputPassword";
 export * as ComponentInputEmail from "./componentInputEmail";
 export * as ComponentInputSize from "./componentInputSize";
 export * as ComponentInputPhone from "./componentInputPhone";
 export * as ComponentInputColor from "./componentInputColor";
+export * as ComponentInputFile from "./componentInputFile";
 export * as ComponentSelectCustomSimple from "./componentSelectCustomSimple";
 export * as ComponentInputAgreementCheckBox from "./componentInputAgreementCheckBox";
 export * as ComponentDraggableOrdersY from "./componentDraggableOrdersY";
 export * as ComponentListSelectedScroller from "./componentListSelectedScroller";
 export * as ComponentInputListSelector from "./componentInputListSelector";
+export * as ComponentInputAcl from "./componentInputAcl";
 export * as ComponentLoading       from "./componentLoading";
 export * as ComponentSidebar       from "./componentSidebar";
 export * as ComponentMouseScroller from "./componentMouseScroller";
