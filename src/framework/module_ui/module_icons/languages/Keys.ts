@@ -29,6 +29,10 @@ export const Keys = {
             name:        CreateTranslationKey() ,
             description: CreateTranslationKey() ,
         },
+        theme: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
 
 
 
@@ -502,6 +506,18 @@ export const Keys = {
             name:        CreateTranslationKey() ,
             description: CreateTranslationKey() ,
         },
+        markupHtml: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+        programmingJavascript: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+        programmingTypescript: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+        programmingPython: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+        programmingJava: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+        programmingCSharp: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+        programmingPhp: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+        programmingGo: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+        programmingRust: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+        programmingCpp: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+        programmingRuby: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+
         userAccountReffrence: {
             name:        CreateTranslationKey() ,
             description: CreateTranslationKey() ,

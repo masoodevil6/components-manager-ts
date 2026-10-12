@@ -52,6 +52,7 @@
       "@/util_consts" :              ["src/framework/module_util/module_consts"] ,
       /// UTIL -> Styles
       "@/util_styles" :              ["src/framework/module_util/module_styles"] ,
+      "@/util_shapes" :              ["src/framework/module_util/module_shapes"] ,
       /// UTIL -> validators
       "@/util_validators" :          ["src/framework/module_util/module_validators"] ,
       /// UTIL -> convertor

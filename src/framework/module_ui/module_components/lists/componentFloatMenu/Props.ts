@@ -93,6 +93,13 @@ export const Props = {
         description:  Keys.category.components.floatMenu.props.floatContent.description,
     }),
 
+    prop_floatBorderPadding: Define_ComponentProp<boolean>({
+        prop:         "prop_floatBorderPadding",
+        default:      true,
+        name:         Keys.category.components.floatMenu.props.floatBorderPadding.name,
+        description:  Keys.category.components.floatMenu.props.floatBorderPadding.description,
+    }),
+
     prop_floatDirectionType: Define_ComponentProp<DirectionTypes>({
         prop:         "prop_floatDirectionType",
         default:      DirectionTypes.TOP,
@@ -116,7 +123,7 @@ export const Props = {
 
     /// --- Float Border ---
 
-    prop_floatBorderWidth: Define_ComponentProp<UtilConst.Sizes | number>({
+    prop_floatBorderWidth: Define_ComponentProp<UtilConst.Sizes | number | null>({
         prop:         "prop_floatBorderWidth",
         default:      UtilConst.Sizes.M,
         name:         Keys.category.components.floatMenu.props.floatBorderWidth.name,
@@ -130,7 +137,7 @@ export const Props = {
         description:  Keys.category.components.floatMenu.props.floatBorderColor.description,
     }),
 
-    prop_floatBorderRadius: Define_ComponentProp<UtilConst.Sizes | number>({
+    prop_floatBorderRadius: Define_ComponentProp<UtilConst.Sizes | number | null>({
         prop:         "prop_floatBorderRadius",
         default:      UtilConst.Sizes.M,
         name:         Keys.category.components.floatMenu.props.floatBorderRadius.name,

@@ -71,6 +71,7 @@ export const Schemas = {
         descriptionKey: Keys.category.components.sidebar.schemas.contentSidebarContentPosition.description,
         props: [
             Props.prop_sidebarBtnOpenSize,
+            Props.prop_sidebarBtnOpenAtStart,
             Props.prop_sidebarDirection,
             Props.prop_sidebarIsOpen,
         ],

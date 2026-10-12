@@ -57,6 +57,14 @@ export const Fa =
             Keys.icons.sun.description,
             "آیکون خورشید که معمولاً برای حالت روز یا تم روشن استفاده می‌شود."
         ],
+        [
+            Keys.icons.theme.name,
+            "تم رنگی"
+        ],
+        [
+            Keys.icons.theme.description,
+            "آیکون دو بخشی برای نمایش مفهوم تم رنگی و حالت روشن یا تاریک."
+        ],
 
 
 
@@ -983,4 +991,26 @@ export const Fa =
         ],
 
 
+        [Keys.icons.markupHtml.name, "HTML"],
+        [Keys.icons.markupHtml.description, "آیکون زبان نشانه‌گذاری HTML"],
+        [Keys.icons.programmingJavascript.name, "جاوااسکریپت"],
+        [Keys.icons.programmingJavascript.description, "آیکون زبان برنامه‌نویسی جاوااسکریپت"],
+        [Keys.icons.programmingTypescript.name, "تایپ‌اسکریپت"],
+        [Keys.icons.programmingTypescript.description, "آیکون زبان برنامه‌نویسی تایپ‌اسکریپت"],
+        [Keys.icons.programmingPython.name, "پایتون"],
+        [Keys.icons.programmingPython.description, "آیکون زبان برنامه‌نویسی پایتون"],
+        [Keys.icons.programmingJava.name, "جاوا"],
+        [Keys.icons.programmingJava.description, "آیکون زبان برنامه‌نویسی جاوا"],
+        [Keys.icons.programmingCSharp.name, "سی‌شارپ"],
+        [Keys.icons.programmingCSharp.description, "آیکون زبان برنامه‌نویسی سی‌شارپ"],
+        [Keys.icons.programmingPhp.name, "پی‌اچ‌پی"],
+        [Keys.icons.programmingPhp.description, "آیکون زبان برنامه‌نویسی پی‌اچ‌پی"],
+        [Keys.icons.programmingGo.name, "گو"],
+        [Keys.icons.programmingGo.description, "آیکون زبان برنامه‌نویسی گو"],
+        [Keys.icons.programmingRust.name, "راست"],
+        [Keys.icons.programmingRust.description, "آیکون زبان برنامه‌نویسی راست"],
+        [Keys.icons.programmingCpp.name, "سی‌پلاس‌پلاس"],
+        [Keys.icons.programmingCpp.description, "آیکون زبان برنامه‌نویسی سی‌پلاس‌پلاس"],
+        [Keys.icons.programmingRuby.name, "روبی"],
+        [Keys.icons.programmingRuby.description, "آیکون زبان برنامه‌نویسی روبی"],
     ]);

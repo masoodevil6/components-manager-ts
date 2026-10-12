@@ -1,0 +1,63 @@
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<link href="./bootstrap.css" rel="stylesheet" type="text/css">
+
+<style>
+    .item-icon{
+        cursor: pointer;
+        width: 300px;
+        height: 150px;
+        position: relative;
+    }
+    .item-icon svg{
+        position: absolute;
+        top: 60%;
+        left: 50%;
+        transform: translate(-50% , -50%);
+    }
+    .item-icon-form-method-name{
+        line-height: 40px;
+    }
+    .item-icon-method-name{
+
+    }
+</style>
+
+<section id="list-icons">
+
+</section>
+
+
+<script src="./tools.js"></script>
+
+<script>
+    const el = document.querySelector("#list-icons");
+    if (el != null && typeof tools_icons != "undefined" && typeof tools_icons == "object"){
+
+        Object.keys(tools_icons).forEach(key=>{
+            let iconSvg = tools_icons[key]({
+                size : 100
+            })
+            el.innerHTML = el.innerHTML + `
+            <div class="item-icon-form-method-name item-icon border  float-end" onclick="copyMethodIcon('${key}')">
+               <span class="bg-dark text-white d-block text-center">
+                  tools_icons.
+                  <b class="item-icon-method-name" >${key}</b>
+               </span>
+               ${iconSvg}
+            </div>
+            `
+        })
+
+    }
+
+
+
+    function copyMethodIcon(methodName){
+        tools_public.getCopyText(`tools_icons.${methodName}`)
+    }
+
+</script>

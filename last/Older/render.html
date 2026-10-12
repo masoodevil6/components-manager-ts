@@ -1,0 +1,226 @@
+
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+<link href="./bootstrap.css" rel="stylesheet" type="text/css">
+
+
+<component-layout id="template-main">
+    <component-body>
+
+
+        <component-layout id="template-main-toolbars">
+            <component-body>
+
+                <component-header id="template-main-toolbars-header"></component-header>
+
+                <component-tree id="selector-from-component"></component-tree>
+
+            </component-body>
+        </component-layout>
+
+
+        <component-layout id="template-main-options">
+            <component-body>
+                <component-header id="template-main-options-header"></component-header>
+
+
+
+            </component-body>
+        </component-layout>
+
+
+        <component-layout id="template-main-render">
+            <component-body>
+                <component-header id="template-main-render-header"></component-header>
+
+                <div id="form-component-render">
+
+                </div>
+
+            </component-body>
+        </component-layout>
+
+
+    </component-body>
+</component-layout>
+
+
+<script src="./html5-qrcode.min.js"></script>
+<script src="./qrcode.js"></script>
+<script src="./jalali.js"></script>
+<script src="./highcharts.js"></script>
+<script src="./components.js"></script>
+<script src="./components-render.js"></script>
+<script src="./tools.js"></script>
+
+
+<script>
+
+
+    tools_init.renderToolsConst()
+
+
+
+
+    new window.ComponentLayout(
+        'template-main' ,
+        {
+            prop_layoutClass: ["row" , "px-2" , "py-0" , "mx-2" , "my-1" , "border" , "rounded" , "shadow-sm"] ,
+        }
+    );
+
+
+
+
+
+
+
+    new window.ComponentLayout(
+        'template-main-toolbars' ,
+        {
+            classList: ["col-3" , "p-2"  , "border-end" , "overflow-y-auto", "overflow-x-hidden"]
+        }
+    );
+    new window.ComponentHeader(
+        "template-main-toolbars-header" ,
+        {
+            classList: "col-md-3 col-12 mt-2"  ,
+
+            prop_size: 5,
+            prop_title: "components" ,
+            prop_icon: " &#x2315;" ,
+        }
+    )
+
+
+    new window.ComponentLayout(
+        'template-main-options' ,
+        {
+            classList: ["col-5" , "p-2"  , "border-end" , "overflow-y-auto", "overflow-x-hidden"]
+        }
+    );
+    new window.ComponentHeader(
+        "template-main-options-header" ,
+        {
+            classList: "col-md-3 col-12 mt-2"  ,
+
+            prop_size: 5,
+            prop_title: "Options" ,
+            prop_icon: " &#x2315;" ,
+        }
+    )
+
+
+    new window.ComponentLayout(
+        'template-main-render' ,
+        {
+            classList: ["col-4" , "p-2"  , "border-end" , "overflow-y-auto", "overflow-x-hidden"]
+        }
+    );
+    new window.ComponentHeader(
+        "template-main-render-header" ,
+        {
+            classList: "col-md-3 col-12 mt-2"  ,
+
+            prop_size: 5,
+            prop_title: "Render" ,
+            prop_icon: " &#x2315;" ,
+        }
+    )
+
+
+    function getListTreeCategory(){
+        let resultExp = [];
+        if (typeof listComponentCategory != "undefined" && listComponentCategory != null && Array.isArray(listComponentCategory)){
+            for (let i = 0; i < listComponentCategory.length; i++) {
+                const itemParentTree = listComponentCategory[i];
+                if (itemParentTree.hasOwnProperty("id") && itemParentTree.hasOwnProperty("category") && itemParentTree.hasOwnProperty("components")){
+                    const id = itemParentTree.id;
+                    resultExp.push({
+                        id: id ,
+                        parent_id: 0 ,
+                        name: `[0${itemParentTree.id}] - ${itemParentTree.category}`
+                    })
+                    for (let j = 0; j < itemParentTree.components.length ; j++) {
+
+                        const component = itemParentTree.components[j];
+                        resultExp.push({
+                            id: id*100+j+1 ,
+                            parent_id: id ,
+                            name: `[0${itemParentTree.id}-0${j+1}] - ${component}`
+                        })
+                    }
+                }
+            }
+        }
+        return resultExp;
+    }
+
+
+
+    function getListTreeCategoryFromParent(itemSelected=0){
+        let resultExp = [];
+        let list = getListTreeCategory();
+        if ( list != null && Array.isArray(list)){
+            for (let i = 0; i < list.length; i++) {
+                const itemTree = list[i];
+                if (itemTree != null && itemTree.hasOwnProperty("parent_id") && itemSelected == itemTree.parent_id){
+                    resultExp.push(itemTree);
+                }
+            }
+        }
+        return resultExp;
+    }
+
+
+
+    const tree = new window.ComponentTree(
+        "selector-from-component" ,
+        {
+            prop_list: getListTreeCategoryFromParent() ,
+            fn_callback: (event , item_id)=>{
+                let list = getListTreeCategoryFromParent(item_id);
+
+                if (list != null && list.length > 0){
+                    return list;
+                }
+                else {
+                    const elFormComponent= document.getElementById("form-component-render");
+
+                    if (typeof listComponentCategory != "undefined"){
+                        for (let i = 0; i < listComponentCategory.length; i++) {
+                            const item= listComponentCategory[i];
+                            if (item.hasOwnProperty("id") && item.id == item_id){
+
+                            }
+                            console.log(item , item_id , elFormComponent)
+                        }
+                    }
+
+
+                }
+
+                return list;
+            } ,
+        }
+    )
+
+
+
+
+
+
+
+    new window.ComponentLayout(
+        'template-main-body' ,
+        {
+            classList: ["col-9" , "p-2"]
+        }
+    );
+
+</script>
+

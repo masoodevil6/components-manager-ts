@@ -8,4 +8,4 @@ export * as WebCode    from "./webCodes"
 export * as Payments   from "./payments"
 export * as Loadings   from "./loadings"
 export * as Users      from "./users"
-
+export * as ProgrammingLanguages from "./programmingLanguages"

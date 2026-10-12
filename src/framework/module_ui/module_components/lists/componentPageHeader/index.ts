@@ -1,0 +1,10 @@
+export {ComponentPageHeader as Component} from "./ComponentPageHeader";
+export {ComponentPageHeaderBase} from "./ComponentPageHeaderBase";
+export {Definition} from "./Definition";
+export {Props} from "./Props";
+export type {PropsType, PropsConfigType} from "./Props";
+export {Schemas} from "./Schemas";
+export type {SchemasType} from "./Schemas";
+export {Methods} from "./Methods";
+export type {MethodsType, MethodsConfigType, MethodsDataArgs} from "./Methods";
+export {Examples} from "./examples";

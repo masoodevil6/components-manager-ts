@@ -21,6 +21,7 @@ export * as Pages          from "@/ui_pages";
 export * as Brand          from "@/util_brands";
 export * as Consts         from "@/util_consts";
 export * as Styles         from "@/util_styles";
+export * as Shapes         from "@/util_shapes";
 export * as Validators     from "@/util_validators";
 export * as Convertor      from "@/util_convertor";
 export * as Files          from "@/util_files";

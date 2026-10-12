@@ -398,7 +398,9 @@ export class ClReactiveElement {
                             return;
                         }
 
-                        if (typeof v === "string" && v.trim().startsWith("<")) {
+                        // Text inside SVG <text> elements is literal content. Parsing it as HTML
+                        // would drop markers such as "</>" because they look like an empty tag.
+                        if (typeof v === "string" && this.tagName !== "text" && v.trim().startsWith("<")) {
                             const template = document.createElement("template");
                             template.innerHTML = v;
                             end.before(template.content.cloneNode(true));
@@ -431,7 +433,8 @@ export class ClReactiveElement {
                 return;
             }
 
-            if (typeof child === "string" && child.trim().startsWith("<")) {
+            // Preserve markup-like strings as text inside SVG <text> elements.
+            if (typeof child === "string" && this.tagName !== "text" && child.trim().startsWith("<")) {
                 const template = document.createElement("template");
                 template.innerHTML = child;
                 this.element.appendChild(template.content.cloneNode(true));

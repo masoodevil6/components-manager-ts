@@ -59,6 +59,14 @@ export const En =
             Keys.icons.sun.description,
             "Sun icon, typically used for day mode or light theme."
         ],
+        [
+            Keys.icons.theme.name,
+            "Color theme"
+        ],
+        [
+            Keys.icons.theme.description,
+            "Two-tone icon representing a color theme and its light or dark mode."
+        ],
 
 
 
@@ -981,6 +989,28 @@ export const En =
             Keys.icons.paymentCardNumber.description,
             "Icon for bank card number"
         ],
+        [Keys.icons.markupHtml.name, "HTML"],
+        [Keys.icons.markupHtml.description, "HTML markup language icon"],
+        [Keys.icons.programmingJavascript.name, "JavaScript"],
+        [Keys.icons.programmingJavascript.description, "JavaScript programming language icon"],
+        [Keys.icons.programmingTypescript.name, "TypeScript"],
+        [Keys.icons.programmingTypescript.description, "TypeScript programming language icon"],
+        [Keys.icons.programmingPython.name, "Python"],
+        [Keys.icons.programmingPython.description, "Python programming language icon"],
+        [Keys.icons.programmingJava.name, "Java"],
+        [Keys.icons.programmingJava.description, "Java programming language icon"],
+        [Keys.icons.programmingCSharp.name, "C#"],
+        [Keys.icons.programmingCSharp.description, "C Sharp programming language icon"],
+        [Keys.icons.programmingPhp.name, "PHP"],
+        [Keys.icons.programmingPhp.description, "PHP programming language icon"],
+        [Keys.icons.programmingGo.name, "Go"],
+        [Keys.icons.programmingGo.description, "Go programming language icon"],
+        [Keys.icons.programmingRust.name, "Rust"],
+        [Keys.icons.programmingRust.description, "Rust programming language icon"],
+        [Keys.icons.programmingCpp.name, "C++"],
+        [Keys.icons.programmingCpp.description, "C Plus Plus programming language icon"],
+        [Keys.icons.programmingRuby.name, "Ruby"],
+        [Keys.icons.programmingRuby.description, "Ruby programming language icon"],
         [
             Keys.icons.userAccountReffrence.name,
             "User Account Reference"

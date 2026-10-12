@@ -54,7 +54,7 @@ export const Props = {
         description:  Keys.category.components.sidebar.props.sidebarBorderRadius.description,
     }),
 
-    prop_sidebarWidth: Define_ComponentProp<number | null>({
+    prop_sidebarWidth: Define_ComponentProp<number | ReturnType<typeof UtilStyle.Css_SizeUnit> | null>({
         prop:         "prop_sidebarWidth",
         default:      120,
         name:         Keys.category.components.sidebar.props.sidebarWidth.name,
@@ -122,6 +122,13 @@ export const Props = {
         default:      true,
         name:         Keys.category.components.sidebar.props.sidebarBtnOpenHas.name,
         description:  Keys.category.components.sidebar.props.sidebarBtnOpenHas.description,
+    }),
+
+    prop_sidebarBtnOpenAtStart: Define_ComponentProp<boolean>({
+        prop:         "prop_sidebarBtnOpenAtStart",
+        default:      false,
+        name:         Keys.category.components.sidebar.props.sidebarBtnOpenAtStart.name,
+        description:  Keys.category.components.sidebar.props.sidebarBtnOpenAtStart.description,
     }),
 
     prop_sidebarBtnOpenSize: Define_ComponentProp<number | null>({

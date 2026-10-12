@@ -1,5 +1,10 @@
 export * as Basic from "./basic";
+export * as Breadcrumb from "./breadcrumb";
 export * as Contents from "./contents";
 export * as Inputs from "./inputs";
+export * as Menus from "./menus";
 export * as Positions from "./positions";
+export * as Pages from "./pages";
 export * as Simples from "./simples";
+export * as Effects from "./effects";
+export * as Tools from "./tools";

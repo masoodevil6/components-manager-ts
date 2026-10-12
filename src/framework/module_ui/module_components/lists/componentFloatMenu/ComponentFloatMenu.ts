@@ -62,6 +62,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
      * Document click listener برای close-on-outside-click
     */
     private _DOCUMENT_CLICK_HANDLER: ((event: MouseEvent) => void) | null = null;
+    private _HOVER_HIDE_TIMEOUT: ReturnType<typeof setTimeout> | null = null;
     private _POSITION_FRAME: number | null = null;
     private _POSITION_RESIZE_HANDLER: (() => void) | null = null;
     private _POSITION_OBSERVER: ResizeObserver | null = null;
@@ -94,6 +95,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
     --------------------------------------------- */
     dispose(): void {
         this._removeDocumentClickListener();
+        this.clearHoverHideTimeout();
         if (this._POSITION_FRAME !== null) cancelAnimationFrame(this._POSITION_FRAME);
         this._POSITION_OBSERVER?.disconnect();
         this._POSITION_OBSERVER = null;
@@ -107,6 +109,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
     }
 
     setShow(show: boolean): void {
+        this.clearHoverHideTimeout();
         this._IS_SHOW = show;
         this._COMPONENT_PROPS_BIND.prop_floatIsShow?.set?.(show);
         this._BORDER_INSTANCE?.set("prop_show", show);
@@ -208,6 +211,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
             styles: {display: "contents", cursor: "pointer"},
             on: {
                 mouseover: (event: MouseEvent) => {
+                    this.clearHoverHideTimeout();
                     const selector = event.currentTarget as HTMLElement;
                     if (event.relatedTarget instanceof Node && selector.contains(event.relatedTarget)) return;
                     CoreObservable.App.computed(
@@ -222,15 +226,12 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                     );
                 },
                 mouseout: (event: MouseEvent) => {
-                    const selector = event.currentTarget as HTMLElement;
-                    if (event.relatedTarget instanceof Node && selector.contains(event.relatedTarget)) return;
-                    CoreObservable.App.computed(
-                        (selectorTypeShow, floatShowControlWithSelf) => {
-                            if (!floatShowControlWithSelf && selectorTypeShow === ShowTypes.HOVER && this._BORDER_INSTANCE) this._BORDER_INSTANCE.set("prop_show", false);
-                        },
-                        [prop_selectorShowType, prop_floatShowControlWithSelf],
-                        this.getScope(),
-                    );
+                    const menuRoot = this.getElement() as HTMLElement | null;
+                    if (event.relatedTarget instanceof Node && menuRoot?.contains(event.relatedTarget)) {
+                        this.clearHoverHideTimeout();
+                        return;
+                    }
+                    this.scheduleHoverHide(prop_selectorShowType, prop_floatShowControlWithSelf);
                 },
             },
             children: [prop_selectorContent],
@@ -280,6 +281,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
         const prop_floatPosition            = data?.["prop_floatPosition"]            ?? bind.prop_floatPosition;
         const prop_floatMinWidth            = data?.["prop_floatMinWidth"]            ?? bind.prop_floatMinWidth;
         const prop_floatStyles              = data?.["prop_floatStyles"]              ?? bind.prop_floatStyles;
+        const prop_selectorShowType         = data?.["prop_selectorShowType"]         ?? bind.prop_selectorShowType;
         const prop_floatShowControlWithSelf = data?.["prop_floatShowControlWithSelf"] ?? bind.prop_floatShowControlWithSelf;
         const prop_floatIsShow              = data?.["prop_floatIsShow"]              ?? bind.prop_floatIsShow;
 
@@ -340,6 +342,17 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                         "z-index": `${UtilStyle.Css_ZIndex(UtilConst.ZIndex.notify)}`,
                     },
                     stylesBind: positionStyles as any,
+                    on: {
+                        mouseover: () => this.clearHoverHideTimeout(),
+                        mouseout: (event: MouseEvent) => {
+                            const menuRoot = this.getElement() as HTMLElement | null;
+                            if (event.relatedTarget instanceof Node && menuRoot?.contains(event.relatedTarget)) {
+                                this.clearHoverHideTimeout();
+                                return;
+                            }
+                            this.scheduleHoverHide(prop_selectorShowType, prop_floatShowControlWithSelf);
+                        },
+                    },
                     children: [
                         this.executeSchemaPart(Schemas.SELECTOR_POSITION_BORDER.part, {}),
                     ],
@@ -370,6 +383,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
         const prop_floatClass        = data?.["prop_floatClass"]        ?? bind.prop_floatClass;
         const prop_floatStyles       = data?.["prop_floatStyles"]       ?? bind.prop_floatStyles;
         const prop_floatContent      = data?.["prop_floatContent"]      ?? bind.prop_floatContent;
+        const prop_floatBorderPadding = data?.["prop_floatBorderPadding"] ?? bind.prop_floatBorderPadding;
         const prop_floatDirection    = data?.["prop_floatDirectionType"] ?? bind.prop_floatDirectionType;
         const prop_floatArrowWidth   = data?.["prop_floatArrowWidth"]   ?? bind.prop_floatArrowWidth;
         const prop_floatBorderWidth  = data?.["prop_floatBorderWidth"]  ?? bind.prop_floatBorderWidth;
@@ -382,6 +396,17 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
         const prop_floatColor        = data?.["prop_floatColor"]        ?? bind.prop_floatColor;
         const prop_floatShowControlWithSelf = data?.["prop_floatShowControlWithSelf"] ?? bind.prop_floatShowControlWithSelf;
         const prop_floatIsShow       = data?.["prop_floatIsShow"]              ?? bind.prop_floatIsShow;
+
+        const floatBorderHas = CoreObservable.App.computed(
+            (width: UtilConst.Sizes | number | null) => width != null && width !== 0,
+            [prop_floatBorderWidth],
+            this.getScope(),
+        );
+        const floatBorderRadiusHas = CoreObservable.App.computed(
+            (radius: UtilConst.Sizes | number | null) => radius != null && radius !== 0,
+            [prop_floatBorderRadius],
+            this.getScope(),
+        );
 
         const borderArrowType = CoreObservable.App.computed(
             (direction: DirectionTypes) => {
@@ -402,7 +427,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
         const borderInstance = UiCategory.UI.Contents.Border(
             {
                 prop_borderClass:             ["shadow-sm", "position-relative"],
-                prop_borderStyles:            this.getStyleBorderPadding() as any,
+                prop_borderStyles:            this.getStyleBorderPadding(prop_floatBorderWidth, prop_floatBorderRadius, prop_floatBorderPadding) as any,
                 prop_borderArrowType:         borderArrowType as any,
                 prop_borderArrowPosition:     prop_floatArrowPosition,
                 prop_borderArrowWidth:        prop_floatArrowWidth,
@@ -415,6 +440,14 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                 prop_borderColor:             prop_floatBorderColor,
                 prop_contentColor:            prop_floatColor,
                 prop_show:                    initialShow,
+                prop_borderTopHas:            floatBorderHas,
+                prop_borderRightHas:          floatBorderHas,
+                prop_borderBottomHas:         floatBorderHas,
+                prop_borderLeftHas:           floatBorderHas,
+                prop_borderTopLeftRadiusHas:  floatBorderRadiusHas,
+                prop_borderTopRightRadiusHas: floatBorderRadiusHas,
+                prop_borderBottomLeftRadiusHas: floatBorderRadiusHas,
+                prop_borderBottomRightRadiusHas: floatBorderRadiusHas,
             } as any,
             {} as any,
         );
@@ -534,15 +567,31 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
     /**
      * padding داخلی border بر اساس sizeName سراسری
     */
-    private getStyleBorderPadding() {
+    private getStyleBorderPadding(prop_floatBorderWidth, prop_floatBorderRadius, prop_floatBorderPadding) {
         return CoreObservable.App.computed(
-            (sizeName: any) => {
-                const margin = UtilStyle.Css_Margin(sizeName);
+            (sizeName: UtilConst.Sizes, borderWidth: UtilConst.Sizes | number | null, borderRadius: UtilConst.Sizes | number | null, hasPadding: boolean) => {
+                const padding = hasPadding ? UtilStyle.Css_Margin(sizeName) : "0px";
+                const width = borderWidth == null || borderWidth === 0
+                    ? "0px"
+                    : UtilStyle.Css_BorderWidth(borderWidth as any);
+                const radius = borderRadius == null || borderRadius === 0
+                    ? "0px"
+                    : typeof borderRadius === "number"
+                        ? UtilStyle.Css_SizeUnit(borderRadius, UtilConst.Units.PEXEL)
+                        : UtilStyle.Css_BorderRadius(borderRadius);
                 return {
-                    padding: margin,
+                    padding,
+                    "border-top-width": UtilStyle.Style_Important(width),
+                    "border-right-width": UtilStyle.Style_Important(width),
+                    "border-bottom-width": UtilStyle.Style_Important(width),
+                    "border-left-width": UtilStyle.Style_Important(width),
+                    "border-top-left-radius": radius,
+                    "border-top-right-radius": radius,
+                    "border-bottom-left-radius": radius,
+                    "border-bottom-right-radius": radius,
                 };
             },
-            [CoreConfig.Settings.SizeName.observable()],
+            [CoreConfig.Settings.SizeName.observable(), prop_floatBorderWidth, prop_floatBorderRadius, prop_floatBorderPadding],
             this.getScope(),
         );
     }
@@ -615,6 +664,22 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
             [prop_floatDirection, prop_floatArrowWidth, prop_floatPosition, CoreConfig.Settings.DirectionRtl.observable()],
             this.getScope(),
         );
+    }
+
+    private scheduleHoverHide(selectorShowType: CoreObservable.App<any>, floatShowControlWithSelf: CoreObservable.App<any>): void {
+        this.clearHoverHideTimeout();
+        if (selectorShowType?.get?.() !== ShowTypes.HOVER || floatShowControlWithSelf?.get?.() || !this._BORDER_INSTANCE) return;
+
+        this._HOVER_HIDE_TIMEOUT = setTimeout(() => {
+            this._HOVER_HIDE_TIMEOUT = null;
+            this._BORDER_INSTANCE?.set("prop_show", false);
+        }, 250);
+    }
+
+    private clearHoverHideTimeout(): void {
+        if (this._HOVER_HIDE_TIMEOUT === null) return;
+        clearTimeout(this._HOVER_HIDE_TIMEOUT);
+        this._HOVER_HIDE_TIMEOUT = null;
     }
 
 }

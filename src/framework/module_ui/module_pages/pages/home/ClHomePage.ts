@@ -1,8 +1,10 @@
 import { ITemplate } from "@/core_route";
 import * as CoreReactive from "@/core_reactive";
-import * as CoreLanguage from "@/core_languages";
 import * as CoreEvent    from "@/core_event";
 import * as UiCategory from "@/ui_categories";
+import * as UtilConst from "@/util_consts";
+import * as UtilStyle from "@/util_styles";
+import {MenuMoreOrientation} from "@/framework/module_ui/module_components/lists/componentMenuMore";
 ///------------------------------
 
 /**
@@ -105,9 +107,75 @@ export class ClHomePage implements ITemplate {
                 familyInput,
                 submitButton
             ]
-        }).getElement()
+        });
 
-        return container
+        const exampleExplanation = CoreReactive.App.section({
+            className: ["mb-3"],
+            children: [
+                CoreReactive.App.p({
+                    children: [
+                        "This example demonstrates CoreEvent request and response handling. Each input listens for a validation request and responds with its current value and whether it is non-empty.",
+                    ],
+                }),
+                CoreReactive.App.p({
+                    className: ["mb-0"],
+                    children: [
+                        "Click Submit to dispatch validation requests to both inputs. The button collects their responses and writes the values, validity, and request metadata to the browser console.",
+                    ],
+                }),
+            ],
+        });
+        const exampleCollapse = UiCategory.UI.Contents.Collapse({
+            prop_collapseTitle: "CoreEvent request / response example",
+            prop_collapseBodyIsOpen: true,
+            prop_collapseBody: CoreReactive.App.section({
+                children: [exampleExplanation, container],
+            }),
+        });
+
+        const header = UiCategory.UI.Pages.Header.PageHeader({
+            prop_pageTitle: "Home",
+            prop_hasIconBack: false,
+        } as any).getElement();
+        const exploreMenu = UiCategory.UI.Menus.MenuMore({
+            styles: {width: "100%"},
+            prop_orientation: MenuMoreOrientation.VERTICAL,
+            prop_menuBackgroundColor: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_3),
+            prop_items: [
+                {id: "components", title: "Components", action: "/components"},
+                {id: "icons", title: "Icons", action: "/icons"},
+                {id: "workflow", title: "Workflow", action: "/workflow"},
+            ],
+        }, {
+            SELECT_ITEM: (_event, dataArgs) => {
+                const destination = dataArgs?.ITEM?.action;
+                if (destination) window.location.href = destination;
+            },
+        } as any);
+        const sidebar = CoreReactive.App.section({
+            styles: {
+                display: "flex",
+                flexDirection: "column",
+                gap: "var(--marginMedium)",
+                padding: "var(--paddingMedium)",
+                color: "var(--shanColor1)",
+            },
+            children: [
+                CoreReactive.App.h3({
+                    styles: {margin: "0", color: "var(--shanColor1)"},
+                    children: ["Explore"],
+                }),
+                exploreMenu.getElement(),
+            ],
+        });
+        const page = UiCategory.UI.Pages.Page({
+            prop_header: header,
+            prop_content: exampleCollapse.getElement(),
+            prop_aside: sidebar,
+            prop_asideWidth: UtilStyle.Css_SizeUnit(280, UtilConst.Units.PEXEL),
+        } as any);
+
+        return page.getElement() as HTMLElement;
     }
 
     onLoad(pageElement: HTMLElement): void {

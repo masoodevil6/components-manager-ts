@@ -52,10 +52,10 @@ declare class ClObservable<T> {
     private _notify;
 }
 
-type index$O_TObservableValue<T> = TObservableValue<T>;
-declare namespace index$O {
+type index$T_TObservableValue<T> = TObservableValue<T>;
+declare namespace index$T {
   export { ClObservable as App, ClScope as Scope };
-  export type { index$O_TObservableValue as TObservableValue };
+  export type { index$T_TObservableValue as TObservableValue };
 }
 
 /**
@@ -477,39 +477,39 @@ declare const stats: () => void;
  */
 declare const monitor: (enabled?: boolean) => void;
 
-declare const index$N_App: typeof App;
-type index$N_ClEventDispatcher = ClEventDispatcher;
-declare const index$N_ClEventDispatcher: typeof ClEventDispatcher;
-type index$N_ClRequest = ClRequest;
-declare const index$N_ClRequest: typeof ClRequest;
-type index$N_ClResponse = ClResponse;
-declare const index$N_ClResponse: typeof ClResponse;
-type index$N_ClStep = ClStep;
-declare const index$N_ClStep: typeof ClStep;
-declare const index$N_Request: typeof Request;
-declare const index$N_Response: typeof Response;
-declare const index$N_Step: typeof Step;
-declare const index$N_SubEvent: typeof SubEvent;
-type index$N_TEmitHandler = TEmitHandler;
-type index$N_TEventHelper = TEventHelper;
-type index$N_TRequestMap = TRequestMap;
-type index$N_TRequestMapEntry = TRequestMapEntry;
-type index$N_TResponseMap = TResponseMap;
-type index$N_TStepDefinition = TStepDefinition;
-type index$N_TStepInstance<TDef extends TStepDefinition = TStepDefinition> = TStepInstance<TDef>;
-type index$N_TStepRef = TStepRef;
-type index$N_TTraceRecord = TTraceRecord;
-declare const index$N_dispose: typeof dispose;
-declare const index$N_find: typeof find;
-declare const index$N_getChild: typeof getChild;
-declare const index$N_inspect: typeof inspect;
-declare const index$N_monitor: typeof monitor;
-declare const index$N_requestMap: typeof requestMap;
-declare const index$N_stats: typeof stats;
-declare const index$N_trace: typeof trace;
-declare namespace index$N {
-  export { index$N_App as App, index$N_ClEventDispatcher as ClEventDispatcher, index$N_ClRequest as ClRequest, index$N_ClResponse as ClResponse, index$N_ClStep as ClStep, index$N_Request as Request, index$N_Response as Response, index$N_Step as Step, index$N_SubEvent as SubEvent, index$N_dispose as dispose, index$N_find as find, index$N_getChild as getChild, index$N_inspect as inspect, index$N_monitor as monitor, index$N_requestMap as requestMap, index$N_stats as stats, index$N_trace as trace };
-  export type { index$N_TEmitHandler as TEmitHandler, index$N_TEventHelper as TEventHelper, index$N_TRequestMap as TRequestMap, index$N_TRequestMapEntry as TRequestMapEntry, index$N_TResponseMap as TResponseMap, index$N_TStepDefinition as TStepDefinition, index$N_TStepInstance as TStepInstance, index$N_TStepRef as TStepRef, index$N_TTraceRecord as TTraceRecord };
+declare const index$S_App: typeof App;
+type index$S_ClEventDispatcher = ClEventDispatcher;
+declare const index$S_ClEventDispatcher: typeof ClEventDispatcher;
+type index$S_ClRequest = ClRequest;
+declare const index$S_ClRequest: typeof ClRequest;
+type index$S_ClResponse = ClResponse;
+declare const index$S_ClResponse: typeof ClResponse;
+type index$S_ClStep = ClStep;
+declare const index$S_ClStep: typeof ClStep;
+declare const index$S_Request: typeof Request;
+declare const index$S_Response: typeof Response;
+declare const index$S_Step: typeof Step;
+declare const index$S_SubEvent: typeof SubEvent;
+type index$S_TEmitHandler = TEmitHandler;
+type index$S_TEventHelper = TEventHelper;
+type index$S_TRequestMap = TRequestMap;
+type index$S_TRequestMapEntry = TRequestMapEntry;
+type index$S_TResponseMap = TResponseMap;
+type index$S_TStepDefinition = TStepDefinition;
+type index$S_TStepInstance<TDef extends TStepDefinition = TStepDefinition> = TStepInstance<TDef>;
+type index$S_TStepRef = TStepRef;
+type index$S_TTraceRecord = TTraceRecord;
+declare const index$S_dispose: typeof dispose;
+declare const index$S_find: typeof find;
+declare const index$S_getChild: typeof getChild;
+declare const index$S_inspect: typeof inspect;
+declare const index$S_monitor: typeof monitor;
+declare const index$S_requestMap: typeof requestMap;
+declare const index$S_stats: typeof stats;
+declare const index$S_trace: typeof trace;
+declare namespace index$S {
+  export { index$S_App as App, index$S_ClEventDispatcher as ClEventDispatcher, index$S_ClRequest as ClRequest, index$S_ClResponse as ClResponse, index$S_ClStep as ClStep, index$S_Request as Request, index$S_Response as Response, index$S_Step as Step, index$S_SubEvent as SubEvent, index$S_dispose as dispose, index$S_find as find, index$S_getChild as getChild, index$S_inspect as inspect, index$S_monitor as monitor, index$S_requestMap as requestMap, index$S_stats as stats, index$S_trace as trace };
+  export type { index$S_TEmitHandler as TEmitHandler, index$S_TEventHelper as TEventHelper, index$S_TRequestMap as TRequestMap, index$S_TRequestMapEntry as TRequestMapEntry, index$S_TResponseMap as TResponseMap, index$S_TStepDefinition as TStepDefinition, index$S_TStepInstance as TStepInstance, index$S_TStepRef as TStepRef, index$S_TTraceRecord as TTraceRecord };
 }
 
 declare enum EnElementNamespace {
@@ -657,7 +657,7 @@ declare class ClReactiveElement {
     static svgPolygon(o?: Options): ClReactiveElement;
 }
 
-declare namespace index$M {
+declare namespace index$R {
   export {
     ClReactiveElement as App,
     EnElementNamespace as TElementNamespace,
@@ -670,7 +670,7 @@ type TBrandTranslationKey = TBrands<symbol, "translationKey">;
 
 declare const MTCreateTranslationKey: () => TBrandTranslationKey;
 
-declare namespace index$L {
+declare namespace index$Q {
   export { MTCreateTranslationKey as CreateTranslationKey };
   export type { TBrandIcons as Icons, TBrandTranslationKey as TranslationKey };
 }
@@ -867,7 +867,7 @@ declare enum CsFileMimeTypes {
 
 declare const CsFileExtensionTypes: Record<string, CsFileMimeTypes>;
 
-declare namespace index$K {
+declare namespace index$P {
   export {
     CsColorGrad as ColorGrad,
     CsColorMain as ColorMain,
@@ -969,12 +969,13 @@ declare const MTIconStrokeWidth: (size?: TCSizes | number, viewBoxX?: number, vi
 
 type TSizeExp = TCSizes | TVSizeUnit;
 
-type index$J_ClStyleValue = ClStyleValue;
-declare const index$J_ClStyleValue: typeof ClStyleValue;
-type index$J_TSizeExp = TSizeExp;
-declare namespace index$J {
-  export { index$J_ClStyleValue as ClStyleValue, MTBorderRadius as Css_BorderRadius, MTBorderWidth as Css_BorderWidth, MTColor as Css_Color, MTFontSize as Css_FontSize, MTHeight as Css_Height, MTIconSize as Css_IconSize, MTIconStrokeWidth as Css_IconStrokeWidth, MTMargin as Css_Margin, MTPadding as Css_Padding, MTSizeCalc as Css_SizeCalc, MTSizeUnit as Css_SizeUnit, MTTransform as Css_Transform, MTZIndex as Css_ZIndex, MTStyleImportant as Style_Important };
-  export type { TVColor as TColor, index$J_TSizeExp as TSizeExp };
+type index$O_ClStyleValue = ClStyleValue;
+declare const index$O_ClStyleValue: typeof ClStyleValue;
+type index$O_TCSizes = TCSizes;
+type index$O_TSizeExp = TSizeExp;
+declare namespace index$O {
+  export { index$O_ClStyleValue as ClStyleValue, MTBorderRadius as Css_BorderRadius, MTBorderWidth as Css_BorderWidth, MTColor as Css_Color, MTFontSize as Css_FontSize, MTHeight as Css_Height, MTIconSize as Css_IconSize, MTIconStrokeWidth as Css_IconStrokeWidth, MTMargin as Css_Margin, MTPadding as Css_Padding, MTSizeCalc as Css_SizeCalc, MTSizeUnit as Css_SizeUnit, MTTransform as Css_Transform, MTZIndex as Css_ZIndex, MTStyleImportant as Style_Important };
+  export type { index$O_TCSizes as TCSizes, TVColor as TColor, index$O_TSizeExp as TSizeExp };
 }
 
 type TValidatorResult = [
@@ -1044,7 +1045,7 @@ declare class ClValidateTextLength extends AbstractValidatorRule<ValidatorTextLe
     validate(input: string): TValidatorResult;
 }
 
-declare namespace index$I {
+declare namespace index$N {
   export {
     ClValidateCharLength as CharLength,
     ClValidateIsEmail as IsEmail,
@@ -1091,21 +1092,21 @@ declare const DictEn: Map<TBrandTranslationKey, string>;
 
 declare const DictFa: Map<TBrandTranslationKey, string>;
 
-declare const index$H_DictEn: typeof DictEn;
-declare const index$H_DictFa: typeof DictFa;
-declare const index$H_Keys: typeof Keys;
-declare namespace index$H {
+declare const index$M_DictEn: typeof DictEn;
+declare const index$M_DictFa: typeof DictFa;
+declare const index$M_Keys: typeof Keys;
+declare namespace index$M {
   export {
-    index$H_DictEn as DictEn,
-    index$H_DictFa as DictFa,
-    index$H_Keys as Keys,
+    index$M_DictEn as DictEn,
+    index$M_DictFa as DictFa,
+    index$M_Keys as Keys,
   };
 }
 
-type index$G_ValidatorDescription = ValidatorDescription;
-declare namespace index$G {
-  export { ClValidator as App, AbstractValidatorRule as ValidatorRule, index$H as language, index$I as validates };
-  export type { index$G_ValidatorDescription as ValidatorDescription, TValidatorResult as ValidatorResult };
+type index$L_ValidatorDescription = ValidatorDescription;
+declare namespace index$L {
+  export { ClValidator as App, AbstractValidatorRule as ValidatorRule, index$M as language, index$N as validates };
+  export type { index$L_ValidatorDescription as ValidatorDescription, TValidatorResult as ValidatorResult };
 }
 
 /**
@@ -1408,93 +1409,93 @@ interface ComponentConstructor {
     };
 }
 
-declare namespace index$F {
+declare namespace index$K {
   export {
     AbComponentConnector as ComponentConnector,
   };
 }
 
-declare namespace index$E {
+declare namespace index$J {
   export type { TExtractName as ExtractName, TExtractNameAndValue as ExtractNameAndValue, TPartAttrDefault as PartAttrDefault, TTypeOf as TypeOf, TValueOf as ValueOf };
 }
 
-declare namespace index$D {
+declare namespace index$I {
   export {
     MtSetValue as SetValue,
   };
 }
 
-declare const index$C_ComponentManager: typeof ComponentManager;
-type index$C_ComponentRegistryEntry = ComponentRegistryEntry;
-declare namespace index$C {
-  export { index$C_ComponentManager as ComponentManager };
-  export type { index$C_ComponentRegistryEntry as ComponentRegistryEntry };
+declare const index$H_ComponentManager: typeof ComponentManager;
+type index$H_ComponentRegistryEntry = ComponentRegistryEntry;
+declare namespace index$H {
+  export { index$H_ComponentManager as ComponentManager };
+  export type { index$H_ComponentRegistryEntry as ComponentRegistryEntry };
 }
 
-declare namespace index$B {
+declare namespace index$G {
   export {
-    index$F as Abstract,
-    index$C as Manager,
-    index$D as Methods,
-    index$E as Types,
+    index$K as Abstract,
+    index$H as Manager,
+    index$I as Methods,
+    index$J as Types,
   };
 }
 
-declare namespace index$A {
+declare namespace index$F {
   export { Define_ComponentProp as Define };
   export type { Interface_ComponentProp as Interface, Type_ComponentProp as Type };
 }
 
-declare namespace index$z {
+declare namespace index$E {
   export { Define_ComponentSchema as Define };
   export type { Interface_ComponentSchema as Interface, Type_ComponentSchema as Type };
 }
 
-declare namespace index$y {
+declare namespace index$D {
   export { Define_ComponentTemplate as Define };
   export type { Interface_ComponentTemplate as Interface, Type_ComponentTemplate as Type };
 }
 
-declare namespace index$x {
+declare namespace index$C {
   export { Define_ComponentMethod as Define };
   export type { Callback_ComponentMethod as Callback, Interface_ComponentMethod as Interface, Type_ComponentMethod as Type };
 }
 
-declare namespace index$w {
+declare namespace index$B {
   export type { Interface_ComponentExample as ComponentExample };
 }
 
-declare namespace index$v {
+declare namespace index$A {
   export type { Type_ComponentDefinition as Type };
 }
 
-declare namespace index$u {
+declare namespace index$z {
   export type { Interface_ComponentIdentity as Interface };
 }
 
-declare namespace index$t {
+declare namespace index$y {
   export {
-    index$v as Definition,
-    index$w as Example,
-    index$u as Identity,
-    index$x as Method,
-    index$A as Prop,
-    index$z as Schema,
-    index$y as Template,
+    index$A as Definition,
+    index$B as Example,
+    index$z as Identity,
+    index$C as Method,
+    index$F as Prop,
+    index$E as Schema,
+    index$D as Template,
   };
 }
 
 type ComponentProps = Record<string, Interface_ComponentProp<any>>;
 type ComponentSchemas = Record<string, Interface_ComponentSchema<any, any>>;
 
-type index$s_ComponentConstructor = ComponentConstructor;
-declare const index$s_ComponentManager: typeof ComponentManager;
-type index$s_ComponentProps = ComponentProps;
-type index$s_ComponentRegistryEntry = ComponentRegistryEntry;
-type index$s_ComponentSchemas = ComponentSchemas;
-declare namespace index$s {
-  export { ClComponentBase as App, index$B as Basic, AbComponentConnector as ComponentConnector, index$s_ComponentManager as ComponentManager, Define_ComponentMethod as DefineMethod, Define_ComponentProp as DefineProp, Define_ComponentSchema as DefineSchema, Define_ComponentTemplate as DefineTemplate, MtSetValue as SetValue, index$t as Tools };
-  export type { index$s_ComponentConstructor as ComponentConstructor, Type_ComponentDefinition as ComponentDefinition, Interface_ComponentExample as ComponentExample, Interface_ComponentIdentity as ComponentIdentity, Interface_ComponentProp as ComponentPropEntry, index$s_ComponentProps as ComponentProps, index$s_ComponentRegistryEntry as ComponentRegistryEntry, Interface_ComponentSchema as ComponentSchemaEntry, index$s_ComponentSchemas as ComponentSchemas, TExtractName as ExtractName, TExtractNameAndValue as ExtractNameAndValue, Callback_ComponentMethod as MethodCallback, Interface_ComponentMethod as MethodInterface, Type_ComponentMethod as MethodType, TPartAttrDefault as PartAttrDefault, Interface_ComponentProp as PropInterface, Type_ComponentProp as PropType, Interface_ComponentSchema as SchemaInterface, Type_ComponentSchema as SchemaType, Interface_ComponentTemplate as TemplateInterface, Type_ComponentTemplate as TemplateType, TTypeOf as TypeOf, TValueOf as ValueOf };
+type index$x_ComponentConstructor = ComponentConstructor;
+declare const index$x_ComponentManager: typeof ComponentManager;
+type index$x_ComponentProps = ComponentProps;
+type index$x_ComponentRegistryEntry = ComponentRegistryEntry;
+type index$x_ComponentSchemas = ComponentSchemas;
+declare namespace index$x {
+  export { ClComponentBase as App, index$G as Basic, AbComponentConnector as ComponentConnector, index$x_ComponentManager as ComponentManager, Define_ComponentMethod as DefineMethod, Define_ComponentProp as DefineProp, Define_ComponentSchema as DefineSchema, Define_ComponentTemplate as DefineTemplate, MtSetValue as SetValue, index$y as Tools };
+  export type { index$x_ComponentConstructor as ComponentConstructor, Type_ComponentDefinition as ComponentDefinition, Interface_ComponentExample as ComponentExample, Interface_ComponentIdentity as ComponentIdentity, Interface_ComponentProp as ComponentPropEntry, index$x_ComponentProps as ComponentProps, index$x_ComponentRegistryEntry as ComponentRegistryEntry, Interface_ComponentSchema as ComponentSchemaEntry, index$x_ComponentSchemas as ComponentSchemas, TExtractName as ExtractName, TExtractNameAndValue as ExtractNameAndValue, Callback_ComponentMethod as MethodCallback, Interface_ComponentMethod as MethodInterface, Type_ComponentMethod as MethodType, TPartAttrDefault as PartAttrDefault, Interface_ComponentProp as PropInterface, Type_ComponentProp as PropType, Interface_ComponentSchema as SchemaInterface, Type_ComponentSchema as SchemaType, Interface_ComponentTemplate as TemplateInterface, Type_ComponentTemplate as TemplateType, TTypeOf as TypeOf, TValueOf as ValueOf };
 }
 
 type TLanguageDefinition = {
@@ -1503,7 +1504,7 @@ type TLanguageDefinition = {
     directionRtl: boolean;
 };
 
-declare namespace index$r {
+declare namespace index$w {
   export type { TLanguageDefinition as LanguageDefinition };
 }
 
@@ -1511,24 +1512,24 @@ declare const DefFa$1: TLanguageDefinition;
 
 declare const DefEn$1: TLanguageDefinition;
 
-declare namespace index$q {
+declare namespace index$v {
   export {
     DefEn$1 as En,
     DefFa$1 as Fa,
   };
 }
 
-declare namespace index$p {
+declare namespace index$u {
   export {
-    index$q as Definition,
-    index$r as Types,
+    index$v as Definition,
+    index$w as Types,
   };
 }
 
-declare namespace index$o {
+declare namespace index$t {
   export {
-    index$N as Event,
-    index$p as Language,
+    index$S as Event,
+    index$u as Language,
   };
 }
 
@@ -1566,7 +1567,7 @@ declare const MTToKebabCase: (str: string) => string;
 
 declare const MTToNumber: (str: string) => string;
 
-declare namespace index$n {
+declare namespace index$s {
   export {
     MTToKebabCase as ToKebabCase,
     MTToNumber as ToNumber,
@@ -1577,7 +1578,7 @@ declare const MTFromEnglishToPersian: (str: string | number, isInt?: boolean) =>
 
 declare const MTFromPersianToEnglish: (str: string | number, isInt?: boolean) => string | number;
 
-declare namespace index$m {
+declare namespace index$r {
   export {
     MTFromEnglishToPersian as FromEnglishToPersian,
     MTFromPersianToEnglish as FromPersianToEnglish,
@@ -1588,7 +1589,7 @@ declare const MTFromPriceToString: (input: string | number) => number | null;
 
 declare const MTFromStringToPrice: (value: string | number) => string | null;
 
-declare namespace index$l {
+declare namespace index$q {
   export {
     MTFromPriceToString as FromPriceToString,
     MTFromStringToPrice as FromStringToPrice,
@@ -1603,7 +1604,7 @@ type TSerializeItem = {
 
 declare const MTToSerializeArray: (formElement: HTMLFormElement | null) => TSerializeItem[];
 
-declare namespace index$k {
+declare namespace index$p {
   export {
     MTToSerializeArray as ToSerializeArray,
   };
@@ -1613,20 +1614,20 @@ declare const MTToCustomSerialize: (obj: Record<string, unknown>) => string;
 
 declare const MTToUnCustomSerialize: (input: string) => Record<string, string>;
 
-declare namespace index$j {
+declare namespace index$o {
   export {
     MTToCustomSerialize as ToCustomSerialize,
     MTToUnCustomSerialize as ToUnCustomSerialize,
   };
 }
 
-declare namespace index$i {
+declare namespace index$n {
   export {
-    index$k as Array,
-    index$m as Number,
-    index$j as Object,
-    index$l as Price,
-    index$n as String,
+    index$p as Array,
+    index$r as Number,
+    index$o as Object,
+    index$q as Price,
+    index$s as String,
   };
 }
 
@@ -1634,16 +1635,16 @@ declare const MTTimeUnixThisTime: (withTomorrow?: boolean) => number;
 
 declare const MTTimeUnixThisYear: (isSamci?: boolean) => number;
 
-declare namespace index$h {
+declare namespace index$m {
   export {
     MTTimeUnixThisTime as ThisTime,
     MTTimeUnixThisYear as ThisYear,
   };
 }
 
-declare namespace index$g {
+declare namespace index$l {
   export {
-    index$h as TimeUnix,
+    index$m as TimeUnix,
   };
 }
 
@@ -1662,7 +1663,7 @@ declare const MTGetExtension: (filename: string) => string;
 
 declare const MTGetIMimeType: (filename: string) => string;
 
-declare namespace index$f {
+declare namespace index$k {
   export {
     MTGetExtension as GetExtension,
     MTGetIMimeType as GetIMimeType,
@@ -1677,7 +1678,7 @@ type TFormArray = {
 
 declare const MTMergeMultiFormArrays: (...arrays: TFormArray[][]) => TFormArray[];
 
-declare namespace index$e {
+declare namespace index$j {
   export {
     MTMergeMultiFormArrays as MergeMultiFormArrays,
   };
@@ -1687,7 +1688,7 @@ declare const MTGetJsonParse: <T>(json: string) => T | null;
 
 declare const MTGetJsonScript: <T>(scriptJsonId: string) => T | null;
 
-declare namespace index$d {
+declare namespace index$i {
   export {
     MTGetJsonParse as GetJsonParse,
     MTGetJsonScript as GetJsonScript,
@@ -1698,7 +1699,7 @@ declare const MTGetListClass: (data?: string | string[] | null) => string;
 
 declare const MTGetListStyles: (data?: string | Record<string, string | number> | null) => string;
 
-declare namespace index$c {
+declare namespace index$h {
   export {
     MTGetListClass as GetListClass,
     MTGetListStyles as GetListStyles,
@@ -1707,7 +1708,7 @@ declare namespace index$c {
 
 declare const MTReplaceInTextWithPattern: (template: string, params?: Record<string, unknown>, pattern?: RegExp) => string;
 
-declare namespace index$b {
+declare namespace index$g {
   export {
     MTReplaceInTextWithPattern as TextWithPattern,
   };
@@ -1715,25 +1716,85 @@ declare namespace index$b {
 
 declare const MTCopyText: (text: string) => Promise<void>;
 
-declare namespace index$a {
+declare namespace index$f {
   export {
     MTCopyText as Text,
   };
 }
 
-declare namespace index$9 {
+declare namespace index$e {
   export {
-    index$e as Array,
-    index$c as Attrs,
-    index$a as Copy,
-    index$d as Json,
-    index$b as Replace,
+    index$j as Array,
+    index$h as Attrs,
+    index$f as Copy,
+    index$i as Json,
+    index$g as Replace,
   };
 }
 
-declare const StateConfigSizeName: TConfigStateDefinition<undefined>;
+type TCTriangleDirection = "up" | "right" | "down" | "left";
 
-declare namespace index$8 {
+type TShapeCssValue = string | number;
+type TShapeTrianglePosition = Partial<Record<"top" | "right" | "bottom" | "left" | "insetInlineStart" | "insetInlineEnd", TShapeCssValue>>;
+type TShapeTriangleOptions = {
+    direction: TCTriangleDirection;
+    width: TShapeCssValue;
+    height: TShapeCssValue;
+    color: string;
+    position?: TShapeTrianglePosition;
+};
+type TShapeTriangleCss = Record<string, string>;
+
+/** Build declarations for a CSS border triangle. DOM and selector ownership remain with the caller. */
+declare function MTCssTriangle(options: TShapeTriangleOptions): TShapeTriangleCss;
+
+declare const index$d_MTCssTriangle: typeof MTCssTriangle;
+declare namespace index$d {
+  export {
+    index$d_MTCssTriangle as MTCssTriangle,
+    MTCssTriangle as Triangle,
+  };
+}
+
+type TSvgPoint = {
+    x: number;
+    y: number;
+};
+
+type TSvgPolygon = readonly TSvgPoint[];
+
+declare function MTSvgPolygonPointsToString(points: TSvgPolygon): string;
+
+declare function MTSvgPolygonVertexMean(points: TSvgPolygon): TSvgPoint | null;
+
+declare function MTSvgPolygonSliceClosed(points: TSvgPolygon, startIndex: number, count: number): TSvgPolygon;
+
+declare function MTSvgPointOffset(point: TSvgPoint, offsetX: number, offsetY: number): TSvgPoint;
+
+declare namespace index$c {
+  export {
+    MTSvgPointOffset as PointOffset,
+    MTSvgPolygonPointsToString as PolygonPointsToString,
+    MTSvgPolygonSliceClosed as PolygonSliceClosed,
+    MTSvgPolygonVertexMean as PolygonVertexMean,
+  };
+}
+
+type index$b_TCTriangleDirection = TCTriangleDirection;
+type index$b_TShapeCssValue = TShapeCssValue;
+type index$b_TShapeTriangleCss = TShapeTriangleCss;
+type index$b_TShapeTriangleOptions = TShapeTriangleOptions;
+type index$b_TShapeTrianglePosition = TShapeTrianglePosition;
+type index$b_TSvgPoint = TSvgPoint;
+type index$b_TSvgPolygon = TSvgPolygon;
+declare namespace index$b {
+  export { index$d as Css, MTCssTriangle as Css_Triangle, index$c as Svg };
+  export type { index$b_TCTriangleDirection as TCTriangleDirection, index$b_TShapeCssValue as TShapeCssValue, index$b_TShapeTriangleCss as TShapeTriangleCss, index$b_TShapeTriangleOptions as TShapeTriangleOptions, index$b_TShapeTrianglePosition as TShapeTrianglePosition, index$b_TSvgPoint as TSvgPoint, index$b_TSvgPolygon as TSvgPolygon };
+}
+
+declare const StateConfigSizeName: TConfigStateDefinition<TCSizes>;
+
+declare namespace index$a {
   export {
     StateConfigDirectionRtl as DirectionRtl,
     StateConfigFontName as FontName,
@@ -1745,16 +1806,16 @@ declare namespace index$8 {
 declare const Settings: {
     DirectionRtl: ClConfigState<boolean>;
     Language: ClConfigState<TLanguageDefinition>;
-    SizeName: ClConfigState<Util.Styles.TCSizes>;
+    SizeName: ClConfigState<TCSizes>;
     FontName: ClConfigState<string>;
 };
 
-declare const index$7_Settings: typeof Settings;
-declare namespace index$7 {
+declare const index$9_Settings: typeof Settings;
+declare namespace index$9 {
   export {
     ClConfigApp as App,
-    index$7_Settings as Settings,
-    index$8 as States,
+    index$9_Settings as Settings,
+    index$a as States,
   };
 }
 
@@ -1783,7 +1844,7 @@ declare namespace Definition {
 
 type TCLanguagesDefinition = typeof Definition[keyof typeof Definition];
 
-declare namespace index$6 {
+declare namespace index$8 {
   export { ClLanguageApp as App, MTCreateTranslationKey as CreateTranslationKey, DefEn as FallbackLanguage };
   export type { TCLanguagesDefinition as TLanguagesDefinition };
 }
@@ -1810,11 +1871,11 @@ declare class ClRouter {
     resolve(): void;
 }
 
-type index$5_ITemplate = ITemplate;
-type index$5_TRouter = TRouter;
-declare namespace index$5 {
+type index$7_ITemplate = ITemplate;
+type index$7_TRouter = TRouter;
+declare namespace index$7 {
   export { ClRouter as App };
-  export type { index$5_ITemplate as ITemplate, index$5_TRouter as TRouter };
+  export type { index$7_ITemplate as ITemplate, index$7_TRouter as TRouter };
 }
 
 /**
@@ -1837,7 +1898,7 @@ declare class ClTestsPage implements ITemplate {
     onLoad(pageElement: HTMLElement): void;
 }
 
-declare namespace index$4 {
+declare namespace index$6 {
   export {
     ClTestsPage as TestsPage,
   };
@@ -1848,7 +1909,7 @@ declare class ClHomePage implements ITemplate {
     onLoad(pageElement: HTMLElement): void;
 }
 
-declare namespace index$3 {
+declare namespace index$5 {
   export {
     ClHomePage as HomePage,
   };
@@ -1859,9 +1920,37 @@ declare class ClIconPage implements ITemplate {
     onLoad(pageElement: HTMLElement): void;
 }
 
-declare namespace index$2 {
+declare namespace index$4 {
   export {
     ClIconPage as IconPage,
+  };
+}
+
+declare class ClWorkflowPage implements ITemplate {
+    render(): HTMLElement;
+    onLoad(_pageElement: HTMLElement): void;
+}
+
+declare namespace index$3 {
+  export {
+    ClWorkflowPage as WorkflowPage,
+  };
+}
+
+declare class ClComponentsPage implements ITemplate {
+    render(): HTMLElement;
+    onLoad(_pageElement: HTMLElement): void;
+}
+
+declare class ClComponentDetailsPage implements ITemplate {
+    render(): HTMLElement;
+    onLoad(_pageElement: HTMLElement): void;
+}
+
+declare namespace index$2 {
+  export {
+    ClComponentDetailsPage as ComponentDetailsPage,
+    ClComponentsPage as ComponentsPage,
   };
 }
 
@@ -1869,31 +1958,34 @@ declare const CtPageMaps: TRouter;
 
 declare namespace index$1 {
   export {
-    index$3 as Home,
-    index$2 as Icon,
+    index$2 as Components,
+    index$5 as Home,
+    index$4 as Icon,
     CtPageMaps as PageMap,
-    index$4 as Tests,
+    index$6 as Tests,
+    index$3 as Workflow,
   };
 }
 
 declare namespace index {
   export {
-    index$L as Brand,
-    index$s as ComponentBase,
-    index$7 as Config,
-    index$K as Consts,
-    index$i as Convertor,
-    index$o as Core,
-    index$g as Dates,
-    index$f as Files,
-    index$6 as Language,
-    index$O as Observable,
+    index$Q as Brand,
+    index$x as ComponentBase,
+    index$9 as Config,
+    index$P as Consts,
+    index$n as Convertor,
+    index$t as Core,
+    index$l as Dates,
+    index$k as Files,
+    index$8 as Language,
+    index$T as Observable,
     index$1 as Pages,
-    index$M as Reactive,
-    index$5 as Route,
-    index$J as Styles,
-    index$9 as Tools,
-    index$G as Validators,
+    index$R as Reactive,
+    index$7 as Route,
+    index$b as Shapes,
+    index$O as Styles,
+    index$e as Tools,
+    index$L as Validators,
   };
 }
 

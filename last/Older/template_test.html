@@ -1,0 +1,442 @@
+
+<script src="./tools.js"></script>
+
+
+
+<!--viewBox="0 0 100 100"-->
+<svg id="mysvg" width="100%" >
+    <defs>
+        <!-- تعریف فیلتر سایه -->
+        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.75)" />
+        </filter>
+    </defs>
+</svg>
+
+<!--
+<script>
+
+    let svg = document.getElementById("mysvg");
+
+    let x = 20;
+    let l = 120;
+    let g = 6;
+    let h = 25;
+
+    const n = 5;
+    const W = svg.width.baseVal.value;
+    const w = 3*x +l;
+    const margin = (W - n*w)/2;
+
+    function renderMiddleShape(number = 0){
+
+        const xStart = margin + (n - number - 1)*w;
+
+
+        /// SHAPE A
+        let shapeA = [];
+        if (number == n-1 ){
+            shapeA.push({x: xStart        , y: 0})  /// C`
+        }
+        else {
+            shapeA.push({x: xStart +2*x   , y: 0})  /// C
+        }
+
+        shapeA.push({x: xStart +3*x+l , y: 0})    /// D
+
+
+        if (number == 0){
+            shapeA.push({x: xStart +3*x+l , y: 2*h})   /// H`N`
+        }
+        else {
+            shapeA.push({x: xStart +2*x+l , y: h})    /// H
+            shapeA.push({x: xStart +3*x+l , y: 2*h})  /// N
+        }
+
+        if (number == n-1 ){
+            shapeA.push({x: xStart        , y: 2*h})  /// M`G`
+            shapeA.push({x: xStart        , y: 0})    /// C
+        }
+        else {
+            shapeA.push({x: xStart +2*x   , y: 2*h})   /// M
+            shapeA.push({x: xStart +x     , y: h})     /// G
+            shapeA.push({x: xStart +2*x   , y: 0})     /// C
+        }
+
+
+
+        /// SHAPE Shadow A
+        let shapeShadowA = [];
+        if (number == 0){
+            shapeShadowA.push({x: xStart +3*x+l , y: h})     /// H`
+            shapeShadowA.push({x: xStart +3*x+l , y: 2*h})   /// N`
+        }
+        else {
+            shapeShadowA.push({x: xStart +2*x+l , y: h})     /// H
+            shapeShadowA.push({x: xStart +3*x+l , y: 2*h})   /// N
+        }
+
+        if (number == n-1 ){
+            shapeShadowA.push({x: xStart        , y: 2*h})  /// G`
+            shapeShadowA.push({x: xStart        , y: h})    /// M`
+            shapeShadowA.push({x: xStart +3*x+l , y: h})    /// H`
+        }
+        else {
+            shapeShadowA.push({x: xStart +2*x   , y: 2*h})   /// M
+            shapeShadowA.push({x: xStart +x     , y: h})     /// G
+            shapeShadowA.push({x: xStart +2*x+l , y: h})     /// H
+        }
+
+
+
+
+        /// SHAPE B
+        if (number < n-1 ){
+            let shapeB = [
+                {x: xStart +x      -g   , y: 0} ,
+                {x: xStart +2*x-g  -g   , y: 0} ,
+                {x: xStart +x-g    -g   , y: h} ,
+                {x: xStart +2*x-g  -g   , y: 2*h} ,
+                {x: xStart +x      -g   , y: 2*h} ,
+                {x: xStart +0      -g   , y: h} ,
+                {x: xStart +x      -g   , y: 0} ,
+            ];
+
+            let shapeShadowB = [
+                {x: xStart +x-g    -g  , y: h} ,
+                {x: xStart +2*x-g  -g  , y: 2*h} ,
+                {x: xStart +x      -g  , y: 2*h} ,
+                {x: xStart +0      -g  , y: h} ,
+                {x: xStart +x-g    -g  , y: h} ,
+            ];
+
+
+            // رسم shapeB
+            let polyB = document.createElementNS("http://www.w3.org/2000/svg","polygon");
+            polyB.setAttribute("points", toPointsString(shapeB));
+            //polyB.setAttribute("stroke", "black");
+            polyB.setAttribute("fill", "#ff9b00");
+            polyB.setAttribute("filter", "url(#shadow)"); // اعمال سایه
+            svg.appendChild(polyB);
+
+            let polyShadowB = document.createElementNS("http://www.w3.org/2000/svg","polygon");
+            polyShadowB.setAttribute("points", toPointsString(shapeShadowB));
+            polyShadowB.setAttribute("fill", "rgba(255,255,255,0.2)");
+            svg.appendChild(polyShadowB);
+        }
+
+
+        // تابع برای ساختن استرینگ points
+        function toPointsString(shape){
+            return shape.map(p => `${p.x},${p.y}`).join(" ");
+        }
+
+        function getCenter(shape){
+            let sumX = 0, sumY = 0;
+            shape.forEach(p => { sumX += p.x; sumY += p.y; });
+            return {x: sumX/shape.length, y: sumY/shape.length};
+        }
+
+
+
+        // رسم shapeA
+        let polyA = document.createElementNS("http://www.w3.org/2000/svg","polygon");
+        polyA.setAttribute("points", toPointsString(shapeA));
+       // polyA.setAttribute("stroke", "black");
+        polyA.setAttribute("fill", "#ff9b00");
+        polyA.setAttribute("filter", "url(#shadow)"); // اعمال سایه
+        svg.appendChild(polyA);
+
+        let polyShadowA = document.createElementNS("http://www.w3.org/2000/svg","polygon");
+        polyShadowA.setAttribute("points", toPointsString(shapeShadowA));
+        polyShadowA.setAttribute("fill", "rgba(255,255,255,0.2)");
+        svg.appendChild(polyShadowA);
+
+
+        let center = getCenter(shapeA);
+
+        // متن وسط shapeA
+        let text = document.createElementNS("http://www.w3.org/2000/svg","text");
+        text.setAttribute("x", center.x);
+        text.setAttribute("y", center.y+ (0.25*h));
+        text.setAttribute("text-anchor", "middle"); // افقی وسط
+        text.setAttribute("dominant-baseline", "middle"); // عمودی وسط
+        text.setAttribute("font-size", "16");
+        text.setAttribute("fill", "white");
+        text.textContent = "step "+(number+1);
+        svg.appendChild(text);
+
+
+        // tik
+        let centerX = center.x + 0.40*l;
+        let centerY = center.y + 5;
+
+        let circle = document.createElementNS("http://www.w3.org/2000/svg","circle");
+        circle.setAttribute("cx", centerX);
+        circle.setAttribute("cy", centerY);
+        circle.setAttribute("r", 10);             // شعاع دایره
+        circle.setAttribute("fill", "#ff000000");     // رنگ دایره
+        circle.setAttribute("stroke", "white");   // خط دور
+        circle.setAttribute("stroke-width", "2");
+        circle.setAttribute("filter", "url(#shadow)"); // سایه
+        svg.appendChild(circle);
+
+        let tik = document.createElementNS("http://www.w3.org/2000/svg","path");
+        tik.setAttribute("d", "M-4,0 L-1,3 L4,-4");  // تیک کوچک داخل دایره
+        tik.setAttribute("stroke", "white");
+        tik.setAttribute("stroke-width", "2");
+        tik.setAttribute("fill", "none");
+        tik.setAttribute("filter", "url(#shadow)");
+        tik.setAttribute("transform", `translate(${centerX}, ${centerY})`);
+        svg.appendChild(tik);
+
+
+    }
+
+
+    for (let i = 0; i < n ; i++) {
+        renderMiddleShape(i);
+    }
+
+
+</script>-->
+
+<script>
+
+    let svg = document.getElementById("mysvg");
+
+    let x = 20;
+    let l = 120;
+    let g = 6;
+    let h = 25;
+
+    const n = 5;
+    const stepSelected = 1;
+    const W = svg.width.baseVal.value;
+    const w = 3*x +l;
+    const marginMin = 0.1*W;
+    const margin = (W - n*w)/2 > marginMin ? (W - n*w)/2  : marginMin;
+
+    function renderShape(number = 0){
+
+        const xStart = margin + (n - number - 1)*w;
+
+
+        /// SHAPE A
+        let shapeAPoints = [];
+        if (number == n-1 ){
+            shapeAPoints.push({x: xStart        , y: 0})  /// C`
+        }
+        else {
+            shapeAPoints.push({x: xStart +2*x   , y: 0})  /// C
+        }
+
+        shapeAPoints.push({x: xStart +3*x+l , y: 0})    /// D
+
+        if (number == 0){
+            shapeAPoints.push({x: xStart +3*x+l , y: h})   /// H
+            shapeAPoints.push({x: xStart +3*x+l , y: 2*h})   /// N
+        }
+        else {
+            shapeAPoints.push({x: xStart +2*x+l , y: h})    /// H
+            shapeAPoints.push({x: xStart +3*x+l , y: 2*h})  /// N
+        }
+
+        if (number == n-1 ){
+            shapeAPoints.push({x: xStart        , y: 2*h})  /// M
+            shapeAPoints.push({x: xStart        , y: h})  /// G
+            shapeAPoints.push({x: xStart        , y: 0})    /// C
+        }
+        else {
+            shapeAPoints.push({x: xStart +2*x   , y: 2*h})   /// M
+            shapeAPoints.push({x: xStart +x     , y: h})     /// G
+            shapeAPoints.push({x: xStart +2*x   , y: 0})     /// C
+        }
+
+
+
+        /// SHAPE B
+        if (number < n-1 ){
+            let shapeBPoints = [
+                {x: xStart +x      -g   , y: 0} ,
+                {x: xStart +2*x-g  -g   , y: 0} ,
+                {x: xStart +x-g    -g   , y: h} ,
+                {x: xStart +2*x-g  -g   , y: 2*h} ,
+                {x: xStart +x      -g   , y: 2*h} ,
+                {x: xStart +0      -g   , y: h} ,
+                {x: xStart +x      -g   , y: 0} ,
+            ];
+
+
+            const shapeB = tools_svg.craeteSvgPolygon(svg , shapeBPoints , {
+                "fill" :  number <= stepSelected ? "#fab01b" : "#15244b" ,
+                "filter" : "url(#shadow)"
+            });
+
+            const shapeBShadow = tools_svg.createShadowInsidePolygonElement(svg , shapeB , 2 , 4 , {
+                "fill" : "rgba(255,255,255,0.2)"
+            })
+
+        }
+
+        const shapeA = tools_svg.craeteSvgPolygon(svg , shapeAPoints , {
+            "fill" :  number <= stepSelected ? "#fab01b" : "#15244b" ,
+            "filter" : "url(#shadow)"
+        })
+
+        const shapeAShadow = tools_svg.createShadowInsidePolygonElement(svg , shapeA , 2 , 4 , {
+            "fill" : "rgba(255,255,255,0.2)"
+        })
+
+        const shapeText = tools_svg.craeteSvgTextToCenterPolygonElement(svg , shapeA , 0 , 0.15*h , "step "+(number+1) , {
+            "text-anchor" : "middle" ,
+            "dominant-baseline" : "middle" ,
+            "font-size" : "16" ,
+            "fill" : "white" ,
+        });
+
+        const shapeCircleTik = tools_svg.craeteSvgCircleToCenterPolygonElement(svg , shapeA , 0.40*l  , 0.10*h  , h/2 , {
+            "fill" : "#ff000000" ,
+            "stroke" : "white" ,
+            "stroke-width" : "2" ,
+            "filter" : "url(#shadow)" ,
+        });
+
+        if(  number <= stepSelected){
+            const shapeTik = tools_svg.craeteSvgPathToCenterCircleElement(svg , shapeCircleTik , 0 , 0 ,  "M-4,0 L-1,3 L4,-4" , {
+                "fill" : "none" ,
+                "stroke" : "white" ,
+                "stroke-width" : "2" ,
+                "filter" : "url(#shadow)" ,
+            });
+        }
+        else{
+            const shapenumber = tools_svg.craeteSvgTextToCenterCircleElement(svg , shapeCircleTik , 0 , 2.5,  number+1 , {
+                "text-anchor" : "middle" ,
+                "dominant-baseline" : "middle" ,
+                "font-size" : "16" ,
+                "fill" : "white" ,
+            });
+        }
+
+
+    }
+
+
+    for (let i = 0; i < n ; i++) {
+        renderShape(i);
+    }
+
+
+</script>
+
+
+
+
+
+
+<svg id="mysvg-mobile" width="100%" >
+    <defs>
+        <!-- تعریف فیلتر سایه -->
+        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.75)" />
+        </filter>
+    </defs>
+</svg>
+
+<script>
+
+    let svg_mobile  = document.getElementById("mysvg-mobile");
+
+    let h_mobile  = 25;
+
+    const n_mobile  = 5;
+    const stepSelected_mobile  = 1;
+
+    const W_mobile = svg.width.baseVal.value;
+    const marginMin_mobile = 0.1*W;
+    const margin_mobile = marginMin;
+
+    const w_mobile = (W_mobile - 2*margin_mobile)/n_mobile;
+
+    let l_mobile = (w_mobile - h_mobile/2)/2;
+
+
+    function renderShape_mobile(number = 0){
+
+        const xStart = margin_mobile + (n_mobile - number - 1)*w_mobile;
+
+
+        if (number < n_mobile-1 ){
+            const linePoints = [
+                {x: xStart +  w_mobile/2        , y:  ((3*h_mobile/2) - 2)} ,
+                {x: xStart -  w_mobile/2        , y:  ((3*h_mobile/2) - 2)} ,
+                {x: xStart -  w_mobile/2        , y:  ((3*h_mobile/2) + 2)} ,
+                {x: xStart +  w_mobile/2        , y:  ((3*h_mobile/2) + 2)} ,
+                {x: xStart +  w_mobile/2        , y:  ((3*h_mobile/2) - 2)} ,
+            ]
+
+            const line = tools_svg.craeteSvgPolygon(svg_mobile , linePoints , {
+                "fill" :  number <= stepSelected-1 ? "#fab01b" : "#15244b" ,
+                "filter" : "url(#shadow)"
+            });
+
+        }
+
+
+
+        const shapeCircle = tools_svg.craeteSvgCircle(svg_mobile , xStart+(w_mobile/2) , (3*h_mobile/2) , h/2  , {
+            "fill" :  number <= stepSelected ? "#fab01b" : "#15244b" ,
+            "stroke" : "white" ,
+            "stroke-width" : "2" ,
+            "filter" : "url(#shadow)" ,
+        });
+
+
+        const shapeText = tools_svg.craeteSvgTextToCenterCircleElement(svg_mobile , shapeCircle , 0 , -h_mobile , "step "+(number+1) , {
+            "text-anchor" : "middle" ,
+            "dominant-baseline" : "middle" ,
+            "font-size" : "16" ,
+            "fill" :  number <= stepSelected ? "#fab01b" : "#15244b" ,
+        });
+
+        if(  number <= stepSelected_mobile){
+            const shapeTik = tools_svg.craeteSvgPathToCenterCircleElement(svg_mobile , shapeCircle , 0  , 0 ,  "M-4,0 L-1,3 L4,-4" , {
+                "fill" : "none" ,
+                "stroke" : "white" ,
+                "stroke-width" : "2" ,
+                "filter" : "url(#shadow)" ,
+            });
+        }
+        else{
+            const shapenumber = tools_svg.craeteSvgTextToCenterCircleElement(svg_mobile , shapeCircle , 0  , 0 ,  number+1 , {
+                "text-anchor" : "middle" ,
+                "dominant-baseline" : "middle" ,
+                "font-size" : "16" ,
+                "fill" : "white" ,
+            });
+        }
+
+
+
+    }
+
+    for (let i = 0; i < n_mobile ; i++) {
+        renderShape_mobile(i);
+    }
+
+
+</script>
+
+
+<svg id="mysvg" width="400" height="100">
+    <polygon id="p1" points="10,10 100,10 100,60 10,60" fill="orange" style="cursor:pointer" />
+</svg>
+
+<script>
+    const p1 = document.getElementById('p1');
+    p1.addEventListener('click', (ev) => {
+        console.log('polygon clicked', ev);
+        // ev.target === p1
+    });
+</script>

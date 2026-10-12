@@ -129,12 +129,11 @@ export class ComponentInputAcl extends ComponentInputAclBase {
         } as any,{CLICK:()=>this._FLOAT_MENU?.setShow(true)} as any);
         const displayValue=CoreObservable.App.computed((items:AclItem[])=>items.map(item=>item.name).join(", "),[this._STAGED],this.getScope());
         const rtl=CoreConfig.Settings.DirectionRtl.observable();
-        const headerBgForInput=data?.prop_backgroundColorHeaderList??bind.prop_backgroundColorHeaderList;
-        const headerInputStyles=CoreObservable.App.computed((background:string|null)=>({
-            backgroundColor:background??UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY,UtilConst.ColorGrad.GRADE_1),
+        const headerInputStyles={
+            backgroundColor:UtilStyle.Css_Color(UtilConst.ColorMain.SHAN,UtilConst.ColorGrad.GRADE_1),
             color:UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY,UtilConst.ColorGrad.GRADE_1),
             opacity:"1",
-        }),[headerBgForInput],this.getScope());
+        };
         const headerInput=new ComponentInputSimple.Component({
             prop_inputValue:displayValue as any,
             prop_inputDisable:true,

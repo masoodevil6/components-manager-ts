@@ -7,3 +7,4 @@ export * as Files  from "@/util_files";
 export * as Tools  from "@/util_tools";
 export * as Validators  from "@/util_validators";
 export * as Styles  from "@/util_styles";
+export * as Shapes  from "@/util_shapes";

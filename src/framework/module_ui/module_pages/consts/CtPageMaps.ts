@@ -6,6 +6,8 @@ import {ClIconPage   as IconPage}      from "../pages/icons/ClIconPage";
 import {ClTestsPage  as TestsPage}     from "../pages/tests/ClTestsPage";
 import {ClPerformancePage as PerformancePage} from "../pages/performance/ClPerformancePage";
 import {ClWorkflowPage as WorkflowPage} from "../pages/workflow/ClWorkflowPage";
+import {ClComponentsPage as ComponentsPage} from "../pages/components/ClComponentsPage";
+import {ClComponentDetailsPage as ComponentDetailsPage} from "../pages/components/ClComponentDetailsPage";
 import * as CoreObservable from "@/core_observable";
 
 
@@ -40,6 +42,18 @@ export const CtPageMaps: TRouter = {
         template:      WorkflowPage,
         data:          { },
         headerTitle:   new CoreObservable.App("Workflow"),
+    },
+
+    "/components": {
+        template:      ComponentsPage,
+        data:          { },
+        headerTitle:   new CoreObservable.App("Components"),
+    },
+
+    "/components/:componentName": {
+        template:      ComponentDetailsPage,
+        data:          { },
+        headerTitle:   new CoreObservable.App("Component"),
     },
 
 }

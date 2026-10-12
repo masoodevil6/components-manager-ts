@@ -383,29 +383,31 @@ export class ComponentButton extends ComponentButtonBase {
         const iconStrokeWidth = CoreObservable.App.computed((size: any, definition: UiIcons.IIconDefinition | null) =>
             UtilStyle.Css_IconStrokeWidth(size, definition?.viewBoxX ?? 24, definition?.viewBoxY ?? 24),
         [sizeName, prop_btnIcon], this.getScope());
-        const iconFrameSize = CoreObservable.App.computed(
-            (heightProp, size) => heightProp ?? UtilStyle.Css_IconSize(size),
-            [prop_btnHeight, sizeName],
-            this.getScope(),
-        );
-        const iconWrapperStyles = CoreObservable.App.computed(() => ({
-            display: "inline-flex",
-            width: iconFrameSize.get(),
-            height: iconFrameSize.get(),
-            flex: "0 0 auto",
+        const iconWrapperStyles = CoreObservable.App.computed((height, size, customStyles) => ({
+            display: "block",
+            width: height ?? UtilStyle.Css_IconSize(size),
+            height: height ?? UtilStyle.Css_IconSize(size),
+            flex: `0 0 ${height ?? UtilStyle.Css_IconSize(size)}`,
+            ...(customStyles ?? {}),
+        }), [prop_btnHeight, sizeName, prop_btnIconStyles], this.getScope());
+        const iconStructureStyles = {
+            display: "flex",
+            width: "100%",
+            height: "100%",
             alignItems: "center",
             justifyContent: "center",
-        }), [], this.getScope());
-        const iconStyles = CoreObservable.App.computed((customStyles) => ({
-            display: "inline-flex",
+        };
+        const iconStyles = {
+            display: "flex",
+            width: "100%",
+            height: "100%",
             flex: "0 0 auto",
             alignItems: "center",
             justifyContent: "center",
             verticalAlign: "middle",
-            ...(customStyles ?? {}),
-        }), [prop_btnIconStyles], this.getScope());
+        };
         const iconClass = CoreObservable.App.computed((classes) => [
-            "d-inline-flex",
+            "d-flex",
             "align-items-center",
             "justify-content-center",
             "flex-shrink-0",
@@ -428,8 +430,8 @@ export class ComponentButton extends ComponentButtonBase {
                             }
                         ),
                         styles: iconWrapperStyles,
-                        prop_structureStyles: iconWrapperStyles,
-                        prop_iconStyles: iconStyles as any,
+                        prop_structureStyles: iconStructureStyles,
+                        prop_iconStyles: iconStyles,
                         prop_iconClass:  iconClass,
                         //prop_icon:      UiIcons.CreateIcon(UiIcons.Src.ArrowUp.Definition, { size: 24 }),
                         prop_iconTitle: "Arrow Up",

@@ -21,6 +21,7 @@ export default defineConfig({
             { find: "@/util_brands",     replacement: path.resolve(__dirname, "./src/framework/module_util/module_brands") },
             { find: "@/util_consts",     replacement: path.resolve(__dirname, "./src/framework/module_util/module_consts") },
             { find: "@/util_styles",     replacement: path.resolve(__dirname, "./src/framework/module_util/module_styles") },
+            { find: "@/util_shapes",     replacement: path.resolve(__dirname, "./src/framework/module_util/module_shapes") },
             { find: "@/util_validators", replacement: path.resolve(__dirname, "./src/framework/module_util/module_validators") },
             { find: "@/util_convertor",  replacement: path.resolve(__dirname, "./src/framework/module_util/module_convertor") },
             { find: "@/util_files",      replacement: path.resolve(__dirname, "./src/framework/module_util/module_files") },

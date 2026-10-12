@@ -1,0 +1,443 @@
+<!--
+<div class="color-range-wrapper" style="position:relative; width:25px; height:300px;">
+    <div class="color-range-picker" id="colorRangePicker"></div>
+    <div class="color-indicator" id="colorIndicator"></div>
+</div>
+<input type="hidden" id="selectedColor" value="#ff0000">
+
+<div class="opacity-wrapper" style="position:relative; width:300px; height:25px;">
+    <div class="opacity-range" id="opacityRange"></div>
+    <div class="opacity-indicator" id="opacityIndicator"></div>
+</div>
+<input type="hidden" id="selectedOpacity" value="1">
+
+
+<style>
+    .color-range-picker {
+        width: 100%;
+        height: 100%;
+        border-radius: 40px;
+        background: linear-gradient(
+                to top,
+                red, orange, yellow, lime, green, cyan, blue, violet, magenta
+        );
+        border: #7c7c7c 1px solid;
+        box-shadow: rgba(0, 0, 0, 0.75) 0 0 3px;
+        cursor: pointer;
+        user-select: none;
+        position: relative;
+    }
+
+    .color-indicator {
+        position: absolute;
+        bottom: 0px;
+        border: #7c7c7c 1px solid;
+        box-shadow: rgba(0, 0, 0, 0.75) 0 0 3px;
+        left: 50%;
+        transform: translate(-50% , 0);
+        width: 18px;
+        height: 18px;
+        background: #ffffff;
+        border-radius: 100%;
+        pointer-events: none;
+    }
+
+
+
+
+    .opacity-range {
+        width: 100%;
+        height: 100%;
+        border-radius: 40px;
+        background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,1));
+        cursor: pointer;
+        position: relative;
+    }
+
+    .opacity-indicator {
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        background: #ffffff;
+        border-radius: 100%;
+        pointer-events: none;
+        border: #7c7c7c 1px solid;
+        box-shadow: rgba(0, 0, 0, 0.75) 0 0 3px;
+        top: 50%;
+        transform: translate( 0 ,-50%);
+    }
+
+
+</style>
+
+<script>
+    const picker = document.getElementById('colorRangePicker');
+    const indicator = document.getElementById('colorIndicator');
+    const inputColor = document.getElementById('selectedColor');
+
+    let isDragging = false;
+    const offset = indicator.offsetHeight / 2; // برای وسط کردن نشانگر
+
+    function updateColor(e) {
+        const rect = picker.getBoundingClientRect();
+        let y = e.clientY - rect.top;
+
+        // محدود کردن به داخل div واقعی با در نظر گرفتن نصف ارتفاع indicator
+        y = Math.max(offset, Math.min(y, rect.height - offset));
+
+        const percent = 1 - (y / rect.height);
+        const hue = Math.round(percent * 360);
+        const color = `hsl(${hue}, 100%, 50%)`;
+
+        inputColor.value = color;
+
+        indicator.style.top = `${y - offset}px`;
+    }
+
+    picker.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        updateColor(e);
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (isDragging) updateColor(e);
+    });
+
+    window.addEventListener('mouseup', () => {
+        isDragging = false;
+    });
+</script>
+
+
+<script>
+    const rangeOpacity = document.getElementById('opacityRange');
+    const indicatorOpacity = document.getElementById('opacityIndicator');
+    const inputOpacity = document.getElementById('selectedOpacity');
+
+    let isDraggingOpacity = false;
+    const offsetOpacity = indicatorOpacity.offsetWidth / 2;
+
+    function updateOpacity(e) {
+        const rect = rangeOpacity.getBoundingClientRect();
+        let x = e.clientX - rect.left;
+
+        // محدود کردن به داخل div واقعی با در نظر گرفتن نصف عرض indicator
+        x = Math.max(offsetOpacity, Math.min(x, rect.width - offsetOpacity));
+
+        const percent = x / rect.width; // چپ=0، راست=1
+        const opacity = parseFloat(percent.toFixed(2));
+
+        inputOpacity.value = opacity;
+
+        indicatorOpacity.style.left = `${x - offsetOpacity}px`;
+    }
+
+
+    rangeOpacity.addEventListener('mousedown', (e) => {
+        isDraggingOpacity = true;
+        updateOpacity(e);
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (isDraggingOpacity) updateOpacity(e);
+    });
+
+    window.addEventListener('mouseup', () => {
+        isDraggingOpacity = false;
+    });
+</script>
+-->
+
+
+
+<style>
+    .color-picker-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 650px;
+    }
+
+    .color-picker-sliders {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+    }
+
+    /* Hue Slider */
+    .hue-slider {
+        width: 30px;
+        height: 300px;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .hue-indicator {
+        position: absolute;
+        width: 30px;
+        height: 4px;
+        background: #fff;
+        left: 0;
+    }
+
+    /* Saturation-Lightness */
+    .sl-wrapper {
+        position: relative;
+        width: 300px;
+        height: 300px;
+        cursor: pointer;
+    }
+
+    .sl-indicator {
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        border: 2px solid #fff;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+    }
+
+    /* Opacity Slider */
+    .opacity-wrapper {
+        position: relative;
+        width: 300px;
+        height: 25px;
+        cursor: pointer;
+    }
+
+    .opacity-indicator {
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        border: 2px solid #fff;
+        border-radius: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+    }
+
+    /* رنگ انتخاب شده */
+    #colorCode {
+        font-weight: bold;
+    }
+
+    #colorBox {
+        width: 40px;
+        height: 40px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+
+</style>
+
+
+<div class="color-picker-container">
+    <div class="color-picker-sliders">
+        <!-- Hue Slider -->
+        <div id="hueSlider" class="hue-slider">
+            <canvas id="hueCanvas" width="30" height="300"></canvas>
+            <div id="hueIndicator" class="hue-indicator"></div>
+        </div>
+
+        <!-- Saturation-Lightness Square -->
+        <div id="slWrapper" class="sl-wrapper">
+            <canvas id="slCanvas" width="300" height="300"></canvas>
+            <div id="slIndicator" class="sl-indicator"></div>
+        </div>
+
+        <!-- Opacity Slider -->
+        <div id="opacityWrapper" class="opacity-wrapper">
+            <canvas id="opacityCanvas" width="300" height="25"></canvas>
+            <div id="opacityIndicator" class="opacity-indicator"></div>
+        </div>
+    </div>
+
+    <!-- نمایش کد رنگ -->
+    <span>Selected Color: <span id="colorCode">#ff0000</span></span>
+
+    <div id="colorBox"></div>
+</div>
+
+<input type="hidden" id="selectedColor">
+<input type="hidden" id="selectedOpacity" value="1">
+
+
+
+
+
+<script>
+    // Elements
+    const hueCanvas = document.getElementById('hueCanvas');
+    const hueCtx = hueCanvas.getContext('2d');
+    const hueIndicator = document.getElementById('hueIndicator');
+
+    const slCanvas = document.getElementById('slCanvas');
+    const slCtx = slCanvas.getContext('2d');
+    const slIndicator = document.getElementById('slIndicator');
+
+    const opacityCanvas = document.getElementById('opacityCanvas');
+    const opacityCtx = opacityCanvas.getContext('2d');
+    const opacityIndicator = document.getElementById('opacityIndicator');
+
+    const inputColor = document.getElementById('selectedColor');
+    const inputOpacity = document.getElementById('selectedOpacity');
+
+    const colorCodeSpan = document.getElementById('colorCode');
+    const colorBoxSpan = document.getElementById('colorBox');
+
+    let hue = 0, sat = 100, light = 50, opacity = 1;
+
+    // -------- Hue Slider --------
+    function drawHue() {
+        const grad = hueCtx.createLinearGradient(0,0,0,hueCanvas.height);
+        grad.addColorStop(0,"red");
+        grad.addColorStop(0.17,"yellow");
+        grad.addColorStop(0.33,"lime");
+        grad.addColorStop(0.5,"cyan");
+        grad.addColorStop(0.67,"blue");
+        grad.addColorStop(0.83,"magenta");
+        grad.addColorStop(1,"red");
+        hueCtx.fillStyle = grad;
+        hueCtx.fillRect(0,0,hueCanvas.width,hueCanvas.height);
+    }
+
+    // -------- Saturation-Lightness --------
+    function drawSL() {
+        const width = slCanvas.width;
+        const height = slCanvas.height;
+        const imageData = slCtx.createImageData(width,height);
+        const data = imageData.data;
+
+        for(let y=0;y<height;y++){
+            const l = 100 - (y/height*100);
+            for(let x=0;x<width;x++){
+                const s = x/width*100;
+                const rgb = hslToRgb(hue,s,l);
+                const idx = (y*width + x)*4;
+                data[idx] = rgb[0];
+                data[idx+1] = rgb[1];
+                data[idx+2] = rgb[2];
+                data[idx+3] = 255;
+            }
+        }
+        slCtx.putImageData(imageData,0,0);
+    }
+
+    // -------- Opacity Slider --------
+    function drawOpacity() {
+        const width = opacityCanvas.width;
+        const height = opacityCanvas.height;
+
+        // رنگ فعلی انتخاب شده (H, S, L)
+        const rgb = hslToRgb(hue, sat, light);
+
+        // Gradient از شفاف تا رنگ کامل
+        const grad = opacityCtx.createLinearGradient(0,0,width,0);
+        grad.addColorStop(0, `rgba(${rgb.join(",")},0)`); // کاملاً شفاف
+        grad.addColorStop(1, `rgba(${rgb.join(",")},1)`); // کاملاً رنگی
+
+        opacityCtx.fillStyle = grad;
+        opacityCtx.fillRect(0,0,width,height);
+    }
+
+    // -------- HSL to RGB --------
+    function hslToRgb(h,s,l){
+        s/=100; l/=100;
+        const k=(n)=> (n + h/30)%12;
+        const a = s*Math.min(l,1-l);
+        const f = n=> l - a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));
+        return [Math.round(f(0)*255),Math.round(f(8)*255),Math.round(f(4)*255)];
+    }
+
+    // -------- Update Indicators and Inputs --------
+    function updateIndicators() {
+        slIndicator.style.left = (sat/100*slCanvas.width)+"px";
+        slIndicator.style.top = ((1-light/100)*slCanvas.height)+"px";
+        hueIndicator.style.top = (hue/360*hueCanvas.height)+"px";
+        opacityIndicator.style.left = (opacity*opacityCanvas.width)+"px";
+
+        const hslStr = `hsl(${hue},${sat}%,${light}%)`;
+        const hexStr = hslToHex(hue,sat,light);
+        inputColor.value = hslStr;
+        inputOpacity.value = opacity;
+
+        colorCodeSpan.textContent = hexStr; // نمایش HEX
+        colorBoxSpan.style.backgroundColor = hexStr; // نمایش HEX
+
+        drawSL();
+        drawOpacity();
+    }
+
+    // -------- Event Handlers --------
+    let draggingHue=false, draggingSL=false, draggingOpacity=false;
+
+    hueCanvas.addEventListener('mousedown', e=>{ draggingHue=true; moveHue(e); });
+    slCanvas.addEventListener('mousedown', e=>{ draggingSL=true; moveSL(e); });
+    opacityCanvas.addEventListener('mousedown', e=>{ draggingOpacity=true; moveOpacity(e); });
+
+    window.addEventListener('mousemove', e=>{
+        if(draggingHue) moveHue(e);
+        if(draggingSL) moveSL(e);
+        if(draggingOpacity) moveOpacity(e);
+    });
+
+    window.addEventListener('mouseup', ()=>{
+        draggingHue=false; draggingSL=false; draggingOpacity=false;
+    });
+
+    // -------- Move Functions --------
+    function moveHue(e){
+        const rect = hueCanvas.getBoundingClientRect();
+        let y = e.clientY - rect.top;
+        y = Math.max(0,Math.min(y,hueCanvas.height));
+        hue = y/hueCanvas.height*360;
+        updateIndicators();
+    }
+
+    function moveSL(e){
+        const rect = slCanvas.getBoundingClientRect();
+        let x = e.clientX - rect.left;
+        let y = e.clientY - rect.top;
+        x = Math.max(0,Math.min(x,slCanvas.width));
+        y = Math.max(0,Math.min(y,slCanvas.height));
+        sat = x/slCanvas.width*100;
+        light = 100 - y/slCanvas.height*100;
+        updateIndicators();
+    }
+
+    function moveOpacity(e){
+        const rect = opacityCanvas.getBoundingClientRect();
+        let x = e.clientX - rect.left;
+        x = Math.max(0, Math.min(x,opacityCanvas.width));
+        opacity = parseFloat((x/opacityCanvas.width).toFixed(2)); // 0 تا 1
+        opacityIndicator.style.left = `${x}px`;
+        inputOpacity.value = opacity;
+
+        // همچنین می‌توان HEX با opacity را بروزرسانی کرد
+        const rgb = hslToRgb(hue, sat, light);
+        const rgbaHex = `rgba(${rgb.join(",")},${opacity})`;
+        colorCodeSpan.textContent = rgbaHex; // نمایش RGBA واقعی
+        colorBoxSpan.style.backgroundColor = rgbaHex; // نمایش HEX
+    }
+
+
+    function hslToHex(h,s,l){
+        s/=100; l/=100;
+        const a = s * Math.min(l,1-l);
+        const f = n=>{
+            const k = (n + h/30)%12;
+            const color = l - a * Math.max(Math.min(k-3,9-k,1),-1);
+            return Math.round(255*color);
+        };
+        const r = f(0), g = f(8), b = f(4);
+        return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
+    }
+
+    // -------- Initialize --------
+    drawHue();
+    updateIndicators();
+
+
+</script>

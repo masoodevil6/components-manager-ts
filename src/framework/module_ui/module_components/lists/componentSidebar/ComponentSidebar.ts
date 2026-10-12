@@ -209,6 +209,14 @@ export class ComponentSidebar extends ComponentSidebarBase {
 
         const sidebarStyles = CoreObservable.App.computed(
             (direction, duration, borderRadius, margin, opacity, isOpen, width, posStart, posEnd) => {
+                const widthCss = typeof width === "number"
+                    ? UtilStyle.Css_SizeUnit(width, UtilConst.Units.PEXEL)
+                    : String(width ?? UtilStyle.Css_SizeUnit(120, UtilConst.Units.PEXEL));
+                const hiddenPosition = UtilStyle.Css_SizeCalc(
+                    UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL),
+                    UtilConst.Operation.MINUS,
+                    widthCss as any,
+                );
                 const styles: Record<string, string> = {
                     position: "absolute",
                     zIndex: String(UtilStyle.Css_ZIndex(UtilConst.ZIndex.popup)),
@@ -287,28 +295,28 @@ export class ComponentSidebar extends ComponentSidebarBase {
                 const marginVal = margin != null ? parseFloat(margin as string) || 0 : 0;
 
                 if (direction === SidebarDirection.LTR) {
-                    styles["left"] = isOpen ? `${marginVal}px` : `-${width}px`;
+                    styles["left"] = isOpen ? `${marginVal}px` : hiddenPosition;
                     styles["top"] = posStart != null ? String(posStart) : "0";
                     styles["bottom"] = posEnd != null ? String(posEnd) : "0";
-                    styles["width"] = `${width}px`;
+                    styles["width"] = widthCss;
                 }
                 if (direction === SidebarDirection.RTL) {
-                    styles["right"] = isOpen ? `${marginVal}px` : `-${width}px`;
+                    styles["right"] = isOpen ? `${marginVal}px` : hiddenPosition;
                     styles["top"] = posStart != null ? String(posStart) : "0";
                     styles["bottom"] = posEnd != null ? String(posEnd) : "0";
-                    styles["width"] = `${width}px`;
+                    styles["width"] = widthCss;
                 }
                 if (direction === SidebarDirection.TTB) {
-                    styles["top"] = isOpen ? `${marginVal}px` : `-${width}px`;
+                    styles["top"] = isOpen ? `${marginVal}px` : hiddenPosition;
                     styles["left"] = posStart != null ? String(posStart) : "0";
                     styles["right"] = posEnd != null ? String(posEnd) : "0";
-                    styles["height"] = `${width}px`;
+                    styles["height"] = widthCss;
                 }
                 if (direction === SidebarDirection.BTT) {
-                    styles["bottom"] = isOpen ? `${marginVal}px` : `-${width}px`;
+                    styles["bottom"] = isOpen ? `${marginVal}px` : hiddenPosition;
                     styles["left"] = posStart != null ? String(posStart) : "0";
                     styles["right"] = posEnd != null ? String(posEnd) : "0";
-                    styles["height"] = `${width}px`;
+                    styles["height"] = widthCss;
                 }
 
                 return styles;
@@ -383,11 +391,12 @@ export class ComponentSidebar extends ComponentSidebarBase {
         const bind = this._COMPONENT_PROPS_BIND;
 
         const prop_sidebarBtnOpenSize = data?.["prop_sidebarBtnOpenSize"] ?? bind.prop_sidebarBtnOpenSize;
+        const prop_sidebarBtnOpenAtStart = data?.["prop_sidebarBtnOpenAtStart"] ?? bind.prop_sidebarBtnOpenAtStart;
         const prop_sidebarDirection   = data?.["prop_sidebarDirection"]   ?? bind.prop_sidebarDirection;
         const prop_sidebarIsOpen      = data?.["prop_sidebarIsOpen"]      ?? bind.prop_sidebarIsOpen;
 
         const positionStyles = CoreObservable.App.computed(
-            (btnSize, direction, isOpen) => {
+            (btnSize, atStart, direction, isOpen) => {
                 const styles: Record<string, string> = {
                     position: "absolute",
                     zIndex: String(UtilStyle.Css_ZIndex(UtilConst.ZIndex.tools_btn)),
@@ -396,17 +405,25 @@ export class ComponentSidebar extends ComponentSidebarBase {
                 const size = `${btnSize}px`;
 
                 if (direction === SidebarDirection.LTR) {
-                    styles["right"] = isOpen
-                        ? `calc(-${size} + ${btnSize / 4}px)`
-                        : `-${size}`;
+                    if (isOpen && atStart) {
+                        styles["left"] = `calc(-${size} + ${btnSize / 4}px)`;
+                    } else {
+                        styles["right"] = isOpen
+                            ? `calc(-${size} + ${btnSize / 4}px)`
+                            : `-${size}`;
+                    }
                     styles["top"] = "50%";
                     styles["transform"] = "translate(0, -50%)";
                     styles["width"] = size;
                     styles["height"] = size;
                 } else if (direction === SidebarDirection.RTL) {
-                    styles["left"] = isOpen
-                        ? `calc(-${size} + ${btnSize / 4}px)`
-                        : `-${size}`;
+                    if (isOpen && atStart) {
+                        styles["right"] = `calc(-${size} + ${btnSize / 4}px)`;
+                    } else {
+                        styles["left"] = isOpen
+                            ? `calc(-${size} + ${btnSize / 4}px)`
+                            : `-${size}`;
+                    }
                     styles["top"] = "50%";
                     styles["transform"] = "translate(0, -50%)";
                     styles["width"] = size;
@@ -431,7 +448,7 @@ export class ComponentSidebar extends ComponentSidebarBase {
 
                 return styles;
             },
-            [prop_sidebarBtnOpenSize, prop_sidebarDirection, prop_sidebarIsOpen],
+            [prop_sidebarBtnOpenSize, prop_sidebarBtnOpenAtStart, prop_sidebarDirection, prop_sidebarIsOpen],
             this.getScope(),
         );
 

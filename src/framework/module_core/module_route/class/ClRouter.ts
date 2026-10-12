@@ -20,10 +20,20 @@ export class ClRouter {
 
     resolve(){
         const path = location.pathname
-        const route = this.routes[path]
+        const route = this.routes[path] ?? this.#matchRoute(path)
         if(!route) return
 
         this.#renderPage(route);
+    }
+
+    #matchRoute(path: string): RouteData | undefined {
+        const pathParts = path.split("/").filter(Boolean);
+        for (const [pattern, route] of Object.entries(this.routes)) {
+            const patternParts = pattern.split("/").filter(Boolean);
+            if (patternParts.length !== pathParts.length) continue;
+            if (patternParts.every((part, index) => part.startsWith(":") || part === pathParts[index])) return route;
+        }
+        return undefined;
     }
 
 

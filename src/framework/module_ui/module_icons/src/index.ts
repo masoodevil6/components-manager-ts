@@ -28,6 +28,7 @@ export * as StatusUnVisit         from "./statusUnVisit";
 
 export * as StatusMoon            from "./statusMoon";
 export * as StatusSun             from "./statusSun";
+export * as StatusTheme           from "./statusTheme";
 
 
 
@@ -167,3 +168,17 @@ export * as PaymentWallet1        from "./paymentWallet1";
 export * as PaymentWallet2        from "./paymentWallet2";
 export * as PaymentCardNumber     from "./paymentCardNumber";
 export * as PaymentRate           from "./paymentRate";
+export * as ProgrammingLanguage  from "./programmingLanguage";
+export {
+    Html as MarkupHtml,
+    JavaScript as ProgrammingJavaScript,
+    TypeScript as ProgrammingTypeScript,
+    Python as ProgrammingPython,
+    Java as ProgrammingJava,
+    CSharp as ProgrammingCSharp,
+    Php as ProgrammingPhp,
+    Go as ProgrammingGo,
+    Rust as ProgrammingRust,
+    Cpp as ProgrammingCpp,
+    Ruby as ProgrammingRuby,
+} from "./programmingLanguage/Definition";

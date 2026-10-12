@@ -118,6 +118,13 @@ import {Schemas    as WebCodeSchemas}            from "./componentWebCode/Schema
 import {Methods    as WebCodeMethods}            from "./componentWebCode/Methods";
 import {Examples   as WebCodeExamples}             from "./componentWebCode/examples";
 // --------------------------------
+import {Component as ComponentCodeMirrorClass} from "./componentCodeMirror";
+import {Definition as CodeMirrorDefinition} from "./componentCodeMirror/Definition";
+import {Props as CodeMirrorProps} from "./componentCodeMirror/Props";
+import {Schemas as CodeMirrorSchemas} from "./componentCodeMirror/Schemas";
+import {Methods as CodeMirrorMethods} from "./componentCodeMirror/Methods";
+import {Examples as CodeMirrorExamples} from "./componentCodeMirror/examples";
+// --------------------------------
 import {Component as ComponentWindowClass}     from "./componentWindow";
 import {Definition as WindowDefinition}         from "./componentWindow/Definition";
 import {Props      as WindowProps}              from "./componentWindow/Props";
@@ -275,6 +282,16 @@ import {Methods    as MouseScrollerMethods}           from "./componentMouseScro
 import {Examples   as MouseScrollerExamples}          from "./componentMouseScroller/examples";
 import * as Workflow from "./componentWorkflow";
 import * as InputAcl from "./componentInputAcl";
+import * as CardViewInfo from "./componentCardViewInfo";
+import * as CardViewClicable from "./componentCardViewClicable";
+import * as ComponentBreadcrumb from "./componentBreadcrumb";
+import * as ComponentBreadcrumbWithArrow from "./componentBreadcrumbWithArrow";
+import * as ComponentBreadcrumbShadow from "./componentBreadcrumbShadow";
+import * as ComponentMenuMore from "./componentMenuMore";
+import * as ComponentPageHeader from "./componentPageHeader";
+import * as ComponentPageCardInfo from "./componentPageCardInfo";
+import * as ComponentPage from "./componentPage";
+import * as ComponentEffective from "./componentEffective";
 
 
 // ثبت ComponentIcon در Component Manager
@@ -439,6 +456,17 @@ CoreComponents.ComponentManager.register({
     methods:     WebCodeMethods,
     examples:    WebCodeExamples,
     constructor: ComponentWebCodeClass as any,
+});
+
+
+// ثبت ComponentCodeMirror در Component Manager
+CoreComponents.ComponentManager.register({
+    definition:  CodeMirrorDefinition,
+    props:       CodeMirrorProps,
+    schemas:     CodeMirrorSchemas,
+    methods:     CodeMirrorMethods,
+    examples:    CodeMirrorExamples,
+    constructor: ComponentCodeMirrorClass as any,
 });
 
 
@@ -698,6 +726,86 @@ CoreComponents.ComponentManager.register({
     constructor: ComponentTimerDownClass as any,
 });
 
+CoreComponents.ComponentManager.register({
+    definition: CardViewInfo.Definition,
+    props: CardViewInfo.Props,
+    schemas: CardViewInfo.Schemas,
+    methods: CardViewInfo.Methods,
+    examples: CardViewInfo.Examples,
+    constructor: CardViewInfo.Component as any,
+});
+CoreComponents.ComponentManager.register({
+    definition: CardViewClicable.Definition,
+    props: CardViewClicable.Props,
+    schemas: CardViewClicable.Schemas,
+    methods: CardViewClicable.Methods,
+    examples: CardViewClicable.Examples,
+    constructor: CardViewClicable.Component as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition: ComponentBreadcrumb.Definition,
+    props: ComponentBreadcrumb.Props,
+    schemas: ComponentBreadcrumb.Schemas,
+    methods: ComponentBreadcrumb.Methods,
+    examples: ComponentBreadcrumb.Examples,
+    constructor: ComponentBreadcrumb.Component as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition: ComponentBreadcrumbWithArrow.Definition,
+    props: ComponentBreadcrumbWithArrow.Props,
+    schemas: ComponentBreadcrumbWithArrow.Schemas,
+    methods: ComponentBreadcrumbWithArrow.Methods,
+    examples: ComponentBreadcrumbWithArrow.Examples,
+    constructor: ComponentBreadcrumbWithArrow.Component as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition: ComponentBreadcrumbShadow.Definition,
+    props: ComponentBreadcrumbShadow.Props,
+    schemas: ComponentBreadcrumbShadow.Schemas,
+    methods: ComponentBreadcrumbShadow.Methods,
+    examples: ComponentBreadcrumbShadow.Examples,
+    constructor: ComponentBreadcrumbShadow.Component as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition: ComponentMenuMore.Definition,
+    props: ComponentMenuMore.Props,
+    schemas: ComponentMenuMore.Schemas,
+    methods: ComponentMenuMore.Methods,
+    examples: ComponentMenuMore.Examples,
+    constructor: ComponentMenuMore.Component as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition: ComponentPageHeader.Definition,
+    props: ComponentPageHeader.Props,
+    schemas: ComponentPageHeader.Schemas,
+    methods: ComponentPageHeader.Methods,
+    examples: ComponentPageHeader.Examples,
+    constructor: ComponentPageHeader.Component as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition: ComponentPageCardInfo.Definition,
+    props: ComponentPageCardInfo.Props,
+    schemas: ComponentPageCardInfo.Schemas,
+    methods: ComponentPageCardInfo.Methods,
+    examples: ComponentPageCardInfo.Examples,
+    constructor: ComponentPageCardInfo.Component as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition: ComponentPage.Definition,
+    props: ComponentPage.Props,
+    schemas: ComponentPage.Schemas,
+    methods: ComponentPage.Methods,
+    examples: ComponentPage.Examples,
+    constructor: ComponentPage.Component as any,
+});
+
 export * as ComponentStructure   from "./componentStructure";
 export * as ComponentIcon        from "./componentIcon";
 export * as ComponentButton      from "./componentButton";
@@ -715,6 +823,7 @@ export * as ComponentTabs       from "./componentTabs";
 export * as ComponentValidate   from "./componentValidate";
 export * as ComponentErrorIsEmpty from "./componentErrorIsEmpty";
 export * as ComponentWebCode     from "./componentWebCode";
+export * as ComponentCodeMirror from "./componentCodeMirror";
 export * as ComponentWindow      from "./componentWindow";
 export * as ComponentWindowConfirm from "./componentWindowConfirm";
 export * as ComponentTable       from "./componentTable";
@@ -740,6 +849,16 @@ export * as ComponentLoading       from "./componentLoading";
 export * as ComponentSidebar       from "./componentSidebar";
 export * as ComponentMouseScroller from "./componentMouseScroller";
 export * as ComponentWorkflow from "./componentWorkflow";
+export * as ComponentCardViewInfo from "./componentCardViewInfo";
+export * as ComponentCardViewClicable from "./componentCardViewClicable";
+export * as ComponentBreadcrumb from "./componentBreadcrumb";
+export * as ComponentBreadcrumbWithArrow from "./componentBreadcrumbWithArrow";
+export * as ComponentBreadcrumbShadow from "./componentBreadcrumbShadow";
+export * as ComponentMenuMore from "./componentMenuMore";
+export * as ComponentPageHeader from "./componentPageHeader";
+export * as ComponentPageCardInfo from "./componentPageCardInfo";
+export * as ComponentPage from "./componentPage";
+export * as ComponentEffective from "./componentEffective";
 
 CoreComponents.ComponentManager.register({
     definition: Workflow.Definition,
@@ -748,4 +867,13 @@ CoreComponents.ComponentManager.register({
     methods: Workflow.Methods,
     examples: [],
     constructor: Workflow.Component as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition: ComponentEffective.Definition,
+    props: ComponentEffective.Props,
+    schemas: ComponentEffective.Schemas,
+    methods: ComponentEffective.Methods,
+    examples: ComponentEffective.Examples,
+    constructor: ComponentEffective.Component as any,
 });

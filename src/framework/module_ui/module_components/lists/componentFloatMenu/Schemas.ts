@@ -59,6 +59,7 @@ export const Schemas = {
             Props.prop_floatClass,
             Props.prop_floatStyles,
             Props.prop_floatContent,
+            Props.prop_floatBorderPadding,
             Props.prop_floatDirectionType,
             Props.prop_floatArrowWidth,
             Props.prop_floatDistance,

@@ -15,6 +15,8 @@ import {Sidebar}           from "./sidebar"
 import {MouseScroller}     from "./mouseScroller"
 import {Workflow}          from "./workflow"
 import {TimerDown}         from "./timerDown"
+import {CardViewInfo}      from "./cardViewInfo"
+import {CardViewClicable}  from "./cardViewClicable"
 
 export const Definition : UICategories.TCategoryComponentDefinition = {
     id:          "contents",
@@ -37,5 +39,7 @@ export const Definition : UICategories.TCategoryComponentDefinition = {
         MouseScroller,
         Workflow,
         TimerDown,
+        CardViewInfo,
+        CardViewClicable,
     ],
 }
