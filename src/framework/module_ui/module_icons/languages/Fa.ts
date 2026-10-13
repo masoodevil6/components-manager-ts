@@ -925,6 +925,12 @@ export const Fa =
         ],
         [Keys.icons.shapeCircle.name, "دایره"],
         [Keys.icons.shapeCircle.description, "آیکون شکل دایرهٔ توپر"],
+        [Keys.icons.shapePlay.name, "پخش"],
+        [Keys.icons.shapePlay.description, "آیکون مثلثی پخش"],
+        [Keys.icons.separatorHorizontal.name, "جداکننده افقی"],
+        [Keys.icons.separatorHorizontal.description, "آیکونی برای نمایش جداکننده میان دو بخش افقی"],
+        [Keys.icons.separatorVertical.name, "جداکننده عمودی"],
+        [Keys.icons.separatorVertical.description, "آیکونی برای نمایش جداکننده میان دو بخش عمودی"],
         [
             Keys.icons.userPassword.name,
             "رمز عبور"

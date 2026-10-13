@@ -10,6 +10,7 @@ export const Schemas = {
         part: "part-menu-more",
         props: [
             Props.prop_orientation,
+            Props.prop_isFullWidth,
             Props.prop_direction,
             Props.prop_items,
             Props.prop_menuBackgroundColor,

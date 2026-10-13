@@ -74,6 +74,11 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
     private _HEADER_MENU: InstanceType<typeof ComponentMenuMore.Component> | null = null;
     private _HEADER_LANGUAGE_ICON: InstanceType<typeof ComponentIcon.Component> | null = null;
     private _BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;
+    private _EDITOR_BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;
+    private _RUN_BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;
+    private _RUN_PANE: CoreReactive.App | null = null;
+    private _RUN_PANEL: HTMLElement | null = null;
+    private _RUN_FRAME: HTMLIFrameElement | null = null;
     private _FOLD_ICON_OPEN: InstanceType<typeof ComponentIcon.Component> | null = null;
     private _FOLD_ICON_CLOSED: InstanceType<typeof ComponentIcon.Component> | null = null;
     private _LANGUAGE_COMPARTMENT = new Compartment();
@@ -82,6 +87,7 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
     private _WRAPPING_COMPARTMENT = new Compartment();
     private _THEME_COMPARTMENT = new Compartment();
     private _IS_DARK_THEME = new CoreObservable.App(false);
+    private _IS_VERTICAL_LAYOUT = new CoreObservable.App(false);
     private _APPLYING_EXTERNAL_VALUE = false;
     private _DISPOSED = false;
 
@@ -105,8 +111,16 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
         this._HEADER_LANGUAGE_ICON = null;
         this._HEADER_BORDER?.dispose();
         this._HEADER_BORDER = null;
+        this._EDITOR_BORDER?.dispose();
+        this._EDITOR_BORDER = null;
+        this._RUN_BORDER?.dispose();
+        this._RUN_BORDER = null;
+        this._RUN_PANE = null;
         this._BORDER?.dispose();
         this._BORDER = null;
+        this._RUN_FRAME?.remove();
+        this._RUN_FRAME = null;
+        this._RUN_PANEL = null;
         this.disposeFoldIcon(this._FOLD_ICON_OPEN);
         this.disposeFoldIcon(this._FOLD_ICON_CLOSED);
         this._FOLD_ICON_OPEN = null;
@@ -135,7 +149,7 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
             case ComponentStructureTrait.schemas.STRUCTURE.part:
                 return ComponentStructureTrait.renderStructureSchema(this, attrsDefault, data);
             case Schemas.ROOT.part:
-                return this.renderRoot(attrsDefault);
+                return this.renderRoot(attrsDefault, data);
             case Schemas.EDITOR.part:
                 return this.renderEditor(attrsDefault, data);
             default:
@@ -143,9 +157,53 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
         }
     }
 
-    private renderRoot(attrsDefault: PartAttrDefault): CoreReactive.App {
+    private renderRoot(attrsDefault: PartAttrDefault, data: Record<string, CoreObservable.App<any>>): CoreReactive.App {
         const editor = this.executeSchemaPart(Schemas.EDITOR.part, {});
         const sizeName = CoreConfig.Settings.SizeName.observable();
+        const directionRtl = CoreConfig.Settings.DirectionRtl.observable();
+        const canRun = data?.["prop_canRun"] ?? this._COMPONENT_PROPS_BIND.prop_canRun;
+        const menuItems = CoreObservable.App.computed((allowRun: boolean) => {
+            const groups: any[] = [{
+                type: "group",
+                id: "code-mirror-language-group",
+                items: [{
+                    id: "code-mirror-language",
+                    title: "Language",
+                    openOn: "hover",
+                    children: [
+                        {id: "code-mirror-language-html", title: "HTML", action: "language-html"},
+                        {id: "code-mirror-language-javascript", title: "JavaScript", action: "language-javascript"},
+                    ],
+                }],
+            }, {
+                type: "group",
+                id: "code-mirror-theme-group",
+                items: [{
+                    id: "code-mirror-theme",
+                    icon: UiIcons.Src.StatusTheme.Definition,
+                    openOn: "hover",
+                    children: [
+                        {id: "code-mirror-theme-light", title: "Light", icon: UiIcons.Src.StatusSun.Definition, action: "theme-light"},
+                        {id: "code-mirror-theme-dark", title: "Dark", icon: UiIcons.Src.StatusMoon.Definition, action: "theme-dark"},
+                    ],
+                }],
+            }];
+            if (allowRun) {
+                groups.push({
+                    type: "group",
+                    id: "code-mirror-separators-group",
+                    items: [
+                        {id: "code-mirror-separator-horizontal", icon: UiIcons.Src.SeparatorHorizontal.Definition, action: "layout-vertical"},
+                        {id: "code-mirror-separator-vertical", icon: UiIcons.Src.SeparatorVertical.Definition, action: "layout-horizontal"},
+                    ],
+                }, {
+                    type: "group",
+                    id: "code-mirror-run-group",
+                    items: [{id: "code-mirror-run", title: "Run", icon: UiIcons.Src.ShapePlay.Definition, action: "run"}],
+                });
+            }
+            return groups;
+        }, [canRun], this.getScope());
         this._HEADER_MENU = new ComponentMenuMore.Component({
             styles: {
                 display: "block",
@@ -163,30 +221,16 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
                 [CoreConfig.Settings.DirectionRtl.observable()],
                 this.getScope(),
             ),
-            prop_items: [{
-                id: "code-mirror-language",
-                title: "Language",
-                openOn: "click",
-                children: [
-                    {id: "code-mirror-language-html", title: "HTML", action: "language-html"},
-                    {id: "code-mirror-language-javascript", title: "JavaScript", action: "language-javascript"},
-                ],
-            }, {
-                id: "code-mirror-theme",
-                title: "Theme",
-                icon: UiIcons.Src.StatusTheme.Definition,
-                openOn: "click",
-                children: [
-                    {id: "code-mirror-theme-light", title: "Light", icon: UiIcons.Src.StatusSun.Definition, action: "theme-light"},
-                    {id: "code-mirror-theme-dark", title: "Dark", icon: UiIcons.Src.StatusMoon.Definition, action: "theme-dark"},
-                ],
-            }],
+            prop_items: menuItems,
         } as any, {
             SELECT_ITEM: (_event, dataArgs) => {
                 if (dataArgs?.ITEM?.action === "language-html") this.set("prop_language", CodeMirrorLanguage.HTML);
                 if (dataArgs?.ITEM?.action === "language-javascript") this.set("prop_language", CodeMirrorLanguage.JAVASCRIPT);
                 if (dataArgs?.ITEM?.action === "theme-light") this._IS_DARK_THEME.set(false);
                 if (dataArgs?.ITEM?.action === "theme-dark") this._IS_DARK_THEME.set(true);
+                if (dataArgs?.ITEM?.action === "layout-horizontal") this._IS_VERTICAL_LAYOUT.set(false);
+                if (dataArgs?.ITEM?.action === "layout-vertical") this._IS_VERTICAL_LAYOUT.set(true);
+                if (dataArgs?.ITEM?.action === "run") this.runCurrentCode();
             },
         } as any);
         const headerIconColor = UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1);
@@ -286,6 +330,10 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
             children: [headerTitleSection, headerMenuSection],
         });
         this._HEADER_BORDER = new ComponentBorder.Component({
+            styles: {
+                position: "relative",
+                zIndex: String(UtilStyle.Css_ZIndex(UtilConst.ZIndex.SELECTOR)),
+            },
             prop_content: headerContent,
             prop_contentBackgroundColor: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
             prop_borderClass: ["position-relative", "d-block", "component-code-mirror-header"],
@@ -293,14 +341,7 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
                 width: "100%",
                 minWidth: "0",
                 position: "relative",
-                zIndex: UtilStyle.Css_ZIndex(UtilConst.ZIndex.SELECTOR),
-                height: UtilStyle.Css_SizeCalc(
-                    UtilStyle.Css_Padding(size) as any,
-                    UtilConst.Operation.ADD,
-                    UtilStyle.Css_Height(size) as any,
-                    UtilConst.Operation.ADD,
-                    UtilStyle.Css_Padding(size) as any,
-                ),
+                zIndex: String(UtilStyle.Css_ZIndex(UtilConst.ZIndex.SELECTOR)),
                 padding: UtilStyle.Css_Padding(size),
                 boxSizing: "border-box",
             }), [sizeName], this.getScope()) as any,
@@ -313,8 +354,203 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
             prop_borderBottomHas: false,
             prop_borderLeftHas: false,
         });
-        this._BORDER = new ComponentBorder.Component({
+        const requestedEditorHeight = this._COMPONENT_PROPS_BIND.prop_editorHeight;
+        const bodyHeight = CoreObservable.App.computed(
+            (customHeight: string | null, size: UtilConst.Sizes) => customHeight || `calc(${Array(10).fill(UtilStyle.Css_Height(size)).join(" + ")})`,
+            [requestedEditorHeight, sizeName],
+            this.getScope(),
+        );
+        const editorBorderRightHas = CoreObservable.App.computed(
+            (allowRun: boolean, isRtl: boolean, isVertical: boolean) => !!allowRun && !isVertical && !isRtl,
+            [canRun, directionRtl, this._IS_VERTICAL_LAYOUT],
+            this.getScope(),
+        );
+        const editorBorderLeftHas = CoreObservable.App.computed(
+            (allowRun: boolean, isRtl: boolean, isVertical: boolean) => !!allowRun && !isVertical && !!isRtl,
+            [canRun, directionRtl, this._IS_VERTICAL_LAYOUT],
+            this.getScope(),
+        );
+        const editorBorderBottomHas = CoreObservable.App.computed(
+            (allowRun: boolean, isVertical: boolean) => !!allowRun && isVertical,
+            [canRun, this._IS_VERTICAL_LAYOUT],
+            this.getScope(),
+        );
+        const editorBorderStyles = CoreObservable.App.computed(
+            (allowRun: boolean, isRtl: boolean, isVertical: boolean, size: UtilConst.Sizes) => ({
+                width: "100%",
+                height: "100%",
+                minWidth: "0",
+                padding: "0",
+                position: "relative",
+                zIndex: allowRun && isVertical
+                    ? String(UtilStyle.Css_ZIndex(UtilConst.ZIndex.basic))
+                    : "auto",
+                overflow: "hidden",
+                boxSizing: "border-box",
+                "border-right-width": UtilStyle.Style_Important(
+                    allowRun && !isVertical && !isRtl ? UtilStyle.Css_BorderWidth(size) : UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL),
+                ),
+                "border-left-width": UtilStyle.Style_Important(
+                    allowRun && !isVertical && isRtl ? UtilStyle.Css_BorderWidth(size) : UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL),
+                ),
+                "border-bottom-width": UtilStyle.Style_Important(
+                    allowRun && isVertical ? UtilStyle.Css_BorderWidth(size) : UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL),
+                ),
+            }),
+            [canRun, directionRtl, this._IS_VERTICAL_LAYOUT, sizeName],
+            this.getScope(),
+        );
+        this._EDITOR_BORDER = new ComponentBorder.Component({
+            styles: {
+                display: "block",
+                width: "100%",
+                height: "100%",
+                minWidth: "0",
+            },
             prop_content: editor,
+            prop_contentSize: UtilConst.Sizes.M,
+            prop_contentBackgroundColor: UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
+            prop_borderClass: ["position-relative", "d-block"],
+            prop_borderStyles: editorBorderStyles as any,
+            prop_borderTopLeftRadiusHas: false,
+            prop_borderTopRightRadiusHas: false,
+            prop_borderBottomLeftRadiusHas: false,
+            prop_borderBottomRightRadiusHas: false,
+            prop_borderTopHas: false,
+            prop_borderRightHas: editorBorderRightHas as any,
+            prop_borderBottomHas: editorBorderBottomHas as any,
+            prop_borderLeftHas: editorBorderLeftHas as any,
+        });
+        const editorPane = CoreReactive.App.section({
+            attrs: {"data-part-name": "part-code-mirror-body-editor"},
+            styles: {
+                display: "block",
+                width: "100%",
+                height: "100%",
+                minWidth: "0",
+                boxSizing: "border-box",
+            },
+            children: [this._EDITOR_BORDER.getReactiveElement()],
+        });
+
+        const runPane = CoreObservable.App.conditionWhen(
+            [canRun],
+            (allowRun: boolean) => !!allowRun,
+            () => {
+                if (this._RUN_PANE) return this._RUN_PANE;
+
+                const runPanel = CoreReactive.App.section({
+                    attrs: {
+                        "data-part-name": "part-code-mirror-run-panel",
+                        "aria-label": "Run output",
+                    },
+                    styles: {
+                        display: "block",
+                        width: "100%",
+                        flex: "1 1 auto",
+                        minHeight: "0",
+                        minWidth: "0",
+                        overflow: "auto",
+                        boxSizing: "border-box",
+                    },
+                });
+                this._RUN_PANEL = runPanel.getElement() as HTMLElement;
+                const runContent = CoreReactive.App.section({
+                    attrs: {"data-part-name": "part-code-mirror-run-content"},
+                    styles: {
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "stretch",
+                        width: "100%",
+                        height: "100%",
+                        minWidth: "0",
+                        minHeight: "0",
+                        boxSizing: "border-box",
+                    },
+                    children: [runPanel],
+                });
+                this._RUN_BORDER = new ComponentBorder.Component({
+                    styles: {
+                        display: "block",
+                        width: "100%",
+                        height: "100%",
+                        minWidth: "0",
+                    },
+                    prop_content: runContent,
+                    prop_contentSize: UtilConst.Sizes.M,
+                    prop_contentBackgroundColor: UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
+                    prop_borderClass: ["position-relative", "d-block"],
+                    prop_borderStyles: {
+                        display: "block",
+                        width: "100%",
+                        height: "100%",
+                        minWidth: "0",
+                        padding: "0",
+                        position: "relative",
+                        overflow: "hidden",
+                        boxSizing: "border-box",
+                    },
+                    prop_borderTopLeftRadiusHas: false,
+                    prop_borderTopRightRadiusHas: false,
+                    prop_borderBottomLeftRadiusHas: false,
+                    prop_borderBottomRightRadiusHas: false,
+                    prop_borderTopHas: false,
+                    prop_borderRightHas: false,
+                    prop_borderBottomHas: false,
+                    prop_borderLeftHas: false,
+                } as any);
+                this._RUN_PANE = CoreReactive.App.section({
+                    attrs: {"data-part-name": "part-code-mirror-body-run"},
+                    styles: {
+                        display: "block",
+                        width: "100%",
+                        height: "100%",
+                        minWidth: "0",
+                        boxSizing: "border-box",
+                    },
+                    children: [this._RUN_BORDER.getReactiveElement()],
+                });
+                return this._RUN_PANE;
+            },
+            () => null,
+            this.getScope(),
+        );
+        canRun.subscribe((enabled) => {
+            if (enabled) return;
+            this.clearRunOutput();
+            this._RUN_BORDER?.dispose();
+            this._RUN_BORDER = null;
+            this._RUN_PANE = null;
+            this._RUN_PANEL = null;
+        }, this.getScope());
+
+        const bodyContent = CoreReactive.App.section({
+            attrs: {"data-part-name": "part-code-mirror-body-content"},
+            styles: {
+                display: "grid",
+                alignItems: "stretch",
+                width: "100%",
+                maxWidth: "100%",
+                minWidth: "0",
+                overflow: "hidden",
+                boxSizing: "border-box",
+            },
+            stylesBind: CoreObservable.App.computed((height: string, allowRun: boolean, isVertical: boolean) => ({
+                height,
+                gridTemplateColumns: allowRun && !isVertical ? "minmax(0, 1fr) minmax(0, 1fr)" : "minmax(0, 1fr)",
+                gridTemplateRows: allowRun && isVertical ? "minmax(0, 1fr) minmax(0, 1fr)" : "minmax(0, 1fr)",
+            }), [bodyHeight, canRun, this._IS_VERTICAL_LAYOUT], this.getScope()),
+            children: [editorPane, runPane as any],
+        });
+        this._BORDER = new ComponentBorder.Component({
+            styles: {
+                display: "block",
+                width: "100%",
+                minWidth: "0",
+                position: "relative",
+                zIndex: String(UtilStyle.Css_ZIndex(UtilConst.ZIndex.basic)),
+            },
+            prop_content: bodyContent,
             prop_contentSize: UtilConst.Sizes.M,
             prop_contentBackgroundColor: UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
             prop_borderClass: ["position-relative", "d-block"],
@@ -323,8 +559,9 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
                 minWidth: "0",
                 padding: "0",
                 position: "relative",
-                zIndex: UtilStyle.Css_ZIndex(UtilConst.ZIndex.basic),
+                zIndex: String(UtilStyle.Css_ZIndex(UtilConst.ZIndex.basic)),
                 overflow: "hidden",
+                boxSizing: "border-box",
             },
             // ComponentBorder represents a null border radius by disabling each corner.
             prop_borderTopLeftRadiusHas: false,
@@ -355,11 +592,17 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
         const numbersColor = data?.["prop_numbersColor"] ?? bind.prop_numbersColor;
         const numberActiveBackgroundColor = data?.["prop_numberActiveBackgroundColor"] ?? bind.prop_numberActiveBackgroundColor;
         const lineActiveBackgroundColor = data?.["prop_lineActiveBackgroundColor"] ?? bind.prop_lineActiveBackgroundColor;
+        const themeLightBackgroundColor = data?.["prop_themeLightBackgroundColor"] ?? bind.prop_themeLightBackgroundColor;
+        const themeDarkBackgroundColor = data?.["prop_themeDarkBackgroundColor"] ?? bind.prop_themeDarkBackgroundColor;
         const sizeName = CoreConfig.Settings.SizeName.observable();
+        const canRun = data?.["prop_canRun"] ?? bind.prop_canRun;
 
         const height = CoreObservable.App.computed(
-            (customHeight: string | null, size: any) => customHeight || `calc(${Array(10).fill(UtilStyle.Css_Height(size)).join(" + ")})`,
-            [requestedHeight, sizeName],
+            (customHeight: string | null, size: any, allowRun: boolean, isVertical: boolean) => {
+                const fullHeight = customHeight || `calc(${Array(10).fill(UtilStyle.Css_Height(size)).join(" + ")})`;
+                return allowRun && isVertical ? `calc((${fullHeight}) / 2)` : fullHeight;
+            },
+            [requestedHeight, sizeName, canRun, this._IS_VERTICAL_LAYOUT],
             this.getScope(),
         );
 
@@ -390,6 +633,8 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
             numbersColor.get(),
             numberActiveBackgroundColor.get(),
             lineActiveBackgroundColor.get(),
+            themeLightBackgroundColor.get(),
+            themeDarkBackgroundColor.get(),
             this._IS_DARK_THEME.get(),
         );
         const updateTheme = () => this.reconfigure(
@@ -400,6 +645,8 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
                 numbersColor.get(),
                 numberActiveBackgroundColor.get(),
                 lineActiveBackgroundColor.get(),
+                themeLightBackgroundColor.get(),
+                themeDarkBackgroundColor.get(),
                 this._IS_DARK_THEME.get(),
             ),
         );
@@ -437,6 +684,8 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
         numbersColor.subscribe(updateTheme, this.getScope());
         numberActiveBackgroundColor.subscribe(updateTheme, this.getScope());
         lineActiveBackgroundColor.subscribe(updateTheme, this.getScope());
+        themeLightBackgroundColor.subscribe(updateTheme, this.getScope());
+        themeDarkBackgroundColor.subscribe(updateTheme, this.getScope());
         this._IS_DARK_THEME.subscribe(updateTheme, this.getScope());
 
         return host;
@@ -471,6 +720,54 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
         } finally {
             this._APPLYING_EXTERNAL_VALUE = false;
         }
+    }
+
+    private runCurrentCode(): void {
+        if (this._DISPOSED || !this._RUN_PANEL) return;
+
+        const source = this._EDITOR?.state.doc.toString() ?? this._COMPONENT_PROPS_BIND.prop_value.get() ?? "";
+        const language = this.normalizeLanguage(this._COMPONENT_PROPS_BIND.prop_language.get());
+        const frame = document.createElement("iframe");
+        frame.title = "Code output";
+        frame.setAttribute("sandbox", "allow-scripts");
+        frame.setAttribute("loading", "lazy");
+        frame.style.display = "block";
+        frame.style.width = "100%";
+        frame.style.height = "100%";
+        frame.style.border = "0";
+        frame.style.backgroundColor = UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1);
+
+        this.clearRunOutput();
+        this._RUN_PANEL.replaceChildren(frame);
+        this._RUN_FRAME = frame;
+        frame.srcdoc = this.createRunDocument(source, language);
+    }
+
+    private clearRunOutput(): void {
+        this._RUN_FRAME?.remove();
+        this._RUN_FRAME = null;
+        this._RUN_PANEL?.replaceChildren();
+    }
+
+    private createRunDocument(source: string, language: CodeMirrorLanguage): string {
+        const contentSecurityPolicy = "default-src 'none'; img-src data: blob:; style-src 'unsafe-inline'; script-src 'unsafe-inline' 'unsafe-eval'; font-src data:; media-src data: blob:; connect-src 'none'; object-src 'none'; frame-src 'none'; form-action 'none'";
+        const policy = `<meta http-equiv="Content-Security-Policy" content="${contentSecurityPolicy}">`;
+        if (language === CodeMirrorLanguage.HTML) {
+            return `<!doctype html><html><head><meta charset="utf-8">${policy}</head><body>${source}</body></html>`;
+        }
+
+        const serializedSource = JSON.stringify(source).replace(/[<\u2028\u2029]/g, (character) =>
+            `\\u${character.charCodeAt(0).toString(16).padStart(4, "0")}`,
+        );
+        return `<!doctype html><html><head><meta charset="utf-8">${policy}<style>body{font:14px ui-monospace,monospace;margin:0;padding:12px}#code-mirror-console{white-space:pre-wrap;overflow-wrap:anywhere;color:#b42318}</style></head><body><pre id="code-mirror-console" aria-live="polite"></pre><script>
+const source = ${serializedSource};
+const output = document.getElementById("code-mirror-console");
+const format = value => typeof value === "string" ? value : (() => { try { return JSON.stringify(value); } catch { return String(value); } })();
+const write = (...values) => { output.textContent += values.map(format).join(" ") + "\\n"; };
+for (const method of ["log", "info", "warn", "error", "debug"]) console[method] = write;
+window.onerror = message => { write(message); };
+try { (0, eval)(source); } catch (error) { write(error && error.stack ? error.stack : error); }
+</script></body></html>`;
     }
 
     private reconfigure(compartment: Compartment, extension: any): void {
@@ -551,16 +848,15 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
         numbersColor: string,
         numberActiveBackgroundColor: string,
         lineActiveBackgroundColor: string,
+        themeLightBackgroundColor: string,
+        themeDarkBackgroundColor: string,
         isDark: boolean,
     ): any {
         const foregroundColor = UtilStyle.Css_Color(
             isDark ? UtilConst.ColorMain.SHAN : UtilConst.ColorMain.PRIMARY,
             UtilConst.ColorGrad.GRADE_1,
         );
-        const backgroundColor = UtilStyle.Css_Color(
-            isDark ? UtilConst.ColorMain.PRIMARY : UtilConst.ColorMain.SHAN,
-            UtilConst.ColorGrad.GRADE_1,
-        );
+        const backgroundColor = isDark ? themeDarkBackgroundColor : themeLightBackgroundColor;
         return EditorView.theme({
             "&": {
                 height: "100%",

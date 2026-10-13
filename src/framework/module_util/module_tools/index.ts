@@ -3,5 +3,7 @@ export {
     Copy ,
     Json ,
     Attrs ,
-    Replace
+    Replace,
+    Fetch
 } from "./methods";
+export type {TFetchField, TFetchRequestData, TFetchRequestOptions, TFetchRequestResult} from "./methods/fetch";

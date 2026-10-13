@@ -8,3 +8,4 @@ export * as Pages from "./pages";
 export * as Simples from "./simples";
 export * as Effects from "./effects";
 export * as Tools from "./tools";
+export * as Fetch from "./fetch";

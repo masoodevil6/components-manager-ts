@@ -17,6 +17,12 @@ export const Props = {
         name: Keys.category.components.codeMirror.props.title.name,
         description: Keys.category.components.codeMirror.props.title.description,
     }),
+    prop_canRun: Define_ComponentProp<boolean>({
+        prop: "prop_canRun",
+        default: false,
+        name: Keys.category.components.codeMirror.props.canRun.name,
+        description: Keys.category.components.codeMirror.props.canRun.description,
+    }),
     prop_value: Define_ComponentProp<string>({
         prop: "prop_value",
         default: "",
@@ -76,6 +82,18 @@ export const Props = {
         default: UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_4),
         name: Keys.category.components.codeMirror.props.lineActiveBackgroundColor.name,
         description: Keys.category.components.codeMirror.props.lineActiveBackgroundColor.description,
+    }),
+    prop_themeLightBackgroundColor: Define_ComponentProp<string>({
+        prop: "prop_themeLightBackgroundColor",
+        default: UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
+        name: Keys.category.components.codeMirror.props.themeLightBackgroundColor.name,
+        description: Keys.category.components.codeMirror.props.themeLightBackgroundColor.description,
+    }),
+    prop_themeDarkBackgroundColor: Define_ComponentProp<string>({
+        prop: "prop_themeDarkBackgroundColor",
+        default: UtilStyle.Css_Color(UtilConst.ColorMain.DARK, UtilConst.ColorGrad.GRADE_3),
+        name: Keys.category.components.codeMirror.props.themeDarkBackgroundColor.name,
+        description: Keys.category.components.codeMirror.props.themeDarkBackgroundColor.description,
     }),
 } satisfies CoreComponents.ComponentProps;
 

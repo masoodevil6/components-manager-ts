@@ -71,6 +71,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
 
         const items = data.prop_items ?? this._COMPONENT_PROPS_BIND.prop_items;
         const orientation = data.prop_orientation ?? this._COMPONENT_PROPS_BIND.prop_orientation;
+        const fullWidth = data.prop_isFullWidth ?? this._COMPONENT_PROPS_BIND.prop_isFullWidth;
         const direction = data.prop_direction ?? this._COMPONENT_PROPS_BIND.prop_direction;
         const menuBackgroundColor = data.prop_menuBackgroundColor ?? this._COMPONENT_PROPS_BIND.prop_menuBackgroundColor;
         const menuBorderRadius = data.prop_menuBorderRadius ?? this._COMPONENT_PROPS_BIND.prop_menuBorderRadius;
@@ -78,8 +79,8 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
         const menuBorder = data.prop_menuBorder ?? this._COMPONENT_PROPS_BIND.prop_menuBorder;
         const sizeName = CoreConfig.Settings.SizeName.observable();
         const menuWidth = CoreObservable.App.computed(
-            (layout: MenuMoreOrientation) => layout === MenuMoreOrientation.VERTICAL ? "100%" : "fit-content",
-            [orientation],
+            (layout: MenuMoreOrientation, useFullWidth: boolean) => layout === MenuMoreOrientation.VERTICAL && useFullWidth ? "100%" : "fit-content",
+            [orientation, fullWidth],
             this.getScope(),
         );
         const menuBorderRadiusHas = CoreObservable.App.computed(
@@ -118,23 +119,23 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             return MenuMoreDirection.TOP_TO_BOTTOM;
         }, [orientation, direction, rtl], this.getScope());
 
-        const layoutStyles = CoreObservable.App.computed((layout: MenuMoreOrientation, resolved: MenuMoreDirection) => ({
+        const layoutStyles = CoreObservable.App.computed((layout: MenuMoreOrientation, resolved: MenuMoreDirection, useFullWidth: boolean) => ({
             display: "flex",
             flexDirection: layout === MenuMoreOrientation.HORIZONTAL
                 ? (resolved === MenuMoreDirection.RTL ? "row-reverse" : "row")
                 : (resolved === MenuMoreDirection.BOTTOM_TO_TOP ? "column-reverse" : "column"),
-            alignItems: layout === MenuMoreOrientation.HORIZONTAL ? "center" : "stretch",
+            alignItems: layout === MenuMoreOrientation.HORIZONTAL ? "center" : (useFullWidth ? "stretch" : "flex-start"),
             flexWrap: "nowrap",
-            width: layout === MenuMoreOrientation.VERTICAL ? "100%" : "fit-content",
+            width: layout === MenuMoreOrientation.VERTICAL && useFullWidth ? "100%" : "fit-content",
             maxWidth: "100%",
-        }), [orientation, resolvedDirection], this.getScope());
+        }), [orientation, resolvedDirection, fullWidth], this.getScope());
 
         const rootContent = CoreObservable.App.computed((list: MenuMoreItem[]) => {
             this.disposeTreeChildren();
             return CoreReactive.App.section({
                 attrs: {role: "menubar"},
                 stylesBind: layoutStyles as any,
-                children: this.renderMenuEntries(list ?? [], 1, {orientation, direction: resolvedDirection, rtl}),
+                children: this.renderMenuEntries(list ?? [], 1, {orientation, fullWidth, direction: resolvedDirection, rtl}),
             });
         }, [items], this.getScope());
 
@@ -186,7 +187,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
     private renderMenuEntries(
         entries: MenuMoreEntry[],
         level: number,
-        layout: {orientation: CoreObservable.App<MenuMoreOrientation>; direction: CoreObservable.App<MenuMoreDirection>; rtl: CoreObservable.App<boolean>},
+        layout: {orientation: CoreObservable.App<MenuMoreOrientation>; fullWidth: CoreObservable.App<boolean>; direction: CoreObservable.App<MenuMoreDirection>; rtl: CoreObservable.App<boolean>},
     ): CoreReactive.App[] {
         return entries.map((entry, index) => {
             const isLastGroup = this.isMenuGroup(entry) && !entries.slice(index + 1).some((next) => this.isMenuGroup(next));
@@ -197,7 +198,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
     private renderTreeItem(
         item: MenuMoreEntry | undefined,
         level: number,
-        layout: {orientation: CoreObservable.App<MenuMoreOrientation>; direction: CoreObservable.App<MenuMoreDirection>; rtl: CoreObservable.App<boolean>},
+        layout: {orientation: CoreObservable.App<MenuMoreOrientation>; fullWidth: CoreObservable.App<boolean>; direction: CoreObservable.App<MenuMoreDirection>; rtl: CoreObservable.App<boolean>},
         isLastGroup = false,
     ): CoreReactive.App {
         if (!item) return CoreReactive.App.section({});
@@ -218,7 +219,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
     private renderGroup(
         group: MenuMoreGroup,
         level: number,
-        layout: {orientation: CoreObservable.App<MenuMoreOrientation>; direction: CoreObservable.App<MenuMoreDirection>; rtl: CoreObservable.App<boolean>},
+        layout: {orientation: CoreObservable.App<MenuMoreOrientation>; fullWidth: CoreObservable.App<boolean>; direction: CoreObservable.App<MenuMoreDirection>; rtl: CoreObservable.App<boolean>},
         isLastGroup: boolean,
     ): CoreReactive.App {
         const horizontalRootGroup = CoreObservable.App.computed(
@@ -228,13 +229,13 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
         );
         const sizeName = CoreConfig.Settings.SizeName.observable();
         const groupStyles = CoreObservable.App.computed(
-            (isHorizontal: boolean, direction: MenuMoreDirection, size: any) => {
+            (isHorizontal: boolean, direction: MenuMoreDirection, size: any, useFullWidth: boolean) => {
                 const styles: Record<string, string> = {
                     display: "flex",
                     flexDirection: isHorizontal ? (direction === MenuMoreDirection.RTL ? "row-reverse" : "row") : "column",
                     alignItems: isHorizontal ? "center" : "stretch",
                     flexWrap: "nowrap",
-                    width: isHorizontal ? "fit-content" : "100%",
+                    width: isHorizontal || !useFullWidth ? "fit-content" : "100%",
                     maxWidth: "100%",
                     boxSizing: "border-box",
                 };
@@ -255,7 +256,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
                 }
                 return styles;
             },
-            [horizontalRootGroup, layout.direction, sizeName],
+            [horizontalRootGroup, layout.direction, sizeName, layout.fullWidth],
             this.getScope(),
         );
         return CoreReactive.App.section({
@@ -273,7 +274,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
         item: MenuMoreItem,
         level: number,
         hasChildren: boolean,
-        layout: {orientation: CoreObservable.App<MenuMoreOrientation>; direction: CoreObservable.App<MenuMoreDirection>; rtl: CoreObservable.App<boolean>},
+        layout: {orientation: CoreObservable.App<MenuMoreOrientation>; fullWidth: CoreObservable.App<boolean>; direction: CoreObservable.App<MenuMoreDirection>; rtl: CoreObservable.App<boolean>},
     ): CoreReactive.App {
         const sizeName = CoreConfig.Settings.SizeName.observable();
         const verticalItemLayout = CoreObservable.App.computed(
@@ -298,17 +299,17 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             [verticalItemLayout, iconFrameSize],
             this.getScope(),
         );
-        const buttonComponentStyles = CoreObservable.App.computed((isVertical: boolean) => isVertical
+        const buttonComponentStyles = CoreObservable.App.computed((isVertical: boolean, useFullWidth: boolean) => isVertical && useFullWidth
             ? {display: "block", width: "100%", height: MENU_ITEM_HEIGHT, flex: "1 1 0%", minWidth: "0"}
             : {display: "inline-block", width: "auto", height: MENU_ITEM_HEIGHT, flex: "0 0 auto", minWidth: "0"},
-        [verticalItemLayout], this.getScope());
-        const buttonStructureStyles = CoreObservable.App.computed((isVertical: boolean) => isVertical
+        [verticalItemLayout, layout.fullWidth], this.getScope());
+        const buttonStructureStyles = CoreObservable.App.computed((isVertical: boolean, useFullWidth: boolean) => isVertical && useFullWidth
             ? {display: "block", width: "100%", height: MENU_ITEM_HEIGHT}
             : {display: "inline-flex", width: "auto", height: MENU_ITEM_HEIGHT, maxWidth: "100%"},
-        [verticalItemLayout], this.getScope());
-        const buttonStyles = CoreObservable.App.computed((size, isVertical: boolean) => ({
+        [verticalItemLayout, layout.fullWidth], this.getScope());
+        const buttonStyles = CoreObservable.App.computed((size, isVertical: boolean, useFullWidth: boolean) => ({
             display: "inline-flex",
-            flex: isVertical ? "1 1 0%" : "0 0 auto",
+            flex: isVertical && useFullWidth ? "1 1 0%" : "0 0 auto",
             alignItems: "center",
             justifyContent: "flex-start",
             gap: UtilStyle.Css_Margin(size),
@@ -326,7 +327,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             padding: UtilStyle.Css_Padding(size),
             cursor: item.disabled ? "default" : "pointer",
             opacity: item.disabled ? "0.55" : "1",
-        }), [sizeName, verticalItemLayout], this.getScope());
+        }), [sizeName, verticalItemLayout, layout.fullWidth], this.getScope());
         const titleStyles = CoreObservable.App.computed((size, isVertical: boolean, frame: string) => ({
             order: item.icon ? "1" : "0",
             padding: "0",
@@ -406,10 +407,10 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             this.getScope(),
         );
         const rowStyles = CoreObservable.App.computed(
-            (isVertical: boolean, hovered: boolean, hoverColor: string, itemPadding: Record<string, string>) => ({
+            (isVertical: boolean, hovered: boolean, hoverColor: string, itemPadding: Record<string, string>, useFullWidth: boolean) => ({
                 display: "flex",
                 alignItems: "center",
-                width: isVertical ? "100%" : "fit-content",
+                width: isVertical && useFullWidth ? "100%" : "fit-content",
                 minWidth: isVertical ? "10rem" : "0",
                 height: MENU_ITEM_HEIGHT,
                 boxSizing: "border-box",
@@ -417,7 +418,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
                 transition: "background-color 160ms ease",
                 ...itemPadding,
             }),
-            [verticalItemLayout, itemHovered, this._COMPONENT_PROPS_BIND.prop_itemBackgroundColorHover, itemPaddingStyles],
+            [verticalItemLayout, itemHovered, this._COMPONENT_PROPS_BIND.prop_itemBackgroundColorHover, itemPaddingStyles, layout.fullWidth],
             this.getScope(),
         );
         const trigger = CoreReactive.App.section({
@@ -482,14 +483,14 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             [layout.orientation],
             this.getScope(),
         );
-        const floatComponentStyles = CoreObservable.App.computed((isHorizontalRoot: boolean) => isHorizontalRoot
+        const floatComponentStyles = CoreObservable.App.computed((isHorizontalRoot: boolean, useFullWidth: boolean) => isHorizontalRoot || !useFullWidth
             ? {display: "inline-block", width: "auto", height: MENU_ITEM_HEIGHT, flex: "0 0 auto"}
             : {display: "block", width: "100%", height: MENU_ITEM_HEIGHT},
-        [horizontalRootItem], this.getScope());
-        const floatStructureStyles = CoreObservable.App.computed((isHorizontalRoot: boolean) => isHorizontalRoot
+        [horizontalRootItem, layout.fullWidth], this.getScope());
+        const floatStructureStyles = CoreObservable.App.computed((isHorizontalRoot: boolean, useFullWidth: boolean) => isHorizontalRoot || !useFullWidth
             ? {display: "inline-block", width: "auto", height: MENU_ITEM_HEIGHT}
             : {display: "block", width: "100%", height: MENU_ITEM_HEIGHT},
-        [horizontalRootItem], this.getScope());
+        [horizontalRootItem, layout.fullWidth], this.getScope());
         const openOnClick = item.openOn === "click";
         const floatMenu = new ComponentFloatMenu.Component({
             classList: ["position-relative", "d-inline-block"],
@@ -566,7 +567,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
 
     private createSubmenuIndicator(
         level: number,
-        layout: {orientation: CoreObservable.App<MenuMoreOrientation>; direction: CoreObservable.App<MenuMoreDirection>; rtl: CoreObservable.App<boolean>},
+        layout: {orientation: CoreObservable.App<MenuMoreOrientation>; fullWidth: CoreObservable.App<boolean>; direction: CoreObservable.App<MenuMoreDirection>; rtl: CoreObservable.App<boolean>},
         visible: boolean,
         verticalItemLayout: CoreObservable.App<boolean>,
     ): CoreReactive.App {

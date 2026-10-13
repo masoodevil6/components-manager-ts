@@ -9,7 +9,7 @@ export const Schemas = {
     STRUCTURE: ComponentStructureTrait.schemas.STRUCTURE,
     ROOT: {
         part: "part-root",
-        props: [Props.prop_title],
+        props: [Props.prop_title, Props.prop_canRun],
         name: Keys.category.components.codeMirror.schemas.root.name,
         description: Keys.category.components.codeMirror.schemas.root.description,
     },
@@ -26,6 +26,8 @@ export const Schemas = {
             Props.prop_numbersColor,
             Props.prop_numberActiveBackgroundColor,
             Props.prop_lineActiveBackgroundColor,
+            Props.prop_themeLightBackgroundColor,
+            Props.prop_themeDarkBackgroundColor,
         ],
         name: Keys.category.components.codeMirror.schemas.editor.name,
         description: Keys.category.components.codeMirror.schemas.editor.description,

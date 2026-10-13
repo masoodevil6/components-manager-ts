@@ -11,6 +11,7 @@ export const JavaScriptExample: ComponentExample = {
         classList: ["col-12", "mb-3"],
         prop_title: "JavaScript Editor",
         prop_language: CodeMirrorLanguage.JAVASCRIPT,
+        prop_canRun: true,
         prop_lineWrapping: true,
         prop_placeholder: "Write JavaScript...",
         prop_value: "const greet = (name) => {\n  return `Hello, ${name}!`;\n};\n\nconsole.log(greet(\"CodeMirror\"));",

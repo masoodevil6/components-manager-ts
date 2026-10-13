@@ -47,6 +47,11 @@ export const Props = {
         name: Keys.category.components.menuMore.props.orientation.name,
         description: Keys.category.components.menuMore.props.orientation.description,
     }),
+    prop_isFullWidth: Define_ComponentProp<boolean>({
+        prop: "prop_isFullWidth", default: true,
+        name: Keys.category.components.menuMore.props.isFullWidth.name,
+        description: Keys.category.components.menuMore.props.isFullWidth.description,
+    }),
     prop_direction: Define_ComponentProp<MenuMoreDirection>({
         prop: "prop_direction", default: MenuMoreDirection.AUTO,
         name: Keys.category.components.menuMore.props.direction.name,

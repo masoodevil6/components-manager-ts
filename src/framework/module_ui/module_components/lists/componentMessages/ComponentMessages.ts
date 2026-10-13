@@ -1,6 +1,7 @@
 import * as CoreReactive from "@/core_reactive";
 import * as CoreObservable from "@/core_observable";
 import * as CoreEvent from "@/core_event";
+import * as CoreConfig from "@/core_configs";
 import * as UtilConst from "@/util_consts";
 import * as UtilStyle from "@/util_styles";
 // --------------------------------
@@ -51,6 +52,9 @@ class ComponentMessages extends ComponentMessagesBase {
      * renderMessages فقط از این Registry می‌خواند — Step نمی‌سازد.
      */
     private _MESSAGE_EVENT_SCOPES = new Map<string, MessageEventScope>();
+    private _MESSAGE_SOURCE: CoreObservable.App<any[]> | null = null;
+    private _MESSAGE_SOURCE_UNSUBSCRIBE: (() => void) | null = null;
+    private _MESSAGE_SYNC_TIMEOUT: ReturnType<typeof setTimeout> | null = null;
 
 
     constructor(
@@ -101,6 +105,12 @@ class ComponentMessages extends ComponentMessagesBase {
      * این متد باید وقتی Component از DOM حذف می‌شود صدا زده شود.
      */
     dispose(): void {
+        this._MESSAGE_SOURCE_UNSUBSCRIBE?.();
+        this._MESSAGE_SOURCE_UNSUBSCRIBE = null;
+        if (this._MESSAGE_SYNC_TIMEOUT !== null) {
+            clearTimeout(this._MESSAGE_SYNC_TIMEOUT);
+            this._MESSAGE_SYNC_TIMEOUT = null;
+        }
         // ۱. Disposal بازگشتی کل Event Tree (شامل همه Message Scopes)
         this.disposeStep();
         // ۲. پاک‌سازی Registry محلی
@@ -138,7 +148,6 @@ class ComponentMessages extends ComponentMessagesBase {
 
         if (!this._COMPONENT_STEP) return;
 
-        const containerStep = this._COMPONENT_STEP.messages;
         const currentIds = new Set(messages.map(m => m.id));
 
         // ۱. Disposal: Scopeهایی که دیگر در current IDs نیستن
@@ -150,6 +159,12 @@ class ComponentMessages extends ComponentMessagesBase {
         }
 
         // ۲. Create: Messageهای جدید که Scope ندارن
+        this.ensureMessageEventScopes(messages);
+    }
+
+    private ensureMessageEventScopes(messages: MessageItem[]): void {
+        if (!this._COMPONENT_STEP) return;
+        const containerStep = this._COMPONENT_STEP.messages;
         for (const msg of messages) {
             if (!this._MESSAGE_EVENT_SCOPES.has(msg.id)) {
                 const scope = createMessageEventScope();
@@ -245,6 +260,34 @@ class ComponentMessages extends ComponentMessagesBase {
                 : msg
         );
         this.syncMessageEventScopes(messageItems);
+
+        // Register before CoreObservable.App.for so each newly added item has
+        // an event scope by the time the reactive list renders it.
+        if (this._MESSAGE_SOURCE !== prop_messages) {
+            this._MESSAGE_SOURCE_UNSUBSCRIBE?.();
+            this._MESSAGE_SOURCE = prop_messages;
+            this._MESSAGE_SOURCE_UNSUBSCRIBE = prop_messages.subscribe(() => {
+                const latest = (prop_messages.get() ?? []).map((msg: string | MessageItem, index: number) =>
+                    typeof msg === "string"
+                        ? {id: `message-${index}-${msg}`, text: msg}
+                        : msg
+                );
+                this.ensureMessageEventScopes(latest);
+
+                // Keep removed scopes alive until synchronous close handlers
+                // finish dispatching the per-message event.
+                if (this._MESSAGE_SYNC_TIMEOUT !== null) clearTimeout(this._MESSAGE_SYNC_TIMEOUT);
+                this._MESSAGE_SYNC_TIMEOUT = setTimeout(() => {
+                    const current = (prop_messages.get() ?? []).map((msg: string | MessageItem, index: number) =>
+                        typeof msg === "string"
+                            ? {id: `message-${index}-${msg}`, text: msg}
+                            : msg
+                    );
+                    this.syncMessageEventScopes(current);
+                    this._MESSAGE_SYNC_TIMEOUT = null;
+                }, 0);
+            });
+        }
 
         // Container — فقط UI container، بدون unique/emit (Plan 8.2.8 بخش ۱۳)
         return CoreReactive.App.div({
@@ -365,6 +408,14 @@ class ComponentMessages extends ComponentMessagesBase {
                         children: [
                             CoreReactive.App.b({
                                 className: ["flex-grow-1"],
+                                styles: {whiteSpace: "pre-line"},
+                                stylesBind: {
+                                    fontSize: CoreObservable.App.computed(
+                                        (sizeName) => UtilStyle.Css_FontSize(sizeName),
+                                        [CoreConfig.Settings.SizeName.observable()],
+                                        this.getScope(),
+                                    ),
+                                },
                                 children: [messageItem.text],
                             }),
                             this.renderManagerComponent( Schemas.ICON.part , attrsDefault , data , {

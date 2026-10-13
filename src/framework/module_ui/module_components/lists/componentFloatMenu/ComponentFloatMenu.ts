@@ -189,23 +189,15 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
         const prop_selectorStyles            = data?.["prop_selectorStyles"]            ?? bind.prop_selectorStyles;
         const prop_selectorShowType          = data?.["prop_selectorShowType"]          ?? bind.prop_selectorShowType;
         const prop_floatShowControlWithSelf  = data?.["prop_floatShowControlWithSelf"]  ?? bind.prop_floatShowControlWithSelf;
-        const prop_floatIsShow               = data?.["prop_floatIsShow"]               ?? bind.prop_floatIsShow;
 
         const handleSelectorClick = (event: Event) => {
             if ((event.target as Element | null)?.closest?.('[aria-disabled="true"]')) return;
-            CoreObservable.App.computed(
-                (selectorTypeShow, floatShowControlWithSelf) => {
-                    if (selectorTypeShow !== ShowTypes.CLICK || !this._BORDER_INSTANCE) return;
-                    this._IS_SHOW = !this._IS_SHOW;
-                    prop_floatIsShow?.set?.(this._IS_SHOW);
-                    this._BORDER_INSTANCE.set("prop_show", this._IS_SHOW);
-                    if (this._IS_SHOW) this.schedulePopupAdjustment();
-                    if (this._IS_SHOW) this._addDocumentClickListener();
-                    else this._removeDocumentClickListener();
-                },
-                [prop_selectorShowType, prop_floatShowControlWithSelf],
-                this.getScope(),
-            );
+            if (prop_selectorShowType.get() !== ShowTypes.CLICK) return;
+            // Click-controlled menus are rendered lazily, so the popup border
+            // does not exist on the first click. Toggle the state first; rendering
+            // then creates the border with the new state.
+            this.setShow(!this._IS_SHOW);
+            if (this._IS_SHOW) this.schedulePopupAdjustment();
         };
         const selectorTrigger = CoreReactive.App.part("span", {
             styles: {display: "contents", cursor: "pointer"},

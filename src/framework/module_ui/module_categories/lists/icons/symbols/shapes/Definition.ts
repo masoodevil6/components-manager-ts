@@ -5,9 +5,10 @@ import {CreateCategoryIcon} from "../../../../basic/methods";
 import {Keys} from "../../../../languages";
 
 export const Circle: TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ShapeCircle.Definition);
+export const Play: TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.ShapePlay.Definition);
 export const Definition: TCategoryIconDefinition = {
     id: "Shapes",
     name: Keys.category.icons.symbolsShapes.name,
     description: Keys.category.icons.symbolsShapes.description,
-    icons: [Circle],
+    icons: [Circle, Play],
 };

@@ -131,7 +131,11 @@ export class ComponentWebCode extends ComponentWebCodeBase {
             attrs: { ...attrsDefault },
             styles: {
                 width:      UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
-                minHeight:  "300px",
+                height:     UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
+                minWidth:   "0",
+                minHeight:  "0",
+                boxSizing:  "border-box",
+                overflow:   "hidden",
                 position:   "relative",
             },
             children: [
@@ -165,13 +169,16 @@ export class ComponentWebCode extends ComponentWebCodeBase {
             attrs: { ...attrsDefault },
             styles: {
                 width:          UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
-                minHeight:      "300px",
+                height:         UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
+                minWidth:       "0",
+                minHeight:      "0",
+                boxSizing:      "border-box",
+                overflow:       "hidden",
                 display:        "flex",
                 justifyContent:  "center",
                 alignItems:      "center",
                 position:       "absolute",
-                top:            "0",
-                left:           "0",
+                inset:          "0",
                 zIndex:         String(UtilStyle.Css_ZIndex(UtilConst.ZIndex.blur_popup)),
             },
             stylesBind: {
@@ -198,11 +205,18 @@ export class ComponentWebCode extends ComponentWebCodeBase {
         return CoreReactive.App.section({
             attrs: { ...attrsDefault },
             styles: {
-                display:    "flex",
+                display:       "flex",
                 flexDirection: "column",
-                alignItems:  "center",
-                zIndex:     String(UtilStyle.Css_ZIndex(UtilConst.ZIndex.tools_blur)),
-                textAlign:  "center",
+                alignItems:    "center",
+                justifyContent:"center",
+                width:         UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
+                height:        UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
+                minWidth:      "0",
+                minHeight:     "0",
+                boxSizing:     "border-box",
+                overflow:      "hidden",
+                zIndex:        String(UtilStyle.Css_ZIndex(UtilConst.ZIndex.tools_blur)),
+                textAlign:     "center",
             },
             children: [
                 this.executeSchemaPart(Schemas.CONTENT_BLUR_POSITION_ICON.part, {}),
@@ -231,12 +245,62 @@ export class ComponentWebCode extends ComponentWebCodeBase {
             (iconSource) => {
                 if (iconSource == null) return this.renderEmptyContent(attrsDefault);
 
-                return new ComponentIcon.Component({
-                    prop_icon:       UiIcons.CreateIcon(iconSource as any, {
-                        size:          250,
+                const icon = UiIcons.CreateIcon(iconSource as any, {size: 250});
+                const svg = icon.getElement() as unknown as SVGSVGElement | null;
+                if (svg?.tagName.toLowerCase() === "svg") {
+                    Object.assign(svg.style, {
+                        display: "block",
+                        width: "100%",
+                        height: "100%",
+                        maxWidth: "250px",
+                        maxHeight: "250px",
+                        minWidth: "0",
+                        minHeight: "0",
+                        flex: "0 1 auto",
+                    });
+                }
+
+                const responsiveIconStyles = CoreObservable.App.computed(
+                    (styles: Record<string, string> | null) => ({
+                        display: "flex",
+                        width: "100%",
+                        height: "100%",
+                        minWidth: "0",
+                        minHeight: "0",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        overflow: "hidden",
+                        ...(styles ?? {}),
                     }),
+                    [prop_iconStyles],
+                    this.getScope(),
+                );
+
+                return new ComponentIcon.Component({
+                    styles:          {
+                        display: "flex",
+                        flex: "1 1 auto",
+                        width: "100%",
+                        height: "100%",
+                        minWidth: "0",
+                        minHeight: "0",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        overflow: "hidden",
+                    },
+                    prop_structureStyles: {
+                        display: "flex",
+                        width: "100%",
+                        height: "100%",
+                        minWidth: "0",
+                        minHeight: "0",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        overflow: "hidden",
+                    },
+                    prop_icon:       icon,
                     prop_iconClass:  prop_iconClass as any,
-                    prop_iconStyles: prop_iconStyles as any,
+                    prop_iconStyles: responsiveIconStyles as any,
                 }, {}).getReactiveElement() as CoreReactive.App;
             },
             [prop_icon],
@@ -261,6 +325,7 @@ export class ComponentWebCode extends ComponentWebCodeBase {
         const prop_btnRetryTitle = data?.["prop_btnRetryTitle"] ?? bind.prop_btnRetryTitle;
         const prop_btnRetryClass = data?.["prop_btnRetryClass"] ?? bind.prop_btnRetryClass;
         const prop_btnRetryIcon  = data?.["prop_btnRetryIcon"]  ?? bind.prop_btnRetryIcon;
+        const prop_hasBtnClose   = data?.["prop_hasBtnClose"]   ?? bind.prop_hasBtnClose;
 
         const translatedTitle = CoreLanguage.App.translate(
             Keys.category.components.errorIsEmpty.texts.btnTitle,
@@ -271,34 +336,80 @@ export class ComponentWebCode extends ComponentWebCodeBase {
             [prop_btnRetryTitle, translatedTitle],
             this.getScope(),
         );
+        const btnStyles = CoreObservable.App.computed(
+            (sizeName) => ({
+                marginBottom: UtilStyle.Css_Margin(sizeName),
+            }),
+            [CoreConfig.Settings.SizeName.observable()],
+            this.getScope(),
+        );
+        const actionGap = CoreObservable.App.computed(
+            (styles: Record<string, string>) => styles.marginBottom,
+            [btnStyles],
+            this.getScope(),
+        );
 
         return CoreObservable.App.computed(
-            (hasBtn: boolean) => {
-                if (!hasBtn) return this.renderEmptyContent(attrsDefault);
+            (hasRetry: boolean, hasClose: boolean, gap: string) => {
+                if (!hasRetry && !hasClose) return this.renderEmptyContent(attrsDefault);
 
-                return new ComponentButton.Component(
-                    {
-                        classList:        ["mt-2", "text-nowrap"],
-                        styles:           { display: "inline-flex", width: "auto" },
-                        prop_structureStyles: { display: "inline-flex", width: "auto" },
-                        prop_btnClass:    prop_btnRetryClass as any,
-                        prop_btnTitle:    btnTitle as any,
-                        prop_btnIcon:     prop_btnRetryIcon as any,
-                        prop_btnVariant:  ButtonVariants.SECONDARY,
-                        prop_btnSemantic: ButtonSemantic.CANCEL,
-                        prop_btnType:     ButtonAction.BUTTON,
-                    } as any,
-                    {
-                        CLICK: (event: Event) => {
-                            this.executeMethod("RETRY_CLICK", event, {});
+                const buttons: CoreReactive.App[] = [];
+                if (hasRetry) {
+                    buttons.push(new ComponentButton.Component(
+                        {
+                            classList:        ["text-nowrap"],
+                            styles:           { display: "inline-flex", width: "auto" },
+                            prop_structureStyles: { display: "inline-flex", width: "auto" },
+                            prop_btnClass:    prop_btnRetryClass as any,
+                            prop_btnStyles:   btnStyles as any,
+                            prop_btnTitle:    btnTitle as any,
+                            prop_btnIcon:     prop_btnRetryIcon as any,
+                            prop_btnVariant:  ButtonVariants.SECONDARY,
+                            prop_btnSemantic: ButtonSemantic.CANCEL,
+                            prop_btnType:     ButtonAction.BUTTON,
+                        } as any,
+                        {
+                            CLICK: (event: Event) => {
+                                this.executeMethod("RETRY_CLICK", event, {});
+                            },
+                        } as any,
+                        {
+                            unique: (this as any)._COMPONENT_STEP?.click ?? undefined,
                         },
-                    } as any,
-                    {
-                        unique: (this as any)._COMPONENT_STEP?.click ?? undefined,
+                    ).getReactiveElement() as CoreReactive.App);
+                }
+
+                if (hasClose) {
+                    buttons.push(new ComponentButton.Component(
+                        {
+                            classList: ["text-nowrap"],
+                            styles: {display: "inline-flex", width: "auto"},
+                            prop_structureStyles: {display: "inline-flex", width: "auto"},
+                            prop_btnTitle: "",
+                            prop_btnIcon: UiIcons.Src.FileWindowClose.Definition,
+                            prop_btnVariant: ButtonVariants.ICON,
+                            prop_btnSemantic: ButtonSemantic.CANCEL,
+                            prop_btnType: ButtonAction.BUTTON,
+                            prop_btnStyles: btnStyles as any,
+                        } as any,
+                        {
+                            CLICK: () => this._COMPONENT_PROPS_BIND.prop_show.set(false),
+                        } as any,
+                    ).getReactiveElement() as CoreReactive.App);
+                }
+
+                return CoreReactive.App.section({
+                    attrs: {...attrsDefault},
+                    styles: {
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap,
                     },
-                ).getReactiveElement() as CoreReactive.App;
+                    children: buttons,
+                });
             },
-            [prop_btnRetryHas],
+            [prop_btnRetryHas, prop_hasBtnClose, actionGap],
             this.getScope(),
         ) as any;
     }

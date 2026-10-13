@@ -933,6 +933,12 @@ export const En =
         ],
         [Keys.icons.shapeCircle.name, "Circle"],
         [Keys.icons.shapeCircle.description, "A filled circle shape"],
+        [Keys.icons.shapePlay.name, "Play"],
+        [Keys.icons.shapePlay.description, "Play button triangle"],
+        [Keys.icons.separatorHorizontal.name, "Horizontal separator"],
+        [Keys.icons.separatorHorizontal.description, "Icon showing a horizontal divider between two sections"],
+        [Keys.icons.separatorVertical.name, "Vertical separator"],
+        [Keys.icons.separatorVertical.description, "Icon showing a vertical divider between two sections"],
         [
             Keys.icons.userPassword.name,
             "Password"

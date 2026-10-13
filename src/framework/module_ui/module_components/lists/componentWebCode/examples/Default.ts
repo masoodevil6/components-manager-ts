@@ -21,6 +21,7 @@ export const DefaultExample: ComponentExample = {
     render: (): HTMLElement => UiCategory.UI.Contents.WebCode(
         {
             classList: ["col-md-3", "col-12", "border", "p-2", "position-relative"],
+            prop_structureStyles: {height: "300px"},
             prop_btnRetryHas: true,
         },
         {

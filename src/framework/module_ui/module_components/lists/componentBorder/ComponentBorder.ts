@@ -297,14 +297,15 @@ export class ComponentBorder extends ComponentBorderBase {
     }
 
     private getStyleBorderWidths(prop_borderTopHas, prop_borderRightHas, prop_borderBottomHas, prop_borderLeftHas) {
+        const sizeName = CoreConfig.Settings.SizeName.observable();
         return CoreObservable.App.computed(
-            (topHas, rightHas, bottomHas, leftHas) => ({
-                "border-top-width": UtilStyle.Style_Important(topHas ? UtilStyle.Css_BorderWidth(UtilConst.Sizes.M) : UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL)),
-                "border-right-width": UtilStyle.Style_Important(rightHas ? UtilStyle.Css_BorderWidth(UtilConst.Sizes.M) : UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL)),
-                "border-bottom-width": UtilStyle.Style_Important(bottomHas ? UtilStyle.Css_BorderWidth(UtilConst.Sizes.M) : UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL)),
-                "border-left-width": UtilStyle.Style_Important(leftHas ? UtilStyle.Css_BorderWidth(UtilConst.Sizes.M) : UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL)),
+            (topHas, rightHas, bottomHas, leftHas, size: UtilConst.Sizes) => ({
+                "border-top-width": UtilStyle.Style_Important(topHas ? UtilStyle.Css_BorderWidth(size) : UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL)),
+                "border-right-width": UtilStyle.Style_Important(rightHas ? UtilStyle.Css_BorderWidth(size) : UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL)),
+                "border-bottom-width": UtilStyle.Style_Important(bottomHas ? UtilStyle.Css_BorderWidth(size) : UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL)),
+                "border-left-width": UtilStyle.Style_Important(leftHas ? UtilStyle.Css_BorderWidth(size) : UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL)),
             }),
-            [prop_borderTopHas, prop_borderRightHas, prop_borderBottomHas, prop_borderLeftHas],
+            [prop_borderTopHas, prop_borderRightHas, prop_borderBottomHas, prop_borderLeftHas, sizeName],
             this.getScope(),
         );
     }

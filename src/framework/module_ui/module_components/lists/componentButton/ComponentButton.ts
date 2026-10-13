@@ -186,6 +186,7 @@ export class ComponentButton extends ComponentButtonBase {
 
         const bind = this._COMPONENT_PROPS_BIND;
 
+        const prop_btnType                    = data?.["prop_btnType"]                    ?? bind.prop_btnType;
         const prop_btnTitle                   = data?.["prop_btnTitle"]                   ?? bind.prop_btnTitle;
         const prop_btnSemantic                = data?.["prop_btnSemantic"]                ?? bind.prop_btnSemantic;
         const prop_btnVariant                 = data?.["prop_btnVariant"]                 ?? bind.prop_btnVariant;
@@ -211,7 +212,6 @@ export class ComponentButton extends ComponentButtonBase {
         );
 
 
-        // const prop_btnType                    = data?.["prop_btnType"]                    ?? bind.prop_btnType;
         // const prop_btnTitleColor              = data?.["prop_btnTitleColor"]              ?? bind.prop_btnTitleColor;
         // const prop_btnTitleColor_hover        = data?.["prop_btnTitleColor_hover"]        ?? bind.prop_btnTitleColor_hover;
         // const prop_btnIcon                    = data?.["prop_btnIcon"]                    ?? bind.prop_btnIcon;
@@ -239,6 +239,7 @@ export class ComponentButton extends ComponentButtonBase {
             attrsBind: {
                 title:    prop_btnTitle,
                 disabled: prop_btnDisabled,
+                type:     prop_btnType,
             },
             className: [
                 "btn"

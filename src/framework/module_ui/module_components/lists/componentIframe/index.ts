@@ -1,0 +1,10 @@
+export {ComponentIframe as Component, ComponentIframe as default} from "./ComponentIframe";
+export {ComponentIframeBase as Base} from "./ComponentIframeBase";
+export {Definition} from "./Definition";
+export {Props} from "./Props";
+export type {PropsType, PropsConfigType} from "./Props";
+export {Schemas} from "./Schemas";
+export type {SchemasType} from "./Schemas";
+export {Methods} from "./Methods";
+export type {MethodsType, MethodsConfigType, MethodsComponentArgs, MethodsDataArgs} from "./Methods";
+export {Examples} from "./examples";

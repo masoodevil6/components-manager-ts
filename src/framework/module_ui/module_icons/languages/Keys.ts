@@ -110,6 +110,18 @@ export const Keys = {
             name:        CreateTranslationKey() ,
             description: CreateTranslationKey() ,
         },
+        shapePlay: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        separatorHorizontal: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        separatorVertical: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
 
 
 

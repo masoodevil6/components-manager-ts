@@ -84,6 +84,13 @@ export const Props = {
         description:  Keys.category.components.webCode.props.btnRetryIcon.description,
     }),
 
+    prop_hasBtnClose: Define_ComponentProp<boolean>({
+        prop:         "prop_hasBtnClose",
+        default:      true,
+        name:         Keys.category.components.webCode.props.hasBtnClose.name,
+        description:  Keys.category.components.webCode.props.hasBtnClose.description,
+    }),
+
 } satisfies CoreComponents.ComponentProps;
 
 

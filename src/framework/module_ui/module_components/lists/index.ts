@@ -179,6 +179,24 @@ import {Props      as InputProps}         from "./componentInput/Props";
 import {Schemas    as InputSchemas}       from "./componentInput/Schemas";
 import {Methods    as InputMethods}        from "./componentInput/Methods";
 import {Examples   as InputExamples}       from "./componentInput/examples";
+import {Component as ComponentFormClass} from "./componentForm";
+import {Definition as FormDefinition} from "./componentForm/Definition";
+import {Props as FormProps} from "./componentForm/Props";
+import {Schemas as FormSchemas} from "./componentForm/Schemas";
+import {Methods as FormMethods} from "./componentForm/Methods";
+import {Examples as FormExamples} from "./componentForm/examples";
+import {Component as ComponentWidgetClass} from "./componentWidget";
+import {Definition as WidgetDefinition} from "./componentWidget/Definition";
+import {Props as WidgetProps} from "./componentWidget/Props";
+import {Schemas as WidgetSchemas} from "./componentWidget/Schemas";
+import {Methods as WidgetMethods} from "./componentWidget/Methods";
+import {Examples as WidgetExamples} from "./componentWidget/examples";
+import {Component as ComponentIframeClass} from "./componentIframe";
+import {Definition as IframeDefinition} from "./componentIframe/Definition";
+import {Props as IframeProps} from "./componentIframe/Props";
+import {Schemas as IframeSchemas} from "./componentIframe/Schemas";
+import {Methods as IframeMethods} from "./componentIframe/Methods";
+import {Examples as IframeExamples} from "./componentIframe/examples";
 // --------------------------------
 import {Component as ComponentInputPriceClass} from "./componentInputPrice";
 import {Definition as InputPriceDefinition}    from "./componentInputPrice/Definition";
@@ -559,6 +577,33 @@ CoreComponents.ComponentManager.register({
 });
 
 CoreComponents.ComponentManager.register({
+    definition: FormDefinition,
+    props: FormProps,
+    schemas: FormSchemas,
+    methods: FormMethods,
+    examples: FormExamples,
+    constructor: ComponentFormClass as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition: WidgetDefinition,
+    props: WidgetProps,
+    schemas: WidgetSchemas,
+    methods: WidgetMethods,
+    examples: WidgetExamples,
+    constructor: ComponentWidgetClass as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition: IframeDefinition,
+    props: IframeProps,
+    schemas: IframeSchemas,
+    methods: IframeMethods,
+    examples: IframeExamples,
+    constructor: ComponentIframeClass as any,
+});
+
+CoreComponents.ComponentManager.register({
     definition:  InputPriceDefinition,
     props:       InputPriceProps,
     schemas:     InputPriceSchemas,
@@ -832,6 +877,9 @@ export * as ComponentInputRadioBox from "./componentInputRadioBox";
 export * as ComponentInputOtp from "./componentInputOtp";
 export * as ComponentInputSimple from "./componentInputSimple";
 export * as ComponentInput from "./componentInput";
+export * as ComponentForm from "./componentForm";
+export * as ComponentWidget from "./componentWidget";
+export * as ComponentIframe from "./componentIframe";
 export * as ComponentInputPrice from "./componentInputPrice";
 export * as ComponentInputPassword from "./componentInputPassword";
 export * as ComponentInputEmail from "./componentInputEmail";

@@ -68,6 +68,7 @@ export const Schemas = {
             Props.prop_btnRetryTitle,
             Props.prop_btnRetryClass,
             Props.prop_btnRetryIcon,
+            Props.prop_hasBtnClose,
         ],
         name:         Keys.category.components.webCode.schemas.contentBlurPositionRetry.name,
         description:  Keys.category.components.webCode.schemas.contentBlurPositionRetry.description,

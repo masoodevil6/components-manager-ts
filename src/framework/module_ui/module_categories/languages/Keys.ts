@@ -67,6 +67,10 @@ export const Keys = {
                 name:        CreateTranslationKey() ,
                 description: CreateTranslationKey() ,
             },
+            symbolsSeparators: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+            },
             /// Arrows -> Basic
             arrowsBasic: {
                 name:        CreateTranslationKey() ,
@@ -435,6 +439,7 @@ export const Keys = {
                 description: CreateTranslationKey(),
                 props: {
                     orientation: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    isFullWidth: {name: CreateTranslationKey(), description: CreateTranslationKey()},
                     direction: {name: CreateTranslationKey(), description: CreateTranslationKey()},
                     items: {name: CreateTranslationKey(), description: CreateTranslationKey()},
                     backgroundColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
@@ -1945,6 +1950,7 @@ export const Keys = {
                     btnRetryTitle:   { name: CreateTranslationKey() , description: CreateTranslationKey() },
                     btnRetryClass:   { name: CreateTranslationKey() , description: CreateTranslationKey() },
                     btnRetryIcon:    { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    hasBtnClose:     { name: CreateTranslationKey() , description: CreateTranslationKey() },
                 },
 
                 schemas: {
@@ -1970,6 +1976,7 @@ export const Keys = {
                 description: CreateTranslationKey(),
                 props: {
                     title: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    canRun: {name: CreateTranslationKey(), description: CreateTranslationKey()},
                     value: {name: CreateTranslationKey(), description: CreateTranslationKey()},
                     language: {name: CreateTranslationKey(), description: CreateTranslationKey()},
                     isReadOnly: {name: CreateTranslationKey(), description: CreateTranslationKey()},
@@ -1980,6 +1987,8 @@ export const Keys = {
                     numbersColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
                     numberActiveBackgroundColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
                     lineActiveBackgroundColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    themeLightBackgroundColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    themeDarkBackgroundColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
                 },
                 schemas: {
                     root: {name: CreateTranslationKey(), description: CreateTranslationKey()},
@@ -1992,6 +2001,101 @@ export const Keys = {
                     default: {name: CreateTranslationKey(), description: CreateTranslationKey()},
                     javascript: {name: CreateTranslationKey(), description: CreateTranslationKey()},
                     readOnly: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+            },
+
+            /// Fetch -> Form
+            fetch: {
+                name: CreateTranslationKey(),
+                description: CreateTranslationKey(),
+                form: {
+                    name: CreateTranslationKey(),
+                    description: CreateTranslationKey(),
+                    props: {
+                        forms: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        formClass: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        formStyles: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        formsMinHeight: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        btnformClass: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        btnformStyles: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        btnSubmit: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        btnSubmitBackground: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        btnSubmitBackgroundHover: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        btnSubmitColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        url: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        data: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        showErrorStepper: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        runFetch: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    },
+                    schemas: {
+                        form: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        border: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        body: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    },
+                    methods: {
+                        submit: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        getResponse: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        response: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    },
+                    examples: {
+                        default: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        validation: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        manualSubmit: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    },
+                },
+                widget: {
+                    name: CreateTranslationKey(),
+                    description: CreateTranslationKey(),
+                    props: {
+                        layoutContent: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        widgetClass: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        widgetStyles: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        widgetMinHeight: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        widgetWidth: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        widgetHeight: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        fetch: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        btnMoreIcon: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        btnMoreShow: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        btnMoreLink: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    },
+                    schemas: {
+                        widget: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        border: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        body: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    },
+                    methods: {
+                        beforeFetch: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        getResponse: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        response: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        retryClick: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    },
+                    examples: {
+                        default: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    },
+                },
+                iframe: {
+                    name: CreateTranslationKey(),
+                    description: CreateTranslationKey(),
+                    props: {
+                        url: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        width: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        height: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        heightAuto: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        iframeClass: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        iframeStyles: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        widgetWidth: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        widgetHeight: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    },
+                    schemas: {
+                        root: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        border: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        body: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        frame: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    },
+                    examples: {
+                        default: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                        fixedHeight: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    },
                 },
             },
 
