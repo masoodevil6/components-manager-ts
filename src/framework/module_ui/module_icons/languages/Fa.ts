@@ -87,6 +87,22 @@ export const Fa =
             "آیکون علامت ضربدر که برای نمایش وضعیت غلط یا رد شده استفاده می‌شود."
         ],
         [
+            Keys.icons.statusError.name,
+            "خطا"
+        ],
+        [
+            Keys.icons.statusError.description,
+            "آیکون خطا برای نمایش خطا یا عملیات ناموفق."
+        ],
+        [
+            Keys.icons.debug.name,
+            "دیباگ"
+        ],
+        [
+            Keys.icons.debug.description,
+            "آیکون حشره برای دیباگ و نمایش خروجی تشخیصی."
+        ],
+        [
             Keys.icons.visit.name,
             "مشاهده شده"
         ],

@@ -471,7 +471,7 @@ export class ClReactiveElement {
                 }
 
                 // Phase 7 (بخش ۶.۲ پلن): تزریق helper رویداد — event.request(map)
-                handler(e, { request: (map) => CoreEvent.App.request(map) });
+                handler(e, { request: (map, source) => CoreEvent.App.request(map, source) });
 
             };
 

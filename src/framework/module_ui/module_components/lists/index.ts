@@ -125,6 +125,13 @@ import {Schemas as CodeMirrorSchemas} from "./componentCodeMirror/Schemas";
 import {Methods as CodeMirrorMethods} from "./componentCodeMirror/Methods";
 import {Examples as CodeMirrorExamples} from "./componentCodeMirror/examples";
 // --------------------------------
+import {Component as ComponentConsoleClass} from "./componentConsole";
+import {Definition as ConsoleDefinition} from "./componentConsole/Definition";
+import {Props as ConsoleProps} from "./componentConsole/Props";
+import {Schemas as ConsoleSchemas} from "./componentConsole/Schemas";
+import {Methods as ConsoleMethods} from "./componentConsole/Methods";
+import {Examples as ConsoleExamples} from "./componentConsole/examples";
+// --------------------------------
 import {Component as ComponentWindowClass}     from "./componentWindow";
 import {Definition as WindowDefinition}         from "./componentWindow/Definition";
 import {Props      as WindowProps}              from "./componentWindow/Props";
@@ -485,6 +492,16 @@ CoreComponents.ComponentManager.register({
     methods:     CodeMirrorMethods,
     examples:    CodeMirrorExamples,
     constructor: ComponentCodeMirrorClass as any,
+});
+
+// Register ComponentConsole in Component Manager.
+CoreComponents.ComponentManager.register({
+    definition:  ConsoleDefinition,
+    props:       ConsoleProps,
+    schemas:     ConsoleSchemas,
+    methods:     ConsoleMethods,
+    examples:    ConsoleExamples,
+    constructor: ComponentConsoleClass as any,
 });
 
 
@@ -869,6 +886,7 @@ export * as ComponentValidate   from "./componentValidate";
 export * as ComponentErrorIsEmpty from "./componentErrorIsEmpty";
 export * as ComponentWebCode     from "./componentWebCode";
 export * as ComponentCodeMirror from "./componentCodeMirror";
+export * as ComponentConsole from "./componentConsole";
 export * as ComponentWindow      from "./componentWindow";
 export * as ComponentWindowConfirm from "./componentWindowConfirm";
 export * as ComponentTable       from "./componentTable";

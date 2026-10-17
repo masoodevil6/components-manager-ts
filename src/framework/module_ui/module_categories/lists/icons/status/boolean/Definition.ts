@@ -9,6 +9,7 @@ import {Keys}                              from "../../../../languages";
 
 export const IsTrue   : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.StatusIsTrue.Definition);
 export const IsFalse  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.StatusIsFalse.Definition);
+export const Error    : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.StatusError.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
@@ -16,6 +17,6 @@ export const Definition : TCategoryIconDefinition = {
     name:            Keys.category.icons.statusBoolean.name ,
     description:     Keys.category.icons.statusBoolean.description  ,
     icons:          [
-        IsTrue, IsFalse
+        IsTrue, IsFalse, Error
     ]
 }

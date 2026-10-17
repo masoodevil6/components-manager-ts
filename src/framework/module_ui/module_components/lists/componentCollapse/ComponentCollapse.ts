@@ -434,6 +434,7 @@ export class ComponentCollapse extends ComponentCollapseBase {
 
         const prop_collapseBody            = data?.["prop_collapseBody"]            ?? bind.prop_collapseBody;
         const prop_collapseBodyStyles      = data?.["prop_collapseBodyStyles"]      ?? bind.prop_collapseBodyStyles;
+        const prop_bodyBackgroundColor    = data?.["prop_bodyBackgroundColor"]    ?? bind.prop_bodyBackgroundColor;
         const prop_collapseBodyClass       = data?.["prop_collapseBodyClass"]       ?? bind.prop_collapseBodyClass;
         const prop_collapseBodyIsOpen      = data?.["prop_collapseBodyIsOpen"]      ?? bind.prop_collapseBodyIsOpen;
         const prop_collapseBodyBorderColor = data?.["prop_collapseBodyBorderColor"] ?? bind.prop_collapseBodyBorderColor;
@@ -491,16 +492,17 @@ export class ComponentCollapse extends ComponentCollapseBase {
         );
 
         const bodyStylesMerged = CoreObservable.App.computed(
-            (styleMap, borderColor, borderStyle, borderWidth, borderRadius, h, fs) => ({
+            (styleMap, bodyBackgroundColor, borderColor, borderStyle, borderWidth, borderRadius, h, fs) => ({
                 lineHeight:   h,
                 fontSize:     fs,
                 ...(styleMap ?? {}),
+                backgroundColor: bodyBackgroundColor,
                 borderColor,
                 borderStyle,
                 borderWidth,
                 borderRadius,
             }),
-            [prop_collapseBodyStyles, prop_collapseBodyBorderColor, borderStyleComputed, borderWidthComputed, borderRadiusComputed, contentHeight, contentFontSize],
+            [prop_collapseBodyStyles, prop_bodyBackgroundColor, prop_collapseBodyBorderColor, borderStyleComputed, borderWidthComputed, borderRadiusComputed, contentHeight, contentFontSize],
             this.getScope(),
         );
 

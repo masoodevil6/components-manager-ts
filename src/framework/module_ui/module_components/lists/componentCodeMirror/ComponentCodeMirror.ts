@@ -29,13 +29,39 @@ import {PartAttrDefault} from "@/core_components";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
 import * as ComponentBorder from "../componentBorder";
+import * as ComponentButton from "../componentButton";
 import * as ComponentIcon from "../componentIcon";
 import * as ComponentMenuMore from "../componentMenuMore";
+import * as ComponentConsole from "../componentConsole";
+import {ButtonAction, ButtonSemantic, ButtonVariants} from "../componentButton/Props";
 import {ComponentCodeMirrorBase} from "./ComponentCodeMirrorBase";
 import {CodeMirrorLanguage, PropsConfigType} from "./Props";
 import {Schemas} from "./Schemas";
 import {MethodsConfigType} from "./Methods";
 import {createCodeMirrorStep} from "./Step";
+import {serializeConsoleValue} from "../componentConsole/Types";
+import type {ConsoleEntry, ConsoleLevel} from "../componentConsole/Types";
+
+const CODE_MIRROR_CONSOLE_HEIGHT = "220px";
+
+const COPY_ICON: UiIcons.IIconDefinition = {
+    title: UiIcons.Src.FileApplication.Definition.title,
+    description: UiIcons.Src.FileApplication.Definition.description,
+    viewBoxX: 24,
+    viewBoxY: 24,
+    render(context) {
+        return [
+            CoreReactive.App.svgPath({
+                attrs: {d: "M8 8h11v11H8z", fill: "none", "stroke-linejoin": "round"},
+                attrsBind: {stroke: context.primaryColor, "stroke-width": context.strokeWidth},
+            }),
+            CoreReactive.App.svgPath({
+                attrs: {d: "M5 5h11v11H5z", "stroke-linejoin": "round"},
+                attrsBind: {fill: context.secondaryColor, stroke: context.primaryColor, "stroke-width": context.strokeWidth},
+            }),
+        ];
+    },
+};
 
 function createCodeMirrorSetup(markerDOM: (open: boolean) => HTMLElement): any[] {
     return [
@@ -73,12 +99,18 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
     private _HEADER_BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;
     private _HEADER_MENU: InstanceType<typeof ComponentMenuMore.Component> | null = null;
     private _HEADER_LANGUAGE_ICON: InstanceType<typeof ComponentIcon.Component> | null = null;
+    private _EDITOR_COPY_BUTTON: InstanceType<typeof ComponentButton.Component> | null = null;
     private _BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;
     private _EDITOR_BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;
     private _RUN_BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;
     private _RUN_PANE: CoreReactive.App | null = null;
     private _RUN_PANEL: HTMLElement | null = null;
     private _RUN_FRAME: HTMLIFrameElement | null = null;
+    private _CONSOLE_COMPONENT: InstanceType<typeof ComponentConsole.Component> | null = null;
+    private _CONSOLE_PANE: CoreReactive.App | null = null;
+    private readonly _CONSOLE_ENTRIES = new CoreObservable.App<ConsoleEntry[]>([]);
+    private readonly _SHOW_CONSOLE = new CoreObservable.App(false);
+    private readonly _RUN_MESSAGE_LISTENER = (event: MessageEvent) => this.handleRunMessage(event);
     private _FOLD_ICON_OPEN: InstanceType<typeof ComponentIcon.Component> | null = null;
     private _FOLD_ICON_CLOSED: InstanceType<typeof ComponentIcon.Component> | null = null;
     private _LANGUAGE_COMPARTMENT = new Compartment();
@@ -98,6 +130,7 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
     ) {
         super("code-mirror", null, identity, createCodeMirrorStep());
         this.renderComponent(config as any, methods as any, identity?.events ?? null);
+        window.addEventListener("message", this._RUN_MESSAGE_LISTENER);
     }
 
     dispose(): void {
@@ -107,6 +140,8 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
         this._EDITOR = null;
         this._HEADER_MENU?.dispose();
         this._HEADER_MENU = null;
+        this._EDITOR_COPY_BUTTON?.dispose();
+        this._EDITOR_COPY_BUTTON = null;
         this.disposeFoldIcon(this._HEADER_LANGUAGE_ICON);
         this._HEADER_LANGUAGE_ICON = null;
         this._HEADER_BORDER?.dispose();
@@ -121,6 +156,10 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
         this._RUN_FRAME?.remove();
         this._RUN_FRAME = null;
         this._RUN_PANEL = null;
+        window.removeEventListener("message", this._RUN_MESSAGE_LISTENER);
+        this._CONSOLE_COMPONENT?.dispose();
+        this._CONSOLE_COMPONENT = null;
+        this._CONSOLE_PANE = null;
         this.disposeFoldIcon(this._FOLD_ICON_OPEN);
         this.disposeFoldIcon(this._FOLD_ICON_CLOSED);
         this._FOLD_ICON_OPEN = null;
@@ -199,7 +238,10 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
                 }, {
                     type: "group",
                     id: "code-mirror-run-group",
-                    items: [{id: "code-mirror-run", title: "Run", icon: UiIcons.Src.ShapePlay.Definition, action: "run"}],
+                    items: [
+                        {id: "code-mirror-console", title: "Console", icon: UiIcons.Src.StatusDebug.Definition, action: "console"},
+                        {id: "code-mirror-run", title: "Run", icon: UiIcons.Src.ShapePlay.Definition, action: "run"},
+                    ],
                 });
             }
             return groups;
@@ -231,6 +273,7 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
                 if (dataArgs?.ITEM?.action === "layout-horizontal") this._IS_VERTICAL_LAYOUT.set(false);
                 if (dataArgs?.ITEM?.action === "layout-vertical") this._IS_VERTICAL_LAYOUT.set(true);
                 if (dataArgs?.ITEM?.action === "run") this.runCurrentCode();
+                if (dataArgs?.ITEM?.action === "console") this._SHOW_CONSOLE.set(!this._SHOW_CONSOLE.get());
             },
         } as any);
         const headerIconColor = UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1);
@@ -375,6 +418,11 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
             [canRun, this._IS_VERTICAL_LAYOUT],
             this.getScope(),
         );
+        const runBorderTopHas = CoreObservable.App.computed(
+            (allowRun: boolean, isVertical: boolean) => !!allowRun && isVertical,
+            [canRun, this._IS_VERTICAL_LAYOUT],
+            this.getScope(),
+        );
         const editorBorderStyles = CoreObservable.App.computed(
             (allowRun: boolean, isRtl: boolean, isVertical: boolean, size: UtilConst.Sizes) => ({
                 width: "100%",
@@ -396,6 +444,16 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
                 "border-bottom-width": UtilStyle.Style_Important(
                     allowRun && isVertical ? UtilStyle.Css_BorderWidth(size) : UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL),
                 ),
+                "border-bottom-style": allowRun && isVertical ? "solid" : "none",
+                "border-bottom-color": allowRun && isVertical
+                    ? UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1)
+                    : "transparent",
+                // This is applied to the inner `part-border` of the editor
+                // ComponentBorder. The shorthand keeps the separator visible
+                // when the layout is switched to the vertical code/run mode.
+                borderBottom: allowRun && isVertical
+                    ? `${UtilStyle.Css_BorderWidth(size)} solid ${UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1)} !important`
+                    : "none",
             }),
             [canRun, directionRtl, this._IS_VERTICAL_LAYOUT, sizeName],
             this.getScope(),
@@ -428,10 +486,46 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
                 width: "100%",
                 height: "100%",
                 minWidth: "0",
+                position: "relative",
+                overflow: "hidden",
                 boxSizing: "border-box",
             },
             children: [this._EDITOR_BORDER.getReactiveElement()],
         });
+        this._EDITOR_COPY_BUTTON = new ComponentButton.Component({
+            styles: CoreObservable.App.computed((isRtl: boolean, size: UtilConst.Sizes) => {
+                const padding = UtilStyle.Css_Padding(size);
+                const controlSize = UtilStyle.Css_SizeCalc(
+                    padding as any,
+                    UtilConst.Operation.ADD,
+                    UtilStyle.Css_Height(size) as any,
+                    UtilConst.Operation.ADD,
+                    padding as any,
+                );
+                return {
+                    display: "block",
+                    position: "absolute",
+                    top: padding,
+                    ...(isRtl ? {left: padding} : {right: padding}),
+                    zIndex: "3",
+                    width: controlSize,
+                    height: controlSize,
+                    minWidth: controlSize,
+                    minHeight: controlSize,
+                };
+            }, [directionRtl, sizeName], this.getScope()) as any,
+            prop_btnTitle: "Copy code",
+            prop_btnType: ButtonAction.BUTTON,
+            prop_btnVariant: ButtonVariants.ICON,
+            prop_btnSemantic: ButtonSemantic.PRIMARY,
+            prop_btnIcon: COPY_ICON,
+            prop_btnIconStyles: {width: "18px", height: "18px"},
+            prop_btnTitleStyles: {display: "none"},
+            prop_btnStyles: {width: "100%", height: "100%", minWidth: "100%", minHeight: "100%", padding: "0"},
+        } as any, {
+            CLICK: () => this.copyEditorContent(),
+        } as any);
+        (editorPane.getElement() as HTMLElement).append(this._EDITOR_COPY_BUTTON.getElement() as HTMLElement);
 
         const runPane = CoreObservable.App.conditionWhen(
             [canRun],
@@ -448,7 +542,9 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
                         display: "block",
                         width: "100%",
                         flex: "1 1 auto",
+                        height: "100%",
                         minHeight: "0",
+                        maxHeight: "100%",
                         minWidth: "0",
                         overflow: "auto",
                         boxSizing: "border-box",
@@ -494,7 +590,7 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
                     prop_borderTopRightRadiusHas: false,
                     prop_borderBottomLeftRadiusHas: false,
                     prop_borderBottomRightRadiusHas: false,
-                    prop_borderTopHas: false,
+                    prop_borderTopHas: runBorderTopHas as any,
                     prop_borderRightHas: false,
                     prop_borderBottomHas: false,
                     prop_borderLeftHas: false,
@@ -506,6 +602,9 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
                         width: "100%",
                         height: "100%",
                         minWidth: "0",
+                        minHeight: "0",
+                        maxHeight: "100%",
+                        overflow: "auto",
                         boxSizing: "border-box",
                     },
                     children: [this._RUN_BORDER.getReactiveElement()],
@@ -517,6 +616,8 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
         );
         canRun.subscribe((enabled) => {
             if (enabled) return;
+            this._SHOW_CONSOLE.set(false);
+            this._CONSOLE_ENTRIES.set([]);
             this.clearRunOutput();
             this._RUN_BORDER?.dispose();
             this._RUN_BORDER = null;
@@ -570,11 +671,79 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
             prop_borderBottomRightRadiusHas: false,
         });
 
+        const consolePane = CoreObservable.App.conditionWhen(
+            [canRun, this._SHOW_CONSOLE],
+            (allowRun: boolean, showConsole: boolean) => !!allowRun && !!showConsole,
+            () => this.renderConsolePane(),
+            () => null,
+            this.getScope(),
+        );
+
         return CoreReactive.App.section({
             attrs: {...attrsDefault},
             styles: {width: "100%", minWidth: "0"},
-            children: [this._HEADER_BORDER.getReactiveElement(), this._BORDER.getReactiveElement()],
+            children: [this._HEADER_BORDER.getReactiveElement(), this._BORDER.getReactiveElement(), consolePane as any],
         });
+    }
+
+    private renderConsolePane(): CoreReactive.App {
+        if (this._CONSOLE_PANE) return this._CONSOLE_PANE;
+        this._CONSOLE_COMPONENT = new ComponentConsole.Component({
+            styles: {
+                display: "block",
+                width: "100%",
+                height: CODE_MIRROR_CONSOLE_HEIGHT,
+                maxHeight: CODE_MIRROR_CONSOLE_HEIGHT,
+                minHeight: CODE_MIRROR_CONSOLE_HEIGHT,
+                minWidth: "0",
+                flex: `0 0 ${CODE_MIRROR_CONSOLE_HEIGHT}`,
+                overflow: "hidden",
+                boxSizing: "border-box",
+            },
+            prop_structureStyles: {
+                display: "block",
+                width: "100%",
+                height: "100%",
+                minHeight: "0",
+                overflow: "hidden",
+                boxSizing: "border-box",
+            },
+            prop_componentBorderStyles: {
+                display: "block",
+                width: "100%",
+                height: "100%",
+                minHeight: "0",
+                overflow: "hidden",
+                boxSizing: "border-box",
+            },
+            prop_componentBorderStructureStyles: {
+                display: "block",
+                width: "100%",
+                height: "100%",
+                minHeight: "0",
+                overflow: "hidden",
+                boxSizing: "border-box",
+            },
+            prop_entries: this._CONSOLE_ENTRIES,
+            prop_showClearButton: true,
+            prop_showLevelFilter: true,
+        } as any);
+        this._CONSOLE_PANE = CoreReactive.App.section({
+            attrs: {"data-part-name": "part-code-mirror-console"},
+            styles: {
+                display: "block",
+                width: "100%",
+                height: CODE_MIRROR_CONSOLE_HEIGHT,
+                maxHeight: CODE_MIRROR_CONSOLE_HEIGHT,
+                minWidth: "0",
+                minHeight: CODE_MIRROR_CONSOLE_HEIGHT,
+                flex: `0 0 ${CODE_MIRROR_CONSOLE_HEIGHT}`,
+                overflow: "hidden",
+                boxSizing: "border-box",
+            },
+            children: [this._CONSOLE_COMPONENT.getReactiveElement() as any],
+        });
+        return this._CONSOLE_PANE;
     }
 
     private renderEditor(
@@ -722,11 +891,78 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
         }
     }
 
+    public run(): void {
+        this.runCurrentCode();
+    }
+
+    private copyEditorContent(): void {
+        const text = this._EDITOR?.state.doc.toString() ?? "";
+        if (!text) return;
+        if (navigator.clipboard?.writeText) {
+            void navigator.clipboard.writeText(text).catch(() => this.copyEditorContentFallback(text));
+            return;
+        }
+        this.copyEditorContentFallback(text);
+    }
+
+    private copyEditorContentFallback(text: string): void {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.append(textarea);
+        textarea.select();
+        try { document.execCommand("copy"); } finally { textarea.remove(); }
+    }
+
     private runCurrentCode(): void {
         if (this._DISPOSED || !this._RUN_PANEL) return;
 
         const source = this._EDITOR?.state.doc.toString() ?? this._COMPONENT_PROPS_BIND.prop_value.get() ?? "";
         const language = this.normalizeLanguage(this._COMPONENT_PROPS_BIND.prop_language.get());
+
+        const runHandler = this._COMPONENT_PROPS_BIND.prop_run?.get();
+        if (typeof runHandler === "function") {
+            this.clearRunOutput();
+            this._CONSOLE_ENTRIES.set([]);
+            try {
+                const output = runHandler(source, language, {
+                    console: {
+                        log: (...values) => this.appendRunConsole("log", values),
+                        info: (...values) => this.appendRunConsole("info", values),
+                        warn: (...values) => this.appendRunConsole("warn", values),
+                        error: (...values) => this.appendRunConsole("error", values),
+                        debug: (...values) => this.appendRunConsole("debug", values),
+                    },
+                });
+                if (output instanceof Node) {
+                    this._RUN_PANEL.replaceChildren(output);
+                } else if (typeof output === "string") {
+                    const outputElement = document.createElement("pre");
+                    outputElement.style.margin = "0";
+                    outputElement.style.padding = UtilStyle.Css_Padding(CoreConfig.Settings.SizeName.get());
+                    outputElement.style.whiteSpace = "pre-wrap";
+                    outputElement.textContent = output;
+                    this._RUN_PANEL.replaceChildren(outputElement);
+                }
+            } catch (error) {
+                const outputElement = document.createElement("pre");
+                outputElement.style.margin = "0";
+                outputElement.style.padding = UtilStyle.Css_Padding(CoreConfig.Settings.SizeName.get());
+                outputElement.style.whiteSpace = "pre-wrap";
+                outputElement.style.color = UtilStyle.Css_Color(UtilConst.ColorMain.ERROR, UtilConst.ColorGrad.GRADE_1);
+                outputElement.textContent = error instanceof Error ? error.stack ?? error.message : String(error);
+                this._RUN_PANEL.replaceChildren(outputElement);
+                this._CONSOLE_ENTRIES.set([{
+                    id: `run-error-${Date.now()}`,
+                    level: "error",
+                    timestamp: Date.now(),
+                    values: [{type: "string", preview: outputElement.textContent}],
+                }]);
+            }
+            return;
+        }
+
         const frame = document.createElement("iframe");
         frame.title = "Code output";
         frame.setAttribute("sandbox", "allow-scripts");
@@ -738,9 +974,37 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
         frame.style.backgroundColor = UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1);
 
         this.clearRunOutput();
+        this._CONSOLE_ENTRIES.set([]);
         this._RUN_PANEL.replaceChildren(frame);
         this._RUN_FRAME = frame;
         frame.srcdoc = this.createRunDocument(source, language);
+    }
+
+    private handleRunMessage(event: MessageEvent): void {
+        if (this._DISPOSED || !this._RUN_FRAME || event.source !== this._RUN_FRAME.contentWindow) return;
+        const data = event.data as any;
+        if (!data || data.__componentCodeMirrorConsole !== true) return;
+        const levels: ConsoleLevel[] = ["log", "info", "warn", "error", "debug"];
+        const level: ConsoleLevel = levels.includes(data.level) ? data.level : "log";
+        const values = Array.isArray(data.values) ? data.values.map((value: unknown) => ({type: "string", preview: String(value)})) : [];
+        const timestamp = Date.now();
+        this._CONSOLE_ENTRIES.set([
+            ...this._CONSOLE_ENTRIES.get(),
+            {id: `run-${timestamp}-${Math.random().toString(36).slice(2)}`, level, timestamp, values},
+        ]);
+    }
+
+    private appendRunConsole(level: ConsoleLevel, values: unknown[]): void {
+        const timestamp = Date.now();
+        this._CONSOLE_ENTRIES.set([
+            ...this._CONSOLE_ENTRIES.get(),
+            {
+                id: `run-${timestamp}-${Math.random().toString(36).slice(2)}`,
+                level,
+                timestamp,
+                values: values.map((value) => serializeConsoleValue(value)),
+            },
+        ]);
     }
 
     private clearRunOutput(): void {
@@ -763,9 +1027,12 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
 const source = ${serializedSource};
 const output = document.getElementById("code-mirror-console");
 const format = value => typeof value === "string" ? value : (() => { try { return JSON.stringify(value); } catch { return String(value); } })();
-const write = (...values) => { output.textContent += values.map(format).join(" ") + "\\n"; };
-for (const method of ["log", "info", "warn", "error", "debug"]) console[method] = write;
-window.onerror = message => { write(message); };
+const write = (level, ...values) => {
+    output.textContent += values.map(format).join(" ") + "\\n";
+    try { window.parent.postMessage({__componentCodeMirrorConsole: true, level, values: values.map(format)}, "*"); } catch {}
+};
+for (const method of ["log", "info", "warn", "error", "debug"]) console[method] = (...values) => write(method, ...values);
+window.onerror = message => { write("error", message); };
 try { (0, eval)(source); } catch (error) { write(error && error.stack ? error.stack : error); }
 </script></body></html>`;
     }

@@ -21,6 +21,8 @@ export * as ArrowDoubleDown      from "./arrowDoubleDown";
 
 export * as StatusIsFalse         from "./statusIsFalse";
 export * as StatusIsTrue          from "./statusIsTrue";
+export * as StatusError           from "./statusError";
+export * as StatusDebug           from "./statusDebug";
 export * as ShapeCircle           from "./shapeCircle";
 export * as ShapePlay             from "./shapePlay";
 export * as SeparatorHorizontal   from "./separatorHorizontal";

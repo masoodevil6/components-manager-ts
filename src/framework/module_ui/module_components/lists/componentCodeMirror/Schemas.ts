@@ -9,7 +9,7 @@ export const Schemas = {
     STRUCTURE: ComponentStructureTrait.schemas.STRUCTURE,
     ROOT: {
         part: "part-root",
-        props: [Props.prop_title, Props.prop_canRun],
+        props: [Props.prop_title, Props.prop_canRun, Props.prop_run],
         name: Keys.category.components.codeMirror.schemas.root.name,
         description: Keys.category.components.codeMirror.schemas.root.description,
     },

@@ -3808,6 +3808,14 @@ export const Fa =
             "استایل‌های CSS اعمال شده روی بدنه"
         ],
         [
+            Keys.category.components.collapse.props.bodyBackgroundColor.name,
+            "\u0631\u0646\u06af \u0632\u0645\u06cc\u0646\u0647 \u0628\u062f\u0646\u0647"
+        ],
+        [
+            Keys.category.components.collapse.props.bodyBackgroundColor.description,
+            "\u0631\u0646\u06af \u0632\u0645\u06cc\u0646\u0647 \u0627\u0639\u0645\u0627\u0644 \u0634\u062f\u0647 \u0631\u0648\u06cc \u0628\u062f\u0646\u0647 \u0622\u06a9\u0648\u0631\u062f\u0626\u0648\u0646"
+        ],
+        [
             Keys.category.components.collapse.props.collapseBodyClass.name,
             "کلاس بدنه"
         ],
@@ -4592,7 +4600,8 @@ export const Fa =
         [Keys.category.components.codeMirror.props.title.description, "عنوان اختیاری کنار آیکون زبان نمایش داده می‌شود؛ اگر خالی باشد نام زبان انتخاب‌شده نمایش داده می‌شود."],
         [Keys.category.components.codeMirror.props.canRun.name, "فعال‌سازی اجرا"],
         [Keys.category.components.codeMirror.props.canRun.description, "گزینهٔ Run و پنل خروجی کنار ویرایشگر را نمایش می‌دهد."],
-        [Keys.category.components.codeMirror.description, "ویرایش یا نمایش کد HTML و JavaScript."],
+        [Keys.category.components.codeMirror.props.run.name, "Run handler"],
+        [Keys.category.components.codeMirror.props.run.description, "Executes the edited source in the run panel."],
         [Keys.category.components.codeMirror.props.value.name, "کد"],
         [Keys.category.components.codeMirror.props.value.description, "متن منبعی که در ویرایشگر نمایش داده می‌شود."],
         [Keys.category.components.codeMirror.props.language.name, "زبان"],
@@ -4623,12 +4632,51 @@ export const Fa =
         [Keys.category.components.codeMirror.schemas.editor.description, "میزبان CodeMirror و تنظیمات واکنشی ویرایشگر."],
         [Keys.category.components.codeMirror.methods.change.name, "تغییر کد"],
         [Keys.category.components.codeMirror.methods.change.description, "هنگام تغییر متن منبع فراخوانی می‌شود."],
+        [Keys.category.components.codeMirror.texts.preview, "پیش‌نمایش"],
         [Keys.category.components.codeMirror.examples.default.name, "ویرایشگر HTML"],
         [Keys.category.components.codeMirror.examples.default.description, "ویرایش HTML همراه با callback تغییر کد."],
         [Keys.category.components.codeMirror.examples.javascript.name, "ویرایشگر JavaScript"],
         [Keys.category.components.codeMirror.examples.javascript.description, "برجسته‌سازی JavaScript همراه با متن راهنما و شکستن سطر."],
         [Keys.category.components.codeMirror.examples.readOnly.name, "ویرایشگر فقط‌خواندنی"],
         [Keys.category.components.codeMirror.examples.readOnly.description, "نمایش کد قابل انتخاب بدون امکان ویرایش."],
+
+        /// Components -> Console
+        [Keys.category.components.console.name, "کنسول"],
+        [Keys.category.components.console.description, "خروجی شبیه کنسول مرورگر با سطح پیام و مقادیر بازشونده."],
+        [Keys.category.components.console.props.entries.name, "پیام‌ها"],
+        [Keys.category.components.console.props.entries.description, "رکوردهای کنسولی که نمایش داده می‌شوند."],
+        [Keys.category.components.console.props.maxEntries.name, "حداکثر پیام‌ها"],
+        [Keys.category.components.console.props.maxEntries.description, "بیشترین تعداد رکوردهایی که نگه داشته و نمایش داده می‌شوند."],
+        [Keys.category.components.console.props.autoScroll.name, "پیمایش خودکار"],
+        [Keys.category.components.console.props.autoScroll.description, "اگر خروجی در انتها باشد، با پیام جدید به پایین پیمایش می‌کند."],
+        [Keys.category.components.console.props.showLevelFilter.name, "نمایش فیلتر سطح"],
+        [Keys.category.components.console.props.showLevelFilter.description, "دکمه‌های فیلتر پیام‌ها بر اساس سطح را نمایش می‌دهد."],
+        [Keys.category.components.console.props.showClearButton.name, "نمایش دکمه پاک‌کردن"],
+        [Keys.category.components.console.props.showClearButton.description, "عمل پاک‌کردن را در نوار ابزار کنسول نمایش می‌دهد."],
+        [Keys.category.components.console.props.placeholder.name, "پیام خالی"],
+        [Keys.category.components.console.props.placeholder.description, "متنی که وقتی پیام مناسبی وجود ندارد نمایش داده می‌شود."],
+        [Keys.category.components.console.schemas.root.name, "کنسول"],
+        [Keys.category.components.console.schemas.root.description, "قاب کنسول دارای ComponentBorder."],
+        [Keys.category.components.console.schemas.toolbar.name, "نوار ابزار"],
+        [Keys.category.components.console.schemas.toolbar.description, "دکمه پاک‌کردن و فیلتر سطح پیام‌ها."],
+        [Keys.category.components.console.schemas.output.name, "خروجی"],
+        [Keys.category.components.console.schemas.output.description, "رکوردهای قابل پیمایش و مقادیر بازشونده کنسول."],
+        [Keys.category.components.console.methods.clear.name, "پاک‌کردن"],
+        [Keys.category.components.console.methods.clear.description, "پس از پاک‌شدن خروجی کنسول فراخوانی می‌شود."],
+        [Keys.category.components.console.methods.entry.name, "پیام جدید"],
+        [Keys.category.components.console.methods.entry.description, "هنگام افزوده‌شدن رکورد جدید فراخوانی می‌شود."],
+        [Keys.category.components.console.methods.filterChange.name, "تغییر فیلتر"],
+        [Keys.category.components.console.methods.filterChange.description, "هنگام تغییر فیلتر سطح پیام فراخوانی می‌شود."],
+        [Keys.category.components.console.texts.clear, "پاک‌کردن"],
+        [Keys.category.components.console.texts.search, "جست‌وجو در کنسول..."],
+        [Keys.category.components.console.texts.all, "همه"],
+        [Keys.category.components.console.texts.empty, "کنسول خالی است"],
+        [Keys.category.components.console.examples.default.name, "خروجی کنسول"],
+        [Keys.category.components.console.examples.default.description, "کنسول با چند پیام نمونه log و info."],
+        [Keys.category.components.console.examples.levels.name, "سطح پیام‌ها"],
+        [Keys.category.components.console.examples.levels.description, "فیلتر پیام‌های log، info، هشدار، خطا و debug."],
+        [Keys.category.components.console.examples.objects.name, "مقادیر قابل بررسی"],
+        [Keys.category.components.console.examples.objects.description, "اشیای بازشونده و پشته خطای نمونه."],
 
         /// Window
         [

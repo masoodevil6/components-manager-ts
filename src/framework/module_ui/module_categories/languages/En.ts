@@ -3832,6 +3832,14 @@ export const En =
             "CSS styles applied to the body"
         ],
         [
+            Keys.category.components.collapse.props.bodyBackgroundColor.name,
+            "Body Background Color"
+        ],
+        [
+            Keys.category.components.collapse.props.bodyBackgroundColor.description,
+            "Background color applied to the collapse body"
+        ],
+        [
             Keys.category.components.collapse.props.collapseBodyClass.name,
             "Body Class"
         ],
@@ -4617,6 +4625,8 @@ export const En =
         [Keys.category.components.codeMirror.props.title.description, "Optional title shown beside the selected language icon. Defaults to the language name."],
         [Keys.category.components.codeMirror.props.canRun.name, "Enable Run"],
         [Keys.category.components.codeMirror.props.canRun.description, "Show a Run action and a live output pane beside the editor."],
+        [Keys.category.components.codeMirror.props.run.name, "Run handler"],
+        [Keys.category.components.codeMirror.props.run.description, "Executes the edited source and renders its result in the run panel."],
         [Keys.category.components.codeMirror.props.value.name, "Code"],
         [Keys.category.components.codeMirror.props.value.description, "Source text shown in the editor."],
         [Keys.category.components.codeMirror.props.language.name, "Language"],
@@ -4647,12 +4657,51 @@ export const En =
         [Keys.category.components.codeMirror.schemas.editor.description, "CodeMirror editor host and reactive editor settings."],
         [Keys.category.components.codeMirror.methods.change.name, "Code Change"],
         [Keys.category.components.codeMirror.methods.change.description, "Called when the source document changes."],
+        [Keys.category.components.codeMirror.texts.preview, "Preview"],
         [Keys.category.components.codeMirror.examples.default.name, "HTML Editor"],
         [Keys.category.components.codeMirror.examples.default.description, "Editable HTML source with a change callback."],
         [Keys.category.components.codeMirror.examples.javascript.name, "JavaScript Editor"],
         [Keys.category.components.codeMirror.examples.javascript.description, "JavaScript syntax highlighting, placeholder, and line wrapping."],
         [Keys.category.components.codeMirror.examples.readOnly.name, "Read Only Editor"],
         [Keys.category.components.codeMirror.examples.readOnly.description, "Selectable source code that cannot be edited."],
+
+        /// Components -> Console
+        [Keys.category.components.console.name, "Console"],
+        [Keys.category.components.console.description, "Browser-style console output with message levels and expandable values."],
+        [Keys.category.components.console.props.entries.name, "Entries"],
+        [Keys.category.components.console.props.entries.description, "Console records to display."],
+        [Keys.category.components.console.props.maxEntries.name, "Maximum Entries"],
+        [Keys.category.components.console.props.maxEntries.description, "Maximum number of records kept visible."],
+        [Keys.category.components.console.props.autoScroll.name, "Auto Scroll"],
+        [Keys.category.components.console.props.autoScroll.description, "Scroll to the newest record when the output is already at the bottom."],
+        [Keys.category.components.console.props.showLevelFilter.name, "Show Level Filter"],
+        [Keys.category.components.console.props.showLevelFilter.description, "Show buttons for filtering messages by level."],
+        [Keys.category.components.console.props.showClearButton.name, "Show Clear Button"],
+        [Keys.category.components.console.props.showClearButton.description, "Show the clear action in the console toolbar."],
+        [Keys.category.components.console.props.placeholder.name, "Empty Message"],
+        [Keys.category.components.console.props.placeholder.description, "Text shown when there are no matching console records."],
+        [Keys.category.components.console.schemas.root.name, "Console"],
+        [Keys.category.components.console.schemas.root.description, "Bordered console container."],
+        [Keys.category.components.console.schemas.toolbar.name, "Toolbar"],
+        [Keys.category.components.console.schemas.toolbar.description, "Clear action and message-level filters."],
+        [Keys.category.components.console.schemas.output.name, "Output"],
+        [Keys.category.components.console.schemas.output.description, "Scrollable console records and expandable values."],
+        [Keys.category.components.console.methods.clear.name, "Clear"],
+        [Keys.category.components.console.methods.clear.description, "Called after the console output is cleared."],
+        [Keys.category.components.console.methods.entry.name, "New Entry"],
+        [Keys.category.components.console.methods.entry.description, "Called when a new console entry is added."],
+        [Keys.category.components.console.methods.filterChange.name, "Filter Change"],
+        [Keys.category.components.console.methods.filterChange.description, "Called when the active message-level filter changes."],
+        [Keys.category.components.console.texts.clear, "Clear"],
+        [Keys.category.components.console.texts.search, "Search console..."],
+        [Keys.category.components.console.texts.all, "All"],
+        [Keys.category.components.console.texts.empty, "Console is empty"],
+        [Keys.category.components.console.examples.default.name, "Console Output"],
+        [Keys.category.components.console.examples.default.description, "A console with sample log and info records."],
+        [Keys.category.components.console.examples.levels.name, "Message Levels"],
+        [Keys.category.components.console.examples.levels.description, "Filter log, info, warning, error, and debug records."],
+        [Keys.category.components.console.examples.objects.name, "Inspectable Values"],
+        [Keys.category.components.console.examples.objects.description, "Expandable object values and an error stack."],
 
         /// Window
         [

@@ -159,6 +159,13 @@ export const Props = {
         description:  Keys.category.components.collapse.props.collapseBodyStyles.description,
     }),
 
+    prop_bodyBackgroundColor: Define_ComponentProp<string | null>({
+        prop:         "prop_bodyBackgroundColor",
+        default:      UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
+        name:         Keys.category.components.collapse.props.bodyBackgroundColor.name,
+        description:  Keys.category.components.collapse.props.bodyBackgroundColor.description,
+    }),
+
     prop_collapseBodyClass: Define_ComponentProp<string[]>({
         prop:         "prop_collapseBodyClass",
         default:      [],

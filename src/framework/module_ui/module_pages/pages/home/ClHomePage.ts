@@ -1,142 +1,155 @@
-import { ITemplate } from "@/core_route";
+import {ITemplate} from "@/core_route";
 import * as CoreReactive from "@/core_reactive";
-import * as CoreEvent    from "@/core_event";
+import * as CoreObservable from "@/core_observable";
+import * as CoreEvent from "@/core_event";
+import * as CoreConfig from "@/core_configs";
 import * as UiCategory from "@/ui_categories";
 import * as UtilConst from "@/util_consts";
 import * as UtilStyle from "@/util_styles";
-import {MenuMoreOrientation} from "@/framework/module_ui/module_components/lists/componentMenuMore";
-///------------------------------
+import {MenuMoreOrientation} from "../../../module_components/lists/componentMenuMore";
+import {CodeMirrorLanguage} from "../../../module_components/lists/componentCodeMirror/Props";
+import type {CodeMirrorRunContext} from "../../../module_components/lists/componentCodeMirror/Props";
 
-/**
- * Stepهای فرم ثبت — مسیر: Register.info.{name|family|submit}
- * (بخش ۶.۳ پلن اصلی — در scope ماژول تا در هر render بازسازی نشوند)
- * identity هر Step یک Symbol یکتاست؛ مسیر متنی فقط metadata است (بند ۲-۳ پلن 4.3)
- */
-const StepRegister = CoreEvent.Step({
-    children: {
-        info: CoreEvent.Step({
-            children: {
-                name:   CoreEvent.Step({
-                    request:  CoreEvent.Request(),
-                    response: CoreEvent.Response({ value: "" })
-                }),
-                family: CoreEvent.Step({
-                    request:  CoreEvent.Request(),
-                    response: CoreEvent.Response({ value: "" })
-                }),
-                submit: CoreEvent.Step({
-                    request:  CoreEvent.Request(),
-                    response: CoreEvent.Response()
-                })
+const reactiveElementSource = `() => {
+    const heading = CoreReactive.App.h2({
+        children: ["ReactiveElement"]
+    });
+    const description = CoreReactive.App.p({
+        children: ["This element was created and composed with CoreReactive.App."]
+    });
+
+    return CoreReactive.App.section({
+        className: ["p-3"],
+        children: [heading, description]
+    }).getElement();
+}`;
+
+const reactiveObservableSource = `() => {
+    const count = new CoreObservable.App(0);
+    const value = CoreReactive.App.b({
+        children: ["Count: ", count]
+    });
+    const increment = CoreReactive.App.button({
+        className: ["btn", "primary"],
+        children: ["Increase"],
+        on: {
+            click: () => count.set(count.get() + 1)
+        }
+    });
+
+    return CoreReactive.App.section({
+        className: ["d-flex", "flex-column", "gap-2", "p-3"],
+        children: [value, increment]
+    }).getElement();
+}`;
+
+const eventSource = `() => {
+    const StepRegister = CoreEvent.Step({
+        children: {
+            info: CoreEvent.Step({
+                children: {
+                    name: CoreEvent.Step({
+                        request: CoreEvent.Request(),
+                        response: CoreEvent.Response({value: ""})
+                    }),
+                    family: CoreEvent.Step({
+                        request: CoreEvent.Request(),
+                        response: CoreEvent.Response({value: ""})
+                    }),
+                    submit: CoreEvent.Step({
+                        request: CoreEvent.Request(),
+                        response: CoreEvent.Response()
+                    })
+                }
+            })
+        }
+    });
+
+    const nameInput = CoreReactive.App.input({
+        className: ["form-input"],
+        attrs: {placeholder: "Name"},
+        unique: StepRegister.info.name,
+        emit: () => {
+            const value = nameInput.getElement().value;
+            return {value, valid: value.trim().length > 0};
+        }
+    });
+    const familyInput = CoreReactive.App.input({
+        className: ["form-input"],
+        attrs: {placeholder: "Family name"},
+        unique: StepRegister.info.family,
+        emit: () => {
+            const value = familyInput.getElement().value;
+            return {value, valid: value.trim().length > 0};
+        }
+    });
+    const submitButton = CoreReactive.App.button({
+        className: ["form-submit"],
+        children: ["Submit"],
+        unique: StepRegister.info.submit,
+        on: {
+            click: (_event, helper) => {
+                const responses = helper.request(
+                    CoreEvent.requestMap([
+                        [StepRegister.info.name, {action: "validate"}],
+                        [StepRegister.info.family, {action: "validate"}]
+                    ]),
+                    StepRegister.info.submit
+                );
+                const nameResponse = responses.get(StepRegister.info.name);
+                const familyResponse = responses.get(StepRegister.info.family);
+                console.log("[CoreEvent] responses", {
+                    requestId: nameResponse?.requestId,
+                    dispatchIds: [nameResponse?.dispatchId, familyResponse?.dispatchId],
+                    source: StepRegister.info.submit.unique,
+                    results: {
+                        name: {target: StepRegister.info.name.unique, ...nameResponse?.value, status: nameResponse?.status},
+                        family: {target: StepRegister.info.family.unique, ...familyResponse?.value, status: familyResponse?.status}
+                    },
+                    entries: Array.from(responses.entries()).map(([step, response]) => ({
+                        target: step.unique,
+                        response
+                    }))
+                });
             }
-        })
-    }
-});
+        }
+    });
+
+    return CoreReactive.App.section({
+        className: ["d-flex", "flex-column", "gap-2", "p-3"],
+        children: [nameInput, familyInput, submitButton]
+    }).getElement();
+}`;
 
 export class ClHomePage implements ITemplate {
 
-    render(query?: Record<string,string> ,extra?: Record<string, any>): HTMLElement {
+    render(_query?: Record<string, string>, _extra?: Record<string, any>): HTMLElement {
+        const reactiveExample = createCodeExample(
+            "ReactiveElement",
+            "CoreReactive.App creates DOM elements as composable reactive elements. The returned element can contain other reactive elements and can be mounted directly.",
+            reactiveElementSource,
+        );
+        const observableExample = createCodeExample(
+            "ReactiveElement + Observable",
+            "CoreObservable.App stores changing state. When the value changes, the observable child is rendered again while the surrounding reactive element stays in place.",
+            reactiveObservableSource,
+        );
+        const eventExample = createCodeExample(
+            "CoreEvent request / response",
+            "The form connects inputs and a submit button through CoreEvent steps. Clicking Submit sends validation requests and prints the collected responses in the CodeMirror console.",
+            eventSource,
+        );
 
-        // ---- فرم مثال CoreEvent (بخش ۶.۴ پلن اصلی) ----
-
-        // input نام — دریافت‌کننده Request (emit = Request Handler — بند ۹ پلن 4.3)
-        const nameInput = CoreReactive.App.input({
-            className: ["form-input"],
-            attrs: { placeholder: "نام" },
-            unique: StepRegister.info.name,
-            emit: (request) => {
-                const value = (nameInput.getElement() as HTMLInputElement).value;
-                return { value, valid: value.trim().length > 0 };   // ← Response این المان
-            }
-        });
-
-        // input نام خانوادگی
-        const familyInput = CoreReactive.App.input({
-            className: ["form-input"],
-            attrs: { placeholder: "نام خانوادگی" },
-            unique: StepRegister.info.family,
-            emit: (request) => {
-                console.log(request);
-                const value = (familyInput.getElement() as HTMLInputElement).value;
-                return { value, valid: value.trim().length > 0 };
-            }
-        });
-
-        // دکمه Submit — آغازگر Request با helper تزریق‌شده (بخش ۶.۲ پلن اصلی)
-        // (بند ۲۳ پلن 4.3) تست اصلی: Request واحد → دو Dispatch → دو Response قابل ردیابی
-        const submitButton = CoreReactive.App.button({
-            className: ["form-submit"],
-            children: ["ثبت"],
-            unique: StepRegister.info.submit,
-            on: {
-                click: (e, event) => {
-                    const responses = event!.request(
-                        CoreEvent.requestMap([
-                            [StepRegister.info.name,   { action: "validate" }],
-                            [StepRegister.info.family, { action: "validate" }]
-                        ]),
-                        StepRegister.info.submit
-                    );
-
-                    // بند ۲۳: هر Response باید requestId/target/value را مشخص کند
-                    const nameResponse   = responses.get(StepRegister.info.name);
-                    const familyResponse = responses.get(StepRegister.info.family);
-
-                    console.log("[CoreEvent] responses ← Register.info.submit", {
-                        requestId: nameResponse?.requestId,          // واحد برای هر دو Response
-                        dispatchIds: [nameResponse?.dispatchId, familyResponse?.dispatchId],
-                        source: "Register.info.submit",
-                        results: {
-                            name:   { target: "Register.info.name",   ...nameResponse?.value,   status: nameResponse?.status },
-                            family: { target: "Register.info.family", ...familyResponse?.value, status: familyResponse?.status }
-                        },
-                        responses
-                    });
-                    console.log("nameResponse" ,nameResponse?.value ,
-                        "familyResponse" , familyResponse?.value);
-                }
-            }
-        });
-
-        const container = CoreReactive.App.div({
-            className: [
-                "page home"
-            ] ,
-            children:[
-                nameInput,
-                familyInput,
-                submitButton
-            ]
-        });
-
-        const exampleExplanation = CoreReactive.App.section({
-            className: ["mb-3"],
-            children: [
-                CoreReactive.App.p({
-                    children: [
-                        "This example demonstrates CoreEvent request and response handling. Each input listens for a validation request and responds with its current value and whether it is non-empty.",
-                    ],
-                }),
-                CoreReactive.App.p({
-                    className: ["mb-0"],
-                    children: [
-                        "Click Submit to dispatch validation requests to both inputs. The button collects their responses and writes the values, validity, and request metadata to the browser console.",
-                    ],
-                }),
-            ],
-        });
-        const exampleCollapse = UiCategory.UI.Contents.Collapse({
-            prop_collapseTitle: "CoreEvent request / response example",
-            prop_collapseBodyIsOpen: true,
-            prop_collapseBody: CoreReactive.App.section({
-                children: [exampleExplanation, container],
-            }),
+        const examples = CoreReactive.App.section({
+            className: ["w-100"],
+            children: [reactiveExample, observableExample, eventExample],
         });
 
         const header = UiCategory.UI.Pages.Header.PageHeader({
             prop_pageTitle: "Home",
             prop_hasIconBack: false,
         } as any).getElement();
+
         const exploreMenu = UiCategory.UI.Menus.MenuMore({
             styles: {width: "100%"},
             prop_orientation: MenuMoreOrientation.VERTICAL,
@@ -152,6 +165,7 @@ export class ClHomePage implements ITemplate {
                 if (destination) window.location.href = destination;
             },
         } as any);
+
         const sidebar = CoreReactive.App.section({
             styles: {
                 display: "flex",
@@ -168,9 +182,10 @@ export class ClHomePage implements ITemplate {
                 exploreMenu.getElement(),
             ],
         });
+
         const page = UiCategory.UI.Pages.Page({
             prop_header: header,
-            prop_content: exampleCollapse.getElement(),
+            prop_content: examples.getElement(),
             prop_aside: sidebar,
             prop_asideWidth: UtilStyle.Css_SizeUnit(280, UtilConst.Units.PEXEL),
         } as any);
@@ -178,7 +193,57 @@ export class ClHomePage implements ITemplate {
         return page.getElement() as HTMLElement;
     }
 
-    onLoad(pageElement: HTMLElement): void {
-    }
+    onLoad(_pageElement: HTMLElement): void {}
+}
 
+function createCodeExample(title: string, explanation: string, source: string): HTMLElement {
+    const codeMirror = UiCategory.UI.Tools.Code.CodeMirror({
+        classList: ["w-100", "mb-3"],
+        prop_title: title,
+        prop_language: CodeMirrorLanguage.JAVASCRIPT,
+        prop_canRun: true,
+        prop_value: source,
+        prop_editorHeight: "300px",
+        prop_run: (editedSource: string, _language: CodeMirrorLanguage, context?: CodeMirrorRunContext) =>
+            executeCodeExample(editedSource, context),
+    } as any);
+
+    queueMicrotask(() => codeMirror.run());
+
+    return UiCategory.UI.Contents.Collapse({
+        styles: CoreObservable.App.computed(
+            (sizeName) => ({marginBottom: UtilStyle.Css_Margin(sizeName)}),
+            [CoreConfig.Settings.SizeName.observable()],
+        ) as any,
+        prop_collapseTitle: title,
+        prop_collapseBodyIsOpen: true,
+        prop_collapseBody: CoreReactive.App.section({
+            children: [
+                CoreReactive.App.p({children: [explanation]}),
+                codeMirror.getElement(),
+            ],
+        }),
+    }).getElement() as HTMLElement;
+}
+
+function executeCodeExample(source: string, context?: CodeMirrorRunContext): HTMLElement | Node | void {
+    const evaluated = new Function(
+        "CoreReactive",
+        "CoreObservable",
+        "CoreEvent",
+        "console",
+        `"use strict"; return (${source});`,
+    )(
+        CoreReactive,
+        CoreObservable,
+        CoreEvent,
+        context?.console ?? console,
+    );
+
+    const result = typeof evaluated === "function" ? evaluated() : evaluated;
+    if (result instanceof Node) return result;
+    if (result && typeof result.getElement === "function") return result.getElement() as HTMLElement;
+    if (result && typeof result.getReactiveElement === "function") return result.getReactiveElement().getElement() as HTMLElement;
+    if (result == null) return;
+    throw new Error("The example source must return an HTMLElement or a reactive element.");
 }

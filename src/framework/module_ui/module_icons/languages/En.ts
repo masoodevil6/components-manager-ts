@@ -91,6 +91,22 @@ export const En =
             "Cross mark icon used to show a false or rejected status."
         ],
         [
+            Keys.icons.statusError.name,
+            "Error"
+        ],
+        [
+            Keys.icons.statusError.description,
+            "Error icon shown for errors and failed operations."
+        ],
+        [
+            Keys.icons.debug.name,
+            "Debug"
+        ],
+        [
+            Keys.icons.debug.description,
+            "Bug icon used for debugging and diagnostic output."
+        ],
+        [
             Keys.icons.visit.name,
             "Unvisited"
         ],

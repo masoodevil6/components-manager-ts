@@ -1,4 +1,4 @@
 export {
     Definition,
-    IsTrue, IsFalse
+    IsTrue, IsFalse, Error
 } from "./Definition";

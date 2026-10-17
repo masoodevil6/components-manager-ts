@@ -91,6 +91,7 @@ export const Schemas = {
         props:        [
             Props.prop_collapseBody,
             Props.prop_collapseBodyStyles,
+            Props.prop_bodyBackgroundColor,
             Props.prop_collapseBodyClass,
             Props.prop_collapseBodyIsOpen,
             Props.prop_collapseBodyBorderColor,

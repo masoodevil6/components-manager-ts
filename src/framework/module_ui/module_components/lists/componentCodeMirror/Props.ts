@@ -10,6 +10,19 @@ export enum CodeMirrorLanguage {
     JAVASCRIPT = "javascript",
 }
 
+export type CodeMirrorRunContext = {
+    console: {
+        log: (...values: unknown[]) => void;
+        info: (...values: unknown[]) => void;
+        warn: (...values: unknown[]) => void;
+        error: (...values: unknown[]) => void;
+        debug: (...values: unknown[]) => void;
+    };
+};
+
+export type CodeMirrorRunResult = HTMLElement | Node | string | null | undefined | void;
+export type CodeMirrorRunHandler = (source: string, language: CodeMirrorLanguage, context?: CodeMirrorRunContext) => CodeMirrorRunResult;
+
 export const Props = {
     prop_title: Define_ComponentProp<string | null>({
         prop: "prop_title",
@@ -22,6 +35,12 @@ export const Props = {
         default: false,
         name: Keys.category.components.codeMirror.props.canRun.name,
         description: Keys.category.components.codeMirror.props.canRun.description,
+    }),
+    prop_run: Define_ComponentProp<CodeMirrorRunHandler | null>({
+        prop: "prop_run",
+        default: null,
+        name: Keys.category.components.codeMirror.props.run.name,
+        description: Keys.category.components.codeMirror.props.run.description,
     }),
     prop_value: Define_ComponentProp<string>({
         prop: "prop_value",
@@ -91,7 +110,7 @@ export const Props = {
     }),
     prop_themeDarkBackgroundColor: Define_ComponentProp<string>({
         prop: "prop_themeDarkBackgroundColor",
-        default: UtilStyle.Css_Color(UtilConst.ColorMain.DARK, UtilConst.ColorGrad.GRADE_3),
+        default: UtilStyle.Css_Color(UtilConst.ColorMain.DARK, UtilConst.ColorGrad.GRADE_4),
         name: Keys.category.components.codeMirror.props.themeDarkBackgroundColor.name,
         description: Keys.category.components.codeMirror.props.themeDarkBackgroundColor.description,
     }),

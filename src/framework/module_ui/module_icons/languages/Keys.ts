@@ -44,6 +44,14 @@ export const Keys = {
             name:        CreateTranslationKey() ,
             description: CreateTranslationKey() ,
         },
+        statusError: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        debug: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
         visit: {
             name:        CreateTranslationKey() ,
             description: CreateTranslationKey() ,
