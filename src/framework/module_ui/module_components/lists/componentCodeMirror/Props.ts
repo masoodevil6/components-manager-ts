@@ -8,6 +8,7 @@ import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/Ty
 export enum CodeMirrorLanguage {
     HTML = "html",
     JAVASCRIPT = "javascript",
+    JSON = "json",
 }
 
 export type CodeMirrorRunContext = {

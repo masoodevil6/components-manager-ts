@@ -73,6 +73,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
         const orientation = data.prop_orientation ?? this._COMPONENT_PROPS_BIND.prop_orientation;
         const fullWidth = data.prop_isFullWidth ?? this._COMPONENT_PROPS_BIND.prop_isFullWidth;
         const direction = data.prop_direction ?? this._COMPONENT_PROPS_BIND.prop_direction;
+        const directionRtl = data.prop_directionRtl ?? this._COMPONENT_PROPS_BIND.prop_directionRtl;
         const menuBackgroundColor = data.prop_menuBackgroundColor ?? this._COMPONENT_PROPS_BIND.prop_menuBackgroundColor;
         const menuBorderRadius = data.prop_menuBorderRadius ?? this._COMPONENT_PROPS_BIND.prop_menuBorderRadius;
         const menuBorderWidth = data.prop_menuBorderWidth ?? this._COMPONENT_PROPS_BIND.prop_menuBorderWidth;
@@ -109,7 +110,11 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             [sizeName, menuBorder, menuBorderWidth, menuBorderRadius, menuWidth],
             this.getScope(),
         );
-        const rtl = CoreConfig.Settings.DirectionRtl.observable();
+        const rtl = CoreObservable.App.computed(
+            (override: boolean | null, systemDirectionRtl: boolean) => override ?? systemDirectionRtl,
+            [directionRtl, CoreConfig.Settings.DirectionRtl.observable()],
+            this.getScope(),
+        );
         const resolvedDirection = CoreObservable.App.computed((layout: MenuMoreOrientation, value: MenuMoreDirection, isRtl: boolean) => {
             if (layout === MenuMoreOrientation.HORIZONTAL) {
                 if (value === MenuMoreDirection.LTR || value === MenuMoreDirection.RTL) return value;
@@ -119,16 +124,17 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             return MenuMoreDirection.TOP_TO_BOTTOM;
         }, [orientation, direction, rtl], this.getScope());
 
-        const layoutStyles = CoreObservable.App.computed((layout: MenuMoreOrientation, resolved: MenuMoreDirection, useFullWidth: boolean) => ({
+        const layoutStyles = CoreObservable.App.computed((layout: MenuMoreOrientation, resolved: MenuMoreDirection, useFullWidth: boolean, isRtl: boolean) => ({
             display: "flex",
+            direction: isRtl ? "rtl" : "ltr",
             flexDirection: layout === MenuMoreOrientation.HORIZONTAL
-                ? (resolved === MenuMoreDirection.RTL ? "row-reverse" : "row")
+                ? ((resolved === MenuMoreDirection.RTL) === isRtl ? "row" : "row-reverse")
                 : (resolved === MenuMoreDirection.BOTTOM_TO_TOP ? "column-reverse" : "column"),
             alignItems: layout === MenuMoreOrientation.HORIZONTAL ? "center" : (useFullWidth ? "stretch" : "flex-start"),
             flexWrap: "nowrap",
             width: layout === MenuMoreOrientation.VERTICAL && useFullWidth ? "100%" : "fit-content",
             maxWidth: "100%",
-        }), [orientation, resolvedDirection, fullWidth], this.getScope());
+        }), [orientation, resolvedDirection, fullWidth, rtl], this.getScope());
 
         const rootContent = CoreObservable.App.computed((list: MenuMoreItem[]) => {
             this.disposeTreeChildren();
@@ -229,10 +235,13 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
         );
         const sizeName = CoreConfig.Settings.SizeName.observable();
         const groupStyles = CoreObservable.App.computed(
-            (isHorizontal: boolean, direction: MenuMoreDirection, size: any, useFullWidth: boolean) => {
+            (isHorizontal: boolean, direction: MenuMoreDirection, size: any, useFullWidth: boolean, isRtl: boolean) => {
                 const styles: Record<string, string> = {
                     display: "flex",
-                    flexDirection: isHorizontal ? (direction === MenuMoreDirection.RTL ? "row-reverse" : "row") : "column",
+                    direction: isRtl ? "rtl" : "ltr",
+                    flexDirection: isHorizontal
+                        ? ((direction === MenuMoreDirection.RTL) === isRtl ? "row" : "row-reverse")
+                        : "column",
                     alignItems: isHorizontal ? "center" : "stretch",
                     flexWrap: "nowrap",
                     width: isHorizontal || !useFullWidth ? "fit-content" : "100%",
@@ -256,7 +265,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
                 }
                 return styles;
             },
-            [horizontalRootGroup, layout.direction, sizeName, layout.fullWidth],
+            [horizontalRootGroup, layout.direction, sizeName, layout.fullWidth, layout.rtl],
             this.getScope(),
         );
         return CoreReactive.App.section({
@@ -307,8 +316,9 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             ? {display: "block", width: "100%", height: MENU_ITEM_HEIGHT}
             : {display: "inline-flex", width: "auto", height: MENU_ITEM_HEIGHT, maxWidth: "100%"},
         [verticalItemLayout, layout.fullWidth], this.getScope());
-        const buttonStyles = CoreObservable.App.computed((size, isVertical: boolean, useFullWidth: boolean) => ({
+        const buttonStyles = CoreObservable.App.computed((size, isVertical: boolean, useFullWidth: boolean, isRtl: boolean) => ({
             display: "inline-flex",
+            direction: isRtl ? "rtl" : "ltr",
             flex: isVertical && useFullWidth ? "1 1 0%" : "0 0 auto",
             alignItems: "center",
             justifyContent: "flex-start",
@@ -327,7 +337,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             padding: UtilStyle.Css_Padding(size),
             cursor: item.disabled ? "default" : "pointer",
             opacity: item.disabled ? "0.55" : "1",
-        }), [sizeName, verticalItemLayout, layout.fullWidth], this.getScope());
+        }), [sizeName, verticalItemLayout, layout.fullWidth, layout.rtl], this.getScope());
         const titleStyles = CoreObservable.App.computed((size, isVertical: boolean, frame: string) => ({
             order: item.icon ? "1" : "0",
             padding: "0",
@@ -407,8 +417,9 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             this.getScope(),
         );
         const rowStyles = CoreObservable.App.computed(
-            (isVertical: boolean, hovered: boolean, hoverColor: string, itemPadding: Record<string, string>, useFullWidth: boolean) => ({
+            (isVertical: boolean, hovered: boolean, hoverColor: string, itemPadding: Record<string, string>, useFullWidth: boolean, isRtl: boolean) => ({
                 display: "flex",
+                direction: isRtl ? "rtl" : "ltr",
                 alignItems: "center",
                 width: isVertical && useFullWidth ? "100%" : "fit-content",
                 minWidth: isVertical ? "10rem" : "0",
@@ -418,16 +429,24 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
                 transition: "background-color 160ms ease",
                 ...itemPadding,
             }),
-            [verticalItemLayout, itemHovered, this._COMPONENT_PROPS_BIND.prop_itemBackgroundColorHover, itemPaddingStyles, layout.fullWidth],
+            [verticalItemLayout, itemHovered, this._COMPONENT_PROPS_BIND.prop_itemBackgroundColorHover, itemPaddingStyles, layout.fullWidth, layout.rtl],
             this.getScope(),
         );
+        const openOnClick = item.openOn === "click";
+        let itemFloatMenu: ComponentFloatMenu.Component | null = null;
         const trigger = CoreReactive.App.section({
             attrs: {role: "none"},
             stylesBind: rowStyles as any,
             on: {
                 mouseenter: () => {
                     clearItemHoverTimeout();
-                    if (!item.disabled) itemHovered.set(true);
+                    if (!item.disabled) {
+                        itemHovered.set(true);
+                        // Open from the actual menu row as well as FloatMenu's
+                        // selector handler. This keeps hover submenus reliable
+                        // when direction overrides change the trigger's layout.
+                        if (hasChildren && !openOnClick) itemFloatMenu?.setShow(true);
+                    }
                 },
                 mouseleave: () => {
                     if (hasChildren) scheduleItemHoverReset();
@@ -441,13 +460,22 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
         });
         if (!hasChildren) return trigger;
 
+        const bodyStyles = CoreObservable.App.computed((isRtl: boolean) => ({
+            display: "flex",
+            flexDirection: "column",
+            minWidth: "10rem",
+            direction: isRtl ? "rtl" : "ltr",
+        }), [layout.rtl], this.getScope());
         const body = CoreReactive.App.section({
             attrs: {role: "menu"},
-            styles: {display: "flex", flexDirection: "column", minWidth: "10rem"},
+            stylesBind: bodyStyles as any,
             on: {
                 mouseenter: () => {
                     clearItemHoverTimeout();
-                    if (!item.disabled) itemHovered.set(true);
+                    if (!item.disabled) {
+                        itemHovered.set(true);
+                        if (!openOnClick) itemFloatMenu?.setShow(true);
+                    }
                 },
                 mouseleave: () => scheduleItemHoverReset(),
             },
@@ -455,7 +483,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
         });
         const floatDirection = CoreObservable.App.computed((orientation: MenuMoreOrientation, direction: MenuMoreDirection, isRtl: boolean) => {
             if (level === 1 && orientation === MenuMoreOrientation.HORIZONTAL) return ComponentFloatMenu.DirectionTypes.BOTTOM;
-            // Submenus open toward the inline end; vertical flow uses the system text direction for the side axis.
+            // Submenus open toward the inline end, using the resolved layout direction for the side axis.
             const opensLeft = direction === MenuMoreDirection.RTL || ((direction === MenuMoreDirection.TOP_TO_BOTTOM || direction === MenuMoreDirection.BOTTOM_TO_TOP) && isRtl);
             return opensLeft ? ComponentFloatMenu.DirectionTypes.LEFT : ComponentFloatMenu.DirectionTypes.RIGHT;
         }, [layout.orientation, layout.direction, layout.rtl], this.getScope());
@@ -491,7 +519,6 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             ? {display: "inline-block", width: "auto", height: MENU_ITEM_HEIGHT}
             : {display: "block", width: "100%", height: MENU_ITEM_HEIGHT},
         [horizontalRootItem, layout.fullWidth], this.getScope());
-        const openOnClick = item.openOn === "click";
         const floatMenu = new ComponentFloatMenu.Component({
             classList: ["position-relative", "d-inline-block"],
             styles: floatComponentStyles as any,
@@ -511,6 +538,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             prop_floatStyles: floatStyles,
             prop_floatShowControlWithSelf: openOnClick,
         } as any);
+        itemFloatMenu = floatMenu;
         this._FLOAT_MENUS.push(floatMenu);
         if (!openOnClick) this._HOVER_FLOAT_MENUS.push(floatMenu);
         return floatMenu.getReactiveElement();

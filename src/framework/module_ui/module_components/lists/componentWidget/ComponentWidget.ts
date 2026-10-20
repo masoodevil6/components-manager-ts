@@ -1,11 +1,13 @@
 import * as CoreReactive from "@/core_reactive";
 import * as CoreObservable from "@/core_observable";
 import * as CoreConfig from "@/core_configs";
+import * as UiCategory from "@/ui_categories";
 import * as UtilTools from "@/util_tools";
 import * as UiIcons from "@/ui_icons";
 import {PartAttrDefault} from "@/core_components";
 import {ComponentWidgetBase} from "./ComponentWidgetBase";
-import {PropsConfigType, WidgetFetchConfig} from "./Props";
+import type {ControllerRequest, PropsConfigType, WidgetFetchConfig} from "./Props";
+import type {RequestState} from "@/ui_controller/module_requests";
 import {Schemas} from "./Schemas";
 import {MethodsConfigType} from "./Methods";
 import {createWidgetStep} from "./Step";
@@ -25,6 +27,7 @@ export class ComponentWidget extends ComponentWidgetBase {
     private readonly _SHOW_404 = new CoreObservable.App(false);
     private readonly _MESSAGES = new CoreObservable.App<unknown[]>([]);
     private readonly _MESSAGE_TYPE = new CoreObservable.App(MessageTypes.CUSTOM);
+    private readonly _SOURCE_CONTENT = new CoreObservable.App<any>(null);
     private readonly _CHILDREN: DisposableChild[] = [];
     private _REQUEST_ID = 0;
     private _DISPOSED = false;
@@ -38,8 +41,11 @@ export class ComponentWidget extends ComponentWidgetBase {
         this.renderComponent(config as any, methods as any, identity?.events ?? null);
 
         queueMicrotask(() => {
+            const controller = this.readValue<ControllerRequest>(this._COMPONENT_PROPS_BIND.prop_controller);
             const fetchConfig = this.readValue<WidgetFetchConfig>(this._COMPONENT_PROPS_BIND.prop_fetch);
-            if (!this._DISPOSED && typeof fetchConfig?.url === "string") void this.fetchWidget(new Event("widget-init"));
+            if (this._DISPOSED) return;
+            if (controller != null) void this.runController(new Event("widget-init"));
+            else if (typeof fetchConfig?.url === "string" && fetchConfig.url.trim()) void this.fetchWidget(new Event("widget-init"));
         });
     }
 
@@ -176,9 +182,11 @@ export class ComponentWidget extends ComponentWidgetBase {
             styles: {position: "absolute", left: "0", top: "0", width: "100%", height: "100%"},
         } as any, {
             RETRY_CLICK: (event) => {
+                const currentController = this.readValue<ControllerRequest>(this._COMPONENT_PROPS_BIND.prop_controller);
                 const currentFetch = this.readValue<WidgetFetchConfig>(this._COMPONENT_PROPS_BIND.prop_fetch);
                 this.executeMethod("RETRY_CLICK", event, {FETCH: currentFetch} as any);
-                void this.fetchWidget(event);
+                if (currentController != null) void this.runController(event);
+                else void this.fetchWidget(event);
             },
         } as any);
         const more = new ComponentIcon.Component({
@@ -209,6 +217,7 @@ export class ComponentWidget extends ComponentWidgetBase {
             children: [
                 messages.getReactiveElement(),
                 this.normalizeContent(content),
+                this._SOURCE_CONTENT.map((sourceContent) => this.normalizeContent(sourceContent), this.getScope()),
                 moreVisible.map((visible: boolean) => visible ? more.getReactiveElement() : null, this.getScope()) as any,
                 webCode.getReactiveElement(),
                 loading.getReactiveElement(),
@@ -255,6 +264,7 @@ export class ComponentWidget extends ComponentWidgetBase {
                 if (requestId !== this._REQUEST_ID || this._DISPOSED) return;
                 this._SHOW_404.set(false);
                 this.executeMethod("RESPONSE", event, {RESULT_EXP: resultExp, RESPONSE: response, REQUEST_DATA: requestData} as any);
+                void this.executeResponseSource(response as RequestState, requestData, requestId);
             },
             onError: (error) => {
                 if (requestId !== this._REQUEST_ID || this._DISPOSED) return;
@@ -265,6 +275,37 @@ export class ComponentWidget extends ComponentWidgetBase {
         await promise;
     }
 
+    private async runController(event: Event): Promise<void> {
+        const controller = this.readValue<ControllerRequest>(this._COMPONENT_PROPS_BIND.prop_controller);
+        if (controller == null || this._DISPOSED) return;
+
+        const requestId = ++this._REQUEST_ID;
+        const requestData = this.readValue<unknown>(this._COMPONENT_PROPS_BIND.prop_requestData);
+        this._SHOW_404.set(false);
+        this.setMessages([], MessageTypes.CUSTOM);
+        this._IS_LOADING.set(true);
+        const promise = Promise.resolve().then(() => typeof controller === "function" ? controller() : controller);
+        this.executeMethod("GET_RESPONSE", event, {PROMISE: promise} as any);
+        try {
+            const response = await promise;
+            if (requestId !== this._REQUEST_ID || this._DISPOSED) return;
+            if (!response || typeof response !== "object" || typeof response.status !== "boolean" || !Array.isArray(response.messages)) {
+                throw new TypeError("prop_controller must provide a RequestState response.");
+            }
+            this._SHOW_404.set(response.state === 404);
+            const messages = response.messages.length ? response.messages : response.status ? [] : ["The controller request failed."];
+            this.setMessages(messages, response.status ? MessageTypes.SUCCESS : MessageTypes.ERROR);
+            this.executeMethod("RESPONSE", event, {RESULT_EXP: response.data, RESPONSE: response, REQUEST_DATA: requestData} as any);
+            await this.executeResponseSource(response, requestData, requestId);
+        } catch (error) {
+            if (requestId !== this._REQUEST_ID || this._DISPOSED) return;
+            this._SHOW_404.set(false);
+            this.setMessages([error instanceof Error ? error.message : "The controller request failed."], MessageTypes.ERROR);
+        } finally {
+            if (requestId === this._REQUEST_ID && !this._DISPOSED) this._IS_LOADING.set(false);
+        }
+    }
+
     private toFetchRequest(data: unknown): UtilTools.TFetchRequestData {
         if (data && typeof data === "object" && !Array.isArray(data)) {
             const source = data as Record<string, unknown>;
@@ -272,6 +313,34 @@ export class ComponentWidget extends ComponentWidgetBase {
             if (requestKeys.some((key) => key in source)) return source as UtilTools.TFetchRequestData;
         }
         return {data};
+    }
+
+    private async executeResponseSource(response: RequestState, requestData: unknown, requestId: number): Promise<void> {
+        if (requestId !== this._REQUEST_ID || this._DISPOSED) return;
+
+        try {
+            let code = typeof response.source === "string" ? response.source : "";
+            if (!code.trim() && typeof response.sourceAddress === "string" && response.sourceAddress.trim()) {
+                const sourceResponse = await fetch(response.sourceAddress);
+                if (!sourceResponse.ok) throw new Error(`Could not load response source (${sourceResponse.status}).`);
+                code = await sourceResponse.text();
+            }
+            if (!code.trim() || requestId !== this._REQUEST_ID || this._DISPOSED) return;
+
+            const execute = new Function(
+                "request",
+                "response",
+                "UiCategory",
+                `return (function(request, response, UiCategory) {\n${code}\n})(request, response, UiCategory);`,
+            ) as (request: unknown, response: unknown, uiCategory: typeof UiCategory) => unknown;
+            const rendered = await execute(requestData, response.data, UiCategory);
+            if (requestId === this._REQUEST_ID && !this._DISPOSED && rendered != null) {
+                this._SOURCE_CONTENT.set(rendered);
+            }
+        } catch (error) {
+            if (requestId !== this._REQUEST_ID || this._DISPOSED) return;
+            this.setMessages([error instanceof Error ? error.message : "Could not execute the response source."], MessageTypes.ERROR);
+        }
     }
 
     private setMessages(messages: unknown[], type: MessageTypes): void {

@@ -151,6 +151,11 @@ export class ComponentWindow extends ComponentWindowBase {
                         ...attrsDefault,
                         "id": `component-window-structure-${this._COMPONENT_RANDOM_ID}`,
                     },
+                    className: ["position-fixed", "w-100", "h-100"],
+                    styles: {
+                        inset: "0",
+                        zIndex: `${UtilStyle.Css_ZIndex(UtilConst.ZIndex.popup)}`,
+                    },
                     children: [
                         this.executeSchemaPart(Schemas.BLUR.part, {}),
                     ],

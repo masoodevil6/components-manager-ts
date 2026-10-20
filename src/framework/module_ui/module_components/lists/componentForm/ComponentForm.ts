@@ -6,7 +6,8 @@ import * as UtilStyle from "@/util_styles";
 import * as UtilConst from "@/util_consts";
 import {PartAttrDefault} from "@/core_components";
 import {ComponentFormBase} from "./ComponentFormBase";
-import {PropsConfigType, SubmitButtonConfig} from "./Props";
+import type {ControllerRequest, ControllerRequestContext, PropsConfigType, SubmitButtonConfig} from "./Props";
+import type {RequestState} from "@/ui_controller/module_requests";
 import {Schemas} from "./Schemas";
 import {MethodsConfigType} from "./Methods";
 import {createFormStep} from "./Step";
@@ -224,6 +225,7 @@ export class ComponentForm extends ComponentFormBase {
         const url = this.readValue<string>(this._COMPONENT_PROPS_BIND.prop_url) ?? "";
         const form = this.getFormElement();
         const extraData = this.readValue(this._COMPONENT_PROPS_BIND.prop_data);
+        const controller = this.readValue<ControllerRequest>(this._COMPONENT_PROPS_BIND.prop_controller);
         const validationErrors = this.collectValidationErrors(form);
         this._SHOW_404.set(false);
         if (validationErrors.length) {
@@ -232,6 +234,19 @@ export class ComponentForm extends ComponentFormBase {
         }
 
         this.setMessages([], MessageTypes.CUSTOM);
+        if (controller != null) {
+            this._IS_LOADING.set(true);
+            try {
+                const context: ControllerRequestContext = {event, form, formData: form ? new FormData(form) : null, data: extraData, url};
+                const promise = this.sendControllerRequest(controller, context);
+                this.executeMethod("GET_RESPONSE", event, {PROMISE: promise} as any);
+                await promise;
+            } finally {
+                this._IS_LOADING.set(false);
+            }
+            return;
+        }
+
         const shouldFetch = this.readValue<boolean>(this._COMPONENT_PROPS_BIND.prop_runFetch) !== false;
         if (!shouldFetch) {
             this.executeMethod("SUBMIT", event, {URL: url, FORM: form, EXTRA_DATA: extraData} as any);
@@ -268,6 +283,28 @@ export class ComponentForm extends ComponentFormBase {
             onError: (error) => this.setMessages([error instanceof Error ? error.message : "The request failed."], MessageTypes.ERROR),
         });
         return result ? {resultExp: result.resultExp, response: result.response} : null;
+    }
+
+    private async sendControllerRequest(controller: Exclude<ControllerRequest, null>, context: ControllerRequestContext): Promise<RequestState | null> {
+        try {
+            const result = typeof controller === "function" ? controller(context) : controller;
+            const response = await Promise.resolve(result);
+            if (!response || typeof response !== "object" || typeof response.status !== "boolean" || !Array.isArray(response.messages)) {
+                throw new TypeError("prop_controller must provide a RequestState response.");
+            }
+
+            this._SHOW_404.set(response.state === 404);
+            this.setMessages(
+                response.messages.length ? response.messages : response.status ? [] : ["The controller request failed."],
+                response.status ? MessageTypes.SUCCESS : MessageTypes.ERROR,
+            );
+            this.executeMethod("RESPONSE", context.event, {RESULT_EXP: response.data, RESPONSE: response} as any);
+            return response;
+        } catch (error) {
+            this._SHOW_404.set(false);
+            this.setMessages([error instanceof Error ? error.message : "The controller request failed."], MessageTypes.ERROR);
+            return null;
+        }
     }
 
     private collectValidationErrors(form: HTMLFormElement | null): string[] {

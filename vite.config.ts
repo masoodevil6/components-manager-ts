@@ -15,6 +15,7 @@ export default defineConfig({
       { find: '@/core',              replacement: path.resolve(__dirname, './src/framework/module_core') },
 
       // ─── UI ─────────────────────────────────────────────────
+      { find: '@/ui_controller', replacement: path.resolve(__dirname, './src/framework/module_ui/module_controller') },
       { find: '@/ui_categories', replacement: path.resolve(__dirname, './src/framework/module_ui/module_categories') },
       { find: '@/ui_components', replacement: path.resolve(__dirname, './src/framework/module_ui/module_components') },
       { find: '@/ui_icons', replacement: path.resolve(__dirname, './src/framework/module_ui/module_icons') },

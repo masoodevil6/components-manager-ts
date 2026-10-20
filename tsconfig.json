@@ -35,6 +35,8 @@
 
       /// UI
       "@/ui" :                       ["src/framework/module_ui"] ,
+      "@/ui_controller" :            ["src/framework/module_ui/module_controller"] ,
+      "@/ui_controller/*" :          ["src/framework/module_ui/module_controller/*"] ,
       "@/ui_categories" :            ["src/framework/module_ui/module_categories"] ,
       "@/ui_components" :            ["src/framework/module_ui/module_components"] ,
       "@/ui_icons" :                 ["src/framework/module_ui/module_icons"] ,

@@ -67,12 +67,20 @@ export const Schemas = {
         part:         "part-form-border-content-title",
         props:        [
             Props.prop_collapseTitle,
+            Props.prop_collapseTitleWidth,
             Props.prop_collapseTitleStyles,
             Props.prop_collapseTitleClass,
             Props.prop_collapseTitleColor,
         ],
         name:         Keys.category.components.collapse.schemas.formBorderContentTitle.name,
         description:  Keys.category.components.collapse.schemas.formBorderContentTitle.description,
+    },
+
+    FORM_BORDER_CONTENT_MENU_MORE: {
+        part:         "part-form-border-content-menu-more",
+        props:        [Props.prop_collapseMenuItems],
+        name:         Keys.category.components.collapse.schemas.formBorderContentMenuMore.name,
+        description:  Keys.category.components.collapse.schemas.formBorderContentMenuMore.description,
     },
 
     FORM_BORDER_CONTENT_ARROW: {

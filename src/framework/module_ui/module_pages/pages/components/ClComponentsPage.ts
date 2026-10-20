@@ -198,7 +198,10 @@ export class ClComponentsPage implements ITemplate {
 
         const header = UiCategory.UI.Pages.Header.PageHeader({
             prop_pageTitle: "Components",
-            prop_hasIconBack: false,
+            prop_hasIconBack: true,
+            prop_pageNav: [
+                {name: "home", title: "Home"},
+            ],
             prop_optionsList: [{
                 id: "filters",
                 title: "Filter",
@@ -206,6 +209,10 @@ export class ClComponentsPage implements ITemplate {
                 action: "toggleFilters",
             }],
         }, {
+            BACK: () => { window.location.href = "/"; },
+            SELECT_NAV_ITEM: (_event: Event, args: any) => {
+                if (args?.NAME === "home") window.location.href = "/";
+            },
             SELECT_OPTION: (_event: Event, args: any) => {
                 if (args?.NAME !== "toggleFilters") return;
                 filters.set("prop_isVisible", !filters.get("prop_isVisible"));

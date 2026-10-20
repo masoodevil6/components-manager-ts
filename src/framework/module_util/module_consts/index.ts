@@ -5,3 +5,7 @@ export {ColorMain , ColorGrad} from "./colors";
 export {ZIndex} from "./styles";
 
 export {FileMimeTypes , FileExtensionTypes} from "./files";
+
+export {HttpStatusCode} from "./http";
+
+export {UrlMethods, urlMethods} from "./urls";

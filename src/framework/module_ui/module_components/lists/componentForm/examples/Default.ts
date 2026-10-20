@@ -12,8 +12,7 @@ export const Default: ComponentExample = {
         const email = UiCategory.UI.Inputs.Input({prop_name: "email", prop_labelTitle: "Email", prop_type: InputTypes.EMAIL, prop_placeholder: "name@example.com"}).getReactiveElement();
         return UiCategory.UI.Fetch.Form({
             prop_forms: [name, email],
-            prop_url: "/example/contact",
-            prop_runFetch: true,
+            prop_controller: () => UiCategory.UI.Controllers.Tests.testConnect({probe: "component-form"}),
             prop_componentBorderClass: ["shadow-sm", "position-relative", "p-3"],
         }, {
             RESPONSE: (_event, payload) => console.info("Form response", payload.RESPONSE),

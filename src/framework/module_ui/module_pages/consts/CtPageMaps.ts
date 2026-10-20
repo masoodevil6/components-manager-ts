@@ -8,6 +8,8 @@ import {ClPerformancePage as PerformancePage} from "../pages/performance/ClPerfo
 import {ClWorkflowPage as WorkflowPage} from "../pages/workflow/ClWorkflowPage";
 import {ClComponentsPage as ComponentsPage} from "../pages/components/ClComponentsPage";
 import {ClComponentDetailsPage as ComponentDetailsPage} from "../pages/components/ClComponentDetailsPage";
+import {ClPagerPage as PagerPage} from "../pages/pager/ClPagerPage";
+import {ClTestPage as TestPage} from "../pages/test/ClTestPage";
 import * as CoreObservable from "@/core_observable";
 
 
@@ -42,6 +44,18 @@ export const CtPageMaps: TRouter = {
         template:      WorkflowPage,
         data:          { },
         headerTitle:   new CoreObservable.App("Workflow"),
+    },
+
+    "/pager": {
+        template:      PagerPage,
+        data:          { },
+        headerTitle:   new CoreObservable.App("Pager"),
+    },
+
+    "/test": {
+        template:      TestPage,
+        data:          { },
+        headerTitle:   new CoreObservable.App("Request Test"),
     },
 
     "/components": {

@@ -109,6 +109,8 @@ export const Fa =
         [Keys.category.icons.symbolsShapes.description, "آیکون‌های شکل‌های هندسی"],
         [Keys.category.icons.symbolsSeparators.name, "جداکننده‌ها"],
         [Keys.category.icons.symbolsSeparators.description, "آیکون‌های جداکننده افقی و عمودی"],
+        [Keys.category.icons.symbolsTreeNodes.name, "گره‌های درخت"],
+        [Keys.category.icons.symbolsTreeNodes.description, "آیکون‌های باز و بسته کردن گره‌های درخت"],
         /// Arrows -> Basic
         [
             Keys.category.icons.arrowsBasic.name,
@@ -643,6 +645,22 @@ export const Fa =
             Keys.category.components.basic.props.prop_structureStyles.description,
             "استایل‌های CSS اعمال شده روی لایه ساختار"
         ],
+
+        /// Components -> Basic -> Element Creator
+        [Keys.category.components.basic.elementCreator.props.mode.name, "حالت"],
+        [Keys.category.components.basic.elementCreator.props.mode.description, "حالت رندر، ویرایش یا پنجره تنظیمات را انتخاب می‌کند."],
+        [Keys.category.components.basic.elementCreator.props.component.name, "کامپوننت مرجع"],
+        [Keys.category.components.basic.elementCreator.props.component.description, "کلاس کامپوننت یا reference کامپوننت دسته‌بندی برای رندر."],
+        [Keys.category.components.basic.elementCreator.props.componentProperties.name, "ویژگی‌های کامپوننت"],
+        [Keys.category.components.basic.elementCreator.props.componentProperties.description, "تنظیماتی که به کامپوننت انتخاب‌شده ارسال می‌شود."],
+        [Keys.category.components.basic.elementCreator.schemas.render.name, "کامپوننت رندرشده"],
+        [Keys.category.components.basic.elementCreator.schemas.render.description, "تنظیمات و نمونهٔ رندرشدهٔ کامپوننت انتخاب‌شده."],
+        [Keys.category.components.basic.elementCreator.examples.render.name, "حالت رندر"],
+        [Keys.category.components.basic.elementCreator.examples.render.description, "کامپوننت مرجع را با ویژگی‌های تنظیم‌شده رندر می‌کند."],
+        [Keys.category.components.basic.elementCreator.examples.edit.name, "حالت ویرایش"],
+        [Keys.category.components.basic.elementCreator.examples.edit.description, "کامپوننت مرجع را همراه کنترل‌های ویرایش رندر می‌کند."],
+        [Keys.category.components.basic.elementCreator.examples.setting.name, "حالت تنظیمات"],
+        [Keys.category.components.basic.elementCreator.examples.setting.description, "پنجره تنظیمات کامپوننت مرجع را با کلیک روی دکمه باز می‌کند."],
 
         /// Components -> Basic -> Schemas -> component
         [
@@ -1429,6 +1447,37 @@ export const Fa =
 
         [Keys.category.components.inputRadioBox.methods.itemIndex.name, "شماره گزینه"],
         [Keys.category.components.inputRadioBox.methods.itemIndex.description, "جایگاه گزینه انتخاب‌شده از صفر"],
+        /// Components -> InputSelectOption
+        [Keys.category.components.inputSelectOption.name, "ورودی انتخاب گزینه"],
+        [Keys.category.components.inputSelectOption.description, "ورودی انتخاب یک گزینه از فهرست"],
+        [Keys.category.components.inputSelectOption.props.name.name, "نام فیلد"],
+        [Keys.category.components.inputSelectOption.props.name.description, "نام فیلد ارسالی فرم"],
+        [Keys.category.components.inputSelectOption.props.itemSelected.name, "گزینه انتخاب‌شده"],
+        [Keys.category.components.inputSelectOption.props.itemSelected.description, "شناسهٔ گزینهٔ انتخاب‌شده؛ مقدار Observable هم پذیرفته می‌شود"],
+        [Keys.category.components.inputSelectOption.props.options.name, "گزینه‌ها"],
+        [Keys.category.components.inputSelectOption.props.options.description, "فهرست گزینه‌ها با شناسه و عنوان نمایشی"],
+        [Keys.category.components.inputSelectOption.props.placeholder.name, "متن راهنما"],
+        [Keys.category.components.inputSelectOption.props.placeholder.description, "متنی که وقتی گزینه‌ای انتخاب نشده نمایش داده می‌شود"],
+        [Keys.category.components.inputSelectOption.props.isDisable.name, "غیرفعال"],
+        [Keys.category.components.inputSelectOption.props.isDisable.description, "جلوگیری از تغییر گزینهٔ انتخاب‌شده"],
+        [Keys.category.components.inputSelectOption.props.inputClass.name, "کلاس ورودی"],
+        [Keys.category.components.inputSelectOption.props.inputClass.description, "کلاس‌های CSS ورودی انتخاب"],
+        [Keys.category.components.inputSelectOption.props.inputStyles.name, "استایل ورودی"],
+        [Keys.category.components.inputSelectOption.props.inputStyles.description, "استایل‌های درون‌خطی ورودی انتخاب"],
+        [Keys.category.components.inputSelectOption.schemas.form.name, "فرم انتخاب"],
+        [Keys.category.components.inputSelectOption.schemas.form.description, "ساختار اصلی ورودی انتخاب گزینه"],
+        [Keys.category.components.inputSelectOption.schemas.select.name, "فهرست انتخاب"],
+        [Keys.category.components.inputSelectOption.schemas.select.description, "کنترل انتخاب یک گزینه"],
+        [Keys.category.components.inputSelectOption.methods.selectChange.description, "پس از تغییر گزینه همراه با مقدار آن اجرا می‌شود"],
+        [Keys.category.components.inputSelectOption.examples.default.name, "انتخاب‌گر سادهٔ گزینه"],
+        [Keys.category.components.inputSelectOption.examples.default.description, "انتخاب‌گر گزینه بدون آیکون و دکمه"],
+        [Keys.category.components.inputSelectOption.examples.withIconAndButton.name, "انتخاب‌گر گزینه با آیکون و دکمه"],
+        [Keys.category.components.inputSelectOption.examples.withIconAndButton.description, "انتخاب‌گر گزینه با آیکون و دکمهٔ افزودن"],
+        [Keys.category.components.inputSelectOption.examples.withIcon.name, "انتخاب‌گر گزینه با آیکون"],
+        [Keys.category.components.inputSelectOption.examples.withIcon.description, "انتخاب‌گر گزینه با آیکون و بدون دکمه"],
+        [Keys.category.components.inputSelectOption.examples.withButton.name, "انتخاب‌گر گزینه با دکمه"],
+        [Keys.category.components.inputSelectOption.examples.withButton.description, "انتخاب‌گر گزینه با دکمهٔ افزودن و بدون آیکون"],
+
         /// Components -> InputOtp
         [Keys.category.components.inputOtp.name, "ورودی کد یک‌بارمصرف"],
         [Keys.category.components.inputOtp.description, "ورودی چندخانه‌ای برای کد یک‌بارمصرف همراه با شمارش معکوس"],
@@ -1507,6 +1556,76 @@ export const Fa =
         [Keys.category.components.input.examples.withAddButton.description, "ورودی همراه با دکمهٔ افزودن"],
         [Keys.category.components.input.examples.withValidation.name, "همراه اعتبارسنجی"],
         [Keys.category.components.input.examples.withValidation.description, "ورودی همراه با قواعد اعتبارسنجی"],
+
+        [Keys.category.components.inputDescription.name, "ورودی توضیحات"],
+        [Keys.category.components.inputDescription.description, "ورودی چندخطی فرم بر پایهٔ ComponentInputDescriptionSimple"],
+        [Keys.category.components.inputDescription.props.name.name, "نام فیلد"], [Keys.category.components.inputDescription.props.name.description, "نام فیلد فرم برای textarea"],
+        [Keys.category.components.inputDescription.props.value.name, "مقدار"], [Keys.category.components.inputDescription.props.value.description, "مقدار فعلی متن چندخطی"],
+        [Keys.category.components.inputDescription.props.isDisable.name, "غیرفعال"], [Keys.category.components.inputDescription.props.isDisable.description, "ویرایش و پاک‌کردن توضیحات را غیرفعال می‌کند"],
+        [Keys.category.components.inputDescription.props.placeholder.name, "متن راهنما"], [Keys.category.components.inputDescription.props.placeholder.description, "راهنمایی که هنگام خالی‌بودن توضیحات نمایش داده می‌شود"],
+        [Keys.category.components.inputDescription.props.rows.name, "تعداد سطرها"], [Keys.category.components.inputDescription.props.rows.description, "تعداد سطرهای قابل‌مشاهدهٔ اولیه"],
+        [Keys.category.components.inputDescription.props.resize.name, "حالت تغییر اندازه"], [Keys.category.components.inputDescription.props.resize.description, "رفتار تغییر اندازهٔ بومی textarea"],
+        [Keys.category.components.inputDescription.props.inputClass.name, "کلاس‌های textarea"], [Keys.category.components.inputDescription.props.inputClass.description, "کلاس‌های CSS اضافی textarea"],
+        [Keys.category.components.inputDescription.props.inputStyles.name, "استایل‌های textarea"], [Keys.category.components.inputDescription.props.inputStyles.description, "استایل‌های درون‌خطی اضافی textarea"],
+        [Keys.category.components.inputDescription.props.inputBorderColor.name, "رنگ بردر"], [Keys.category.components.inputDescription.props.inputBorderColor.description, "رنگ بردر textarea در حالت عادی"],
+        [Keys.category.components.inputDescription.props.inputBorderColorFocus.name, "رنگ بردر هنگام focus"], [Keys.category.components.inputDescription.props.inputBorderColorFocus.description, "رنگ بردر textarea هنگام تمرکز"],
+        [Keys.category.components.inputDescription.props.inputBorderWidth.name, "ضخامت بردر"], [Keys.category.components.inputDescription.props.inputBorderWidth.description, "ضخامت بردر textarea بر اساس اندازهٔ سیستم"],
+        [Keys.category.components.inputDescription.props.inputBorderRadius.name, "گردی گوشه‌ها"], [Keys.category.components.inputDescription.props.inputBorderRadius.description, "گردی گوشه‌های textarea بر اساس اندازهٔ سیستم"],
+        [Keys.category.components.inputDescription.props.backgroundColorForm.name, "پس‌زمینهٔ فرم"], [Keys.category.components.inputDescription.props.backgroundColorForm.description, "رنگ پس‌زمینهٔ wrapper فرم توضیحات"],
+        [Keys.category.components.inputDescription.props.formBorderRadius.name, "گردی فرم"], [Keys.category.components.inputDescription.props.formBorderRadius.description, "گردی wrapper فرم بر اساس اندازهٔ سیستم"],
+        [Keys.category.components.inputDescription.props.title.name, "عنوان اعتبارسنجی"], [Keys.category.components.inputDescription.props.title.description, "عنوان استفاده‌شده در پیام‌های اعتبارسنجی"],
+        [Keys.category.components.inputDescription.props.hasRules.name, "اعتبارسنجی"], [Keys.category.components.inputDescription.props.hasRules.description, "اعتبارسنجی توضیحات را فعال می‌کند"],
+        [Keys.category.components.inputDescription.props.isAbsoluteRule.name, "اعتبارسنجی شناور"], [Keys.category.components.inputDescription.props.isAbsoluteRule.description, "پیام‌های اعتبارسنجی را به‌صورت شناور نمایش می‌دهد"],
+        [Keys.category.components.inputDescription.props.listRules.name, "قواعد اعتبارسنجی"], [Keys.category.components.inputDescription.props.listRules.description, "قواعد اعتبارسنجی اعمال‌شده روی توضیحات"],
+        [Keys.category.components.inputDescription.props.msgRules.name, "پیام‌های اعتبارسنجی"], [Keys.category.components.inputDescription.props.msgRules.description, "پیام‌های سفارشی اعتبارسنجی"],
+        [Keys.category.components.inputDescription.schemas.form.name, "فرم توضیحات"], [Keys.category.components.inputDescription.schemas.form.description, "wrapper حاوی کامپوننت ورودی چندخطی"],
+        [Keys.category.components.inputDescription.schemas.description.name, "textarea توضیحات"], [Keys.category.components.inputDescription.schemas.description.description, "textarea ساخته‌شده با ComponentInputDescriptionSimple"],
+        [Keys.category.components.inputDescription.schemas.validate.name, "اعتبارسنجی"], [Keys.category.components.inputDescription.schemas.validate.description, "پیام‌های اعتبارسنجی توضیحات"],
+        [Keys.category.components.inputDescription.methods.inputChange.description, "مقدار توضیحات تغییر کرد"],
+        [Keys.category.components.inputDescription.methods.inputFocus.description, "تمرکز روی توضیحات"],
+        [Keys.category.components.inputDescription.methods.inputBlur.description, "خروج از توضیحات"],
+        [Keys.category.components.inputDescription.examples.default.name, "پیش‌فرض"], [Keys.category.components.inputDescription.examples.default.description, "توضیحات چندخطی همراه برچسب و متن راهنما"],
+        [Keys.category.components.inputDescription.examples.disabled.name, "غیرفعال"], [Keys.category.components.inputDescription.examples.disabled.description, "نمایش مقدار توضیحات در حالت غیرفعال"],
+        [Keys.category.components.inputDescription.examples.withValidation.name, "همراه اعتبارسنجی"], [Keys.category.components.inputDescription.examples.withValidation.description, "اعتبارسنجی اجباری برای توضیحات چندخطی"],
+
+        [Keys.category.components.inputJson.name, "ورودی JSON"], [Keys.category.components.inputJson.description, "ویرایش متن JSON همراه با پیش‌نمایش زندهٔ درختی"],
+        [Keys.category.components.inputJson.props.name.name, "نام فیلد"], [Keys.category.components.inputJson.props.name.description, "نام فیلد ورودی JSON"],
+        [Keys.category.components.inputJson.props.value.name, "متن JSON"], [Keys.category.components.inputJson.props.value.description, "متن خام JSON در ویرایشگر"],
+        [Keys.category.components.inputJson.props.isDisable.name, "غیرفعال"], [Keys.category.components.inputJson.props.isDisable.description, "ویرایشگر JSON را فقط‌خواندنی می‌کند"],
+        [Keys.category.components.inputJson.props.placeholder.name, "متن راهنما"], [Keys.category.components.inputJson.props.placeholder.description, "متن راهنمای ویرایشگر JSON"],
+        [Keys.category.components.inputJson.props.title.name, "عنوان اعتبارسنجی"], [Keys.category.components.inputJson.props.title.description, "عنوانی که در پیام‌های اعتبارسنجی استفاده می‌شود"],
+        [Keys.category.components.inputJson.props.hasHeader.name, "نمایش سربرگ"], [Keys.category.components.inputJson.props.hasHeader.description, "در صورت فعال بودن، سربرگ ویرایشگر را نمایش می‌دهد"],
+        [Keys.category.components.inputJson.props.headerTitle.name, "عنوان سربرگ"], [Keys.category.components.inputJson.props.headerTitle.description, "عنوان نمایشی سربرگ ویرایشگر"],
+        [Keys.category.components.inputJson.props.numbersBackgroundColor.name, "پس‌زمینهٔ شماره‌خط‌ها"], [Keys.category.components.inputJson.props.numbersBackgroundColor.description, "رنگ پس‌زمینهٔ ستون شماره‌خط‌ها"],
+        [Keys.category.components.inputJson.props.numbersColor.name, "رنگ شماره‌خط‌ها"], [Keys.category.components.inputJson.props.numbersColor.description, "رنگ متن شماره‌خط‌ها"],
+        [Keys.category.components.inputJson.props.numberActiveBackgroundColor.name, "پس‌زمینهٔ شماره‌خط فعال"], [Keys.category.components.inputJson.props.numberActiveBackgroundColor.description, "رنگ پس‌زمینهٔ شمارهٔ خط فعال"],
+        [Keys.category.components.inputJson.props.lineActiveBackgroundColor.name, "پس‌زمینهٔ خط فعال"], [Keys.category.components.inputJson.props.lineActiveBackgroundColor.description, "رنگ پس‌زمینهٔ خط فعال در ویرایشگر"],
+        [Keys.category.components.inputJson.props.themeLightBackgroundColor.name, "پس‌زمینهٔ روشن ویرایشگر"], [Keys.category.components.inputJson.props.themeLightBackgroundColor.description, "رنگ پس‌زمینهٔ ویرایشگر در تم روشن"],
+        [Keys.category.components.inputJson.props.themeDarkBackgroundColor.name, "پس‌زمینهٔ تیرهٔ ویرایشگر"], [Keys.category.components.inputJson.props.themeDarkBackgroundColor.description, "رنگ پس‌زمینهٔ ویرایشگر در تم تیره"],
+        [Keys.category.components.inputJson.props.isDarkTheme.name, "تم تیره"], [Keys.category.components.inputJson.props.isDarkTheme.description, "تم تیره و رنگ پس‌زمینهٔ تیرهٔ ویرایشگر را فعال می‌کند"],
+        [Keys.category.components.inputJson.props.editorHeight.name, "ارتفاع ویرایشگر"], [Keys.category.components.inputJson.props.editorHeight.description, "ارتفاع مشترک ویرایشگر و پیش‌نمایش JSON"],
+        [Keys.category.components.inputJson.props.backgroundColorForm.name, "پس‌زمینهٔ فرم"], [Keys.category.components.inputJson.props.backgroundColorForm.description, "رنگ پس‌زمینهٔ فرم ورودی JSON"],
+        [Keys.category.components.inputJson.props.formBorderRadius.name, "گردی فرم"], [Keys.category.components.inputJson.props.formBorderRadius.description, "گردی گوشه‌های فرم بر اساس اندازهٔ سیستم"],
+        [Keys.category.components.inputJson.props.hasRules.name, "اعتبارسنجی"], [Keys.category.components.inputJson.props.hasRules.description, "قواعد اعتبارسنجی ورودی JSON را فعال می‌کند"],
+        [Keys.category.components.inputJson.props.isAbsoluteRule.name, "اعتبارسنجی شناور"], [Keys.category.components.inputJson.props.isAbsoluteRule.description, "پیام اعتبارسنجی را به‌صورت شناور نمایش می‌دهد"],
+        [Keys.category.components.inputJson.props.listRules.name, "قواعد اعتبارسنجی"], [Keys.category.components.inputJson.props.listRules.description, "قواعد اعمال‌شده روی متن JSON"],
+        [Keys.category.components.inputJson.props.msgRules.name, "پیام‌های اعتبارسنجی"], [Keys.category.components.inputJson.props.msgRules.description, "پیام‌های سفارشی اعتبارسنجی"],
+        [Keys.category.components.inputJson.schemas.form.name, "فرم ورودی JSON"], [Keys.category.components.inputJson.schemas.form.description, "فرم شامل سربرگ، ویرایشگر و پیش‌نمایش JSON"],
+        [Keys.category.components.inputJson.schemas.header.name, "سربرگ"], [Keys.category.components.inputJson.schemas.header.description, "سربرگ مبتنی بر کامپوننت PageHeader"],
+        [Keys.category.components.inputJson.schemas.editor.name, "ویرایشگر و پیش‌نمایش"], [Keys.category.components.inputJson.schemas.editor.description, "چیدمان دو بخشی ویرایش متن و نمایش زندهٔ درخت"],
+        [Keys.category.components.inputJson.schemas.code.name, "ویرایشگر JSON"], [Keys.category.components.inputJson.schemas.code.description, "ویرایش متن خام با CodeMirror در حالت JSON"],
+        [Keys.category.components.inputJson.schemas.error.name, "خطای JSON"], [Keys.category.components.inputJson.schemas.error.description, "نمایش خطای parse برای JSON نامعتبر"],
+        [Keys.category.components.inputJson.schemas.preview.name, "پیش‌نمایش JSON"], [Keys.category.components.inputJson.schemas.preview.description, "نمایش زندهٔ دادهٔ معتبر با ComponentJsonTree"],
+        [Keys.category.components.inputJson.schemas.validate.name, "اعتبارسنجی"], [Keys.category.components.inputJson.schemas.validate.description, "قواعد اعتبارسنجی روی مقدار خام JSON"],
+        [Keys.category.components.inputJson.methods.inputChange.description, "متن JSON تغییر کرد"],
+        [Keys.category.components.inputJson.methods.inputFocus.description, "تمرکز روی ویرایشگر JSON"],
+        [Keys.category.components.inputJson.methods.inputBlur.description, "تمرکز از ویرایشگر JSON برداشته شد"],
+        [Keys.category.components.inputJson.examples.default.name, "پیش‌فرض"], [Keys.category.components.inputJson.examples.default.description, "ویرایش JSON و مشاهدهٔ پیش‌نمایش زنده"],
+        [Keys.category.components.inputJson.examples.nested.name, "دادهٔ تو در تو"], [Keys.category.components.inputJson.examples.nested.description, "نمایش آرایه‌ها و objectهای تودرتو در درخت"],
+        [Keys.category.components.inputJson.examples.invalidJson.name, "JSON نامعتبر"], [Keys.category.components.inputJson.examples.invalidJson.description, "نمایش خطا و بازیابی پیش‌نمایش پس از اصلاح JSON"],
+        [Keys.category.components.inputJson.texts.editorTitle, "ویرایشگر JSON"],
+        [Keys.category.components.inputJson.texts.invalidJson, "JSON معتبر نیست"],
+        [Keys.category.components.inputJson.texts.emptyPreview, "پیش‌نمایش JSON"],
 
         [Keys.category.components.inputPrice.name, "ورودی قیمت"],
         [Keys.category.components.inputPrice.description, "ورودی قیمت قالب‌بندی‌شده با محاسبات و اطلاعات اختیاری"],
@@ -1636,6 +1755,39 @@ export const Fa =
         [Keys.category.components.inputSimple.methods.inputBlur.description, "focus از ورودی برداشته شد"],
         [Keys.category.components.inputSimple.examples.default.name, "پیش‌فرض"],
         [Keys.category.components.inputSimple.examples.default.description, "ورودی ساده همراه با تغییر مقدار، focus و پاک‌کردن"],
+
+        /// Components -> SimpleComponent -> InputDescriptionSimple
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.name, "ورودی توضیحات"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.description, "ورودی چندخطی متن با textarea بومی"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputName.name, "نام فیلد"], [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputName.description, "نام فیلد فرم برای textarea"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputDisable.name, "غیرفعال"], [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputDisable.description, "textarea و امکان پاک‌کردن آن را غیرفعال می‌کند"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputValue.name, "مقدار"], [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputValue.description, "مقدار فعلی متن چندخطی"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputClass.name, "کلاس‌های textarea"], [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputClass.description, "کلاس‌های CSS اضافی برای textarea"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputStyles.name, "استایل‌های textarea"], [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputStyles.description, "استایل‌های درون‌خطی اضافی برای textarea"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputPlaceholder.name, "متن راهنما"], [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputPlaceholder.description, "متنی که هنگام خالی بودن textarea نمایش داده می‌شود"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputRows.name, "تعداد سطرها"], [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputRows.description, "تعداد سطرهای اولیه قابل مشاهده"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputResize.name, "حالت تغییر اندازه"], [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputResize.description, "رفتار بومی تغییر اندازه textarea"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderColor.name, "رنگ کادر"], [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderColor.description, "رنگ کادر در حالت عادی"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderColorFocus.name, "رنگ کادر هنگام تمرکز"], [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderColorFocus.description, "رنگ کادر هنگام focus شدن textarea"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderWidth.name, "ضخامت کادر"], [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderWidth.description, "ضخامت کادر بر اساس اندازهٔ سیستم"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderRadius.name, "گردی گوشه‌ها"], [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderRadius.description, "گردی کادر بر اساس اندازهٔ سیستم"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderTopLeftRadiusHas.name, "گوشهٔ بالا-چپ"], [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderTopLeftRadiusHas.description, "نمایش گردی گوشهٔ بالا-چپ"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderTopRightRadiusHas.name, "گوشهٔ بالا-راست"], [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderTopRightRadiusHas.description, "نمایش گردی گوشهٔ بالا-راست"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderBottomLeftRadiusHas.name, "گوشهٔ پایین-چپ"], [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderBottomLeftRadiusHas.description, "نمایش گردی گوشهٔ پایین-چپ"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderBottomRightRadiusHas.name, "گوشهٔ پایین-راست"], [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderBottomRightRadiusHas.description, "نمایش گردی گوشهٔ پایین-راست"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderTopHas.name, "لبهٔ بالا"], [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderTopHas.description, "نمایش لبهٔ بالایی کادر"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderRightHas.name, "لبهٔ راست"], [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderRightHas.description, "نمایش لبهٔ راست کادر"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderBottomHas.name, "لبهٔ پایین"], [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderBottomHas.description, "نمایش لبهٔ پایینی کادر"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderLeftHas.name, "لبهٔ چپ"], [Keys.category.components.simpleComponent.inputDescriptionSimple.props.inputBorderLeftHas.description, "نمایش لبهٔ چپ کادر"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.schemas.form.name, "فرم textarea"], [Keys.category.components.simpleComponent.inputDescriptionSimple.schemas.form.description, "قاب اصلی شامل textarea و آیکون پاک‌کردن"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.schemas.textarea.name, "textarea"], [Keys.category.components.simpleComponent.inputDescriptionSimple.schemas.textarea.description, "عنصر بومی ورود متن چندخطی"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.schemas.clearIcon.name, "آیکون پاک‌کردن"], [Keys.category.components.simpleComponent.inputDescriptionSimple.schemas.clearIcon.description, "آیکونی که مقدار textarea را پاک می‌کند"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.methods.inputChange.description, "مقدار textarea تغییر کرد"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.methods.inputFocus.description, "textarea متمرکز شد"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.methods.inputBlur.description, "تمرکز از textarea برداشته شد"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.examples.default.name, "پیش‌فرض"], [Keys.category.components.simpleComponent.inputDescriptionSimple.examples.default.description, "textarea چندخطی با رویداد تغییر مقدار و امکان پاک‌کردن"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.examples.disabled.name, "غیرفعال"], [Keys.category.components.simpleComponent.inputDescriptionSimple.examples.disabled.description, "نمایش مقدار textarea در حالت غیرفعال"],
+        [Keys.category.components.simpleComponent.inputDescriptionSimple.examples.customRows.name, "تعداد سطر دلخواه"], [Keys.category.components.simpleComponent.inputDescriptionSimple.examples.customRows.description, "textarea با تعداد سطر و حالت تغییر اندازهٔ سفارشی"],
 
         [Keys.category.components.inputFile.name, "File input"], [Keys.category.components.inputFile.description, "File picker with drag and drop, validation, list, and confirmed deletion"],
         [Keys.category.components.inputFile.props.accept.name, "Accepted file types"], [Keys.category.components.inputFile.props.accept.description, "File types accepted by the picker"],
@@ -2145,6 +2297,11 @@ export const Fa =
         [Keys.category.components.menuMore.examples.vertical.name, "منوی عمودی عملیات"],
         [Keys.category.components.menuMore.examples.vertical.description, "منوی عمودی با زیرمنوی شناور در کنار گزینه."],
 
+        [Keys.category.components.menuMore.props.directionRtl.name, "چیدمان راست‌به‌چپ"],
+        [Keys.category.components.menuMore.props.directionRtl.description, "جهت سیستم را برای چینش گزینه‌ها و جای زیرمنو بازنویسی می‌کند؛ مقدار null از جهت فعلی سیستم پیروی می‌کند."],
+        [Keys.category.components.menuMore.examples.oppositeDirection.name, "جهت مخالف سیستم"],
+        [Keys.category.components.menuMore.examples.oppositeDirection.description, "منوی عمودی و تودرتو با چیدمانی در خلاف جهت فعلی سیستم."],
+
         /// Components -> FloatMenu
         [
             Keys.category.components.floatMenu.name,
@@ -2201,6 +2358,14 @@ export const Fa =
         [
             Keys.category.components.floatMenu.props.floatStyles.description,
             "styleهای inline بخش float panel"
+        ],
+        [
+            Keys.category.components.floatMenu.props.floatUsePortal.name,
+            "رندر بیرون از کانتینر"
+        ],
+        [
+            Keys.category.components.floatMenu.props.floatUsePortal.description,
+            "پنل شناور را خارج از والد رندر می‌کند تا کانتینر اسکرول آن را نبرد یا اسکرول اضافه نگیرد"
         ],
         [
             Keys.category.components.floatMenu.props.floatContent.name,
@@ -2566,6 +2731,7 @@ export const Fa =
             Keys.category.components.simples.description,
             "لیستی از کامپوننت‌های ساده و پایه"
         ],
+
 
         /// Components -> Button
         [
@@ -3661,7 +3827,7 @@ export const Fa =
         ],
         [
             Keys.category.components.collapse.description,
-            "پنل قابل باز/بسته شدن با عنوان، آیکون و فلش"
+            "پنل قابل باز و بسته شدن با آیکون، عنوان، عملیات MenuMore و فلش"
         ],
         [
             Keys.category.components.collapse.props.collapseBorderBackground.name,
@@ -3744,12 +3910,28 @@ export const Fa =
             "استایل‌های CSS اعمال شده روی آیکون"
         ],
         [
+            Keys.category.components.collapse.props.collapseMenuItems.name,
+            "گزینه‌های منوی سربرگ"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseMenuItems.description,
+            "عملیات MenuMore که بعد از عنوان و پیش از فلش باز و بسته شدن نمایش داده می‌شوند"
+        ],
+        [
             Keys.category.components.collapse.props.collapseTitle.name,
             "عنوان"
         ],
         [
             Keys.category.components.collapse.props.collapseTitle.description,
             "متن عنوان آکاردئون"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseTitleWidth.name,
+            "پهنای عنوان"
+        ],
+        [
+            Keys.category.components.collapse.props.collapseTitleWidth.description,
+            "عرض اختصاصی عنوان در سربرگ"
         ],
         [
             Keys.category.components.collapse.props.collapseTitleStyles.name,
@@ -3896,6 +4078,14 @@ export const Fa =
             "متن عنوان آکاردئون"
         ],
         [
+            Keys.category.components.collapse.schemas.formBorderContentMenuMore.name,
+            "منوی بیشتر سربرگ"
+        ],
+        [
+            Keys.category.components.collapse.schemas.formBorderContentMenuMore.description,
+            "عملیات MenuMore که پس از عنوان در محتوای سربرگ قرار می‌گیرند"
+        ],
+        [
             Keys.category.components.collapse.schemas.formBorderContentArrow.name,
             "بخش فلش"
         ],
@@ -3920,6 +4110,14 @@ export const Fa =
             "کالبکک هنگام کلیک روی عنوان آکاردئون"
         ],
         [
+            Keys.category.components.collapse.methods.selectMenuItem.name,
+            "انتخاب گزینه منوی سربرگ"
+        ],
+        [
+            Keys.category.components.collapse.methods.selectMenuItem.description,
+            "هنگام انتخاب یکی از عملیات MenuMore سربرگ فراخوانی می‌شود"
+        ],
+        [
             Keys.category.components.collapse.examples.default.name,
             "آکاردئون پیش‌فرض"
         ],
@@ -3935,6 +4133,64 @@ export const Fa =
             Keys.category.components.collapse.examples.clickable.description,
             "نمایش آکاردئون با کالبکک کلیک و آیکون"
         ],
+
+        [
+            Keys.category.components.collapse.examples.initiallyOpen.name,
+            "آکاردئون باز از ابتدا"
+        ],
+        [
+            Keys.category.components.collapse.examples.initiallyOpen.description,
+            "نمایش بدنه آکاردئون در هنگام نمایش اولیه باز است"
+        ],
+        [
+            Keys.category.components.collapse.examples.titleOnly.name,
+            "آکاردئون بدون آیکون و منو"
+        ],
+        [
+            Keys.category.components.collapse.examples.titleOnly.description,
+            "نمایش سربرگ با عنوان و فلش بازشو"
+        ],
+        [
+            Keys.category.components.collapse.examples.styled.name,
+            "آکاردئون با استایل سفارشی"
+        ],
+        [
+            Keys.category.components.collapse.examples.styled.description,
+            "نمایش آکاردئون با رنگ و استایل سفارشی سربرگ و بدنه"
+        ],
+
+        [Keys.category.components.collapseLine.name, "جداکنندهٔ بازشو"],
+        [Keys.category.components.collapseLine.description, "جداکنندهٔ خطی با عنوان و بدنهٔ اختیاری و قابلیت باز و بسته‌شدن"],
+        [Keys.category.components.collapseLine.props.canCollapse.name, "قابلیت باز و بسته‌شدن"], [Keys.category.components.collapseLine.props.canCollapse.description, "فعال‌کردن کنترل باز و بسته‌شدن بدنه"],
+        [Keys.category.components.collapseLine.props.bodyIsOpen.name, "وضعیت بدنه"], [Keys.category.components.collapseLine.props.bodyIsOpen.description, "تعیین می‌کند بدنه در حالت بازشو نمایش داده شود"],
+        [Keys.category.components.collapseLine.props.title.name, "عنوان جداکننده"], [Keys.category.components.collapseLine.props.title.description, "عنوان اختیاری میان دو خط"],
+        [Keys.category.components.collapseLine.props.body.name, "بدنه"], [Keys.category.components.collapseLine.props.body.description, "محتوای زیر جداکننده"],
+        [Keys.category.components.collapseLine.props.lineBackground.name, "رنگ خط و فلش"], [Keys.category.components.collapseLine.props.lineBackground.description, "رنگ مشترک خط‌های جداکننده و فلش باز و بسته‌شدن"],
+        [Keys.category.components.collapseLine.props.isCenter.name, "وسط‌چین بودن محتوا"], [Keys.category.components.collapseLine.props.isCenter.description, "در حالت فعال، عنوان و فلش را وسط‌چین می‌کند؛ در غیر این صورت آن‌ها را مطابق جهت متن سیستم قرار می‌دهد"],
+        [Keys.category.components.collapseLine.props.thickness.name, "ضخامت خط"], [Keys.category.components.collapseLine.props.thickness.description, "ضخامت strokeهای جداکننده"],
+        [Keys.category.components.collapseLine.props.class.name, "کلاس‌های جداکننده"], [Keys.category.components.collapseLine.props.class.description, "کلاس‌های ظرف جداکننده"],
+        [Keys.category.components.collapseLine.props.styles.name, "استایل‌های جداکننده"], [Keys.category.components.collapseLine.props.styles.description, "استایل‌های ظرف جداکننده"],
+        [Keys.category.components.collapseLine.props.titleClass.name, "کلاس‌های عنوان"], [Keys.category.components.collapseLine.props.titleClass.description, "کلاس‌های عنوان یا کنترل بازشو"],
+        [Keys.category.components.collapseLine.props.titleStyles.name, "استایل‌های عنوان"], [Keys.category.components.collapseLine.props.titleStyles.description, "استایل‌های عنوان یا کنترل بازشو"],
+        [Keys.category.components.collapseLine.props.bodyClass.name, "کلاس‌های بدنه"], [Keys.category.components.collapseLine.props.bodyClass.description, "کلاس‌های ظرف بدنه"],
+        [Keys.category.components.collapseLine.props.bodyStyles.name, "استایل‌های بدنه"], [Keys.category.components.collapseLine.props.bodyStyles.description, "استایل‌های ظرف بدنه"],
+        [Keys.category.components.collapseLine.props.arrowClass.name, "کلاس‌های فلش"], [Keys.category.components.collapseLine.props.arrowClass.description, "کلاس‌های فلش وضعیت باز و بسته"],
+        [Keys.category.components.collapseLine.props.arrowStyles.name, "استایل‌های فلش"], [Keys.category.components.collapseLine.props.arrowStyles.description, "استایل‌های فلش وضعیت باز و بسته"],
+        [Keys.category.components.collapseLine.schemas.root.name, "ریشه"], [Keys.category.components.collapseLine.schemas.root.description, "ظرف جداکننده و بدنه"],
+        [Keys.category.components.collapseLine.schemas.divider.name, "جداکننده"], [Keys.category.components.collapseLine.schemas.divider.description, "خط و عنوان اختیاری"],
+        [Keys.category.components.collapseLine.schemas.lineStart.name, "خط آغازین"], [Keys.category.components.collapseLine.schemas.lineStart.description, "بخش اول خط جداکننده"],
+        [Keys.category.components.collapseLine.schemas.title.name, "عنوان"], [Keys.category.components.collapseLine.schemas.title.description, "عنوان ثابت در حالت غیرتعاملی"],
+        [Keys.category.components.collapseLine.schemas.toggle.name, "کنترل بازشو"], [Keys.category.components.collapseLine.schemas.toggle.description, "دکمهٔ باز و بسته‌کردن بدنه"],
+        [Keys.category.components.collapseLine.schemas.arrow.name, "فلش"], [Keys.category.components.collapseLine.schemas.arrow.description, "فلش وضعیت بدنه"],
+        [Keys.category.components.collapseLine.schemas.lineEnd.name, "خط پایانی"], [Keys.category.components.collapseLine.schemas.lineEnd.description, "بخش دوم خط جداکننده"],
+        [Keys.category.components.collapseLine.schemas.body.name, "بدنه"], [Keys.category.components.collapseLine.schemas.body.description, "محتوای اختیاری زیر خط"],
+        [Keys.category.components.collapseLine.methods.click.name, "کلیک"], [Keys.category.components.collapseLine.methods.click.description, "فراخوانی هنگام تغییر وضعیت بدنه"],
+        [Keys.category.components.collapseLine.texts.toggle, "باز و بسته‌کردن محتوا"],
+        [Keys.category.components.collapseLine.examples.default.name, "جداکنندهٔ ساده"], [Keys.category.components.collapseLine.examples.default.description, "خط تمام‌عرض بدون عنوان و تعامل"],
+        [Keys.category.components.collapseLine.examples.labeled.name, "جداکنندهٔ عنوان‌دار"], [Keys.category.components.collapseLine.examples.labeled.description, "عنوان میان دو بخش خط"],
+        [Keys.category.components.collapseLine.examples.bodyAlwaysVisible.name, "بدنهٔ همیشه‌نمایان"], [Keys.category.components.collapseLine.examples.bodyAlwaysVisible.description, "نمایش بدنه بدون قابلیت باز و بسته‌شدن"],
+        [Keys.category.components.collapseLine.examples.collapsible.name, "جداکنندهٔ بازشو"], [Keys.category.components.collapseLine.examples.collapsible.description, "عنوان و بدنهٔ قابل‌باز و بسته‌شدن"],
+        [Keys.category.components.collapseLine.examples.directionAligned.name, "محتوای هم‌جهت با متن"], [Keys.category.components.collapseLine.examples.directionAligned.description, "با غیرفعال‌کردن وسط‌چین، عنوان و فلش در گوشهٔ آغازین و مطابق جهت متن سیستم قرار می‌گیرند"],
 
 
         /// Components -> Label
@@ -4677,6 +4933,65 @@ export const Fa =
         [Keys.category.components.console.examples.levels.description, "فیلتر پیام‌های log، info، هشدار، خطا و debug."],
         [Keys.category.components.console.examples.objects.name, "مقادیر قابل بررسی"],
         [Keys.category.components.console.examples.objects.description, "اشیای بازشونده و پشته خطای نمونه."],
+
+        /// Components -> Tools -> Data Types -> JSON Tree
+        [Keys.category.components.jsonTree.name, "درخت JSON"],
+        [Keys.category.components.jsonTree.description, "نمایش حرفه‌ای و بازشوندهٔ داده‌های JSON به‌شکل درختی."],
+        [Keys.category.components.jsonTree.props.data.name, "دادهٔ JSON"],
+        [Keys.category.components.jsonTree.props.data.description, "مقدار JSON که به‌شکل درخت تعاملی نمایش داده می‌شود."],
+        [Keys.category.components.jsonTree.props.initialExpandDepth.name, "عمق بازشدن اولیه"],
+        [Keys.category.components.jsonTree.props.initialExpandDepth.description, "تعداد سطح‌هایی که هنگام نمایش اولیه باز هستند."],
+        [Keys.category.components.jsonTree.props.maxDepth.name, "حداکثر عمق"],
+        [Keys.category.components.jsonTree.props.maxDepth.description, "بیشترین عمق نمایش برای حفظ کارایی درخت‌های بزرگ."],
+        [Keys.category.components.jsonTree.props.maxNodes.name, "حداکثر گره‌ها"],
+        [Keys.category.components.jsonTree.props.maxNodes.description, "بیشترین تعداد گره‌هایی که هم‌زمان render می‌شوند."],
+        [Keys.category.components.jsonTree.props.showSearch.name, "نمایش جست‌وجو"],
+        [Keys.category.components.jsonTree.props.showSearch.description, "نمایش جست‌وجوی کلیدها و مقدارهای سادهٔ JSON."],
+        [Keys.category.components.jsonTree.props.showExpandControls.name, "نمایش کنترل باز و بسته‌کردن"],
+        [Keys.category.components.jsonTree.props.showExpandControls.description, "نمایش کنترل‌های بازکردن یا بستن شاخه‌های درخت."],
+        [Keys.category.components.jsonTree.props.showCopyButton.name, "نمایش دکمهٔ کپی"],
+        [Keys.category.components.jsonTree.props.showCopyButton.description, "نمایش دکمهٔ کپی کل مقدار JSON."],
+        [Keys.category.components.jsonTree.props.searchPlaceholder.name, "متن راهنمای جست‌وجو"],
+        [Keys.category.components.jsonTree.props.searchPlaceholder.description, "متنی که در فیلد جست‌وجوی درخت نمایش داده می‌شود."],
+        [Keys.category.components.jsonTree.props.emptyText.name, "متن حالت خالی"],
+        [Keys.category.components.jsonTree.props.emptyText.description, "پیامی که وقتی دادهٔ JSON ارائه نشده نمایش داده می‌شود."],
+        [Keys.category.components.jsonTree.props.headerBackgroundColor.name, "رنگ پس‌زمینهٔ نوار ابزار"],
+        [Keys.category.components.jsonTree.props.headerBackgroundColor.description, "رنگ پس‌زمینهٔ نوار ابزار درخت JSON."],
+        [Keys.category.components.jsonTree.schemas.root.name, "درخت JSON"],
+        [Keys.category.components.jsonTree.schemas.root.description, "قاب درخت JSON با ComponentBorder."],
+        [Keys.category.components.jsonTree.schemas.toolbar.name, "نوار ابزار"],
+        [Keys.category.components.jsonTree.schemas.toolbar.description, "کنترل‌های جست‌وجو، بازکردن، بستن و کپی."],
+        [Keys.category.components.jsonTree.schemas.tree.name, "درخت"],
+        [Keys.category.components.jsonTree.schemas.tree.description, "کلیدها، مقدارها و شاخه‌های بازشوندهٔ JSON."],
+        [Keys.category.components.jsonTree.methods.nodeToggle.name, "تغییر وضعیت گره"],
+        [Keys.category.components.jsonTree.methods.nodeToggle.description, "هنگام باز یا بسته‌شدن گرهٔ آبجکت یا آرایه اجرا می‌شود."],
+        [Keys.category.components.jsonTree.methods.searchChange.name, "تغییر جست‌وجو"],
+        [Keys.category.components.jsonTree.methods.searchChange.description, "هنگام تغییر عبارت جست‌وجو اجرا می‌شود."],
+        [Keys.category.components.jsonTree.methods.expandAll.name, "بازکردن همه"],
+        [Keys.category.components.jsonTree.methods.expandAll.description, "پس از بازشدن شاخه‌های درخت اجرا می‌شود."],
+        [Keys.category.components.jsonTree.methods.collapseAll.name, "بستن همه"],
+        [Keys.category.components.jsonTree.methods.collapseAll.description, "پس از بسته‌شدن شاخه‌های درخت اجرا می‌شود."],
+        [Keys.category.components.jsonTree.methods.copy.name, "کپی JSON"],
+        [Keys.category.components.jsonTree.methods.copy.description, "پس از کپی موفق دادهٔ JSON اجرا می‌شود."],
+        [Keys.category.components.jsonTree.texts.search, "جست‌وجوی کلید و مقدار..."],
+        [Keys.category.components.jsonTree.texts.expand, "بازکردن"],
+        [Keys.category.components.jsonTree.texts.collapse, "بستن"],
+        [Keys.category.components.jsonTree.texts.expandAll, "بازکردن همه"],
+        [Keys.category.components.jsonTree.texts.collapseAll, "بستن همه"],
+        [Keys.category.components.jsonTree.texts.copy, "کپی JSON"],
+        [Keys.category.components.jsonTree.texts.empty, "دادهٔ JSON ارائه نشده است"],
+        [Keys.category.components.jsonTree.texts.noResults, "کلید یا مقدار منطبق پیدا نشد"],
+        [Keys.category.components.jsonTree.texts.truncated, "برای حفظ کارایی، گره‌های بیشتری نمایش داده نشدند."],
+        [Keys.category.components.jsonTree.texts.keys, "کلید"],
+        [Keys.category.components.jsonTree.texts.items, "مورد"],
+        [Keys.category.components.jsonTree.texts.copySuccess, "JSON کپی شد"],
+        [Keys.category.components.jsonTree.texts.copyFailure, "کپی JSON ناموفق بود"],
+        [Keys.category.components.jsonTree.examples.default.name, "JSON ساخت‌یافته"],
+        [Keys.category.components.jsonTree.examples.default.description, "درختی فشرده با نمونه‌ای از نوع‌های JSON."],
+        [Keys.category.components.jsonTree.examples.nested.name, "دادهٔ تو‌در‌تو"],
+        [Keys.category.components.jsonTree.examples.nested.description, "درختی عمیق برای نمایش تورفتگی و عمق بازشدن اولیه."],
+        [Keys.category.components.jsonTree.examples.searchAndControls.name, "جست‌وجو و کنترل‌ها"],
+        [Keys.category.components.jsonTree.examples.searchAndControls.description, "جست‌وجو، بازکردن، بستن و کپی یک آبجکت JSON بزرگ‌تر."],
 
         /// Window
         [
@@ -5865,6 +6180,8 @@ export const Fa =
         [Keys.category.components.tools.description, "کامپوننت‌های کمکی برای ویرایش و کار با کد منبع."],
         [Keys.category.components.tools.code.name, "کد"],
         [Keys.category.components.tools.code.description, "کامپوننت‌های نمایش و ویرایش کد منبع."],
+        [Keys.category.components.tools.dataType.name, "نوع داده"],
+        [Keys.category.components.tools.dataType.description, "کامپوننت‌هایی برای نمایش و بررسی داده‌های ساخت‌یافته."],
         [Keys.category.components.effects.name, "افکت‌ها"],
         [Keys.category.components.effects.description, "کامپوننت‌هایی برای افزودن تغییرهای نمایشی به عناصر رابط کاربری."],
         [Keys.category.components.effective.name, "افکت Border"],
@@ -5891,6 +6208,40 @@ export const Fa =
         [Keys.category.components.effective.examples.default.description, "componentBorder با افکت محوشدن هنگام نمایش و ناپدیدشدن."],
         [Keys.category.components.effective.examples.separateShowHideModes.name, "حالت جداگانهٔ نمایش و ناپدیدشدن"],
         [Keys.category.components.effective.examples.separateShowHideModes.description, "کنترل visibility از والد همراه با افکت‌های متفاوت scale و slide."],
+
+        /// Components -> Effects -> Effect Change
+        [Keys.category.components.effectChange.name, "افکت تغییر محتوا"],
+        [Keys.category.components.effectChange.description, "هنگام تغییر محتوا در صفحه، اسلایدر و بخش‌های دیگر transition نمایش می‌دهد."],
+        [Keys.category.components.effectChange.props.content.name, "محتوا"],
+        [Keys.category.components.effectChange.props.content.description, "محتوای فعلی؛ تغییر این مقدار transition را آغاز می‌کند."],
+        [Keys.category.components.effectChange.props.mode.name, "حالت transition"],
+        [Keys.category.components.effectChange.props.mode.description, "حالت تغییر محتوا: بدون افکت، محوشدن، حرکت، بزرگ‌نمایی یا نمایش لودینگ."],
+        [Keys.category.components.effectChange.props.changeDirection.name, "جهت تغییر"],
+        [Keys.category.components.effectChange.props.changeDirection.description, "جهت منطقی حرکت در حالت slide که با چیدمان RTL سازگار می‌شود."],
+        [Keys.category.components.effectChange.props.duration.name, "مدت"],
+        [Keys.category.components.effectChange.props.duration.description, "مدت transition برحسب میلی‌ثانیه."],
+        [Keys.category.components.effectChange.props.easing.name, "تابع زمان‌بندی"],
+        [Keys.category.components.effectChange.props.easing.description, "تابع CSS برای زمان‌بندی transition."],
+        [Keys.category.components.effectChange.props.respectReducedMotion.name, "رعایت کاهش حرکت"],
+        [Keys.category.components.effectChange.props.respectReducedMotion.description, "در صورت درخواست سیستم‌عامل برای کاهش حرکت، انیمیشن غیرفعال می‌شود."],
+        [Keys.category.components.effectChange.schemas.root.name, "تغییر محتوا"],
+        [Keys.category.components.effectChange.schemas.root.description, "ناحیهٔ پایدار برای نمایش محتوای در حال تغییر."],
+        [Keys.category.components.effectChange.schemas.content.name, "جایگاه محتوا"],
+        [Keys.category.components.effectChange.schemas.content.description, "محتوای فعلی و محتوای قبلی هنگام اجرای transition."],
+        [Keys.category.components.effectChange.methods.transitionStart.name, "شروع transition"],
+        [Keys.category.components.effectChange.methods.transitionStart.description, "هنگام آغاز transition محتوای متحرک اجرا می‌شود."],
+        [Keys.category.components.effectChange.methods.transitionEnd.name, "پایان transition"],
+        [Keys.category.components.effectChange.methods.transitionEnd.description, "پس از پایان transition آخرین محتوا اجرا می‌شود."],
+        [Keys.category.components.effectChange.examples.default.name, "پیش‌فرض"],
+        [Keys.category.components.effectChange.examples.default.description, "تغییر دو مقدار متنی با افکت محوشدن."],
+        [Keys.category.components.effectChange.examples.pageChange.name, "تغییر صفحه"],
+        [Keys.category.components.effectChange.examples.pageChange.description, "جابه‌جایی بین پنل‌ها با حرکت سازگار با جهت صفحه."],
+        [Keys.category.components.effectChange.examples.slider.name, "اسلایدر"],
+        [Keys.category.components.effectChange.examples.slider.description, "تغییر پیاپی اسلایدها با حفظ کنترل آخرین transition."],
+        [Keys.category.components.effectChange.examples.loading.name, "لودینگ"],
+        [Keys.category.components.effectChange.examples.loading.description, "لودینگ تا زمان توقف دستی باقی می‌ماند؛ در این مثال prop_duration تعیین نشده است."],
+        [Keys.category.components.effectChange.examples.loading.start, "شروع بارگذاری"],
+        [Keys.category.components.effectChange.examples.loading.finish, "پایان بارگذاری"],
 
         /// Components -> CardViewClicable
         [Keys.category.components.cardViewClicable.name, "کارت کلیک‌پذیر"],
@@ -6451,6 +6802,58 @@ export const Fa =
         [Keys.category.components.fetch.form.examples.validation.description, "تا زمانی که اعتبارسنج فرزند خطا داشته باشد ارسال انجام نمی‌شود"],
         [Keys.category.components.fetch.form.examples.manualSubmit.name, "ارسال دستی"],
         [Keys.category.components.fetch.form.examples.manualSubmit.description, "دریافت فرم و داده‌های اضافی بدون ارسال درخواست شبکه"],
+        [Keys.category.components.fetch.form.customForm.name, "فرم سفارشی"],
+        [Keys.category.components.fetch.form.customForm.description, "ساخت و نمایش فرم گروه‌بندی‌شده با حالت ویرایش و اجرا"],
+        [Keys.category.components.fetch.form.customForm.props.mode.name, "حالت فرم"],
+        [Keys.category.components.fetch.form.customForm.props.mode.description, "تعیین می‌کند فرم در حالت ویرایش یا اجرا نمایش داده شود"],
+        [Keys.category.components.fetch.form.customForm.props.groups.name, "گروه‌ها و فیلدها"],
+        [Keys.category.components.fetch.form.customForm.props.groups.description, "تعریف گروه‌های تاشو و فیلدهای هر گروه"],
+        [Keys.category.components.fetch.form.customForm.props.values.name, "مقادیر فرم"],
+        [Keys.category.components.fetch.form.customForm.props.values.description, "مقادیر اولیه یا کنترل‌شده بر اساس نام فیلد"],
+        [Keys.category.components.fetch.form.customForm.props.formOptions.name, "تنظیمات ارسال فرم"],
+        [Keys.category.components.fetch.form.customForm.props.formOptions.description, "تنظیمات مجاز ComponentForm برای حالت اجرا؛ ارسال شبکه به‌طور پیش‌فرض خاموش است"],
+        [Keys.category.components.fetch.form.customForm.props.layoutClass.name, "کلاس‌های چیدمان"],
+        [Keys.category.components.fetch.form.customForm.props.layoutClass.description, "کلاس‌های wrapper ساخته‌شده با ComponentLayout"],
+        [Keys.category.components.fetch.form.customForm.props.layoutStyles.name, "استایل‌های چیدمان"],
+        [Keys.category.components.fetch.form.customForm.props.layoutStyles.description, "استایل‌های wrapper ساخته‌شده با ComponentLayout"],
+        [Keys.category.components.fetch.form.customForm.schemas.root.name, "ریشه فرم سفارشی"],
+        [Keys.category.components.fetch.form.customForm.schemas.root.description, "wrapper اصلی فرم سفارشی و نمای فعال آن"],
+        [Keys.category.components.fetch.form.customForm.methods.templateChange.name, "تغییر قالب"],
+        [Keys.category.components.fetch.form.customForm.methods.templateChange.description, "پس از ویرایش گروه یا فیلد، تعریف تازه فرم را ارائه می‌کند"],
+        [Keys.category.components.fetch.form.customForm.methods.valueChange.name, "تغییر مقدار"],
+        [Keys.category.components.fetch.form.customForm.methods.valueChange.description, "پس از تغییر مقدار یک فیلد در حالت اجرا فراخوانی می‌شود"],
+        [Keys.category.components.fetch.form.customForm.methods.submit.name, "ارسال فرم"],
+        [Keys.category.components.fetch.form.customForm.methods.submit.description, "در حالت اجرا هنگام ارسال دستی فرم فراخوانی می‌شود"],
+        [Keys.category.components.fetch.form.customForm.methods.getResponse.name, "دریافت پاسخ"],
+        [Keys.category.components.fetch.form.customForm.methods.getResponse.description, "در حالت اجرا با شروع درخواست و دریافت Promise فراخوانی می‌شود"],
+        [Keys.category.components.fetch.form.customForm.methods.response.name, "پاسخ"],
+        [Keys.category.components.fetch.form.customForm.methods.response.description, "پس از دریافت پاسخ درخواست در حالت اجرا فراخوانی می‌شود"],
+        [Keys.category.components.fetch.form.customForm.examples.editMode.name, "ویرایش فرم"],
+        [Keys.category.components.fetch.form.customForm.examples.editMode.description, "ویرایش گروه‌ها، فیلدها و گزینه‌های فرم"],
+        [Keys.category.components.fetch.form.customForm.examples.runMode.name, "اجرای فرم"],
+        [Keys.category.components.fetch.form.customForm.examples.runMode.description, "نمایش فرم گروه‌بندی‌شده برای ورود و ارسال داده"],
+        [Keys.category.components.fetch.form.customForm.editor.addGroup, "افزودن گروه"],
+        [Keys.category.components.fetch.form.customForm.editor.removeGroup, "حذف گروه"],
+        [Keys.category.components.fetch.form.customForm.editor.deleteGroupTitle, "حذف گروه"],
+        [Keys.category.components.fetch.form.customForm.editor.deleteGroupMessage, "آیا مطمئن هستید که می‌خواهید این گروه را حذف کنید؟"],
+        [Keys.category.components.fetch.form.customForm.editor.groupSettings, "تنظیمات گروه"],
+        [Keys.category.components.fetch.form.customForm.editor.addField, "افزودن فیلد"],
+        [Keys.category.components.fetch.form.customForm.editor.removeField, "حذف فیلد"],
+        [Keys.category.components.fetch.form.customForm.editor.groupTitle, "عنوان گروه"],
+        [Keys.category.components.fetch.form.customForm.editor.columns, "تعداد ستون‌ها"],
+        [Keys.category.components.fetch.form.customForm.editor.save, "ذخیره"],
+        [Keys.category.components.fetch.form.customForm.editor.cancel, "انصراف"],
+        [Keys.category.components.fetch.form.customForm.editor.fieldName, "نام فیلد"],
+        [Keys.category.components.fetch.form.customForm.editor.fieldLabel, "برچسب"],
+        [Keys.category.components.fetch.form.customForm.editor.fieldType, "نوع فیلد"],
+        [Keys.category.components.fetch.form.customForm.editor.fieldPlaceholder, "متن راهنما"],
+        [Keys.category.components.fetch.form.customForm.editor.required, "اجباری"],
+        [Keys.category.components.fetch.form.customForm.editor.options, "گزینه‌ها (با ویرگول جدا شوند)"],
+        [Keys.category.components.fetch.form.customForm.editor.input, "ورودی"],
+        [Keys.category.components.fetch.form.customForm.editor.textarea, "متن چندخطی"],
+        [Keys.category.components.fetch.form.customForm.editor.checkbox, "چک‌باکس"],
+        [Keys.category.components.fetch.form.customForm.editor.radio, "انتخاب تکی"],
+        [Keys.category.components.fetch.form.customForm.editor.select, "انتخاب از فهرست"],
         [Keys.category.components.fetch.widget.name, "ویجت"],
         [Keys.category.components.fetch.widget.description, "بخش محتوای دارای بردر با امکان درخواست، لودینگ، پیام و تلاش مجدد"],
         [Keys.category.components.fetch.widget.props.layoutContent.name, "محتوای ویجت"],
@@ -6485,6 +6888,8 @@ export const Fa =
         [Keys.category.components.fetch.widget.methods.retryClick.description, "هنگام انتخاب تلاش مجدد در صفحه یافت‌نشدن اجرا می‌شود"],
         [Keys.category.components.fetch.widget.examples.default.name, "پیش‌فرض"],
         [Keys.category.components.fetch.widget.examples.default.description, "محتوای ثابت داخل ComponentBorder"],
+        [Keys.category.components.fetch.widget.examples.testConnect.name, "آزمایش اتصال"],
+        [Keys.category.components.fetch.widget.examples.testConnect.description, "ارسال درخواست POST به مسیر محلی Node و نمایش پاسخ زنده"],
         [Keys.category.components.fetch.iframe.name, "آی‌فریم"],
         [Keys.category.components.fetch.iframe.description, "آی‌فریم درون ComponentBorder با تنظیمات قابل کنترل"],
         [Keys.category.components.fetch.iframe.props.url.name, "آدرس منبع"],
@@ -6515,4 +6920,22 @@ export const Fa =
         [Keys.category.components.fetch.iframe.examples.default.description, "آی‌فریم داخل ComponentBorder با ارتفاع وابسته به viewport"],
         [Keys.category.components.fetch.iframe.examples.fixedHeight.name, "ارتفاع ثابت"],
         [Keys.category.components.fetch.iframe.examples.fixedHeight.description, "آی‌فریم با ارتفاع ثابت پیکربندی‌شده"],
+        [Keys.category.components.layout.name, "چیدمان"],
+        [Keys.category.components.layout.description, "چیدمان ردیفی Bootstrap برای محتوای ثابت یا واکنشی با عرض ستون قابل تنظیم"],
+        [Keys.category.components.layout.props.col.name, "عرض ستون"],
+        [Keys.category.components.layout.props.col.description, "اعمال عرض Bootstrap از col-1 تا col-12 به همه محتواها یا انتخاب CUSTOM برای تعیین عرض هر مورد"],
+        [Keys.category.components.layout.props.layoutClass.name, "کلاس‌های چیدمان"],
+        [Keys.category.components.layout.props.layoutClass.description, "کلاس‌هایی که به بخش محتوای چیدمان اعمال می‌شوند"],
+        [Keys.category.components.layout.props.layoutStyles.name, "استایل‌های چیدمان"],
+        [Keys.category.components.layout.props.layoutStyles.description, "استایل‌هایی که به بخش محتوای چیدمان اعمال می‌شوند"],
+        [Keys.category.components.layout.props.layoutContent.name, "محتوای چیدمان"],
+        [Keys.category.components.layout.props.layoutContent.description, "فهرست موارد شامل content و col و class و styles؛ اگر null باشد، محتوای فرزند نمایش داده می‌شود"],
+        [Keys.category.components.layout.schemas.layout.name, "بخش چیدمان"],
+        [Keys.category.components.layout.schemas.layout.description, "بخش wrapper که محتوا را نمایش می‌دهد"],
+        [Keys.category.components.layout.examples.default.name, "پیش‌فرض"],
+        [Keys.category.components.layout.examples.default.description, "نمایش متن با کلاس و استایل سفارشی"],
+        [Keys.category.components.layout.examples.slottedContent.name, "محتوای فرزند"],
+        [Keys.category.components.layout.examples.slottedContent.description, "نمایش callback محتوای فرزند هنگام null بودن prop_layoutContent"],
+        [Keys.category.components.layout.examples.reactiveContent.name, "محتوای واکنشی"],
+        [Keys.category.components.layout.examples.reactiveContent.description, "به‌روزرسانی محتوای چیدمان از طریق Observable بدون ساخت مجدد کامپوننت"],
     ]);

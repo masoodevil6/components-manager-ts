@@ -23,11 +23,16 @@ export const DefaultExample: ComponentExample = {
         {
             prop_collapseTitle: "Section Title",
             prop_collapseIcon:  UiIcons.Src.InputNumber.Definition,
+            prop_collapseMenuItems: [
+                {id: "collapse-details", title: "Details", action: "details"},
+            ],
             prop_collapseBody:  CoreReactive.App.div({
                 children: ["This is the collapse body content."],
             }),
         },
-        {},
+        {
+            SELECT_MENU_ITEM: (_event, dataArgs) => console.log("collapse menu item selected", dataArgs?.ITEM),
+        },
     ).getElement() as HTMLElement,
 
 };

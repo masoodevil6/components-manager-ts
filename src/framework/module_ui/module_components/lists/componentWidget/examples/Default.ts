@@ -12,5 +12,6 @@ export const Default: ComponentExample = {
         prop_widgetHeight: "180px",
         prop_widgetStyles: {"min-height": "120px", padding: "1rem"},
         prop_componentBorderClass: ["shadow-sm", "position-relative"],
+        prop_controller: () => UiCategory.UI.Controllers.Tests.testConnect({probe: "component-widget"}),
     }).getElement() as HTMLElement,
 };

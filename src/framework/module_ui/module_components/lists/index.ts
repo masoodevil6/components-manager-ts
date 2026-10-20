@@ -82,6 +82,12 @@ import {Props      as CollapseProps}             from "./componentCollapse/Props
 import {Schemas    as CollapseSchemas}           from "./componentCollapse/Schemas";
 import {Methods    as CollapseMethods}           from "./componentCollapse/Methods";
 import {Examples   as CollapseExamples}          from "./componentCollapse/examples";
+import {Component as ComponentCollapseLineClass} from "./componentCollapseLine";
+import {Definition as CollapseLineDefinition}    from "./componentCollapseLine/Definition";
+import {Props      as CollapseLineProps}         from "./componentCollapseLine/Props";
+import {Schemas    as CollapseLineSchemas}       from "./componentCollapseLine/Schemas";
+import {Methods    as CollapseLineMethods}       from "./componentCollapseLine/Methods";
+import {Examples   as CollapseLineExamples}      from "./componentCollapseLine/examples";
 // --------------------------------
 import {Component as ComponentRecyclerViewClass}   from "./componentRecyclerView";
 import {Definition as RecyclerViewDefinition}    from "./componentRecyclerView/Definition";
@@ -132,6 +138,13 @@ import {Schemas as ConsoleSchemas} from "./componentConsole/Schemas";
 import {Methods as ConsoleMethods} from "./componentConsole/Methods";
 import {Examples as ConsoleExamples} from "./componentConsole/examples";
 // --------------------------------
+import {Component as ComponentJsonTreeClass} from "./componentJsonTree";
+import {Definition as JsonTreeDefinition} from "./componentJsonTree/Definition";
+import {Props as JsonTreeProps} from "./componentJsonTree/Props";
+import {Schemas as JsonTreeSchemas} from "./componentJsonTree/Schemas";
+import {Methods as JsonTreeMethods} from "./componentJsonTree/Methods";
+import {Examples as JsonTreeExamples} from "./componentJsonTree/examples";
+// --------------------------------
 import {Component as ComponentWindowClass}     from "./componentWindow";
 import {Definition as WindowDefinition}         from "./componentWindow/Definition";
 import {Props      as WindowProps}              from "./componentWindow/Props";
@@ -165,6 +178,12 @@ import {Props as InputRadioBoxProps} from "./componentInputRadioBox/Props";
 import {Schemas as InputRadioBoxSchemas} from "./componentInputRadioBox/Schemas";
 import {Methods as InputRadioBoxMethods} from "./componentInputRadioBox/Methods";
 import {Examples as InputRadioBoxExamples} from "./componentInputRadioBox/examples";
+import {Component as ComponentInputSelectOptionClass} from "./componentInputSelectOption";
+import {Definition as InputSelectOptionDefinition} from "./componentInputSelectOption/Definition";
+import {Props as InputSelectOptionProps} from "./componentInputSelectOption/Props";
+import {Schemas as InputSelectOptionSchemas} from "./componentInputSelectOption/Schemas";
+import {Methods as InputSelectOptionMethods} from "./componentInputSelectOption/Methods";
+import {Examples as InputSelectOptionExamples} from "./componentInputSelectOption/examples";
 // --------------------------------
 import {Component as ComponentInputOtpClass} from "./componentInputOtp";
 import {Definition as InputOtpDefinition}    from "./componentInputOtp/Definition";
@@ -180,6 +199,27 @@ import {Schemas    as InputSimpleSchemas}       from "./componentInputSimple/Sch
 import {Methods    as InputSimpleMethods}       from "./componentInputSimple/Methods";
 import {Examples   as InputSimpleExamples}      from "./componentInputSimple/examples";
 // --------------------------------
+import {Component as ComponentInputDescriptionSimpleClass} from "./componentInputDescriptionSimple";
+import {Definition as InputDescriptionSimpleDefinition} from "./componentInputDescriptionSimple/Definition";
+import {Props as InputDescriptionSimpleProps} from "./componentInputDescriptionSimple/Props";
+import {Schemas as InputDescriptionSimpleSchemas} from "./componentInputDescriptionSimple/Schemas";
+import {Methods as InputDescriptionSimpleMethods} from "./componentInputDescriptionSimple/Methods";
+import {Examples as InputDescriptionSimpleExamples} from "./componentInputDescriptionSimple/examples";
+// --------------------------------
+import {Component as ComponentInputDescriptionClass} from "./componentInputDescription";
+import {Definition as InputDescriptionDefinition} from "./componentInputDescription/Definition";
+import {Props as InputDescriptionProps} from "./componentInputDescription/Props";
+import {Schemas as InputDescriptionSchemas} from "./componentInputDescription/Schemas";
+import {Methods as InputDescriptionMethods} from "./componentInputDescription/Methods";
+import {Examples as InputDescriptionExamples} from "./componentInputDescription/examples";
+// --------------------------------
+import {Component as ComponentInputJsonClass} from "./componentInputJson";
+import {Definition as InputJsonDefinition} from "./componentInputJson/Definition";
+import {Props as InputJsonProps} from "./componentInputJson/Props";
+import {Schemas as InputJsonSchemas} from "./componentInputJson/Schemas";
+import {Methods as InputJsonMethods} from "./componentInputJson/Methods";
+import {Examples as InputJsonExamples} from "./componentInputJson/examples";
+// --------------------------------
 import {Component as ComponentInputClass} from "./componentInput";
 import {Definition as InputDefinition}    from "./componentInput/Definition";
 import {Props      as InputProps}         from "./componentInput/Props";
@@ -192,6 +232,12 @@ import {Props as FormProps} from "./componentForm/Props";
 import {Schemas as FormSchemas} from "./componentForm/Schemas";
 import {Methods as FormMethods} from "./componentForm/Methods";
 import {Examples as FormExamples} from "./componentForm/examples";
+import {Component as ComponentCustomFormClass} from "./componentCustomForm";
+import {Definition as CustomFormDefinition} from "./componentCustomForm/Definition";
+import {Props as CustomFormProps} from "./componentCustomForm/Props";
+import {Schemas as CustomFormSchemas} from "./componentCustomForm/Schemas";
+import {Methods as CustomFormMethods} from "./componentCustomForm/Methods";
+import {Examples as CustomFormExamples} from "./componentCustomForm/examples";
 import {Component as ComponentWidgetClass} from "./componentWidget";
 import {Definition as WidgetDefinition} from "./componentWidget/Definition";
 import {Props as WidgetProps} from "./componentWidget/Props";
@@ -317,6 +363,9 @@ import * as ComponentPageHeader from "./componentPageHeader";
 import * as ComponentPageCardInfo from "./componentPageCardInfo";
 import * as ComponentPage from "./componentPage";
 import * as ComponentEffective from "./componentEffective";
+import * as ComponentEffectChange from "./componentEffectChange";
+import * as ComponentLayout from "./componentLayout";
+import * as ComponentElementCreator from "./componentElementCreator";
 
 
 // ثبت ComponentIcon در Component Manager
@@ -429,6 +478,17 @@ CoreComponents.ComponentManager.register({
 });
 
 
+// Register ComponentCollapseLine (Plan 48.1.0)
+CoreComponents.ComponentManager.register({
+    definition:  CollapseLineDefinition,
+    props:       CollapseLineProps,
+    schemas:     CollapseLineSchemas,
+    methods:     CollapseLineMethods,
+    examples:    CollapseLineExamples,
+    constructor: ComponentCollapseLineClass as any,
+});
+
+
 // ثبت ComponentRecyclerView در Component Manager (Plan 15.1.0)
 CoreComponents.ComponentManager.register({
     definition:  RecyclerViewDefinition,
@@ -504,6 +564,16 @@ CoreComponents.ComponentManager.register({
     constructor: ComponentConsoleClass as any,
 });
 
+// Register ComponentJsonTree in Component Manager.
+CoreComponents.ComponentManager.register({
+    definition:  JsonTreeDefinition,
+    props:       JsonTreeProps,
+    schemas:     JsonTreeSchemas,
+    methods:     JsonTreeMethods,
+    examples:    JsonTreeExamples,
+    constructor: ComponentJsonTreeClass as any,
+});
+
 
 // ثبت ComponentWindow در Component Manager
 CoreComponents.ComponentManager.register({
@@ -558,6 +628,15 @@ CoreComponents.ComponentManager.register({
 });
 
 CoreComponents.ComponentManager.register({
+    definition: InputSelectOptionDefinition,
+    props: InputSelectOptionProps,
+    schemas: InputSelectOptionSchemas,
+    methods: InputSelectOptionMethods,
+    examples: InputSelectOptionExamples,
+    constructor: ComponentInputSelectOptionClass as any,
+});
+
+CoreComponents.ComponentManager.register({
     definition: ElementPositionDefinition,
     props: ElementPositionProps,
     schemas: ElementPositionSchemas,
@@ -585,6 +664,33 @@ CoreComponents.ComponentManager.register({
 });
 
 CoreComponents.ComponentManager.register({
+    definition: InputDescriptionSimpleDefinition,
+    props: InputDescriptionSimpleProps,
+    schemas: InputDescriptionSimpleSchemas,
+    methods: InputDescriptionSimpleMethods,
+    examples: InputDescriptionSimpleExamples,
+    constructor: ComponentInputDescriptionSimpleClass as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition: InputDescriptionDefinition,
+    props: InputDescriptionProps,
+    schemas: InputDescriptionSchemas,
+    methods: InputDescriptionMethods,
+    examples: InputDescriptionExamples,
+    constructor: ComponentInputDescriptionClass as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition: InputJsonDefinition,
+    props: InputJsonProps,
+    schemas: InputJsonSchemas,
+    methods: InputJsonMethods,
+    examples: InputJsonExamples,
+    constructor: ComponentInputJsonClass as any,
+});
+
+CoreComponents.ComponentManager.register({
     definition:  InputDefinition,
     props:       InputProps,
     schemas:     InputSchemas,
@@ -600,6 +706,15 @@ CoreComponents.ComponentManager.register({
     methods: FormMethods,
     examples: FormExamples,
     constructor: ComponentFormClass as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition: CustomFormDefinition,
+    props: CustomFormProps,
+    schemas: CustomFormSchemas,
+    methods: CustomFormMethods,
+    examples: CustomFormExamples,
+    constructor: ComponentCustomFormClass as any,
 });
 
 CoreComponents.ComponentManager.register({
@@ -880,6 +995,7 @@ export * as ComponentElementPosition from "./componentElementPosition";
 export * as ComponentTooltip     from "./componentTooltip";
 export * as ComponentTimerDown   from "./componentTimerDown";
 export * as ComponentCollapse    from "./componentCollapse";
+export * as ComponentCollapseLine from "./componentCollapseLine";
 export * as ComponentRecyclerView from "./componentRecyclerView";
 export * as ComponentTabs       from "./componentTabs";
 export * as ComponentValidate   from "./componentValidate";
@@ -887,15 +1003,21 @@ export * as ComponentErrorIsEmpty from "./componentErrorIsEmpty";
 export * as ComponentWebCode     from "./componentWebCode";
 export * as ComponentCodeMirror from "./componentCodeMirror";
 export * as ComponentConsole from "./componentConsole";
+export * as ComponentJsonTree from "./componentJsonTree";
 export * as ComponentWindow      from "./componentWindow";
 export * as ComponentWindowConfirm from "./componentWindowConfirm";
 export * as ComponentTable       from "./componentTable";
 export * as ComponentInputCheckBox from "./componentInputCheckBox";
 export * as ComponentInputRadioBox from "./componentInputRadioBox";
+export * as ComponentInputSelectOption from "./componentInputSelectOption";
 export * as ComponentInputOtp from "./componentInputOtp";
 export * as ComponentInputSimple from "./componentInputSimple";
+export * as ComponentInputDescriptionSimple from "./componentInputDescriptionSimple";
+export * as ComponentInputDescription from "./componentInputDescription";
+export * as ComponentInputJson from "./componentInputJson";
 export * as ComponentInput from "./componentInput";
 export * as ComponentForm from "./componentForm";
+export * as ComponentCustomForm from "./componentCustomForm";
 export * as ComponentWidget from "./componentWidget";
 export * as ComponentIframe from "./componentIframe";
 export * as ComponentInputPrice from "./componentInputPrice";
@@ -925,6 +1047,9 @@ export * as ComponentPageHeader from "./componentPageHeader";
 export * as ComponentPageCardInfo from "./componentPageCardInfo";
 export * as ComponentPage from "./componentPage";
 export * as ComponentEffective from "./componentEffective";
+export * as ComponentEffectChange from "./componentEffectChange";
+export * as ComponentLayout from "./componentLayout";
+export * as ComponentElementCreator from "./componentElementCreator";
 
 CoreComponents.ComponentManager.register({
     definition: Workflow.Definition,
@@ -942,4 +1067,31 @@ CoreComponents.ComponentManager.register({
     methods: ComponentEffective.Methods,
     examples: ComponentEffective.Examples,
     constructor: ComponentEffective.Component as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition: ComponentEffectChange.Definition,
+    props: ComponentEffectChange.Props,
+    schemas: ComponentEffectChange.Schemas,
+    methods: ComponentEffectChange.Methods,
+    examples: ComponentEffectChange.Examples,
+    constructor: ComponentEffectChange.Component as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition: ComponentLayout.Definition,
+    props: ComponentLayout.Props,
+    schemas: ComponentLayout.Schemas,
+    methods: ComponentLayout.Methods,
+    examples: ComponentLayout.Examples,
+    constructor: ComponentLayout.Component as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition: ComponentElementCreator.Definition,
+    props: ComponentElementCreator.Props,
+    schemas: ComponentElementCreator.Schemas,
+    methods: ComponentElementCreator.Methods,
+    examples: ComponentElementCreator.Examples,
+    constructor: ComponentElementCreator.Component as any,
 });

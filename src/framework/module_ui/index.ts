@@ -1,6 +1,7 @@
 export * as Category from "@/ui_categories";
 export * as Component from "@/ui_components";
 export * as Icon from "@/ui_icons";
+export * as Controller from "./module_controller";
 
 
 //----------------------------

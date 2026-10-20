@@ -1,6 +1,7 @@
 export {Definition} from "./Definition"
 export {Border}       from "./border"
 export {Collapse}     from "./collapse"
+export {CollapseLine} from "./collapseLine"
 export {ErrorIsEmpty} from "./errorIsEmpty"
 export {WebCode}     from "./webCode"
 export {RecyclerView} from "./recyclerView"

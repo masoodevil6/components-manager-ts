@@ -19,6 +19,7 @@ import {
 import {Compartment, EditorState} from "@codemirror/state";
 import {html} from "@codemirror/lang-html";
 import {javascript} from "@codemirror/lang-javascript";
+import {json} from "@codemirror/lang-json";
 import * as CoreReactive from "@/core_reactive";
 import * as CoreObservable from "@/core_observable";
 import * as CoreConfig from "@/core_configs";
@@ -200,8 +201,13 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
         const editor = this.executeSchemaPart(Schemas.EDITOR.part, {});
         const sizeName = CoreConfig.Settings.SizeName.observable();
         const directionRtl = CoreConfig.Settings.DirectionRtl.observable();
-        const canRun = data?.["prop_canRun"] ?? this._COMPONENT_PROPS_BIND.prop_canRun;
-        const menuItems = CoreObservable.App.computed((allowRun: boolean) => {
+        const requestedCanRun = data?.["prop_canRun"] ?? this._COMPONENT_PROPS_BIND.prop_canRun;
+        const canRun = CoreObservable.App.computed(
+            (allowRun: boolean, language: CodeMirrorLanguage) => !!allowRun && this.normalizeLanguage(language) !== CodeMirrorLanguage.JSON,
+            [requestedCanRun, this._COMPONENT_PROPS_BIND.prop_language],
+            this.getScope(),
+        );
+        const menuItems = CoreObservable.App.computed((allowRun: boolean, language: CodeMirrorLanguage) => {
             const groups: any[] = [{
                 type: "group",
                 id: "code-mirror-language-group",
@@ -212,6 +218,7 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
                     children: [
                         {id: "code-mirror-language-html", title: "HTML", action: "language-html"},
                         {id: "code-mirror-language-javascript", title: "JavaScript", action: "language-javascript"},
+                        {id: "code-mirror-language-json", title: "JSON", action: "language-json"},
                     ],
                 }],
             }, {
@@ -227,7 +234,7 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
                     ],
                 }],
             }];
-            if (allowRun) {
+            if (allowRun && this.normalizeLanguage(language) !== CodeMirrorLanguage.JSON) {
                 groups.push({
                     type: "group",
                     id: "code-mirror-separators-group",
@@ -245,7 +252,7 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
                 });
             }
             return groups;
-        }, [canRun], this.getScope());
+        }, [requestedCanRun, this._COMPONENT_PROPS_BIND.prop_language], this.getScope());
         this._HEADER_MENU = new ComponentMenuMore.Component({
             styles: {
                 display: "block",
@@ -268,6 +275,7 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
             SELECT_ITEM: (_event, dataArgs) => {
                 if (dataArgs?.ITEM?.action === "language-html") this.set("prop_language", CodeMirrorLanguage.HTML);
                 if (dataArgs?.ITEM?.action === "language-javascript") this.set("prop_language", CodeMirrorLanguage.JAVASCRIPT);
+                if (dataArgs?.ITEM?.action === "language-json") this.set("prop_language", CodeMirrorLanguage.JSON);
                 if (dataArgs?.ITEM?.action === "theme-light") this._IS_DARK_THEME.set(false);
                 if (dataArgs?.ITEM?.action === "theme-dark") this._IS_DARK_THEME.set(true);
                 if (dataArgs?.ITEM?.action === "layout-horizontal") this._IS_VERTICAL_LAYOUT.set(false);
@@ -283,9 +291,12 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
             this.getScope(),
         );
         const languageIconDefinition = CoreObservable.App.computed(
-            (language: CodeMirrorLanguage) => this.normalizeLanguage(language) === CodeMirrorLanguage.JAVASCRIPT
-                ? UiIcons.Src.ProgrammingJavaScript
-                : UiIcons.Src.MarkupHtml,
+            (language: CodeMirrorLanguage) => {
+                const normalized = this.normalizeLanguage(language);
+                if (normalized === CodeMirrorLanguage.JAVASCRIPT) return UiIcons.Src.ProgrammingJavaScript;
+                if (normalized === CodeMirrorLanguage.JSON) return UiIcons.Src.FileApplication;
+                return UiIcons.Src.MarkupHtml;
+            },
             [this._COMPONENT_PROPS_BIND.prop_language],
             this.getScope(),
         );
@@ -309,7 +320,10 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
             (title: string | null, language: CodeMirrorLanguage) => {
                 const customTitle = title?.trim();
                 if (customTitle) return customTitle;
-                return this.normalizeLanguage(language) === CodeMirrorLanguage.JAVASCRIPT ? "JavaScript" : "HTML";
+                const normalized = this.normalizeLanguage(language);
+                if (normalized === CodeMirrorLanguage.JAVASCRIPT) return "JavaScript";
+                if (normalized === CodeMirrorLanguage.JSON) return "JSON";
+                return "HTML";
             },
             [this._COMPONENT_PROPS_BIND.prop_title, this._COMPONENT_PROPS_BIND.prop_language],
             this.getScope(),
@@ -549,6 +563,11 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
                         overflow: "auto",
                         boxSizing: "border-box",
                     },
+                    stylesBind: CoreObservable.App.computed(
+                        (size: UtilConst.Sizes) => ({padding: UtilStyle.Css_Padding(size)}),
+                        [sizeName],
+                        this.getScope(),
+                    ),
                 });
                 this._RUN_PANEL = runPanel.getElement() as HTMLElement;
                 const runContent = CoreReactive.App.section({
@@ -764,7 +783,12 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
         const themeLightBackgroundColor = data?.["prop_themeLightBackgroundColor"] ?? bind.prop_themeLightBackgroundColor;
         const themeDarkBackgroundColor = data?.["prop_themeDarkBackgroundColor"] ?? bind.prop_themeDarkBackgroundColor;
         const sizeName = CoreConfig.Settings.SizeName.observable();
-        const canRun = data?.["prop_canRun"] ?? bind.prop_canRun;
+        const requestedCanRun = data?.["prop_canRun"] ?? bind.prop_canRun;
+        const canRun = CoreObservable.App.computed(
+            (allowRun: boolean, editorLanguage: CodeMirrorLanguage) => !!allowRun && this.normalizeLanguage(editorLanguage) !== CodeMirrorLanguage.JSON,
+            [requestedCanRun, language],
+            this.getScope(),
+        );
 
         const height = CoreObservable.App.computed(
             (customHeight: string | null, size: any, allowRun: boolean, isVertical: boolean) => {
@@ -1043,13 +1067,15 @@ try { (0, eval)(source); } catch (error) { write(error && error.stack ? error.st
     }
 
     private normalizeLanguage(language: unknown): CodeMirrorLanguage {
-        return language === CodeMirrorLanguage.JAVASCRIPT
-            ? CodeMirrorLanguage.JAVASCRIPT
-            : CodeMirrorLanguage.HTML;
+        if (language === CodeMirrorLanguage.JAVASCRIPT) return CodeMirrorLanguage.JAVASCRIPT;
+        if (language === CodeMirrorLanguage.JSON) return CodeMirrorLanguage.JSON;
+        return CodeMirrorLanguage.HTML;
     }
 
     private languageExtension(language: CodeMirrorLanguage): any {
-        return language === CodeMirrorLanguage.JAVASCRIPT ? javascript() : html();
+        if (language === CodeMirrorLanguage.JAVASCRIPT) return javascript();
+        if (language === CodeMirrorLanguage.JSON) return json();
+        return html();
     }
 
     private readOnlyExtension(readOnly: boolean): any[] {

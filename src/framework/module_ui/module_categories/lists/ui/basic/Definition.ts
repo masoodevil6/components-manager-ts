@@ -1,6 +1,8 @@
 ﻿import * as UICategories                from "@/ui_categories"
 import * as UIComponents               from "@/ui_components"
 import {Keys}                          from "../../../languages"
+import {Layout}                        from "./layout"
+import {ElementCreator}                from "./elementCreator"
 
 
 /**
@@ -53,6 +55,8 @@ export const Definition : UICategories.TCategoryComponentDefinition = {
     description: Keys.category.components.basic.description,
 
     components: [
-        ComponentStructureTotality
+        ComponentStructureTotality,
+        Layout,
+        ElementCreator,
     ]
 }

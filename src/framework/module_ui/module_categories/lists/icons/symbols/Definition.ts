@@ -4,6 +4,7 @@ import {Definition as ArrowsDefinition}     from "./arrows";
 import {Definition as ExclumationDefinition} from "./exclumation";
 import {Definition as ShapesDefinition} from "./shapes";
 import {Definition as SeparatorsDefinition} from "./separators";
+import {Definition as TreeNodesDefinition} from "./treeNodes";
 import {TCategoryIconDefinition}            from "../../../basic/types/TCategoryIconDefinition";
 import {Keys}                               from "../../../languages";
 
@@ -16,5 +17,6 @@ export const Definition : TCategoryIconDefinition = {
         ExclumationDefinition ,
         ShapesDefinition,
         SeparatorsDefinition,
+        TreeNodesDefinition,
     ]
 }

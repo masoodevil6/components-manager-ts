@@ -24,11 +24,13 @@ export class ClComponentDetailsPage implements ITemplate {
                 prop_pageTitle: "Component not found",
                 prop_hasIconBack: true,
                 prop_pageNav: [
+                    {name: "home", title: "Home"},
                     {name: "components", title: "Components"},
                 ],
             }, {
                 BACK: () => { window.location.href = "/components"; },
                 SELECT_NAV_ITEM: (_event: Event, args: any) => {
+                    if (args?.NAME === "home") window.location.href = "/";
                     if (args?.NAME === "components") window.location.href = "/components";
                 },
             } as any).getElement();
@@ -49,11 +51,13 @@ export class ClComponentDetailsPage implements ITemplate {
             prop_pageTitle: entry.definition.name,
             prop_hasIconBack: true,
             prop_pageNav: [
+                {name: "home", title: "Home"},
                 {name: "components", title: "Components"},
             ],
         }, {
             BACK: () => { window.location.href = "/components"; },
             SELECT_NAV_ITEM: (_event: Event, args: any) => {
+                if (args?.NAME === "home") window.location.href = "/";
                 if (args?.NAME === "components") window.location.href = "/components";
             },
         } as any).getElement();

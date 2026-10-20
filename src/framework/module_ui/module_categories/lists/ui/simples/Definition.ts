@@ -6,6 +6,7 @@ import {Button}           from "./button";
 import {Messages}         from "./messages";
 import {Label}            from "./label";
 import {InputSimple}      from "./inputSimple";
+import {InputDescriptionSimple} from "./inputDescriptionSimple";
 import {SelectCustomSimple} from "./selectCustomSimple";
 
 export const Definition : UICategories.TCategoryComponentDefinition = {
@@ -19,6 +20,7 @@ export const Definition : UICategories.TCategoryComponentDefinition = {
         Messages,
         Label,
         InputSimple,
+        InputDescriptionSimple,
         SelectCustomSimple,
     ],
 }

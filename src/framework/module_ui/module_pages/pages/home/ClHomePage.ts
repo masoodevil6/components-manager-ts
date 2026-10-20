@@ -158,6 +158,8 @@ export class ClHomePage implements ITemplate {
                 {id: "components", title: "Components", action: "/components"},
                 {id: "icons", title: "Icons", action: "/icons"},
                 {id: "workflow", title: "Workflow", action: "/workflow"},
+                {id: "pager", title: "Pager", action: "/pager"},
+                {id: "request-test", title: "Request Test", action: "/test"},
             ],
         }, {
             SELECT_ITEM: (_event, dataArgs) => {

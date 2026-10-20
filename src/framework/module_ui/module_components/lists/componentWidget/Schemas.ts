@@ -63,7 +63,9 @@ export const Schemas = {
         part: "part-widget-body",
         props: [
             Props.prop_layoutContent,
+            Props.prop_requestData,
             Props.prop_fetch,
+            Props.prop_controller,
             Props.prop_btnMore_icon,
             Props.prop_btnMore_show,
             Props.prop_btnMore_link,

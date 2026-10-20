@@ -13,6 +13,9 @@ export * as ArrowDoubleRight     from "./arrowDoubleRight";
 export * as ArrowDoubleUp        from "./arrowDoubleUp";
 export * as ArrowDoubleDown      from "./arrowDoubleDown";
 
+export * as TreeNodeExpand      from "./treeNodeExpand";
+export * as TreeNodeCollapse    from "./treeNodeCollapse";
+
 
 
 
@@ -160,6 +163,7 @@ export * as FileReload             from "./fileReload";
 export * as FileEmpty              from "./fileEmpty";
 export * as FileClearBroom         from "./fileClearBroom";
 export * as FileApplication        from "./fileApplication";
+export * as FileCopy               from "./fileCopy";
 export * as FileCategory           from "./fileCategory";
 export * as FileType           from "./fileType";
 export * as FileTypeNote       from "./fileTypeNote";

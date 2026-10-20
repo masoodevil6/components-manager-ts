@@ -57,6 +57,11 @@ export const Props = {
         name: Keys.category.components.menuMore.props.direction.name,
         description: Keys.category.components.menuMore.props.direction.description,
     }),
+    prop_directionRtl: Define_ComponentProp<boolean | null>({
+        prop: "prop_directionRtl", default: null,
+        name: Keys.category.components.menuMore.props.directionRtl.name,
+        description: Keys.category.components.menuMore.props.directionRtl.description,
+    }),
     prop_items: Define_ComponentProp<MenuMoreEntry[]>({
         prop: "prop_items", default: [],
         name: Keys.category.components.menuMore.props.items.name,

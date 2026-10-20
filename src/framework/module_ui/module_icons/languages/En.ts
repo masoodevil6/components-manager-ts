@@ -851,6 +851,8 @@ export const En =
             Keys.icons.fileApplication.description,
             "Icon for application with AI logo"
         ],
+        [Keys.icons.fileCopy.name, "Copy"],
+        [Keys.icons.fileCopy.description, "Icon showing two overlapping documents to copy content"],
         [
             Keys.icons.fileCategory.name,
             "Category"
@@ -955,6 +957,10 @@ export const En =
         [Keys.icons.separatorHorizontal.description, "Icon showing a horizontal divider between two sections"],
         [Keys.icons.separatorVertical.name, "Vertical separator"],
         [Keys.icons.separatorVertical.description, "Icon showing a vertical divider between two sections"],
+        [Keys.icons.treeNodeExpand.name, "Expand tree node"],
+        [Keys.icons.treeNodeExpand.description, "Plus in a square for opening a tree node"],
+        [Keys.icons.treeNodeCollapse.name, "Collapse tree node"],
+        [Keys.icons.treeNodeCollapse.description, "Minus in a square for closing a tree node"],
         [
             Keys.icons.userPassword.name,
             "Password"

@@ -4,3 +4,4 @@ export * as Arrows       from "./arrows";
 export * as Exclamation  from "./exclumation";
 export * as Shapes       from "./shapes";
 export * as Separators   from "./separators";
+export * as TreeNodes    from "./treeNodes";

@@ -28,7 +28,7 @@ export const Schemas = {
         Props.prop_forms, Props.prop_formClass, Props.prop_formStyles, Props.prop_formsMinHeight,
         Props.prop_btnformClass, Props.prop_btnformStyles, Props.prop_btnSubmit,
         Props.prop_btnSubmitBackground, Props.prop_btnSubmitBackgroundHover, Props.prop_btnSubmitColor,
-        Props.prop_url, Props.prop_data, Props.prop_showErrorStepper, Props.prop_runFetch,
+        Props.prop_url, Props.prop_data, Props.prop_showErrorStepper, Props.prop_runFetch, Props.prop_controller,
     ], name: Keys.category.components.fetch.form.schemas.body.name, description: Keys.category.components.fetch.form.schemas.body.description},
 } satisfies CoreComponents.ComponentSchemas;
 

@@ -1,6 +1,10 @@
 import {ComponentExample} from "@/core_components";
 // --------------------------------
-import {DefaultExample}    from "./Default";
+import {DefaultExample}       from "./Default";
+import {ClickableExample}     from "./Clickable";
+import {InitiallyOpenExample} from "./InitiallyOpen";
+import {TitleOnlyExample}     from "./TitleOnly";
+import {StyledExample}        from "./Styled";
 
 
 /**
@@ -11,7 +15,11 @@ import {DefaultExample}    from "./Default";
  */
 export const Examples = {
 
-    DEFAULT:   DefaultExample,
+    DEFAULT:         DefaultExample,
+    CLICKABLE:       ClickableExample,
+    INITIALLY_OPEN:  InitiallyOpenExample,
+    TITLE_ONLY:      TitleOnlyExample,
+    STYLED:          StyledExample,
 
 } satisfies Record<string, ComponentExample>;
 

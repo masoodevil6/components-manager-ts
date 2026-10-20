@@ -3,9 +3,12 @@ import {Keys}            from "../../../languages"
 import {Validate}        from "./validate"
 import {InputCheckBox}  from "./inputCheckBox"
 import {InputRadioBox} from "./inputRadioBox"
+import {InputSelectOption} from "./inputSelectOption"
 import {InputOtp}       from "./inputOtp"
 import {InputListSelector}  from "./inputListSelector"
 import {Input}       from "./input"
+import {InputDescription} from "./inputDescription"
+import {InputJson} from "./inputJson"
 import {InputPrice} from "./inputPrice"
 import {InputPassword} from "./inputPassword"
 import {InputEmail} from "./inputEmail"
@@ -24,9 +27,12 @@ export const Definition : UICategories.TCategoryComponentDefinition = {
         Validate,
         InputCheckBox,
         InputRadioBox,
+        InputSelectOption,
         InputOtp,
         InputListSelector,
         Input,
+        InputDescription,
+        InputJson,
         InputPrice,
         InputPassword,
         InputEmail,

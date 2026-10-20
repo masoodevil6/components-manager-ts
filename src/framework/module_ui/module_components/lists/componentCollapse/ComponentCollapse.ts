@@ -16,6 +16,10 @@ import {PropsType as StructurePropsType} from "../componentStructure/Props";
 // --------------------------------
 import * as ComponentBorder from "../componentBorder";
 import * as ComponentIcon   from "../componentIcon";
+import * as ComponentMenuMore from "../componentMenuMore";
+
+const COLLAPSE_ARROW_SECTION_WIDTH = "calc(var(--paddingMedium) + var(--heightMedium) + var(--paddingMedium))";
+const COLLAPSE_HEADER_CONTENT_WIDTH = "calc(100% - var(--paddingMedium) - var(--heightMedium) - var(--paddingMedium))";
 
 
 /**
@@ -43,6 +47,7 @@ import * as ComponentIcon   from "../componentIcon";
  *   - fontSize واکنش‌گرا → computed روی CoreConfig.Settings.SizeName
  */
 export class ComponentCollapse extends ComponentCollapseBase {
+    private _HEADER_MENU: ComponentMenuMore.Component | null = null;
 
 
     constructor(
@@ -70,6 +75,8 @@ export class ComponentCollapse extends ComponentCollapseBase {
        Plan 9.1 — Component Disposal
     --------------------------------------------- */
     dispose(): void {
+        this._HEADER_MENU?.dispose();
+        this._HEADER_MENU = null;
         this.disposeStep();
     }
 
@@ -116,6 +123,8 @@ export class ComponentCollapse extends ComponentCollapseBase {
                 return this.renderFormBorderContentIcon(attrsDefault, data, extra);
             case Schemas.FORM_BORDER_CONTENT_TITLE.part:
                 return this.renderFormBorderContentTitle(attrsDefault, data, extra);
+            case Schemas.FORM_BORDER_CONTENT_MENU_MORE.part:
+                return this.renderFormBorderContentMenuMore(attrsDefault, data, extra);
             case Schemas.FORM_BORDER_CONTENT_ARROW.part:
                 return this.renderFormBorderContentArrow(attrsDefault, data, extra);
             case Schemas.FORM_BODY.part:
@@ -189,6 +198,14 @@ export class ComponentCollapse extends ComponentCollapseBase {
             } as any,
             {
                 CLICK_BORDER: (event: Event) => {
+                    const eventTarget = event.target;
+                    const menuPartId = this.getPartId(Schemas.FORM_BORDER_CONTENT_MENU_MORE.part);
+                    if (eventTarget instanceof Element) {
+                        const menuPart = eventTarget.closest(`#${menuPartId}`);
+                        const menuControl = eventTarget.closest("button, [role='menuitem']");
+                        if (menuPart && menuControl && menuPart.contains(menuControl)) return;
+                    }
+
                     const isOpen = this.get("prop_collapseBodyIsOpen") as boolean;
                     this.set("prop_collapseBodyIsOpen", !isOpen);
                     this.executeMethod("CLICK", event, {});
@@ -203,7 +220,7 @@ export class ComponentCollapse extends ComponentCollapseBase {
 
     /* ---------------------------------------------
        renderFormBorderContent — رندر Part FORM_BORDER_CONTENT
-       section.row + children [ICON, TITLE, ARROW]
+       header [CONTENT(icon, title, MenuMore), arrow]
     --------------------------------------------- */
     protected renderFormBorderContent(
         attrsDefault?: PartAttrDefault,
@@ -211,13 +228,41 @@ export class ComponentCollapse extends ComponentCollapseBase {
         extra?:        any,
     ): CoreReactive.App {
 
+        const icon = CoreReactive.App.section({
+            styles: {
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxSizing: "border-box",
+                width: COLLAPSE_ARROW_SECTION_WIDTH,
+                minWidth: COLLAPSE_ARROW_SECTION_WIDTH,
+                flex: `0 0 ${COLLAPSE_ARROW_SECTION_WIDTH}`,
+                flexShrink: "0",
+            },
+            children: [this.executeSchemaPart(Schemas.FORM_BORDER_CONTENT_ICON.part, {})],
+        });
+
+        const content = CoreReactive.App.section({
+            className: ["d-flex", "align-items-center", "flex-grow-1", "min-w-0"],
+            styles: {
+                width: COLLAPSE_HEADER_CONTENT_WIDTH,
+                minWidth: "0",
+                flex: `0 0 ${COLLAPSE_HEADER_CONTENT_WIDTH}`,
+                maxWidth: COLLAPSE_HEADER_CONTENT_WIDTH,
+            },
+            children: [
+                icon,
+                this.executeSchemaPart(Schemas.FORM_BORDER_CONTENT_TITLE.part, {}),
+                this.executeSchemaPart(Schemas.FORM_BORDER_CONTENT_MENU_MORE.part, {}),
+            ],
+        });
+
         return CoreReactive.App.section({
             attrs: { ...attrsDefault },
-            styles: { position: "relative", display: "flex", alignItems: "center", flexWrap: "nowrap", cursor: "pointer" },
-            className: ["p-0", "m-0"],
+            styles: {position: "relative", display: "flex", alignItems: "center", flexWrap: "nowrap", cursor: "pointer", width: "100%"},
+            className: ["p-0", "m-0", "min-w-0"],
             children: [
-                this.executeSchemaPart(Schemas.FORM_BORDER_CONTENT_ICON.part, {}),
-                this.executeSchemaPart(Schemas.FORM_BORDER_CONTENT_TITLE.part, {}),
+                content,
                 this.executeSchemaPart(Schemas.FORM_BORDER_CONTENT_ARROW.part, {}),
             ],
         });
@@ -241,37 +286,17 @@ export class ComponentCollapse extends ComponentCollapseBase {
         const prop_collapseIconClass  = data?.["prop_collapseIconClass"]  ?? bind.prop_collapseIconClass;
         const prop_collapseIconStyles = data?.["prop_collapseIconStyles"] ?? bind.prop_collapseIconStyles;
 
-        // عرض آیکون = iconSize(SizeName)
-        // فضای آیکون = iconSize + 2*margin (برای padding دو طرف)
-        const iconWidth = CoreObservable.App.computed(
-            (sizeName) => UtilStyle.Css_IconSize(sizeName),
-            [CoreConfig.Settings.SizeName.observable()],
-            this.getScope(),
-        );
-        const iconSpace = CoreObservable.App.computed(
-            (sizeName) => {
-                const iconSize = UtilStyle.Css_IconSize(sizeName) as any;
-                const margin  = UtilStyle.Css_Margin(sizeName as any) as any;
-                return UtilStyle.Css_SizeCalc(iconSize, UtilConst.Operation.ADD, margin, UtilConst.Operation.ADD, margin);
-            },
-            [CoreConfig.Settings.SizeName.observable()],
-            this.getScope(),
-        );
-
         const iconStylesMerged = CoreObservable.App.computed(
-            (styleMap, w, marginVal) => ({
-                width:      w,
-                minWidth:   w,
+            (styleMap) => ({
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
                 flexShrink: "0",
-                marginLeft: marginVal,
-                marginRight: marginVal,
+                margin: "0",
+                maxWidth: "100%",
                 ...(styleMap ?? {}),
             }),
-            [prop_collapseIconStyles, iconWidth, CoreObservable.App.computed(
-                (sizeName) => UtilStyle.Css_Margin(sizeName as any),
-                [CoreConfig.Settings.SizeName.observable()],
-                this.getScope(),
-            )],
+            [prop_collapseIconStyles],
             this.getScope(),
         );
 
@@ -294,6 +319,68 @@ export class ComponentCollapse extends ComponentCollapseBase {
 
 
     /* ---------------------------------------------
+       renderFormBorderContentMenuMore — header actions menu
+    --------------------------------------------- */
+    protected renderFormBorderContentMenuMore(
+        attrsDefault?: PartAttrDefault,
+        data?:         Record<string, CoreObservable.App<any>>,
+        extra?:        any,
+    ): CoreReactive.App {
+
+        const menuItems = data?.["prop_collapseMenuItems"] ?? this._COMPONENT_PROPS_BIND.prop_collapseMenuItems;
+        const titleWidth = data?.["prop_collapseTitleWidth"] ?? this._COMPONENT_PROPS_BIND.prop_collapseTitleWidth;
+        const menuWidthStyles = CoreObservable.App.computed(
+            (width: string) => {
+                const remainingWidth = `calc(100% - ${width} - var(--paddingMedium) - var(--heightMedium) - var(--paddingMedium))`;
+                return {
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-end",
+                    boxSizing: "border-box",
+                    width: remainingWidth,
+                    minWidth: "0",
+                    maxWidth: remainingWidth,
+                    flex: `0 0 ${remainingWidth}`,
+                };
+            },
+            [titleWidth],
+            this.getScope(),
+        );
+
+        if (!this._HEADER_MENU) {
+            this._HEADER_MENU = new ComponentMenuMore.Component({
+                styles: {
+                    display: "block",
+                    width: "fit-content",
+                    maxWidth: "100%",
+                    minWidth: "0",
+                    flex: "0 0 auto",
+                    marginInlineStart: "auto",
+                },
+                prop_orientation: ComponentMenuMore.MenuMoreOrientation.HORIZONTAL,
+                prop_isFullWidth: false,
+                prop_menuBorder: false,
+                prop_menuBackgroundColor: "transparent",
+                prop_items: menuItems,
+            } as any, {
+                SELECT_ITEM: (event, dataArgs) => {
+                    event.stopPropagation();
+                    this.executeMethod("SELECT_MENU_ITEM", event, {ITEM: dataArgs?.ITEM} as any);
+                },
+            } as any);
+        }
+
+        return CoreReactive.App.section({
+            attrs: {...attrsDefault},
+            className: ["min-w-0"],
+            stylesBind: menuWidthStyles as any,
+            on: {click: (event: Event) => event.stopPropagation()},
+            children: [this._HEADER_MENU.getReactiveElement() as CoreReactive.App],
+        });
+    }
+
+
+    /* ---------------------------------------------
        renderFormBorderContentTitle — رندر Part FORM_BORDER_CONTENT_TITLE
        section.col + <b> + computed styles (fontSize, lineHeight, color)
     --------------------------------------------- */
@@ -306,6 +393,7 @@ export class ComponentCollapse extends ComponentCollapseBase {
         const bind = this._COMPONENT_PROPS_BIND;
 
         const prop_collapseTitle       = data?.["prop_collapseTitle"]       ?? bind.prop_collapseTitle;
+        const prop_collapseTitleWidth  = data?.["prop_collapseTitleWidth"]  ?? bind.prop_collapseTitleWidth;
         const prop_collapseTitleStyles = data?.["prop_collapseTitleStyles"] ?? bind.prop_collapseTitleStyles;
         const prop_collapseTitleClass  = data?.["prop_collapseTitleClass"]  ?? bind.prop_collapseTitleClass;
         const prop_collapseTitleColor  = data?.["prop_collapseTitleColor"]  ?? bind.prop_collapseTitleColor;
@@ -321,27 +409,22 @@ export class ComponentCollapse extends ComponentCollapseBase {
             this.getScope(),
         );
 
-        // عرض title = calc(100% - (iconSize + 2*margin))
-        const titleWidth = CoreObservable.App.computed(
-            (sizeName) => {
-                const iconSize = UtilStyle.Css_IconSize(sizeName) as any;
-                const margin  = UtilStyle.Css_Margin(sizeName as any) as any;
-                const iconSpace = UtilStyle.Css_SizeCalc(iconSize, UtilConst.Operation.ADD, margin, UtilConst.Operation.ADD, margin);
-                return UtilStyle.Css_SizeCalc("100%" as any, UtilConst.Operation.MINUS, iconSpace);
-            },
-            [CoreConfig.Settings.SizeName.observable()],
-            this.getScope(),
-        );
-
         const stylesMerged = CoreObservable.App.computed(
-            (styleMap, color, h, fs, w) => ({
+            (styleMap, color, h, fs, width) => ({
                 lineHeight: h,
                 fontSize:   fs,
-                width:      w,
+                boxSizing:  "border-box",
+                width,
+                minWidth:   width,
+                maxWidth:   width,
+                flex:       `0 0 ${width}`,
+                overflow:   "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
                 ...(styleMap ?? {}),
                 ...(color != null ? { color } : {}),
             }),
-            [prop_collapseTitleStyles, prop_collapseTitleColor, contentHeight, contentFontSize, titleWidth],
+            [prop_collapseTitleStyles, prop_collapseTitleColor, contentHeight, contentFontSize, prop_collapseTitleWidth],
             this.getScope(),
         );
 
@@ -376,8 +459,6 @@ export class ComponentCollapse extends ComponentCollapseBase {
         const prop_collapseArrowStyles = data?.["prop_collapseArrowStyles"] ?? bind.prop_collapseArrowStyles;
         const prop_collapseBodyIsOpen  = data?.["prop_collapseBodyIsOpen"]  ?? bind.prop_collapseBodyIsOpen;
 
-        const directionRtl = CoreConfig.Settings.DirectionRtl.observable();
-
         const arrowIcon = CoreObservable.App.computed(
             (isOpen: boolean) => {
                 const src = isOpen
@@ -393,17 +474,21 @@ export class ComponentCollapse extends ComponentCollapseBase {
             this.getScope(),
         );
 
-        // فلش در خلاف جهت collapse قرار می‌گیرد:
-        // RTL → سمت چپ، LTR → سمت راست
         const arrowPositionStyles = CoreObservable.App.computed(
-            (rtl: boolean, styleMap: Record<string, string> | null) => ({
-                position: "absolute",
-                top:      "50%",
-                transform: "translateY(-50%)",
-                ...(rtl ? { left: "0.5rem" } : { right: "0.5rem" }),
+            (styleMap: Record<string, string> | null) => ({
+                position: "relative",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxSizing: "border-box",
+                width: COLLAPSE_ARROW_SECTION_WIDTH,
+                minWidth: COLLAPSE_ARROW_SECTION_WIDTH,
+                flex: `0 0 ${COLLAPSE_ARROW_SECTION_WIDTH}`,
+                margin: "0",
+                flexShrink: "0",
                 ...(styleMap ?? {}),
             }),
-            [directionRtl, prop_collapseArrowStyles],
+            [prop_collapseArrowStyles],
             this.getScope(),
         );
 

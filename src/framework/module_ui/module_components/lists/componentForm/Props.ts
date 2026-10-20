@@ -3,7 +3,18 @@ import {DefineProp as Define_ComponentProp} from "@/core_components";
 import * as UtilConst from "@/util_consts";
 import {Props as BorderProps, BorderTypes, ArrowTypes} from "../componentBorder/Props";
 import {Keys} from "../../../module_categories/languages";
+import type {RequestState} from "@/ui_controller/module_requests";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
+
+export type ControllerRequestContext = {
+    event: Event;
+    form: HTMLFormElement | null;
+    formData: FormData | null;
+    data: unknown;
+    url: string;
+};
+export type ControllerRequestResult = RequestState | Promise<RequestState>;
+export type ControllerRequest = ControllerRequestResult | ((context: ControllerRequestContext) => ControllerRequestResult) | null;
 
 export type SubmitButtonConfig = {
     prop_title?: string;
@@ -41,6 +52,7 @@ export const Props = {
     prop_btnSubmitColor: defineFormProp<string | null>("prop_btnSubmitColor", null, formKeys.btnSubmitColor.name, formKeys.btnSubmitColor.description),
     prop_url: defineFormProp<string>("prop_url", "", formKeys.url.name, formKeys.url.description),
     prop_data: defineFormProp<any>("prop_data", [], formKeys.data.name, formKeys.data.description),
+    prop_controller: defineFormProp<ControllerRequest>("prop_controller", null, "Controller request", "Internal controller response or a handler that returns a response."),
     prop_showErrorStepper: defineFormProp<boolean>("prop_showErrorStepper", true, formKeys.showErrorStepper.name, formKeys.showErrorStepper.description),
     prop_runFetch: defineFormProp<boolean>("prop_runFetch", true, formKeys.runFetch.name, formKeys.runFetch.description),
 

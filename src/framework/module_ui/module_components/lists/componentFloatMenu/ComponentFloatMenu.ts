@@ -67,6 +67,10 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
     private _POSITION_RESIZE_HANDLER: (() => void) | null = null;
     private _POSITION_OBSERVER: ResizeObserver | null = null;
     private _POSITION_OBSERVED_POPUP: HTMLElement | null = null;
+    private _PORTALLED_POPUP: HTMLElement | null = null;
+    private _PORTAL_PLACEHOLDER: Comment | null = null;
+    private _PORTAL_OFFSET_X = 0;
+    private _PORTAL_OFFSET_Y = 0;
 
 
     constructor(
@@ -100,6 +104,10 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
         this._POSITION_OBSERVER?.disconnect();
         this._POSITION_OBSERVER = null;
         this._POSITION_OBSERVED_POPUP = null;
+        this._PORTALLED_POPUP?.remove();
+        this._PORTAL_PLACEHOLDER?.remove();
+        this._PORTALLED_POPUP = null;
+        this._PORTAL_PLACEHOLDER = null;
         if (this._POSITION_RESIZE_HANDLER) {
             window.removeEventListener("resize", this._POSITION_RESIZE_HANDLER);
             window.removeEventListener("scroll", this._POSITION_RESIZE_HANDLER, true);
@@ -113,8 +121,17 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
         this._IS_SHOW = show;
         this._COMPONENT_PROPS_BIND.prop_floatIsShow?.set?.(show);
         this._BORDER_INSTANCE?.set("prop_show", show);
-        if (show) this._addDocumentClickListener();
-        else this._removeDocumentClickListener();
+        if (show && this._isPortalEnabled()) this.schedulePopupAdjustment();
+        if (!show && this._PORTALLED_POPUP) this._PORTALLED_POPUP.style.visibility = "hidden";
+        if (show && this._COMPONENT_PROPS_BIND.prop_selectorShowType?.get?.() === ShowTypes.CLICK) {
+            this._addDocumentClickListener();
+        } else {
+            this._removeDocumentClickListener();
+        }
+    }
+
+    containsTarget(target: EventTarget | null): boolean {
+        return this._isInsideMenu(target, this.getElement() as HTMLElement);
     }
 
 
@@ -205,7 +222,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                 mouseover: (event: MouseEvent) => {
                     this.clearHoverHideTimeout();
                     const selector = event.currentTarget as HTMLElement;
-                    if (event.relatedTarget instanceof Node && selector.contains(event.relatedTarget)) return;
+                    if (this._isInsideMenu(event.relatedTarget, selector)) return;
                     CoreObservable.App.computed(
                         (selectorTypeShow, floatShowControlWithSelf) => {
                             if (!floatShowControlWithSelf && selectorTypeShow === ShowTypes.HOVER && this._BORDER_INSTANCE) {
@@ -219,7 +236,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                 },
                 mouseout: (event: MouseEvent) => {
                     const menuRoot = this.getElement() as HTMLElement | null;
-                    if (event.relatedTarget instanceof Node && menuRoot?.contains(event.relatedTarget)) {
+                    if (this._isInsideMenu(event.relatedTarget, menuRoot)) {
                         this.clearHoverHideTimeout();
                         return;
                     }
@@ -270,6 +287,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
 
         const prop_floatDirectionType       = data?.["prop_floatDirectionType"]       ?? bind.prop_floatDirectionType;
         const prop_floatArrowWidth          = data?.["prop_floatArrowWidth"]          ?? bind.prop_floatArrowWidth;
+        const prop_floatDistance            = data?.["prop_floatDistance"]            ?? bind.prop_floatDistance;
         const prop_floatPosition            = data?.["prop_floatPosition"]            ?? bind.prop_floatPosition;
         const prop_floatMinWidth            = data?.["prop_floatMinWidth"]            ?? bind.prop_floatMinWidth;
         const prop_floatStyles              = data?.["prop_floatStyles"]              ?? bind.prop_floatStyles;
@@ -305,6 +323,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                 this.getStylePositionStyles(
                     prop_floatDirectionType,
                     prop_floatArrowWidth,
+                    prop_floatDistance,
                     prop_floatPosition,
                 ),
                 prop_floatMinWidth,
@@ -331,14 +350,14 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                         position: "absolute",
                         display:  "block",
                         visibility: "hidden",
-                        "z-index": `${UtilStyle.Css_ZIndex(UtilConst.ZIndex.notify)}`,
+                        "z-index": `${UtilStyle.Css_ZIndex(UtilConst.ZIndex.SELECTOR_POPUP)}`,
                     },
                     stylesBind: positionStyles as any,
                     on: {
                         mouseover: () => this.clearHoverHideTimeout(),
                         mouseout: (event: MouseEvent) => {
                             const menuRoot = this.getElement() as HTMLElement | null;
-                            if (event.relatedTarget instanceof Node && menuRoot?.contains(event.relatedTarget)) {
+                            if (this._isInsideMenu(event.relatedTarget, menuRoot)) {
                                 this.clearHoverHideTimeout();
                                 return;
                             }
@@ -458,14 +477,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
 
         this._DOCUMENT_CLICK_HANDLER = (event: MouseEvent) => {
             const el = this.getElement() as any;
-            if (el && !el.contains(event.target as Node)) {
-                if (this._BORDER_INSTANCE) {
-                    this._IS_SHOW = false;
-                    this._COMPONENT_PROPS_BIND.prop_floatIsShow?.set?.(false);
-                    this._BORDER_INSTANCE.set("prop_show", false);
-                }
-                this._removeDocumentClickListener();
-            }
+            if (el && !this._isInsideMenu(event.target, el)) this.setShow(false);
         };
 
         document.addEventListener("click", this._DOCUMENT_CLICK_HANDLER);
@@ -491,7 +503,15 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
     /** Keep the popup inside the visual viewport after it is laid out. */
     private adjustPopupToViewport(): void {
         const root = this.getElement() as HTMLElement | null;
-        const popup = root?.querySelector('[data-part-name="part-selector-position"]') as HTMLElement | null;
+        const usePortal = this._isPortalEnabled();
+        if (usePortal && !this._IS_SHOW) return;
+
+        if (this._PORTALLED_POPUP && !this._PORTALLED_POPUP.isConnected) {
+            this._PORTALLED_POPUP = null;
+            this._PORTAL_PLACEHOLDER = null;
+        }
+
+        const popup = this._PORTALLED_POPUP ?? root?.querySelector('[data-part-name="part-selector-position"]') as HTMLElement | null;
         if (!popup || !popup.isConnected) {
             // The reactive tree can schedule its first frame before the DOM commit.
             // Keep the popup hidden and retry so it never flashes at the unadjusted position.
@@ -505,6 +525,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
             this._POSITION_OBSERVER.observe(popup);
             const border = popup.querySelector('[data-part-name="part-border"]');
             if (border) this._POSITION_OBSERVER.observe(border);
+            if (usePortal && root) this._POSITION_OBSERVER.observe(root);
             this._POSITION_OBSERVED_POPUP = popup;
         }
 
@@ -512,14 +533,53 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
         const leftEdge = Math.max(0, viewport?.offsetLeft ?? 0);
         const rightEdge = Math.min(window.innerWidth, leftEdge + (viewport?.width ?? window.innerWidth));
         const gap = 8;
+        const rootRect = root?.getBoundingClientRect();
         // `translate` is independent of the transform used for vertical placement.
         popup.style.translate = "0px 0px";
         const availableWidth = Math.max(0, rightEdge - leftEdge - gap * 2);
 
         popup.style.boxSizing = "border-box";
         popup.style.maxWidth = `${availableWidth}px`;
-        const currentMinWidth = parseFloat(getComputedStyle(popup).minWidth) || 0;
-        popup.style.minWidth = `${Math.min(currentMinWidth, availableWidth)}px`;
+        const minWidthSource = this._COMPONENT_PROPS_BIND.prop_floatMinWidth?.get?.();
+        const currentMinWidth = getComputedStyle(popup).minWidth;
+        const percentageMinWidth = typeof minWidthSource === "string" ? minWidthSource.trim().match(/^(-?(?:\d+\.?\d*|\.\d+))%$/) : null;
+        const pixelMinWidth = typeof minWidthSource === "string" ? minWidthSource.trim().match(/^(-?(?:\d+\.?\d*|\.\d+))px$/i) : null;
+        const resolvedMinWidth = percentageMinWidth && rootRect
+            ? rootRect.width * (parseFloat(percentageMinWidth[1]) / 100)
+            : pixelMinWidth
+                ? parseFloat(pixelMinWidth[1])
+                : parseFloat(currentMinWidth) || 0;
+        popup.style.minWidth = `${Math.min(Math.max(0, resolvedMinWidth), availableWidth)}px`;
+
+        if (usePortal && root && rootRect) {
+            const currentRect = popup.getBoundingClientRect();
+            if (!this._PORTALLED_POPUP) {
+                this._PORTAL_OFFSET_X = currentRect.left - rootRect.left;
+                this._PORTAL_OFFSET_Y = currentRect.top - rootRect.top;
+                this._PORTAL_PLACEHOLDER = document.createComment("float-menu-portal");
+                popup.before(this._PORTAL_PLACEHOLDER);
+                document.body.appendChild(popup);
+                this._PORTALLED_POPUP = popup;
+            }
+
+            const floatWidth = this._COMPONENT_PROPS_BIND.prop_floatWidth?.get?.();
+            const percentageWidth = typeof floatWidth === "string" ? floatWidth.trim().match(/^(-?(?:\d+\.?\d*|\.\d+))%$/) : null;
+            const pixelWidth = typeof floatWidth === "string" ? floatWidth.trim().match(/^(-?(?:\d+\.?\d*|\.\d+))px$/i) : null;
+            const portalWidth = percentageWidth
+                ? rootRect.width * (parseFloat(percentageWidth[1]) / 100)
+                : pixelWidth
+                    ? parseFloat(pixelWidth[1])
+                    : currentRect.width;
+
+            popup.style.position = "fixed";
+            popup.style.left = `${rootRect.left + this._PORTAL_OFFSET_X}px`;
+            popup.style.top = `${rootRect.top + this._PORTAL_OFFSET_Y}px`;
+            popup.style.right = "auto";
+            popup.style.bottom = "auto";
+            popup.style.transform = "none";
+            popup.style.margin = "0px";
+            popup.style.width = `${Math.min(portalWidth, availableWidth)}px`;
+        }
 
         const adjustedRect = popup.getBoundingClientRect();
         const overflowLeft = leftEdge + gap - adjustedRect.left;
@@ -527,6 +587,15 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
         if (overflowLeft > 0) popup.style.translate = `${overflowLeft}px 0px`;
         else if (overflowRight > 0) popup.style.translate = `${-overflowRight}px 0px`;
         popup.style.visibility = "visible";
+    }
+
+    private _isPortalEnabled(): boolean {
+        return this._COMPONENT_PROPS_BIND.prop_floatUsePortal?.get?.() === true;
+    }
+
+    private _isInsideMenu(target: EventTarget | null, root?: Node | null): boolean {
+        if (!(target instanceof Node)) return false;
+        return !!root?.contains(target) || !!this._PORTALLED_POPUP?.contains(target);
     }
 
 
@@ -595,11 +664,13 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
     private getStylePositionStyles(
         prop_floatDirection:  any,
         prop_floatArrowWidth: any,
+        prop_floatDistance: any,
         prop_floatPosition:   any,
     ) {
         return CoreObservable.App.computed(
-            (direction: DirectionTypes, arrowWidth: number, position: string | null, dirRtl: boolean) => {
+            (direction: DirectionTypes, arrowWidth: number, distance: number, position: string | null, dirRtl: boolean) => {
                 const styles: Record<string, string> = {};
+                const offset = UtilStyle.Css_SizeUnit(distance, UtilConst.Units.PEXEL);
 
                 switch (direction) {
                     case DirectionTypes.TOP:
@@ -607,8 +678,8 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                             UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
                             UtilConst.Operation.ADD,
                             UtilStyle.Css_SizeUnit(arrowWidth, UtilConst.Units.PEXEL),
-                            UtilConst.Operation.MINUS,
-                            UtilStyle.Css_SizeUnit(10, UtilConst.Units.PEXEL),
+                            UtilConst.Operation.ADD,
+                            offset,
                         );
                         if (dirRtl) {
                             styles["left"] = position ? UtilStyle.Css_SizeUnit(parseFloat(position), UtilConst.Units.PERCENT) : "0px";
@@ -619,9 +690,11 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
 
                     case DirectionTypes.BOTTOM:
                         styles["top"] = UtilStyle.Css_SizeCalc(
+                            UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
+                            UtilConst.Operation.ADD,
                             UtilStyle.Css_SizeUnit(arrowWidth, UtilConst.Units.PEXEL),
                             UtilConst.Operation.ADD,
-                            UtilStyle.Css_SizeUnit(20, UtilConst.Units.PEXEL),
+                            offset,
                         );
                         if (dirRtl) {
                             styles["left"] = position ? UtilStyle.Css_SizeUnit(parseFloat(position), UtilConst.Units.PERCENT) : "0px";
@@ -635,6 +708,8 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                             UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
                             UtilConst.Operation.ADD,
                             UtilStyle.Css_SizeUnit(arrowWidth, UtilConst.Units.PEXEL),
+                            UtilConst.Operation.ADD,
+                            offset,
                         );
                         styles["top"] = position ? UtilStyle.Css_SizeUnit(parseFloat(position), UtilConst.Units.PERCENT) : UtilStyle.Css_SizeUnit(50, UtilConst.Units.PERCENT);
                         styles["transform"] = "translate(0, -50%)";
@@ -645,6 +720,8 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                             UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
                             UtilConst.Operation.ADD,
                             UtilStyle.Css_SizeUnit(arrowWidth, UtilConst.Units.PEXEL),
+                            UtilConst.Operation.ADD,
+                            offset,
                         );
                         styles["top"] = position ? UtilStyle.Css_SizeUnit(parseFloat(position), UtilConst.Units.PERCENT) : UtilStyle.Css_SizeUnit(50, UtilConst.Units.PERCENT);
                         styles["transform"] = "translate(0, -50%)";
@@ -653,7 +730,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
 
                 return styles;
             },
-            [prop_floatDirection, prop_floatArrowWidth, prop_floatPosition, CoreConfig.Settings.DirectionRtl.observable()],
+            [prop_floatDirection, prop_floatArrowWidth, prop_floatDistance, prop_floatPosition, CoreConfig.Settings.DirectionRtl.observable()],
             this.getScope(),
         );
     }
@@ -664,7 +741,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
 
         this._HOVER_HIDE_TIMEOUT = setTimeout(() => {
             this._HOVER_HIDE_TIMEOUT = null;
-            this._BORDER_INSTANCE?.set("prop_show", false);
+            this.setShow(false);
         }, 250);
     }
 

@@ -1,4 +1,4 @@
 export {
     Definition,
-    Edit, Delete, Attachment
+    Edit, Delete, Attachment, Copy
 } from "./Definition";

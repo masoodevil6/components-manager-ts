@@ -4,6 +4,7 @@ import {Keys}                from "../../../module_categories/languages";
 import * as UtilStyle        from "@/util_styles";
 import * as UtilConst        from "@/util_consts";
 import * as UiIcons          from "@/ui_icons";
+import type {MenuMoreEntry} from "../componentMenuMore/Props";
 import type {
     ExtractPropsType,
     ExtractPropsConfigType,
@@ -97,6 +98,13 @@ export const Props = {
         description:  Keys.category.components.collapse.props.collapseIconStyles.description,
     }),
 
+    prop_collapseMenuItems: Define_ComponentProp<MenuMoreEntry[]>({
+        prop:         "prop_collapseMenuItems",
+        default:      [],
+        name:         Keys.category.components.collapse.props.collapseMenuItems.name,
+        description:  Keys.category.components.collapse.props.collapseMenuItems.description,
+    }),
+
     /// --- Title ---
 
     prop_collapseTitle: Define_ComponentProp<string | null>({
@@ -104,6 +112,13 @@ export const Props = {
         default:      null,
         name:         Keys.category.components.collapse.props.collapseTitle.name,
         description:  Keys.category.components.collapse.props.collapseTitle.description,
+    }),
+
+    prop_collapseTitleWidth: Define_ComponentProp<string>({
+        prop:         "prop_collapseTitleWidth",
+        default:      UtilStyle.Css_SizeUnit(160, UtilConst.Units.PEXEL),
+        name:         Keys.category.components.collapse.props.collapseTitleWidth.name,
+        description:  Keys.category.components.collapse.props.collapseTitleWidth.description,
     }),
 
     prop_collapseTitleStyles: Define_ComponentProp<Record<string, string>>({

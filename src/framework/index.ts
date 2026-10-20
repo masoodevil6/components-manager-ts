@@ -15,6 +15,7 @@ export * as Route          from "@/core_route";
 
 // UI
 export * as Pages          from "@/ui_pages";
+export * as UI              from "./module_ui";
 
 
 // util

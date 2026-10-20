@@ -12,6 +12,7 @@ export const Schemas = {
             Props.prop_orientation,
             Props.prop_isFullWidth,
             Props.prop_direction,
+            Props.prop_directionRtl,
             Props.prop_items,
             Props.prop_menuBackgroundColor,
             Props.prop_itemBackgroundColorHover,

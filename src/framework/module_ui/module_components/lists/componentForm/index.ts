@@ -2,7 +2,7 @@ export {ComponentForm as Component} from "./ComponentForm";
 export {ComponentFormBase as Base} from "./ComponentFormBase";
 export {Definition} from "./Definition";
 export {Props} from "./Props";
-export type {PropsType, PropsConfigType, SubmitButtonConfig} from "./Props";
+export type {PropsType, PropsConfigType, SubmitButtonConfig, ControllerRequest, ControllerRequestContext, ControllerRequestResult} from "./Props";
 export {Schemas} from "./Schemas";
 export type {SchemasType} from "./Schemas";
 export {Methods} from "./Methods";

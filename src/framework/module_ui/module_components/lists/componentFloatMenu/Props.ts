@@ -86,6 +86,13 @@ export const Props = {
         description:  Keys.category.components.floatMenu.props.floatStyles.description,
     }),
 
+    prop_floatUsePortal: Define_ComponentProp<boolean>({
+        prop:         "prop_floatUsePortal",
+        default:      false,
+        name:         Keys.category.components.floatMenu.props.floatUsePortal.name,
+        description:  Keys.category.components.floatMenu.props.floatUsePortal.description,
+    }),
+
     prop_floatContent: Define_ComponentProp<string | any>({
         prop:         "prop_floatContent",
         default:      "",

@@ -130,6 +130,14 @@ export const Keys = {
             name:        CreateTranslationKey() ,
             description: CreateTranslationKey() ,
         },
+        treeNodeExpand: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        treeNodeCollapse: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
 
 
 
@@ -471,6 +479,10 @@ export const Keys = {
             description: CreateTranslationKey() ,
         },
         fileApplication: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
+        fileCopy: {
             name:        CreateTranslationKey() ,
             description: CreateTranslationKey() ,
         },

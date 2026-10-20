@@ -1,0 +1,4 @@
+return UiCategory.UI.Contents.CardViewInfo({
+    prop_title: String(response?.title ?? "Test Connect"),
+    prop_content: "Request title: " + String(request?.title ?? ""),
+});

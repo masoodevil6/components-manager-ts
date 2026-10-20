@@ -1,1 +1,1 @@
-export {Form, Definition} from "./Definition";
+export {Form, CustomForm, Definition} from "./Definition";

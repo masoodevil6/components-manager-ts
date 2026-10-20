@@ -326,8 +326,10 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
             iconStyles["color"] = String(prop_colorIcon);
         }
 
-        const iconValue = (prop_icon as any)?.get?.() ?? prop_icon;
-        const iconInstance = iconValue
+        const iconValue = CoreObservable.App.isObservable(prop_icon)
+            ? (prop_icon as CoreObservable.App<UiIcons.IIconDefinition | null>).get()
+            : prop_icon;
+        const iconInstance = iconValue != null
             ? UiIcons.CreateIcon(iconValue as any)
             : null;
 

@@ -10,6 +10,7 @@ import {Keys}                                   from "../../../../languages";
 export const Edit    : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FilesEdit.Definition);
 export const Delete  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FilesDelete.Definition);
 export const Attachment : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FileAttachment.Definition);
+export const Copy  : TCategoryIconTotality = CreateCategoryIcon(UiIcons.Src.FileCopy.Definition);
 
 
 export const Definition : TCategoryIconDefinition = {
@@ -17,6 +18,6 @@ export const Definition : TCategoryIconDefinition = {
     name:            Keys.category.icons.filesActions.name ,
     description:     Keys.category.icons.filesActions.description ,
     icons:          [
-        Edit, Delete, Attachment
+        Edit, Delete, Attachment, Copy
     ]
 }

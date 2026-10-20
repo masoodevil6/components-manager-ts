@@ -113,7 +113,8 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
             prop_floatBackground: UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
             prop_floatShowControlWithSelf: false,
             prop_floatIsShow: this._IS_OPEN,
-            prop_floatStyles: {display: "block", top: "auto"},
+            prop_floatUsePortal: true,
+            prop_floatStyles: {display: "block"},
         } as any, {});
         this._IS_OPEN.subscribe((isOpen) => {
             const event = new MouseEvent("click", {bubbles: true});
@@ -174,7 +175,6 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
         const headerStyles = CoreObservable.App.computed((enabled: boolean, size, isRtl, customStyles) => enabled ? ({
             display: "block",
             width: "100%",
-            padding: UtilStyle.Css_Padding(size),
             lineHeight: UtilStyle.Css_Height(size),
             fontSize: UtilStyle.Css_FontSize(size),
             direction: isRtl ? "rtl" : "ltr",
@@ -318,7 +318,11 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
         this._DOCUMENT_LISTENER = (event: any) => {
             const root = this.getElement() as HTMLElement;
             if (event instanceof KeyboardEvent && event.key === "Escape") { this.closeMenu(event); return; }
-            if (event instanceof MouseEvent && !root.contains(event.target as Node)) this.closeMenu(event);
+            if (
+                event instanceof MouseEvent &&
+                !root.contains(event.target as Node) &&
+                !this._FLOAT_MENU?.containsTarget(event.target)
+            ) this.closeMenu(event);
         };
         document.addEventListener("click", this._DOCUMENT_LISTENER as EventListener, true);
         document.addEventListener("keydown", this._DOCUMENT_LISTENER as EventListener, true);

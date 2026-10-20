@@ -2,6 +2,7 @@ import * as UICategories from "@/ui_categories"
 import {Keys}            from "../../../languages"
 import {Border}          from "./border"
 import {Collapse}        from "./collapse"
+import {CollapseLine}    from "./collapseLine"
 import {ErrorIsEmpty}    from "./errorIsEmpty"
 import {WebCode}        from "./webCode"
 import {RecyclerView}    from "./recyclerView"
@@ -26,6 +27,7 @@ export const Definition : UICategories.TCategoryComponentDefinition = {
     components:  [
         Border,
         Collapse,
+        CollapseLine,
         ErrorIsEmpty,
         WebCode,
         RecyclerView,

@@ -17,8 +17,7 @@ export const Validation: ComponentExample = {
         }).getReactiveElement();
         return UiCategory.UI.Fetch.Form({
             prop_forms: [email],
-            prop_url: "/example/validation",
-            prop_runFetch: true,
+            prop_controller: () => UiCategory.UI.Controllers.Tests.testConnect({probe: "component-form-validation"}),
         }, {
             RESPONSE: (_event, payload) => console.info("Validated form response", payload.RESPONSE),
         }).getElement() as HTMLElement;

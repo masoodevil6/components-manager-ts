@@ -843,6 +843,8 @@ export const Fa =
             Keys.icons.fileApplication.description,
             "آیکون برنامه و اپلیکیشن با لوگوی AI"
         ],
+        [Keys.icons.fileCopy.name, "کپی"],
+        [Keys.icons.fileCopy.description, "آیکون دو برگه روی‌هم‌افتاده برای کپی کردن محتوا"],
         [
             Keys.icons.fileCategory.name,
             "دسته‌بندی"
@@ -947,6 +949,10 @@ export const Fa =
         [Keys.icons.separatorHorizontal.description, "آیکونی برای نمایش جداکننده میان دو بخش افقی"],
         [Keys.icons.separatorVertical.name, "جداکننده عمودی"],
         [Keys.icons.separatorVertical.description, "آیکونی برای نمایش جداکننده میان دو بخش عمودی"],
+        [Keys.icons.treeNodeExpand.name, "باز کردن گره"],
+        [Keys.icons.treeNodeExpand.description, "علامت بعلاوه داخل مربع برای باز کردن گره"],
+        [Keys.icons.treeNodeCollapse.name, "بستن گره"],
+        [Keys.icons.treeNodeCollapse.description, "علامت منها داخل مربع برای بستن گره"],
         [
             Keys.icons.userPassword.name,
             "رمز عبور"

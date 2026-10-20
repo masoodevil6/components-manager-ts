@@ -5,7 +5,11 @@ import * as UtilConst from "@/util_consts";
 import {Keys} from "../../../module_categories/languages";
 import {Props as BorderProps, BorderTypes, ArrowTypes} from "../componentBorder/Props";
 import type {TFetchRequestData} from "@/util_tools";
+import type {RequestState} from "@/ui_controller/module_requests";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
+
+export type ControllerRequestResult = RequestState | Promise<RequestState>;
+export type ControllerRequest = ControllerRequestResult | (() => ControllerRequestResult) | null;
 
 export type WidgetFetchConfig = {
     url: string;
@@ -38,7 +42,9 @@ export const Props = {
     prop_widgetMinHeight: defineWidgetProp<string | null>("prop_widgetMinHeight", null, widgetKeys.props.widgetMinHeight.name, widgetKeys.props.widgetMinHeight.description),
     prop_widgetWidth: defineWidgetProp<string | null>("prop_widgetWidth", null, widgetKeys.props.widgetWidth.name, widgetKeys.props.widgetWidth.description),
     prop_widgetHeight: defineWidgetProp<string | null>("prop_widgetHeight", null, widgetKeys.props.widgetHeight.name, widgetKeys.props.widgetHeight.description),
+    prop_requestData: defineWidgetProp<unknown>("prop_requestData", null, "Request data", "Data submitted with the request and passed to response source code."),
     prop_fetch: defineWidgetProp<WidgetFetchConfig>("prop_fetch", {url: "", data: null}, widgetKeys.props.fetch.name, widgetKeys.props.fetch.description),
+    prop_controller: defineWidgetProp<ControllerRequest>("prop_controller", null, "Controller request", "Internal controller response or a handler that returns a response."),
     prop_btnMore_icon: defineWidgetProp<UiIcons.IIconDefinition | null>("prop_btnMore_icon", null, widgetKeys.props.btnMoreIcon.name, widgetKeys.props.btnMoreIcon.description),
     prop_btnMore_show: defineWidgetProp<boolean>("prop_btnMore_show", false, widgetKeys.props.btnMoreShow.name, widgetKeys.props.btnMoreShow.description),
     prop_btnMore_link: defineWidgetProp<string | null>("prop_btnMore_link", null, widgetKeys.props.btnMoreLink.name, widgetKeys.props.btnMoreLink.description),

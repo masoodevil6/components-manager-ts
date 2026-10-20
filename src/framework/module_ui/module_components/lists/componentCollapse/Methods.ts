@@ -1,6 +1,7 @@
 import {Keys}                from "../../../module_categories/languages";
 // --------------------------------
 import {Props}                   from "./Props";
+import type {MenuMoreItem} from "../componentMenuMore/Props";
 import type {
     ExtractMethodsType,
     ExtractMethodsComponentArgs,
@@ -31,6 +32,13 @@ export const Methods = {
 
         // dataArgs — مثل legacy: خالی
         dataArgs: {} as const,
+    },
+
+    SELECT_MENU_ITEM: {
+        name:        "fn_onSelectCollapseMenuItem",
+        description: Keys.category.components.collapse.methods.selectMenuItem.description,
+        args:        {},
+        dataArgs:    {} as {ITEM: MenuMoreItem},
     },
 
 } as const;

@@ -12,9 +12,10 @@ export enum CsZIndex {
 
     notify=           80,
 
-    blur_popup=       90,
-    popup=            91,
-
     SELECTOR=         100,
+
+    blur_popup=       300,
+    popup=            301,
+    SELECTOR_POPUP=   302,
 }
 
