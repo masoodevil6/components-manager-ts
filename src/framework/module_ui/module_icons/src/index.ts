@@ -180,6 +180,7 @@ export * as PaymentRate           from "./paymentRate";
 export * as ProgrammingLanguage  from "./programmingLanguage";
 export {
     Html as MarkupHtml,
+    Css as ProgrammingCss,
     JavaScript as ProgrammingJavaScript,
     TypeScript as ProgrammingTypeScript,
     Python as ProgrammingPython,

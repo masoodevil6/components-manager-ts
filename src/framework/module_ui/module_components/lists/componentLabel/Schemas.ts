@@ -34,6 +34,10 @@ export const Schemas = {
             Props.prop_labelShow,
             Props.prop_labelBackground,
             Props.prop_labelRadius,
+            Props.prop_labelBorderTopLeftRadiusHas,
+            Props.prop_labelBorderTopRightRadiusHas,
+            Props.prop_labelBorderBottomLeftRadiusHas,
+            Props.prop_labelBorderBottomRightRadiusHas,
             Props.prop_labelMinWidth,
         ],
     },
@@ -58,6 +62,13 @@ export const Schemas = {
             Props.prop_labelClass,
             Props.prop_labelColor,
         ],
+    },
+
+    BORDER_CONTENT_MENU_MORE: {
+        part:        "part-label-content-menu-more",
+        name:        Keys.category.components.label.schemas.borderContentMenuMore.name,
+        description: Keys.category.components.label.schemas.borderContentMenuMore.description,
+        props: [Props.prop_labelGroups, Props.prop_labelGroupSelected],
     },
 
     /** معادل Legacy: part-content-tooltip — هر ۶ prop tooltip */

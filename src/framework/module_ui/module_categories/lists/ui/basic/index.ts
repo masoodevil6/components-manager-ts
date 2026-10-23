@@ -1,3 +1,5 @@
 export {Definition, ComponentStructureTotality as ComponentStructure} from "./Definition"
 export {Layout} from "./layout"
+export {LayoutCreator} from "./layoutCreator"
+export {Styles} from "./styles"
 export {ElementCreator} from "./elementCreator"

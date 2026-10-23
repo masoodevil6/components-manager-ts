@@ -294,7 +294,7 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase {
             (language: CodeMirrorLanguage) => {
                 const normalized = this.normalizeLanguage(language);
                 if (normalized === CodeMirrorLanguage.JAVASCRIPT) return UiIcons.Src.ProgrammingJavaScript;
-                if (normalized === CodeMirrorLanguage.JSON) return UiIcons.Src.FileApplication;
+                if (normalized === CodeMirrorLanguage.JSON) return UiIcons.Src.FileApplication.Definition;
                 return UiIcons.Src.MarkupHtml;
             },
             [this._COMPONENT_PROPS_BIND.prop_language],

@@ -1,9 +1,23 @@
 import * as CoreComponents from "@/core_components";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
+import * as UtilTools from "@/util_tools";
 import {Keys} from "../../../module_categories/languages";
+import * as ComponentInputSelectOption from "../componentInputSelectOption";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
 
 const translation = Keys.category.components.layout;
+
+type LayoutPropGroupsType = {
+    layout: CoreComponents.PropGroupInterface;
+};
+
+export const PropGroups = CoreComponents.DefinePropGroup<LayoutPropGroupsType>({
+    layout: {
+        name: translation.groups.layout.name,
+        description: translation.groups.layout.description,
+        col: 1,
+    },
+});
 
 export enum LayoutColumn {
     CUSTOM = "CUSTOM",
@@ -21,6 +35,16 @@ export enum LayoutColumn {
     COL_12 = "COL_12",
 }
 
+const columnOptions = Object.values(LayoutColumn).map((value) => ({
+    id: value,
+    name: value === LayoutColumn.CUSTOM ? "Custom" : value.toLowerCase().replace("_", "-"),
+}));
+
+const columnEditor = UtilTools.Render.ComponentRender.inputSelectOption(
+    ComponentInputSelectOption.Component as any,
+    columnOptions,
+);
+
 export type LayoutContentItem = {
     content: unknown;
     col?: LayoutColumn | null;
@@ -34,6 +58,10 @@ export const Props = {
         default: LayoutColumn.COL_12,
         name: translation.props.col.name,
         description: translation.props.col.description,
+        OptionShow: true,
+        OptionComponentSelector: columnEditor.OptionComponentSelector,
+        OptionComponentOption: columnEditor.OptionComponentOption,
+        OptionGroup: PropGroups.layout,
     }),
     prop_layoutClass: Define_ComponentProp<string[]>({
         prop: "prop_layoutClass",

@@ -226,6 +226,12 @@ import {Props      as InputProps}         from "./componentInput/Props";
 import {Schemas    as InputSchemas}       from "./componentInput/Schemas";
 import {Methods    as InputMethods}        from "./componentInput/Methods";
 import {Examples   as InputExamples}       from "./componentInput/examples";
+import {Component as ComponentInputGroupClass} from "./componentInputGroup";
+import {Definition as InputGroupDefinition} from "./componentInputGroup/Definition";
+import {Props as InputGroupProps} from "./componentInputGroup/Props";
+import {Schemas as InputGroupSchemas} from "./componentInputGroup/Schemas";
+import {Methods as InputGroupMethods} from "./componentInputGroup/Methods";
+import {Examples as InputGroupExamples} from "./componentInputGroup/examples";
 import {Component as ComponentFormClass} from "./componentForm";
 import {Definition as FormDefinition} from "./componentForm/Definition";
 import {Props as FormProps} from "./componentForm/Props";
@@ -366,6 +372,8 @@ import * as ComponentEffective from "./componentEffective";
 import * as ComponentEffectChange from "./componentEffectChange";
 import * as ComponentLayout from "./componentLayout";
 import * as ComponentElementCreator from "./componentElementCreator";
+import * as ComponentLayoutCreator from "./componentLayoutCreator";
+import * as ComponentStyles from "./componentStyles";
 
 
 // ثبت ComponentIcon در Component Manager
@@ -700,6 +708,15 @@ CoreComponents.ComponentManager.register({
 });
 
 CoreComponents.ComponentManager.register({
+    definition: InputGroupDefinition,
+    props: InputGroupProps,
+    schemas: InputGroupSchemas,
+    methods: InputGroupMethods,
+    examples: InputGroupExamples,
+    constructor: ComponentInputGroupClass as any,
+});
+
+CoreComponents.ComponentManager.register({
     definition: FormDefinition,
     props: FormProps,
     schemas: FormSchemas,
@@ -1016,6 +1033,7 @@ export * as ComponentInputDescriptionSimple from "./componentInputDescriptionSim
 export * as ComponentInputDescription from "./componentInputDescription";
 export * as ComponentInputJson from "./componentInputJson";
 export * as ComponentInput from "./componentInput";
+export * as ComponentInputGroup from "./componentInputGroup";
 export * as ComponentForm from "./componentForm";
 export * as ComponentCustomForm from "./componentCustomForm";
 export * as ComponentWidget from "./componentWidget";
@@ -1050,6 +1068,8 @@ export * as ComponentEffective from "./componentEffective";
 export * as ComponentEffectChange from "./componentEffectChange";
 export * as ComponentLayout from "./componentLayout";
 export * as ComponentElementCreator from "./componentElementCreator";
+export * as ComponentLayoutCreator from "./componentLayoutCreator";
+export * as ComponentStyles from "./componentStyles";
 
 CoreComponents.ComponentManager.register({
     definition: Workflow.Definition,
@@ -1094,4 +1114,22 @@ CoreComponents.ComponentManager.register({
     methods: ComponentElementCreator.Methods,
     examples: ComponentElementCreator.Examples,
     constructor: ComponentElementCreator.Component as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition: ComponentLayoutCreator.Definition,
+    props: ComponentLayoutCreator.Props,
+    schemas: ComponentLayoutCreator.Schemas,
+    methods: ComponentLayoutCreator.Methods,
+    examples: ComponentLayoutCreator.Examples,
+    constructor: ComponentLayoutCreator.Component as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition: ComponentStyles.Definition,
+    props: ComponentStyles.Props,
+    schemas: ComponentStyles.Schemas,
+    methods: ComponentStyles.Methods,
+    examples: ComponentStyles.Examples,
+    constructor: ComponentStyles.Component as any,
 });

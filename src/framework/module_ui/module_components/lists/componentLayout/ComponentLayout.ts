@@ -1,6 +1,8 @@
 import * as CoreReactive from "@/core_reactive";
 import * as CoreObservable from "@/core_observable";
+import * as CoreConfig from "@/core_configs";
 import {PartAttrDefault} from "@/core_components";
+import * as UtilStyle from "@/util_styles";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {ComponentLayoutBase} from "./ComponentLayoutBase";
@@ -69,32 +71,40 @@ export class ComponentLayout extends ComponentLayoutBase {
         const layoutClass = data?.["prop_layoutClass"] ?? bind.prop_layoutClass;
         const layoutStyles = data?.["prop_layoutStyles"] ?? bind.prop_layoutStyles;
         const layoutContent = data?.["prop_layoutContent"] ?? bind.prop_layoutContent;
+        const sizeName = CoreConfig.Settings.SizeName.observable();
         const renderedContent = CoreObservable.App.computed(
-            (value: LayoutContentItem[] | null, column: LayoutColumn) => {
+            (value: LayoutContentItem[] | null, column: LayoutColumn, currentSizeName: any) => {
                 const content = value == null
                     ? this._CONTENT_RENDERER?.() ?? null
                     : value;
-                return this.renderLayoutContent(content, column);
+                return this.renderLayoutContent(content, column, UtilStyle.Css_Margin(currentSizeName));
             },
-            [layoutContent, col],
+            [layoutContent, col, sizeName],
             this.getScope(),
         );
 
         return CoreReactive.App.section({
             attrs: {...attrsDefault},
             classBind: [layoutClass],
+            // Bootstrap rows extend by half a gutter on each side. Give the row
+            // its matching container padding so it stays within the layout width.
+            styles: {
+                boxSizing: "border-box",
+                paddingLeft: "0.75rem",
+                paddingRight: "0.75rem",
+            },
             stylesBind: {styles: layoutStyles},
             children: [renderedContent as any],
         });
     }
 
-    private renderLayoutContent(content: unknown, column: LayoutColumn): CoreReactive.App {
+    private renderLayoutContent(content: unknown, column: LayoutColumn, marginBottom: string): CoreReactive.App {
         const items = this.getLayoutItems(content);
         return CoreReactive.App.div({
             className: ["row"],
             children: items.map((item) => {
                 const itemColumn = column === LayoutColumn.CUSTOM
-                    ? item.col ?? null
+                    ? item.col ?? column
                     : column;
                 const columnClass = itemColumn && itemColumn !== LayoutColumn.CUSTOM
                     ? itemColumn.toLowerCase().replace("_", "-")
@@ -106,7 +116,7 @@ export class ComponentLayout extends ComponentLayoutBase {
 
                 return CoreReactive.App.div({
                     className: classes,
-                    styles: item.styles ?? {},
+                    styles: {...(item.styles ?? {}), marginBottom},
                     children: [this.normalizeContent(item.content)],
                 });
             }),

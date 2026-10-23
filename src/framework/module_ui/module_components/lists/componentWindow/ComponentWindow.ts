@@ -39,6 +39,8 @@ export class ComponentWindow extends ComponentWindowBase {
     private _IS_FULL_SIZE: boolean = false;
     private _RESIZE_ANIM_ID: number | null = null;
     private _CLOSE_TIMEOUT_ID: number | null = null;
+    private _BUTTON_CANCEL: ComponentButton.Component | null = null;
+    private _BUTTON_ACCEPT: ComponentButton.Component | null = null;
     private static _ANIM_CSS_INJECTED = false;
 
 
@@ -69,6 +71,12 @@ export class ComponentWindow extends ComponentWindowBase {
        Plan 9.1 — Component Disposal
     --------------------------------------------- */
     dispose(): void {
+        this._BUTTON_CANCEL?.dispose();
+        this._BUTTON_CANCEL?.getScope?.().dispose?.();
+        this._BUTTON_CANCEL = null;
+        this._BUTTON_ACCEPT?.dispose();
+        this._BUTTON_ACCEPT?.getScope?.().dispose?.();
+        this._BUTTON_ACCEPT = null;
         this.disposeStep();
     }
 
@@ -544,79 +552,96 @@ export class ComponentWindow extends ComponentWindowBase {
             });
         }
 
-        const footerChildren: (CoreReactive.App | string)[] = [];
+        const showCancelBinding = prop_showCancel instanceof CoreObservable.App
+            ? prop_showCancel
+            : new CoreObservable.App(!!showCancelValue);
+        const showAcceptBinding = prop_showAccept instanceof CoreObservable.App
+            ? prop_showAccept
+            : new CoreObservable.App(!!showAcceptValue);
+        const hasFooterButtons = CoreObservable.App.computed(
+            (showCancel: boolean, showAccept: boolean) => !!showCancel || !!showAccept,
+            [showCancelBinding, showAcceptBinding],
+            this.getScope(),
+        );
 
-        if (showCancelValue) {
-            footerChildren.push(
-                new ComponentButton.Component(
-                    {
-                        classList: [],
-                        styles: { display: "inline-flex", width: "auto" },
-                        prop_structureStyles: { display: "inline-flex", width: "auto" },
-                        prop_btnClass: [],
-                        prop_btnStyles: {
-                            padding: "6px 14px",
-                            fontSize: "12px",
+        return CoreObservable.App.conditionWhen(
+            [hasFooterButtons],
+            (hasButtons: boolean) => hasButtons,
+            () => {
+                const footerChildren = [
+                    CoreObservable.App.conditionWhen(
+                        [showCancelBinding],
+                        (show: boolean) => !!show,
+                        () => {
+                            this._BUTTON_CANCEL ??= new ComponentButton.Component(
+                                {
+                                    classList: [],
+                                    styles: {display: "inline-flex", width: "auto"},
+                                    prop_structureStyles: {display: "inline-flex", width: "auto"},
+                                    prop_btnClass: [],
+                                    prop_btnStyles: {padding: "6px 14px", fontSize: "12px"},
+                                    prop_btnTitle: cancelTextValue ?? "Cancel",
+                                    prop_btnIcon: UiIcons.Src.StatusIsFalse.Definition,
+                                    prop_btnVariant: ButtonVariants.SECONDARY,
+                                    prop_btnSemantic: ButtonSemantic.CANCEL,
+                                    prop_btnType: ButtonAction.BUTTON,
+                                } as any,
+                                {
+                                    CLICK: (event: Event) => {
+                                        this.executeMethod("CANCEL", event, {});
+                                        this.fn_onClickCloseWindow(event);
+                                    },
+                                } as any,
+                            );
+                            return this._BUTTON_CANCEL.getReactiveElement() as CoreReactive.App;
                         },
-                        prop_btnTitle: cancelTextValue ?? "Cancel",
-                        prop_btnIcon: UiIcons.Src.StatusIsFalse.Definition,
-                        prop_btnVariant: ButtonVariants.SECONDARY,
-                        prop_btnSemantic: ButtonSemantic.CANCEL,
-                        prop_btnType: ButtonAction.BUTTON,
-                    } as any,
-                    {
-                        CLICK: (event: Event) => {
-                            this.executeMethod("CANCEL", event, {});
-                            this.fn_onClickCloseWindow(event);
+                        () => null,
+                        this.getScope(),
+                    ),
+                    CoreObservable.App.conditionWhen(
+                        [showAcceptBinding],
+                        (show: boolean) => !!show,
+                        () => {
+                            this._BUTTON_ACCEPT ??= new ComponentButton.Component(
+                                {
+                                    classList: [],
+                                    styles: {display: "inline-flex", width: "auto"},
+                                    prop_structureStyles: {display: "inline-flex", width: "auto"},
+                                    prop_btnClass: [],
+                                    prop_btnStyles: {padding: "6px 14px", fontSize: "12px"},
+                                    prop_btnTitle: acceptTextValue ?? "Confirm",
+                                    prop_btnIcon: UiIcons.Src.StatusIsTrue.Definition,
+                                    prop_btnVariant: ButtonVariants.PRIMARY,
+                                    prop_btnSemantic: ButtonSemantic.SUBMIT,
+                                    prop_btnType: ButtonAction.BUTTON,
+                                } as any,
+                                {
+                                    CLICK: (event: Event) => {
+                                        this.executeMethod("ACCEPT", event, {});
+                                        this.fn_onClickCloseWindow(event);
+                                    },
+                                } as any,
+                            );
+                            return this._BUTTON_ACCEPT.getReactiveElement() as CoreReactive.App;
                         },
-                    } as any,
-                ).getReactiveElement() as CoreReactive.App,
-            );
-        }
+                        () => null,
+                        this.getScope(),
+                    ),
+                ];
 
-        if (showAcceptValue) {
-            footerChildren.push(
-                new ComponentButton.Component(
-                    {
-                        classList: [],
-                        styles: { display: "inline-flex", width: "auto" },
-                        prop_structureStyles: { display: "inline-flex", width: "auto" },
-                        prop_btnClass: [],
-                        prop_btnStyles: {
-                            padding: "6px 14px",
-                            fontSize: "12px",
-                        },
-                        prop_btnTitle: acceptTextValue ?? "Confirm",
-                        prop_btnIcon: UiIcons.Src.StatusIsTrue.Definition,
-                        prop_btnVariant: ButtonVariants.PRIMARY,
-                        prop_btnSemantic: ButtonSemantic.SUBMIT,
-                        prop_btnType: ButtonAction.BUTTON,
-                    } as any,
-                    {
-                        CLICK: (event: Event) => {
-                            this.executeMethod("ACCEPT", event, {});
-                            this.fn_onClickCloseWindow(event);
-                        },
-                    } as any,
-                ).getReactiveElement() as CoreReactive.App,
-            );
-        }
-
-        if (footerChildren.length === 0) {
-            return CoreReactive.App.section({ attrs: { ...attrsDefault } });
-        }
-
-        return CoreReactive.App.section({
-            attrs: {
-                ...attrsDefault,
-                "id": `component-window-window-footer-${this._COMPONENT_RANDOM_ID}`,
+                return CoreReactive.App.section({
+                    attrs: {
+                        ...attrsDefault,
+                        "id": `component-window-window-footer-${this._COMPONENT_RANDOM_ID}`,
+                    },
+                    className: ["border-top", "d-flex", "align-items-center", "justify-content-end", "gap-2", "px-3"],
+                    styles: {height: "55px"},
+                    children: footerChildren as any,
+                });
             },
-            className: ["border-top", "d-flex", "align-items-center", "justify-content-end", "gap-2", "px-3"],
-            styles: {
-                height: "55px",
-            },
-            children: footerChildren,
-        });
+            () => CoreReactive.App.section({attrs: {...attrsDefault}}),
+            this.getScope(),
+        ) as any;
     }
 
 

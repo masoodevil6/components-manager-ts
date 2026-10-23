@@ -3,10 +3,12 @@ import * as CoreObservable from "@/core_observable";
 import * as CoreConfig from "@/core_configs";
 import * as UtilConst from "@/util_consts";
 import * as UtilStyle from "@/util_styles";
+import * as UtilTools from "@/util_tools";
 import * as UiIcons from "@/ui_icons";
 import {PartAttrDefault} from "@/core_components";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {ComponentLabelTrait} from "../../traits/componentLabelTrait";
+import {RegisterLabelRadiusOptionEditor} from "../componentLabel/Props";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
 import * as ComponentSelectCustomSimple from "../componentSelectCustomSimple";
 import * as ComponentIcon from "../componentIcon";
@@ -277,3 +279,10 @@ export class ComponentInputSelectOption extends ComponentInputSelectOptionBase {
         return Array.isArray(options) ? options : [];
     }
 }
+
+RegisterLabelRadiusOptionEditor(
+    UtilTools.Render.ComponentRender.inputSelectOption(
+        ComponentInputSelectOption as any,
+        Object.values(UtilConst.Sizes),
+    ),
+);

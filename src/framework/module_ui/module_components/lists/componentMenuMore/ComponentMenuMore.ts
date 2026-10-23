@@ -54,6 +54,11 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
         return super.getElement() as HTMLElement;
     }
 
+    containsTarget(target: EventTarget | null): boolean {
+        if (!(target instanceof Node)) return false;
+        return this.getElement().contains(target) || this._FLOAT_MENUS.some((menu) => menu.containsTarget(target));
+    }
+
     override renderContentComponent(): CoreReactive.App {
         return this.executeSchemaPart(Schemas.ROOT.part, {});
     }
@@ -174,7 +179,11 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
                 mouseenter: () => this.clearHoverHideTimeout(),
                 mouseleave: (event: MouseEvent) => {
                     const root = event.currentTarget as HTMLElement;
-                    if (event.relatedTarget instanceof Node && root.contains(event.relatedTarget)) {
+                    const relatedTarget = event.relatedTarget;
+                    const pointerRemainsInMenu = relatedTarget instanceof Node && (
+                        root.contains(relatedTarget) || this.containsTarget(relatedTarget)
+                    );
+                    if (pointerRemainsInMenu) {
                         this.clearHoverHideTimeout();
                         return;
                     }
@@ -534,12 +543,14 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             prop_floatDistance: 0,
             prop_floatWidth: "max-content",
             prop_floatMinWidth: "10rem",
+            prop_floatUsePortal: true,
             ...this.getFloatMenuBorderConfig(),
             prop_floatStyles: floatStyles,
             prop_floatShowControlWithSelf: openOnClick,
         } as any);
         itemFloatMenu = floatMenu;
         this._FLOAT_MENUS.push(floatMenu);
+        floatMenu.setRelatedTargetContains((target) => this.containsTarget(target));
         if (!openOnClick) this._HOVER_FLOAT_MENUS.push(floatMenu);
         return floatMenu.getReactiveElement();
     }

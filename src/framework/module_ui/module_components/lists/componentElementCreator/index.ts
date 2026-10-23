@@ -1,6 +1,6 @@
 export {ComponentElementCreator as Component} from "./ComponentElementCreator";
 export {Definition} from "./Definition";
-export {Props, ElementCreatorMode} from "./Props";
+export {Props, PropGroups, ElementCreatorMode} from "./Props";
 export type {PropsType, PropsConfigType} from "./Props";
 export {Schemas} from "./Schemas";
 export type {SchemasType} from "./Schemas";

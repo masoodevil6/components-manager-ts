@@ -10,7 +10,7 @@ export const Setting: ComponentExample = {
     description: Keys.category.components.basic.elementCreator.examples.setting.description,
     render: (): HTMLElement => {
         const elementCreator = new ComponentElementCreator({
-            prop_mode: ElementCreatorMode.SETTING,
+            prop_mode: ElementCreatorMode.SETTING_EDIT,
             prop_component: UiCategory.UI.Inputs.Input,
             prop_componentProperties: {
                 prop_name: "elementCreatorSettingInput",

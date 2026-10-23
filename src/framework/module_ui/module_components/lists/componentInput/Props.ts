@@ -11,10 +11,37 @@ import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/Ty
 
 export {InputSimpleTypes as InputTypes};
 
+type InputPropGroupsType = {
+    value: CoreComponents.PropGroupInterface;
+};
+
+export const PropGroups = CoreComponents.DefinePropGroup<InputPropGroupsType>({
+    value: {
+        name: Keys.category.components.input.props.value.name,
+        description: Keys.category.components.input.props.value.description,
+        col: 2,
+    },
+});
+
 export const Props = {
     prop_name: Define_ComponentProp<string | null>({prop: "prop_name", default: null, name: Keys.category.components.input.props.name.name, description: Keys.category.components.input.props.name.description}),
-    prop_value: Define_ComponentProp<string | null>({prop: "prop_value", default: null, name: Keys.category.components.input.props.value.name, description: Keys.category.components.input.props.value.description}),
-    prop_isDisable: Define_ComponentProp<boolean>({prop: "prop_isDisable", default: false, name: Keys.category.components.input.props.isDisable.name, description: Keys.category.components.input.props.isDisable.description}),
+
+    prop_value: Define_ComponentProp<string | null>({
+        prop: "prop_value",
+        default: null,
+        name: Keys.category.components.input.props.value.name,
+        description: Keys.category.components.input.props.value.description,
+        OptionShow: true,
+        OptionGroup: PropGroups.value,
+    }),
+    prop_isDisable: Define_ComponentProp<boolean>({
+        prop: "prop_isDisable",
+        default: false,
+        name: Keys.category.components.input.props.isDisable.name,
+        description: Keys.category.components.input.props.isDisable.description,
+        OptionShow: true,
+        OptionGroup: PropGroups.value,
+    }),
     prop_title: Define_ComponentProp<string | null>({prop: "prop_title", default: null, name: Keys.category.components.input.props.title.name, description: Keys.category.components.input.props.title.description}),
     prop_backgroundColorForm: Define_ComponentProp<string>({prop: "prop_backgroundColorForm", default: "var(--secondaryColor1)", name: Keys.category.components.input.props.backgroundColorForm.name, description: Keys.category.components.input.props.backgroundColorForm.description}),
     prop_formBorderRadius: Define_ComponentProp<UtilConst.Sizes>({prop: "prop_formBorderRadius", default: UtilConst.Sizes.M, name: Keys.category.components.input.props.formBorderRadius.name, description: Keys.category.components.input.props.formBorderRadius.description}),
@@ -24,7 +51,7 @@ export const Props = {
     prop_inputBorderColor: Define_ComponentProp<string | null>({prop: "prop_inputBorderColor", default: null, name: Keys.category.components.input.props.inputBorderColor.name, description: Keys.category.components.input.props.inputBorderColor.description}),
     prop_inputBorderColorFocus: Define_ComponentProp<string | null>({prop: "prop_inputBorderColorFocus", default: null, name: Keys.category.components.input.props.inputBorderColorFocus.name, description: Keys.category.components.input.props.inputBorderColorFocus.description}),
     prop_inputBorderWidth: Define_ComponentProp<UtilConst.Sizes>({prop: "prop_inputBorderWidth", default: UtilConst.Sizes.M, name: Keys.category.components.input.props.inputBorderWidth.name, description: Keys.category.components.input.props.inputBorderWidth.description}),
-    prop_inputBorderRadius: Define_ComponentProp<UtilConst.Sizes>({prop: "prop_inputBorderRadius", default: UtilConst.Sizes.M, name: Keys.category.components.input.props.inputBorderRadius.name, description: Keys.category.components.input.props.inputBorderRadius.description}),
+    prop_inputBorderRadius: Define_ComponentProp<UtilConst.Sizes | null>({prop: "prop_inputBorderRadius", default: UtilConst.Sizes.M, name: Keys.category.components.input.props.inputBorderRadius.name, description: Keys.category.components.input.props.inputBorderRadius.description}),
     prop_type: Define_ComponentProp<InputSimpleTypes>({prop: "prop_type", default: InputSimpleTypes.STRING, name: Keys.category.components.input.props.type.name, description: Keys.category.components.input.props.type.description}),
     prop_placeholder: Define_ComponentProp<string | null>({prop: "prop_placeholder", default: null, name: Keys.category.components.input.props.placeholder.name, description: Keys.category.components.input.props.placeholder.description}),
     prop_icon: Define_ComponentProp<UiIcons.IIconDefinition | null>({prop: "prop_icon", default: null, name: Keys.category.components.input.props.icon.name, description: Keys.category.components.input.props.icon.description}),

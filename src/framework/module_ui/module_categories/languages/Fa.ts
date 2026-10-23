@@ -653,6 +653,20 @@ export const Fa =
         [Keys.category.components.basic.elementCreator.props.component.description, "کلاس کامپوننت یا reference کامپوننت دسته‌بندی برای رندر."],
         [Keys.category.components.basic.elementCreator.props.componentProperties.name, "ویژگی‌های کامپوننت"],
         [Keys.category.components.basic.elementCreator.props.componentProperties.description, "تنظیماتی که به کامپوننت انتخاب‌شده ارسال می‌شود."],
+        [Keys.category.components.basic.elementCreator.props.hasHeaderSetting.name, "نمایش تنظیمات هدر"],
+        [Keys.category.components.basic.elementCreator.props.hasHeaderSetting.description, "گزینهٔ تنظیمات را در هدر حالت ویرایش نمایش می‌دهد."],
+        [Keys.category.components.basic.elementCreator.props.hasHeaderDelete.name, "نمایش حذف هدر"],
+        [Keys.category.components.basic.elementCreator.props.hasHeaderDelete.description, "گزینهٔ حذف را در هدر حالت ویرایش نمایش می‌دهد."],
+        [Keys.category.components.basic.elementCreator.props.hasHeaderColumn.name, "نمایش ستون هدر"],
+        [Keys.category.components.basic.elementCreator.props.hasHeaderColumn.description, "گزینهٔ عرض ستون را در هدر حالت ویرایش نمایش می‌دهد."],
+        [Keys.category.components.basic.elementCreator.props.hasTabComponent.name, "نمایش تب کامپوننت"],
+        [Keys.category.components.basic.elementCreator.props.hasTabComponent.description, "تب انتخاب کامپوننت را در پنجرهٔ SETTING_EDIT نمایش می‌دهد."],
+        [Keys.category.components.basic.elementCreator.props.hasTabProps.name, "نمایش تب ویژگی‌ها"],
+        [Keys.category.components.basic.elementCreator.props.hasTabProps.description, "تب ویژگی‌های کامپوننت را در پنجرهٔ SETTING_EDIT نمایش می‌دهد."],
+        [Keys.category.components.basic.elementCreator.groups.header.name, "گزینه‌های هدر"],
+        [Keys.category.components.basic.elementCreator.groups.header.description, "تعیین می‌کند کدام گزینه‌ها در هدر حالت ویرایش نمایش داده شوند."],
+        [Keys.category.components.basic.elementCreator.groups.settingsWindow.name, "تب‌های پنجرهٔ تنظیمات"],
+        [Keys.category.components.basic.elementCreator.groups.settingsWindow.description, "تعیین می‌کند کدام تب‌ها در پنجرهٔ SETTING_EDIT نمایش داده شوند."],
         [Keys.category.components.basic.elementCreator.schemas.render.name, "کامپوننت رندرشده"],
         [Keys.category.components.basic.elementCreator.schemas.render.description, "تنظیمات و نمونهٔ رندرشدهٔ کامپوننت انتخاب‌شده."],
         [Keys.category.components.basic.elementCreator.examples.render.name, "حالت رندر"],
@@ -661,6 +675,37 @@ export const Fa =
         [Keys.category.components.basic.elementCreator.examples.edit.description, "کامپوننت مرجع را همراه کنترل‌های ویرایش رندر می‌کند."],
         [Keys.category.components.basic.elementCreator.examples.setting.name, "حالت تنظیمات"],
         [Keys.category.components.basic.elementCreator.examples.setting.description, "پنجره تنظیمات کامپوننت مرجع را با کلیک روی دکمه باز می‌کند."],
+        [Keys.category.components.basic.layoutCreator.name, "سازنده چیدمان"],
+        [Keys.category.components.basic.layoutCreator.description, "کامپوننت پایه برای ساخت چیدمان."],
+        [Keys.category.components.basic.layoutCreator.props.mode.name, "حالت"],
+        [Keys.category.components.basic.layoutCreator.props.mode.description, "انتخاب می‌کند محتوای سازنده چیدمان مستقیم یا در قاب ویرایش نمایش داده شود."],
+        [Keys.category.components.basic.layoutCreator.editor.addColumn, "افزودن ستون"],
+        [Keys.category.components.basic.layoutCreator.methods.deleteLayout.name, "حذف چیدمان"],
+        [Keys.category.components.basic.layoutCreator.methods.deleteLayout.description, "پس از تأیید حذف چیدمان اصلی فراخوانی می‌شود."],
+        [Keys.category.components.basic.layoutCreator.methods.deleteColumn.name, "حذف ستون"],
+        [Keys.category.components.basic.layoutCreator.methods.deleteColumn.description, "پس از تأیید حذف ستون، همراه با اندیس آن که از صفر شروع می‌شود فراخوانی می‌شود."],
+        [Keys.category.components.basic.layoutCreator.schemas.render.name, "محتوای سازنده چیدمان"],
+        [Keys.category.components.basic.layoutCreator.schemas.render.description, "ستون‌های ویرایشگر ComponentLayout و حالت انتخاب‌شده را نمایش می‌دهد."],
+        [Keys.category.components.basic.layoutCreator.examples.render.name, "حالت رندر"],
+        [Keys.category.components.basic.layoutCreator.examples.render.description, "ستون‌های تنظیم‌شدهٔ ComponentLayout را در حالت رندر نمایش می‌دهد."],
+        [Keys.category.components.basic.layoutCreator.examples.edit.name, "حالت ویرایش"],
+        [Keys.category.components.basic.layoutCreator.examples.edit.description, "ستون‌های قابل‌ویرایش ComponentLayout و گزینهٔ افزودن ستون را نمایش می‌دهد."],
+
+        /// Components -> Basic -> Styles
+        [Keys.category.components.basic.styles.groups.margin.name, "حاشیه"],
+        [Keys.category.components.basic.styles.groups.margin.description, "حاشیهٔ بالا، راست، پایین و چپ را تنظیم می‌کند."],
+        [Keys.category.components.basic.styles.props.marginTop.name, "حاشیهٔ بالا"],
+        [Keys.category.components.basic.styles.props.marginTop.description, "اندازهٔ حاشیهٔ بالا را تنظیم می‌کند."],
+        [Keys.category.components.basic.styles.props.marginRight.name, "حاشیهٔ راست"],
+        [Keys.category.components.basic.styles.props.marginRight.description, "اندازهٔ حاشیهٔ راست را تنظیم می‌کند."],
+        [Keys.category.components.basic.styles.props.marginBottom.name, "حاشیهٔ پایین"],
+        [Keys.category.components.basic.styles.props.marginBottom.description, "اندازهٔ حاشیهٔ پایین را تنظیم می‌کند."],
+        [Keys.category.components.basic.styles.props.marginLeft.name, "حاشیهٔ چپ"],
+        [Keys.category.components.basic.styles.props.marginLeft.description, "اندازهٔ حاشیهٔ چپ را تنظیم می‌کند."],
+        [Keys.category.components.basic.styles.schemas.styles.name, "پیش‌نمایش استایل"],
+        [Keys.category.components.basic.styles.schemas.styles.description, "Hello World را با حاشیه‌های تنظیم‌شده نمایش می‌دهد."],
+        [Keys.category.components.basic.styles.examples.default.name, "پیش‌فرض"],
+        [Keys.category.components.basic.styles.examples.default.description, "پیش‌نمایش Hello World را با حاشیه‌های پیش‌فرض نمایش می‌دهد."],
 
         /// Components -> Basic -> Schemas -> component
         [
@@ -1509,6 +1554,14 @@ export const Fa =
         [Keys.category.components.inputOtp.examples.default.description, "نمایش ورودی شش‌خانه‌ای کد یک‌بارمصرف"],
 
         /// Components -> Input
+        [Keys.category.components.inputGroup.name, "گروه ورودی"],
+        [Keys.category.components.inputGroup.description, "گروهی از کامپوننت‌های ورودی ساده با چیدمان مشترک در فرم."],
+        [Keys.category.components.inputGroup.props.inputs.name, "ورودی‌ها"],
+        [Keys.category.components.inputGroup.props.inputs.description, "عضوهای LABEL و INPUT شامل نمونه یا سازندهٔ کامپوننت ساده و عرض ستون Bootstrap هستند."],
+        [Keys.category.components.inputGroup.schemas.form.name, "فرم"],
+        [Keys.category.components.inputGroup.schemas.form.description, "برچسب‌ها و کامپوننت‌های ورودی ساده با چیدمان مناسب در فرم."],
+        [Keys.category.components.inputGroup.examples.default.name, "پیش‌فرض"],
+        [Keys.category.components.inputGroup.examples.default.description, "عنوان اصلی کامپوننت را حفظ می‌کند و یک برچسب را کنار دو ورودی در فرم نمایش می‌دهد."],
         [Keys.category.components.input.name, "ورودی"],
         [Keys.category.components.input.description, "ورودی فرم همراه با آیکون، دکمهٔ افزودن و اعتبارسنجی اختیاری"],
         [Keys.category.components.input.props.name.name, "نام فیلد"], [Keys.category.components.input.props.name.description, "نام فرم ورودی"],
@@ -1524,7 +1577,7 @@ export const Fa =
         [Keys.category.components.input.props.inputBorderColor.name, "رنگ بردر ورودی"], [Keys.category.components.input.props.inputBorderColor.description, "رنگ بردر ورودی در حالت عادی"],
         [Keys.category.components.input.props.inputBorderColorFocus.name, "رنگ بردر هنگام focus"], [Keys.category.components.input.props.inputBorderColorFocus.description, "رنگ بردر هنگام تمرکز روی ورودی"],
         [Keys.category.components.input.props.inputBorderWidth.name, "ضخامت بردر ورودی"], [Keys.category.components.input.props.inputBorderWidth.description, "ضخامت بردر بر اساس اندازهٔ سیستم"],
-        [Keys.category.components.input.props.inputBorderRadius.name, "گردی گوشهٔ ورودی"], [Keys.category.components.input.props.inputBorderRadius.description, "گردی گوشه بر اساس اندازهٔ سیستم"],
+        [Keys.category.components.input.props.inputBorderRadius.name, "گردی گوشهٔ ورودی"], [Keys.category.components.input.props.inputBorderRadius.description, "گردی گوشه بر اساس اندازهٔ سیستم؛ مقدار null گردی را حذف می‌کند"],
         [Keys.category.components.input.props.type.name, "نوع ورودی"], [Keys.category.components.input.props.type.description, "نوع استاندارد عنصر ورودی"],
         [Keys.category.components.input.props.placeholder.name, "متن راهنما"], [Keys.category.components.input.props.placeholder.description, "متنی که هنگام خالی‌بودن ورودی نمایش داده می‌شود"],
         [Keys.category.components.input.props.icon.name, "آیکون"], [Keys.category.components.input.props.icon.description, "آیکون اختیاری کنار ورودی"],
@@ -1678,7 +1731,7 @@ export const Fa =
         [Keys.category.components.inputSimple.props.inputBorderColor.name, "رنگ بردر ورودی"], [Keys.category.components.inputSimple.props.inputBorderColor.description, "رنگ بردر ورودی در حالت عادی"],
         [Keys.category.components.inputSimple.props.inputBorderColorFocus.name, "رنگ بردر هنگام focus"], [Keys.category.components.inputSimple.props.inputBorderColorFocus.description, "رنگ بردر هنگام تمرکز روی ورودی"],
         [Keys.category.components.inputSimple.props.inputBorderWidth.name, "ضخامت بردر ورودی"], [Keys.category.components.inputSimple.props.inputBorderWidth.description, "ضخامت بردر بر اساس اندازهٔ سیستم"],
-        [Keys.category.components.inputSimple.props.inputBorderRadius.name, "گردی گوشهٔ ورودی"], [Keys.category.components.inputSimple.props.inputBorderRadius.description, "گردی گوشه بر اساس اندازهٔ سیستم"],
+        [Keys.category.components.inputSimple.props.inputBorderRadius.name, "گردی گوشهٔ ورودی"], [Keys.category.components.inputSimple.props.inputBorderRadius.description, "گردی گوشه بر اساس اندازهٔ سیستم؛ مقدار null گردی را حذف می‌کند"],
         [Keys.category.components.inputSimple.props.inputType.name, "نوع ورودی"],
         [Keys.category.components.inputSimple.props.inputType.description, "نوع استاندارد عنصر input"],
         [Keys.category.components.inputSimple.props.inputPlaceholder.name, "متن راهنما"],
@@ -4202,6 +4255,12 @@ export const Fa =
             Keys.category.components.label.description,
             "برچسب قابل‌کلیک با اتصال به input (for) و پشتیبانی tooltip"
         ],
+        [Keys.category.components.label.groups.content.name, "محتوا و نمایش"],
+        [Keys.category.components.label.groups.content.description, "متن و وضعیت نمایشی برچسب"],
+        [Keys.category.components.label.groups.appearance.name, "ظاهر"],
+        [Keys.category.components.label.groups.appearance.description, "رنگ و اندازهٔ برچسب"],
+        [Keys.category.components.label.groups.tooltip.name, "راهنما"],
+        [Keys.category.components.label.groups.tooltip.description, "متن و تنظیمات راهنمای برچسب"],
         [
             Keys.category.components.label.props.labelShow.name,
             "نمایش برچسب"
@@ -4224,8 +4283,16 @@ export const Fa =
         ],
         [
             Keys.category.components.label.props.labelRadius.description,
-            "اندازه استاندارد گردی گوشه‌های برچسب"
+            "اندازهٔ استاندارد گردی گوشه‌های برچسب؛ مقدار null گردی را حذف می‌کند"
         ],
+        [Keys.category.components.label.props.labelBorderTopLeftRadiusHas.name, "گردی گوشهٔ بالا-چپ"],
+        [Keys.category.components.label.props.labelBorderTopLeftRadiusHas.description, "گردی گوشهٔ بالا-چپ برچسب را فعال می‌کند"],
+        [Keys.category.components.label.props.labelBorderTopRightRadiusHas.name, "گردی گوشهٔ بالا-راست"],
+        [Keys.category.components.label.props.labelBorderTopRightRadiusHas.description, "گردی گوشهٔ بالا-راست برچسب را فعال می‌کند"],
+        [Keys.category.components.label.props.labelBorderBottomLeftRadiusHas.name, "گردی گوشهٔ پایین-چپ"],
+        [Keys.category.components.label.props.labelBorderBottomLeftRadiusHas.description, "گردی گوشهٔ پایین-چپ برچسب را فعال می‌کند"],
+        [Keys.category.components.label.props.labelBorderBottomRightRadiusHas.name, "گردی گوشهٔ پایین-راست"],
+        [Keys.category.components.label.props.labelBorderBottomRightRadiusHas.description, "گردی گوشهٔ پایین-راست برچسب را فعال می‌کند"],
         [
             Keys.category.components.label.props.labelMinWidth.name,
             "حداقل عرض"
@@ -4249,6 +4316,22 @@ export const Fa =
         [
             Keys.category.components.label.props.labelFor.description,
             "شناسه المان input مرتبط (برای دسترس‌پذیری)"
+        ],
+        [
+            Keys.category.components.label.props.labelGroups.name,
+            "گروه‌های منوی سربرگ"
+        ],
+        [
+            Keys.category.components.label.props.labelGroups.description,
+            "گروه‌های قابل انتخابی که در منوی سربرگ برچسب نمایش داده می‌شوند"
+        ],
+        [
+            Keys.category.components.label.props.labelGroupSelected.name,
+            "گروه انتخاب‌شدهٔ سربرگ"
+        ],
+        [
+            Keys.category.components.label.props.labelGroupSelected.description,
+            "شناسهٔ گروه انتخاب‌شده؛ اگر خالی باشد اولین گروه به‌صورت پیش‌فرض انتخاب می‌شود"
         ],
         [
             Keys.category.components.label.props.labelStyle.name,
@@ -4336,7 +4419,7 @@ export const Fa =
         ],
         [
             Keys.category.components.label.schemas.borderContent.description,
-            "ظرف عنوان و tooltip"
+            "ظرف عنوان، منوی اختیاری و tooltip"
         ],
         [
             Keys.category.components.label.schemas.borderContentTitle.name,
@@ -4345,6 +4428,14 @@ export const Fa =
         [
             Keys.category.components.label.schemas.borderContentTitle.description,
             "عنوان با اتصال به input (for) و استایل‌ها"
+        ],
+        [
+            Keys.category.components.label.schemas.borderContentMenuMore.name,
+            "بخش منوی سربرگ"
+        ],
+        [
+            Keys.category.components.label.schemas.borderContentMenuMore.description,
+            "منوی اختیاری MenuMore بین عنوان و tooltip"
         ],
         [
             Keys.category.components.label.schemas.borderContentTooltip.name,
@@ -4363,6 +4454,14 @@ export const Fa =
             "با کلیک روی برچسب فعال می‌شود؛ FOR (componentArgs) و IS_DISABLE (dataArgs) دریافت می‌کند"
         ],
         [
+            Keys.category.components.label.methods.selectMenuItem.name,
+            "انتخاب فرزند منو"
+        ],
+        [
+            Keys.category.components.label.methods.selectMenuItem.description,
+            "هنگام انتخاب فرزند، مقدار انتخاب‌شده و گزینهٔ والد را ارسال می‌کند"
+        ],
+        [
             Keys.category.components.label.examples.default.name,
             "برچسب پیش‌فرض"
         ],
@@ -4377,6 +4476,14 @@ export const Fa =
         [
             Keys.category.components.label.examples.clickable.description,
             "برچسب با callback واقعی کلیک"
+        ],
+        [
+            Keys.category.components.label.examples.withMenuMore.name,
+            "برچسب با منوی سربرگ"
+        ],
+        [
+            Keys.category.components.label.examples.withMenuMore.description,
+            "گزینهٔ والد با چند فرزند که انتخاب هر فرزند عنوان والد و مقدار انتخاب‌شده را به‌روزرسانی می‌کند"
         ],
 
 
@@ -6922,6 +7029,8 @@ export const Fa =
         [Keys.category.components.fetch.iframe.examples.fixedHeight.description, "آی‌فریم با ارتفاع ثابت پیکربندی‌شده"],
         [Keys.category.components.layout.name, "چیدمان"],
         [Keys.category.components.layout.description, "چیدمان ردیفی Bootstrap برای محتوای ثابت یا واکنشی با عرض ستون قابل تنظیم"],
+        [Keys.category.components.layout.groups.layout.name, "چیدمان"],
+        [Keys.category.components.layout.groups.layout.description, "تنظیم عرض ستون و ساختار چیدمان"],
         [Keys.category.components.layout.props.col.name, "عرض ستون"],
         [Keys.category.components.layout.props.col.description, "اعمال عرض Bootstrap از col-1 تا col-12 به همه محتواها یا انتخاب CUSTOM برای تعیین عرض هر مورد"],
         [Keys.category.components.layout.props.layoutClass.name, "کلاس‌های چیدمان"],

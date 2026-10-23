@@ -2,6 +2,7 @@ import {ComponentExample} from "@/core_components";
 // --------------------------------
 import {DefaultExample}    from "./Default";
 import {ClickableExample}  from "./Clickable";
+import {WithMenuMoreExample} from "./WithMenuMore";
 
 
 /**
@@ -15,6 +16,7 @@ export const Examples = {
 
     DEFAULT:   DefaultExample,
     CLICKABLE: ClickableExample,
+    WITH_MENU_MORE: WithMenuMoreExample,
 
 } satisfies Record<string, ComponentExample>;
 

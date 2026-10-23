@@ -1021,6 +1021,8 @@ export const Fa =
 
         [Keys.icons.markupHtml.name, "HTML"],
         [Keys.icons.markupHtml.description, "آیکون زبان نشانه‌گذاری HTML"],
+        [Keys.icons.programmingCss.name, "CSS"],
+        [Keys.icons.programmingCss.description, "آیکون شیوه‌نامهٔ CSS"],
         [Keys.icons.programmingJavascript.name, "جاوااسکریپت"],
         [Keys.icons.programmingJavascript.description, "آیکون زبان برنامه‌نویسی جاوااسکریپت"],
         [Keys.icons.programmingTypescript.name, "تایپ‌اسکریپت"],

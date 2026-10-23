@@ -1,6 +1,8 @@
 import {Keys}                from "../../../module_categories/languages";
 // --------------------------------
 import {Props}                   from "./Props";
+import type {LabelGroup}         from "./Props";
+import type {MenuMoreItem}       from "../componentMenuMore/Props";
 import type {
     ExtractMethodsType,
     ExtractMethodsComponentArgs,
@@ -33,6 +35,13 @@ export const Methods = {
         dataArgs: {
             IS_DISABLE: false as boolean,
         },
+    },
+
+    SELECT_MENU_ITEM: {
+        name:        "fn_onSelectLabelMenuItem",
+        description: Keys.category.components.label.methods.selectMenuItem.description,
+        args:        {VALUE: Props.prop_labelGroupSelected},
+        dataArgs:    {} as {ITEM: LabelGroup; PARENT: MenuMoreItem | null},
     },
 
 } as const;

@@ -539,6 +539,7 @@ export const Keys = {
             description: CreateTranslationKey() ,
         },
         markupHtml: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+        programmingCss: { name: CreateTranslationKey(), description: CreateTranslationKey() },
         programmingJavascript: { name: CreateTranslationKey(), description: CreateTranslationKey() },
         programmingTypescript: { name: CreateTranslationKey(), description: CreateTranslationKey() },
         programmingPython: { name: CreateTranslationKey(), description: CreateTranslationKey() },

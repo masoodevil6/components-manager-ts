@@ -16,6 +16,7 @@ import {createInputColorStep} from "./Step";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {ComponentLabelTrait} from "../../traits/componentLabelTrait";
+import {RegisterLabelColorOptionEditor} from "../componentLabel/Props";
 import * as ComponentIcon from "../componentIcon";
 import * as ComponentFloatMenu from "../componentFloatMenu";
 import * as ComponentValidate from "../componentValidate";
@@ -1334,3 +1335,5 @@ export class ComponentInputColor extends ComponentInputColorBase {
         return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
     }
 }
+
+RegisterLabelColorOptionEditor(ComponentInputColor as any, {prop_colorSelector: colorSelector.COLOR});

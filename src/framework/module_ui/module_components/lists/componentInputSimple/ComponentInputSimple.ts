@@ -80,8 +80,8 @@ export class ComponentInputSimple extends ComponentInputSimpleBase {
         ];
         const customBorderStyles = CoreObservable.App.computed((size, width, radius, topLeft, topRight, bottomLeft, bottomRight) => {
             const resolvedWidth = UtilStyle.Css_BorderWidth(width ?? size);
-            const resolvedRadius = UtilStyle.Css_BorderRadius(radius ?? size);
             const zero = UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL);
+            const resolvedRadius = radius == null ? zero : UtilStyle.Css_BorderRadius(radius);
             return {
                 borderTopWidth: UtilStyle.Style_Important(resolvedWidth),
                 borderRightWidth: UtilStyle.Style_Important(resolvedWidth),

@@ -17,6 +17,7 @@ import * as ComponentIcon from "../componentIcon";
 import * as ComponentButton from "../componentButton";
 import * as ComponentValidate from "../componentValidate";
 import {ComponentLabelTrait} from "../../traits/componentLabelTrait";
+import {RegisterLabelTitleOptionEditor} from "../componentLabel/Props";
 import {ButtonAction} from "../componentButton/Props";
 
 type DisposableChild = {dispose?: () => void; disposeStep?: () => void};
@@ -285,3 +286,5 @@ export class ComponentInput extends ComponentInputBase {
         return (this._INPUT_SIMPLE?.getElement() as HTMLElement | undefined)?.querySelector("input") ?? null;
     }
 }
+
+RegisterLabelTitleOptionEditor(ComponentInput as any);

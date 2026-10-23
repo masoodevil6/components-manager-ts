@@ -1,7 +1,7 @@
 export {ComponentLayout as Component} from "./ComponentLayout";
 export {ComponentLayoutBase as Base} from "./ComponentLayoutBase";
 export {Definition} from "./Definition";
-export {LayoutColumn, Props} from "./Props";
+export {LayoutColumn, Props, PropGroups} from "./Props";
 export type {LayoutContentItem} from "./Props";
 export type {PropsType, PropsConfigType} from "./Props";
 export {Schemas} from "./Schemas";

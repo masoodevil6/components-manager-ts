@@ -11,6 +11,7 @@ export {MtSetValue as SetValue} from "./basic/methods/MtSetValue"
 export type {Type_ComponentDefinition    as ComponentDefinition}  from "./tools/defination/Type_ComponentDefinition"
 export type {Interface_ComponentIdentity as ComponentIdentity}    from "./tools/Idetify/Interface_ComponentIdentity"
 export type {Interface_ComponentProp     as ComponentPropEntry}   from "./tools/prop/Interface_ComponentProp"
+export type {Interface_ComponentPropGroup as ComponentPropGroupEntry} from "./tools/propGroup/Interface_ComponentPropGroup"
 export type {Interface_ComponentSchema   as ComponentSchemaEntry} from "./tools/schema/Interface_ComponentSchema"
 export type ComponentProps   = Record<string, import("./tools/prop/Interface_ComponentProp").Interface_ComponentProp<any>>;
 export type ComponentSchemas = Record<string, import("./tools/schema/Interface_ComponentSchema").Interface_ComponentSchema<any, any>>;
@@ -26,6 +27,11 @@ export type {TPartAttrDefault      as PartAttrDefault}      from "./basic/types/
 export type {Type_ComponentProp    as PropType}             from "./tools/prop/Type_ComponentProp"
 export type {Interface_ComponentProp   as PropInterface}    from "./tools/prop/Interface_ComponentProp"
 export      {Define_ComponentProp  as DefineProp}           from "./tools/prop/Define_ComponentProp"
+
+/// Tools -> Prop Group
+export type {Type_ComponentPropGroup      as PropGroupType}      from "./tools/propGroup/Type_ComponentPropGroup"
+export type {Interface_ComponentPropGroup as PropGroupInterface} from "./tools/propGroup/Interface_ComponentPropGroup"
+export      {Define_ComponentPropGroup    as DefinePropGroup}    from "./tools/propGroup/Define_ComponentPropGroup"
 
 /// Tools -> Schema
 export type {Type_ComponentSchema      as SchemaType}       from "./tools/schema/Type_ComponentSchema"

@@ -1019,6 +1019,8 @@ export const En =
         ],
         [Keys.icons.markupHtml.name, "HTML"],
         [Keys.icons.markupHtml.description, "HTML markup language icon"],
+        [Keys.icons.programmingCss.name, "CSS"],
+        [Keys.icons.programmingCss.description, "CSS stylesheet icon"],
         [Keys.icons.programmingJavascript.name, "JavaScript"],
         [Keys.icons.programmingJavascript.description, "JavaScript programming language icon"],
         [Keys.icons.programmingTypescript.name, "TypeScript"],

@@ -204,20 +204,19 @@ export class ComponentTooltip extends ComponentTooltipBase {
 
         const prop_tooltipIcon          = data?.["prop_tooltipIcon"]          ?? bind.prop_tooltipIcon;
         const prop_tooltipIconTitle     = data?.["prop_tooltipIconTitle"]     ?? bind.prop_tooltipIconTitle;
-        const prop_tooltipIconPosition  = data?.["prop_tooltipIconPosition"]  ?? bind.prop_tooltipIconPosition;
 
-        const directionRtl = CoreConfig.Settings.DirectionRtl.observable();
         const styles = CoreObservable.App.computed(
-            (pos: string, rtl: boolean) => {
-                const s: Record<string, string> = {
+            (size: UtilConst.Sizes) => {
+                const iconSize = UtilStyle.Css_IconSize(size) as string;
+                return {
+                    outline:   "none",
                     top:       "50%",
-                    transform: "translateY(-50%)",
+                    transform: "translate(0px, -50%)",
+                    right:     iconSize,
+                    height:    iconSize,
                 };
-                if (rtl) s["left"] = pos;
-                else s["right"] = pos;
-                return s;
             },
-            [prop_tooltipIconPosition, directionRtl],
+            [CoreConfig.Settings.SizeName.observable()],
             this.getScope(),
         );
 

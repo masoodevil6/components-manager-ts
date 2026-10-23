@@ -69,6 +69,9 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
     private _POSITION_OBSERVED_POPUP: HTMLElement | null = null;
     private _PORTALLED_POPUP: HTMLElement | null = null;
     private _PORTAL_PLACEHOLDER: Comment | null = null;
+    private _RELATED_TARGET_CONTAINS: ((target: EventTarget | null) => boolean) | null = null;
+    private _SELECTOR_CLICK_HANDLER: ((event: Event) => void) | null = null;
+    private _SELECTOR_CLICK_ROOT: HTMLElement | null = null;
     private _PORTAL_OFFSET_X = 0;
     private _PORTAL_OFFSET_Y = 0;
 
@@ -108,6 +111,12 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
         this._PORTAL_PLACEHOLDER?.remove();
         this._PORTALLED_POPUP = null;
         this._PORTAL_PLACEHOLDER = null;
+        this._RELATED_TARGET_CONTAINS = null;
+        if (this._SELECTOR_CLICK_HANDLER) {
+            this._SELECTOR_CLICK_ROOT?.removeEventListener("click", this._SELECTOR_CLICK_HANDLER, true);
+            this._SELECTOR_CLICK_HANDLER = null;
+            this._SELECTOR_CLICK_ROOT = null;
+        }
         if (this._POSITION_RESIZE_HANDLER) {
             window.removeEventListener("resize", this._POSITION_RESIZE_HANDLER);
             window.removeEventListener("scroll", this._POSITION_RESIZE_HANDLER, true);
@@ -131,7 +140,12 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
     }
 
     containsTarget(target: EventTarget | null): boolean {
-        return this._isInsideMenu(target, this.getElement() as HTMLElement);
+        return this._isInsideOwnMenu(target, this.getElement() as HTMLElement);
+    }
+
+    /** Treat related popups in a composite menu as part of the same hover region. */
+    setRelatedTargetContains(predicate: ((target: EventTarget | null) => boolean) | null): void {
+        this._RELATED_TARGET_CONTAINS = predicate;
     }
 
 
@@ -208,6 +222,8 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
         const prop_floatShowControlWithSelf  = data?.["prop_floatShowControlWithSelf"]  ?? bind.prop_floatShowControlWithSelf;
 
         const handleSelectorClick = (event: Event) => {
+            const target = event.target as Element | null;
+            if (!target?.closest?.("[data-float-menu-trigger]")) return;
             if ((event.target as Element | null)?.closest?.('[aria-disabled="true"]')) return;
             if (prop_selectorShowType.get() !== ShowTypes.CLICK) return;
             // Click-controlled menus are rendered lazily, so the popup border
@@ -217,6 +233,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
             if (this._IS_SHOW) this.schedulePopupAdjustment();
         };
         const selectorTrigger = CoreReactive.App.part("span", {
+            attrs: {"data-float-menu-trigger": ""},
             styles: {display: "contents", cursor: "pointer"},
             on: {
                 mouseover: (event: MouseEvent) => {
@@ -245,9 +262,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
             },
             children: [prop_selectorContent],
         });
-        selectorTrigger.getElement().addEventListener("click", handleSelectorClick, true);
-
-        return CoreReactive.App.part("section", {
+        const selectorRoot = CoreReactive.App.part("section", {
             attrs: {
                 ...attrsDefault,
             },
@@ -259,17 +274,21 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                 fontSize:   this.getStyleSelectorFontSize(),
                 prop_selectorStyles,
             } as any,
-            classBind: [
-                prop_selectorClass,
-            ],
-            className: [
-                "d-inline-block",
-            ],
+            classBind: [prop_selectorClass],
+            className: ["d-inline-block"],
             children: [
                 selectorTrigger,
                 this.executeSchemaPart(Schemas.SELECTOR_POSITION.part, {}),
             ],
         });
+        if (this._SELECTOR_CLICK_HANDLER) {
+            this._SELECTOR_CLICK_ROOT?.removeEventListener("click", this._SELECTOR_CLICK_HANDLER, true);
+        }
+        this._SELECTOR_CLICK_HANDLER = handleSelectorClick;
+        this._SELECTOR_CLICK_ROOT = selectorRoot.getElement() as HTMLElement;
+        this._SELECTOR_CLICK_ROOT.addEventListener("click", handleSelectorClick, true);
+
+        return selectorRoot;
     }
 
 
@@ -294,6 +313,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
         const prop_selectorShowType         = data?.["prop_selectorShowType"]         ?? bind.prop_selectorShowType;
         const prop_floatShowControlWithSelf = data?.["prop_floatShowControlWithSelf"] ?? bind.prop_floatShowControlWithSelf;
         const prop_floatIsShow              = data?.["prop_floatIsShow"]              ?? bind.prop_floatIsShow;
+        const prop_floatUsePortal           = data?.["prop_floatUsePortal"]           ?? bind.prop_floatUsePortal;
 
         // Plan 11.1 fix — showObservable:
         //   floatShowControlWithSelf=true  → returns floatIsShow (controlled by prop)
@@ -303,13 +323,17 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
         //   قبلاً false برمی‌گرداند که باعث می‌شد conditionWhen popup را اصلاً نسازد
         //   و _BORDER_INSTANCE null می‌شد و hover handlers بی‌اثیر می‌شدند
         const showObservable = CoreObservable.App.computed(
-            (floatShowControlWithSelf, floatIsShow) => {
+            (floatShowControlWithSelf, floatIsShow, usePortal) => {
+                // Keep portalled popup content mounted after its first render.
+                // Recreating the subtree on each open/close can leave the menu's
+                // trigger and popup references out of sync after item selection.
+                if (usePortal) return true;
                 if (floatShowControlWithSelf) {
                     return floatIsShow;
                 }
                 return true;
             },
-            [prop_floatShowControlWithSelf, prop_floatIsShow],
+            [prop_floatShowControlWithSelf, prop_floatIsShow, prop_floatUsePortal],
             this.getScope(),
         );
 
@@ -572,6 +596,9 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
                     : currentRect.width;
 
             popup.style.position = "fixed";
+            // A portalled popup escapes its owner's stacking context. Keep it above
+            // component headers that reserve SELECTOR_POPUP + 1 for their controls.
+            popup.style.zIndex = `${UtilStyle.Css_ZIndex(UtilConst.ZIndex.SELECTOR_POPUP) + 2}`;
             popup.style.left = `${rootRect.left + this._PORTAL_OFFSET_X}px`;
             popup.style.top = `${rootRect.top + this._PORTAL_OFFSET_Y}px`;
             popup.style.right = "auto";
@@ -594,6 +621,10 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
     }
 
     private _isInsideMenu(target: EventTarget | null, root?: Node | null): boolean {
+        return this._isInsideOwnMenu(target, root) || this._RELATED_TARGET_CONTAINS?.(target) === true;
+    }
+
+    private _isInsideOwnMenu(target: EventTarget | null, root?: Node | null): boolean {
         if (!(target instanceof Node)) return false;
         return !!root?.contains(target) || !!this._PORTALLED_POPUP?.contains(target);
     }

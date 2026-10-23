@@ -8,9 +8,41 @@ import type {
     ExtractPropsType,
     ExtractPropsConfigType,
 } from "../../tools/type/TypeHelpers";
+import type {ComponentConstructor} from "@/core_components";
+import type {Interface_ComponentRender} from "@/util_tools";
 // --------------------------------
 import {TooltipDirectionTypes} from "../componentTooltip/Props";
 export {TooltipDirectionTypes} from "../componentTooltip/Props";
+
+export type LabelGroup = {
+    id: string;
+    title: string;
+    action?: string;
+};
+
+type LabelPropGroupsType = {
+    content: CoreComponents.PropGroupInterface;
+    appearance: CoreComponents.PropGroupInterface;
+    tooltip: CoreComponents.PropGroupInterface;
+};
+
+export const PropGroups = CoreComponents.DefinePropGroup<LabelPropGroupsType>({
+    content: {
+        name: Keys.category.components.label.groups.content.name,
+        description: Keys.category.components.label.groups.content.description,
+        col: 2,
+    },
+    appearance: {
+        name: Keys.category.components.label.groups.appearance.name,
+        description: Keys.category.components.label.groups.appearance.description,
+        col: 2,
+    },
+    tooltip: {
+        name: Keys.category.components.label.groups.tooltip.name,
+        description: Keys.category.components.label.groups.tooltip.description,
+        col: 2,
+    },
+});
 
 
 /**
@@ -32,6 +64,8 @@ export const Props = {
         default:      true,
         name:         Keys.category.components.label.props.labelShow.name,
         description:  Keys.category.components.label.props.labelShow.description,
+        OptionShow:   true,
+        OptionGroup:  PropGroups.content,
     }),
 
     /// --- Border ---
@@ -41,13 +75,42 @@ export const Props = {
         default:      UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
         name:         Keys.category.components.label.props.labelBackground.name,
         description:  Keys.category.components.label.props.labelBackground.description,
+        OptionShow:   true,
+        OptionGroup:  PropGroups.appearance,
     }),
 
-    prop_labelRadius: Define_ComponentProp<UtilConst.Sizes>({
+    prop_labelRadius: Define_ComponentProp<UtilConst.Sizes | null>({
         prop:         "prop_labelRadius",
         default:      UtilConst.Sizes.M,
         name:         Keys.category.components.label.props.labelRadius.name,
         description:  Keys.category.components.label.props.labelRadius.description,
+        OptionShow:   true,
+        OptionGroup:  PropGroups.appearance,
+    }),
+
+    prop_labelBorderTopLeftRadiusHas: Define_ComponentProp<boolean>({
+        prop: "prop_labelBorderTopLeftRadiusHas",
+        default: true,
+        name: Keys.category.components.label.props.labelBorderTopLeftRadiusHas.name,
+        description: Keys.category.components.label.props.labelBorderTopLeftRadiusHas.description,
+    }),
+    prop_labelBorderTopRightRadiusHas: Define_ComponentProp<boolean>({
+        prop: "prop_labelBorderTopRightRadiusHas",
+        default: true,
+        name: Keys.category.components.label.props.labelBorderTopRightRadiusHas.name,
+        description: Keys.category.components.label.props.labelBorderTopRightRadiusHas.description,
+    }),
+    prop_labelBorderBottomLeftRadiusHas: Define_ComponentProp<boolean>({
+        prop: "prop_labelBorderBottomLeftRadiusHas",
+        default: true,
+        name: Keys.category.components.label.props.labelBorderBottomLeftRadiusHas.name,
+        description: Keys.category.components.label.props.labelBorderBottomLeftRadiusHas.description,
+    }),
+    prop_labelBorderBottomRightRadiusHas: Define_ComponentProp<boolean>({
+        prop: "prop_labelBorderBottomRightRadiusHas",
+        default: true,
+        name: Keys.category.components.label.props.labelBorderBottomRightRadiusHas.name,
+        description: Keys.category.components.label.props.labelBorderBottomRightRadiusHas.description,
     }),
 
     prop_labelMinWidth: Define_ComponentProp<string | null>({
@@ -55,6 +118,8 @@ export const Props = {
         default:      null,
         name:         Keys.category.components.label.props.labelMinWidth.name,
         description:  Keys.category.components.label.props.labelMinWidth.description,
+        OptionShow:   true,
+        OptionGroup:  PropGroups.appearance,
     }),
 
     /// --- Title ---
@@ -64,6 +129,9 @@ export const Props = {
         default:      null,
         name:         Keys.category.components.label.props.labelTitle.name,
         description:  Keys.category.components.label.props.labelTitle.description,
+        OptionShow:   true,
+        OptionComponentOption: {},
+        OptionGroup:  PropGroups.content,
     }),
 
     prop_labelFor: Define_ComponentProp<string | null>({
@@ -71,6 +139,26 @@ export const Props = {
         default:      null,
         name:         Keys.category.components.label.props.labelFor.name,
         description:  Keys.category.components.label.props.labelFor.description,
+        OptionShow:   true,
+        OptionGroup:  PropGroups.content,
+    }),
+
+    prop_labelGroups: Define_ComponentProp<LabelGroup[] | null>({
+        prop:         "prop_labelGroups",
+        default:      null,
+        name:         Keys.category.components.label.props.labelGroups.name,
+        description:  Keys.category.components.label.props.labelGroups.description,
+        OptionShow:   true,
+        OptionGroup:  PropGroups.content,
+    }),
+
+    prop_labelGroupSelected: Define_ComponentProp<string | null>({
+        prop:         "prop_labelGroupSelected",
+        default:      null,
+        name:         Keys.category.components.label.props.labelGroupSelected.name,
+        description:  Keys.category.components.label.props.labelGroupSelected.description,
+        OptionShow:   true,
+        OptionGroup:  PropGroups.content,
     }),
 
     prop_labelStyle: Define_ComponentProp<Record<string, string>>({
@@ -92,6 +180,8 @@ export const Props = {
         default:      UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
         name:         Keys.category.components.label.props.labelColor.name,
         description:  Keys.category.components.label.props.labelColor.description,
+        OptionShow:   true,
+        OptionGroup:  PropGroups.appearance,
     }),
 
     /// --- Tooltip ---
@@ -108,6 +198,8 @@ export const Props = {
         default:      null,
         name:         Keys.category.components.label.props.labelTooltipDescription.name,
         description:  Keys.category.components.label.props.labelTooltipDescription.description,
+        OptionShow:   true,
+        OptionGroup:  PropGroups.tooltip,
     }),
 
     prop_labelTooltipBackground: Define_ComponentProp<string | null>({
@@ -115,6 +207,8 @@ export const Props = {
         default:      UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1),
         name:         Keys.category.components.label.props.labelTooltipBackground.name,
         description:  Keys.category.components.label.props.labelTooltipBackground.description,
+        OptionShow:   true,
+        OptionGroup:  PropGroups.tooltip,
     }),
 
     prop_labelTooltipColor: Define_ComponentProp<string | null>({
@@ -123,6 +217,8 @@ export const Props = {
         default:      UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1),
         name:         Keys.category.components.label.props.labelTooltipColor.name,
         description:  Keys.category.components.label.props.labelTooltipColor.description,
+        OptionShow:   true,
+        OptionGroup:  PropGroups.tooltip,
     }),
 
     prop_labelTooltipPosition: Define_ComponentProp<ReturnType<typeof UtilStyle.Css_SizeUnit>>({
@@ -137,9 +233,36 @@ export const Props = {
         default:      TooltipDirectionTypes.BOTTOM,
         name:         Keys.category.components.label.props.labelTooltipDirection.name,
         description:  Keys.category.components.label.props.labelTooltipDirection.description,
+        OptionShow:   true,
+        OptionGroup:  PropGroups.tooltip,
     }),
 
 } satisfies CoreComponents.ComponentProps;
+
+/** Inject the text editor after ComponentInput is initialized, avoiding a module cycle. */
+export function RegisterLabelTitleOptionEditor(component: ComponentConstructor): void {
+    Props.prop_labelTitle.OptionComponentSelector = component;
+}
+
+export function RegisterLabelColorOptionEditor(
+    component: ComponentConstructor,
+    options: Record<string, any> = {},
+): void {
+    for (const prop of [
+        Props.prop_labelBackground,
+        Props.prop_labelColor,
+        Props.prop_labelTooltipBackground,
+        Props.prop_labelTooltipColor,
+    ]) {
+        prop.OptionComponentSelector = component;
+        prop.OptionComponentOption = options;
+    }
+}
+
+export function RegisterLabelRadiusOptionEditor(render: Interface_ComponentRender<ComponentConstructor>): void {
+    Props.prop_labelRadius.OptionComponentSelector = render.OptionComponentSelector;
+    Props.prop_labelRadius.OptionComponentOption = render.OptionComponentOption;
+}
 
 
 /**

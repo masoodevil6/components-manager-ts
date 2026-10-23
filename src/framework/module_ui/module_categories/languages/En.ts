@@ -646,6 +646,20 @@ export const En =
         [Keys.category.components.basic.elementCreator.props.component.description, "Component class or category component reference to render."],
         [Keys.category.components.basic.elementCreator.props.componentProperties.name, "Component properties"],
         [Keys.category.components.basic.elementCreator.props.componentProperties.description, "Configuration passed to the selected component."],
+        [Keys.category.components.basic.elementCreator.props.hasHeaderSetting.name, "Show header settings"],
+        [Keys.category.components.basic.elementCreator.props.hasHeaderSetting.description, "Show the settings option in the edit header."],
+        [Keys.category.components.basic.elementCreator.props.hasHeaderDelete.name, "Show header delete"],
+        [Keys.category.components.basic.elementCreator.props.hasHeaderDelete.description, "Show the delete option in the edit header."],
+        [Keys.category.components.basic.elementCreator.props.hasHeaderColumn.name, "Show header column"],
+        [Keys.category.components.basic.elementCreator.props.hasHeaderColumn.description, "Show the column-width option in the edit header."],
+        [Keys.category.components.basic.elementCreator.props.hasTabComponent.name, "Show Component tab"],
+        [Keys.category.components.basic.elementCreator.props.hasTabComponent.description, "Show the component-selection tab in the SETTING_EDIT window."],
+        [Keys.category.components.basic.elementCreator.props.hasTabProps.name, "Show Props tab"],
+        [Keys.category.components.basic.elementCreator.props.hasTabProps.description, "Show the component-properties tab in the SETTING_EDIT window."],
+        [Keys.category.components.basic.elementCreator.groups.header.name, "Header options"],
+        [Keys.category.components.basic.elementCreator.groups.header.description, "Choose which options appear in the edit header."],
+        [Keys.category.components.basic.elementCreator.groups.settingsWindow.name, "Settings window tabs"],
+        [Keys.category.components.basic.elementCreator.groups.settingsWindow.description, "Choose which tabs appear in the SETTING_EDIT window."],
         [Keys.category.components.basic.elementCreator.schemas.render.name, "Rendered component"],
         [Keys.category.components.basic.elementCreator.schemas.render.description, "Settings and rendered instance of the selected component."],
         [Keys.category.components.basic.elementCreator.examples.render.name, "Render mode"],
@@ -654,6 +668,37 @@ export const En =
         [Keys.category.components.basic.elementCreator.examples.edit.description, "Renders the reference component inside its editing controls."],
         [Keys.category.components.basic.elementCreator.examples.setting.name, "Settings mode"],
         [Keys.category.components.basic.elementCreator.examples.setting.description, "Opens the reference component settings window from a button."],
+        [Keys.category.components.basic.layoutCreator.name, "Layout Creator"],
+        [Keys.category.components.basic.layoutCreator.description, "A starter component for building layouts."],
+        [Keys.category.components.basic.layoutCreator.props.mode.name, "Mode"],
+        [Keys.category.components.basic.layoutCreator.props.mode.description, "Choose whether to render the layout creator or show its editing frame."],
+        [Keys.category.components.basic.layoutCreator.editor.addColumn, "Add column"],
+        [Keys.category.components.basic.layoutCreator.methods.deleteLayout.name, "Delete layout"],
+        [Keys.category.components.basic.layoutCreator.methods.deleteLayout.description, "Called after deletion of the main layout is confirmed."],
+        [Keys.category.components.basic.layoutCreator.methods.deleteColumn.name, "Delete column"],
+        [Keys.category.components.basic.layoutCreator.methods.deleteColumn.description, "Called after a column deletion is confirmed, with its zero-based index."],
+        [Keys.category.components.basic.layoutCreator.schemas.render.name, "Layout creator content"],
+        [Keys.category.components.basic.layoutCreator.schemas.render.description, "The ComponentLayout column editors and their selected mode."],
+        [Keys.category.components.basic.layoutCreator.examples.render.name, "Render mode"],
+        [Keys.category.components.basic.layoutCreator.examples.render.description, "Renders the configured ComponentLayout columns in render mode."],
+        [Keys.category.components.basic.layoutCreator.examples.edit.name, "Edit mode"],
+        [Keys.category.components.basic.layoutCreator.examples.edit.description, "Renders editable ComponentLayout columns with an add-column tile."],
+
+        /// Components -> Basic -> Styles
+        [Keys.category.components.basic.styles.groups.margin.name, "Margin"],
+        [Keys.category.components.basic.styles.groups.margin.description, "Set the top, right, bottom, and left margins."],
+        [Keys.category.components.basic.styles.props.marginTop.name, "Margin top"],
+        [Keys.category.components.basic.styles.props.marginTop.description, "Set the top margin size."],
+        [Keys.category.components.basic.styles.props.marginRight.name, "Margin right"],
+        [Keys.category.components.basic.styles.props.marginRight.description, "Set the right margin size."],
+        [Keys.category.components.basic.styles.props.marginBottom.name, "Margin bottom"],
+        [Keys.category.components.basic.styles.props.marginBottom.description, "Set the bottom margin size."],
+        [Keys.category.components.basic.styles.props.marginLeft.name, "Margin left"],
+        [Keys.category.components.basic.styles.props.marginLeft.description, "Set the left margin size."],
+        [Keys.category.components.basic.styles.schemas.styles.name, "Style preview"],
+        [Keys.category.components.basic.styles.schemas.styles.description, "Provides four margin controls and previews their effect on Hello World."],
+        [Keys.category.components.basic.styles.examples.default.name, "Default"],
+        [Keys.category.components.basic.styles.examples.default.description, "Shows the four margin controls and a Hello World preview."],
 
         /// Components -> Basic -> Schemas -> component
         [
@@ -1503,6 +1548,14 @@ export const En =
         [Keys.category.components.inputOtp.examples.default.description, "Display a six-field one-time code input"],
 
         /// Components -> Input
+        [Keys.category.components.inputGroup.name, "Input group"],
+        [Keys.category.components.inputGroup.description, "A group of simple input components arranged in a shared form."],
+        [Keys.category.components.inputGroup.props.inputs.name, "Inputs"],
+        [Keys.category.components.inputGroup.props.inputs.description, "LABEL and INPUT items with a simple component instance or factory and Bootstrap column width."],
+        [Keys.category.components.inputGroup.schemas.form.name, "Form"],
+        [Keys.category.components.inputGroup.schemas.form.description, "Labels and simple input components arranged in the form."],
+        [Keys.category.components.inputGroup.examples.default.name, "Default"],
+        [Keys.category.components.inputGroup.examples.default.description, "Keeps the component label and shows an inline form label beside two inputs."],
         [Keys.category.components.input.name, "Input"],
         [Keys.category.components.input.description, "A form input with optional icon, add button, and validation"],
         [Keys.category.components.input.props.name.name, "Field name"], [Keys.category.components.input.props.name.description, "Form name for the input"],
@@ -1518,7 +1571,7 @@ export const En =
         [Keys.category.components.input.props.inputBorderColor.name, "Input border color"], [Keys.category.components.input.props.inputBorderColor.description, "Border color when the input is not focused"],
         [Keys.category.components.input.props.inputBorderColorFocus.name, "Focused border color"], [Keys.category.components.input.props.inputBorderColorFocus.description, "Border color while the input is focused"],
         [Keys.category.components.input.props.inputBorderWidth.name, "Input border width"], [Keys.category.components.input.props.inputBorderWidth.description, "System border width for the input"],
-        [Keys.category.components.input.props.inputBorderRadius.name, "Input border radius"], [Keys.category.components.input.props.inputBorderRadius.description, "System border radius for the input"],
+        [Keys.category.components.input.props.inputBorderRadius.name, "Input border radius"], [Keys.category.components.input.props.inputBorderRadius.description, "System border radius for the input; null removes the radius"],
         [Keys.category.components.input.props.type.name, "Input type"], [Keys.category.components.input.props.type.description, "Standard input element type"],
         [Keys.category.components.input.props.placeholder.name, "Placeholder"], [Keys.category.components.input.props.placeholder.description, "Text shown while the input is empty"],
         [Keys.category.components.input.props.icon.name, "Icon"], [Keys.category.components.input.props.icon.description, "Optional icon beside the input"],
@@ -1672,7 +1725,7 @@ export const En =
         [Keys.category.components.inputSimple.props.inputBorderColor.name, "Input border color"], [Keys.category.components.inputSimple.props.inputBorderColor.description, "Border color when the input is not focused"],
         [Keys.category.components.inputSimple.props.inputBorderColorFocus.name, "Focused border color"], [Keys.category.components.inputSimple.props.inputBorderColorFocus.description, "Border color while the input is focused"],
         [Keys.category.components.inputSimple.props.inputBorderWidth.name, "Input border width"], [Keys.category.components.inputSimple.props.inputBorderWidth.description, "System border width for the input"],
-        [Keys.category.components.inputSimple.props.inputBorderRadius.name, "Input border radius"], [Keys.category.components.inputSimple.props.inputBorderRadius.description, "System border radius for the input"],
+        [Keys.category.components.inputSimple.props.inputBorderRadius.name, "Input border radius"], [Keys.category.components.inputSimple.props.inputBorderRadius.description, "System border radius for the input; null removes the radius"],
         [Keys.category.components.inputSimple.props.inputType.name, "Input type"],
         [Keys.category.components.inputSimple.props.inputType.description, "Standard input element type"],
         [Keys.category.components.inputSimple.props.inputPlaceholder.name, "Placeholder"],
@@ -4224,6 +4277,12 @@ export const En =
             Keys.category.components.label.description,
             "Clickable label with input binding (for) and tooltip support"
         ],
+        [Keys.category.components.label.groups.content.name, "Content and Display"],
+        [Keys.category.components.label.groups.content.description, "Label text and visibility settings"],
+        [Keys.category.components.label.groups.appearance.name, "Appearance"],
+        [Keys.category.components.label.groups.appearance.description, "Label color and sizing"],
+        [Keys.category.components.label.groups.tooltip.name, "Tooltip"],
+        [Keys.category.components.label.groups.tooltip.description, "Tooltip text and display settings"],
         [
             Keys.category.components.label.props.labelShow.name,
             "Show Label"
@@ -4246,8 +4305,16 @@ export const En =
         ],
         [
             Keys.category.components.label.props.labelRadius.description,
-            "Standard corner radius size of the label"
+            "Standard corner radius size of the label; null removes the radius"
         ],
+        [Keys.category.components.label.props.labelBorderTopLeftRadiusHas.name, "Round top-left corner"],
+        [Keys.category.components.label.props.labelBorderTopLeftRadiusHas.description, "Enable the label's top-left corner radius"],
+        [Keys.category.components.label.props.labelBorderTopRightRadiusHas.name, "Round top-right corner"],
+        [Keys.category.components.label.props.labelBorderTopRightRadiusHas.description, "Enable the label's top-right corner radius"],
+        [Keys.category.components.label.props.labelBorderBottomLeftRadiusHas.name, "Round bottom-left corner"],
+        [Keys.category.components.label.props.labelBorderBottomLeftRadiusHas.description, "Enable the label's bottom-left corner radius"],
+        [Keys.category.components.label.props.labelBorderBottomRightRadiusHas.name, "Round bottom-right corner"],
+        [Keys.category.components.label.props.labelBorderBottomRightRadiusHas.description, "Enable the label's bottom-right corner radius"],
         [
             Keys.category.components.label.props.labelMinWidth.name,
             "Min Width"
@@ -4271,6 +4338,22 @@ export const En =
         [
             Keys.category.components.label.props.labelFor.description,
             "Id of the associated input element (for accessibility)"
+        ],
+        [
+            Keys.category.components.label.props.labelGroups.name,
+            "Header Menu Groups"
+        ],
+        [
+            Keys.category.components.label.props.labelGroups.description,
+            "Selectable groups shown in the label header menu"
+        ],
+        [
+            Keys.category.components.label.props.labelGroupSelected.name,
+            "Selected Header Group"
+        ],
+        [
+            Keys.category.components.label.props.labelGroupSelected.description,
+            "Id of the selected group; defaults to the first group when empty"
         ],
         [
             Keys.category.components.label.props.labelStyle.name,
@@ -4358,7 +4441,7 @@ export const En =
         ],
         [
             Keys.category.components.label.schemas.borderContent.description,
-            "Container of the title and tooltip"
+            "Container of the title, optional menu, and tooltip"
         ],
         [
             Keys.category.components.label.schemas.borderContentTitle.name,
@@ -4367,6 +4450,14 @@ export const En =
         [
             Keys.category.components.label.schemas.borderContentTitle.description,
             "Title with input binding (for) and styles"
+        ],
+        [
+            Keys.category.components.label.schemas.borderContentMenuMore.name,
+            "Header Menu Part"
+        ],
+        [
+            Keys.category.components.label.schemas.borderContentMenuMore.description,
+            "Optional MenuMore displayed between the title and tooltip"
         ],
         [
             Keys.category.components.label.schemas.borderContentTooltip.name,
@@ -4385,6 +4476,14 @@ export const En =
             "Fires when the label is clicked; receives FOR (componentArgs) and IS_DISABLE (dataArgs)"
         ],
         [
+            Keys.category.components.label.methods.selectMenuItem.name,
+            "Select menu child"
+        ],
+        [
+            Keys.category.components.label.methods.selectMenuItem.description,
+            "Fires with the selected child, its parent, and the selected value"
+        ],
+        [
             Keys.category.components.label.examples.default.name,
             "Default Label"
         ],
@@ -4399,6 +4498,14 @@ export const En =
         [
             Keys.category.components.label.examples.clickable.description,
             "Label with a real click callback"
+        ],
+        [
+            Keys.category.components.label.examples.withMenuMore.name,
+            "Label with Header Menu"
+        ],
+        [
+            Keys.category.components.label.examples.withMenuMore.description,
+            "A parent menu option whose selected child updates the parent title and selected value"
         ],
 
 
@@ -6945,6 +7052,8 @@ export const En =
         [Keys.category.components.fetch.iframe.examples.fixedHeight.description, "Iframe using a configured fixed height"],
         [Keys.category.components.layout.name, "Layout"],
         [Keys.category.components.layout.description, "A Bootstrap row layout for static or reactive content with configurable column widths"],
+        [Keys.category.components.layout.groups.layout.name, "Layout"],
+        [Keys.category.components.layout.groups.layout.description, "Column sizing and layout structure"],
         [Keys.category.components.layout.props.col.name, "Column width"],
         [Keys.category.components.layout.props.col.description, "Apply one Bootstrap col-1 to col-12 width to every content item, or use CUSTOM for per-item widths"],
         [Keys.category.components.layout.props.layoutClass.name, "Layout classes"],

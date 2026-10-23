@@ -7,6 +7,7 @@ import {InputSelectOption} from "./inputSelectOption"
 import {InputOtp}       from "./inputOtp"
 import {InputListSelector}  from "./inputListSelector"
 import {Input}       from "./input"
+import {InputGroup} from "./inputGroup"
 import {InputDescription} from "./inputDescription"
 import {InputJson} from "./inputJson"
 import {InputPrice} from "./inputPrice"
@@ -31,6 +32,7 @@ export const Definition : UICategories.TCategoryComponentDefinition = {
         InputOtp,
         InputListSelector,
         Input,
+        InputGroup,
         InputDescription,
         InputJson,
         InputPrice,

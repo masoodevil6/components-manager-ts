@@ -4,6 +4,7 @@ import type {
     ExtractMethodsDataArgs,
     ExtractMethodsConfigType,
 } from "../../tools/type/TypeHelpers";
+import type {LayoutColumn} from "../componentLayout/Props";
 
 export const Methods = {
     CLICK_SETTINGS: {
@@ -17,6 +18,21 @@ export const Methods = {
         description: "Callback after the delete action is confirmed",
         args: {},
         dataArgs: {} as const,
+    },
+    COLUMN_CHANGE: {
+        name: "fn_onColumnChange",
+        description: "Callback when a layout column option is selected",
+        args: {},
+        dataArgs: {COLUMN: null as LayoutColumn | null},
+    },
+    SETTINGS_APPLY: {
+        name: "fn_onSettingsApply",
+        description: "Callback after the reference component settings are applied",
+        args: {},
+        dataArgs: {
+            COMPONENT: null as Function | null,
+            PROPERTIES: {} as Record<string, any>,
+        },
     },
 } as const;
 

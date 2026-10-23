@@ -1,19 +1,21 @@
 import * as CoreReactive   from "@/core_reactive";
 import * as CoreObservable from "@/core_observable";
 import * as CoreConfig     from "@/core_configs";
+import * as UtilConst      from "@/util_consts";
 import * as UtilStyle      from "@/util_styles";
 // --------------------------------
 import {ComponentLabelBase}     from "./ComponentLabelBase";
 import {createLabelStep}        from "./Step";
 import {Schemas}                from "./Schemas";
 import {MethodsConfigType}      from "./Methods";
-import {PropsType}              from "./Props";
+import {PropsType, LabelGroup}   from "./Props";
 import {PartAttrDefault}        from "@/core_components";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {ComponentTooltipTrait}  from "../../traits/componentTooltipTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
 // --------------------------------
 import * as ComponentBorder from "../componentBorder";
+import * as ComponentMenuMore from "../componentMenuMore";
 
 
 /**
@@ -48,6 +50,7 @@ import * as ComponentBorder from "../componentBorder";
  *   - fontSize واکنش‌گرا → computed روی CoreConfig.Settings.SizeName
  */
 export class ComponentLabel extends ComponentLabelBase {
+    private _MENU_MORE: ComponentMenuMore.Component | null = null;
 
 
     constructor(
@@ -76,6 +79,8 @@ export class ComponentLabel extends ComponentLabelBase {
        Tooltip بدون listener JS است — فقط Event Tree پاک می‌شود
     --------------------------------------------- */
     dispose(): void {
+        this._MENU_MORE?.dispose();
+        this._MENU_MORE = null;
         this.disposeStep();
     }
 
@@ -122,6 +127,8 @@ export class ComponentLabel extends ComponentLabelBase {
                 return this.renderLabelContent(attrsDefault, data, extra);
             case Schemas.BORDER_CONTENT_TITLE.part:
                 return this.renderLabelTitle(attrsDefault, data, extra);
+            case Schemas.BORDER_CONTENT_MENU_MORE.part:
+                return this.renderLabelMenuMore(attrsDefault, data);
             case Schemas.BORDER_CONTENT_TOOLTIP.part:
                 return this.renderLabelTooltip(attrsDefault, data, extra);
             default:
@@ -158,6 +165,12 @@ export class ComponentLabel extends ComponentLabelBase {
           const prop_labelShow        = data?.["prop_labelShow"]        ?? bind.prop_labelShow;
           const prop_labelBackground  = data?.["prop_labelBackground"]  ?? bind.prop_labelBackground;
           const prop_labelRadius      = data?.["prop_labelRadius"]      ?? bind.prop_labelRadius;
+          const radiusCornerProps = [
+              data?.["prop_labelBorderTopLeftRadiusHas"] ?? bind.prop_labelBorderTopLeftRadiusHas,
+              data?.["prop_labelBorderTopRightRadiusHas"] ?? bind.prop_labelBorderTopRightRadiusHas,
+              data?.["prop_labelBorderBottomLeftRadiusHas"] ?? bind.prop_labelBorderBottomLeftRadiusHas,
+              data?.["prop_labelBorderBottomRightRadiusHas"] ?? bind.prop_labelBorderBottomRightRadiusHas,
+          ];
           const prop_labelMinWidth    = data?.["prop_labelMinWidth"]    ?? bind.prop_labelMinWidth;
 
           console.log("[DEBUG renderLabelBorder]", {
@@ -175,6 +188,7 @@ export class ComponentLabel extends ComponentLabelBase {
                   return show ? this.buildBorderElement(data, {
                       labelBackground: prop_labelBackground,
                       labelRadius:     prop_labelRadius,
+                      radiusCornerProps,
                       labelMinWidth:   prop_labelMinWidth,
                   }) : null;
               },
@@ -204,6 +218,7 @@ export class ComponentLabel extends ComponentLabelBase {
           label?: {
               labelBackground: CoreObservable.App<any>;
               labelRadius:     CoreObservable.App<any>;
+              radiusCornerProps: CoreObservable.App<any>[];
               labelMinWidth:   CoreObservable.App<any>;
           },
       ): CoreReactive.App {
@@ -212,8 +227,27 @@ export class ComponentLabel extends ComponentLabelBase {
    
           // تزریق radius اختصاصی Label به Border (قابل‌گسترش به استایل‌های دیگر)
           const prop_borderStyles = CoreObservable.App.computed(
-              (radius) => UtilStyle.Style_Important(`border-radius: ${UtilStyle.Css_BorderRadius(radius)}`),
-              [label.labelRadius],
+              (radius, topLeft, topRight, bottomLeft, bottomRight, sizeName) => {
+                  const zero = UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL);
+                  const resolvedRadius = radius == null ? zero : UtilStyle.Css_BorderRadius(radius);
+                  return {
+                      display: "flow-root",
+                      height: UtilStyle.Css_SizeCalc(
+                          UtilStyle.Css_Padding(sizeName) as any,
+                          UtilConst.Operation.ADD,
+                          UtilStyle.Css_Height(sizeName) as any,
+                          UtilConst.Operation.ADD,
+                          UtilStyle.Css_Padding(sizeName) as any,
+                      ),
+                      borderTopLeftRadius: UtilStyle.Style_Important(topLeft ? resolvedRadius : zero),
+                      borderTopRightRadius: UtilStyle.Style_Important(topRight ? resolvedRadius : zero),
+                      borderBottomLeftRadius: UtilStyle.Style_Important(bottomLeft ? resolvedRadius : zero),
+                      borderBottomRightRadius: UtilStyle.Style_Important(bottomRight ? resolvedRadius : zero),
+                      border: null as any,
+                      borderStyle: "none",
+                  };
+              },
+              [label.labelRadius, ...label.radiusCornerProps, CoreConfig.Settings.SizeName.observable()],
               this.getScope(),
           );
    
@@ -223,7 +257,7 @@ export class ComponentLabel extends ComponentLabelBase {
          // مستقیم از ComponentBorder.Component — بدون وابستگی به UiCategory
          return new ComponentBorder.Component(
              {
-                 prop_borderClass:            ["position-relative", "py-0", "px-2"],
+                 prop_borderClass:            ["position-relative", "px-2"],
                  prop_borderStyles:           prop_borderStyles,
                  prop_content:                this.executeSchemaPart(Schemas.BORDER_CONTENT.part),
                  prop_contentBackgroundColor: label.labelBackground,
@@ -244,7 +278,7 @@ export class ComponentLabel extends ComponentLabelBase {
 
     /* ---------------------------------------------
        renderLabelContent — رندر Part BORDER_CONTENT
-       section.position-relative + cursor: pointer + children [TITLE, TOOLTIP]
+       section.position-relative + cursor: pointer + children [TITLE, MENU_MORE, TOOLTIP]
        (Legacy: templateFn_render_borderContent)
 
        Plan 13.1.3 — بازگشت به layout legacy:
@@ -256,21 +290,143 @@ export class ComponentLabel extends ComponentLabelBase {
         extra?:        any,
     ): CoreReactive.App {
 
+        const sizeName = CoreConfig.Settings.SizeName.observable();
+        const contentHeight = CoreObservable.App.computed(
+            (size: UtilConst.Sizes) => UtilStyle.Css_SizeCalc(
+                UtilStyle.Css_Padding(size) as any,
+                UtilConst.Operation.ADD,
+                UtilStyle.Css_Height(size) as any,
+                UtilConst.Operation.ADD,
+                UtilStyle.Css_Padding(size) as any,
+            ),
+            [sizeName],
+            this.getScope(),
+        );
+
         return CoreReactive.App.section({
             attrs: {
                 ...attrsDefault,
             },
+            stylesBind: {
+                height: contentHeight,
+            },
             styles: {
                 cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
+                minWidth: "0",
             },
             className: [
                 "position-relative",
             ],
             children: [
                 this.executeSchemaPart(Schemas.BORDER_CONTENT_TITLE.part),
+                this.executeSchemaPart(Schemas.BORDER_CONTENT_MENU_MORE.part),
                 this.executeSchemaPart(Schemas.BORDER_CONTENT_TOOLTIP.part),
             ],
         });
+    }
+
+
+    protected renderLabelMenuMore(
+        attrsDefault?: PartAttrDefault,
+        data?: Record<string, CoreObservable.App<any>>,
+    ): CoreReactive.App {
+        const bind = this._COMPONENT_PROPS_BIND;
+        const groups = data?.["prop_labelGroups"] ?? bind.prop_labelGroups;
+        const selected = data?.["prop_labelGroupSelected"] ?? bind.prop_labelGroupSelected;
+        const selectedGroupId = CoreObservable.App.computed(
+            (groupList: LabelGroup[] | null, selectedId: string | null) => {
+                const availableGroups = Array.isArray(groupList) ? groupList : [];
+                if (availableGroups.length === 0) return null;
+                if (availableGroups.some((group) => group.id === selectedId)) return selectedId;
+                this.set("prop_labelGroupSelected", availableGroups[0].id);
+                return availableGroups[0].id;
+            },
+            [groups, selected],
+            this.getScope(),
+        );
+        const selectedGroupTitle = CoreObservable.App.computed(
+            (groupList: LabelGroup[] | null, selectedId: string | null) => {
+                const availableGroups = Array.isArray(groupList) ? groupList : [];
+                const selectedGroup = availableGroups.find((group) => group.id === selectedId) ?? availableGroups[0];
+                return selectedGroup?.title ?? "";
+            },
+            [groups, selectedGroupId],
+            this.getScope(),
+        );
+        const displayItems = CoreObservable.App.computed(
+            (groupList: LabelGroup[] | null) => {
+                const availableGroups = Array.isArray(groupList) ? groupList : [];
+                if (availableGroups.length === 0) return [];
+                return [{
+                    id: "label-group-selector",
+                    // Keep the menu tree stable while selection changes. The title
+                    // observable updates the existing trigger instead of rebuilding
+                    // and disposing every floating menu in ComponentMenuMore.
+                    title: selectedGroupTitle as any,
+                    openOn: "click" as const,
+                    children: availableGroups,
+                }];
+            },
+            [groups],
+            this.getScope(),
+        );
+        return CoreObservable.App.conditionWhen(
+            [groups],
+            (groupList: LabelGroup[] | null) => Array.isArray(groupList) && groupList.length > 0,
+            () => {
+                if (!this._MENU_MORE) {
+                    this._MENU_MORE = new ComponentMenuMore.Component(
+                        {
+                            prop_orientation: ComponentMenuMore.MenuMoreOrientation.HORIZONTAL,
+                            prop_isFullWidth: false,
+                            prop_items: displayItems as any,
+                            prop_menuBorder: false,
+                            styles: {
+                                display: "flex",
+                                alignItems: "center",
+                                width: "fit-content",
+                                maxWidth: "100%",
+                                minWidth: "0",
+                                flex: "0 0 auto",
+                            },
+                        } as any,
+                        {
+                            SELECT_ITEM: (event, dataArgs) => {
+                                event.stopPropagation();
+                                const item = dataArgs?.ITEM as ComponentMenuMore.MenuMoreItem | undefined;
+                                if (!item) return;
+                                const availableGroups = groups.get() as LabelGroup[] | null;
+                                const selectedGroup = availableGroups?.find((group) => group.id === item.id);
+                                if (!selectedGroup) return;
+                                this.set("prop_labelGroupSelected", selectedGroup.id);
+                                this.executeMethod("SELECT_MENU_ITEM", event, {
+                                    ITEM: selectedGroup,
+                                    PARENT: dataArgs?.PARENT ?? null,
+                                });
+                            },
+                        } as any,
+                    );
+                }
+
+                return CoreReactive.App.section({
+                    attrs: { ...attrsDefault },
+                    styles: {
+                        position: "absolute",
+                        top: "50%",
+                        transform: "translate(0px, -50%)",
+                        right: "calc(var(--paddingMedium) + var(--heightMedium) + var(--paddingMedium) + 2.5%)",
+                        zIndex: String(UtilStyle.Css_ZIndex(UtilConst.ZIndex.tools_position)),
+                    },
+                    on: { click: (event: Event) => event.stopPropagation() },
+                    children: [this._MENU_MORE.getReactiveElement() as CoreReactive.App],
+                });
+            },
+            () => null,
+            this.getScope(),
+        ) as any;
     }
 
 

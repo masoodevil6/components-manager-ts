@@ -29,6 +29,7 @@ function createMonogram(
 }
 
 export const Html: IconDefinition = createMonogram(Keys.icons.markupHtml.name, Keys.icons.markupHtml.description, "</>", 10);
+export const Css: IconDefinition = createMonogram(Keys.icons.programmingCss.name, Keys.icons.programmingCss.description, "CSS", 7);
 export const JavaScript: IconDefinition = createMonogram(Keys.icons.programmingJavascript.name, Keys.icons.programmingJavascript.description, "JS", 9);
 export const TypeScript: IconDefinition = createMonogram(Keys.icons.programmingTypescript.name, Keys.icons.programmingTypescript.description, "TS", 9);
 

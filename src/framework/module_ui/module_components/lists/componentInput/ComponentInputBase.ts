@@ -10,12 +10,12 @@ import {Definition} from "./Definition";
 export class ComponentInputBase extends CoreComponents.App<PropsType & Record<string, any>, SchemasType, any, MethodsType> {
     protected _COMPONENT_STEP: CoreEvent.TStepInstance<any> | null = null;
 
-    constructor(identity?: {unique?: any; emit?: any; events?: Record<string, any> | null}, step?: CoreEvent.TStepInstance<any>) {
-        super("input", null);
+    constructor(identity?: {unique?: any; emit?: any; events?: Record<string, any> | null}, step?: CoreEvent.TStepInstance<any>, componentName = "input") {
+        super(componentName, null);
         this._COMPONENT_UNIQUE = identity?.unique ?? null;
         this._COMPONENT_EMIT = identity?.emit ?? null;
         this._COMPONENT_STEP = step ?? null;
-        if (step && identity?.unique && typeof (identity.unique as any).identity === "symbol") CoreEvent.SubEvent(identity.unique, "input", step);
+        if (step && identity?.unique && typeof (identity.unique as any).identity === "symbol") CoreEvent.SubEvent(identity.unique, componentName, step);
     }
 
     protected disposeStep(): void {
