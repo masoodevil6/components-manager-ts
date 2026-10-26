@@ -6,12 +6,12 @@ import {Props, type PropsType} from "./Props";
 import {Schemas, type SchemasType} from "./Schemas";
 import {Methods, type MethodsType} from "./Methods";
 
-export class ComponentPageCardInfoBase extends CoreComponents.App<
-    PropsType & Record<string, any>, SchemasType, any, MethodsType
-> {
-    protected _COMPONENT_STEP: CoreEvent.TStepInstance<any> | null = null;
+export class ComponentPageCardInfoBase<TWorkflow extends CoreComponents.ComponentWorkflow<any> = CoreComponents.ComponentWorkflow> extends CoreComponents.App<
+    PropsType & Record<string, any>, SchemasType, any, MethodsType,
+    TWorkflow> {
+    protected _COMPONENT_STEP: TWorkflow | null = null;
 
-    constructor(identity?: {unique?: CoreEvent.TStepRef | null; emit?: CoreEvent.TEmitHandler | null}, step?: CoreEvent.TStepInstance<any>) {
+    constructor(identity?: {unique?: CoreEvent.TStepRef | null; emit?: CoreEvent.TEmitHandler | null}, step?: TWorkflow) {
         super("pageCardInfo", null);
         this._COMPONENT_UNIQUE = identity?.unique ?? null;
         this._COMPONENT_EMIT = identity?.emit ?? null;

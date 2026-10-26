@@ -1,3 +1,4 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 // --------------------------------
 
@@ -8,7 +9,7 @@ import * as CoreEvent from "@/core_event";
  * بدون event داخلی — فقط root step خالی.
  */
 export function createListSelectedScrollerStep() {
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {}
     });
 }

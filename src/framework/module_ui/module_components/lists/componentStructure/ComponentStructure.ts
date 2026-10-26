@@ -9,6 +9,7 @@ import {PropsType}           from "./Props";
 import {SchemasType}         from "./Schemas";
 import {MethodsType}         from "./Methods";
 import {ComponentIdentity}   from "@/core_components";
+import type {ComponentWorkflow} from "@/core_components";
 // --------------------------------
 import {PartAttrDefault}     from "@/core_components";
 
@@ -59,12 +60,14 @@ export class ComponentStructure<
     TProp extends Record<string, any>      = PropsType,
     TSchemas                               = SchemasType,
     TMethods extends Record<string, any>   = MethodsType,
-    TIdentity extends ComponentIdentity    = ComponentIdentity
+    TIdentity extends ComponentIdentity    = ComponentIdentity,
+    TWorkflow extends ComponentWorkflow<any> = ComponentWorkflow
 > extends ComponentStructureBase<
     TProp,
     TSchemas,
     TMethods,
-    TIdentity
+    TIdentity,
+    TWorkflow
 > {
 
 

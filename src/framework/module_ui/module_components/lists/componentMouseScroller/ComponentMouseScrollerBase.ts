@@ -10,34 +10,34 @@ import {Definition}               from "./Definition";
 
 
 /**
- * ComponentMouseScrollerBase — ترکیب config پایه و اختصاصی
+ * ComponentMouseScrollerBase â€” ØªØ±Ú©ÛŒØ¨ config Ù¾Ø§ÛŒÙ‡ Ùˆ Ø§Ø®ØªØµØ§ØµÛŒ
  *
- * ارث از CoreComponents.App (ClComponentBase)
- * base props و schemas از ComponentStructureTrait
+ * Ø§Ø±Ø« Ø§Ø² CoreComponents.App (ClComponentBase)
+ * base props Ùˆ schemas Ø§Ø² ComponentStructureTrait
  *
  * Step Node (Plan 9.1 + 8.2.7):
- *   _COMPONENT_STEP — درخت Workflow داخلی Component (داخلی)
+ *   _COMPONENT_STEP â€” Ø¯Ø±Ø®Øª Workflow Ø¯Ø§Ø®Ù„ÛŒ Component (Ø¯Ø§Ø®Ù„ÛŒ)
  */
-export class ComponentMouseScrollerBase extends CoreComponents.App<
+export class ComponentMouseScrollerBase<TWorkflow extends CoreComponents.ComponentWorkflow<any> = CoreComponents.ComponentWorkflow> extends CoreComponents.App<
     PropsType & Record<string, any>,
     SchemasType,
     any,
-    MethodsType
-> {
+    MethodsType,
+    TWorkflow> {
 
     /**
-     * Step Node — درخت Workflow داخلی ComponentMouseScroller
+     * Step Node â€” Ø¯Ø±Ø®Øª Workflow Ø¯Ø§Ø®Ù„ÛŒ ComponentMouseScroller
      */
-    protected _COMPONENT_STEP: CoreEvent.TStepInstance<any> | null = null;
+    protected _COMPONENT_STEP: TWorkflow | null = null;
 
 
     /**
      * constructor (Plan 8.2.7)
      *
-     * @param componentName — نام Component (default: "mouse-scroller")
-     * @param elId          — شناسه المان (default: null)
-     * @param identity      — بیرونی { unique?, emit?, events? }
-     * @param step          — داخلی (Workflow خاص این Component)
+     * @param componentName â€” Ù†Ø§Ù… Component (default: "mouse-scroller")
+     * @param elId          â€” Ø´Ù†Ø§Ø³Ù‡ Ø§Ù„Ù…Ø§Ù† (default: null)
+     * @param identity      â€” Ø¨ÛŒØ±ÙˆÙ†ÛŒ { unique?, emit?, events? }
+     * @param step          â€” Ø¯Ø§Ø®Ù„ÛŒ (Workflow Ø®Ø§Øµ Ø§ÛŒÙ† Component)
      */
     constructor(
         componentName: string = "mouse-scroller",
@@ -47,7 +47,7 @@ export class ComponentMouseScrollerBase extends CoreComponents.App<
             emit?:   CoreEvent.TEmitHandler | null;
             events?: Record<string, any> | null;
         },
-        step?: CoreEvent.TStepInstance<any>,
+        step?: TWorkflow,
     ) {
         super(componentName, elId);
 
@@ -56,7 +56,7 @@ export class ComponentMouseScrollerBase extends CoreComponents.App<
 
         this._COMPONENT_STEP   = step ?? null;
 
-        // Plan 8.2.7 — SubEvent
+        // Plan 8.2.7 â€” SubEvent
         if (step && identity?.unique && typeof (identity.unique as any).identity === "symbol") {
             CoreEvent.SubEvent(identity.unique as CoreEvent.TStepRef, componentName, step);
         }
@@ -64,7 +64,7 @@ export class ComponentMouseScrollerBase extends CoreComponents.App<
 
 
     /**
-     * Disposal — پاک‌سازی کل subtree از رجیستری CoreEvent (Plan 8.2.7 / 9.1)
+     * Disposal â€” Ù¾Ø§Ú©â€ŒØ³Ø§Ø²ÛŒ Ú©Ù„ subtree Ø§Ø² Ø±Ø¬ÛŒØ³ØªØ±ÛŒ CoreEvent (Plan 8.2.7 / 9.1)
      */
     disposeStep(): void {
         if (this._COMPONENT_STEP) {

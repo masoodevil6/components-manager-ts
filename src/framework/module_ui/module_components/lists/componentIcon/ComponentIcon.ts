@@ -14,39 +14,39 @@ import {createIconStep}                   from "./Step";
 
 
 /**
- * ComponentIcon — کلاس نهایی
+ * ComponentIcon â€” Ú©Ù„Ø§Ø³ Ù†Ù‡Ø§ÛŒÛŒ
  *
- * معماری Composition:
- *   ComponentIcon HAS-A ComponentStructure (نه IS-A)
- *   ComponentStructure در renderContentComponent ساخته می‌شود
- *   و content آن = renderIcon (محتوای اختصاصی ComponentIcon)
+ * Ù…Ø¹Ù…Ø§Ø±ÛŒ Composition:
+ *   ComponentIcon HAS-A ComponentStructure (Ù†Ù‡ IS-A)
+ *   ComponentStructure Ø¯Ø± renderContentComponent Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯
+ *   Ùˆ content Ø¢Ù† = renderIcon (Ù…Ø­ØªÙˆØ§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ ComponentIcon)
  *
- * Constructor امضا: (config, methods, identity?)
- *   config  — شامل propهای پایه (classList, prop_show, ...) + propهای اختصاصی (prop_icon, ...)
- *   methods — methodهای اختصاصی (CLICK, HOVER, BLUR)
- *   identity — { unique?, emit?, events? }
+ * Constructor Ø§Ù…Ø¶Ø§: (config, methods, identity?)
+ *   config  â€” Ø´Ø§Ù…Ù„ propÙ‡Ø§ÛŒ Ù¾Ø§ÛŒÙ‡ (classList, prop_show, ...) + propÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (prop_icon, ...)
+ *   methods â€” methodÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (CLICK, HOVER, BLUR)
+ *   identity â€” { unique?, emit?, events? }
  *
-* هر prop در config می‌تواند مقدار خام یا Observable باشد (PropsConfigType) —
-* معماری renderComponent هر دو را می‌پذیرد (if Observable → store directly).
-* این امکان Component والد (مثل ComponentButton) را می‌دهد propها را به‌صورت
-* Observable از _COMPONENT_PROPS_BIND خودش به‌طور reactive forward کند.
+* Ù‡Ø± prop Ø¯Ø± config Ù…ÛŒâ€ŒØªÙˆØ§Ù†Ø¯ Ù…Ù‚Ø¯Ø§Ø± Ø®Ø§Ù… ÛŒØ§ Observable Ø¨Ø§Ø´Ø¯ (PropsConfigType) â€”
+* Ù…Ø¹Ù…Ø§Ø±ÛŒ renderComponent Ù‡Ø± Ø¯Ùˆ Ø±Ø§ Ù…ÛŒâ€ŒÙ¾Ø°ÛŒØ±Ø¯ (if Observable â†’ store directly).
+* Ø§ÛŒÙ† Ø§Ù…Ú©Ø§Ù† Component ÙˆØ§Ù„Ø¯ (Ù…Ø«Ù„ ComponentButton) Ø±Ø§ Ù…ÛŒâ€ŒØ¯Ù‡Ø¯ propÙ‡Ø§ Ø±Ø§ Ø¨Ù‡â€ŒØµÙˆØ±Øª
+* Observable Ø§Ø² _COMPONENT_PROPS_BIND Ø®ÙˆØ¯Ø´ Ø¨Ù‡â€ŒØ·ÙˆØ± reactive forward Ú©Ù†Ø¯.
 *
- * Plan 8.2.7 — Step داخلی در constructor ساخته می‌شود (نه در render cycle).
- *   هر Instance Step خودش را دارد (createIconStep factory) — identity یکتا،
- *   تداخل در registerEmit رفع شد.
- *   Base در constructor از طریق CoreEvent.SubEvent آن را به Parent Step متصل می‌کند.
+ * Plan 8.2.7 â€” Step Ø¯Ø§Ø®Ù„ÛŒ Ø¯Ø± constructor Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯ (Ù†Ù‡ Ø¯Ø± render cycle).
+ *   Ù‡Ø± Instance Step Ø®ÙˆØ¯Ø´ Ø±Ø§ Ø¯Ø§Ø±Ø¯ (createIconStep factory) â€” identity ÛŒÚ©ØªØ§ØŒ
+ *   ØªØ¯Ø§Ø®Ù„ Ø¯Ø± registerEmit Ø±ÙØ¹ Ø´Ø¯.
+ *   Base Ø¯Ø± constructor Ø§Ø² Ø·Ø±ÛŒÙ‚ CoreEvent.SubEvent Ø¢Ù† Ø±Ø§ Ø¨Ù‡ Parent Step Ù…ØªØµÙ„ Ù…ÛŒâ€ŒÚ©Ù†Ø¯.
  *
- * Plan 9.1 — Event Scope Ownership:
- *   هر ComponentIcon مالک Step Instance خودش است.
- *   disposal فقط Event resources متعلق به همین Component را آزاد می‌کند.
+ * Plan 9.1 â€” Event Scope Ownership:
+ *   Ù‡Ø± ComponentIcon Ù…Ø§Ù„Ú© Step Instance Ø®ÙˆØ¯Ø´ Ø§Ø³Øª.
+ *   disposal ÙÙ‚Ø· Event resources Ù…ØªØ¹Ù„Ù‚ Ø¨Ù‡ Ù‡Ù…ÛŒÙ† Component Ø±Ø§ Ø¢Ø²Ø§Ø¯ Ù…ÛŒâ€ŒÚ©Ù†Ø¯.
  *
- * Plan 8.2.10 — renderContentComponent از Trait استفاده می‌کند:
+ * Plan 8.2.10 â€” renderContentComponent Ø§Ø² Trait Ø§Ø³ØªÙØ§Ø¯Ù‡ Ù…ÛŒâ€ŒÚ©Ù†Ø¯:
  *   ComponentStructureTrait.renderContent(this, () => this.renderIcon())
- *   Trait نام کامپوننت را از this._COMPONENT_NAME می‌خواند و به
- *   ComponentStructure.create(componentName, ...) پاس می‌دهد.
- *   خروجی: <component-icon><section>...</section></component-icon>
+ *   Trait Ù†Ø§Ù… Ú©Ø§Ù…Ù¾ÙˆÙ†Ù†Øª Ø±Ø§ Ø§Ø² this._COMPONENT_NAME Ù…ÛŒâ€ŒØ®ÙˆØ§Ù†Ø¯ Ùˆ Ø¨Ù‡
+ *   ComponentStructure.create(componentName, ...) Ù¾Ø§Ø³ Ù…ÛŒâ€ŒØ¯Ù‡Ø¯.
+ *   Ø®Ø±ÙˆØ¬ÛŒ: <component-icon><section>...</section></component-icon>
  */
- export class ComponentIcon extends ComponentIconBase {
+ export class ComponentIcon extends ComponentIconBase<ReturnType<typeof createIconStep>>{
 
   constructor(
      config?:  Partial<StructurePropsType & IconPropsConfigType>,
@@ -79,8 +79,8 @@ import {createIconStep}                   from "./Step";
 
 
     /* ---------------------------------------------
-       renderManagerComponent — Routing
-       Plan 11.2 — COMPONENT + STRUCTURE از Trait، بقیه اختصاصی
+       renderManagerComponent â€” Routing
+       Plan 11.2 â€” COMPONENT + STRUCTURE Ø§Ø² TraitØŒ Ø¨Ù‚ÛŒÙ‡ Ø§Ø®ØªØµØ§ØµÛŒ
     --------------------------------------------- */
     override renderManagerComponent(
         partName:     string,
@@ -89,12 +89,12 @@ import {createIconStep}                   from "./Step";
         extra:        any,
     ): CoreReactive.App {
         switch (partName) {
-            // --- Plan 11.2: Schema پایه ---
+            // --- Plan 11.2: Schema Ù¾Ø§ÛŒÙ‡ ---
             case ComponentStructureTrait.schemas.COMPONENT.part:
                 return ComponentStructureTrait.renderComponentSchema(this, attrsDefault, data);
             case ComponentStructureTrait.schemas.STRUCTURE.part:
                 return ComponentStructureTrait.renderStructureSchema(this, attrsDefault, data);
-            // --- Schema اختصاصی ---
+            // --- Schema Ø§Ø®ØªØµØ§ØµÛŒ ---
             case Schemas.ICON.part:
                 return this.renderIcon(attrsDefault, data, extra);
             default:
@@ -137,7 +137,7 @@ import {createIconStep}                   from "./Step";
                     event.preventDefault();
                     this.executeMethod("CLICK", event, {});
                 },
-                // hover/blur: DOM → Method API (بدون Event Engine routing)
+                // hover/blur: DOM â†’ Method API (Ø¨Ø¯ÙˆÙ† Event Engine routing)
                 mouseenter: (event: Event) => {
                     event.preventDefault();
                     this.executeMethod("HOVER", event, {});

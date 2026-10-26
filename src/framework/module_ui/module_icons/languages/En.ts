@@ -1051,4 +1051,6 @@ export const En =
         ],
 
 
+        [Keys.icons.eventWorkflow.name, "Event workflow"],
+        [Keys.icons.eventWorkflow.description, "Connected nodes representing an event workflow"],
     ]);

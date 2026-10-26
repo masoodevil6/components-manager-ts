@@ -22,25 +22,25 @@ import * as ComponentIcon   from "../componentIcon";
 
 
 /**
- * ComponentTabs — کامپوننت تب‌ها (Plan 15.1.0 — بازیگیری کامل Behavior Legacy)
+ * ComponentTabs â€” Ú©Ø§Ù…Ù¾ÙˆÙ†Ù†Øª ØªØ¨â€ŒÙ‡Ø§ (Plan 15.1.0 â€” Ø¨Ø§Ø²ÛŒÚ¯ÛŒØ±ÛŒ Ú©Ø§Ù…Ù„ Behavior Legacy)
  *
- * معماری Composition:
- *   ComponentTabs HAS-A ComponentBorder (برای tab border و body border)
- *   ComponentTabs HAS-A ComponentIcon (برای آیکون هر tab)
+ * Ù…Ø¹Ù…Ø§Ø±ÛŒ Composition:
+ *   ComponentTabs HAS-A ComponentBorder (Ø¨Ø±Ø§ÛŒ tab border Ùˆ body border)
+ *   ComponentTabs HAS-A ComponentIcon (Ø¨Ø±Ø§ÛŒ Ø¢ÛŒÚ©ÙˆÙ† Ù‡Ø± tab)
  *
- * Constructor امضا: (config, methods, identity?)
- *   config  — شامل propهای پایه + propهای اختصاصی
- *   methods — methodهای اختصاصی (CLICK_TAB, CLICK_BODY)
- *   identity — { unique?, emit?, events? }
+ * Constructor Ø§Ù…Ø¶Ø§: (config, methods, identity?)
+ *   config  â€” Ø´Ø§Ù…Ù„ propÙ‡Ø§ÛŒ Ù¾Ø§ÛŒÙ‡ + propÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ
+ *   methods â€” methodÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (CLICK_TAB, CLICK_BODY)
+ *   identity â€” { unique?, emit?, events? }
  *
- * بازیگیری Behavior از Legacy:
- *   - prop_tabsView: full_width → row + col-md-N / float → float-start
- *   - prop_tabSelected → تغییر رنگ background و color title
- *   - click روی tab border → set prop_tabSelected + executeMethod CLICK_TAB
- *   - click روی body border → executeMethod CLICK_BODY
- *   - body show/hide با mapBoolean(prop_tabSelected == itemTab.id)
+ * Ø¨Ø§Ø²ÛŒÚ¯ÛŒØ±ÛŒ Behavior Ø§Ø² Legacy:
+ *   - prop_tabsView: full_width â†’ row + col-md-N / float â†’ float-start
+ *   - prop_tabSelected â†’ ØªØºÛŒÛŒØ± Ø±Ù†Ú¯ background Ùˆ color title
+ *   - click Ø±ÙˆÛŒ tab border â†’ set prop_tabSelected + executeMethod CLICK_TAB
+ *   - click Ø±ÙˆÛŒ body border â†’ executeMethod CLICK_BODY
+ *   - body show/hide Ø¨Ø§ mapBoolean(prop_tabSelected == itemTab.id)
  */
-export class ComponentTabs extends ComponentTabsBase {
+export class ComponentTabs extends ComponentTabsBase<ReturnType<typeof createTabsStep>>{
 
     constructor(
         config?:  Partial<StructurePropsType & PropsType>,
@@ -85,12 +85,12 @@ export class ComponentTabs extends ComponentTabsBase {
     ): CoreReactive.App {
 
         switch (partName) {
-            // --- Plan 11.2: Schema پایه ---
+            // --- Plan 11.2: Schema Ù¾Ø§ÛŒÙ‡ ---
             case ComponentStructureTrait.schemas.COMPONENT.part:
                 return ComponentStructureTrait.renderComponentSchema(this, attrsDefault, data);
             case ComponentStructureTrait.schemas.STRUCTURE.part:
                 return ComponentStructureTrait.renderStructureSchema(this, attrsDefault, data);
-            // --- Schema اختصاصی ---
+            // --- Schema Ø§Ø®ØªØµØ§ØµÛŒ ---
             case Schemas.FORM.part:
                 return this.renderForm(attrsDefault, data, extra);
             case Schemas.FORM_TABS.part:
@@ -114,7 +114,7 @@ export class ComponentTabs extends ComponentTabsBase {
 
 
     /* ---------------------------------------------
-       renderForm — ظرف اصلی: FORM_TABS + FORM_BODYS
+       renderForm â€” Ø¸Ø±Ù Ø§ØµÙ„ÛŒ: FORM_TABS + FORM_BODYS
     --------------------------------------------- */
     protected renderForm(
         attrsDefault?: PartAttrDefault,
@@ -132,9 +132,9 @@ export class ComponentTabs extends ComponentTabsBase {
 
 
     /* ---------------------------------------------
-       renderFormTabs — لیست tab headers
-       full_width → row + col-md-N (N بر اساس تعداد)
-       float → float-start
+       renderFormTabs â€” Ù„ÛŒØ³Øª tab headers
+       full_width â†’ row + col-md-N (N Ø¨Ø± Ø§Ø³Ø§Ø³ ØªØ¹Ø¯Ø§Ø¯)
+       float â†’ float-start
     --------------------------------------------- */
     protected renderFormTabs(
         attrsDefault?: PartAttrDefault,
@@ -234,8 +234,8 @@ export class ComponentTabs extends ComponentTabsBase {
 
 
     /* ---------------------------------------------
-       renderFormTabsBorder — ComponentBorder برای هر tab
-       click → set prop_tabSelected + executeMethod CLICK_TAB
+       renderFormTabsBorder â€” ComponentBorder Ø¨Ø±Ø§ÛŒ Ù‡Ø± tab
+       click â†’ set prop_tabSelected + executeMethod CLICK_TAB
     --------------------------------------------- */
     protected renderFormTabsBorder(
         attrsDefault?: PartAttrDefault,
@@ -306,7 +306,7 @@ export class ComponentTabs extends ComponentTabsBase {
 
 
     /* ---------------------------------------------
-       renderFormTabsBorderContent — section.row + [TITLE, ICON]
+       renderFormTabsBorderContent â€” section.row + [TITLE, ICON]
     --------------------------------------------- */
     protected renderFormTabsBorderContent(
         attrsDefault?: PartAttrDefault,
@@ -370,7 +370,7 @@ export class ComponentTabs extends ComponentTabsBase {
 
 
     /* ---------------------------------------------
-       renderFormTabsBorderContentIcon — ComponentIcon
+       renderFormTabsBorderContentIcon â€” ComponentIcon
     --------------------------------------------- */
     protected renderFormTabsBorderContentIcon(
         attrsDefault?: PartAttrDefault,
@@ -412,7 +412,7 @@ export class ComponentTabs extends ComponentTabsBase {
 
 
     /* ---------------------------------------------
-       renderFormTabsBorderContentTitle — <b> + color bind
+       renderFormTabsBorderContentTitle â€” <b> + color bind
     --------------------------------------------- */
     protected renderFormTabsBorderContentTitle(
         attrsDefault?: PartAttrDefault,
@@ -479,7 +479,7 @@ export class ComponentTabs extends ComponentTabsBase {
 
 
     /* ---------------------------------------------
-       renderFormBodys — لیست body ها
+       renderFormBodys â€” Ù„ÛŒØ³Øª body Ù‡Ø§
     --------------------------------------------- */
     protected renderFormBodys(
         attrsDefault?: PartAttrDefault,
@@ -522,9 +522,9 @@ export class ComponentTabs extends ComponentTabsBase {
 
 
     /* ---------------------------------------------
-       renderFormBodysBorder — ComponentBorder برای body
-       show/hide با prop_tabSelected == itemTab.id
-       click → executeMethod CLICK_BODY
+       renderFormBodysBorder â€” ComponentBorder Ø¨Ø±Ø§ÛŒ body
+       show/hide Ø¨Ø§ prop_tabSelected == itemTab.id
+       click â†’ executeMethod CLICK_BODY
     --------------------------------------------- */
     protected renderFormBodysBorder(
         attrsDefault?: PartAttrDefault,
@@ -577,7 +577,7 @@ export class ComponentTabs extends ComponentTabsBase {
 
 
     /* ---------------------------------------------
-       renderEmptyContent — fallback خالی
+       renderEmptyContent â€” fallback Ø®Ø§Ù„ÛŒ
     --------------------------------------------- */
     public renderEmptyContent(
         attrsDefault?: PartAttrDefault,

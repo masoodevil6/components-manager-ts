@@ -23,32 +23,32 @@ import * as ComponentIcon from "../componentIcon";
 
 
 /**
- * ComponentButton — کلاس نهایی (Plan 9.1.1 — بازیابی کامل Behavior Legacy)
+ * ComponentButton â€” Ú©Ù„Ø§Ø³ Ù†Ù‡Ø§ÛŒÛŒ (Plan 9.1.1 â€” Ø¨Ø§Ø²ÛŒØ§Ø¨ÛŒ Ú©Ø§Ù…Ù„ Behavior Legacy)
  *
- * معماری Composition:
- *   ComponentButton HAS-A ComponentStructure (نه IS-A)
- *   ComponentStructure در renderContentComponent ساخته می‌شود
- *   و content آن = renderButton (محتوای اختصاصی ComponentButton)
+ * Ù…Ø¹Ù…Ø§Ø±ÛŒ Composition:
+ *   ComponentButton HAS-A ComponentStructure (Ù†Ù‡ IS-A)
+ *   ComponentStructure Ø¯Ø± renderContentComponent Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯
+ *   Ùˆ content Ø¢Ù† = renderButton (Ù…Ø­ØªÙˆØ§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ ComponentButton)
  *
- * Constructor امضا: (config, methods, identity?)
- *   config  — شامل propهای پایه + propهای اختصاصی (prop_btnTitle, ...)
- *   methods — methodهای اختصاصی (CLICK, HOVER, BLUR)
- *   identity — { unique?, emit?, events? }
+ * Constructor Ø§Ù…Ø¶Ø§: (config, methods, identity?)
+ *   config  â€” Ø´Ø§Ù…Ù„ propÙ‡Ø§ÛŒ Ù¾Ø§ÛŒÙ‡ + propÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (prop_btnTitle, ...)
+ *   methods â€” methodÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (CLICK, HOVER, BLUR)
+ *   identity â€” { unique?, emit?, events? }
  *
- * Plan 9.1.1 — Behavior بازیابی‌شده از Legacy:
- *   ۱. رنگ‌های semantic چهارگانه (SUBMIT→primary، BACK→secondary، CANCEL→error، CUSTOM→prop)
- *   ۲. hover engine — با CoreObservable.App<boolean> داخلی (معادل el.hover قدیمی)
- *   ۳. borderRadius با منطق DEFAULT + RTL-awareness (CSS logical properties)
- *   ۴. رندر شرطی آیکون (conditionWhen) — با آیکون: title+icon، بدون آیکون: فقط title
- *   ۵. رنگ title بر اساس semantic + hover
- *   ۶. height بر اساس prop + سایز سراسری
- *   ۷. CUSTOM semantic → رنگ‌ها از propهای سفارشی
+ * Plan 9.1.1 â€” Behavior Ø¨Ø§Ø²ÛŒØ§Ø¨ÛŒâ€ŒØ´Ø¯Ù‡ Ø§Ø² Legacy:
+ *   Û±. Ø±Ù†Ú¯â€ŒÙ‡Ø§ÛŒ semantic Ú†Ù‡Ø§Ø±Ú¯Ø§Ù†Ù‡ (SUBMITâ†’primaryØŒ BACKâ†’secondaryØŒ CANCELâ†’errorØŒ CUSTOMâ†’prop)
+ *   Û². hover engine â€” Ø¨Ø§ CoreObservable.App<boolean> Ø¯Ø§Ø®Ù„ÛŒ (Ù…Ø¹Ø§Ø¯Ù„ el.hover Ù‚Ø¯ÛŒÙ…ÛŒ)
+ *   Û³. borderRadius Ø¨Ø§ Ù…Ù†Ø·Ù‚ DEFAULT + RTL-awareness (CSS logical properties)
+ *   Û´. Ø±Ù†Ø¯Ø± Ø´Ø±Ø·ÛŒ Ø¢ÛŒÚ©ÙˆÙ† (conditionWhen) â€” Ø¨Ø§ Ø¢ÛŒÚ©ÙˆÙ†: title+iconØŒ Ø¨Ø¯ÙˆÙ† Ø¢ÛŒÚ©ÙˆÙ†: ÙÙ‚Ø· title
+ *   Ûµ. Ø±Ù†Ú¯ title Ø¨Ø± Ø§Ø³Ø§Ø³ semantic + hover
+ *   Û¶. height Ø¨Ø± Ø§Ø³Ø§Ø³ prop + Ø³Ø§ÛŒØ² Ø³Ø±Ø§Ø³Ø±ÛŒ
+ *   Û·. CUSTOM semantic â†’ Ø±Ù†Ú¯â€ŒÙ‡Ø§ Ø§Ø² propÙ‡Ø§ÛŒ Ø³ÙØ§Ø±Ø´ÛŒ
  */
-export class ComponentButton extends ComponentButtonBase {
+export class ComponentButton extends ComponentButtonBase<ReturnType<typeof createButtonStep>>{
 
     /* ---------------------------------------------
-       Hover State — معادل el.hover قدیمی (Plan 9.1.1)
-       Observable داخلی کلاس — توسط on: {mouseenter/mouseleave} تغذیه می‌شود
+       Hover State â€” Ù…Ø¹Ø§Ø¯Ù„ el.hover Ù‚Ø¯ÛŒÙ…ÛŒ (Plan 9.1.1)
+       Observable Ø¯Ø§Ø®Ù„ÛŒ Ú©Ù„Ø§Ø³ â€” ØªÙˆØ³Ø· on: {mouseenter/mouseleave} ØªØºØ°ÛŒÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯
     --------------------------------------------- */
     private readonly _HOVER_STATE = new CoreObservable.App<boolean>(false);
 
@@ -62,7 +62,7 @@ export class ComponentButton extends ComponentButtonBase {
             events?: Record<string, any> | null;
         },
     ) {
-        // Plan 8.2.7 / 9.1 — Step داخلی در constructor ساخته می‌شود
+        // Plan 8.2.7 / 9.1 â€” Step Ø¯Ø§Ø®Ù„ÛŒ Ø¯Ø± constructor Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯
         const step = createButtonStep();
 
         super("button", null, identity, step);
@@ -76,7 +76,7 @@ export class ComponentButton extends ComponentButtonBase {
 
 
     /* ---------------------------------------------
-       Plan 9.1 — Component Disposal
+       Plan 9.1 â€” Component Disposal
     --------------------------------------------- */
     dispose(): void {
         this.disposeStep();
@@ -84,9 +84,9 @@ export class ComponentButton extends ComponentButtonBase {
 
 
     /* ---------------------------------------------
-       Plan 11.2 — renderContentComponent
-       لایه ساختار از طریق Schema پایه (COMPONENT + STRUCTURE) رندر می‌شود.
-       renderContentComponent فقط محتوای اختصاصی را رندر می‌کند.
+       Plan 11.2 â€” renderContentComponent
+       Ù„Ø§ÛŒÙ‡ Ø³Ø§Ø®ØªØ§Ø± Ø§Ø² Ø·Ø±ÛŒÙ‚ Schema Ù¾Ø§ÛŒÙ‡ (COMPONENT + STRUCTURE) Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒØ´ÙˆØ¯.
+       renderContentComponent ÙÙ‚Ø· Ù…Ø­ØªÙˆØ§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ Ø±Ø§ Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒÚ©Ù†Ø¯.
     --------------------------------------------- */
     override renderContentComponent(
         attrsDefault: PartAttrDefault,
@@ -98,8 +98,8 @@ export class ComponentButton extends ComponentButtonBase {
 
 
     /* ---------------------------------------------
-       renderManagerComponent — Routing
-       Plan 11.2 — COMPONENT + STRUCTURE از Trait، بقیه اختصاصی
+       renderManagerComponent â€” Routing
+       Plan 11.2 â€” COMPONENT + STRUCTURE Ø§Ø² TraitØŒ Ø¨Ù‚ÛŒÙ‡ Ø§Ø®ØªØµØ§ØµÛŒ
     --------------------------------------------- */
     override renderManagerComponent(
         partName:     string,
@@ -109,12 +109,12 @@ export class ComponentButton extends ComponentButtonBase {
     ): CoreReactive.App {
 
         switch (partName) {
-            // --- Plan 11.2: Schema پایه ---
+            // --- Plan 11.2: Schema Ù¾Ø§ÛŒÙ‡ ---
             case ComponentStructureTrait.schemas.COMPONENT.part:
                 return ComponentStructureTrait.renderComponentSchema(this, attrsDefault, data);
             case ComponentStructureTrait.schemas.STRUCTURE.part:
                 return ComponentStructureTrait.renderStructureSchema(this, attrsDefault, data);
-            // --- Schema اختصاصی ---
+            // --- Schema Ø§Ø®ØªØµØ§ØµÛŒ ---
             case Schemas.BUTTON.part:
                 return this.renderButton( attrsDefault, data, extra);
             case Schemas.BUTTON_TITLE.part:
@@ -216,9 +216,9 @@ export class ComponentButton extends ComponentButtonBase {
         // const prop_btnTitleColor_hover        = data?.["prop_btnTitleColor_hover"]        ?? bind.prop_btnTitleColor_hover;
         // const prop_btnIcon                    = data?.["prop_btnIcon"]                    ?? bind.prop_btnIcon;
 
-        /* --- رندر شرطی آیکون (Plan 9.1.1 — معادل conditionWhen قدیمی) ---
-           با آیکون: [title, icon] — بدون آیکون: [title]
-           onTrue/onFalse در زمان تغییر prop_btnIcon اجرا می‌شوند              */
+        /* --- Ø±Ù†Ø¯Ø± Ø´Ø±Ø·ÛŒ Ø¢ÛŒÚ©ÙˆÙ† (Plan 9.1.1 â€” Ù…Ø¹Ø§Ø¯Ù„ conditionWhen Ù‚Ø¯ÛŒÙ…ÛŒ) ---
+           Ø¨Ø§ Ø¢ÛŒÚ©ÙˆÙ†: [title, icon] â€” Ø¨Ø¯ÙˆÙ† Ø¢ÛŒÚ©ÙˆÙ†: [title]
+           onTrue/onFalse Ø¯Ø± Ø²Ù…Ø§Ù† ØªØºÛŒÛŒØ± prop_btnIcon Ø§Ø¬Ø±Ø§ Ù…ÛŒâ€ŒØ´ÙˆÙ†Ø¯              */
         // const iconChildren = CoreObservable.App.conditionWhen(
         //     prop_btnIcon,
         //     (icon) => icon != null,
@@ -475,7 +475,7 @@ export class ComponentButton extends ComponentButtonBase {
     private getStyleBtnBorderColor(prop_btnSemantic , prop_btnBorderColor , prop_btnBorderWidth){
         return  CoreObservable.App.computed(
             (semantic, borderColorProp, borderWidthProp, sizeName) => {
-                // CUSTOM بدون border prop → بدون border (null)
+                // CUSTOM Ø¨Ø¯ÙˆÙ† border prop â†’ Ø¨Ø¯ÙˆÙ† border (null)
                 const color = ComponentButton.resolveSemantic(semantic as ButtonSemantic, ComponentButton._semanticBorder, borderColorProp);
                 if (color == null) return null;
                 return `${UtilStyle.Css_BorderWidth(borderWidthProp ?? sizeName)} solid ${color}`;

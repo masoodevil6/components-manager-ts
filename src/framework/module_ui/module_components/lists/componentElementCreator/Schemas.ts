@@ -11,7 +11,7 @@ export const Schemas = {
     STRUCTURE: ComponentStructureTrait.schemas.STRUCTURE,
     RENDER: {
         part: "part-element-creator",
-        props: [Props.prop_mode, Props.prop_component, Props.prop_componentProperties],
+        props: [Props.prop_mode, Props.prop_component, Props.prop_components, Props.prop_componentProperties],
         name: translation.schemas.render.name,
         description: translation.schemas.render.description,
     },

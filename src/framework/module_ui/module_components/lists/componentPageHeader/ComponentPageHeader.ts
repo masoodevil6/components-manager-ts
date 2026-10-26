@@ -17,7 +17,7 @@ import {createPageHeaderStep} from "./Step";
 
 type Child = {dispose?: () => void; disposeStep?: () => void};
 
-export class ComponentPageHeader extends ComponentPageHeaderBase {
+export class ComponentPageHeader extends ComponentPageHeaderBase<ReturnType<typeof createPageHeaderStep>>{
     private _CHILDREN: Child[] = [];
     private _DISPOSED = false;
 

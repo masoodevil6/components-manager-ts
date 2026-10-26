@@ -1,9 +1,10 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 
-const endpoint = () => CoreEvent.Step({request: CoreEvent.Request(), response: CoreEvent.Response({value: null as unknown})});
+const endpoint = () => DefineWorkflow({request: CoreEvent.Request(), response: CoreEvent.Response({value: null as unknown})});
 
 export function createCustomFormStep() {
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {
             templateChange: endpoint(),
             valueChange: endpoint(),

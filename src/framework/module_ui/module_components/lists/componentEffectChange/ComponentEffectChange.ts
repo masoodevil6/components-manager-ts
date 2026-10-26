@@ -18,7 +18,7 @@ const normalizeDuration = (value: unknown): number => {
     return Number.isFinite(duration) ? Math.max(0, duration) : 0;
 };
 
-export class ComponentEffectChange extends ComponentEffectChangeBase {
+export class ComponentEffectChange extends ComponentEffectChangeBase<ReturnType<typeof createEffectChangeStep>>{
     private _CONTENT_HOST: HTMLElement | null = null;
     private _CURRENT_LAYER: HTMLElement | null = null;
     private _CURRENT_VALUE: EffectChangeContent = null;

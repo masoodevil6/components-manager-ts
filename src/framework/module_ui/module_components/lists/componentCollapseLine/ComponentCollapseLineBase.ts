@@ -6,17 +6,17 @@ import {Methods, MethodsType} from "./Methods";
 import {Props, PropsType} from "./Props";
 import {Schemas, SchemasType} from "./Schemas";
 
-export class ComponentCollapseLineBase extends CoreComponents.App<
+export class ComponentCollapseLineBase<TWorkflow extends CoreComponents.ComponentWorkflow<any> = CoreComponents.ComponentWorkflow> extends CoreComponents.App<
     PropsType & Record<string, any>,
     SchemasType,
     any,
-    MethodsType
-> {
-    protected _COMPONENT_STEP: CoreEvent.TStepInstance<any> | null = null;
+    MethodsType,
+    TWorkflow> {
+    protected _COMPONENT_STEP: TWorkflow | null = null;
 
     constructor(
         identity?: {unique?: CoreEvent.TStepRef | null; emit?: CoreEvent.TEmitHandler | null; events?: Record<string, any> | null},
-        step?: CoreEvent.TStepInstance<any>,
+        step?: TWorkflow,
     ) {
         super("collapse-line", null);
         this._COMPONENT_UNIQUE = identity?.unique ?? null;

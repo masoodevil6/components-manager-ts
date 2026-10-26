@@ -5,7 +5,7 @@ import {Schemas, SchemasType} from "./Schemas";
 import {Methods, MethodsType} from "./Methods";
 import {Definition} from "./Definition";
 
-export class ComponentIframeBase extends CoreComponents.App<PropsType & Record<string, any>, SchemasType, any, MethodsType> {
+export class ComponentIframeBase extends CoreComponents.App<PropsType & Record<string, any>, SchemasType, any, MethodsType, CoreComponents.ComponentWorkflow> {
     protected _COMPONENT_DEFINITION = Definition;
     protected _COMPONENT_PATTERN = CoreComponents.DefineProp<PropsType & Record<string, any>>({
         ...ComponentStructureTrait.props,

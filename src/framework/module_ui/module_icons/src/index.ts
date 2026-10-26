@@ -15,6 +15,7 @@ export * as ArrowDoubleDown      from "./arrowDoubleDown";
 
 export * as TreeNodeExpand      from "./treeNodeExpand";
 export * as TreeNodeCollapse    from "./treeNodeCollapse";
+export * as EventWorkflow       from "./eventWorkflow";
 
 
 

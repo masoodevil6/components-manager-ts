@@ -15,7 +15,7 @@ import * as ComponentBorder from "../componentBorder";
 import * as ComponentElementPosition from "../componentElementPosition";
 import * as ComponentButton from "../componentButton";
 
-export class ComponentCardViewClicable extends ComponentCardViewBase {
+export class ComponentCardViewClicable extends ComponentCardViewBase<ReturnType<typeof createCardViewClicableStep>>{
     private _BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;
     private _ACTION_POSITION: InstanceType<typeof ComponentElementPosition.Component> | null = null;
     private _ACTION_BUTTON: InstanceType<typeof ComponentButton.Component> | null = null;

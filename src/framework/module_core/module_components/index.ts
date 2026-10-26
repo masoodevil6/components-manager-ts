@@ -51,6 +51,8 @@ export      {Define_ComponentMethod    as DefineMethod}    from "./tools/method/
 
 /// Tools -> Example
 export type {Interface_ComponentExample as ComponentExample} from "./tools/example/Interface_ComponentExample"
+export type {Interface_ComponentWorkflow as ComponentWorkflow} from "./tools/workflow/Interface_ComponentWorkflow"
+export {Define_ComponentWorkflow as DefineWorkflow} from "./tools/workflow/Define_ComponentWorkflow"
 
 /// Manager
 export      {ComponentManager}            from "./basic/manager/ComponentManager"

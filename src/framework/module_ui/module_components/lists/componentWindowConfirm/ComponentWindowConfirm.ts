@@ -20,22 +20,22 @@ import * as ComponentIcon    from "../componentIcon";
 
 
 /**
- * ComponentWindowConfirm — کلاس نهایی
+ * ComponentWindowConfirm â€” Ú©Ù„Ø§Ø³ Ù†Ù‡Ø§ÛŒÛŒ
  *
- * معماری Composition:
- *   ComponentWindowConfirm HAS-A ComponentWindow (نه IS-A)
- *   ComponentWindow در renderConfirmStructure ساخته می‌شود
- *   و content آن = icon + message (محتوای اختصاصی ComponentWindowConfirm)
+ * Ù…Ø¹Ù…Ø§Ø±ÛŒ Composition:
+ *   ComponentWindowConfirm HAS-A ComponentWindow (Ù†Ù‡ IS-A)
+ *   ComponentWindow Ø¯Ø± renderConfirmStructure Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯
+ *   Ùˆ content Ø¢Ù† = icon + message (Ù…Ø­ØªÙˆØ§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ ComponentWindowConfirm)
  *
- * Constructor امضا: (config, methods, identity?)
- *   config  — شامل propهای پایه + propهای اختصاصی
- *   methods — methodهای اختصاصی (CONFIRM, CANCEL)
- *   identity — { unique?, emit?, events? }
+ * Constructor Ø§Ù…Ø¶Ø§: (config, methods, identity?)
+ *   config  â€” Ø´Ø§Ù…Ù„ propÙ‡Ø§ÛŒ Ù¾Ø§ÛŒÙ‡ + propÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ
+ *   methods â€” methodÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (CONFIRM, CANCEL)
+ *   identity â€” { unique?, emit?, events? }
  *
- * Plan 9.1 — Step داخلی در constructor ساخته می‌شود (factory function).
- * Plan 11.2 — لایه <component-window-confirm> + <section> از Schema پایه رندر می‌شود.
+ * Plan 9.1 â€” Step Ø¯Ø§Ø®Ù„ÛŒ Ø¯Ø± constructor Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯ (factory function).
+ * Plan 11.2 â€” Ù„Ø§ÛŒÙ‡ <component-window-confirm> + <section> Ø§Ø² Schema Ù¾Ø§ÛŒÙ‡ Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒØ´ÙˆØ¯.
  */
-export class ComponentWindowConfirm extends ComponentWindowConfirmBase {
+export class ComponentWindowConfirm extends ComponentWindowConfirmBase<ReturnType<typeof createWindowConfirmStep>>{
 
     private _WINDOW: ComponentWindow.Component | null = null;
 
@@ -65,7 +65,7 @@ export class ComponentWindowConfirm extends ComponentWindowConfirmBase {
 
 
     /* ---------------------------------------------
-       Plan 9.1 — Component Disposal
+       Plan 9.1 â€” Component Disposal
     --------------------------------------------- */
     dispose(): void {
         this.disposeStep();
@@ -73,9 +73,9 @@ export class ComponentWindowConfirm extends ComponentWindowConfirmBase {
 
 
     /* ---------------------------------------------
-       Plan 11.2 — renderContentComponent
-       لایه ساختار از طریق Schema پایه (COMPONENT + STRUCTURE) رندر می‌شود.
-       renderContentComponent فقط محتوای اختصاصی را رندر می‌کند.
+       Plan 11.2 â€” renderContentComponent
+       Ù„Ø§ÛŒÙ‡ Ø³Ø§Ø®ØªØ§Ø± Ø§Ø² Ø·Ø±ÛŒÙ‚ Schema Ù¾Ø§ÛŒÙ‡ (COMPONENT + STRUCTURE) Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒØ´ÙˆØ¯.
+       renderContentComponent ÙÙ‚Ø· Ù…Ø­ØªÙˆØ§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ Ø±Ø§ Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒÚ©Ù†Ø¯.
     --------------------------------------------- */
     override renderContentComponent(
         attrsDefault: PartAttrDefault,
@@ -87,8 +87,8 @@ export class ComponentWindowConfirm extends ComponentWindowConfirmBase {
 
 
     /* ---------------------------------------------
-       renderManagerComponent — Routing
-       Plan 11.2 — COMPONENT + STRUCTURE از Trait، بقیه اختصاصی
+       renderManagerComponent â€” Routing
+       Plan 11.2 â€” COMPONENT + STRUCTURE Ø§Ø² TraitØŒ Ø¨Ù‚ÛŒÙ‡ Ø§Ø®ØªØµØ§ØµÛŒ
     --------------------------------------------- */
     override renderManagerComponent(
         partName:     string,
@@ -98,12 +98,12 @@ export class ComponentWindowConfirm extends ComponentWindowConfirmBase {
     ): CoreReactive.App {
 
         switch (partName) {
-            // --- Plan 11.2: Schema پایه ---
+            // --- Plan 11.2: Schema Ù¾Ø§ÛŒÙ‡ ---
             case ComponentStructureTrait.schemas.COMPONENT.part:
                 return ComponentStructureTrait.renderComponentSchema(this, attrsDefault, data);
             case ComponentStructureTrait.schemas.STRUCTURE.part:
                 return ComponentStructureTrait.renderStructureSchema(this, attrsDefault, data);
-            // --- Schema اختصاصی ---
+            // --- Schema Ø§Ø®ØªØµØ§ØµÛŒ ---
             case Schemas.CONFIRM_STRUCTURE.part:
                 return this.renderConfirmStructure(attrsDefault, data, extra);
             default:
@@ -113,9 +113,9 @@ export class ComponentWindowConfirm extends ComponentWindowConfirmBase {
 
 
     /* ---------------------------------------------
-       renderConfirmStructure — رندر Part CONFIRM_STRUCTURE اصلی
-       یک ComponentWindow با icon + message به‌عنوان body می‌سازد
-       و ACCEPT/CANCEL را به methodهای این component متصل می‌کند.
+       renderConfirmStructure â€” Ø±Ù†Ø¯Ø± Part CONFIRM_STRUCTURE Ø§ØµÙ„ÛŒ
+       ÛŒÚ© ComponentWindow Ø¨Ø§ icon + message Ø¨Ù‡â€ŒØ¹Ù†ÙˆØ§Ù† body Ù…ÛŒâ€ŒØ³Ø§Ø²Ø¯
+       Ùˆ ACCEPT/CANCEL Ø±Ø§ Ø¨Ù‡ methodÙ‡Ø§ÛŒ Ø§ÛŒÙ† component Ù…ØªØµÙ„ Ù…ÛŒâ€ŒÚ©Ù†Ø¯.
     --------------------------------------------- */
     private renderConfirmStructure(
         attrsDefault?: PartAttrDefault,

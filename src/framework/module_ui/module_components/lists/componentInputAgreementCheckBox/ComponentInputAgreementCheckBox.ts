@@ -23,21 +23,21 @@ import * as ComponentDraggableOrdersY           from "../componentDraggableOrder
 
 
 /**
- * ComponentInputAgreementCheckBox — کلاس نهایی
+ * ComponentInputAgreementCheckBox â€” Ú©Ù„Ø§Ø³ Ù†Ù‡Ø§ÛŒÛŒ
  *
  * Composition:
  *   ComponentInputAgreementCheckBox HAS-A ComponentLabel (for the label section)
  *   ComponentInputAgreementCheckBox HAS-A ComponentInputCheckBox (for "select all" and individual items)
  *
  * Constructor: (config, methods, identity?)
- *   config  — شامل propهای پایه + propهای اختصاصی
- *   methods — methodهای اختصاصی (CLICK_ALL, CLICK_ITEM)
- *   identity — { unique?, emit?, events? }
+ *   config  â€” Ø´Ø§Ù…Ù„ propÙ‡Ø§ÛŒ Ù¾Ø§ÛŒÙ‡ + propÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ
+ *   methods â€” methodÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (CLICK_ALL, CLICK_ITEM)
+ *   identity â€” { unique?, emit?, events? }
  *
- * Plan 9.1 — Step داخلی در constructor ساخته می‌شود (factory function).
- * Plan 11.2 — لایه <component-input-agreement-checkbox> + <section> از Schema پایه رندر می‌شود.
+ * Plan 9.1 â€” Step Ø¯Ø§Ø®Ù„ÛŒ Ø¯Ø± constructor Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯ (factory function).
+ * Plan 11.2 â€” Ù„Ø§ÛŒÙ‡ <component-input-agreement-checkbox> + <section> Ø§Ø² Schema Ù¾Ø§ÛŒÙ‡ Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒØ´ÙˆØ¯.
  */
-export class ComponentInputAgreementCheckBox extends ComponentInputAgreementCheckBoxBase {
+export class ComponentInputAgreementCheckBox extends ComponentInputAgreementCheckBoxBase<ReturnType<typeof createInputAgreementCheckBoxStep>>{
 
     private _CHECK_BOX_ALL: ComponentInputCheckBox.Component | null = null;
     private _dragJustFinished = false;
@@ -107,7 +107,7 @@ export class ComponentInputAgreementCheckBox extends ComponentInputAgreementChec
 
 
     /* ---------------------------------------------
-       renderMain — container section
+       renderMain â€” container section
     --------------------------------------------- */
     protected renderMain(
         attrsDefault?: PartAttrDefault,
@@ -131,7 +131,7 @@ export class ComponentInputAgreementCheckBox extends ComponentInputAgreementChec
 
 
     /* ---------------------------------------------
-       renderMainInputOrder — hidden input for form submission
+       renderMainInputOrder â€” hidden input for form submission
     --------------------------------------------- */
     protected renderMainInputOrder(
         attrsDefault?: PartAttrDefault,
@@ -164,7 +164,7 @@ export class ComponentInputAgreementCheckBox extends ComponentInputAgreementChec
 
 
     /* ---------------------------------------------
-       renderMainCheckBoxAll — "select all" checkbox
+       renderMainCheckBoxAll â€” "select all" checkbox
     --------------------------------------------- */
     protected renderMainCheckBoxAll(
         attrsDefault?: PartAttrDefault,
@@ -186,7 +186,7 @@ export class ComponentInputAgreementCheckBox extends ComponentInputAgreementChec
             Keys.category.components.inputAgreementCheckBox.texts.checkBoxAllTitle,
         );
 
-        // عنوان متفاوت برای برچسب (label)
+        // Ø¹Ù†ÙˆØ§Ù† Ù…ØªÙØ§ÙˆØª Ø¨Ø±Ø§ÛŒ Ø¨Ø±Ú†Ø³Ø¨ (label)
         const translatedAllLabel = CoreLanguage.App.translate(
             Keys.category.components.inputAgreementCheckBox.texts.checkBoxAllLabel,
         );
@@ -205,11 +205,11 @@ export class ComponentInputAgreementCheckBox extends ComponentInputAgreementChec
                 classList:                  ["d-flow-root", "mb-1"],
                 prop_isDisable:             prop_isDisable,
                 prop_labelShow:             prop_labelShow,
-                // استفاده از عبارت متفاوت برای عنوان برچسب
+                // Ø§Ø³ØªÙØ§Ø¯Ù‡ Ø§Ø² Ø¹Ø¨Ø§Ø±Øª Ù…ØªÙØ§ÙˆØª Ø¨Ø±Ø§ÛŒ Ø¹Ù†ÙˆØ§Ù† Ø¨Ø±Ú†Ø³Ø¨
                 prop_labelTitle:            translatedAllLabel,
                 prop_labelTooltipDescription: prop_labelTooltipDescription,
                 prop_title:                 checkBoxAllTitle,
-                // نمایش b اصلی (main title)
+                // Ù†Ù…Ø§ÛŒØ´ b Ø§ØµÙ„ÛŒ (main title)
                 prop_titleShow:             true,
                 prop_value:                 CoreObservable.App.computed(
                     (listValue, listCheckBox) => {
@@ -264,7 +264,7 @@ export class ComponentInputAgreementCheckBox extends ComponentInputAgreementChec
 
 
     /* ---------------------------------------------
-       renderMainCheckBoxList — list of individual checkboxes
+       renderMainCheckBoxList â€” list of individual checkboxes
     --------------------------------------------- */
     protected renderMainCheckBoxList(
         attrsDefault?: PartAttrDefault,
@@ -353,7 +353,7 @@ export class ComponentInputAgreementCheckBox extends ComponentInputAgreementChec
 
 
     /* ---------------------------------------------
-       renderMainCheckBoxListCheckBoxItem — individual checkbox item
+       renderMainCheckBoxListCheckBoxItem â€” individual checkbox item
     --------------------------------------------- */
     protected renderMainCheckBoxListCheckBoxItem(
         attrsDefault?: PartAttrDefault,
@@ -410,7 +410,7 @@ export class ComponentInputAgreementCheckBox extends ComponentInputAgreementChec
 
 
     /* ---------------------------------------------
-       FUNCTIONs — Private methods
+       FUNCTIONs â€” Private methods
     --------------------------------------------- */
 
     private pr_onClickCheckBoxAll(event: Event, checkBoxValue: any): void {

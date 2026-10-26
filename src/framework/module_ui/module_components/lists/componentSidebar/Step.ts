@@ -1,3 +1,4 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 // --------------------------------
 
@@ -9,9 +10,9 @@ import * as CoreEvent from "@/core_event";
  *   هر ComponentSidebar Instance باید Step Instance مستقل داشته باشد.
  */
 export function createSidebarStep() {
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {
-            toggle: CoreEvent.Step({
+            toggle: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),

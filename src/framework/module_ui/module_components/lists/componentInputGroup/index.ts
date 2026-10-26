@@ -1,7 +1,7 @@
 export { ComponentInputGroup as Component } from "./ComponentInputGroup";
 export { Definition } from "./Definition";
 export { Props, PropGroups, InputTypes, InputGroupItemType } from "./Props";
-export type { PropsType, PropsConfigType, InputGroupInput, InputGroupItem } from "./Props";
+export type { PropsType, PropsConfigType, InputGroupInput, InputGroupItem, InputGroupDefinition } from "./Props";
 export { Schemas } from "./Schemas";
 export type { SchemasType } from "./Schemas";
 export { Methods } from "./Methods";

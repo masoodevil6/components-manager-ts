@@ -21,7 +21,7 @@ import * as ComponentRecyclerView from "../componentRecyclerView";
 
 type Child = {dispose?: () => void; disposeStep?: () => void};
 
-export class ComponentInputRadioBox extends ComponentInputRadioBoxBase {
+export class ComponentInputRadioBox extends ComponentInputRadioBoxBase<ReturnType<typeof createInputRadioBoxStep>>{
     private readonly _CHILDREN: Child[] = [];
     private readonly _OPTION_CHILDREN: Child[] = [];
     private _VALIDATE_CHILD: Child | null = null;

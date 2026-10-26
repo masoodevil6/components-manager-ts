@@ -16,7 +16,7 @@ import * as ComponentValidate from "../componentValidate";
 
 type DisposableChild = {dispose?: () => void; disposeStep?: () => void};
 
-export class ComponentInputDescription extends ComponentInputDescriptionBase {
+export class ComponentInputDescription extends ComponentInputDescriptionBase<ReturnType<typeof createInputDescriptionStep>>{
     private _DESCRIPTION_SIMPLE: InstanceType<typeof ComponentInputDescriptionSimple.Component> | null = null;
     private _CHILDREN: DisposableChild[] = [];
     private _DISPOSED = false;

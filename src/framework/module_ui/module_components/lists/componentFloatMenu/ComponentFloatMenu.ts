@@ -23,43 +23,43 @@ import {ArrowTypes}                from "../componentBorder/Props";
 
 
 /**
- * ComponentFloatMenu — کلاس نهایی (Plan 11.1 — بازیابی کامل Behavior Legacy)
+ * ComponentFloatMenu â€” Ú©Ù„Ø§Ø³ Ù†Ù‡Ø§ÛŒÛŒ (Plan 11.1 â€” Ø¨Ø§Ø²ÛŒØ§Ø¨ÛŒ Ú©Ø§Ù…Ù„ Behavior Legacy)
  *
- * معماری Composition:
- *   ComponentFloatMenu HAS-A ComponentStructure (نه IS-A)
- *   ComponentStructure در renderContentComponent ساخته می‌شود
- *   و content آن = renderSelector (محتوای اختصاصی ComponentFloatMenu)
+ * Ù…Ø¹Ù…Ø§Ø±ÛŒ Composition:
+ *   ComponentFloatMenu HAS-A ComponentStructure (Ù†Ù‡ IS-A)
+ *   ComponentStructure Ø¯Ø± renderContentComponent Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯
+ *   Ùˆ content Ø¢Ù† = renderSelector (Ù…Ø­ØªÙˆØ§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ ComponentFloatMenu)
  *
- * Constructor امضا: (config, methods, identity?)
- *   config  — شامل propهای پایه + propهای اختصاصی
- *   methods — methodهای اختصاصی (خالی — presentational)
- *   identity — { unique?, emit?, events? }
+ * Constructor Ø§Ù…Ø¶Ø§: (config, methods, identity?)
+ *   config  â€” Ø´Ø§Ù…Ù„ propÙ‡Ø§ÛŒ Ù¾Ø§ÛŒÙ‡ + propÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ
+ *   methods â€” methodÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (Ø®Ø§Ù„ÛŒ â€” presentational)
+ *   identity â€” { unique?, emit?, events? }
  *
- * Plan 11.1 — Behavior بازیابی‌شده از Legacy:
- *   ۱. selector با showType (HOVER یا CLICK) — toggle/show/hide float panel
- *   ۲. inline positioning — direction-based offsets (TOP/BOTTOM/LEFT/RIGHT)
- *   ۳. Composition با UiCategory.UI.Contents.Border برای float panel
- *   ۴. arrow direction mapping (TOP→BOTTOM, BOTTOM→TOP, LEFT→RIGHT, RIGHT→LEFT)
- *   ۵. RTL-aware positioning (left/right swap)
- *   ۶. prop_floatShowControlWithSelf — کنترل نمایش از prop_floatIsShow
- *   ۷. document click listener برای click showType (close on outside click)
+ * Plan 11.1 â€” Behavior Ø¨Ø§Ø²ÛŒØ§Ø¨ÛŒâ€ŒØ´Ø¯Ù‡ Ø§Ø² Legacy:
+ *   Û±. selector Ø¨Ø§ showType (HOVER ÛŒØ§ CLICK) â€” toggle/show/hide float panel
+ *   Û². inline positioning â€” direction-based offsets (TOP/BOTTOM/LEFT/RIGHT)
+ *   Û³. Composition Ø¨Ø§ UiCategory.UI.Contents.Border Ø¨Ø±Ø§ÛŒ float panel
+ *   Û´. arrow direction mapping (TOPâ†’BOTTOM, BOTTOMâ†’TOP, LEFTâ†’RIGHT, RIGHTâ†’LEFT)
+ *   Ûµ. RTL-aware positioning (left/right swap)
+ *   Û¶. prop_floatShowControlWithSelf â€” Ú©Ù†ØªØ±Ù„ Ù†Ù…Ø§ÛŒØ´ Ø§Ø² prop_floatIsShow
+ *   Û·. document click listener Ø¨Ø±Ø§ÛŒ click showType (close on outside click)
  */
-export class ComponentFloatMenu extends ComponentFloatMenuBase {
+export class ComponentFloatMenu extends ComponentFloatMenuBase<ReturnType<typeof createFloatMenuStep>>{
 
     /* ---------------------------------------------
-       Internal State — visibility of float panel
-       نشان‌گر داخلی نمایش/عدم نمایش float panel
+       Internal State â€” visibility of float panel
+       Ù†Ø´Ø§Ù†â€ŒÚ¯Ø± Ø¯Ø§Ø®Ù„ÛŒ Ù†Ù…Ø§ÛŒØ´/Ø¹Ø¯Ù… Ù†Ù…Ø§ÛŒØ´ float panel
     --------------------------------------------- */
     private _IS_SHOW: boolean = false;
 
     /**
-     * Reference به Border instance برای set prop_show
-     * در legacy معادل _COMPONENT_POSITION بود
+     * Reference Ø¨Ù‡ Border instance Ø¨Ø±Ø§ÛŒ set prop_show
+     * Ø¯Ø± legacy Ù…Ø¹Ø§Ø¯Ù„ _COMPONENT_POSITION Ø¨ÙˆØ¯
     */
     private _BORDER_INSTANCE: any = null;
 
     /**
-     * Document click listener برای close-on-outside-click
+     * Document click listener Ø¨Ø±Ø§ÛŒ close-on-outside-click
     */
     private _DOCUMENT_CLICK_HANDLER: ((event: MouseEvent) => void) | null = null;
     private _HOVER_HIDE_TIMEOUT: ReturnType<typeof setTimeout> | null = null;
@@ -74,6 +74,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
     private _SELECTOR_CLICK_ROOT: HTMLElement | null = null;
     private _PORTAL_OFFSET_X = 0;
     private _PORTAL_OFFSET_Y = 0;
+    private readonly _PORTAL_PLACEMENT = new CoreObservable.App<DirectionTypes | null>(null);
 
 
     constructor(
@@ -98,7 +99,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
 
 
     /* ---------------------------------------------
-       Plan 8.2.7 — Component Disposal
+       Plan 8.2.7 â€” Component Disposal
     --------------------------------------------- */
     dispose(): void {
         this._removeDocumentClickListener();
@@ -150,9 +151,9 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
 
 
     /* ---------------------------------------------
-       Plan 11.2 — renderContentComponent
-       لایه ساختار از طریق Schema پایه رندر می‌شود.
-       renderContentComponent فقط محتوای اختصاصی را رندر می‌کند.
+       Plan 11.2 â€” renderContentComponent
+       Ù„Ø§ÛŒÙ‡ Ø³Ø§Ø®ØªØ§Ø± Ø§Ø² Ø·Ø±ÛŒÙ‚ Schema Ù¾Ø§ÛŒÙ‡ Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒØ´ÙˆØ¯.
+       renderContentComponent ÙÙ‚Ø· Ù…Ø­ØªÙˆØ§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ Ø±Ø§ Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒÚ©Ù†Ø¯.
     --------------------------------------------- */
     override renderContentComponent(
         attrsDefault: PartAttrDefault,
@@ -164,8 +165,8 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
 
 
     /* ---------------------------------------------
-       renderManagerComponent — Routing
-       Plan 11.2 — COMPONENT + STRUCTURE از Trait، بقیه اختصاصی
+       renderManagerComponent â€” Routing
+       Plan 11.2 â€” COMPONENT + STRUCTURE Ø§Ø² TraitØŒ Ø¨Ù‚ÛŒÙ‡ Ø§Ø®ØªØµØ§ØµÛŒ
     --------------------------------------------- */
     override renderManagerComponent(
         partName:     string,
@@ -175,12 +176,12 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
     ): CoreReactive.App {
 
         switch (partName) {
-            // --- Plan 11.2: Schema پایه ---
+            // --- Plan 11.2: Schema Ù¾Ø§ÛŒÙ‡ ---
             case ComponentStructureTrait.schemas.COMPONENT.part:
                 return ComponentStructureTrait.renderComponentSchema(this, attrsDefault, data);
             case ComponentStructureTrait.schemas.STRUCTURE.part:
                 return ComponentStructureTrait.renderStructureSchema(this, attrsDefault, data);
-            // --- Schema اختصاصی ---
+            // --- Schema Ø§Ø®ØªØµØ§ØµÛŒ ---
             case Schemas.SELECTOR.part:
                 return this.renderSelector(attrsDefault, data, extra);
             case Schemas.SELECTOR_POSITION.part:
@@ -194,7 +195,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
 
 
     /* ---------------------------------------------
-       Static Lookup Maps — direction → arrow type
+       Static Lookup Maps â€” direction â†’ arrow type
     --------------------------------------------- */
     private static readonly _directionToArrow: Record<DirectionTypes, ArrowTypes> = {
         [DirectionTypes.TOP]:    ArrowTypes.BOTTOM,
@@ -205,7 +206,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
 
 
     /* ---------------------------------------------
-       renderSelector — بخش trigger (selector)
+       renderSelector â€” Ø¨Ø®Ø´ trigger (selector)
     --------------------------------------------- */
     protected renderSelector(
         attrsDefault?: PartAttrDefault,
@@ -293,8 +294,8 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
 
 
     /* ---------------------------------------------
-       renderSelectorPosition — بخش positioning (inline)
-       جایگزین ComponentElementPosition با inline styles
+       renderSelectorPosition â€” Ø¨Ø®Ø´ positioning (inline)
+       Ø¬Ø§ÛŒÚ¯Ø²ÛŒÙ† ComponentElementPosition Ø¨Ø§ inline styles
     --------------------------------------------- */
     protected renderSelectorPosition(
         attrsDefault?: PartAttrDefault,
@@ -315,13 +316,13 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
         const prop_floatIsShow              = data?.["prop_floatIsShow"]              ?? bind.prop_floatIsShow;
         const prop_floatUsePortal           = data?.["prop_floatUsePortal"]           ?? bind.prop_floatUsePortal;
 
-        // Plan 11.1 fix — showObservable:
-        //   floatShowControlWithSelf=true  → returns floatIsShow (controlled by prop)
-        //   floatShowControlWithSelf=false → returns true (popup همیشه در DOM)
-        //     visibility واقعی از طریق prop_show روی border کنترل می‌شه
-        //     (mouseenter/mouseleave/click handlers روی _BORDER_INSTANCE.set("prop_show", ...) صدا می‌زنند)
-        //   قبلاً false برمی‌گرداند که باعث می‌شد conditionWhen popup را اصلاً نسازد
-        //   و _BORDER_INSTANCE null می‌شد و hover handlers بی‌اثیر می‌شدند
+        // Plan 11.1 fix â€” showObservable:
+        //   floatShowControlWithSelf=true  â†’ returns floatIsShow (controlled by prop)
+        //   floatShowControlWithSelf=false â†’ returns true (popup Ù‡Ù…ÛŒØ´Ù‡ Ø¯Ø± DOM)
+        //     visibility ÙˆØ§Ù‚Ø¹ÛŒ Ø§Ø² Ø·Ø±ÛŒÙ‚ prop_show Ø±ÙˆÛŒ border Ú©Ù†ØªØ±Ù„ Ù…ÛŒâ€ŒØ´Ù‡
+        //     (mouseenter/mouseleave/click handlers Ø±ÙˆÛŒ _BORDER_INSTANCE.set("prop_show", ...) ØµØ¯Ø§ Ù…ÛŒâ€ŒØ²Ù†Ù†Ø¯)
+        //   Ù‚Ø¨Ù„Ø§Ù‹ false Ø¨Ø±Ù…ÛŒâ€ŒÚ¯Ø±Ø¯Ø§Ù†Ø¯ Ú©Ù‡ Ø¨Ø§Ø¹Ø« Ù…ÛŒâ€ŒØ´Ø¯ conditionWhen popup Ø±Ø§ Ø§ØµÙ„Ø§Ù‹ Ù†Ø³Ø§Ø²Ø¯
+        //   Ùˆ _BORDER_INSTANCE null Ù…ÛŒâ€ŒØ´Ø¯ Ùˆ hover handlers Ø¨ÛŒâ€ŒØ§Ø«ÛŒØ± Ù…ÛŒâ€ŒØ´Ø¯Ù†Ø¯
         const showObservable = CoreObservable.App.computed(
             (floatShowControlWithSelf, floatIsShow, usePortal) => {
                 // Keep portalled popup content mounted after its first render.
@@ -404,8 +405,8 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
 
 
     /* ---------------------------------------------
-       renderSelectorPositionBorder — بخش border (Composition)
-       Composition با UiCategory.UI.Contents.Border
+       renderSelectorPositionBorder â€” Ø¨Ø®Ø´ border (Composition)
+       Composition Ø¨Ø§ UiCategory.UI.Contents.Border
     --------------------------------------------- */
     protected renderSelectorPositionBorder(
         attrsDefault?: PartAttrDefault,
@@ -444,17 +445,17 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
         );
 
         const borderArrowType = CoreObservable.App.computed(
-            (direction: DirectionTypes) => {
-                return ComponentFloatMenu._directionToArrow[direction];
+            (direction: DirectionTypes, placement: DirectionTypes | null) => {
+                return ComponentFloatMenu._directionToArrow[placement ?? direction];
             },
-            [prop_floatDirection],
+            [prop_floatDirection, this._PORTAL_PLACEMENT],
             this.getScope(),
         );
 
-        // Plan 11.1 fix — وقتی floatShowControlWithSelf=false (HOVER/CLICK mode):
-        //   border با prop_show:false شروع می‌شه (hidden)
-        //   hover/click handlers با _BORDER_INSTANCE.set("prop_show", true/false) آن را toggle می‌کنند
-        //   وقتی floatShowControlWithSelf=true: prop_show از prop_floatIsShow کنترل می‌شه
+        // Plan 11.1 fix â€” ÙˆÙ‚ØªÛŒ floatShowControlWithSelf=false (HOVER/CLICK mode):
+        //   border Ø¨Ø§ prop_show:false Ø´Ø±ÙˆØ¹ Ù…ÛŒâ€ŒØ´Ù‡ (hidden)
+        //   hover/click handlers Ø¨Ø§ _BORDER_INSTANCE.set("prop_show", true/false) Ø¢Ù† Ø±Ø§ toggle Ù…ÛŒâ€ŒÚ©Ù†Ù†Ø¯
+        //   ÙˆÙ‚ØªÛŒ floatShowControlWithSelf=true: prop_show Ø§Ø² prop_floatIsShow Ú©Ù†ØªØ±Ù„ Ù…ÛŒâ€ŒØ´Ù‡
         const initialShow = prop_floatShowControlWithSelf
             ? (prop_floatIsShow?.get?.() ?? false)
             : false;
@@ -494,7 +495,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
 
 
     /* ---------------------------------------------
-       Document Click Listener — close on outside click
+       Document Click Listener â€” close on outside click
     --------------------------------------------- */
     private _addDocumentClickListener(): void {
         if (this._DOCUMENT_CLICK_HANDLER) return;
@@ -549,7 +550,10 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
             this._POSITION_OBSERVER.observe(popup);
             const border = popup.querySelector('[data-part-name="part-border"]');
             if (border) this._POSITION_OBSERVER.observe(border);
-            if (usePortal && root) this._POSITION_OBSERVER.observe(root);
+            if (usePortal && root) {
+                this._POSITION_OBSERVER.observe(root);
+                this.getVerticalClipAncestors(root).forEach((ancestor) => this._POSITION_OBSERVER?.observe(ancestor));
+            }
             this._POSITION_OBSERVED_POPUP = popup;
         }
 
@@ -558,6 +562,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
         const rightEdge = Math.min(window.innerWidth, leftEdge + (viewport?.width ?? window.innerWidth));
         const gap = 8;
         const rootRect = root?.getBoundingClientRect();
+        const configuredDirection = this._COMPONENT_PROPS_BIND.prop_floatDirectionType?.get?.() as DirectionTypes | undefined;
         // `translate` is independent of the transform used for vertical placement.
         popup.style.translate = "0px 0px";
         const availableWidth = Math.max(0, rightEdge - leftEdge - gap * 2);
@@ -598,14 +603,48 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
             popup.style.position = "fixed";
             // A portalled popup escapes its owner's stacking context. Keep it above
             // component headers that reserve SELECTOR_POPUP + 1 for their controls.
-            popup.style.zIndex = `${UtilStyle.Css_ZIndex(UtilConst.ZIndex.SELECTOR_POPUP) + 2}`;
+            const isInsidePageSetting = !!root?.closest("[data-component-page-setting-layer]");
+            const popupZIndex = isInsidePageSetting
+                ? UtilConst.ZIndex.page_setting + 2
+                : UtilStyle.Css_ZIndex(UtilConst.ZIndex.SELECTOR_POPUP) + 2;
+            popup.style.zIndex = `${popupZIndex}`;
             popup.style.left = `${rootRect.left + this._PORTAL_OFFSET_X}px`;
-            popup.style.top = `${rootRect.top + this._PORTAL_OFFSET_Y}px`;
             popup.style.right = "auto";
             popup.style.bottom = "auto";
             popup.style.transform = "none";
             popup.style.margin = "0px";
             popup.style.width = `${Math.min(portalWidth, availableWidth)}px`;
+
+            let effectiveDirection = configuredDirection;
+            if (configuredDirection === DirectionTypes.TOP || configuredDirection === DirectionTypes.BOTTOM) {
+                const bounds = this.getVerticalClipBounds(root);
+                const popupHeight = Math.max(popup.getBoundingClientRect().height, popup.scrollHeight);
+                const arrowWidth = Number(this._COMPONENT_PROPS_BIND.prop_floatArrowWidth?.get?.()) || 0;
+                const distance = Number(this._COMPONENT_PROPS_BIND.prop_floatDistance?.get?.()) || 0;
+                const offset = Math.max(0, arrowWidth + distance);
+                const availableAbove = Math.max(0, rootRect.top - bounds.top);
+                const availableBelow = Math.max(0, bounds.bottom - rootRect.bottom);
+                const fitsAbove = popupHeight + offset <= availableAbove;
+                const fitsBelow = popupHeight + offset <= availableBelow;
+
+                if (configuredDirection === DirectionTypes.BOTTOM && !fitsBelow && (fitsAbove || availableAbove > availableBelow)) {
+                    effectiveDirection = DirectionTypes.TOP;
+                } else if (configuredDirection === DirectionTypes.TOP && !fitsAbove && (fitsBelow || availableBelow > availableAbove)) {
+                    effectiveDirection = DirectionTypes.BOTTOM;
+                }
+
+                this._PORTAL_PLACEMENT.set(effectiveDirection === configuredDirection ? null : effectiveDirection);
+
+                const top = effectiveDirection === DirectionTypes.TOP
+                    ? rootRect.top - popupHeight - offset
+                    : effectiveDirection === DirectionTypes.BOTTOM
+                        ? rootRect.bottom + offset
+                        : rootRect.top + this._PORTAL_OFFSET_Y;
+                popup.style.top = `${top}px`;
+            } else {
+                this._PORTAL_PLACEMENT.set(null);
+                popup.style.top = `${rootRect.top + this._PORTAL_OFFSET_Y}px`;
+            }
         }
 
         const adjustedRect = popup.getBoundingClientRect();
@@ -620,6 +659,37 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
         return this._COMPONENT_PROPS_BIND.prop_floatUsePortal?.get?.() === true;
     }
 
+    private getVerticalClipAncestors(element: HTMLElement): HTMLElement[] {
+        const ancestors: HTMLElement[] = [];
+        let ancestor = element.parentElement;
+
+        while (ancestor && ancestor !== document.body && ancestor !== document.documentElement) {
+            const overflowY = getComputedStyle(ancestor).overflowY;
+            if (["auto", "scroll", "overlay", "hidden", "clip"].includes(overflowY)) {
+                ancestors.push(ancestor);
+            }
+            ancestor = ancestor.parentElement;
+        }
+
+        return ancestors;
+    }
+
+    private getVerticalClipBounds(element: HTMLElement): {top: number; bottom: number} {
+        const viewport = window.visualViewport;
+        let top = Math.max(0, viewport?.offsetTop ?? 0);
+        let bottom = Math.min(window.innerHeight, top + (viewport?.height ?? window.innerHeight));
+
+        for (const ancestor of this.getVerticalClipAncestors(element)) {
+            if (ancestor.clientHeight <= 0) continue;
+            const rect = ancestor.getBoundingClientRect();
+            const clipTop = rect.top + ancestor.clientTop;
+            top = Math.max(top, clipTop);
+            bottom = Math.min(bottom, clipTop + ancestor.clientHeight);
+        }
+
+        return {top, bottom: Math.max(top, bottom)};
+    }
+
     private _isInsideMenu(target: EventTarget | null, root?: Node | null): boolean {
         return this._isInsideOwnMenu(target, root) || this._RELATED_TARGET_CONTAINS?.(target) === true;
     }
@@ -631,11 +701,11 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
 
 
     /// ---------------------
-    //  Style Getters — private و کوچک (الگوی componentButton)
+    //  Style Getters â€” private Ùˆ Ú©ÙˆÚ†Ú© (Ø§Ù„Ú¯ÙˆÛŒ componentButton)
     /// ---------------------
 
     /**
-     * ارتفاع خط selector بر اساس sizeName سراسری
+     * Ø§Ø±ØªÙØ§Ø¹ Ø®Ø· selector Ø¨Ø± Ø§Ø³Ø§Ø³ sizeName Ø³Ø±Ø§Ø³Ø±ÛŒ
     */
     private getStyleSelectorLineHeight() {
         return CoreObservable.App.computed(
@@ -646,7 +716,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
     }
 
     /**
-     * اندازه فونت selector بر اساس sizeName سراسری
+     * Ø§Ù†Ø¯Ø§Ø²Ù‡ ÙÙˆÙ†Øª selector Ø¨Ø± Ø§Ø³Ø§Ø³ sizeName Ø³Ø±Ø§Ø³Ø±ÛŒ
     */
     private getStyleSelectorFontSize() {
         return CoreObservable.App.computed(
@@ -657,7 +727,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
     }
 
     /**
-     * padding داخلی border بر اساس sizeName سراسری
+     * padding Ø¯Ø§Ø®Ù„ÛŒ border Ø¨Ø± Ø§Ø³Ø§Ø³ sizeName Ø³Ø±Ø§Ø³Ø±ÛŒ
     */
     private getStyleBorderPadding(prop_floatBorderWidth, prop_floatBorderRadius, prop_floatBorderPadding) {
         return CoreObservable.App.computed(
@@ -689,8 +759,8 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase {
     }
 
     /**
-     * محاسبه styleهای position بر اساس direction
-     * inline positioning — جایگزین ComponentElementPosition
+     * Ù…Ø­Ø§Ø³Ø¨Ù‡ styleÙ‡Ø§ÛŒ position Ø¨Ø± Ø§Ø³Ø§Ø³ direction
+     * inline positioning â€” Ø¬Ø§ÛŒÚ¯Ø²ÛŒÙ† ComponentElementPosition
     */
     private getStylePositionStyles(
         prop_floatDirection:  any,

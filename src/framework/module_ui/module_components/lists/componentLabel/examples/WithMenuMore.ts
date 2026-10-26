@@ -34,6 +34,12 @@ export const WithMenuMoreExample: ComponentExample = {
                 prop_labelGroupSelected: "EDIT_PROFILE",
             },
             {
+                CHANGE_GROUP: (_event, dataArgs, componentArgs) => {
+                    console.log("Label group changed:", {
+                        value: componentArgs?.VALUE,
+                        group: dataArgs?.GROUP,
+                    });
+                },
                 SELECT_MENU_ITEM: (_event, dataArgs, componentArgs) => {
                     console.log("Label group selection:", {
                         value: componentArgs?.VALUE,

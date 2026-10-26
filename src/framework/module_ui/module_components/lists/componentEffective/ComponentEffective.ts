@@ -39,7 +39,7 @@ const hiddenVisual = (mode: EffectiveMode): {opacity: string; transform: string}
     }
 };
 
-export class ComponentEffective extends ComponentEffectiveBase {
+export class ComponentEffective extends ComponentEffectiveBase<ReturnType<typeof createEffectiveStep>>{
     private _BORDER: ComponentBorder.Component | null = null;
     private readonly _CHILDREN: DisposableChild[] = [];
     private readonly _PRESENT: CoreObservable.App<boolean>;

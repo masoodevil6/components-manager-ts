@@ -1,3 +1,4 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 // --------------------------------
 
@@ -15,9 +16,9 @@ import * as CoreEvent from "@/core_event";
  *   cancel    ← Event Engine endpoint (unique روی cancel button)
  */
 export function createLoadingStep() {
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {
-            cancel: CoreEvent.Step({
+            cancel: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),

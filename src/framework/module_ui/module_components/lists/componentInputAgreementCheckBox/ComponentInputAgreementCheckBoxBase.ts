@@ -10,28 +10,28 @@ import {Definition}               from "./Definition";
 
 
 /**
- * ComponentInputAgreementCheckBoxBase — ترکیب config پایه و اختصاصی
+ * ComponentInputAgreementCheckBoxBase â€” ØªØ±Ú©ÛŒØ¨ config Ù¾Ø§ÛŒÙ‡ Ùˆ Ø§Ø®ØªØµØ§ØµÛŒ
  *
- * ارث از CoreComponents.App (ClComponentBase) — نه ComponentStructure.
- * ComponentInputAgreementCheckBox خودش یک Component مستقل است.
+ * Ø§Ø±Ø« Ø§Ø² CoreComponents.App (ClComponentBase) â€” Ù†Ù‡ ComponentStructure.
+ * ComponentInputAgreementCheckBox Ø®ÙˆØ¯Ø´ ÛŒÚ© Component Ù…Ø³ØªÙ‚Ù„ Ø§Ø³Øª.
  *
- * Plan 11.2 — Schema پایه (COMPONENT + STRUCTURE) از ComponentStructureTrait.schemas
- * در _COMPONENT_SCHEMA spread می‌شوند تا لایه <component-input-agreement-checkbox> + <section> رندر شوند.
+ * Plan 11.2 â€” Schema Ù¾Ø§ÛŒÙ‡ (COMPONENT + STRUCTURE) Ø§Ø² ComponentStructureTrait.schemas
+ * Ø¯Ø± _COMPONENT_SCHEMA spread Ù…ÛŒâ€ŒØ´ÙˆÙ†Ø¯ ØªØ§ Ù„Ø§ÛŒÙ‡ <component-input-agreement-checkbox> + <section> Ø±Ù†Ø¯Ø± Ø´ÙˆÙ†Ø¯.
  *
- * Plan 8.2.7 / 9.1 — SubEvent + Event Scope Ownership:
- *   هر ComponentInputAgreementCheckBox مالک Step Instance خودش است.
+ * Plan 8.2.7 / 9.1 â€” SubEvent + Event Scope Ownership:
+ *   Ù‡Ø± ComponentInputAgreementCheckBox Ù…Ø§Ù„Ú© Step Instance Ø®ÙˆØ¯Ø´ Ø§Ø³Øª.
  */
-export class ComponentInputAgreementCheckBoxBase extends CoreComponents.App<
+export class ComponentInputAgreementCheckBoxBase<TWorkflow extends CoreComponents.ComponentWorkflow<any> = CoreComponents.ComponentWorkflow> extends CoreComponents.App<
     PropsType & Record<string, any>,
     SchemasType,
     any,
-    MethodsType
-> {
+    MethodsType,
+    TWorkflow> {
 
     /**
-     * Step Node — درخت Workflow داخلی ComponentInputAgreementCheckBox
+     * Step Node â€” Ø¯Ø±Ø®Øª Workflow Ø¯Ø§Ø®Ù„ÛŒ ComponentInputAgreementCheckBox
      */
-    protected _COMPONENT_STEP: CoreEvent.TStepInstance<any> | null = null;
+    protected _COMPONENT_STEP: TWorkflow | null = null;
 
 
     /**
@@ -45,7 +45,7 @@ export class ComponentInputAgreementCheckBoxBase extends CoreComponents.App<
             emit?:   CoreEvent.TEmitHandler | null;
             events?: Record<string, any> | null;
         },
-        step?: CoreEvent.TStepInstance<any>,
+        step?: TWorkflow,
     ) {
         super(componentName, elId);
 
@@ -54,7 +54,7 @@ export class ComponentInputAgreementCheckBoxBase extends CoreComponents.App<
 
         this._COMPONENT_STEP   = step ?? null;
 
-        // Plan 8.2.7 — SubEvent
+        // Plan 8.2.7 â€” SubEvent
         if (step && identity?.unique && typeof (identity.unique as any).identity === "symbol") {
             CoreEvent.SubEvent(identity.unique as CoreEvent.TStepRef, componentName, step);
         }
@@ -62,7 +62,7 @@ export class ComponentInputAgreementCheckBoxBase extends CoreComponents.App<
 
 
     /**
-     * Disposal — پاک‌سازی کل subtree از رجیستری CoreEvent (Plan 8.2.7 / 9.1)
+     * Disposal â€” Ù¾Ø§Ú©â€ŒØ³Ø§Ø²ÛŒ Ú©Ù„ subtree Ø§Ø² Ø±Ø¬ÛŒØ³ØªØ±ÛŒ CoreEvent (Plan 8.2.7 / 9.1)
      */
     disposeStep(): void {
         if (this._COMPONENT_STEP) {

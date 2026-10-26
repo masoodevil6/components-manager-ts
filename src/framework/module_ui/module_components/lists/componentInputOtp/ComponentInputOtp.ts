@@ -22,7 +22,7 @@ type TimerDownInstance = {
     dispose(): void;
 };
 
-export class ComponentInputOtp extends ComponentInputOtpBase {
+export class ComponentInputOtp extends ComponentInputOtpBase<ReturnType<typeof createInputOtpStep>>{
     private readonly _OTP_INSTANCE_ID = `${++nextInputOtpInstanceId}-${this._COMPONENT_RANDOM_ID}`;
     private readonly _OTP_VALUE = new CoreObservable.App("");
     private _OTP_TIMER: TimerDownInstance | null = null;

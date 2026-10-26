@@ -24,7 +24,7 @@ import * as ComponentWebCode from "../componentWebCode";
 type Child = {dispose?: () => void; disposeStep?: () => void};
 type ResponsePayload = {resultExp: unknown; response: unknown};
 
-export class ComponentForm extends ComponentFormBase {
+export class ComponentForm extends ComponentFormBase<ReturnType<typeof createFormStep>>{
     private static _INSTANCE_COUNT = 0;
     private readonly _FORM_ID = `component-form-native-${++ComponentForm._INSTANCE_COUNT}`;
     private readonly _IS_LOADING = new CoreObservable.App(false);
@@ -340,7 +340,7 @@ export class ComponentForm extends ComponentFormBase {
             if (stopAtFirst) break;
         }
         return Array.from(groupedErrors, ([parameter, messages]) =>
-            `${parameter}:\n${messages.map((message) => `  • ${message}`).join("\n")}`,
+            `${parameter}:\n${messages.map((message) => `  â€¢ ${message}`).join("\n")}`,
         );
     }
 

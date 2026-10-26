@@ -43,7 +43,7 @@ import * as UiIcons from "@/ui_icons";
  *
  *   قانون طلایی: State changes ≠ Event identity changes
  */
-class ComponentMessages extends ComponentMessagesBase {
+class ComponentMessages extends ComponentMessagesBase<ReturnType<typeof createMessagesStep>> {
 
     /**
      * Registry — نگاشت Message ID → Event Scope (Plan 8.2.8)

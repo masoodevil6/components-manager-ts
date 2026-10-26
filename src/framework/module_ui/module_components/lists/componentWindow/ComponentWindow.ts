@@ -20,21 +20,21 @@ import {ButtonSemantic, ButtonVariants, ButtonAction} from "../componentButton/P
 
 
 /**
- * ComponentWindow — کلاس نهایی
+ * ComponentWindow â€” Ú©Ù„Ø§Ø³ Ù†Ù‡Ø§ÛŒÛŒ
  *
- * معماری Composition:
- *   ComponentWindow HAS-A ComponentButton (نه IS-A)
- *   ComponentButton در renderWindowHeaderIconClose/Resize و renderWindowFooter ساخته می‌شود.
+ * Ù…Ø¹Ù…Ø§Ø±ÛŒ Composition:
+ *   ComponentWindow HAS-A ComponentButton (Ù†Ù‡ IS-A)
+ *   ComponentButton Ø¯Ø± renderWindowHeaderIconClose/Resize Ùˆ renderWindowFooter Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯.
  *
- * Constructor امضا: (config, methods, identity?)
- *   config  — شامل propهای پایه + propهای اختصاصی
- *   methods — methodهای اختصاصی (CLOSE, OPEN, RESIZE, ACCEPT, CANCEL, ...)
- *   identity — { unique?, emit?, events? }
+ * Constructor Ø§Ù…Ø¶Ø§: (config, methods, identity?)
+ *   config  â€” Ø´Ø§Ù…Ù„ propÙ‡Ø§ÛŒ Ù¾Ø§ÛŒÙ‡ + propÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ
+ *   methods â€” methodÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (CLOSE, OPEN, RESIZE, ACCEPT, CANCEL, ...)
+ *   identity â€” { unique?, emit?, events? }
  *
- * Plan 9.1 — Step داخلی در constructor ساخته می‌شود (factory function).
- * Plan 11.2 — لایه <component-window> + <section> از Schema پایه رندر می‌شود.
+ * Plan 9.1 â€” Step Ø¯Ø§Ø®Ù„ÛŒ Ø¯Ø± constructor Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯ (factory function).
+ * Plan 11.2 â€” Ù„Ø§ÛŒÙ‡ <component-window> + <section> Ø§Ø² Schema Ù¾Ø§ÛŒÙ‡ Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒØ´ÙˆØ¯.
  */
-export class ComponentWindow extends ComponentWindowBase {
+export class ComponentWindow extends ComponentWindowBase<ReturnType<typeof createWindowStep>>{
 
     private _IS_FULL_SIZE: boolean = false;
     private _RESIZE_ANIM_ID: number | null = null;
@@ -68,7 +68,7 @@ export class ComponentWindow extends ComponentWindowBase {
 
 
     /* ---------------------------------------------
-       Plan 9.1 — Component Disposal
+       Plan 9.1 â€” Component Disposal
     --------------------------------------------- */
     dispose(): void {
         this._BUTTON_CANCEL?.dispose();
@@ -82,7 +82,7 @@ export class ComponentWindow extends ComponentWindowBase {
 
 
     /* ---------------------------------------------
-       Plan 11.2 — renderContentComponent
+       Plan 11.2 â€” renderContentComponent
     --------------------------------------------- */
     override renderContentComponent(
         attrsDefault: PartAttrDefault,
@@ -94,7 +94,7 @@ export class ComponentWindow extends ComponentWindowBase {
 
 
     /* ---------------------------------------------
-       renderManagerComponent — Routing
+       renderManagerComponent â€” Routing
     --------------------------------------------- */
     override renderManagerComponent(
         partName:     string,
@@ -135,7 +135,7 @@ export class ComponentWindow extends ComponentWindowBase {
 
 
     /* ---------------------------------------------
-       renderStructure — Part WINDOW_STRUCTURE
+       renderStructure â€” Part WINDOW_STRUCTURE
     --------------------------------------------- */
     protected renderStructure(
         attrsDefault?: PartAttrDefault,
@@ -176,7 +176,7 @@ export class ComponentWindow extends ComponentWindowBase {
 
 
     /* ---------------------------------------------
-       renderBlur — Part BLUR (overlay)
+       renderBlur â€” Part BLUR (overlay)
     --------------------------------------------- */
     protected renderBlur(
         attrsDefault?: PartAttrDefault,
@@ -220,7 +220,7 @@ export class ComponentWindow extends ComponentWindowBase {
 
 
     /* ---------------------------------------------
-       renderWindow — Part WINDOW
+       renderWindow â€” Part WINDOW
     --------------------------------------------- */
     protected renderWindow(
         attrsDefault?: PartAttrDefault,
@@ -272,7 +272,7 @@ export class ComponentWindow extends ComponentWindowBase {
 
 
     /* ---------------------------------------------
-       renderWindowHeader — Part WINDOW_HEADER
+       renderWindowHeader â€” Part WINDOW_HEADER
     --------------------------------------------- */
     protected renderWindowHeader(
         attrsDefault?: PartAttrDefault,
@@ -307,7 +307,7 @@ export class ComponentWindow extends ComponentWindowBase {
 
 
     /* ---------------------------------------------
-       renderWindowHeaderTitle — Part WINDOW_HEADER_TITLE
+       renderWindowHeaderTitle â€” Part WINDOW_HEADER_TITLE
     --------------------------------------------- */
     protected renderWindowHeaderTitle(
         attrsDefault?: PartAttrDefault,
@@ -345,7 +345,7 @@ export class ComponentWindow extends ComponentWindowBase {
 
 
     /* ---------------------------------------------
-       renderWindowHeaderIcons — Part WINDOW_HEADER_ICONS
+       renderWindowHeaderIcons â€” Part WINDOW_HEADER_ICONS
     --------------------------------------------- */
     protected renderWindowHeaderIcons(
         attrsDefault?: PartAttrDefault,
@@ -371,7 +371,7 @@ export class ComponentWindow extends ComponentWindowBase {
 
 
     /* ---------------------------------------------
-       renderWindowHeaderIconClose — Part WINDOW_HEADER_ICONS_CLOSE
+       renderWindowHeaderIconClose â€” Part WINDOW_HEADER_ICONS_CLOSE
     --------------------------------------------- */
     protected renderWindowHeaderIconClose(
         attrsDefault?: PartAttrDefault,
@@ -426,7 +426,7 @@ export class ComponentWindow extends ComponentWindowBase {
 
 
     /* ---------------------------------------------
-       renderWindowHeaderIconResize — Part WINDOW_HEADER_ICONS_RESIZE
+       renderWindowHeaderIconResize â€” Part WINDOW_HEADER_ICONS_RESIZE
     --------------------------------------------- */
     protected renderWindowHeaderIconResize(
         attrsDefault?: PartAttrDefault,
@@ -481,7 +481,7 @@ export class ComponentWindow extends ComponentWindowBase {
 
 
     /* ---------------------------------------------
-       renderWindowBody — Part WINDOW_BODY
+       renderWindowBody â€” Part WINDOW_BODY
     --------------------------------------------- */
     protected renderWindowBody(
         attrsDefault?: PartAttrDefault,
@@ -515,7 +515,7 @@ export class ComponentWindow extends ComponentWindowBase {
 
 
     /* ---------------------------------------------
-       renderWindowFooter — Part WINDOW_FOOTER
+       renderWindowFooter â€” Part WINDOW_FOOTER
     --------------------------------------------- */
     protected renderWindowFooter(
         attrsDefault?: PartAttrDefault,

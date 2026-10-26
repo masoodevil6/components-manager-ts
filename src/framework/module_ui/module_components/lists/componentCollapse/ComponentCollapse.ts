@@ -23,30 +23,30 @@ const COLLAPSE_HEADER_CONTENT_WIDTH = "calc(100% - var(--paddingMedium) - var(--
 
 
 /**
- * ComponentCollapse — کلاس نهایی (Plan 15.1.0 — بازیابی کامل Behavior Legacy)
+ * ComponentCollapse â€” Ú©Ù„Ø§Ø³ Ù†Ù‡Ø§ÛŒÛŒ (Plan 15.1.0 â€” Ø¨Ø§Ø²ÛŒØ§Ø¨ÛŒ Ú©Ø§Ù…Ù„ Behavior Legacy)
  *
- * معماری Composition:
- *   ComponentCollapse HAS-A ComponentBorder (نه IS-A)
- *   ComponentBorder در renderFormBorder از طریق مستقیم
- *   new ComponentBorder.Component ساخته می‌شود — نه new مستقیم.
- *   ComponentIcon در renderFormBorderContentIcon و renderFormBorderContentArrow
- *   از طریق مستقیم new ComponentIcon.Component ساخته می‌شود.
+ * Ù…Ø¹Ù…Ø§Ø±ÛŒ Composition:
+ *   ComponentCollapse HAS-A ComponentBorder (Ù†Ù‡ IS-A)
+ *   ComponentBorder Ø¯Ø± renderFormBorder Ø§Ø² Ø·Ø±ÛŒÙ‚ Ù…Ø³ØªÙ‚ÛŒÙ…
+ *   new ComponentBorder.Component Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯ â€” Ù†Ù‡ new Ù…Ø³ØªÙ‚ÛŒÙ….
+ *   ComponentIcon Ø¯Ø± renderFormBorderContentIcon Ùˆ renderFormBorderContentArrow
+ *   Ø§Ø² Ø·Ø±ÛŒÙ‚ Ù…Ø³ØªÙ‚ÛŒÙ… new ComponentIcon.Component Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯.
  *
- * Constructor امضا: (config, methods, identity?)
- *   config  — شامل propهای پایه + propهای اختصاصی
- *   methods — methodهای اختصاصی (CLICK)
- *   identity — { unique?, emit?, events? }
+ * Constructor Ø§Ù…Ø¶Ø§: (config, methods, identity?)
+ *   config  â€” Ø´Ø§Ù…Ù„ propÙ‡Ø§ÛŒ Ù¾Ø§ÛŒÙ‡ + propÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ
+ *   methods â€” methodÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (CLICK)
+ *   identity â€” { unique?, emit?, events? }
  *
- * Plan 9.1 — Step داخلی در constructor ساخته می‌شود (factory function).
- * Plan 11.2 — لایه <component-collapse> + <section> از Schema پایه (COMPONENT + STRUCTURE) رندر می‌شود.
+ * Plan 9.1 â€” Step Ø¯Ø§Ø®Ù„ÛŒ Ø¯Ø± constructor Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯ (factory function).
+ * Plan 11.2 â€” Ù„Ø§ÛŒÙ‡ <component-collapse> + <section> Ø§Ø² Schema Ù¾Ø§ÛŒÙ‡ (COMPONENT + STRUCTURE) Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒØ´ÙˆØ¯.
  *
- * بازیابی Behavior از Legacy:
- *   - title قابل‌کلیک → CLICK method روی Border composition
- *   - arrow toggle → prop_collapseBodyIsOpen mapList (arrow_up / arrow_down)
- *   - body show/hide → prop_collapseBodyIsOpen mapBoolean ("show" / "d-none")
- *   - fontSize واکنش‌گرا → computed روی CoreConfig.Settings.SizeName
+ * Ø¨Ø§Ø²ÛŒØ§Ø¨ÛŒ Behavior Ø§Ø² Legacy:
+ *   - title Ù‚Ø§Ø¨Ù„â€ŒÚ©Ù„ÛŒÚ© â†’ CLICK method Ø±ÙˆÛŒ Border composition
+ *   - arrow toggle â†’ prop_collapseBodyIsOpen mapList (arrow_up / arrow_down)
+ *   - body show/hide â†’ prop_collapseBodyIsOpen mapBoolean ("show" / "d-none")
+ *   - fontSize ÙˆØ§Ú©Ù†Ø´â€ŒÚ¯Ø±Ø§ â†’ computed Ø±ÙˆÛŒ CoreConfig.Settings.SizeName
  */
-export class ComponentCollapse extends ComponentCollapseBase {
+export class ComponentCollapse extends ComponentCollapseBase<ReturnType<typeof createCollapseStep>>{
     private _HEADER_MENU: ComponentMenuMore.Component | null = null;
 
 
@@ -72,7 +72,7 @@ export class ComponentCollapse extends ComponentCollapseBase {
 
 
     /* ---------------------------------------------
-       Plan 9.1 — Component Disposal
+       Plan 9.1 â€” Component Disposal
     --------------------------------------------- */
     dispose(): void {
         this._HEADER_MENU?.dispose();
@@ -82,9 +82,9 @@ export class ComponentCollapse extends ComponentCollapseBase {
 
 
     /* ---------------------------------------------
-       Plan 11.2 — renderContentComponent
-       لایه ساختار از طریق Schema پایه (COMPONENT + STRUCTURE) رندر می‌شود.
-       renderContentComponent فقط محتوای اختصاصی را رندر می‌کند.
+       Plan 11.2 â€” renderContentComponent
+       Ù„Ø§ÛŒÙ‡ Ø³Ø§Ø®ØªØ§Ø± Ø§Ø² Ø·Ø±ÛŒÙ‚ Schema Ù¾Ø§ÛŒÙ‡ (COMPONENT + STRUCTURE) Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒØ´ÙˆØ¯.
+       renderContentComponent ÙÙ‚Ø· Ù…Ø­ØªÙˆØ§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ Ø±Ø§ Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒÚ©Ù†Ø¯.
     --------------------------------------------- */
     override renderContentComponent(
         attrsDefault: PartAttrDefault,
@@ -96,8 +96,8 @@ export class ComponentCollapse extends ComponentCollapseBase {
 
 
     /* ---------------------------------------------
-       renderManagerComponent — Routing
-       Plan 11.2 — COMPONENT + STRUCTURE از Trait، بقیه اختصاصی
+       renderManagerComponent â€” Routing
+       Plan 11.2 â€” COMPONENT + STRUCTURE Ø§Ø² TraitØŒ Ø¨Ù‚ÛŒÙ‡ Ø§Ø®ØªØµØ§ØµÛŒ
     --------------------------------------------- */
     override renderManagerComponent(
         partName:     string,
@@ -107,12 +107,12 @@ export class ComponentCollapse extends ComponentCollapseBase {
     ): CoreReactive.App {
 
         switch (partName) {
-            // --- Plan 11.2: Schema پایه ---
+            // --- Plan 11.2: Schema Ù¾Ø§ÛŒÙ‡ ---
             case ComponentStructureTrait.schemas.COMPONENT.part:
                 return ComponentStructureTrait.renderComponentSchema(this, attrsDefault, data);
             case ComponentStructureTrait.schemas.STRUCTURE.part:
                 return ComponentStructureTrait.renderStructureSchema(this, attrsDefault, data);
-            // --- Schema اختصاصی ---
+            // --- Schema Ø§Ø®ØªØµØ§ØµÛŒ ---
             case Schemas.FORM.part:
                 return this.renderForm(attrsDefault, data, extra);
             case Schemas.FORM_BORDER.part:
@@ -136,8 +136,8 @@ export class ComponentCollapse extends ComponentCollapseBase {
 
 
     /* ---------------------------------------------
-       renderForm — رندر Part FORM اصلی
-       ظرف اصلی شامل FORM_BORDER + FORM_BODY
+       renderForm â€” Ø±Ù†Ø¯Ø± Part FORM Ø§ØµÙ„ÛŒ
+       Ø¸Ø±Ù Ø§ØµÙ„ÛŒ Ø´Ø§Ù…Ù„ FORM_BORDER + FORM_BODY
     --------------------------------------------- */
     protected renderForm(
         attrsDefault?: PartAttrDefault,
@@ -156,9 +156,9 @@ export class ComponentCollapse extends ComponentCollapseBase {
 
 
     /* ---------------------------------------------
-       renderFormBorder — رندر Part FORM_BORDER
-       Composition: new ComponentBorder.Component (مستقیم)
-       + click → toggle prop_collapseBodyIsOpen + executeMethod("CLICK")
+       renderFormBorder â€” Ø±Ù†Ø¯Ø± Part FORM_BORDER
+       Composition: new ComponentBorder.Component (Ù…Ø³ØªÙ‚ÛŒÙ…)
+       + click â†’ toggle prop_collapseBodyIsOpen + executeMethod("CLICK")
     --------------------------------------------- */
     protected renderFormBorder(
         attrsDefault?: PartAttrDefault,
@@ -219,7 +219,7 @@ export class ComponentCollapse extends ComponentCollapseBase {
 
 
     /* ---------------------------------------------
-       renderFormBorderContent — رندر Part FORM_BORDER_CONTENT
+       renderFormBorderContent â€” Ø±Ù†Ø¯Ø± Part FORM_BORDER_CONTENT
        header [CONTENT(icon, title, MenuMore), arrow]
     --------------------------------------------- */
     protected renderFormBorderContent(
@@ -270,9 +270,9 @@ export class ComponentCollapse extends ComponentCollapseBase {
 
 
     /* ---------------------------------------------
-       renderFormBorderContentIcon — رندر Part FORM_BORDER_CONTENT_ICON
-       Composition: new ComponentIcon.Component (مستقیم)
-       رندر شرطی آیکون با conditionWhen
+       renderFormBorderContentIcon â€” Ø±Ù†Ø¯Ø± Part FORM_BORDER_CONTENT_ICON
+       Composition: new ComponentIcon.Component (Ù…Ø³ØªÙ‚ÛŒÙ…)
+       Ø±Ù†Ø¯Ø± Ø´Ø±Ø·ÛŒ Ø¢ÛŒÚ©ÙˆÙ† Ø¨Ø§ conditionWhen
     --------------------------------------------- */
     protected renderFormBorderContentIcon(
         attrsDefault?: PartAttrDefault,
@@ -319,7 +319,7 @@ export class ComponentCollapse extends ComponentCollapseBase {
 
 
     /* ---------------------------------------------
-       renderFormBorderContentMenuMore — header actions menu
+       renderFormBorderContentMenuMore â€” header actions menu
     --------------------------------------------- */
     protected renderFormBorderContentMenuMore(
         attrsDefault?: PartAttrDefault,
@@ -381,7 +381,7 @@ export class ComponentCollapse extends ComponentCollapseBase {
 
 
     /* ---------------------------------------------
-       renderFormBorderContentTitle — رندر Part FORM_BORDER_CONTENT_TITLE
+       renderFormBorderContentTitle â€” Ø±Ù†Ø¯Ø± Part FORM_BORDER_CONTENT_TITLE
        section.col + <b> + computed styles (fontSize, lineHeight, color)
     --------------------------------------------- */
     protected renderFormBorderContentTitle(
@@ -443,9 +443,9 @@ export class ComponentCollapse extends ComponentCollapseBase {
 
 
     /* ---------------------------------------------
-       renderFormBorderContentArrow — رندر Part FORM_BORDER_CONTENT_ARROW
-       Composition: new ComponentIcon.Component (مستقیم)
-       arrow up/down بر اساس prop_collapseBodyIsOpen (mapList)
+       renderFormBorderContentArrow â€” Ø±Ù†Ø¯Ø± Part FORM_BORDER_CONTENT_ARROW
+       Composition: new ComponentIcon.Component (Ù…Ø³ØªÙ‚ÛŒÙ…)
+       arrow up/down Ø¨Ø± Ø§Ø³Ø§Ø³ prop_collapseBodyIsOpen (mapList)
     --------------------------------------------- */
     protected renderFormBorderContentArrow(
         attrsDefault?: PartAttrDefault,
@@ -505,9 +505,9 @@ export class ComponentCollapse extends ComponentCollapseBase {
 
 
     /* ---------------------------------------------
-       renderFormBody — رندر Part FORM_BODY
+       renderFormBody â€” Ø±Ù†Ø¯Ø± Part FORM_BODY
        section.col + computed styles (fontSize, lineHeight, border)
-       + show/hide با mapBoolean(prop_collapseBodyIsOpen)
+       + show/hide Ø¨Ø§ mapBoolean(prop_collapseBodyIsOpen)
     --------------------------------------------- */
     protected renderFormBody(
         attrsDefault?: PartAttrDefault,
@@ -602,7 +602,7 @@ export class ComponentCollapse extends ComponentCollapseBase {
 
 
     /* ---------------------------------------------
-       renderEmptyContent — fallback خالی
+       renderEmptyContent â€” fallback Ø®Ø§Ù„ÛŒ
     --------------------------------------------- */
     public renderEmptyContent(
         attrsDefault?: PartAttrDefault,

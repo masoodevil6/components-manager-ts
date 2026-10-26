@@ -10,57 +10,57 @@ import {Definition}               from "./Definition";
 
 
 /**
- * ComponentIconBase — ترکیب config پایه و اختصاصی
+ * ComponentIconBase â€” ØªØ±Ú©ÛŒØ¨ config Ù¾Ø§ÛŒÙ‡ Ùˆ Ø§Ø®ØªØµØ§ØµÛŒ
  *
- * ارث از CoreComponents.App (ClComponentBase) — نه ComponentStructure.
- * ComponentIcon خودش یک Component مستقل است.
- * ComponentStructure به‌عنوان فرزند در renderContentComponent استفاده می‌شود.
+ * Ø§Ø±Ø« Ø§Ø² CoreComponents.App (ClComponentBase) â€” Ù†Ù‡ ComponentStructure.
+ * ComponentIcon Ø®ÙˆØ¯Ø´ ÛŒÚ© Component Ù…Ø³ØªÙ‚Ù„ Ø§Ø³Øª.
+ * ComponentStructure Ø¨Ù‡â€ŒØ¹Ù†ÙˆØ§Ù† ÙØ±Ø²Ù†Ø¯ Ø¯Ø± renderContentComponent Ø§Ø³ØªÙØ§Ø¯Ù‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯.
  *
- * ۷ prop پایه ComponentStructure از ComponentStructureTrait.props در _COMPONENT_PATTERN
- * ثبت می‌شوند تا کاربر بتواند آن‌ها را set کند — سپس در renderContentComponent
- * به ComponentStructure.create() forward می‌شوند.
+ * Û· prop Ù¾Ø§ÛŒÙ‡ ComponentStructure Ø§Ø² ComponentStructureTrait.props Ø¯Ø± _COMPONENT_PATTERN
+ * Ø«Ø¨Øª Ù…ÛŒâ€ŒØ´ÙˆÙ†Ø¯ ØªØ§ Ú©Ø§Ø±Ø¨Ø± Ø¨ØªÙˆØ§Ù†Ø¯ Ø¢Ù†â€ŒÙ‡Ø§ Ø±Ø§ set Ú©Ù†Ø¯ â€” Ø³Ù¾Ø³ Ø¯Ø± renderContentComponent
+ * Ø¨Ù‡ ComponentStructure.create() forward Ù…ÛŒâ€ŒØ´ÙˆÙ†Ø¯.
  *
  * Step Node (Plan 9.1 + 8.2.7):
- *   _COMPONENT_STEP — درخت Workflow داخلی Component (داخلی)
- *   در constructor از طریق super پاس داده می‌شود.
- *   در متدهای render به reactiveElementها متصل می‌شود.
+ *   _COMPONENT_STEP â€” Ø¯Ø±Ø®Øª Workflow Ø¯Ø§Ø®Ù„ÛŒ Component (Ø¯Ø§Ø®Ù„ÛŒ)
+ *   Ø¯Ø± constructor Ø§Ø² Ø·Ø±ÛŒÙ‚ super Ù¾Ø§Ø³ Ø¯Ø§Ø¯Ù‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯.
+ *   Ø¯Ø± Ù…ØªØ¯Ù‡Ø§ÛŒ render Ø¨Ù‡ reactiveElementÙ‡Ø§ Ù…ØªØµÙ„ Ù…ÛŒâ€ŒØ´ÙˆØ¯.
  *
- *   تفاوت با identity:
- *     identity = بیرونی — والد به این Component
- *     step     = داخلی — این Component به فرزندانش
+ *   ØªÙØ§ÙˆØª Ø¨Ø§ identity:
+ *     identity = Ø¨ÛŒØ±ÙˆÙ†ÛŒ â€” ÙˆØ§Ù„Ø¯ Ø¨Ù‡ Ø§ÛŒÙ† Component
+ *     step     = Ø¯Ø§Ø®Ù„ÛŒ â€” Ø§ÛŒÙ† Component Ø¨Ù‡ ÙØ±Ø²Ù†Ø¯Ø§Ù†Ø´
  *
- * Plan 8.2.7 — SubEvent:
- *   اگر Parent Step (identity.unique) و Child Step (step) هر دو وجود دارند،
- *   Child به‌عنوان SubEvent زیر Parent ثبت می‌شود — از طریق CoreEvent.SubEvent API.
- *   هیچ mutate مستقیمی روی children انجام نمی‌شود.
- *   هر Instance Step خودش را دارد (factory) — identity یکتا، تداخل ندارد.
+ * Plan 8.2.7 â€” SubEvent:
+ *   Ø§Ú¯Ø± Parent Step (identity.unique) Ùˆ Child Step (step) Ù‡Ø± Ø¯Ùˆ ÙˆØ¬ÙˆØ¯ Ø¯Ø§Ø±Ù†Ø¯ØŒ
+ *   Child Ø¨Ù‡â€ŒØ¹Ù†ÙˆØ§Ù† SubEvent Ø²ÛŒØ± Parent Ø«Ø¨Øª Ù…ÛŒâ€ŒØ´ÙˆØ¯ â€” Ø§Ø² Ø·Ø±ÛŒÙ‚ CoreEvent.SubEvent API.
+ *   Ù‡ÛŒÚ† mutate Ù…Ø³ØªÙ‚ÛŒÙ…ÛŒ Ø±ÙˆÛŒ children Ø§Ù†Ø¬Ø§Ù… Ù†Ù…ÛŒâ€ŒØ´ÙˆØ¯.
+ *   Ù‡Ø± Instance Step Ø®ÙˆØ¯Ø´ Ø±Ø§ Ø¯Ø§Ø±Ø¯ (factory) â€” identity ÛŒÚ©ØªØ§ØŒ ØªØ¯Ø§Ø®Ù„ Ù†Ø¯Ø§Ø±Ø¯.
  *
- * Plan 9.1 — Event Scope Ownership:
- *   هر ComponentIcon مالک Step Instance خودش است.
- *   disposal یک Component فقط باید Event resources متعلق به همان Component را آزاد کند.
+ * Plan 9.1 â€” Event Scope Ownership:
+ *   Ù‡Ø± ComponentIcon Ù…Ø§Ù„Ú© Step Instance Ø®ÙˆØ¯Ø´ Ø§Ø³Øª.
+ *   disposal ÛŒÚ© Component ÙÙ‚Ø· Ø¨Ø§ÛŒØ¯ Event resources Ù…ØªØ¹Ù„Ù‚ Ø¨Ù‡ Ù‡Ù…Ø§Ù† Component Ø±Ø§ Ø¢Ø²Ø§Ø¯ Ú©Ù†Ø¯.
  */
-export class ComponentIconBase extends CoreComponents.App<
+export class ComponentIconBase<TWorkflow extends CoreComponents.ComponentWorkflow<any> = CoreComponents.ComponentWorkflow> extends CoreComponents.App<
     PropsType & Record<string, any>,
     SchemasType,
     any,
-    MethodsType
-> {
+    MethodsType,
+    TWorkflow> {
 
     /**
-     * Step Node — درخت Workflow داخلی ComponentIcon
-     * فرزند در constructor از طریق super پاس می‌دهد.
-     * در متدهای render به reactiveElementها متصل می‌شود.
+     * Step Node â€” Ø¯Ø±Ø®Øª Workflow Ø¯Ø§Ø®Ù„ÛŒ ComponentIcon
+     * ÙØ±Ø²Ù†Ø¯ Ø¯Ø± constructor Ø§Ø² Ø·Ø±ÛŒÙ‚ super Ù¾Ø§Ø³ Ù…ÛŒâ€ŒØ¯Ù‡Ø¯.
+     * Ø¯Ø± Ù…ØªØ¯Ù‡Ø§ÛŒ render Ø¨Ù‡ reactiveElementÙ‡Ø§ Ù…ØªØµÙ„ Ù…ÛŒâ€ŒØ´ÙˆØ¯.
      */
-    protected _COMPONENT_STEP: CoreEvent.TStepInstance<any> | null = null;
+    protected _COMPONENT_STEP: TWorkflow | null = null;
 
 
     /**
      * constructor (Plan 8.2.7)
      *
-     * @param componentName — نام Component (default: "icon")
-     * @param elId          — شناسه المان (default: null)
-     * @param identity      — بیرونی { unique?, emit?, events? } — والد به این Component
-     * @param step          — داخلی (Workflow خاص این Component) — این Component به فرزندهایش
+     * @param componentName â€” Ù†Ø§Ù… Component (default: "icon")
+     * @param elId          â€” Ø´Ù†Ø§Ø³Ù‡ Ø§Ù„Ù…Ø§Ù† (default: null)
+     * @param identity      â€” Ø¨ÛŒØ±ÙˆÙ†ÛŒ { unique?, emit?, events? } â€” ÙˆØ§Ù„Ø¯ Ø¨Ù‡ Ø§ÛŒÙ† Component
+     * @param step          â€” Ø¯Ø§Ø®Ù„ÛŒ (Workflow Ø®Ø§Øµ Ø§ÛŒÙ† Component) â€” Ø§ÛŒÙ† Component Ø¨Ù‡ ÙØ±Ø²Ù†Ø¯Ù‡Ø§ÛŒØ´
      */
     constructor(
         componentName: string = "icon",
@@ -70,7 +70,7 @@ export class ComponentIconBase extends CoreComponents.App<
             emit?:   CoreEvent.TEmitHandler | null;
             events?: Record<string, any> | null;
         },
-        step?: CoreEvent.TStepInstance<any>,
+        step?: TWorkflow,
     ) {
         super(componentName, elId);
 
@@ -95,7 +95,7 @@ export class ComponentIconBase extends CoreComponents.App<
 
     protected _COMPONENT_DEFINITION = Definition;
 
-    // ۷ prop پایه (از Trait) + ۴ prop اختصاصی ComponentIcon
+    // Û· prop Ù¾Ø§ÛŒÙ‡ (Ø§Ø² Trait) + Û´ prop Ø§Ø®ØªØµØ§ØµÛŒ ComponentIcon
     protected _COMPONENT_PATTERN = CoreComponents.DefineProp<PropsType & Record<string, any>>({
         ...ComponentStructureTrait.props,
         ...Props,

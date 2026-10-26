@@ -24,30 +24,30 @@ import {ButtonVariants, ButtonSemantic} from "../componentButton/Props";
 
 
 /**
- * ComponentErrorIsEmpty — کلاس نهایی
+ * ComponentErrorIsEmpty â€” Ú©Ù„Ø§Ø³ Ù†Ù‡Ø§ÛŒÛŒ
  *
- * معماری Composition:
- *   ComponentErrorIsEmpty HAS-A ComponentBorder (نه IS-A)
- *   ComponentBorder در renderBorder از طریق مستقیم
- *   new ComponentBorder.Component ساخته می‌شود.
- *   ComponentIcon در renderBorderContentIcon از طریق مستقیم ساخته می‌شود.
- *   ComponentButton در renderBorderContentBtn از طریق مستقیم ساخته می‌شود.
+ * Ù…Ø¹Ù…Ø§Ø±ÛŒ Composition:
+ *   ComponentErrorIsEmpty HAS-A ComponentBorder (Ù†Ù‡ IS-A)
+ *   ComponentBorder Ø¯Ø± renderBorder Ø§Ø² Ø·Ø±ÛŒÙ‚ Ù…Ø³ØªÙ‚ÛŒÙ…
+ *   new ComponentBorder.Component Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯.
+ *   ComponentIcon Ø¯Ø± renderBorderContentIcon Ø§Ø² Ø·Ø±ÛŒÙ‚ Ù…Ø³ØªÙ‚ÛŒÙ… Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯.
+ *   ComponentButton Ø¯Ø± renderBorderContentBtn Ø§Ø² Ø·Ø±ÛŒÙ‚ Ù…Ø³ØªÙ‚ÛŒÙ… Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯.
  *
- * Constructor امضا: (config, methods, identity?)
- *   config  — شامل propهای پایه + propهای اختصاصی
- *   methods — methodهای اختصاصی (BTN_CLICK)
- *   identity — { unique?, emit?, events? }
+ * Constructor Ø§Ù…Ø¶Ø§: (config, methods, identity?)
+ *   config  â€” Ø´Ø§Ù…Ù„ propÙ‡Ø§ÛŒ Ù¾Ø§ÛŒÙ‡ + propÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ
+ *   methods â€” methodÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (BTN_CLICK)
+ *   identity â€” { unique?, emit?, events? }
  *
- * Plan 9.1 — Step داخلی در constructor ساخته می‌شود (factory function).
- * Plan 11.2 — لایه <component-error-is-empty> + <section> از Schema پایه رندر می‌شود.
+ * Plan 9.1 â€” Step Ø¯Ø§Ø®Ù„ÛŒ Ø¯Ø± constructor Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯ (factory function).
+ * Plan 11.2 â€” Ù„Ø§ÛŒÙ‡ <component-error-is-empty> + <section> Ø§Ø² Schema Ù¾Ø§ÛŒÙ‡ Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒØ´ÙˆØ¯.
  *
- * بازیابی Behavior از Legacy:
- *   - icon نمایش warning
- *   - title نمایش پیام خطا
- *   - button retry با BTN_CLICK method
- *   - fontSize واکنش‌گرا → computed روی CoreConfig.Settings.SizeName
+ * Ø¨Ø§Ø²ÛŒØ§Ø¨ÛŒ Behavior Ø§Ø² Legacy:
+ *   - icon Ù†Ù…Ø§ÛŒØ´ warning
+ *   - title Ù†Ù…Ø§ÛŒØ´ Ù¾ÛŒØ§Ù… Ø®Ø·Ø§
+ *   - button retry Ø¨Ø§ BTN_CLICK method
+ *   - fontSize ÙˆØ§Ú©Ù†Ø´â€ŒÚ¯Ø±Ø§ â†’ computed Ø±ÙˆÛŒ CoreConfig.Settings.SizeName
  */
-export class ComponentErrorIsEmpty extends ComponentErrorIsEmptyBase {
+export class ComponentErrorIsEmpty extends ComponentErrorIsEmptyBase<ReturnType<typeof createErrorIsEmptyStep>>{
 
     constructor(
         config?:  Partial<StructurePropsType & ErrorIsEmptyPropsConfigType>,
@@ -71,7 +71,7 @@ export class ComponentErrorIsEmpty extends ComponentErrorIsEmptyBase {
 
 
     /* ---------------------------------------------
-       Plan 9.1 — Component Disposal
+       Plan 9.1 â€” Component Disposal
     --------------------------------------------- */
     dispose(): void {
         this.disposeStep();
@@ -79,7 +79,7 @@ export class ComponentErrorIsEmpty extends ComponentErrorIsEmptyBase {
 
 
     /* ---------------------------------------------
-       Plan 11.2 — renderContentComponent
+       Plan 11.2 â€” renderContentComponent
     --------------------------------------------- */
     override renderContentComponent(
         attrsDefault: PartAttrDefault,
@@ -91,7 +91,7 @@ export class ComponentErrorIsEmpty extends ComponentErrorIsEmptyBase {
 
 
     /* ---------------------------------------------
-       renderManagerComponent — Routing
+       renderManagerComponent â€” Routing
     --------------------------------------------- */
     override renderManagerComponent(
         partName:     string,
@@ -124,7 +124,7 @@ export class ComponentErrorIsEmpty extends ComponentErrorIsEmptyBase {
 
 
     /* ---------------------------------------------
-       renderForm — رندر Part FORM اصلی
+       renderForm â€” Ø±Ù†Ø¯Ø± Part FORM Ø§ØµÙ„ÛŒ
     --------------------------------------------- */
     protected renderForm(
         attrsDefault?: PartAttrDefault,
@@ -142,7 +142,7 @@ export class ComponentErrorIsEmpty extends ComponentErrorIsEmptyBase {
 
 
     /* ---------------------------------------------
-       renderBorder — Composition: ComponentBorder
+       renderBorder â€” Composition: ComponentBorder
     --------------------------------------------- */
     protected renderBorder(
         attrsDefault?: PartAttrDefault,
@@ -169,7 +169,7 @@ export class ComponentErrorIsEmpty extends ComponentErrorIsEmptyBase {
 
 
     /* ---------------------------------------------
-       renderBorderContent — section + children [ICON, TITLE, BTN]
+       renderBorderContent â€” section + children [ICON, TITLE, BTN]
     --------------------------------------------- */
     protected renderBorderContent(
         attrsDefault?: PartAttrDefault,
@@ -190,7 +190,7 @@ export class ComponentErrorIsEmpty extends ComponentErrorIsEmptyBase {
 
 
     /* ---------------------------------------------
-       renderBorderContentIcon — Composition: ComponentIcon
+       renderBorderContentIcon â€” Composition: ComponentIcon
     --------------------------------------------- */
     protected renderBorderContentIcon(
         attrsDefault?: PartAttrDefault,
@@ -225,7 +225,7 @@ export class ComponentErrorIsEmpty extends ComponentErrorIsEmptyBase {
 
 
     /* ---------------------------------------------
-       renderBorderContentTitle — section + <b> + computed styles
+       renderBorderContentTitle â€” section + <b> + computed styles
     --------------------------------------------- */
     protected renderBorderContentTitle(
         attrsDefault?: PartAttrDefault,
@@ -276,8 +276,8 @@ export class ComponentErrorIsEmpty extends ComponentErrorIsEmptyBase {
 
 
     /* ---------------------------------------------
-       renderBorderContentBtn — Composition: ComponentButton
-       رندر شرطی بر اساس prop_btnHas
+       renderBorderContentBtn â€” Composition: ComponentButton
+       Ø±Ù†Ø¯Ø± Ø´Ø±Ø·ÛŒ Ø¨Ø± Ø§Ø³Ø§Ø³ prop_btnHas
     --------------------------------------------- */
     protected renderBorderContentBtn(
         attrsDefault?: PartAttrDefault,
@@ -335,7 +335,7 @@ export class ComponentErrorIsEmpty extends ComponentErrorIsEmptyBase {
 
 
     /* ---------------------------------------------
-       renderEmptyContent — fallback خالی
+       renderEmptyContent â€” fallback Ø®Ø§Ù„ÛŒ
     --------------------------------------------- */
     public renderEmptyContent(
         attrsDefault?: PartAttrDefault,

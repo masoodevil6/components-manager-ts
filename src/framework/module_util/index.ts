@@ -8,3 +8,4 @@ export * as Tools  from "@/util_tools";
 export * as Validators  from "@/util_validators";
 export * as Styles  from "@/util_styles";
 export * as Shapes  from "@/util_shapes";
+export * as OptionsStd from "@/util_options_std";

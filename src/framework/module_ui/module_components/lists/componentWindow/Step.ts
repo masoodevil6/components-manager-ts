@@ -1,3 +1,4 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 // --------------------------------
 
@@ -12,17 +13,17 @@ import * as CoreEvent from "@/core_event";
  *   resize  ← Event Engine endpoint
  */
 export function createWindowStep() {
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {
-            open: CoreEvent.Step({
+            open: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),
-            close: CoreEvent.Step({
+            close: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),
-            resize: CoreEvent.Step({
+            resize: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),

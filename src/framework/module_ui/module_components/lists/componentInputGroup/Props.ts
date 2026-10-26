@@ -33,6 +33,12 @@ export type InputGroupItem = {
     width: LayoutColumn | number | string | null;
 };
 
+export type InputGroupDefinition = {
+    id: string;
+    title: string;
+    inputs: InputGroupItem[];
+};
+
 const translation = Keys.category.components.inputGroup.props;
 
 export const Props = {
@@ -45,11 +51,18 @@ export const Props = {
         OptionShow: true,
         OptionGroup: InputProps.PropGroups.value,
     }),
-    prop_inputs: Define_ComponentProp<InputGroupItem[]>({
+    prop_inputs: Define_ComponentProp<InputGroupDefinition[]>({
         prop: "prop_inputs",
         default: [],
         name: translation.inputs.name,
         description: translation.inputs.description,
+    }),
+    prop_groupSelected: Define_ComponentProp<string | null>({
+        prop: "prop_groupSelected",
+        default: null,
+        name: translation.groupSelected.name,
+        description: translation.groupSelected.description,
+        OptionShow: true,
     }),
 } satisfies CoreComponents.ComponentProps;
 

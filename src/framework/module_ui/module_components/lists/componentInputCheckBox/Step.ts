@@ -1,3 +1,4 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 // --------------------------------
 
@@ -8,17 +9,17 @@ import * as CoreEvent from "@/core_event";
  *   click ← Event Engine endpoint
  */
 export function createInputCheckBoxStep() {
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {
-            label: CoreEvent.Step({
+            label: DefineWorkflow({
                 children: {
-                    click: CoreEvent.Step({
+                    click: DefineWorkflow({
                         request:  CoreEvent.Request(),
                         response: CoreEvent.Response({ value: "" }),
                     }),
                 }
             }),
-            click: CoreEvent.Step({
+            click: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: false }),
             }),

@@ -21,7 +21,7 @@ import {Keys} from "../../../module_categories/languages";
 
 type NodeMatch = {visible: Set<string>; forcedExpanded: Set<string>; direct: Set<string>};
 
-export class ComponentJsonTree extends ComponentJsonTreeBase {
+export class ComponentJsonTree extends ComponentJsonTreeBase<ReturnType<typeof createJsonTreeStep>>{
     private _BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;
     private _TOOLBAR_BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;
     private _SEARCH: InstanceType<typeof ComponentInputSimple.Component> | null = null;
@@ -51,6 +51,7 @@ export class ComponentJsonTree extends ComponentJsonTreeBase {
                 this.renderTree();
             }, this.getScope());
         }
+        this._COMPONENT_PROPS_BIND.prop_treeHorizontalScroll.subscribe(() => this.renderTree(), this.getScope());
         for (const key of ["prop_showSearch", "prop_showExpandControls", "prop_showCopyButton", "prop_searchPlaceholder"] as const) {
             this._COMPONENT_PROPS_BIND[key].subscribe(() => this.renderToolbar(), this.getScope());
         }
@@ -326,9 +327,32 @@ export class ComponentJsonTree extends ComponentJsonTreeBase {
     }
 
     private renderTreePart(): CoreReactive.App {
+        const bind = this._COMPONENT_PROPS_BIND;
+        const treeStyles = CoreObservable.App.computed(
+            (fillHeight: boolean, horizontalScroll: boolean) => ({
+                display: "block",
+                flex: fillHeight ? "1 1 0px" : "1 1 auto",
+                width: "100%",
+                minWidth: "0",
+                minHeight: fillHeight ? "0" : "220px",
+                height: "auto",
+                maxHeight: fillHeight ? "none" : "min(65vh, 720px)",
+                overflowX: horizontalScroll ? "auto" : "hidden",
+                overflowY: "auto",
+                padding: "var(--paddingMedium)",
+                boxSizing: "border-box",
+                backgroundColor: "var(--shanColor1)",
+                fontFamily: "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+                fontSize: "0.88rem",
+                lineHeight: "1.65",
+                color: "var(--darkColor1)",
+            }),
+            [bind.prop_treeFillHeight, bind.prop_treeHorizontalScroll],
+            this.getScope(),
+        );
         const tree = CoreReactive.App.section({
             attrs: {"data-part-name": "part-json-tree-tree", role: "tree", "aria-label": "JSON tree"},
-            styles: {display: "block", flex: "1 1 auto", width: "100%", minWidth: "0", minHeight: "220px", maxHeight: "min(65vh, 720px)", overflow: "auto", padding: "var(--paddingMedium)", boxSizing: "border-box", backgroundColor: "var(--shanColor1)", fontFamily: "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace", fontSize: "0.88rem", lineHeight: "1.65", color: "var(--darkColor1)"},
+            stylesBind: treeStyles as any,
         });
         this._TREE_ELEMENT = tree.getElement() as HTMLElement;
         this._TREE_ELEMENT.addEventListener("click", (event) => this.onTreeClick(event));
@@ -347,6 +371,7 @@ export class ComponentJsonTree extends ComponentJsonTreeBase {
         }
 
         const query = this._QUERY.trim().toLocaleLowerCase();
+        const horizontalScroll = this._COMPONENT_PROPS_BIND.prop_treeHorizontalScroll.get();
         const match = this.findMatches(data, query);
         const maxNodes = this.limit(this._COMPONENT_PROPS_BIND.prop_maxNodes.get(), 2000, 1, 50000);
         const maxDepth = this.limit(this._COMPONENT_PROPS_BIND.prop_maxDepth.get(), 32, 0, 256);
@@ -365,7 +390,8 @@ export class ComponentJsonTree extends ComponentJsonTreeBase {
             row.setAttribute("aria-level", String(depth + 1));
             row.style.display = "flex";
             row.style.alignItems = "center";
-            row.style.minWidth = "0";
+            row.style.width = horizontalScroll ? "max-content" : "100%";
+            row.style.minWidth = horizontalScroll ? "100%" : "0";
             row.style.minHeight = "30px";
             row.style.paddingInlineStart = `${8 + depth * 20}px`;
             row.style.paddingInlineEnd = "8px";
@@ -386,11 +412,11 @@ export class ComponentJsonTree extends ComponentJsonTreeBase {
 
             row.append(this.dataTypeBadge(value));
             const keyElement = this.token("part-json-tree-key", isRoot ? "JSON" : key, "var(--primaryColor1)", true, query);
-            keyElement.style.flex = "0 1 auto";
-            keyElement.style.maxWidth = "40%";
-            keyElement.style.minWidth = "0";
-            keyElement.style.overflow = "hidden";
-            keyElement.style.textOverflow = "ellipsis";
+            keyElement.style.flex = horizontalScroll ? "0 0 auto" : "0 1 auto";
+            keyElement.style.maxWidth = horizontalScroll ? "none" : "40%";
+            keyElement.style.minWidth = horizontalScroll ? "max-content" : "0";
+            keyElement.style.overflow = horizontalScroll ? "visible" : "hidden";
+            keyElement.style.textOverflow = horizontalScroll ? "clip" : "ellipsis";
             keyElement.style.whiteSpace = "nowrap";
             row.append(keyElement);
             if (!isRoot) {
@@ -416,9 +442,10 @@ export class ComponentJsonTree extends ComponentJsonTreeBase {
                 if (!expanded && children.length === 0) summary.textContent = Array.isArray(value) ? (expanded ? "[" : "[...] " + children.length) : (expanded ? "{" : "{...} " + children.length);
             } else {
                 const valueElement = this.valueToken(value, query);
-                valueElement.style.minWidth = "0";
-                valueElement.style.flex = "1 1 auto";
-                valueElement.style.overflowWrap = "anywhere";
+                valueElement.style.minWidth = horizontalScroll ? "max-content" : "0";
+                valueElement.style.flex = horizontalScroll ? "0 0 auto" : "1 1 auto";
+                valueElement.style.overflowWrap = horizontalScroll ? "normal" : "anywhere";
+                if (horizontalScroll) valueElement.style.whiteSpace = "nowrap";
                 row.append(valueElement);
             }
             const copyButton = this.createNodeCopyButton(path, isRoot ? "JSON" : key, row);
@@ -452,6 +479,10 @@ export class ComponentJsonTree extends ComponentJsonTreeBase {
             const closing = document.createElement("div");
             closing.dataset.partName = "part-json-tree-close";
             closing.style.paddingInlineStart = `${depth * 20 + 31}px`;
+            if (horizontalScroll) {
+                closing.style.width = "max-content";
+                closing.style.minWidth = "100%";
+            }
             closing.style.height = "12px";
             closing.style.color = "var(--darkColor2)";
             closing.style.fontSize = "0.78em";

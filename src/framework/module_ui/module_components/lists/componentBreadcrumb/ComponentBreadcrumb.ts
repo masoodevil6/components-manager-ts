@@ -22,7 +22,7 @@ const asCss = (style: Record<string, string>): string => Object.entries(style)
     .map(([name, value]) => `${name.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}:${value};`)
     .join("");
 
-export class ComponentBreadcrumb extends ComponentBreadcrumbBase {
+export class ComponentBreadcrumb extends ComponentBreadcrumbBase<ReturnType<typeof createBreadcrumbStep>>{
     private _BACK_BUTTON: InstanceType<typeof ComponentButton.Component> | null = null;
     private readonly _INSTANCE_CLASS = `component-breadcrumb-${this._COMPONENT_RANDOM_ID}`;
 

@@ -1,4 +1,5 @@
 import * as CoreEvent from "@/core_event";
+import {DefineWorkflow} from "@/core_components";
 // --------------------------------
 
 
@@ -52,19 +53,19 @@ export interface MessageEventScope {
  */
 export const createMessageEventScope = (): MessageEventScope => {
 
-    const root = CoreEvent.Step({
+    const root = DefineWorkflow({
         children: {
 
             // body — محتوای پیام — target برای close Request
-            body: CoreEvent.Step({
+            body: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),
 
             // icon — آیکون بستن
-            icon: CoreEvent.Step({
+            icon: DefineWorkflow({
                 children: {
-                    close: CoreEvent.Step({
+                    close: DefineWorkflow({
                         request:  CoreEvent.Request(),
                         response: CoreEvent.Response({ value: "" }),
                     }),

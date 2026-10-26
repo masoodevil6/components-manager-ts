@@ -1,0 +1,1 @@
+export const PAGE_SETTING_TRANSITION_MS = 500;

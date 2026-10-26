@@ -1,11 +1,12 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 
 export function createInputSimpleStep() {
-    const endpoint = () => CoreEvent.Step({
+    const endpoint = () => DefineWorkflow({
         request: CoreEvent.Request(),
         response: CoreEvent.Response({value: null as string | null}),
     });
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {
             inputChange: endpoint(),
             inputFocus: endpoint(),

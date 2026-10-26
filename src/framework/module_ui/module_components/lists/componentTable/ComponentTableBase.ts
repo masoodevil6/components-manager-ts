@@ -10,25 +10,25 @@ import {Definition}               from "./Definition";
 
 
 /**
- * ComponentTableBase — ترکیب config پایه و اختصاصی
+ * ComponentTableBase â€” ØªØ±Ú©ÛŒØ¨ config Ù¾Ø§ÛŒÙ‡ Ùˆ Ø§Ø®ØªØµØ§ØµÛŒ
  *
- * ارث از CoreComponents.App (ClComponentBase) — نه ComponentStructure.
- * ComponentTable خودش یک Component مستقل است.
+ * Ø§Ø±Ø« Ø§Ø² CoreComponents.App (ClComponentBase) â€” Ù†Ù‡ ComponentStructure.
+ * ComponentTable Ø®ÙˆØ¯Ø´ ÛŒÚ© Component Ù…Ø³ØªÙ‚Ù„ Ø§Ø³Øª.
  *
- * Plan 8.2.7 / 9.1 — SubEvent + Event Scope Ownership:
- *   هر ComponentTable مالک Step Instance خودش است.
+ * Plan 8.2.7 / 9.1 â€” SubEvent + Event Scope Ownership:
+ *   Ù‡Ø± ComponentTable Ù…Ø§Ù„Ú© Step Instance Ø®ÙˆØ¯Ø´ Ø§Ø³Øª.
  */
-export class ComponentTableBase extends CoreComponents.App<
+export class ComponentTableBase<TWorkflow extends CoreComponents.ComponentWorkflow<any> = CoreComponents.ComponentWorkflow> extends CoreComponents.App<
     PropsType & Record<string, any>,
     SchemasType,
     any,
-    MethodsType
-> {
+    MethodsType,
+    TWorkflow> {
 
     /**
-     * Step Node — درخت Workflow داخلی ComponentTable
+     * Step Node â€” Ø¯Ø±Ø®Øª Workflow Ø¯Ø§Ø®Ù„ÛŒ ComponentTable
      */
-    protected _COMPONENT_STEP: CoreEvent.TStepInstance<any> | null = null;
+    protected _COMPONENT_STEP: TWorkflow | null = null;
 
 
     /**
@@ -42,7 +42,7 @@ export class ComponentTableBase extends CoreComponents.App<
             emit?:   CoreEvent.TEmitHandler | null;
             events?: Record<string, any> | null;
         },
-        step?: CoreEvent.TStepInstance<any>,
+        step?: TWorkflow,
     ) {
         super(componentName, elId);
 
@@ -58,7 +58,7 @@ export class ComponentTableBase extends CoreComponents.App<
 
 
     /**
-     * Disposal — پاک‌سازی کل subtree از رجیستری CoreEvent
+     * Disposal â€” Ù¾Ø§Ú©â€ŒØ³Ø§Ø²ÛŒ Ú©Ù„ subtree Ø§Ø² Ø±Ø¬ÛŒØ³ØªØ±ÛŒ CoreEvent
      */
     disposeStep(): void {
         if (this._COMPONENT_STEP) {

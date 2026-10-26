@@ -34,6 +34,7 @@ export default defineConfig({
       { find: '@/util_dates', replacement: path.resolve(__dirname, './src/framework/module_util/module_dates') },
       { find: '@/util_excels', replacement: path.resolve(__dirname, './src/framework/module_util/module_excel') },
       { find: '@/util_tools', replacement: path.resolve(__dirname, './src/framework/module_util/module_tools') },
+      { find: '@/util_options_std', replacement: path.resolve(__dirname, './src/framework/module_util/module_options_std') },
       { find: '@/util', replacement: path.resolve(__dirname, './src/framework/module_util') },
 
       // ─── PERFORMANCE ────────────────────────────────────────

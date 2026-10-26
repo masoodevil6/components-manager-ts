@@ -7,6 +7,12 @@ import {Keys} from "../../../module_categories/languages";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
 
 export const Props = {
+    prop_setting: Define_ComponentProp<CoreReactive.App | string | HTMLElement | null>({
+        prop: "prop_setting",
+        default: null,
+        name: Keys.category.components.page.props.setting.name,
+        description: Keys.category.components.page.props.setting.description,
+    }),
     prop_header: Define_ComponentProp<CoreReactive.App | string | null>({
         prop: "prop_header",
         default: null,

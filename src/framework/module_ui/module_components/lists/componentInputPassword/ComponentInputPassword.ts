@@ -19,7 +19,7 @@ import * as ComponentValidate from "../componentValidate";
 
 type Child = {dispose?: () => void; disposeStep?: () => void};
 
-export class ComponentInputPassword extends ComponentInputPasswordBase {
+export class ComponentInputPassword extends ComponentInputPasswordBase<ReturnType<typeof createInputPasswordStep>>{
     private static _INSTANCE_COUNT = 0;
     private readonly _INPUT_ID = `component-input-password-${++ComponentInputPassword._INSTANCE_COUNT}`;
     private _INPUT_SIMPLE: InstanceType<typeof ComponentInputSimple.Component> | null = null;

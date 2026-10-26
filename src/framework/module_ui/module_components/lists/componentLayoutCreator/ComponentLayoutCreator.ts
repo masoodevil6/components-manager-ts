@@ -1,7 +1,10 @@
 import * as CoreComponents from "@/core_components";
 import * as CoreReactive from "@/core_reactive";
 import * as CoreObservable from "@/core_observable";
+import * as CoreConfig from "@/core_configs";
+import * as CoreEvent from "@/core_event";
 import * as CoreLanguage from "@/core_languages";
+import * as UtilOptionsStd from "@/util_options_std";
 import {PartAttrDefault} from "@/core_components";
 import * as UiIcons from "@/ui_icons";
 import * as ComponentStructure from "../componentStructure";
@@ -43,6 +46,7 @@ export class ComponentLayoutCreator extends ComponentStructure.Component {
     private _ADD_COLUMN_SETTINGS_CREATOR: ComponentElementCreator.Component | null = null;
     private _ADD_COLUMN_BORDER: ComponentBorder.Component | null = null;
     private _ADD_COLUMN_ICON: ComponentIcon.Component | null = null;
+    private _ACTIVE_SETTINGS_CREATOR: ComponentElementCreator.Component | null = null;
     private _DISPOSED = false;
 
     constructor(
@@ -60,6 +64,7 @@ export class ComponentLayoutCreator extends ComponentStructure.Component {
         for (const creator of this._COLUMN_CREATORS.splice(0).reverse()) creator.dispose();
         this._COLUMN_ITEM_COLS.clear();
         this._ADD_COLUMN_SETTINGS_CREATOR?.dispose();
+        this._ACTIVE_SETTINGS_CREATOR = null;
         this._ADD_COLUMN_BORDER?.dispose();
         (this._ADD_COLUMN_ICON as any)?.getScope?.().dispose?.();
         this._MAIN_ELEMENT_CREATOR?.dispose();
@@ -107,6 +112,7 @@ export class ComponentLayoutCreator extends ComponentStructure.Component {
         data: Record<string, CoreObservable.App<any>>,
     ): CoreReactive.App {
         const mode = data?.["prop_mode"] ?? this._COMPONENT_PROPS_BIND.prop_mode;
+        const components = data?.["prop_components"] ?? this._COMPONENT_PROPS_BIND.prop_components;
         this._COLUMN_CREATOR_MODE ??= CoreObservable.App.computed(
             (layoutMode: LayoutCreatorMode) => layoutMode === LayoutCreatorMode.EDIT
                 ? ComponentElementCreator.ElementCreatorMode.EDIT
@@ -115,7 +121,7 @@ export class ComponentLayoutCreator extends ComponentStructure.Component {
             this.getScope(),
         );
 
-        if (this._COLUMN_CREATORS.length === 0) this.createColumnCreator();
+        if (this._COLUMN_CREATORS.length === 0) this.createColumnCreator(undefined, undefined, components);
         this._ADD_COLUMN_BORDER ??= this.createAddColumnBorder();
         this._LAYOUT_CONTENT ??= CoreObservable.App.computed(
             (layoutMode: LayoutCreatorMode, _version: number) => {
@@ -136,6 +142,9 @@ export class ComponentLayoutCreator extends ComponentStructure.Component {
 
         this._MAIN_ELEMENT_CREATOR ??= new ComponentElementCreator.Component({
             prop_mode: this._COLUMN_CREATOR_MODE as any,
+            prop_components: components as any,
+            prop_settingsUsePageSetting: true,
+            prop_hasHeaderSetting: false,
             prop_hasHeaderDelete: false,
             prop_hasTabComponent: false,
             prop_component: ComponentLayout.Component,
@@ -158,6 +167,7 @@ export class ComponentLayoutCreator extends ComponentStructure.Component {
     private createColumnCreator(
         selectedComponent?: Function,
         propertiesOverride?: Record<string, any>,
+        components: CoreObservable.App<any> = this._COMPONENT_PROPS_BIND.prop_components,
     ): ComponentElementCreator.Component {
         const mainComponent = this._MAIN_ELEMENT_CREATOR?.get("prop_component") as Function | null;
         const mainProperties = this._MAIN_ELEMENT_CREATOR?.get("prop_componentProperties") as Record<string, any> | null;
@@ -173,17 +183,51 @@ export class ComponentLayoutCreator extends ComponentStructure.Component {
         let creator!: ComponentElementCreator.Component;
         creator = new ComponentElementCreator.Component({
             prop_mode: this._COLUMN_CREATOR_MODE as any,
+            prop_components: components as any,
+            prop_settingsUsePageSetting: true,
+            prop_settingsUseExternalPageSetting: true,
             prop_component: componentReference,
             // Each column starts from the main creator's current settings, with
             // its own column content and independently editable properties.
-            prop_componentProperties: columnProperties,
+            prop_componentProperties: this.withDefaultColumnMargin(columnProperties),
         } as any, {
             CLICK_DELETE: (event) => this.removeColumnCreator(creator, event),
             COLUMN_CHANGE: (_event, dataArgs) => this.updateColumnItemCol(creator, dataArgs?.COLUMN),
+            SETTINGS_OPEN: (event, dataArgs) => this.openComponentSettings(creator, event, dataArgs),
+            SETTINGS_CLOSE: (event) => this.closeComponentSettings(creator, event),
         } as any);
         this._COLUMN_ITEM_COLS.set(creator, ComponentLayout.LayoutColumn.COL_4);
         this._COLUMN_CREATORS.push(creator);
         return creator;
+    }
+
+    private withDefaultColumnMargin(properties: Record<string, any>): Record<string, any> {
+        const result = {...(properties ?? {})};
+        const configuredStyles = result.prop_structureStyles;
+        const sizeName = CoreConfig.Settings.SizeName.get();
+        const defaultMargin = UtilOptionsStd.Group.Margin.createPropertyCssStyles(
+            UtilOptionsStd.Group.Margin.Direction.BOTTOM,
+            sizeName,
+        );
+        const applyDefault = (value: any): Record<string, any> => {
+            const styles = value && typeof value === "object" && !Array.isArray(value) ? value : {};
+            const hasMarginBottom = Object.keys(styles).some((key) =>
+                key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`) === UtilOptionsStd.Group.Margin.Direction.BOTTOM,
+            );
+            return hasMarginBottom ? {...styles} : {...styles, ...defaultMargin};
+        };
+
+        if (CoreObservable.App.isObservable(configuredStyles)) {
+            result.prop_structureStyles = CoreObservable.App.computed(
+                (styles: any) => applyDefault(styles),
+                [configuredStyles],
+                this.getScope(),
+            );
+        } else {
+            result.prop_structureStyles = applyDefault(configuredStyles);
+        }
+
+        return result;
     }
 
     private createColumnPreviewContent(): ComponentLayout.LayoutContentItem[] {
@@ -268,6 +312,9 @@ export class ComponentLayoutCreator extends ComponentStructure.Component {
         if (this._DISPOSED) return;
         this._ADD_COLUMN_SETTINGS_CREATOR ??= new ComponentElementCreator.Component({
             prop_mode: ComponentElementCreator.ElementCreatorMode.SETTING_CREATE,
+            prop_components: this._COMPONENT_PROPS_BIND.prop_components as any,
+            prop_settingsUsePageSetting: true,
+            prop_settingsUseExternalPageSetting: true,
             prop_component: null,
             prop_componentProperties: {},
         } as any, {
@@ -278,12 +325,67 @@ export class ComponentLayoutCreator extends ComponentStructure.Component {
                 this.createColumnCreator(selectedComponent, dataArgs?.PROPERTIES as Record<string, any>);
                 this._COLUMN_VERSION.set(this._COLUMN_VERSION.get() + 1);
             },
+            SETTINGS_OPEN: (openEvent, dataArgs) => this.openComponentSettings(
+                this._ADD_COLUMN_SETTINGS_CREATOR!,
+                openEvent,
+                dataArgs,
+            ),
+            SETTINGS_CLOSE: (closeEvent) => this.closeComponentSettings(this._ADD_COLUMN_SETTINGS_CREATOR!, closeEvent),
         } as any);
 
         this._ADD_COLUMN_SETTINGS_CREATOR.set("prop_mode", ComponentElementCreator.ElementCreatorMode.SETTING_CREATE);
         this._ADD_COLUMN_SETTINGS_CREATOR.set("prop_component", null);
         this._ADD_COLUMN_SETTINGS_CREATOR.set("prop_componentProperties", {});
-        this._ADD_COLUMN_SETTINGS_CREATOR.call_openSettings(event);
+        this._ADD_COLUMN_SETTINGS_CREATOR.call_openSettingsPage(event, this.getElement());
+    }
+
+    private findPageSettingEndpoint(): CoreEvent.TStepRef | null {
+        const root = this.getPageWorkflowRoot();
+        if (!root) return null;
+        const pageStep = CoreEvent.getChild(root, "page");
+        return pageStep ? CoreEvent.getChild(pageStep, "setting") : null;
+    }
+
+    private getPageWorkflowRoot(): CoreEvent.TStepRef | null {
+        let step: any = this._COMPONENT_UNIQUE;
+        if (!step || typeof step.getParent !== "function") return null;
+        while (step.getParent()) step = step.getParent();
+        return step as CoreEvent.TStepRef;
+    }
+
+    private getPageWorkflowSource(): CoreEvent.TStepRef | null {
+        const root = this.getPageWorkflowRoot();
+        return root ? CoreEvent.getChild(root, "showWorkflow") : null;
+    }
+
+    private openComponentSettings(
+        creator: ComponentElementCreator.Component,
+        _event: Event,
+        dataArgs?: {CONTENT?: CoreReactive.App | null},
+    ): void {
+        const content = dataArgs?.CONTENT;
+        const endpoint = this.findPageSettingEndpoint();
+        const source = this.getPageWorkflowSource();
+        const response = endpoint && content
+            ? CoreEvent.App.request(CoreEvent.requestMap([[endpoint, {content}]]), source).get(endpoint)
+            : null;
+
+        if (response?.status === "success" && response.value?.opened === true) {
+            this._ACTIVE_SETTINGS_CREATOR = creator;
+            return;
+        }
+
+        if (content) creator.call_showSettingsPageSetting(content, this.getElement());
+    }
+
+    private closeComponentSettings(creator: ComponentElementCreator.Component, _event?: Event): void {
+        if (this._ACTIVE_SETTINGS_CREATOR !== creator) return;
+        const endpoint = this.findPageSettingEndpoint();
+        const source = this.getPageWorkflowSource();
+        if (endpoint) {
+            CoreEvent.App.request(CoreEvent.requestMap([[endpoint, {close: true}]]), source);
+        }
+        this._ACTIVE_SETTINGS_CREATOR = null;
     }
 
     private removeColumnCreator(creator: ComponentElementCreator.Component, event: Event): void {

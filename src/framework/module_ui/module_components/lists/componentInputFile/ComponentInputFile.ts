@@ -23,7 +23,7 @@ import * as ComponentValidate from "../componentValidate";
 
 type Child = {dispose?: () => void; disposeStep?: () => void};
 
-export class ComponentInputFile extends ComponentInputFileBase {
+export class ComponentInputFile extends ComponentInputFileBase<ReturnType<typeof createInputFileStep>>{
     private static _INSTANCE_COUNT = 0;
     private readonly _INPUT_ID = 'component-input-file-' + (++ComponentInputFile._INSTANCE_COUNT);
     private readonly _VALID_FILES = new CoreObservable.App<File[]>([]);
@@ -256,7 +256,7 @@ export class ComponentInputFile extends ComponentInputFileBase {
         const sizeName = CoreConfig.Settings.SizeName.get();
         const content = CoreReactive.App.section({styles: {display: "flex", flexDirection: "column", gap: "4px", padding: UtilStyle.Css_Padding(sizeName)}, children: [
             CoreReactive.App.section({styles: {fontWeight: "600", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"}, attrs: {title: item.file.name}, children: [item.file.name]}),
-            ...item.errors.map((error) => CoreReactive.App.section({styles: {fontSize: "0.9em"}, children: ["• ", error]})),
+            ...item.errors.map((error) => CoreReactive.App.section({styles: {fontSize: "0.9em"}, children: ["â€¢ ", error]})),
         ]});
         const border = new ComponentBorder.Component({
             prop_borderClass: ["position-relative", "w-100"],

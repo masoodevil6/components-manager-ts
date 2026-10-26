@@ -17,6 +17,12 @@ export const Props = {
         name: translation.props.mode.name,
         description: translation.props.mode.description,
     }),
+    prop_components: Define_ComponentProp<Function[] | null>({
+        prop: "prop_components",
+        default: null,
+        name: translation.props.components.name,
+        description: translation.props.components.description,
+    }),
 } satisfies CoreComponents.ComponentProps;
 
 export type PropsType = ExtractPropsType<typeof Props>;

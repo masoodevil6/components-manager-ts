@@ -1,9 +1,10 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 
 export function createInputColorStep() {
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {
-            change: CoreEvent.Step({
+            change: DefineWorkflow({
                 request: CoreEvent.Request(),
                 response: CoreEvent.Response({value: null as string | null}),
             }),

@@ -17,7 +17,7 @@ import * as CoreLanguage from "@/core_languages";
 import {Keys} from "../../../module_categories/languages";
 import * as ComponentElementPosition from "../componentElementPosition";
 
-export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
+export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase<ReturnType<typeof createDraggableOrdersStep>>{
 
     private _drag: any = null;
     private _dragOverId = new CoreObservable.App<any>(null);
@@ -110,7 +110,7 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
                 } as any, {} as any).getReactiveElement();
                 let unpinnedIndex = 0;
                 for (const it of sorted) {
-                    // فقط قبل از آیتم‌های ناپین placeholder را قرار بده
+                    // ÙÙ‚Ø· Ù‚Ø¨Ù„ Ø§Ø² Ø¢ÛŒØªÙ…â€ŒÙ‡Ø§ÛŒ Ù†Ø§Ù¾ÛŒÙ† placeholder Ø±Ø§ Ù‚Ø±Ø§Ø± Ø¨Ø¯Ù‡
                     if (!it?.isPin && it?.id !== this._drag?.id && overIndex === unpinnedIndex) {
                         nodes.push(placeholder);
                     }
@@ -150,7 +150,7 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
             this.getScope(),
         );
 
-        // نشان‌دادن آیکون سنجاق فقط هنگام hover (مثل نسخه قدیمی)
+        // Ù†Ø´Ø§Ù†â€ŒØ¯Ø§Ø¯Ù† Ø¢ÛŒÚ©ÙˆÙ† Ø³Ù†Ø¬Ø§Ù‚ ÙÙ‚Ø· Ù‡Ù†Ú¯Ø§Ù… hover (Ù…Ø«Ù„ Ù†Ø³Ø®Ù‡ Ù‚Ø¯ÛŒÙ…ÛŒ)
         const iconHover = new CoreObservable.App<boolean>(false);
         const iconOpacity = CoreObservable.App.computed(
             (hover, st) => (st ? (hover ? "1" : "0") : "0"),
@@ -203,7 +203,7 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase {
             ],
         });
 
-        // رنگ پس‌زمینه مطابق legacy: پین‌شده → SUCCESS، حالت درگ → SECONDARY، پیش‌فرض → SHAN
+        // Ø±Ù†Ú¯ Ù¾Ø³â€ŒØ²Ù…ÛŒÙ†Ù‡ Ù…Ø·Ø§Ø¨Ù‚ legacy: Ù¾ÛŒÙ†â€ŒØ´Ø¯Ù‡ â†’ SUCCESSØŒ Ø­Ø§Ù„Øª Ø¯Ø±Ú¯ â†’ SECONDARYØŒ Ù¾ÛŒØ´â€ŒÙØ±Ø¶ â†’ SHAN
         const bgColor = CoreObservable.App.computed(
             (pinned, overId) => {
                 if (pinned) return UtilStyle.Css_Color(UtilConst.ColorMain.SUCCESS, UtilConst.ColorGrad.GRADE_5);

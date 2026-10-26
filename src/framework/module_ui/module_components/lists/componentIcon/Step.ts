@@ -1,3 +1,4 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 // --------------------------------
 
@@ -26,17 +27,17 @@ import * as CoreEvent from "@/core_event";
  *   blur     ← DOM → Method API (ساختار Step برای آینده)
  */
 export function createIconStep() {
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {
-            click: CoreEvent.Step({
+            click: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),
-            hover: CoreEvent.Step({
+            hover: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),
-            blur: CoreEvent.Step({
+            blur: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),

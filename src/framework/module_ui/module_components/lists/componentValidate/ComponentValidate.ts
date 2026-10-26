@@ -18,27 +18,27 @@ import {PropsConfigType as ValidatePropsConfigType} from "./Props";
 
 
 /**
- * ComponentValidate — کلاس نهایی (Plan 15.1.0 — بازیابی کامل Behavior Legacy)
+ * ComponentValidate â€” Ú©Ù„Ø§Ø³ Ù†Ù‡Ø§ÛŒÛŒ (Plan 15.1.0 â€” Ø¨Ø§Ø²ÛŒØ§Ø¨ÛŒ Ú©Ø§Ù…Ù„ Behavior Legacy)
  *
- * معماری Composition:
- *   ComponentValidate HAS-A ComponentStructure (نه IS-A)
- *   ComponentStructure در renderContentComponent ساخته می‌شود
- *   و content آن = renderForm (محتوای اختصاصی ComponentValidate)
+ * Ù…Ø¹Ù…Ø§Ø±ÛŒ Composition:
+ *   ComponentValidate HAS-A ComponentStructure (Ù†Ù‡ IS-A)
+ *   ComponentStructure Ø¯Ø± renderContentComponent Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯
+ *   Ùˆ content Ø¢Ù† = renderForm (Ù…Ø­ØªÙˆØ§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ ComponentValidate)
  *
- * Constructor امضا: (config, methods, identity?)
- *   config  — شامل propهای پایه + propهای اختصاصی
- *   methods — methodهای اختصاصی (CHANGE)
- *   identity — { unique?, emit?, events? }
+ * Constructor Ø§Ù…Ø¶Ø§: (config, methods, identity?)
+ *   config  â€” Ø´Ø§Ù…Ù„ propÙ‡Ø§ÛŒ Ù¾Ø§ÛŒÙ‡ + propÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ
+ *   methods â€” methodÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (CHANGE)
+ *   identity â€” { unique?, emit?, events? }
  *
- * بازیابی Behavior از Legacy:
- *   - prop_value (Observable) → subscribe → fn_readyListRules
- *   - prop_reference (element ID) → addEventListener → fn_readyListRules
- *   - prop_referenceComponent (component instance) → get("prop_value")
- *   - UtilValidators.App.validate برای اعتبارسنجی
- *   - var_ruleResults / var_validation_msg / var_isInputCorrect → Observable state
- *   - CHANGE method با dataArgs: {IS_VALID, MESSAGES, VALUE}
+ * Ø¨Ø§Ø²ÛŒØ§Ø¨ÛŒ Behavior Ø§Ø² Legacy:
+ *   - prop_value (Observable) â†’ subscribe â†’ fn_readyListRules
+ *   - prop_reference (element ID) â†’ addEventListener â†’ fn_readyListRules
+ *   - prop_referenceComponent (component instance) â†’ get("prop_value")
+ *   - UtilValidators.App.validate Ø¨Ø±Ø§ÛŒ Ø§Ø¹ØªØ¨Ø§Ø±Ø³Ù†Ø¬ÛŒ
+ *   - var_ruleResults / var_validation_msg / var_isInputCorrect â†’ Observable state
+ *   - CHANGE method Ø¨Ø§ dataArgs: {IS_VALID, MESSAGES, VALUE}
  */
-export class ComponentValidate extends ComponentValidateBase {
+export class ComponentValidate extends ComponentValidateBase<ReturnType<typeof createValidateStep>>{
 
     private validateState = ComponentValidateTrait.createState();
 
@@ -67,7 +67,7 @@ export class ComponentValidate extends ComponentValidateBase {
 
 
     /* ---------------------------------------------
-       Plan 9.1 — Component Disposal
+       Plan 9.1 â€” Component Disposal
     --------------------------------------------- */
     dispose(): void {
         this.disposeStep();
@@ -75,9 +75,9 @@ export class ComponentValidate extends ComponentValidateBase {
 
 
     /* ---------------------------------------------
-       Plan 11.2 — renderContentComponent
-       لایه ساختار از طریق Schema پایه (COMPONENT + STRUCTURE) رندر می‌شود.
-       renderContentComponent فقط محتوای اختصاصی را رندر می‌کند.
+       Plan 11.2 â€” renderContentComponent
+       Ù„Ø§ÛŒÙ‡ Ø³Ø§Ø®ØªØ§Ø± Ø§Ø² Ø·Ø±ÛŒÙ‚ Schema Ù¾Ø§ÛŒÙ‡ (COMPONENT + STRUCTURE) Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒØ´ÙˆØ¯.
+       renderContentComponent ÙÙ‚Ø· Ù…Ø­ØªÙˆØ§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ Ø±Ø§ Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒÚ©Ù†Ø¯.
     --------------------------------------------- */
     override renderContentComponent(
         attrsDefault: PartAttrDefault,
@@ -89,8 +89,8 @@ export class ComponentValidate extends ComponentValidateBase {
 
 
     /* ---------------------------------------------
-       renderManagerComponent — Routing
-       Plan 11.2 — COMPONENT + STRUCTURE از Trait، بقیه اختصاصی
+       renderManagerComponent â€” Routing
+       Plan 11.2 â€” COMPONENT + STRUCTURE Ø§Ø² TraitØŒ Ø¨Ù‚ÛŒÙ‡ Ø§Ø®ØªØµØ§ØµÛŒ
     --------------------------------------------- */
     override renderManagerComponent(
         partName:     string,
@@ -100,12 +100,12 @@ export class ComponentValidate extends ComponentValidateBase {
     ): CoreReactive.App {
 
         switch (partName) {
-            // --- Plan 11.2: Schema پایه ---
+            // --- Plan 11.2: Schema Ù¾Ø§ÛŒÙ‡ ---
             case ComponentStructureTrait.schemas.COMPONENT.part:
                 return ComponentStructureTrait.renderComponentSchema(this, attrsDefault, data);
             case ComponentStructureTrait.schemas.STRUCTURE.part:
                 return ComponentStructureTrait.renderStructureSchema(this, attrsDefault, data);
-            // --- Schema اختصاصی ---
+            // --- Schema Ø§Ø®ØªØµØ§ØµÛŒ ---
             case Schemas.FORM.part:
                 return this.renderForm(attrsDefault, data, extra);
             case Schemas.RULES_HTML.part:
@@ -121,8 +121,8 @@ export class ComponentValidate extends ComponentValidateBase {
 
 
     /* ---------------------------------------------
-       renderForm — رندر Part FORM اصلی
-       ظرف اصلی شامل RULES_HTML + VALIDATES_DATA + STATUS_ICON
+       renderForm â€” Ø±Ù†Ø¯Ø± Part FORM Ø§ØµÙ„ÛŒ
+       Ø¸Ø±Ù Ø§ØµÙ„ÛŒ Ø´Ø§Ù…Ù„ RULES_HTML + VALIDATES_DATA + STATUS_ICON
     --------------------------------------------- */
     protected renderForm(
         attrsDefault?: PartAttrDefault,
@@ -163,7 +163,7 @@ export class ComponentValidate extends ComponentValidateBase {
 
 
     /* ---------------------------------------------
-       FUNCTIONs — Validation Logic (بازیابی از Legacy)
+       FUNCTIONs â€” Validation Logic (Ø¨Ø§Ø²ÛŒØ§Ø¨ÛŒ Ø§Ø² Legacy)
     --------------------------------------------- */
 
     private fn_getFormRulesElement(): HTMLElement | null {
@@ -320,7 +320,7 @@ export class ComponentValidate extends ComponentValidateBase {
 
 
     /* ---------------------------------------------
-       renderEmptyContent — fallback خالی
+       renderEmptyContent â€” fallback Ø®Ø§Ù„ÛŒ
     --------------------------------------------- */
     public renderEmptyContent(
         attrsDefault?: PartAttrDefault,

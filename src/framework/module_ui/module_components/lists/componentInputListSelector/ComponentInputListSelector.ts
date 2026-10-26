@@ -24,21 +24,21 @@ import * as ComponentListSelectedScroller   from "../componentListSelectedScroll
 
 
 /**
- * ComponentInputListSelector — انتخاب‌گر لیست با منوی شناور
+ * ComponentInputListSelector â€” Ø§Ù†ØªØ®Ø§Ø¨â€ŒÚ¯Ø± Ù„ÛŒØ³Øª Ø¨Ø§ Ù…Ù†ÙˆÛŒ Ø´Ù†Ø§ÙˆØ±
  *
- * معماری Composition:
- *   ComponentInputListSelector HAS-A ComponentPositionMenu (منوی شناور با selector + body)
- *   ComponentInputListSelector HAS-A ComponentInputAgreementCheckBox (چک‌باکس‌های انتخاب ستون)
- *   ComponentInputListSelector HAS-A ComponentListSelectedScroller (اسکرولر آیتم‌های انتخاب‌شده)
- *   ComponentInputListSelector HAS-A ComponentBorder (ظرف اصلی)
- *   ComponentInputListSelector HAS-A ComponentIcon (آیکون انتخاب‌گر)
+ * Ù…Ø¹Ù…Ø§Ø±ÛŒ Composition:
+ *   ComponentInputListSelector HAS-A ComponentPositionMenu (Ù…Ù†ÙˆÛŒ Ø´Ù†Ø§ÙˆØ± Ø¨Ø§ selector + body)
+ *   ComponentInputListSelector HAS-A ComponentInputAgreementCheckBox (Ú†Ú©â€ŒØ¨Ø§Ú©Ø³â€ŒÙ‡Ø§ÛŒ Ø§Ù†ØªØ®Ø§Ø¨ Ø³ØªÙˆÙ†)
+ *   ComponentInputListSelector HAS-A ComponentListSelectedScroller (Ø§Ø³Ú©Ø±ÙˆÙ„Ø± Ø¢ÛŒØªÙ…â€ŒÙ‡Ø§ÛŒ Ø§Ù†ØªØ®Ø§Ø¨â€ŒØ´Ø¯Ù‡)
+ *   ComponentInputListSelector HAS-A ComponentBorder (Ø¸Ø±Ù Ø§ØµÙ„ÛŒ)
+ *   ComponentInputListSelector HAS-A ComponentIcon (Ø¢ÛŒÚ©ÙˆÙ† Ø§Ù†ØªØ®Ø§Ø¨â€ŒÚ¯Ø±)
  *
- * Constructor امضا: (config, methods, identity?)
- *   config  — شامل propهای پایه + propهای اختصاصی
- *   methods — methodهای اختصاصی (CLICK_ICON, CLICK_ACCEPT, CLICK_REJECT, CALLBACK_COL_SELECTOR, DELETE_SELECTED_ITEM)
- *   identity — { unique?, emit?, events? }
+ * Constructor Ø§Ù…Ø¶Ø§: (config, methods, identity?)
+ *   config  â€” Ø´Ø§Ù…Ù„ propÙ‡Ø§ÛŒ Ù¾Ø§ÛŒÙ‡ + propÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ
+ *   methods â€” methodÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (CLICK_ICON, CLICK_ACCEPT, CLICK_REJECT, CALLBACK_COL_SELECTOR, DELETE_SELECTED_ITEM)
+ *   identity â€” { unique?, emit?, events? }
  */
-export class ComponentInputListSelector extends ComponentInputListSelectorBase {
+export class ComponentInputListSelector extends ComponentInputListSelectorBase<ReturnType<typeof createInputListSelectorStep>>{
 
     private var_columns: CoreObservable.App<ColumnItem[]>;
     private var_tempOrder: CoreObservable.App<(string | number)[]>;
@@ -122,7 +122,7 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
 
 
     /* ---------------------------------------------
-       renderMain — ظرف اصلی با ComponentBorder
+       renderMain â€” Ø¸Ø±Ù Ø§ØµÙ„ÛŒ Ø¨Ø§ ComponentBorder
     --------------------------------------------- */
     protected renderMain(
         attrsDefault?: PartAttrDefault,
@@ -165,7 +165,7 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
 
 
     /* ---------------------------------------------
-       renderLabel — برچسب کامپوننت
+       renderLabel â€” Ø¨Ø±Ú†Ø³Ø¨ Ú©Ø§Ù…Ù¾ÙˆÙ†Ù†Øª
     --------------------------------------------- */
     protected renderLabel(
         attrsDefault?: PartAttrDefault,
@@ -201,7 +201,7 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
 
 
     /* ---------------------------------------------
-       renderFormFloatMenu — منوی شناور با ComponentPositionMenu
+       renderFormFloatMenu â€” Ù…Ù†ÙˆÛŒ Ø´Ù†Ø§ÙˆØ± Ø¨Ø§ ComponentPositionMenu
     --------------------------------------------- */
     protected renderFormFloatMenu(
         attrsDefault?: PartAttrDefault,
@@ -301,7 +301,7 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
 
 
     /* ---------------------------------------------
-       renderFormFloatMenuIconList — آیکون انتخاب‌گر
+       renderFormFloatMenuIconList â€” Ø¢ÛŒÚ©ÙˆÙ† Ø§Ù†ØªØ®Ø§Ø¨â€ŒÚ¯Ø±
     --------------------------------------------- */
     protected renderFormFloatMenuIconList(
         attrsDefault?: PartAttrDefault,
@@ -354,7 +354,7 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
 
 
     /* ---------------------------------------------
-       renderFormFloatMenuCheckBoxes — چک‌باکس‌های انتخاب ستون
+       renderFormFloatMenuCheckBoxes â€” Ú†Ú©â€ŒØ¨Ø§Ú©Ø³â€ŒÙ‡Ø§ÛŒ Ø§Ù†ØªØ®Ø§Ø¨ Ø³ØªÙˆÙ†
     --------------------------------------------- */
     protected renderFormFloatMenuCheckBoxes(
         attrsDefault?: PartAttrDefault,
@@ -439,7 +439,7 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
 
 
     /* ---------------------------------------------
-       renderFormListSelected — اسکرولر آیتم‌های انتخاب‌شده
+       renderFormListSelected â€” Ø§Ø³Ú©Ø±ÙˆÙ„Ø± Ø¢ÛŒØªÙ…â€ŒÙ‡Ø§ÛŒ Ø§Ù†ØªØ®Ø§Ø¨â€ŒØ´Ø¯Ù‡
     --------------------------------------------- */
     protected renderFormListSelected(
         attrsDefault?: PartAttrDefault,
@@ -513,7 +513,7 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase {
 
 
     /* ---------------------------------------------
-       FUNCTIONs — منطق اختصاصی
+       FUNCTIONs â€” Ù…Ù†Ø·Ù‚ Ø§Ø®ØªØµØ§ØµÛŒ
     --------------------------------------------- */
 
     private fn_onClickIcon(event: any) {

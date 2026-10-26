@@ -5,6 +5,7 @@ import {Layout}                        from "./layout"
 import {ElementCreator}                from "./elementCreator"
 import {LayoutCreator}                  from "./layoutCreator"
 import {Styles}                         from "./styles"
+import {PageSetting}                    from "./pageSetting"
 
 
 /**
@@ -62,5 +63,6 @@ export const Definition : UICategories.TCategoryComponentDefinition = {
         LayoutCreator,
         ElementCreator,
         Styles,
+        PageSetting,
     ]
 }

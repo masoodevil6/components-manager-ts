@@ -374,6 +374,7 @@ import * as ComponentLayout from "./componentLayout";
 import * as ComponentElementCreator from "./componentElementCreator";
 import * as ComponentLayoutCreator from "./componentLayoutCreator";
 import * as ComponentStyles from "./componentStyles";
+import * as ComponentPageSetting from "./componentPageSetting";
 
 
 // ثبت ComponentIcon در Component Manager
@@ -1070,6 +1071,7 @@ export * as ComponentLayout from "./componentLayout";
 export * as ComponentElementCreator from "./componentElementCreator";
 export * as ComponentLayoutCreator from "./componentLayoutCreator";
 export * as ComponentStyles from "./componentStyles";
+export * as ComponentPageSetting from "./componentPageSetting";
 
 CoreComponents.ComponentManager.register({
     definition: Workflow.Definition,
@@ -1132,4 +1134,13 @@ CoreComponents.ComponentManager.register({
     methods: ComponentStyles.Methods,
     examples: ComponentStyles.Examples,
     constructor: ComponentStyles.Component as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition: ComponentPageSetting.Definition,
+    props: ComponentPageSetting.Props,
+    schemas: ComponentPageSetting.Schemas,
+    methods: {},
+    examples: ComponentPageSetting.Examples,
+    constructor: ComponentPageSetting.Component as any,
 });

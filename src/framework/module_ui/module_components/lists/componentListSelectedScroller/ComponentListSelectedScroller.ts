@@ -22,18 +22,18 @@ import * as ComponentIcon   from "../componentIcon";
 
 
 /**
- * ComponentListSelectedScroller — اسکرولر لیست انتخاب‌شده
+ * ComponentListSelectedScroller â€” Ø§Ø³Ú©Ø±ÙˆÙ„Ø± Ù„ÛŒØ³Øª Ø§Ù†ØªØ®Ø§Ø¨â€ŒØ´Ø¯Ù‡
  *
- * معماری Composition:
- *   ComponentListSelectedScroller HAS-A ComponentBorder (برای هر آیتم لیست)
- *   ComponentListSelectedScroller HAS-A ComponentIcon (برای آیکون close)
+ * Ù…Ø¹Ù…Ø§Ø±ÛŒ Composition:
+ *   ComponentListSelectedScroller HAS-A ComponentBorder (Ø¨Ø±Ø§ÛŒ Ù‡Ø± Ø¢ÛŒØªÙ… Ù„ÛŒØ³Øª)
+ *   ComponentListSelectedScroller HAS-A ComponentIcon (Ø¨Ø±Ø§ÛŒ Ø¢ÛŒÚ©ÙˆÙ† close)
  *
- * Constructor امضا: (config, methods, identity?)
- *   config  — شامل propهای پایه + propهای اختصاصی
- *   methods — methodهای اختصاصی (DELETE_ITEM)
- *   identity — { unique?, emit?, events? }
+ * Constructor Ø§Ù…Ø¶Ø§: (config, methods, identity?)
+ *   config  â€” Ø´Ø§Ù…Ù„ propÙ‡Ø§ÛŒ Ù¾Ø§ÛŒÙ‡ + propÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ
+ *   methods â€” methodÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (DELETE_ITEM)
+ *   identity â€” { unique?, emit?, events? }
  */
-export class ComponentListSelectedScroller extends ComponentListSelectedScrollerBase {
+export class ComponentListSelectedScroller extends ComponentListSelectedScrollerBase<ReturnType<typeof createListSelectedScrollerStep>>{
 
     constructor(
         config?:  Partial<StructurePropsType & PropsType>,
@@ -78,12 +78,12 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
     ): CoreReactive.App {
 
         switch (partName) {
-            // --- Schema پایه ---
+            // --- Schema Ù¾Ø§ÛŒÙ‡ ---
             case ComponentStructureTrait.schemas.COMPONENT.part:
                 return ComponentStructureTrait.renderComponentSchema(this, attrsDefault, data);
             case ComponentStructureTrait.schemas.STRUCTURE.part:
                 return ComponentStructureTrait.renderStructureSchema(this, attrsDefault, data);
-            // --- Schema اختصاصی ---
+            // --- Schema Ø§Ø®ØªØµØ§ØµÛŒ ---
             case Schemas.BORDER.part:
                 return this.renderBorder(attrsDefault, data, extra);
             case Schemas.BORDER_LIST.part:
@@ -101,7 +101,7 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
 
 
     /* ---------------------------------------------
-       renderBorder — ظرف اصلی با ComponentBorder بیرونی
+       renderBorder â€” Ø¸Ø±Ù Ø§ØµÙ„ÛŒ Ø¨Ø§ ComponentBorder Ø¨ÛŒØ±ÙˆÙ†ÛŒ
     --------------------------------------------- */
     protected renderBorder(
         attrsDefault?: PartAttrDefault,
@@ -145,7 +145,7 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
 
 
     /* ---------------------------------------------
-       renderBorderList — لیست اسکرول‌شونده آیتم‌ها
+       renderBorderList â€” Ù„ÛŒØ³Øª Ø§Ø³Ú©Ø±ÙˆÙ„â€ŒØ´ÙˆÙ†Ø¯Ù‡ Ø¢ÛŒØªÙ…â€ŒÙ‡Ø§
     --------------------------------------------- */
     protected renderBorderList(
         attrsDefault?: PartAttrDefault,
@@ -371,7 +371,7 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
 
 
     /* ---------------------------------------------
-       renderListItemBorder — یک آیتم لیست با ComponentBorder
+       renderListItemBorder â€” ÛŒÚ© Ø¢ÛŒØªÙ… Ù„ÛŒØ³Øª Ø¨Ø§ ComponentBorder
     --------------------------------------------- */
     protected renderListItemBorder(
         attrsDefault?: PartAttrDefault,
@@ -471,7 +471,7 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
 
 
     /* ---------------------------------------------
-       renderListItemBorderTitle — عنوان آیتم
+       renderListItemBorderTitle â€” Ø¹Ù†ÙˆØ§Ù† Ø¢ÛŒØªÙ…
     --------------------------------------------- */
     protected renderListItemBorderTitle(
         attrsDefault?: PartAttrDefault,
@@ -526,7 +526,7 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
 
 
     /* ---------------------------------------------
-       renderListItemBorderIconClose — آیکون بستن آیتم
+       renderListItemBorderIconClose â€” Ø¢ÛŒÚ©ÙˆÙ† Ø¨Ø³ØªÙ† Ø¢ÛŒØªÙ…
     --------------------------------------------- */
     protected renderListItemBorderIconClose(
         attrsDefault?: PartAttrDefault,

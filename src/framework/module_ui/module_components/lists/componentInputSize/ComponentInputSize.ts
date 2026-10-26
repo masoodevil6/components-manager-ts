@@ -21,7 +21,7 @@ import {ButtonAction, ButtonSemantic} from "../componentButton/Props";
 
 type Child = {dispose?: () => void; disposeStep?: () => void};
 
-export class ComponentInputSize extends ComponentInputSizeBase {
+export class ComponentInputSize extends ComponentInputSizeBase<ReturnType<typeof createInputSizeStep>>{
     private static _INSTANCE_COUNT = 0;
     private readonly _INPUT_ID = `component-input-size-${++ComponentInputSize._INSTANCE_COUNT}`;
     private readonly _NUMBER_INPUT_CLASS = `component-input-size-number-${ComponentInputSize._INSTANCE_COUNT}`;

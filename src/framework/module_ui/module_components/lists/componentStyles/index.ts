@@ -1,6 +1,7 @@
 export {ComponentStyles as Component} from "./ComponentStyles";
 export {Definition} from "./Definition";
-export {Props, PropGroups} from "./Props";
+export {Props} from "./Props";
+export type {ComponentStyleGroups, ComponentStyleValues} from "./Props";
 export type {PropsType, PropsConfigType} from "./Props";
 export {Schemas} from "./Schemas";
 export type {SchemasType} from "./Schemas";

@@ -1,3 +1,4 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 // --------------------------------
 
@@ -17,17 +18,17 @@ import * as CoreEvent from "@/core_event";
  *   clickReject  ← Event Engine endpoint (unique روی Reject button)
  */
 export function createPositionMenuStep() {
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {
-            clickOpen:   CoreEvent.Step({
+            clickOpen:   DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),
-            clickAccept: CoreEvent.Step({
+            clickAccept: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),
-            clickReject: CoreEvent.Step({
+            clickReject: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),

@@ -15,7 +15,7 @@ import {Schemas} from "./Schemas";
 import {PropsConfigType} from "./Props";
 import {MethodsConfigType} from "./Methods";
 
-export class ComponentCollapseLine extends ComponentCollapseLineBase {
+export class ComponentCollapseLine extends ComponentCollapseLineBase<ReturnType<typeof createCollapseLineStep>>{
     private _ARROW_ICON: InstanceType<typeof ComponentIcon.Component> | null = null;
     private _DISPOSED = false;
 

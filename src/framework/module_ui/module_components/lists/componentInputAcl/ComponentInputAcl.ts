@@ -23,7 +23,7 @@ import * as UiIcons from "@/ui_icons";
 type Child = {dispose?:()=>void; disposeStep?:()=>void};
 
 /** Remote ACL selector. Selection is staged until the position menu is accepted. */
-export class ComponentInputAcl extends ComponentInputAclBase {
+export class ComponentInputAcl extends ComponentInputAclBase<ReturnType<typeof createInputAclStep>>{
     private readonly _AVAILABLE = new CoreObservable.App<AclItem[]>([]);
     private readonly _STAGED = new CoreObservable.App<AclItem[]>([]);
     private readonly _COMMITTED = new CoreObservable.App<AclItem[]>([]);
@@ -216,7 +216,7 @@ export class ComponentInputAcl extends ComponentInputAclBase {
                 const color=(isSelected?bind.prop_itemAclColorSelected:bind.prop_itemAclColorUnSelected).get()??UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY,UtilConst.ColorGrad.GRADE_1);
                 const background=(isSelected?bind.prop_itemAclBackgroundColorSelected:bind.prop_itemAclBackgroundColorUnSelected).get()??UtilStyle.Css_Color(UtilConst.ColorMain.SHAN,UtilConst.ColorGrad.GRADE_1);
                 const border=(isSelected?bind.prop_itemAclBorderColorSelected:bind.prop_itemAclBorderColorUnSelected).get()??UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY,UtilConst.ColorGrad.GRADE_1);
-                return CoreReactive.App.section({className:["d-flex","align-items-center","p-2","cursor-pointer"],styles:{cursor:"pointer",color,backgroundColor:background,borderBottom:`1px solid ${border}`},on:{click:()=>this.toggle(item),mouseenter:(event:Event)=>{const el=event.currentTarget as HTMLElement;el.style.backgroundColor=(isSelected?bind.prop_itemAclBackgroundColorSelectedHover:bind.prop_itemAclBackgroundColorUnSelectedHover).get()??background;el.style.color=(isSelected?bind.prop_itemAclColorSelectedHover:bind.prop_itemAclColorUnSelectedHover).get()??color;},mouseleave:(event:Event)=>{const el=event.currentTarget as HTMLElement;el.style.backgroundColor=background;el.style.color=color;}},children:[CoreReactive.App.span({styles:{color:(isSelected?bind.prop_itemAclIconColorSelected:bind.prop_itemAclIconColorUnSelected).get()??color},children:[isSelected?"✓":"□"]}),CoreReactive.App.span({className:["ms-2"],children:[item.name]})]});
+                return CoreReactive.App.section({className:["d-flex","align-items-center","p-2","cursor-pointer"],styles:{cursor:"pointer",color,backgroundColor:background,borderBottom:`1px solid ${border}`},on:{click:()=>this.toggle(item),mouseenter:(event:Event)=>{const el=event.currentTarget as HTMLElement;el.style.backgroundColor=(isSelected?bind.prop_itemAclBackgroundColorSelectedHover:bind.prop_itemAclBackgroundColorUnSelectedHover).get()??background;el.style.color=(isSelected?bind.prop_itemAclColorSelectedHover:bind.prop_itemAclColorUnSelectedHover).get()??color;},mouseleave:(event:Event)=>{const el=event.currentTarget as HTMLElement;el.style.backgroundColor=background;el.style.color=color;}},children:[CoreReactive.App.span({styles:{color:(isSelected?bind.prop_itemAclIconColorSelected:bind.prop_itemAclIconColorUnSelected).get()??color},children:[isSelected?"âœ“":"â–¡"]}),CoreReactive.App.span({className:["ms-2"],children:[item.name]})]});
             }),
             ...(loading?[CoreReactive.App.div({className:["text-center","p-2"],children:[CoreLanguage.App.translate(Keys.category.components.inputAcl.texts.loading)]})]:[]),
         ],[this._AVAILABLE,this._STAGED,this._LOADING],this.getScope())});

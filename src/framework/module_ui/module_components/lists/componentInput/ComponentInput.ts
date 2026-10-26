@@ -22,7 +22,7 @@ import {ButtonAction} from "../componentButton/Props";
 
 type DisposableChild = {dispose?: () => void; disposeStep?: () => void};
 
-export class ComponentInput extends ComponentInputBase {
+export class ComponentInput extends ComponentInputBase<ReturnType<typeof createInputStep>>{
     private static _INSTANCE_COUNT = 0;
     private readonly _NUMBER_INPUT_CLASS = `component-input-number-${++ComponentInput._INSTANCE_COUNT}`;
     private _INPUT_SIMPLE: InstanceType<typeof ComponentInputSimple.Component> | null = null;

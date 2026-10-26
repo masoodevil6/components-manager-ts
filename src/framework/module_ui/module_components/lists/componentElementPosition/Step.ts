@@ -1,9 +1,10 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 
 export function createElementPositionStep() {
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {
-            click: CoreEvent.Step({request: CoreEvent.Request(), response: CoreEvent.Response({value: ""})}),
+            click: DefineWorkflow({request: CoreEvent.Request(), response: CoreEvent.Response({value: ""})}),
         },
     });
 }

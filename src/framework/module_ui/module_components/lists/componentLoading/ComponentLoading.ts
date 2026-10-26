@@ -19,30 +19,30 @@ import * as ComponentIcon from "../componentIcon";
 
 
 /**
- * ComponentLoading — کلاس نهایی
+ * ComponentLoading â€” Ú©Ù„Ø§Ø³ Ù†Ù‡Ø§ÛŒÛŒ
  *
- * معماری Composition:
- *   ComponentLoading HAS-A ComponentStructure (نه IS-A)
- *   ComponentStructure در renderContentComponent ساخته می‌شود
- *   و content آن = renderLoading (محتوای اختصاصی ComponentLoading)
+ * Ù…Ø¹Ù…Ø§Ø±ÛŒ Composition:
+ *   ComponentLoading HAS-A ComponentStructure (Ù†Ù‡ IS-A)
+ *   ComponentStructure Ø¯Ø± renderContentComponent Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯
+ *   Ùˆ content Ø¢Ù† = renderLoading (Ù…Ø­ØªÙˆØ§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ ComponentLoading)
  *
- * Constructor امضا: (config, methods, identity?)
- *   config  — شامل propهای پایه + propهای اختصاصی (prop_type, prop_icon, ...)
- *   methods — methodهای اختصاصی (CANCEL)
- *   identity — { unique?, emit?, events? }
+ * Constructor Ø§Ù…Ø¶Ø§: (config, methods, identity?)
+ *   config  â€” Ø´Ø§Ù…Ù„ propÙ‡Ø§ÛŒ Ù¾Ø§ÛŒÙ‡ + propÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (prop_type, prop_icon, ...)
+ *   methods â€” methodÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (CANCEL)
+ *   identity â€” { unique?, emit?, events? }
  *
- * Plan 8.2.7 — Step داخلی در constructor ساخته می‌شود (نه در render cycle).
- * Plan 11.2 — لایه <component-loading> + <section> از Schema پایه رندر می‌شود.
+ * Plan 8.2.7 â€” Step Ø¯Ø§Ø®Ù„ÛŒ Ø¯Ø± constructor Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯ (Ù†Ù‡ Ø¯Ø± render cycle).
+ * Plan 11.2 â€” Ù„Ø§ÛŒÙ‡ <component-loading> + <section> Ø§Ø² Schema Ù¾Ø§ÛŒÙ‡ Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒØ´ÙˆØ¯.
  *
- * بازیابی Behavior از Legacy:
- *   - انیمیشن لودینگ دایره‌ای (CSS ring یا آیکون سفارشی)
- *   - دکمه لغو با تاخیر نمایش
- *   - background shadow برای overlay
+ * Ø¨Ø§Ø²ÛŒØ§Ø¨ÛŒ Behavior Ø§Ø² Legacy:
+ *   - Ø§Ù†ÛŒÙ…ÛŒØ´Ù† Ù„ÙˆØ¯ÛŒÙ†Ú¯ Ø¯Ø§ÛŒØ±Ù‡â€ŒØ§ÛŒ (CSS ring ÛŒØ§ Ø¢ÛŒÚ©ÙˆÙ† Ø³ÙØ§Ø±Ø´ÛŒ)
+ *   - Ø¯Ú©Ù…Ù‡ Ù„ØºÙˆ Ø¨Ø§ ØªØ§Ø®ÛŒØ± Ù†Ù…Ø§ÛŒØ´
+ *   - background shadow Ø¨Ø±Ø§ÛŒ overlay
  */
-export class ComponentLoading extends ComponentLoadingBase {
+export class ComponentLoading extends ComponentLoadingBase<ReturnType<typeof createLoadingStep>>{
 
     /**
-     * Timer ID برای cancel button delay
+     * Timer ID Ø¨Ø±Ø§ÛŒ cancel button delay
      */
     private _cancelTimerId: ReturnType<typeof setTimeout> | null = null;
 
@@ -71,7 +71,7 @@ export class ComponentLoading extends ComponentLoadingBase {
 
 
     /* ---------------------------------------------
-       Plan 9.1 — Component Disposal
+       Plan 9.1 â€” Component Disposal
     --------------------------------------------- */
     dispose(): void {
         if (this._cancelTimerId !== null) {
@@ -83,9 +83,9 @@ export class ComponentLoading extends ComponentLoadingBase {
 
 
     /* ---------------------------------------------
-       Plan 11.2 — renderContentComponent
-       لایه ساختار از طریق Schema پایه (COMPONENT + STRUCTURE) رندر می‌شود.
-       renderContentComponent فقط محتوای اختصاصی را رندر می‌کند.
+       Plan 11.2 â€” renderContentComponent
+       Ù„Ø§ÛŒÙ‡ Ø³Ø§Ø®ØªØ§Ø± Ø§Ø² Ø·Ø±ÛŒÙ‚ Schema Ù¾Ø§ÛŒÙ‡ (COMPONENT + STRUCTURE) Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒØ´ÙˆØ¯.
+       renderContentComponent ÙÙ‚Ø· Ù…Ø­ØªÙˆØ§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ Ø±Ø§ Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒÚ©Ù†Ø¯.
     --------------------------------------------- */
     override renderContentComponent(
         attrsDefault: PartAttrDefault,
@@ -97,8 +97,8 @@ export class ComponentLoading extends ComponentLoadingBase {
 
 
     /* ---------------------------------------------
-       renderManagerComponent — Routing
-       Plan 11.2 — COMPONENT + STRUCTURE از Trait، بقیه اختصاصی
+       renderManagerComponent â€” Routing
+       Plan 11.2 â€” COMPONENT + STRUCTURE Ø§Ø² TraitØŒ Ø¨Ù‚ÛŒÙ‡ Ø§Ø®ØªØµØ§ØµÛŒ
     --------------------------------------------- */
     override renderManagerComponent(
         partName:     string,
@@ -108,12 +108,12 @@ export class ComponentLoading extends ComponentLoadingBase {
     ): CoreReactive.App {
 
         switch (partName) {
-            // --- Plan 11.2: Schema پایه ---
+            // --- Plan 11.2: Schema Ù¾Ø§ÛŒÙ‡ ---
             case ComponentStructureTrait.schemas.COMPONENT.part:
                 return ComponentStructureTrait.renderComponentSchema(this, attrsDefault, data);
             case ComponentStructureTrait.schemas.STRUCTURE.part:
                 return ComponentStructureTrait.renderStructureSchema(this, attrsDefault, data);
-            // --- Schema اختصاصی ---
+            // --- Schema Ø§Ø®ØªØµØ§ØµÛŒ ---
             case Schemas.LOADING.part:
                 return this.renderLoading(attrsDefault, data, extra);
             case Schemas.CANCEL_BTN.part:
@@ -125,7 +125,7 @@ export class ComponentLoading extends ComponentLoadingBase {
 
 
     /* ---------------------------------------------
-       renderLoading — رندر Part LOADING اصلی
+       renderLoading â€” Ø±Ù†Ø¯Ø± Part LOADING Ø§ØµÙ„ÛŒ
     --------------------------------------------- */
     protected renderLoading(
         attrsDefault?: PartAttrDefault,
@@ -268,7 +268,7 @@ export class ComponentLoading extends ComponentLoadingBase {
 
 
     /* ---------------------------------------------
-       renderCancelBtn — رندر Part CANCEL_BTN
+       renderCancelBtn â€” Ø±Ù†Ø¯Ø± Part CANCEL_BTN
     --------------------------------------------- */
     protected renderCancelBtn(
         attrsDefault?: PartAttrDefault,
@@ -337,7 +337,7 @@ export class ComponentLoading extends ComponentLoadingBase {
 
 
     /* ---------------------------------------------
-       renderEmptyContent — fallback خالی
+       renderEmptyContent â€” fallback Ø®Ø§Ù„ÛŒ
     --------------------------------------------- */
     public renderEmptyContent(
         attrsDefault?: PartAttrDefault,
@@ -349,7 +349,7 @@ export class ComponentLoading extends ComponentLoadingBase {
 
 
     /* ---------------------------------------------
-       fn_injectStyles — inject CSS keyframes for ring animation
+       fn_injectStyles â€” inject CSS keyframes for ring animation
     --------------------------------------------- */
     private fn_injectStyles(): void {
         const styleId = `component-loading-styles-${(this as any)._COMPONENT_RANDOM_ID ?? "default"}`;
@@ -372,7 +372,7 @@ export class ComponentLoading extends ComponentLoadingBase {
 
 
     /* ---------------------------------------------
-       fn_onCancelLoading — cancel handler
+       fn_onCancelLoading â€” cancel handler
     --------------------------------------------- */
     private fn_onCancelLoading = (event?: Event): void => {
         this.set("prop_show", false);

@@ -11,16 +11,16 @@ import {Definition}               from "./Definition";
 
 
 /**
- * ComponentInputCheckBoxBase — ترکیب config پایه و اختصاصی
+ * ComponentInputCheckBoxBase â€” ØªØ±Ú©ÛŒØ¨ config Ù¾Ø§ÛŒÙ‡ Ùˆ Ø§Ø®ØªØµØ§ØµÛŒ
  */
-export class ComponentInputCheckBoxBase extends CoreComponents.App<
+export class ComponentInputCheckBoxBase<TWorkflow extends CoreComponents.ComponentWorkflow<any> = CoreComponents.ComponentWorkflow> extends CoreComponents.App<
     PropsType & Record<string, any>,
     SchemasType,
     any,
-    MethodsType
-> {
+    MethodsType,
+    TWorkflow> {
 
-    protected _COMPONENT_STEP: CoreEvent.TStepInstance<any> | null = null;
+    protected _COMPONENT_STEP: TWorkflow | null = null;
 
 
     constructor(
@@ -31,7 +31,7 @@ export class ComponentInputCheckBoxBase extends CoreComponents.App<
             emit?:   CoreEvent.TEmitHandler | null;
             events?: Record<string, any> | null;
         },
-        step?: CoreEvent.TStepInstance<any>,
+        step?: TWorkflow,
     ) {
         super(componentName, elId);
 

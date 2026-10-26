@@ -1,13 +1,14 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 
 export function createInputGroupStep() {
   const endpoint = () =>
-    CoreEvent.Step({
+    DefineWorkflow({
       request: CoreEvent.Request(),
       response: CoreEvent.Response({ value: {} as Record<string, any> }),
     });
 
-  return CoreEvent.Step({
+  return DefineWorkflow({
     children: {
       inputChange: endpoint(),
       inputFocus: endpoint(),

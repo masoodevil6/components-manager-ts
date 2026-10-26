@@ -15,7 +15,7 @@ import {PropsType as StructurePropsType} from "../componentStructure/Props";
 import * as ComponentBorder from "../componentBorder";
 import * as ComponentIcon from "../componentIcon";
 
-export class ComponentInputDescriptionSimple extends ComponentInputDescriptionSimpleBase {
+export class ComponentInputDescriptionSimple extends ComponentInputDescriptionSimpleBase<ReturnType<typeof createInputDescriptionSimpleStep>>{
     private readonly _FOCUSED = new CoreObservable.App<boolean>(false);
     private _TEXTAREA: HTMLTextAreaElement | null = null;
     private _CLEAR_ICON: (InstanceType<typeof ComponentIcon.Component> & {disposeStep?: () => void}) | null = null;

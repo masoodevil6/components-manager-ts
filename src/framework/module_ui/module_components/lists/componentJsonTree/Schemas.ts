@@ -12,6 +12,7 @@ export const Schemas = {
         props: [
             Props.prop_data, Props.prop_initialExpandDepth, Props.prop_maxDepth, Props.prop_maxNodes,
             Props.prop_showSearch, Props.prop_showExpandControls, Props.prop_showCopyButton,
+            Props.prop_treeHorizontalScroll, Props.prop_treeFillHeight,
             Props.prop_searchPlaceholder, Props.prop_emptyText, Props.prop_headerBackgroundColor,
             Props.prop_componentBorderSelector, Props.prop_componentBorderAppend, Props.prop_componentBorderClassList,
             Props.prop_componentBorderElementStyles, Props.prop_componentBorderShow, Props.prop_componentBorderStructureClass,
@@ -37,7 +38,7 @@ export const Schemas = {
     },
     TREE: {
         part: "part-json-tree-tree",
-        props: [Props.prop_data, Props.prop_initialExpandDepth, Props.prop_maxDepth, Props.prop_maxNodes, Props.prop_emptyText],
+        props: [Props.prop_data, Props.prop_initialExpandDepth, Props.prop_maxDepth, Props.prop_maxNodes, Props.prop_emptyText, Props.prop_treeHorizontalScroll, Props.prop_treeFillHeight],
         name: Keys.category.components.jsonTree.schemas.tree.name,
         description: Keys.category.components.jsonTree.schemas.tree.description,
     },

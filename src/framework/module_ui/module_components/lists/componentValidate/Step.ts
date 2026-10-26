@@ -1,3 +1,4 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 // --------------------------------
 
@@ -10,9 +11,9 @@ import * as CoreEvent from "@/core_event";
  *   change ← Event Engine endpoint (unique روی validate form)
  */
 export function createValidateStep() {
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {
-            change: CoreEvent.Step({
+            change: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),

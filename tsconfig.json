@@ -67,6 +67,8 @@
       "@/util_excels" :              ["src/framework/module_util/module_excel"] ,
       /// UTIL -> methods
       "@/util_tools" :               ["src/framework/module_util/module_tools"] ,
+      /// UTIL -> standard option presets
+      "@/util_options_std" :          ["src/framework/module_util/module_options_std"] ,
     }
   }
 }

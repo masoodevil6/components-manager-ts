@@ -9,7 +9,7 @@ import {Definition} from "./Definition";
 import {Props, PropsType, PropsConfigType} from "./Props";
 import {Schemas, SchemasType} from "./Schemas";
 
-export class ComponentWorkflow extends CoreComponents.App<PropsType & Record<string, any>, SchemasType, any, Record<string, never>> {
+export class ComponentWorkflow extends CoreComponents.App<PropsType & Record<string, any>, SchemasType, any, Record<string, never>, CoreComponents.ComponentWorkflow> {
     protected _COMPONENT_DEFINITION = Definition;
     protected _COMPONENT_PATTERN = CoreComponents.DefineProp<PropsType & Record<string, any>>({
         ...ComponentStructureTrait.props,

@@ -27,7 +27,7 @@ import {ButtonAction, ButtonSemantic} from "../componentButton/Props";
 type Child = {dispose?: () => void; disposeStep?: () => void};
 type DragMode = "sl" | "hue" | "opacity" | null;
 
-export class ComponentInputColor extends ComponentInputColorBase {
+export class ComponentInputColor extends ComponentInputColorBase<ReturnType<typeof createInputColorStep>>{
     private readonly _VALUE = new CoreObservable.App<string | null>(null);
     private readonly _EMPTY = new CoreObservable.App(true);
     private readonly _FORM_VALUE = new CoreObservable.App<string | null>(null);
@@ -561,16 +561,34 @@ export class ComponentInputColor extends ComponentInputColorBase {
             prop_btnTitle: CoreLanguage.App.translate(Keys.category.components.inputColor.schemas.confirm) as any,
             styles: {width: "50%", flex: "1 1 0", minWidth: "0"},
             prop_btnStyles: {width: "100%"},
-        } as any, {} as any);
+        } as any, {
+            CLICK: (event: Event, _dataArgs: any, componentArgs: any) => {
+                console.log("[ComponentInputColor] confirm button click", {
+                    name: this.get("prop_name"),
+                    title: componentArgs?.TITLE,
+                    pendingColor: this._EMPTY.get() ? null : this._VALUE.get(),
+                    committedValue: this._FORM_VALUE.get(),
+                });
+                this.confirmPickerSelection(event);
+            },
+        } as any);
         const cancel = new ComponentButton.Component({
             prop_btnType: ButtonAction.BUTTON,
             prop_btnSemantic: ButtonSemantic.BACK,
             prop_btnTitle: CoreLanguage.App.translate(Keys.category.components.inputColor.schemas.cancel) as any,
             styles: {width: "50%", flex: "1 1 0", minWidth: "0"},
             prop_btnStyles: {width: "100%"},
-        } as any, {} as any);
-        (confirm.getElement() as HTMLElement).addEventListener("click", (event) => this.confirmPickerSelection(event));
-        (cancel.getElement() as HTMLElement).addEventListener("click", (event) => this.cancelPickerSelection(event));
+        } as any, {
+            CLICK: (event: Event, _dataArgs: any, componentArgs: any) => {
+                console.log("[ComponentInputColor] cancel button click", {
+                    name: this.get("prop_name"),
+                    title: componentArgs?.TITLE,
+                    pendingColor: this._EMPTY.get() ? null : this._VALUE.get(),
+                    committedValue: this._FORM_VALUE.get(),
+                });
+                this.cancelPickerSelection(event);
+            },
+        } as any);
         this._CHILDREN.push(confirm as any, cancel as any);
         return CoreReactive.App.section({
             className: ["d-flex", "align-items-center", "w-100"],
@@ -584,6 +602,7 @@ export class ComponentInputColor extends ComponentInputColorBase {
         event.stopPropagation();
         const color = this._EMPTY.get() ? "" : this._VALUE.get() ?? "";
         const original = this._OPENING_VALUE ?? "";
+        console.log("[ComponentInputColor] picker confirm", {name: this.get("prop_name"), color, original});
         this._PICKER_CONFIRMED = true;
         this.set("prop_value", color || null);
         this.set("prop_colorSelected", color || null);

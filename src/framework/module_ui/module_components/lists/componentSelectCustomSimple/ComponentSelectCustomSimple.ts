@@ -1,4 +1,4 @@
-﻿import * as CoreReactive from "@/core_reactive";
+import * as CoreReactive from "@/core_reactive";
 import * as CoreObservable from "@/core_observable";
 import * as CoreConfig from "@/core_configs";
 import * as UtilConst from "@/util_consts";
@@ -21,7 +21,7 @@ import * as ComponentInputSimple from "../componentInputSimple";
 import * as ComponentRecyclerView from "../componentRecyclerView";
 import {ShowTypes as FloatMenuShowTypes} from "../componentFloatMenu";
 
-export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase {
+export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase<ReturnType<typeof createSelectCustomSimpleStep>>{
     private readonly _IS_OPEN = new CoreObservable.App(false);
     private readonly _SEARCH = new CoreObservable.App("");
     private _BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;

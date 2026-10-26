@@ -44,6 +44,12 @@ export const Props = {
         name: translation.props.component.name,
         description: translation.props.component.description,
     }),
+    prop_components: Define_ComponentProp<Function[] | null>({
+        prop: "prop_components",
+        default: null,
+        name: translation.props.components.name,
+        description: translation.props.components.description,
+    }),
     prop_componentProperties: Define_ComponentProp<Record<string, any>>({
         prop: "prop_componentProperties",
         default: {
@@ -92,6 +98,18 @@ export const Props = {
         description: translation.props.hasTabProps.description,
         OptionShow: true,
         OptionGroup: PropGroups.settingsWindow,
+    }),
+    prop_settingsUsePageSetting: Define_ComponentProp<boolean>({
+        prop: "prop_settingsUsePageSetting",
+        default: false,
+        name: translation.props.settingsUsePageSetting.name,
+        description: translation.props.settingsUsePageSetting.description,
+    }),
+    prop_settingsUseExternalPageSetting: Define_ComponentProp<boolean>({
+        prop: "prop_settingsUseExternalPageSetting",
+        default: false,
+        name: translation.props.settingsUsePageSetting.name,
+        description: translation.props.settingsUsePageSetting.description,
     }),
 } satisfies CoreComponents.ComponentProps;
 

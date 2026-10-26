@@ -1043,4 +1043,6 @@ export const Fa =
         [Keys.icons.programmingCpp.description, "آیکون زبان برنامه‌نویسی سی‌پلاس‌پلاس"],
         [Keys.icons.programmingRuby.name, "روبی"],
         [Keys.icons.programmingRuby.description, "آیکون زبان برنامه‌نویسی روبی"],
+        [Keys.icons.eventWorkflow.name, "جریان کار رویداد"],
+        [Keys.icons.eventWorkflow.description, "گره‌های متصل برای نمایش جریان رویداد"],
     ]);

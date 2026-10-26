@@ -13,7 +13,7 @@ export const Schemas = {
   ...ComponentLabelTrait.schemas,
   FORM: {
     part: "part-input-group-form",
-    props: [Props.prop_backgroundColorForm, Props.prop_formBorderRadius, Props.prop_inputs],
+    props: [Props.prop_backgroundColorForm, Props.prop_formBorderRadius, Props.prop_inputs, Props.prop_groupSelected],
     name: translation.form.name,
     description: translation.form.description,
   },

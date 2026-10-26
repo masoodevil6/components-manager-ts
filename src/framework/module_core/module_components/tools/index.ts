@@ -6,3 +6,4 @@ export * as Method     from "./method";
 export * as Example    from "./example";
 export * as Definition from "./defination";
 export * as Identity   from "./Idetify";
+export * as Workflow   from "./workflow";

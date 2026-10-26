@@ -49,6 +49,7 @@ export interface Interface_ComponentExample {
      *
      * @returns HTMLElement نتیجه render
      */
-    render:      () => HTMLElement;
+    /** Runtime page context is optional; detail-page examples receive the existing pageWorkflow tree. */
+    render:      (context?: {pageWorkflow?: unknown}) => HTMLElement;
 
 }

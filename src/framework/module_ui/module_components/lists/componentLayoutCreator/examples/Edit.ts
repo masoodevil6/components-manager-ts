@@ -7,9 +7,9 @@ export const Edit: ComponentExample = {
     id: "layout_creator_edit",
     name: Keys.category.components.basic.layoutCreator.examples.edit.name,
     description: Keys.category.components.basic.layoutCreator.examples.edit.description,
-    render(): HTMLElement {
+    render: (context) => {
         return UiCategory.UI.Basic.LayoutCreator({
             prop_mode: LayoutCreatorMode.EDIT,
-        }).getElement() as HTMLElement;
+        }, {}, {unique: context?.pageWorkflow as any}).getElement() as HTMLElement;
     },
 };

@@ -28,3 +28,4 @@ export * as Convertor      from "@/util_convertor";
 export * as Files          from "@/util_files";
 export * as Dates          from "@/util_dates";
 export * as Tools          from "@/util_tools";
+export * as OptionsStd     from "@/util_options_std";

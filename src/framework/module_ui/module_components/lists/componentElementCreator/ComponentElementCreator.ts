@@ -2,6 +2,7 @@ import * as CoreComponents from "@/core_components";
 import * as CoreReactive from "@/core_reactive";
 import * as CoreObservable from "@/core_observable";
 import * as CoreEvent from "@/core_event";
+import * as CoreConfig from "@/core_configs";
 import * as CoreLanguage from "@/core_languages";
 import * as UiCategory from "@/ui_categories";
 import {PartAttrDefault} from "@/core_components";
@@ -15,14 +16,20 @@ import * as ComponentWindow from "../componentWindow";
 import * as ComponentWindowConfirm from "../componentWindowConfirm";
 import * as ComponentMenuMore from "../componentMenuMore";
 import * as ComponentCollapse from "../componentCollapse";
+import * as ComponentButton from "../componentButton";
 import * as ComponentInput from "../componentInput";
 import * as ComponentInputCheckBox from "../componentInputCheckBox";
 import * as ComponentInputColor from "../componentInputColor";
 import * as ComponentInputSelectOption from "../componentInputSelectOption";
 import * as ComponentCodeMirror from "../componentCodeMirror";
 import * as ComponentTabs from "../componentTabs";
+import * as ComponentStyles from "../componentStyles";
+import * as ComponentPageSetting from "../componentPageSetting";
+import * as UtilOptionsStd from "@/util_options_std";
 import {LayoutColumn} from "../componentLayout/Props";
+import {ButtonSemantic, ButtonVariants} from "../componentButton/Props";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
+import {Keys} from "../../../module_categories/languages";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {ElementCreatorMode, Props} from "./Props";
 import type {PropsConfigType as ElementCreatorPropsConfigType, PropsType as ElementCreatorPropsType} from "./Props";
@@ -32,7 +39,37 @@ import {Definition} from "./Definition";
 import {createElementCreatorStep} from "./Step";
 import {Methods, type MethodsConfigType, type MethodsType} from "./Methods";
 
-export class ComponentElementCreator extends ComponentStructure.Component {
+const CSS_STYLE_PROPERTIES = [
+    UtilOptionsStd.Group.Margin.Direction.TOP,
+    UtilOptionsStd.Group.Margin.Direction.RIGHT,
+    UtilOptionsStd.Group.Margin.Direction.BOTTOM,
+    UtilOptionsStd.Group.Margin.Direction.LEFT,
+    UtilOptionsStd.Group.Padding.Direction.TOP,
+    UtilOptionsStd.Group.Padding.Direction.RIGHT,
+    UtilOptionsStd.Group.Padding.Direction.BOTTOM,
+    UtilOptionsStd.Group.Padding.Direction.LEFT,
+    UtilOptionsStd.Group.BorderRadius.Corner.TOP_LEFT,
+    UtilOptionsStd.Group.BorderRadius.Corner.TOP_RIGHT,
+    UtilOptionsStd.Group.BorderRadius.Corner.BOTTOM_RIGHT,
+    UtilOptionsStd.Group.BorderRadius.Corner.BOTTOM_LEFT,
+    UtilOptionsStd.Group.ElementSize.Height.Key,
+    UtilOptionsStd.Group.ElementSize.Width.Key,
+    ...UtilOptionsStd.Group.Text.Properties,
+    UtilOptionsStd.Group.Colors.BackgroundColor.Key,
+    UtilOptionsStd.Group.Colors.TextColor.Key,
+    ...Object.values(UtilOptionsStd.Group.Border.Direction),
+    ...Object.values(UtilOptionsStd.Group.Border.Color),
+    ...Object.values(UtilOptionsStd.Group.Border.Style.Direction),
+];
+const MARGIN_STYLE_PROPERTIES = new Set<string>(UtilOptionsStd.Group.Margin.Properties);
+
+export class ComponentElementCreator extends ComponentStructure.Component<
+    StructurePropsType & ElementCreatorPropsType & Record<string, any>,
+    ElementCreatorSchemasType,
+    MethodsType,
+    CoreComponents.ComponentIdentity,
+    ReturnType<typeof createElementCreatorStep>
+> {
     protected override _COMPONENT_DEFINITION = Definition;
     protected override _COMPONENT_PATTERN: any = CoreComponents.DefineProp<StructurePropsType & ElementCreatorPropsType & Record<string, any>>({
         ...ComponentStructureTrait.props,
@@ -45,7 +82,7 @@ export class ComponentElementCreator extends ComponentStructure.Component {
     protected override _COMPONENT_METHODS = CoreComponents.DefineMethod<MethodsType, StructurePropsType & ElementCreatorPropsType & Record<string, any>>({
         ...Methods,
     } as any);
-    private readonly _STEP: CoreEvent.TStepInstance<any>;
+    private readonly _STEP: ReturnType<typeof createElementCreatorStep>;
     private _RENDERED_COMPONENT: {getElement: () => HTMLElement; getReactiveElement?: () => any; dispose?: () => void; getScope?: () => {dispose?: () => void}} | null = null;
     private _ROOT_BORDER: ComponentBorder.Component | null = null;
     private _OPTIONS_BORDER: ComponentBorder.Component | null = null;
@@ -53,6 +90,9 @@ export class ComponentElementCreator extends ComponentStructure.Component {
     private _OPTIONS_EFFECT: ComponentEffectChange.Component | null = null;
     private _SETTINGS_WINDOW: ComponentWindow.Component | null = null;
     private _SETTINGS_WINDOW_ELEMENT: HTMLElement | null = null;
+    private _SETTINGS_PAGE_SETTING: ComponentPageSetting.Component | null = null;
+    private _SETTINGS_PAGE_SETTING_ELEMENT: HTMLElement | null = null;
+    private _SETTINGS_PAGE_ACCEPT_BUTTON: ComponentButton.Component | null = null;
     private _SETTINGS_WINDOW_OPEN = false;
     private _SETTINGS_CLOSE_TIMER: number | null = null;
     private _SETTINGS_MODE: ElementCreatorMode.SETTING_CREATE | ElementCreatorMode.SETTING_EDIT | null = null;
@@ -73,8 +113,13 @@ export class ComponentElementCreator extends ComponentStructure.Component {
     private _SETTINGS_DRAFT: Record<string, any> = {};
     private _DELETE_CONFIRM: ComponentWindowConfirm.Component | null = null;
     private _DELETE_CONFIRM_ELEMENT: HTMLElement | null = null;
-    private _CSS_WINDOW: ComponentWindow.Component | null = null;
-    private _CSS_WINDOW_ELEMENT: HTMLElement | null = null;
+    private _CSS_PAGE_SETTING: ComponentPageSetting.Component | null = null;
+    private _CSS_PAGE_SETTING_ELEMENT: HTMLElement | null = null;
+    private _CSS_STYLES_COMPONENT: ComponentStyles.Component | null = null;
+    private _CSS_STYLE_SOURCE: Record<string, any> | null = null;
+    private _CSS_STYLE_COMPONENT_REFERENCE: Function | null = null;
+    private _CSS_STYLE_VALUES_UNSUBSCRIBE: (() => void) | null = null;
+    private readonly _CSS_STYLE_VALUES = new CoreObservable.App<Record<string, any>>({});
     private _OPTIONS_BORDER_CONTENT: {getElement: () => HTMLElement; dispose: () => void} | null = null;
     private _OPTIONS_MENU_ITEMS: CoreObservable.App<ComponentMenuMore.MenuMoreEntry[]> | null = null;
     private readonly _OPTIONS_CONTENT = new CoreObservable.App<any>(null);
@@ -92,8 +137,8 @@ export class ComponentElementCreator extends ComponentStructure.Component {
         identity?: {unique?: any; emit?: any; events?: Record<string, any> | null},
     ) {
         const step = createElementCreatorStep();
-        super("elementCreator", null, identity as any, step as any);
-        this._STEP = step as any;
+        super("elementCreator", null, identity as any, step);
+        this._STEP = step;
         this.renderComponent(config as any, methods as any, identity?.events ?? null);
     }
 
@@ -115,12 +160,13 @@ export class ComponentElementCreator extends ComponentStructure.Component {
         this._OPTIONS_MENU?.dispose();
         this._OPTIONS_MENU = null;
         this.disposeSettingsWindow();
+        this.disposeSettingsPageSetting();
         this._DELETE_CONFIRM_ELEMENT?.remove();
         this._DELETE_CONFIRM_ELEMENT = null;
         this._DELETE_CONFIRM?.getScope().dispose();
         this._DELETE_CONFIRM?.dispose();
         this._DELETE_CONFIRM = null;
-        this.disposeCssWindow();
+        this.disposeCssPageSetting();
         const optionsBorder = this._OPTIONS_BORDER as any;
         optionsBorder?.dispose?.();
         optionsBorder?.getScope?.().dispose();
@@ -128,7 +174,9 @@ export class ComponentElementCreator extends ComponentStructure.Component {
         this._OPTIONS_BORDER_CONTENT = null;
         this.disposeRootBorder();
         this.getScope().dispose();
-        CoreEvent.dispose(this._STEP as any);
+        if (CoreEvent.App.getRegistry().some((step) => step.identity === this._STEP.identity)) {
+            CoreEvent.dispose(this._STEP);
+        }
     }
 
     override renderContentComponent(
@@ -168,7 +216,7 @@ export class ComponentElementCreator extends ComponentStructure.Component {
                 const renderedComponent = this.createRenderedComponent(componentReference, properties);
                 if (mode === ElementCreatorMode.EDIT) return this.renderEditMode(renderedComponent);
                 this.disposeRootBorder();
-                return renderedComponent;
+                return this.renderWithMargin(renderedComponent, "part-element-creator-render-content");
             },
             [prop_mode, prop_component, prop_componentProperties],
             this.getScope(),
@@ -251,7 +299,6 @@ export class ComponentElementCreator extends ComponentStructure.Component {
                 width: "100%",
                 display: "flex",
                 flexDirection: "column",
-                gap: "var(--marginSmall)",
             },
             children: [
                 CoreReactive.App.section({
@@ -267,14 +314,12 @@ export class ComponentElementCreator extends ComponentStructure.Component {
                     styles: {
                         display: "flex",
                         flexDirection: "column",
-                        gap: "var(--marginSmall)",
-                        padding: "var(--paddingMedium)",
                         position: "relative",
                         zIndex: String(UtilStyle.Css_ZIndex(UtilConst.ZIndex.basic)),
                         boxSizing: "border-box",
                     },
                     children: [
-                        renderedComponent as any,
+                        this.renderWithMargin(renderedComponent, "part-element-creator-render-content") as any,
                     ],
                 }),
             ],
@@ -369,6 +414,7 @@ export class ComponentElementCreator extends ComponentStructure.Component {
         mode: ElementCreatorMode.SETTING_CREATE | ElementCreatorMode.SETTING_EDIT,
         componentReference: Function | null,
         properties: Record<string, any>,
+        pageSetting = false,
     ): CoreReactive.App {
         this.disposeSettingsChildren();
         this._SETTINGS_DRAFT = {...(properties ?? {})};
@@ -390,12 +436,68 @@ export class ComponentElementCreator extends ComponentStructure.Component {
         this._SETTINGS_TABS = new ComponentTabs.Component({
             prop_tabSelected: tabs[0]?.id ?? null,
             prop_tabs: tabs,
-            prop_bodyStyles: {padding: 0, maxHeight: "65vh", overflow: "auto"},
+            prop_bodyStyles: pageSetting
+                ? {padding: 0, maxHeight: "none", overflow: "visible"}
+                : {padding: 0, maxHeight: "65vh", overflow: "auto"},
             prop_bodyClass: ["w-100"],
             prop_structureStyles: {width: "100%"},
         } as any);
         this._SETTINGS_CHILDREN.push(this._SETTINGS_TABS as any);
         return this._SETTINGS_TABS.getReactiveElement() as CoreReactive.App;
+    }
+
+    private createSettingsPageContent(tabs: CoreReactive.App): CoreReactive.App {
+        const acceptTitle = CoreLanguage.App.translate(Keys.category.components.basic.elementCreator.editor.addComponent).get();
+        const cancelTitle = CoreLanguage.App.translate(Keys.category.components.basic.elementCreator.editor.cancel).get();
+        const cancelButton = new ComponentButton.Component({
+            prop_btnTitle: cancelTitle,
+            prop_btnVariant: ButtonVariants.SECONDARY,
+            prop_btnSemantic: ButtonSemantic.CANCEL,
+            prop_btnWidth: "100%",
+        } as any, {
+            CLICK: (event: Event) => {
+                this.closeSettingsPageSetting();
+                this.executeMethod("SETTINGS_CLOSE", event, {});
+            },
+        } as any);
+        const acceptButton = new ComponentButton.Component({
+            prop_btnTitle: acceptTitle,
+            prop_btnVariant: ButtonVariants.PRIMARY,
+            prop_btnSemantic: ButtonSemantic.SUBMIT,
+            prop_btnWidth: "100%",
+            prop_btnDisabled: this._SETTINGS_SELECTED_COMPONENT == null,
+        } as any, {
+            CLICK: (event: Event) => this.applySettingsDraft(event),
+        } as any);
+        this._SETTINGS_CHILDREN.push(cancelButton as any, acceptButton as any);
+        this._SETTINGS_PAGE_ACCEPT_BUTTON = acceptButton;
+
+        return CoreReactive.App.section({
+            styles: {
+                display: "flex",
+                flexDirection: "column",
+                width: "100%",
+                height: "100%",
+                minHeight: "0",
+                boxSizing: "border-box",
+            },
+            children: [
+                CoreReactive.App.div({
+                    styles: {flex: "1 1 auto", minHeight: "0", overflowY: "auto"},
+                    children: [tabs],
+                }),
+                CoreReactive.App.div({
+                    className: ["border-top", "p-3"],
+                    styles: {
+                        display: "grid",
+                        gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                        gap: "var(--marginMedium)",
+                        flex: "0 0 auto",
+                    },
+                    children: [cancelButton.getReactiveElement(), acceptButton.getReactiveElement()],
+                }),
+            ],
+        });
     }
 
     private createSettingsTabs(propertyBody: CoreReactive.App | null): Array<{id: string; title: string; body: CoreReactive.App}> {
@@ -411,14 +513,17 @@ export class ComponentElementCreator extends ComponentStructure.Component {
     }
 
     private createSettingsComponentTab(): CoreReactive.App {
+        const allEntries = this.getFilteredComponentEntries("__all__");
         const categoryOptions = [
             {id: "__all__", name: "All"},
-            ...this._SETTINGS_CATEGORIES.map((category) => ({id: category.key, name: category.name})),
+            ...this._SETTINGS_CATEGORIES
+                .filter((category) => allEntries.some((entry) =>
+                    entry.categoryKey === category.key || entry.categoryKey.startsWith(`${category.key}/`),
+                ))
+                .map((category) => ({id: category.key, name: category.name})),
         ];
         const selectedCategory = this._SETTINGS_SELECTED_CATEGORY;
         const filteredEntries = this.getFilteredComponentEntries(selectedCategory);
-        const currentEntry = this.getCurrentUnlistedEntry();
-        if (currentEntry && selectedCategory === "__all__") filteredEntries.unshift(currentEntry);
 
         this._SETTINGS_CATEGORY_SELECT = new ComponentInputSelectOption.Component({
             prop_name: "element-creator-component-category",
@@ -582,9 +687,42 @@ export class ComponentElementCreator extends ComponentStructure.Component {
     }
 
     private getFilteredComponentEntries(categoryKey: string): any[] {
-        return categoryKey === "__all__"
+        let configuredComponents: any = this._COMPONENT_PROPS_BIND.prop_components?.get?.();
+        const seenObservables = new Set<any>();
+        while (CoreObservable.App.isObservable(configuredComponents) && !seenObservables.has(configuredComponents)) {
+            seenObservables.add(configuredComponents);
+            configuredComponents = configuredComponents.get();
+        }
+        const allowedComponents: Function[] | null = Array.isArray(configuredComponents)
+            ? configuredComponents.filter((component): component is Function => typeof component === "function")
+            : null;
+        const allowedReferences = allowedComponents === null ? null : new Set(allowedComponents);
+        const allowedIds = allowedComponents === null
+            ? null
+            : new Set(allowedComponents.map((component) => this.getComponentReferenceId(component)).filter((id): id is string => id !== null));
+        const entries = allowedReferences === null || allowedIds === null
             ? [...this._SETTINGS_REGISTERED_COMPONENTS]
-            : this._SETTINGS_REGISTERED_COMPONENTS.filter((entry) => entry.categoryKey === categoryKey);
+            : this._SETTINGS_REGISTERED_COMPONENTS.filter((entry) =>
+                allowedReferences.has(entry.component) || allowedIds.has(entry.componentId),
+            );
+
+        // Keep the currently rendered component available while editing even if
+        // it is no longer in the allow-list; the list controls new selections.
+        const selectedComponent = this._SETTINGS_SELECTED_COMPONENT;
+        if (this._SETTINGS_MODE === ElementCreatorMode.SETTING_EDIT && selectedComponent && !entries.some((entry) => entry.component === selectedComponent)) {
+            const currentEntry = this.findRegisteredComponent(selectedComponent) ?? this.getCurrentUnlistedEntry();
+            if (currentEntry) entries.push(currentEntry);
+        }
+
+        return categoryKey === "__all__"
+            ? entries
+            : entries.filter((entry) => entry.categoryKey === categoryKey);
+    }
+
+    private getComponentReferenceId(componentReference: Function): string | null {
+        const directId = (componentReference as any)?.info?.id ?? (componentReference as any)?._COMPONENT_DEFINITION?.id;
+        if (directId) return String(directId);
+        return this.readComponentId(componentReference);
     }
 
     private getCurrentUnlistedEntry(): any | null {
@@ -605,8 +743,6 @@ export class ComponentElementCreator extends ComponentStructure.Component {
         const categoryKey = value == null ? "__all__" : String(value);
         this._SETTINGS_SELECTED_CATEGORY = categoryKey;
         const options = this.getFilteredComponentEntries(categoryKey);
-        const currentEntry = this.getCurrentUnlistedEntry();
-        if (currentEntry && categoryKey === "__all__") options.unshift(currentEntry);
         const selectedStillAvailable = options.some((entry) => entry.component === this._SETTINGS_SELECTED_COMPONENT);
         if (!selectedStillAvailable) {
             this._SETTINGS_SELECTED_COMPONENT = null;
@@ -624,7 +760,6 @@ export class ComponentElementCreator extends ComponentStructure.Component {
         const entry = key == null
             ? null
             : this.getFilteredComponentEntries(this._SETTINGS_SELECTED_CATEGORY)
-                .concat(this.getCurrentUnlistedEntry() ? [this.getCurrentUnlistedEntry()] : [])
                 .find((candidate) => candidate?.key === key) ?? null;
         const nextComponent = entry?.component ?? null;
         if (nextComponent !== this._SETTINGS_SELECTED_COMPONENT) {
@@ -653,6 +788,7 @@ export class ComponentElementCreator extends ComponentStructure.Component {
             this._SETTINGS_TABS.set("prop_tabSelected", tabs[0]?.id ?? null);
         }
         this._SETTINGS_WINDOW?.set("prop_showAccept", this._SETTINGS_SELECTED_COMPONENT != null);
+        this._SETTINGS_PAGE_ACCEPT_BUTTON?.set("prop_btnDisabled", this._SETTINGS_SELECTED_COMPONENT == null);
     }
 
     private getComponentDefaultProperties(componentReference: Function): Record<string, any> {
@@ -693,6 +829,7 @@ export class ComponentElementCreator extends ComponentStructure.Component {
                 : initialValue;
         const editorOptions: Record<string, any> = {
             ...(propDefinition.OptionComponentOption ?? {}),
+            prop_name: propName,
             prop_value: editorValue,
             prop_labelTitle: label,
             prop_labelTooltipDescription: description,
@@ -808,6 +945,8 @@ export class ComponentElementCreator extends ComponentStructure.Component {
         componentBinding?.set?.(componentReference);
         propertiesBinding?.set?.(properties);
         this.executeMethod("SETTINGS_APPLY", event, {COMPONENT: componentReference, PROPERTIES: properties});
+        if (this._SETTINGS_PAGE_SETTING) this.closeSettingsPageSetting();
+        this.executeMethod("SETTINGS_CLOSE", event, {});
     }
 
     private disposeSettingsPropChildren(): void {
@@ -831,6 +970,7 @@ export class ComponentElementCreator extends ComponentStructure.Component {
             child.dispose?.();
         }
         this._SETTINGS_TABS = null;
+        this._SETTINGS_PAGE_ACCEPT_BUTTON = null;
         this._SETTINGS_CATEGORY_SELECT = null;
         this._SETTINGS_COMPONENT_SELECT = null;
         this._SETTINGS_COMPONENT_TAB_BODY = null;
@@ -857,49 +997,267 @@ export class ComponentElementCreator extends ComponentStructure.Component {
         this.disposeSettingsChildren();
     }
 
-    private openCssWindow(): void {
-        if (!this._CSS_WINDOW) {
-            this._CSS_WINDOW = new ComponentWindow.Component({
-                prop_title: "CSS",
-                prop_body: CoreReactive.App.section({
-                    attrs: {"data-part-name": "part-element-creator-css-window-body"},
-                    styles: {width: "100%", minHeight: "240px"},
-                }),
-                prop_windowWidth: 560,
-                prop_windowHeight: 420,
-                prop_showBtnResize: false,
-                prop_showAccept: false,
-                prop_showCancel: false,
-                // ComponentWindow.call_open() needs its structure to exist with the
-                // expected id; an initially hidden structure omits that id.
-                prop_isVisible: true,
-            } as any);
-            this._CSS_WINDOW_ELEMENT = this._CSS_WINDOW.getElement() as HTMLElement;
-        }
-        if (!this._CSS_WINDOW_ELEMENT?.isConnected) document.body.appendChild(this._CSS_WINDOW_ELEMENT!);
-        this._CSS_WINDOW.call_open();
+    private disposeSettingsPageSetting(): void {
+        const pageSetting = this._SETTINGS_PAGE_SETTING;
+        this._SETTINGS_PAGE_SETTING = null;
+        this._SETTINGS_PAGE_SETTING_ELEMENT?.remove();
+        this._SETTINGS_PAGE_SETTING_ELEMENT = null;
+        pageSetting?.dispose();
     }
 
-    private disposeCssWindow(): void {
-        const cssWindow = this._CSS_WINDOW as any;
-        this._CSS_WINDOW = null;
-        this._CSS_WINDOW_ELEMENT?.remove();
-        this._CSS_WINDOW_ELEMENT = null;
-        cssWindow?.getScope?.()?.dispose?.();
-        cssWindow?.dispose?.();
+    private closeSettingsPageSetting(): void {
+        this._SETTINGS_WINDOW_OPEN = false;
+        this._SETTINGS_PAGE_SETTING?.set("prop_sidebarIsOpen", false);
+    }
+
+    private closeCssPageSetting(): void {
+        this._CSS_PAGE_SETTING?.set("prop_sidebarIsOpen", false);
+    }
+
+    private prepareSettingsPageSetting(): {content: CoreReactive.App; mode: ElementCreatorMode.SETTING_CREATE | ElementCreatorMode.SETTING_EDIT} {
+        this.closeCssPageSetting();
+        const configuredMode = this._COMPONENT_PROPS_BIND.prop_mode.get() as ElementCreatorMode;
+        const mode = configuredMode === ElementCreatorMode.SETTING_CREATE
+            ? ElementCreatorMode.SETTING_CREATE
+            : ElementCreatorMode.SETTING_EDIT;
+        const configuredComponent = this._COMPONENT_PROPS_BIND.prop_component.get() as Function | null;
+        const componentReference = mode === ElementCreatorMode.SETTING_CREATE ? null : configuredComponent;
+        const properties = (this._COMPONENT_PROPS_BIND.prop_componentProperties.get() ?? {}) as Record<string, any>;
+
+        if (this._SETTINGS_CLOSE_TIMER !== null) {
+            window.clearTimeout(this._SETTINGS_CLOSE_TIMER);
+            this._SETTINGS_CLOSE_TIMER = null;
+        }
+        if (this._SETTINGS_WINDOW) this.disposeSettingsWindow();
+
+        this._SETTINGS_MODE = mode;
+        this._SETTINGS_COMPONENT_REFERENCE = componentReference;
+        this._SETTINGS_PROPERTIES_SOURCE = properties;
+        const tabs = this.createSettingsBody(mode, componentReference, properties, true);
+        const content = this.createSettingsPageContent(tabs);
+
+        return {content, mode};
+    }
+
+    private showSettingsPageSetting(content: CoreReactive.App, mountHost?: HTMLElement): void {
+
+        if (!this._SETTINGS_PAGE_SETTING) {
+            this._SETTINGS_PAGE_SETTING = new ComponentPageSetting.Component({
+                prop_content: content,
+                prop_contentScrollY: true,
+                prop_sidebarWidth: 480,
+                prop_sidebarIsOpen: true,
+                prop_sidebarHasOpenIcon: false,
+            } as any);
+            this._SETTINGS_PAGE_SETTING_ELEMENT = this._SETTINGS_PAGE_SETTING.getElement() as HTMLElement;
+        } else {
+            this._SETTINGS_PAGE_SETTING.set("prop_content", content);
+            this._SETTINGS_PAGE_SETTING.set("prop_sidebarIsOpen", true);
+        }
+
+        const pageSettingElement = this._SETTINGS_PAGE_SETTING_ELEMENT;
+        const settingsHost = mountHost ?? this.getElement();
+        if (pageSettingElement && settingsHost && pageSettingElement.parentElement !== settingsHost) {
+            settingsHost.appendChild(pageSettingElement);
+        }
+        this._SETTINGS_WINDOW_OPEN = true;
+    }
+
+    private openSettingsPageSetting(mountHost?: HTMLElement): void {
+        const {content, mode} = this.prepareSettingsPageSetting();
+        if (this._COMPONENT_PROPS_BIND.prop_settingsUseExternalPageSetting.get()) {
+            this._SETTINGS_WINDOW_OPEN = true;
+            this.executeMethod("SETTINGS_OPEN", undefined, {CONTENT: content, MODE: mode});
+            return;
+        }
+        this.showSettingsPageSetting(content, mountHost);
+    }
+
+    call_showSettingsPageSetting(content: CoreReactive.App, mountHost?: HTMLElement): void {
+        this.showSettingsPageSetting(content, mountHost);
+    }
+
+    private openCssPageSetting(): void {
+        this.closeSettingsPageSetting();
+        if (this._SETTINGS_WINDOW) this.disposeSettingsWindow();
+
+        const properties = (this._COMPONENT_PROPS_BIND.prop_componentProperties.get() ?? {}) as Record<string, any>;
+        this.syncCssStyleValues(
+            properties,
+            this._COMPONENT_PROPS_BIND.prop_component.get() as Function | null,
+        );
+        if (!this._CSS_STYLE_VALUES_UNSUBSCRIBE) {
+            this._CSS_STYLE_VALUES_UNSUBSCRIBE = this._CSS_STYLE_VALUES.subscribe((values) => {
+                this.applyCssStylesToComponentProperties(values ?? {});
+            }, this.getScope());
+        }
+        if (!this._CSS_STYLES_COMPONENT) {
+            this._CSS_STYLES_COMPONENT = new ComponentStyles.Component({
+                prop_styleGroups: CSS_STYLE_PROPERTIES,
+                prop_value: this._CSS_STYLE_VALUES,
+                prop_structureStyles: {width: "100%", height: "100%", minHeight: "0"},
+                styles: {width: "100%", height: "100%", minHeight: "0"},
+            } as any);
+        }
+        if (!this._CSS_PAGE_SETTING) {
+            this._CSS_PAGE_SETTING = new ComponentPageSetting.Component({
+                prop_content: this._CSS_STYLES_COMPONENT.getReactiveElement(),
+                prop_contentScrollY: false,
+                prop_sidebarWidth: 480,
+                prop_sidebarIsOpen: true,
+                prop_sidebarHasOpenIcon: false,
+            } as any);
+            this._CSS_PAGE_SETTING_ELEMENT = this._CSS_PAGE_SETTING.getElement();
+            this._CSS_PAGE_SETTING_ELEMENT.style.display = "none";
+            this.getElement().appendChild(this._CSS_PAGE_SETTING_ELEMENT);
+        } else {
+            this._CSS_PAGE_SETTING.set("prop_sidebarIsOpen", true);
+        }
+    }
+
+    private disposeCssPageSetting(): void {
+        this._CSS_STYLE_VALUES_UNSUBSCRIBE?.();
+        this._CSS_STYLE_VALUES_UNSUBSCRIBE = null;
+        this._CSS_PAGE_SETTING_ELEMENT?.remove();
+        this._CSS_PAGE_SETTING_ELEMENT = null;
+        this._CSS_PAGE_SETTING?.dispose();
+        this._CSS_PAGE_SETTING = null;
+        this._CSS_STYLES_COMPONENT?.dispose();
+        this._CSS_STYLES_COMPONENT = null;
+        this._CSS_STYLE_SOURCE = null;
+        this._CSS_STYLE_COMPONENT_REFERENCE = null;
+        this._CSS_STYLE_VALUES.set({});
+    }
+
+    private applyCssStylesToComponentProperties(values: Record<string, any>): void {
+        const currentProperties = this._COMPONENT_PROPS_BIND.prop_componentProperties.get();
+        if (!currentProperties || typeof currentProperties !== "object") return;
+
+        const configuredStyles = currentProperties.prop_structureStyles;
+        const resolvedStyles = CoreObservable.App.isObservable(configuredStyles)
+            ? configuredStyles.get()
+            : configuredStyles;
+        const currentStyles = resolvedStyles && typeof resolvedStyles === "object" && !Array.isArray(resolvedStyles)
+            ? resolvedStyles as Record<string, any>
+            : {};
+        const managedProperties = new Set<string>(CSS_STYLE_PROPERTIES);
+        const preservedStyles = Object.fromEntries(
+            Object.entries(currentStyles).filter(([styleName]) => {
+                const property = styleName.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
+                return !managedProperties.has(property);
+            }),
+        );
+        const nextStyles = {
+            ...preservedStyles,
+            ...UtilOptionsStd.Group.CreateCssStyles(values),
+        };
+        const styleNames = new Set([...Object.keys(currentStyles), ...Object.keys(nextStyles)]);
+        const hasChanged = [...styleNames].some((styleName) => !Object.is(currentStyles[styleName], nextStyles[styleName]));
+        if (!hasChanged) return;
+
+        this._COMPONENT_PROPS_BIND.prop_componentProperties.set({
+            ...currentProperties,
+            prop_structureStyles: nextStyles,
+        });
     }
 
     private createRenderedComponent(componentReference: Function | null, properties: Record<string, any>): CoreReactive.App | HTMLElement | null {
         this.disposeRenderedComponent();
         if (typeof componentReference !== "function") return null;
 
+        const componentProperties = {...(properties ?? {})};
+        this.syncCssStyleValues(properties ?? {}, componentReference);
+        const configuredStyles = componentProperties.prop_structureStyles;
+        const structureStyles = CoreObservable.App.isObservable(configuredStyles)
+            ? configuredStyles
+            : new CoreObservable.App(configuredStyles ?? {});
+        componentProperties.prop_structureStyles = CoreObservable.App.computed(
+            (baseStyles: Record<string, any>, values: Record<string, any>) => {
+                const componentStyles = this.withoutMarginStyles(baseStyles);
+                return {
+                    ...componentStyles,
+                    ...UtilOptionsStd.Group.CreateCssStyles(this.withoutMarginStyles(values)),
+                    boxSizing: componentStyles.boxSizing ?? "border-box",
+                };
+            },
+            [structureStyles, this._CSS_STYLE_VALUES],
+            this.getScope(),
+        );
+
         const reference = componentReference as any;
         const isClass = typeof reference.prototype?.getElement === "function";
         const instance = (isClass
-            ? new reference(properties ?? {}, {} as any)
-            : reference(properties ?? {}, {} as any)) as NonNullable<typeof this._RENDERED_COMPONENT>;
+            ? new reference(componentProperties, {} as any)
+            : reference(componentProperties, {} as any)) as NonNullable<typeof this._RENDERED_COMPONENT>;
         this._RENDERED_COMPONENT = instance;
         return (instance?.getReactiveElement?.() ?? instance?.getElement?.() ?? null) as CoreReactive.App | HTMLElement | null;
+    }
+
+    private syncCssStyleValues(properties: Record<string, any>, componentReference: Function | null): void {
+        if (this._CSS_STYLE_SOURCE === properties) return;
+        const keepCurrentValues = this._CSS_STYLE_COMPONENT_REFERENCE === componentReference;
+        this._CSS_STYLE_SOURCE = properties;
+        this._CSS_STYLE_COMPONENT_REFERENCE = componentReference;
+        const configuredStyles = properties?.prop_structureStyles;
+        const styles = CoreObservable.App.isObservable(configuredStyles)
+            ? configuredStyles.get()
+            : configuredStyles;
+        const values: Record<string, any> = {};
+        const defaultSpacingValue = CoreConfig.Settings.SizeName.get();
+        for (const direction of UtilOptionsStd.Group.Margin.DirectionSets.ALL) {
+            values[direction] = defaultSpacingValue;
+        }
+        for (const direction of UtilOptionsStd.Group.Padding.DirectionSets.ALL) {
+            values[direction] = defaultSpacingValue;
+        }
+        if (styles && typeof styles === "object" && !Array.isArray(styles)) {
+            for (const [styleName, value] of Object.entries(styles)) {
+                const property = styleName.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
+                if (UtilOptionsStd.Group.ResolveProperty(property)) values[property] = value;
+            }
+        }
+        this._CSS_STYLE_VALUES.set(keepCurrentValues
+            ? {...values, ...this._CSS_STYLE_VALUES.get()}
+            : values);
+    }
+
+    private withoutMarginStyles(styles: Record<string, any> | null | undefined): Record<string, any> {
+        return Object.fromEntries(
+            Object.entries(styles ?? {}).filter(([styleName]) => {
+                const property = styleName.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
+                return !MARGIN_STYLE_PROPERTIES.has(property);
+            }),
+        );
+    }
+
+    private createMarginCssStyles(values: Record<string, any> | null | undefined): Record<string, string> {
+        const marginValues = Object.fromEntries(
+            Object.entries(values ?? {}).filter(([property]) => MARGIN_STYLE_PROPERTIES.has(property)),
+        );
+        const styles = UtilOptionsStd.Group.CreateCssStyles(marginValues);
+        for (const property of UtilOptionsStd.Group.Margin.Properties) {
+            const styleName = property.replace(/-([a-z])/g, (_match, letter: string) => letter.toUpperCase());
+            if (!Object.prototype.hasOwnProperty.call(styles, styleName)) styles[styleName] = "";
+        }
+        return styles;
+    }
+
+    private renderWithMargin(
+        content: CoreReactive.App | HTMLElement | null,
+        partName: string,
+    ): CoreReactive.App {
+        return CoreReactive.App.section({
+            attrs: {"data-part-name": partName},
+            stylesBind: CoreObservable.App.computed(
+                (values: Record<string, any>) => ({
+                    width: "auto",
+                    ...this.createMarginCssStyles(values),
+                }),
+                [this._CSS_STYLE_VALUES],
+                this.getScope(),
+            ),
+            children: [content as any],
+        });
     }
 
     private disposeRenderedComponent(): void {
@@ -987,11 +1345,12 @@ export class ComponentElementCreator extends ComponentStructure.Component {
 
     private handleOptionSelection(event: Event, action?: string): void {
         if (action === "CLICK_SETTINGS") {
-            this.call_openSettings(event);
+            if (this._COMPONENT_PROPS_BIND.prop_settingsUsePageSetting.get()) this.call_openSettingsPage(event);
+            else this.call_openSettings(event);
         } else if (action === "CLICK_DELETE") {
             this.openDeleteConfirm();
         } else if (action === "CLICK_CSS") {
-            this.openCssWindow();
+            this.openCssPageSetting();
         } else if (action === "SET_COLUMN_NULL") {
             this.executeMethod("COLUMN_CHANGE", event, {COLUMN: null});
         } else if (Object.values(LayoutColumn).includes(action as LayoutColumn)) {
@@ -1000,6 +1359,8 @@ export class ComponentElementCreator extends ComponentStructure.Component {
     }
 
     private openSettingsWindow(): void {
+        this.closeCssPageSetting();
+        if (this._SETTINGS_PAGE_SETTING) this.disposeSettingsPageSetting();
         const configuredMode = this._COMPONENT_PROPS_BIND.prop_mode.get() as ElementCreatorMode;
         const mode = configuredMode === ElementCreatorMode.SETTING_CREATE
             ? ElementCreatorMode.SETTING_CREATE
@@ -1030,6 +1391,11 @@ export class ComponentElementCreator extends ComponentStructure.Component {
 
     call_openSettings(event?: Event): void {
         this.openSettingsWindow();
+        this.executeMethod("CLICK_SETTINGS", event);
+    }
+
+    call_openSettingsPage(event?: Event, mountHost?: HTMLElement): void {
+        this.openSettingsPageSetting(mountHost);
         this.executeMethod("CLICK_SETTINGS", event);
     }
 

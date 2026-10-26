@@ -24,11 +24,11 @@ import {createCheckBoxControl} from "./Control";
 
 
 /**
- * ComponentInputCheckBox — کلاس نهایی
+ * ComponentInputCheckBox â€” Ú©Ù„Ø§Ø³ Ù†Ù‡Ø§ÛŒÛŒ
  *
  * Composition:
  *   ComponentInputCheckBox HAS-A ComponentBorder (for the checkbox box)
- *   ComponentBorder content → ComponentIcon (for the tick icon)
+ *   ComponentBorder content â†’ ComponentIcon (for the tick icon)
  *
  * Constructor: (config, methods, identity?)
  *
@@ -45,7 +45,7 @@ import {createCheckBoxControl} from "./Control";
  *     </section>
  *   </component-input-checkbox>
  */
-export class ComponentInputCheckBox extends ComponentInputCheckBoxBase {
+export class ComponentInputCheckBox extends ComponentInputCheckBoxBase<ReturnType<typeof createInputCheckBoxStep>>{
 
     constructor(
         config?:  Partial<StructurePropsType & PropsConfigType>,
@@ -115,7 +115,7 @@ export class ComponentInputCheckBox extends ComponentInputCheckBoxBase {
 
 
     /* ---------------------------------------------
-       renderMain — container section
+       renderMain â€” container section
     --------------------------------------------- */
     protected renderMain(
         attrsDefault?: PartAttrDefault,
@@ -140,7 +140,7 @@ export class ComponentInputCheckBox extends ComponentInputCheckBoxBase {
 
 
     /* ---------------------------------------------
-       renderLabel — label via ComponentLabel composition
+       renderLabel â€” label via ComponentLabel composition
        Renders the label section with title, tooltip, border, and background.
     --------------------------------------------- */
     protected renderLabel(
@@ -164,7 +164,7 @@ export class ComponentInputCheckBox extends ComponentInputCheckBoxBase {
 
 
     /* ---------------------------------------------
-       renderMainIcon — checkbox box via ComponentBorder composition
+       renderMainIcon â€” checkbox box via ComponentBorder composition
        Legacy: template_render_main_icon
     --------------------------------------------- */
     protected renderMainIcon(
@@ -218,7 +218,7 @@ export class ComponentInputCheckBox extends ComponentInputCheckBoxBase {
 
 
     /* ---------------------------------------------
-       renderMainIconPosition — centered positioning wrapper
+       renderMainIconPosition â€” centered positioning wrapper
        Legacy: template_render_main_icon_position (ComponentElementPosition)
     --------------------------------------------- */
     protected renderMainIconPosition(
@@ -251,7 +251,7 @@ export class ComponentInputCheckBox extends ComponentInputCheckBoxBase {
 
 
     /* ---------------------------------------------
-       renderMainIconCheckbox — tick icon via ComponentIcon composition
+       renderMainIconCheckbox â€” tick icon via ComponentIcon composition
        Legacy: template_render_main_icon_position_checkBox
     --------------------------------------------- */
     protected renderMainIconCheckbox(
@@ -311,7 +311,7 @@ export class ComponentInputCheckBox extends ComponentInputCheckBoxBase {
 
 
     /* ---------------------------------------------
-       renderMainTitle — title text
+       renderMainTitle â€” title text
        Legacy: template_render_main_title
     --------------------------------------------- */
     protected renderMainTitle(
@@ -459,7 +459,7 @@ export class ComponentInputCheckBox extends ComponentInputCheckBoxBase {
 
 
     /* ---------------------------------------------
-       renderValidate — optional ComponentValidate composition
+       renderValidate â€” optional ComponentValidate composition
        Renders a ComponentValidate when prop_listRules is non-empty.
     --------------------------------------------- */
     protected renderValidate(
@@ -508,7 +508,7 @@ export class ComponentInputCheckBox extends ComponentInputCheckBoxBase {
 
     /// ---------------------
     ///  Private Style Getters
-    ///  الگوی Plan 12.1 §۰.۳ — هر متد یک CoreObservable.App.computed برمی‌گرداند
+    ///  Ø§Ù„Ú¯ÙˆÛŒ Plan 12.1 Â§Û°.Û³ â€” Ù‡Ø± Ù…ØªØ¯ ÛŒÚ© CoreObservable.App.computed Ø¨Ø±Ù…ÛŒâ€ŒÚ¯Ø±Ø¯Ø§Ù†Ø¯
     /// ---------------------
 
     private getIconBorderSize() {

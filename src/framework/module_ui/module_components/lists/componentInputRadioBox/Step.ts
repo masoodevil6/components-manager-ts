@@ -1,10 +1,11 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 
 export function createInputRadioBoxStep() {
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {
-            label: CoreEvent.Step({children: {click: CoreEvent.Step({request: CoreEvent.Request(), response: CoreEvent.Response({value: ""})})}}),
-            selectItem: CoreEvent.Step({request: CoreEvent.Request(), response: CoreEvent.Response({value: null})}),
+            label: DefineWorkflow({children: {click: DefineWorkflow({request: CoreEvent.Request(), response: CoreEvent.Response({value: ""})})}}),
+            selectItem: DefineWorkflow({request: CoreEvent.Request(), response: CoreEvent.Response({value: null})}),
         },
     });
 }

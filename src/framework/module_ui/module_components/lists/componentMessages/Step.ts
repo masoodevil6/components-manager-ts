@@ -1,3 +1,4 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 // --------------------------------
 
@@ -31,12 +32,12 @@ import * as CoreEvent from "@/core_event";
  *   step     = داخلی — این Component به فرزندانش
  */
 export const createMessagesStep = () =>
-    CoreEvent.Step({
+    DefineWorkflow({
         children: {
 
             // Container — div والد لیست پیام‌ها
             // Per-Message SubEventها در runtime به این node متصل می‌شوند
-            messages: CoreEvent.Step({
+            messages: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),

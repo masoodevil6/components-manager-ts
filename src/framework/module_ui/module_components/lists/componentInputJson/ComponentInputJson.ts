@@ -73,7 +73,7 @@ function createEditorSearchHighlighter(): any {
     }, {decorations: (plugin) => plugin.decorations});
 }
 
-export class ComponentInputJson extends ComponentInputJsonBase {
+export class ComponentInputJson extends ComponentInputJsonBase<ReturnType<typeof createInputJsonStep>>{
     private _EDITOR: EditorView | null = null;
     private _EDITOR_ALL_FOLDED = false;
     private readonly _READ_ONLY_COMPARTMENT = new Compartment();

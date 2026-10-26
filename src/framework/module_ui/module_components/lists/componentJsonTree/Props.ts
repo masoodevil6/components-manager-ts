@@ -54,6 +54,16 @@ export const Props = {
         name: Keys.category.components.jsonTree.props.showCopyButton.name,
         description: Keys.category.components.jsonTree.props.showCopyButton.description,
     }),
+    prop_treeHorizontalScroll: Define_ComponentProp<boolean>({
+        prop: "prop_treeHorizontalScroll", default: false,
+        name: Keys.category.components.jsonTree.props.treeHorizontalScroll.name,
+        description: Keys.category.components.jsonTree.props.treeHorizontalScroll.description,
+    }),
+    prop_treeFillHeight: Define_ComponentProp<boolean>({
+        prop: "prop_treeFillHeight", default: false,
+        name: Keys.category.components.jsonTree.props.treeFillHeight.name,
+        description: Keys.category.components.jsonTree.props.treeFillHeight.description,
+    }),
     prop_searchPlaceholder: Define_ComponentProp<string | CoreObservable.App<string>>({
         prop: "prop_searchPlaceholder", default: CoreLanguage.App.translate(Keys.category.components.jsonTree.texts.search),
         name: Keys.category.components.jsonTree.props.searchPlaceholder.name,

@@ -20,17 +20,17 @@ import {ButtonAction} from "../componentButton/Props";
 
 
 /**
- * ComponentMouseScroller — کلاس نهایی
+ * ComponentMouseScroller â€” Ú©Ù„Ø§Ø³ Ù†Ù‡Ø§ÛŒÛŒ
  *
- * یک scroller با قابلیت zoom، drag-to-pan، wheel-to-zoom و sidebars.
- * از ComponentBorder و ComponentSidebar (به‌عنوان فرزند) استفاده می‌کند.
+ * ÛŒÚ© scroller Ø¨Ø§ Ù‚Ø§Ø¨Ù„ÛŒØª zoomØŒ drag-to-panØŒ wheel-to-zoom Ùˆ sidebars.
+ * Ø§Ø² ComponentBorder Ùˆ ComponentSidebar (Ø¨Ù‡â€ŒØ¹Ù†ÙˆØ§Ù† ÙØ±Ø²Ù†Ø¯) Ø§Ø³ØªÙØ§Ø¯Ù‡ Ù…ÛŒâ€ŒÚ©Ù†Ø¯.
  *
- * Constructor امضا: (config, methods, identity?)
- *   config  — شامل propهای پایه + propهای اختصاصی
- *   methods — methodهای اختصاصی
- *   identity — { unique?, emit?, events? }
+ * Constructor Ø§Ù…Ø¶Ø§: (config, methods, identity?)
+ *   config  â€” Ø´Ø§Ù…Ù„ propÙ‡Ø§ÛŒ Ù¾Ø§ÛŒÙ‡ + propÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ
+ *   methods â€” methodÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ
+ *   identity â€” { unique?, emit?, events? }
  */
-export class ComponentMouseScroller extends ComponentMouseScrollerBase {
+export class ComponentMouseScroller extends ComponentMouseScrollerBase<ReturnType<typeof createMouseScrollerStep>>{
 
     private _SCROLL_IS_DOWN:    CoreObservable.App<boolean> = new CoreObservable.App(false);
     private _DEFAULT_OPACITY:   CoreObservable.App<any> | null = null;
@@ -68,7 +68,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     /* ---------------------------------------------
-       Plan 9.1 — Component Disposal
+       Plan 9.1 â€” Component Disposal
     --------------------------------------------- */
     dispose(): void {
         if (this._ZOOM_ANIM_ID != null) {
@@ -80,9 +80,9 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     /* ---------------------------------------------
-       Plan 11.2 — renderContentComponent
-       لایه ساختار از طریق Schema پایه (COMPONENT + STRUCTURE) رندر می‌شود.
-       renderContentComponent فقط محتوای اختصاصی را رندر می‌کند.
+       Plan 11.2 â€” renderContentComponent
+       Ù„Ø§ÛŒÙ‡ Ø³Ø§Ø®ØªØ§Ø± Ø§Ø² Ø·Ø±ÛŒÙ‚ Schema Ù¾Ø§ÛŒÙ‡ (COMPONENT + STRUCTURE) Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒØ´ÙˆØ¯.
+       renderContentComponent ÙÙ‚Ø· Ù…Ø­ØªÙˆØ§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ Ø±Ø§ Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒÚ©Ù†Ø¯.
     --------------------------------------------- */
     override renderContentComponent(
         attrsDefault: PartAttrDefault,
@@ -94,7 +94,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     /* ---------------------------------------------
-       renderManagerComponent — Routing
+       renderManagerComponent â€” Routing
     --------------------------------------------- */
     override renderManagerComponent(
         partName:     string,
@@ -104,12 +104,12 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
     ): CoreReactive.App {
 
         switch (partName) {
-            // --- Plan 11.2: Schema پایه ---
+            // --- Plan 11.2: Schema Ù¾Ø§ÛŒÙ‡ ---
             case ComponentStructureTrait.schemas.COMPONENT.part:
                 return ComponentStructureTrait.renderComponentSchema(this, attrsDefault, data);
             case ComponentStructureTrait.schemas.STRUCTURE.part:
                 return ComponentStructureTrait.renderStructureSchema(this, attrsDefault, data);
-            // --- Schema اختصاصی ---
+            // --- Schema Ø§Ø®ØªØµØ§ØµÛŒ ---
             case Schemas.BORDER.part:
                 return this.renderBorder(attrsDefault, data, extra);
             case Schemas.BORDER_CONTENT.part:
@@ -151,7 +151,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     /* ---------------------------------------------
-       renderBorder — بخش اصلی (Border wrapper)
+       renderBorder â€” Ø¨Ø®Ø´ Ø§ØµÙ„ÛŒ (Border wrapper)
     --------------------------------------------- */
     protected renderBorder(
         attrsDefault?: PartAttrDefault,
@@ -234,7 +234,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     /* ---------------------------------------------
-       renderBorderContent — محتوای داخل Border
+       renderBorderContent â€” Ù…Ø­ØªÙˆØ§ÛŒ Ø¯Ø§Ø®Ù„ Border
     --------------------------------------------- */
     protected renderBorderContent(
         attrsDefault?: PartAttrDefault,
@@ -298,7 +298,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     /* ---------------------------------------------
-       renderBorderContentView — ناحیه قابل zoom/scroll
+       renderBorderContentView â€” Ù†Ø§Ø­ÛŒÙ‡ Ù‚Ø§Ø¨Ù„ zoom/scroll
     --------------------------------------------- */
     protected renderBorderContentView(
         attrsDefault?: PartAttrDefault,
@@ -347,7 +347,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     /* ---------------------------------------------
-       renderBorderContentSidebar — sidebar (left/right)
+       renderBorderContentSidebar â€” sidebar (left/right)
     --------------------------------------------- */
     protected renderBorderContentSidebar(
         attrsDefault?: PartAttrDefault,
@@ -449,7 +449,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     /* ---------------------------------------------
-       renderBorderContentSidebarTop — sidebar top
+       renderBorderContentSidebarTop â€” sidebar top
     --------------------------------------------- */
     protected renderBorderContentSidebarTop(
         attrsDefault?: PartAttrDefault,
@@ -511,7 +511,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     /* ---------------------------------------------
-       renderBorderContentSidebarBottom — sidebar bottom
+       renderBorderContentSidebarBottom â€” sidebar bottom
     --------------------------------------------- */
     protected renderBorderContentSidebarBottom(
         attrsDefault?: PartAttrDefault,
@@ -573,7 +573,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     /* ---------------------------------------------
-       renderBorderContentPositionZoom — zoom indicator
+       renderBorderContentPositionZoom â€” zoom indicator
     --------------------------------------------- */
     protected renderBorderContentPositionZoom(
         attrsDefault?: PartAttrDefault,
@@ -618,7 +618,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     /* ---------------------------------------------
-       renderBorderContentPositionZoomBorder — zoom border
+       renderBorderContentPositionZoomBorder â€” zoom border
     --------------------------------------------- */
     protected renderBorderContentPositionZoomBorder(
         attrsDefault?: PartAttrDefault,
@@ -660,7 +660,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     /* ---------------------------------------------
-       renderBorderContentTools — tools sidebar
+       renderBorderContentTools â€” tools sidebar
     --------------------------------------------- */
     protected renderBorderContentTools(
         attrsDefault?: PartAttrDefault,
@@ -755,7 +755,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     /* ---------------------------------------------
-       renderBorderContentToolsContent — tools content
+       renderBorderContentToolsContent â€” tools content
     --------------------------------------------- */
     protected renderBorderContentToolsContent(
         attrsDefault?: PartAttrDefault,
@@ -775,7 +775,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     /* ---------------------------------------------
-       renderBorderContentToolsContentZooming — zooming section
+       renderBorderContentToolsContentZooming â€” zooming section
     --------------------------------------------- */
     protected renderBorderContentToolsContentZooming(
         attrsDefault?: PartAttrDefault,
@@ -808,7 +808,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     /* ---------------------------------------------
-       renderBorderContentToolsContentZoomingIn — zoom in icon
+       renderBorderContentToolsContentZoomingIn â€” zoom in icon
     --------------------------------------------- */
     protected renderBorderContentToolsContentZoomingIn(
         attrsDefault?: PartAttrDefault,
@@ -843,7 +843,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     /* ---------------------------------------------
-       renderBorderContentToolsContentZoomingRefresh — zoom refresh icon
+       renderBorderContentToolsContentZoomingRefresh â€” zoom refresh icon
     --------------------------------------------- */
     protected renderBorderContentToolsContentZoomingRefresh(
         attrsDefault?: PartAttrDefault,
@@ -876,7 +876,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     /* ---------------------------------------------
-       renderBorderContentToolsContentZoomingOut — zoom out icon
+       renderBorderContentToolsContentZoomingOut â€” zoom out icon
     --------------------------------------------- */
     protected renderBorderContentToolsContentZoomingOut(
         attrsDefault?: PartAttrDefault,
@@ -911,7 +911,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     /* ---------------------------------------------
-       renderBorderContentToolsContentColoring — coloring section
+       renderBorderContentToolsContentColoring â€” coloring section
     --------------------------------------------- */
     protected renderBorderContentToolsContentColoring(
         attrsDefault?: PartAttrDefault,
@@ -943,7 +943,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     /* ---------------------------------------------
-       renderBorderContentToolsContentColoringLight — light mode icon
+       renderBorderContentToolsContentColoringLight â€” light mode icon
     --------------------------------------------- */
     protected renderBorderContentToolsContentColoringLight(
         attrsDefault?: PartAttrDefault,
@@ -976,7 +976,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     /* ---------------------------------------------
-       renderBorderContentToolsContentColoringDark — dark mode icon
+       renderBorderContentToolsContentColoringDark â€” dark mode icon
     --------------------------------------------- */
     protected renderBorderContentToolsContentColoringDark(
         attrsDefault?: PartAttrDefault,
@@ -1009,7 +1009,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     /* ---------------------------------------------
-       Event Handlers — Mouse / Wheel
+       Event Handlers â€” Mouse / Wheel
     --------------------------------------------- */
     private fn_scrollerMouseDown(event: any): void {
         if (event.target?.closest?.('component-sidebar')) return;
@@ -1143,7 +1143,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase {
 
 
     /* ---------------------------------------------
-       pr_setChangeValue — helper for zoom border click
+       pr_setChangeValue â€” helper for zoom border click
     --------------------------------------------- */
     private pr_setChangeValue(event: any): void {
         const bind = this._COMPONENT_PROPS_BIND;

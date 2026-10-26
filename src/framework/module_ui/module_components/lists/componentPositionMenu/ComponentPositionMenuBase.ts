@@ -10,41 +10,41 @@ import {Definition}               from "./Definition";
 
 
 /**
- * ComponentPositionMenuBase — ترکیب config پایه و اختصاصی
+ * ComponentPositionMenuBase â€” ØªØ±Ú©ÛŒØ¨ config Ù¾Ø§ÛŒÙ‡ Ùˆ Ø§Ø®ØªØµØ§ØµÛŒ
  *
- * ارث از CoreComponents.App (ClComponentBase) — نه ComponentStructure.
- * ComponentPositionMenu خودش یک Component مستقل است.
- * ComponentStructure به‌عنوان لایه پایه در Schema اول رندر می‌شود.
+ * Ø§Ø±Ø« Ø§Ø² CoreComponents.App (ClComponentBase) â€” Ù†Ù‡ ComponentStructure.
+ * ComponentPositionMenu Ø®ÙˆØ¯Ø´ ÛŒÚ© Component Ù…Ø³ØªÙ‚Ù„ Ø§Ø³Øª.
+ * ComponentStructure Ø¨Ù‡â€ŒØ¹Ù†ÙˆØ§Ù† Ù„Ø§ÛŒÙ‡ Ù¾Ø§ÛŒÙ‡ Ø¯Ø± Schema Ø§ÙˆÙ„ Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒØ´ÙˆØ¯.
  *
- * ۷ prop پایه ComponentStructure از ComponentStructureTrait.props در _COMPONENT_PATTERN
- * ثبت می‌شوند تا کاربر بتواند آن‌ها را set کند.
+ * Û· prop Ù¾Ø§ÛŒÙ‡ ComponentStructure Ø§Ø² ComponentStructureTrait.props Ø¯Ø± _COMPONENT_PATTERN
+ * Ø«Ø¨Øª Ù…ÛŒâ€ŒØ´ÙˆÙ†Ø¯ ØªØ§ Ú©Ø§Ø±Ø¨Ø± Ø¨ØªÙˆØ§Ù†Ø¯ Ø¢Ù†â€ŒÙ‡Ø§ Ø±Ø§ set Ú©Ù†Ø¯.
  *
  * Step Node (Plan 9.1 + 8.2.7):
- *   _COMPONENT_STEP — درخت Workflow داخلی Component (داخلی)
+ *   _COMPONENT_STEP â€” Ø¯Ø±Ø®Øª Workflow Ø¯Ø§Ø®Ù„ÛŒ Component (Ø¯Ø§Ø®Ù„ÛŒ)
  *
- * Plan 8.2.7 — SubEvent:
- *   اگر Parent Step (identity.unique) و Child Step (step) هر دو وجود دارند،
- *   Child به‌عنوان SubEvent زیر Parent ثبت می‌شود.
+ * Plan 8.2.7 â€” SubEvent:
+ *   Ø§Ú¯Ø± Parent Step (identity.unique) Ùˆ Child Step (step) Ù‡Ø± Ø¯Ùˆ ÙˆØ¬ÙˆØ¯ Ø¯Ø§Ø±Ù†Ø¯ØŒ
+ *   Child Ø¨Ù‡â€ŒØ¹Ù†ÙˆØ§Ù† SubEvent Ø²ÛŒØ± Parent Ø«Ø¨Øª Ù…ÛŒâ€ŒØ´ÙˆØ¯.
  */
-export class ComponentPositionMenuBase extends CoreComponents.App<
+export class ComponentPositionMenuBase<TWorkflow extends CoreComponents.ComponentWorkflow<any> = CoreComponents.ComponentWorkflow> extends CoreComponents.App<
     PropsType & Record<string, any>,
     SchemasType,
     any,
-    MethodsType
-> {
+    MethodsType,
+    TWorkflow> {
     /**
-     * Step Node — درخت Workflow داخلی ComponentPositionMenu
+     * Step Node â€” Ø¯Ø±Ø®Øª Workflow Ø¯Ø§Ø®Ù„ÛŒ ComponentPositionMenu
      */
-    protected _COMPONENT_STEP: CoreEvent.TStepInstance<any> | null = null;
+    protected _COMPONENT_STEP: TWorkflow | null = null;
 
 
     /**
      * constructor (Plan 8.2.7)
      *
-     * @param componentName — نام Component (default: "position-menu")
-     * @param elId          — شناسه المان (default: null)
-     * @param identity      — بیرونی { unique?, emit?, events? }
-     * @param step          — داخلی (Workflow خاص این Component)
+     * @param componentName â€” Ù†Ø§Ù… Component (default: "position-menu")
+     * @param elId          â€” Ø´Ù†Ø§Ø³Ù‡ Ø§Ù„Ù…Ø§Ù† (default: null)
+     * @param identity      â€” Ø¨ÛŒØ±ÙˆÙ†ÛŒ { unique?, emit?, events? }
+     * @param step          â€” Ø¯Ø§Ø®Ù„ÛŒ (Workflow Ø®Ø§Øµ Ø§ÛŒÙ† Component)
      */
     constructor(
         componentName: string = "position-menu",
@@ -54,7 +54,7 @@ export class ComponentPositionMenuBase extends CoreComponents.App<
             emit?:   CoreEvent.TEmitHandler | null;
             events?: Record<string, any> | null;
         },
-        step?: CoreEvent.TStepInstance<any>,
+        step?: TWorkflow,
     ) {
         super(componentName, elId);
 
@@ -63,8 +63,8 @@ export class ComponentPositionMenuBase extends CoreComponents.App<
 
         this._COMPONENT_STEP   = step ?? null;
 
-        // Plan 8.2.7 — SubEvent
-        // Guard: identity.unique باید یک Step واقعی باشد (symbol identity داشته باشد).
+        // Plan 8.2.7 â€” SubEvent
+        // Guard: identity.unique Ø¨Ø§ÛŒØ¯ ÛŒÚ© Step ÙˆØ§Ù‚Ø¹ÛŒ Ø¨Ø§Ø´Ø¯ (symbol identity Ø¯Ø§Ø´ØªÙ‡ Ø¨Ø§Ø´Ø¯).
         if (step && identity?.unique && typeof (identity.unique as any).identity === "symbol") {
             CoreEvent.SubEvent(identity.unique as CoreEvent.TStepRef, componentName, step);
         }
@@ -72,7 +72,7 @@ export class ComponentPositionMenuBase extends CoreComponents.App<
 
 
     /**
-     * Disposal — پاک‌سازی کل subtree از رجیستری CoreEvent (Plan 8.2.7 / 9.1)
+     * Disposal â€” Ù¾Ø§Ú©â€ŒØ³Ø§Ø²ÛŒ Ú©Ù„ subtree Ø§Ø² Ø±Ø¬ÛŒØ³ØªØ±ÛŒ CoreEvent (Plan 8.2.7 / 9.1)
      */
     disposeStep(): void {
         if (this._COMPONENT_STEP) {

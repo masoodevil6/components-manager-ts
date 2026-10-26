@@ -11,7 +11,7 @@ export const Schemas = {
     STRUCTURE: ComponentStructureTrait.schemas.STRUCTURE,
     RENDER: {
         part: "part-layout-creator",
-        props: [Props.prop_mode],
+        props: [Props.prop_mode, Props.prop_components],
         name: translation.schemas.render.name,
         description: translation.schemas.render.description,
     },

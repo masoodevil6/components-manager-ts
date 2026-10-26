@@ -1,5 +1,6 @@
 import { Keys } from "../../../module_categories/languages";
 import { Props } from "./Props";
+import type { InputGroupDefinition } from "./Props";
 import type {
   ExtractMethodsType,
   ExtractMethodsComponentArgs,
@@ -25,6 +26,12 @@ export const Methods = {
     description: Keys.category.components.input.methods.inputBlur.description,
     args: { VALUE: Props.prop_value },
     dataArgs: {} as const,
+  },
+  CHANGE_GROUP: {
+    name: "fn_onChangeGroup",
+    description: Keys.category.components.inputGroup.methods.changeGroup.description,
+    args: { VALUE: Props.prop_groupSelected },
+    dataArgs: {} as { GROUP: InputGroupDefinition },
   },
   CLICK_BUTTON: {
     name: "fn_onClickButton",

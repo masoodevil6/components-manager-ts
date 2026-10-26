@@ -17,7 +17,7 @@ import {ButtonAction, ButtonSemantic} from "../componentButton/Props";
 import {TooltipDirectionTypes} from "../componentTooltip/Props";
 import {Keys} from "../../../module_categories/languages";
 
-export class ComponentTimerDown extends ComponentTimerDownBase {
+export class ComponentTimerDown extends ComponentTimerDownBase<ReturnType<typeof createTimerDownStep>>{
     private _FINISH_TIMER_INTERVAL: ReturnType<typeof setInterval> | null = null;
     private _TIMER_DOWN_MINUTE_ONE = new CoreObservable.App("-");
     private _TIMER_DOWN_MINUTE_TWO = new CoreObservable.App("-");

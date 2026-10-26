@@ -1,3 +1,4 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 // --------------------------------
 
@@ -9,25 +10,25 @@ import * as CoreEvent from "@/core_event";
  *   هر ComponentMouseScroller Instance باید Step Instance مستقل داشته باشد.
  */
 export function createMouseScrollerStep() {
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {
-            zoomIn: CoreEvent.Step({
+            zoomIn: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: 0 }),
             }),
-            zoomOut: CoreEvent.Step({
+            zoomOut: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: 0 }),
             }),
-            zoomRefresh: CoreEvent.Step({
+            zoomRefresh: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: 1 }),
             }),
-            colorModeLight: CoreEvent.Step({
+            colorModeLight: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),
-            colorModeDark: CoreEvent.Step({
+            colorModeDark: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),

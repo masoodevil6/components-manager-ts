@@ -20,7 +20,7 @@ import * as ComponentValidate from "../componentValidate";
 
 type Child = {dispose?: () => void; disposeStep?: () => void};
 
-export class ComponentInputPhone extends ComponentInputPhoneBase {
+export class ComponentInputPhone extends ComponentInputPhoneBase<ReturnType<typeof createInputPhoneStep>>{
     private static _INSTANCE_COUNT = 0;
     private readonly _INPUT_ID = `component-input-phone-${++ComponentInputPhone._INSTANCE_COUNT}`;
     private _INPUT_SIMPLE: InstanceType<typeof ComponentInputSimple.Component> | null = null;

@@ -22,7 +22,7 @@ import {createInputSelectOptionStep} from "./Step";
 
 type DisposableChild = {dispose?: () => void; disposeStep?: () => void};
 
-export class ComponentInputSelectOption extends ComponentInputSelectOptionBase {
+export class ComponentInputSelectOption extends ComponentInputSelectOptionBase<ReturnType<typeof createInputSelectOptionStep>>{
     private readonly _CHILDREN: DisposableChild[] = [];
     private readonly _CURRENT_SELECTION = new CoreObservable.App<InputSelectOptionValue>(null);
     private _SELECT_CHILD: InstanceType<typeof ComponentSelectCustomSimple.Component> | null = null;

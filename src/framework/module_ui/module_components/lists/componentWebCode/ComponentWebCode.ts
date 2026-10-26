@@ -23,28 +23,28 @@ import {Keys}                         from "../../../module_categories/languages
 
 
 /**
- * ComponentWebCode — کلاس نهایی
+ * ComponentWebCode â€” Ú©Ù„Ø§Ø³ Ù†Ù‡Ø§ÛŒÛŒ
  *
- * معماری Composition:
- *   ComponentWebCode HAS-A ComponentIcon + ComponentButton (نه IS-A)
- *   ComponentIcon در renderContentBlurPositionIcon از طریق مستقیم ساخته می‌شود.
- *   ComponentButton در renderContentBlurPositionRetry از طریق مستقیم ساخته می‌شود.
+ * Ù…Ø¹Ù…Ø§Ø±ÛŒ Composition:
+ *   ComponentWebCode HAS-A ComponentIcon + ComponentButton (Ù†Ù‡ IS-A)
+ *   ComponentIcon Ø¯Ø± renderContentBlurPositionIcon Ø§Ø² Ø·Ø±ÛŒÙ‚ Ù…Ø³ØªÙ‚ÛŒÙ… Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯.
+ *   ComponentButton Ø¯Ø± renderContentBlurPositionRetry Ø§Ø² Ø·Ø±ÛŒÙ‚ Ù…Ø³ØªÙ‚ÛŒÙ… Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯.
  *
- * Constructor امضا: (config, methods, identity?)
- *   config  — شامل propهای پایه + propهای اختصاصی
- *   methods — methodهای اختصاصی (RETRY_CLICK)
- *   identity — { unique?, emit?, events? }
+ * Constructor Ø§Ù…Ø¶Ø§: (config, methods, identity?)
+ *   config  â€” Ø´Ø§Ù…Ù„ propÙ‡Ø§ÛŒ Ù¾Ø§ÛŒÙ‡ + propÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ
+ *   methods â€” methodÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (RETRY_CLICK)
+ *   identity â€” { unique?, emit?, events? }
  *
- * Plan 9.1 — Step داخلی در constructor ساخته می‌شود (factory function).
- * Plan 11.2 — لایه <component-web-code> + <section> از Schema پایه رندر می‌شود.
+ * Plan 9.1 â€” Step Ø¯Ø§Ø®Ù„ÛŒ Ø¯Ø± constructor Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯ (factory function).
+ * Plan 11.2 â€” Ù„Ø§ÛŒÙ‡ <component-web-code> + <section> Ø§Ø² Schema Ù¾Ø§ÛŒÙ‡ Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒØ´ÙˆØ¯.
  *
- * بازیابی Behavior از Legacy:
- *   - icon نمایش web code (مثلاً 404)
- *   - blur background با رنگ قابل تنظیم
- *   - retry button با RETRY_CLICK method
- *   - position center با absolute + transform
+ * Ø¨Ø§Ø²ÛŒØ§Ø¨ÛŒ Behavior Ø§Ø² Legacy:
+ *   - icon Ù†Ù…Ø§ÛŒØ´ web code (Ù…Ø«Ù„Ø§Ù‹ 404)
+ *   - blur background Ø¨Ø§ Ø±Ù†Ú¯ Ù‚Ø§Ø¨Ù„ ØªÙ†Ø¸ÛŒÙ…
+ *   - retry button Ø¨Ø§ RETRY_CLICK method
+ *   - position center Ø¨Ø§ absolute + transform
  */
-export class ComponentWebCode extends ComponentWebCodeBase {
+export class ComponentWebCode extends ComponentWebCodeBase<ReturnType<typeof createWebCodeStep>>{
 
     constructor(
         config?:  Partial<StructurePropsType & WebCodePropsConfigType>,
@@ -68,7 +68,7 @@ export class ComponentWebCode extends ComponentWebCodeBase {
 
 
     /* ---------------------------------------------
-       Plan 9.1 — Component Disposal
+       Plan 9.1 â€” Component Disposal
     --------------------------------------------- */
     dispose(): void {
         this.disposeStep();
@@ -76,7 +76,7 @@ export class ComponentWebCode extends ComponentWebCodeBase {
 
 
     /* ---------------------------------------------
-       Plan 11.2 — renderContentComponent
+       Plan 11.2 â€” renderContentComponent
     --------------------------------------------- */
     override renderContentComponent(
         attrsDefault: PartAttrDefault,
@@ -88,7 +88,7 @@ export class ComponentWebCode extends ComponentWebCodeBase {
 
 
     /* ---------------------------------------------
-       renderManagerComponent — Routing
+       renderManagerComponent â€” Routing
     --------------------------------------------- */
     override renderManagerComponent(
         partName:     string,
@@ -119,7 +119,7 @@ export class ComponentWebCode extends ComponentWebCodeBase {
 
 
     /* ---------------------------------------------
-       renderContent — رندر Part CONTENT اصلی
+       renderContent â€” Ø±Ù†Ø¯Ø± Part CONTENT Ø§ØµÙ„ÛŒ
     --------------------------------------------- */
     protected renderContent(
         attrsDefault?: PartAttrDefault,
@@ -146,9 +146,9 @@ export class ComponentWebCode extends ComponentWebCodeBase {
 
 
     /* ---------------------------------------------
-       renderContentBlur — blur background layer
+       renderContentBlur â€” blur background layer
        Legacy: template_render_content_blur (ComponentElementPosition FIX)
-       جایگزین با inline absolute positioning
+       Ø¬Ø§ÛŒÚ¯Ø²ÛŒÙ† Ø¨Ø§ inline absolute positioning
     --------------------------------------------- */
     protected renderContentBlur(
         attrsDefault?: PartAttrDefault,
@@ -192,9 +192,9 @@ export class ComponentWebCode extends ComponentWebCodeBase {
 
 
     /* ---------------------------------------------
-       renderContentBlurPosition — centered position wrapper
+       renderContentBlurPosition â€” centered position wrapper
        Legacy: template_render_content_blur_position (ComponentElementPosition ABSOLUTE)
-       جایگزین با inline absolute + transform centering
+       Ø¬Ø§ÛŒÚ¯Ø²ÛŒÙ† Ø¨Ø§ inline absolute + transform centering
     --------------------------------------------- */
     protected renderContentBlurPosition(
         attrsDefault?: PartAttrDefault,
@@ -227,7 +227,7 @@ export class ComponentWebCode extends ComponentWebCodeBase {
 
 
     /* ---------------------------------------------
-       renderContentBlurPositionIcon — Composition: ComponentIcon
+       renderContentBlurPositionIcon â€” Composition: ComponentIcon
     --------------------------------------------- */
     protected renderContentBlurPositionIcon(
         attrsDefault?: PartAttrDefault,
@@ -310,8 +310,8 @@ export class ComponentWebCode extends ComponentWebCodeBase {
 
 
     /* ---------------------------------------------
-       renderContentBlurPositionRetry — Composition: ComponentButton
-       رندر شرطی بر اساس prop_btnRetryHas
+       renderContentBlurPositionRetry â€” Composition: ComponentButton
+       Ø±Ù†Ø¯Ø± Ø´Ø±Ø·ÛŒ Ø¨Ø± Ø§Ø³Ø§Ø³ prop_btnRetryHas
     --------------------------------------------- */
     protected renderContentBlurPositionRetry(
         attrsDefault?: PartAttrDefault,
@@ -416,7 +416,7 @@ export class ComponentWebCode extends ComponentWebCodeBase {
 
 
     /* ---------------------------------------------
-       renderEmptyContent — fallback خالی
+       renderEmptyContent â€” fallback Ø®Ø§Ù„ÛŒ
     --------------------------------------------- */
     public renderEmptyContent(
         attrsDefault?: PartAttrDefault,

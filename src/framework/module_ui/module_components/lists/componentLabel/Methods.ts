@@ -37,6 +37,13 @@ export const Methods = {
         },
     },
 
+    CHANGE_GROUP: {
+        name:        "fn_onChangeLabelGroup",
+        description: Keys.category.components.label.methods.changeGroup.description,
+        args:        {VALUE: Props.prop_labelGroupSelected},
+        dataArgs:    {} as {GROUP: LabelGroup},
+    },
+
     SELECT_MENU_ITEM: {
         name:        "fn_onSelectLabelMenuItem",
         description: Keys.category.components.label.methods.selectMenuItem.description,

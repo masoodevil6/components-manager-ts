@@ -138,6 +138,10 @@ export const Keys = {
             name:        CreateTranslationKey() ,
             description: CreateTranslationKey() ,
         },
+        eventWorkflow: {
+            name:        CreateTranslationKey() ,
+            description: CreateTranslationKey() ,
+        },
 
 
 

@@ -6,13 +6,13 @@ import {Schemas, SchemasType} from "./Schemas";
 import {Methods, MethodsType} from "./Methods";
 import {Definition} from "./Definition";
 
-export class ComponentCardViewBase extends CoreComponents.App<
-    PropsType & Record<string, any>, SchemasType, any, MethodsType
-> {
-    protected _COMPONENT_STEP: CoreEvent.TStepInstance<any> | null = null;
+export class ComponentCardViewBase<TWorkflow extends CoreComponents.ComponentWorkflow<any> = CoreComponents.ComponentWorkflow> extends CoreComponents.App<
+    PropsType & Record<string, any>, SchemasType, any, MethodsType,
+    TWorkflow> {
+    protected _COMPONENT_STEP: TWorkflow | null = null;
 
     constructor(
-        step?: CoreEvent.TStepInstance<any>,
+        step?: TWorkflow,
         identity?: {unique?: CoreEvent.TStepRef | null; emit?: CoreEvent.TEmitHandler | null},
     ) {
         super("cardViewInfo", null);

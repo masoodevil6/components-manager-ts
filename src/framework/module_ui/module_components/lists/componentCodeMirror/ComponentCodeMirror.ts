@@ -95,7 +95,7 @@ function createCodeMirrorSetup(markerDOM: (open: boolean) => HTMLElement): any[]
     ];
 }
 
-export class ComponentCodeMirror extends ComponentCodeMirrorBase {
+export class ComponentCodeMirror extends ComponentCodeMirrorBase<ReturnType<typeof createCodeMirrorStep>>{
     private _EDITOR: EditorView | null = null;
     private _HEADER_BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;
     private _HEADER_MENU: InstanceType<typeof ComponentMenuMore.Component> | null = null;

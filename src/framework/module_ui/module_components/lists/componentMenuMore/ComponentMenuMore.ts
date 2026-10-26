@@ -19,7 +19,7 @@ import {Methods, type MethodsType, type MethodsConfigType} from "./Methods";
 
 const MENU_ITEM_HEIGHT = "calc(var(--paddingMedium) + var(--heightMedium) + var(--paddingMedium))";
 
-export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<string, any>, SchemasType, any, MethodsType> {
+export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<string, any>, SchemasType, any, MethodsType, CoreComponents.ComponentWorkflow> {
     protected _COMPONENT_DEFINITION = Definition;
     protected _COMPONENT_PATTERN = CoreComponents.DefineProp<PropsType & Record<string, any>>({...ComponentStructureTrait.props, ...Props} as any);
     protected _COMPONENT_SCHEMA = CoreComponents.DefineSchema<SchemasType, PropsType & Record<string, any>>({...ComponentStructureTrait.schemas, ...Schemas} as any);

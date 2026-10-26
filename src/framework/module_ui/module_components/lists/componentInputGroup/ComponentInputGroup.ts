@@ -12,6 +12,7 @@ import {
   Props,
   InputGroupItemType,
   type InputGroupItem,
+  type InputGroupDefinition,
   type PropsConfigType,
 } from "./Props";
 import { LayoutColumn } from "../componentLayout/Props";
@@ -48,7 +49,7 @@ const INPUT_RADIUS_PROPS = [
   "prop_selectBorderBottomRightRadiusHas",
 ];
 
-export class ComponentInputGroup extends ComponentInputBase {
+export class ComponentInputGroup extends ComponentInputBase<ReturnType<typeof createInputGroupStep>>{
   protected override _COMPONENT_DEFINITION = Definition;
   protected override _COMPONENT_PATTERN: any = CoreComponents.DefineProp<
     Record<string, any>
@@ -71,6 +72,7 @@ export class ComponentInputGroup extends ComponentInputBase {
 
   private readonly _CHILDREN: DisposableChild[] = [];
   private readonly _INPUT_COMPONENTS = new Set<DisposableChild>();
+  private _ACTIVE_INPUTS = new Set<DisposableChild>();
   private readonly _INPUT_VALUE_BINDINGS = new Map<DisposableChild, InputValueBinding>();
   private readonly _CREATED_INPUTS = new Map<object, CreatedInput>();
   private readonly _ITEM_RADIUS_DEFAULTS = new WeakMap<object, Record<string, any>>();
@@ -168,6 +170,7 @@ export class ComponentInputGroup extends ComponentInputBase {
     const description =
       data?.prop_labelTooltipDescription ?? bind.prop_labelTooltipDescription;
     const show = data?.prop_labelShow ?? bind.prop_labelShow;
+    const inputs = data?.prop_inputs ?? bind.prop_inputs;
 
     return CoreObservable.App.conditionWhen(
       [show, title, description],
@@ -180,13 +183,24 @@ export class ComponentInputGroup extends ComponentInputBase {
         for (const propName of Object.keys(ComponentLabelTrait.props)) {
           labelProps[propName] = data?.[propName] ?? bind[propName];
         }
+        labelProps.prop_labelGroups = CoreObservable.App.computed(
+          (groupList: InputGroupDefinition[] | null | undefined) =>
+            (Array.isArray(groupList) ? groupList : []).map(({ id, title }) => ({ id, title, action: id })),
+          [inputs],
+          this.getScope(),
+        );
+        labelProps.prop_labelGroupSelected = data?.prop_groupSelected ?? bind.prop_groupSelected;
         labelProps.classList = ["d-block"];
         labelProps.styles = {
           marginBlockEnd: UtilStyle.Css_Margin(
             CoreConfig.Settings.SizeName.get(),
           ),
         };
-        const label = ComponentLabelTrait.createLabel(labelProps);
+        const label = ComponentLabelTrait.createLabel(labelProps, {
+          CHANGE_GROUP: (event: Event, dataArgs: any) => {
+            this.executeMethod("CHANGE_GROUP", event, { GROUP: dataArgs?.GROUP });
+          },
+        });
         this._CHILDREN.push(label as any);
         return label.getReactiveElement() as CoreReactive.App;
       },
@@ -204,6 +218,7 @@ export class ComponentInputGroup extends ComponentInputBase {
       data?.prop_backgroundColorForm ?? bind.prop_backgroundColorForm;
     const radius = data?.prop_formBorderRadius ?? bind.prop_formBorderRadius;
     const inputs = data?.prop_inputs ?? bind.prop_inputs;
+    const selectedGroup = data?.prop_groupSelected ?? bind.prop_groupSelected;
     const directionRtl = CoreConfig.Settings.DirectionRtl.observable();
     const styles = CoreObservable.App.computed(
       (backgroundColor, borderRadius) => ({
@@ -217,9 +232,20 @@ export class ComponentInputGroup extends ComponentInputBase {
       this.getScope(),
     );
     const renderedInputs = CoreObservable.App.computed(
-      (value: InputGroupItem[] | null | undefined, isRtl: boolean) =>
-        this.renderInputs(value, isRtl),
-      [inputs, directionRtl],
+      (
+        groupList: InputGroupDefinition[] | null | undefined,
+        selectedId: string | null,
+        isRtl: boolean,
+      ) => {
+        const groups = Array.isArray(groupList) ? groupList : [];
+        let group = groups.find((candidate) => candidate.id === selectedId);
+        if (!group && groups.length > 0) {
+          group = groups[0];
+          this.set("prop_groupSelected", group.id);
+        }
+        return this.renderInputs(group?.inputs ?? [], isRtl, groups);
+      },
+      [inputs, selectedGroup, directionRtl],
       this.getScope(),
     );
 
@@ -234,6 +260,7 @@ export class ComponentInputGroup extends ComponentInputBase {
   private renderInputs(
     inputs: InputGroupItem[] | null | undefined,
     isRtl: boolean,
+    groups: InputGroupDefinition[] = [],
   ): CoreReactive.App {
     const list = Array.isArray(inputs) ? inputs : [];
     const rowPositions = this.getInputRowPositions(list);
@@ -252,8 +279,11 @@ export class ComponentInputGroup extends ComponentInputBase {
       });
     });
 
+    this._ACTIVE_INPUTS = activeInputs;
+    const configuredInputs = this.getConfiguredInputComponents(groups);
+    for (const configured of configuredInputs) this._INPUT_COMPONENTS.add(configured);
     for (const previous of this._INPUT_COMPONENTS) {
-      if (activeInputs.has(previous)) continue;
+      if (activeInputs.has(previous) || configuredInputs.has(previous)) continue;
       this.removeInputValueBinding(previous);
       if (previous.dispose) previous.dispose();
       else previous.disposeStep?.();
@@ -270,6 +300,31 @@ export class ComponentInputGroup extends ComponentInputBase {
       styles: { width: "100%", minWidth: "0" },
       children,
     });
+  }
+
+  private getConfiguredInputComponents(
+    groups: InputGroupDefinition[],
+  ): Set<DisposableChild> {
+    const configured = new Set<DisposableChild>();
+    for (const group of groups) {
+      for (const item of group?.inputs ?? []) {
+        const input = item?.input;
+        if (typeof input === "function") {
+          const created = this._CREATED_INPUTS.get(item as object);
+          if (created) configured.add(created.instance);
+          continue;
+        }
+        if (
+          input &&
+          typeof input === "object" &&
+          (typeof (input as any).getElement === "function" ||
+            typeof (input as any).getReactiveElement === "function")
+        ) {
+          configured.add(input as DisposableChild);
+        }
+      }
+    }
+    return configured;
   }
 
   private resolveInput(
@@ -399,7 +454,9 @@ export class ComponentInputGroup extends ComponentInputBase {
 
   private readInputGroupValue(): Record<string, any> {
     const value: Record<string, any> = {};
-    for (const binding of this._INPUT_VALUE_BINDINGS.values()) {
+    for (const input of this._ACTIVE_INPUTS) {
+      const binding = this._INPUT_VALUE_BINDINGS.get(input);
+      if (!binding) continue;
       const name = binding.name.get();
       if (typeof name !== "string" || name.trim() === "") continue;
       value[name] = binding.value.get();

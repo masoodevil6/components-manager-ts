@@ -1,10 +1,11 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 
 export function createTimerDownStep() {
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {
-            clickRetry: CoreEvent.Step({ request: CoreEvent.Request(), response: CoreEvent.Response({ value: "" }) }),
-            finishTimer: CoreEvent.Step({ request: CoreEvent.Request(), response: CoreEvent.Response({ value: "" }) }),
+            clickRetry: DefineWorkflow({ request: CoreEvent.Request(), response: CoreEvent.Response({ value: "" }) }),
+            finishTimer: DefineWorkflow({ request: CoreEvent.Request(), response: CoreEvent.Response({ value: "" }) }),
         },
     });
 }

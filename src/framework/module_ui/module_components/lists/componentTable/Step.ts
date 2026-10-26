@@ -1,3 +1,4 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 // --------------------------------
 
@@ -11,13 +12,13 @@ import * as CoreEvent from "@/core_event";
  *   clickOptionCard ← Event Engine endpoint
  */
 export function createTableStep() {
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {
-            selectCol: CoreEvent.Step({
+            selectCol: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),
-            clickOptionCard: CoreEvent.Step({
+            clickOptionCard: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),

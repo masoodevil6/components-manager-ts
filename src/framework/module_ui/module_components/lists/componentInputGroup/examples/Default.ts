@@ -25,6 +25,14 @@ export const Default: ComponentExample = {
       prop_inputName: "lastName",
       prop_inputPlaceholder: "Last name",
     });
+    const createFirstName = UiCategory.UI.Simples.InputSimple({
+      prop_inputName: "firstName",
+      prop_inputPlaceholder: "First name",
+    });
+    const createLastName = UiCategory.UI.Simples.InputSimple({
+      prop_inputName: "lastName",
+      prop_inputPlaceholder: "Last name",
+    });
 
     return UiCategory.UI.Inputs.InputGroup(
       {
@@ -32,15 +40,36 @@ export const Default: ComponentExample = {
         prop_labelTitle: "Contact info",
         prop_labelBackground: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
         prop_labelColor: UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
+        prop_groupSelected: null,
         prop_inputs: [
-          { type: InputGroupItemType.LABEL, input: nameLabel, width: LayoutColumn.COL_2 },
-          { type: InputGroupItemType.INPUT, input: firstName, width: LayoutColumn.COL_5 },
-          { type: InputGroupItemType.INPUT, input: lastName, width: LayoutColumn.COL_5 },
+          {
+            id: "EDIT",
+            title: "Edit profile",
+            inputs: [
+              { type: InputGroupItemType.LABEL, input: nameLabel, width: LayoutColumn.COL_2 },
+              { type: InputGroupItemType.INPUT, input: firstName, width: LayoutColumn.COL_5 },
+              { type: InputGroupItemType.INPUT, input: lastName, width: LayoutColumn.COL_5 },
+            ],
+          },
+          {
+            id: "CREATE",
+            title: "Create profile",
+            inputs: [
+              { type: InputGroupItemType.INPUT, input: createFirstName, width: LayoutColumn.COL_8 },
+              { type: InputGroupItemType.INPUT, input: createLastName, width: LayoutColumn.COL_4 },
+            ],
+          },
         ],
       },
       {
         INPUT_CHANGE: (_event, _dataArgs, componentArgs) => {
           console.log("InputGroup prop_value:", componentArgs.VALUE);
+        },
+        CHANGE_GROUP: (_event, dataArgs, componentArgs) => {
+          console.log("InputGroup group changed:", {
+            value: componentArgs.VALUE,
+            group: dataArgs.GROUP,
+          });
         },
       },
     ).getElement() as HTMLElement;

@@ -1,9 +1,10 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 
 export function createCollapseLineStep() {
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {
-            click: CoreEvent.Step({
+            click: DefineWorkflow({
                 request: CoreEvent.Request(),
                 response: CoreEvent.Response({value: false}),
             }),

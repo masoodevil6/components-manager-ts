@@ -18,24 +18,24 @@ import {ButtonAction} from "../componentButton/Props";
 
 
 /**
- * ComponentSidebar — کلاس نهایی
+ * ComponentSidebar â€” Ú©Ù„Ø§Ø³ Ù†Ù‡Ø§ÛŒÛŒ
  *
- * معماری Composition:
- *   ComponentSidebar HAS-A ComponentStructure (نه IS-A)
- *   ComponentStructure در renderContentComponent ساخته می‌شود
- *   و content آن = renderSidebarContent (محتوای اختصاصی ComponentSidebar)
+ * Ù…Ø¹Ù…Ø§Ø±ÛŒ Composition:
+ *   ComponentSidebar HAS-A ComponentStructure (Ù†Ù‡ IS-A)
+ *   ComponentStructure Ø¯Ø± renderContentComponent Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯
+ *   Ùˆ content Ø¢Ù† = renderSidebarContent (Ù…Ø­ØªÙˆØ§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ ComponentSidebar)
  *
- * Constructor امضا: (config, methods, identity?)
- *   config  — شامل propهای پایه + propهای اختصاصی
- *   methods — methodهای اختصاصی (TOGGLE)
- *   identity — { unique?, emit?, events? }
+ * Constructor Ø§Ù…Ø¶Ø§: (config, methods, identity?)
+ *   config  â€” Ø´Ø§Ù…Ù„ propÙ‡Ø§ÛŒ Ù¾Ø§ÛŒÙ‡ + propÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ
+ *   methods â€” methodÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (TOGGLE)
+ *   identity â€” { unique?, emit?, events? }
  *
- * Plan 9.1 — Step داخلی در constructor ساخته می‌شود (factory function).
- * Plan 11.2 — لایه <component-sidebar> + <section> از Schema پایه رندر می‌شود.
+ * Plan 9.1 â€” Step Ø¯Ø§Ø®Ù„ÛŒ Ø¯Ø± constructor Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯ (factory function).
+ * Plan 11.2 â€” Ù„Ø§ÛŒÙ‡ <component-sidebar> + <section> Ø§Ø² Schema Ù¾Ø§ÛŒÙ‡ Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒØ´ÙˆØ¯.
  *
- * Positioning: inline styles (جایگزین ComponentElementPosition)
+ * Positioning: inline styles (Ø¬Ø§ÛŒÚ¯Ø²ÛŒÙ† ComponentElementPosition)
  */
-export class ComponentSidebar extends ComponentSidebarBase {
+export class ComponentSidebar extends ComponentSidebarBase<ReturnType<typeof createSidebarStep>>{
 
     private _DEFAULT_OPACITY: CoreObservable.App<any> | null = null;
 
@@ -61,7 +61,7 @@ export class ComponentSidebar extends ComponentSidebarBase {
 
 
     /* ---------------------------------------------
-       Plan 9.1 — Component Disposal
+       Plan 9.1 â€” Component Disposal
     --------------------------------------------- */
     dispose(): void {
         this.disposeStep();
@@ -69,9 +69,9 @@ export class ComponentSidebar extends ComponentSidebarBase {
 
 
     /* ---------------------------------------------
-       Plan 11.2 — renderContentComponent
-       لایه ساختار از طریق Schema پایه (COMPONENT + STRUCTURE) رندر می‌شود.
-       renderContentComponent فقط محتوای اختصاصی را رندر می‌کند.
+       Plan 11.2 â€” renderContentComponent
+       Ù„Ø§ÛŒÙ‡ Ø³Ø§Ø®ØªØ§Ø± Ø§Ø² Ø·Ø±ÛŒÙ‚ Schema Ù¾Ø§ÛŒÙ‡ (COMPONENT + STRUCTURE) Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒØ´ÙˆØ¯.
+       renderContentComponent ÙÙ‚Ø· Ù…Ø­ØªÙˆØ§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ Ø±Ø§ Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒÚ©Ù†Ø¯.
     --------------------------------------------- */
     override renderContentComponent(
         attrsDefault: PartAttrDefault,
@@ -83,8 +83,8 @@ export class ComponentSidebar extends ComponentSidebarBase {
 
 
     /* ---------------------------------------------
-       renderManagerComponent — Routing
-       Plan 11.2 — COMPONENT + STRUCTURE از Trait، بقیه اختصاصی
+       renderManagerComponent â€” Routing
+       Plan 11.2 â€” COMPONENT + STRUCTURE Ø§Ø² TraitØŒ Ø¨Ù‚ÛŒÙ‡ Ø§Ø®ØªØµØ§ØµÛŒ
     --------------------------------------------- */
     override renderManagerComponent(
         partName:     string,
@@ -94,12 +94,12 @@ export class ComponentSidebar extends ComponentSidebarBase {
     ): CoreReactive.App {
 
         switch (partName) {
-            // --- Plan 11.2: Schema پایه ---
+            // --- Plan 11.2: Schema Ù¾Ø§ÛŒÙ‡ ---
             case ComponentStructureTrait.schemas.COMPONENT.part:
                 return ComponentStructureTrait.renderComponentSchema(this, attrsDefault, data);
             case ComponentStructureTrait.schemas.STRUCTURE.part:
                 return ComponentStructureTrait.renderStructureSchema(this, attrsDefault, data);
-            // --- Schema اختصاصی ---
+            // --- Schema Ø§Ø®ØªØµØ§ØµÛŒ ---
             case Schemas.CONTENT.part:
                 return this.renderContent(attrsDefault, data, extra);
             case Schemas.CONTENT_BLUR.part:
@@ -121,7 +121,7 @@ export class ComponentSidebar extends ComponentSidebarBase {
 
 
     /* ---------------------------------------------
-       renderContent — بخش اصلی
+       renderContent â€” Ø¨Ø®Ø´ Ø§ØµÙ„ÛŒ
     --------------------------------------------- */
     protected renderContent(
         attrsDefault?: PartAttrDefault,
@@ -142,7 +142,7 @@ export class ComponentSidebar extends ComponentSidebarBase {
 
 
     /* ---------------------------------------------
-       renderContentBlur — پس‌زمینه blur
+       renderContentBlur â€” Ù¾Ø³â€ŒØ²Ù…ÛŒÙ†Ù‡ blur
     --------------------------------------------- */
     protected renderContentBlur(
         attrsDefault?: PartAttrDefault,
@@ -180,7 +180,7 @@ export class ComponentSidebar extends ComponentSidebarBase {
 
 
     /* ---------------------------------------------
-       renderContentSidebar — بخش sidebar (inline positioning)
+       renderContentSidebar â€” Ø¨Ø®Ø´ sidebar (inline positioning)
     --------------------------------------------- */
     protected renderContentSidebar(
         attrsDefault?: PartAttrDefault,
@@ -341,7 +341,7 @@ export class ComponentSidebar extends ComponentSidebarBase {
 
 
     /* ---------------------------------------------
-       renderContentSidebarContent — محتوای sidebar
+       renderContentSidebarContent â€” Ù…Ø­ØªÙˆØ§ÛŒ sidebar
     --------------------------------------------- */
     protected renderContentSidebarContent(
         attrsDefault?: PartAttrDefault,
@@ -380,7 +380,7 @@ export class ComponentSidebar extends ComponentSidebarBase {
 
 
     /* ---------------------------------------------
-       renderContentSidebarContentPosition — دکمه toggle (inline positioning)
+       renderContentSidebarContentPosition â€” Ø¯Ú©Ù…Ù‡ toggle (inline positioning)
     --------------------------------------------- */
     protected renderContentSidebarContentPosition(
         attrsDefault?: PartAttrDefault,
@@ -468,7 +468,7 @@ export class ComponentSidebar extends ComponentSidebarBase {
 
 
     /* ---------------------------------------------
-       renderContentSidebarContentPositionButton — دکمه toggle
+       renderContentSidebarContentPositionButton â€” Ø¯Ú©Ù…Ù‡ toggle
     --------------------------------------------- */
     protected renderContentSidebarContentPositionButton(
         attrsDefault?: PartAttrDefault,
@@ -514,7 +514,7 @@ export class ComponentSidebar extends ComponentSidebarBase {
 
 
     /* ---------------------------------------------
-       renderContentSidebarContentPositionButtonIcon — آیکون دکمه toggle
+       renderContentSidebarContentPositionButtonIcon â€” Ø¢ÛŒÚ©ÙˆÙ† Ø¯Ú©Ù…Ù‡ toggle
     --------------------------------------------- */
     protected renderContentSidebarContentPositionButtonIcon(
         attrsDefault?: PartAttrDefault,

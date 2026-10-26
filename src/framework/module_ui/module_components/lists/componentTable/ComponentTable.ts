@@ -19,19 +19,19 @@ import * as UiIcons     from "@/ui_icons";
 
 
 /**
- * ComponentTable — کلاس نهایی
+ * ComponentTable â€” Ú©Ù„Ø§Ø³ Ù†Ù‡Ø§ÛŒÛŒ
  *
- * معماری Composition:
- *   ComponentTable HAS-A ComponentStructure (نه IS-A)
- *   ComponentStructure در renderContentComponent ساخته می‌شود
- *   و content آن = renderTable (محتوای اختصاصی ComponentTable)
+ * Ù…Ø¹Ù…Ø§Ø±ÛŒ Composition:
+ *   ComponentTable HAS-A ComponentStructure (Ù†Ù‡ IS-A)
+ *   ComponentStructure Ø¯Ø± renderContentComponent Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯
+ *   Ùˆ content Ø¢Ù† = renderTable (Ù…Ø­ØªÙˆØ§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ ComponentTable)
  *
- * Constructor امضا: (config, methods, identity?)
- *   config  — شامل propهای پایه + propهای اختصاصی
- *   methods — methodهای اختصاصی (SELECT_COL, CLICK_OPTION_CARD)
- *   identity — { unique?, emit?, events? }
+ * Constructor Ø§Ù…Ø¶Ø§: (config, methods, identity?)
+ *   config  â€” Ø´Ø§Ù…Ù„ propÙ‡Ø§ÛŒ Ù¾Ø§ÛŒÙ‡ + propÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ
+ *   methods â€” methodÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (SELECT_COL, CLICK_OPTION_CARD)
+ *   identity â€” { unique?, emit?, events? }
  */
-export class ComponentTable extends ComponentTableBase {
+export class ComponentTable extends ComponentTableBase<ReturnType<typeof createTableStep>>{
 
     constructor(
         config?:  Partial<StructurePropsType & PropsConfigType>,
@@ -95,7 +95,7 @@ export class ComponentTable extends ComponentTableBase {
 
 
     /* ---------------------------------------------
-       renderTable — رندر Part TABLE اصلی
+       renderTable â€” Ø±Ù†Ø¯Ø± Part TABLE Ø§ØµÙ„ÛŒ
     --------------------------------------------- */
     protected renderTable(
         attrsDefault?: PartAttrDefault,
@@ -138,7 +138,7 @@ export class ComponentTable extends ComponentTableBase {
 
 
     /* ---------------------------------------------
-       renderTableHeader — رندر Part TABLE_HEADER
+       renderTableHeader â€” Ø±Ù†Ø¯Ø± Part TABLE_HEADER
     --------------------------------------------- */
     protected renderTableHeader(
         attrsDefault?: PartAttrDefault,
@@ -203,7 +203,7 @@ export class ComponentTable extends ComponentTableBase {
 
 
     /* ---------------------------------------------
-       renderTableBody — رندر Part TABLE_BODY
+       renderTableBody â€” Ø±Ù†Ø¯Ø± Part TABLE_BODY
     --------------------------------------------- */
     protected renderTableBody(
         attrsDefault?: PartAttrDefault,
@@ -362,8 +362,8 @@ export class ComponentTable extends ComponentTableBase {
 
 
     /* ---------------------------------------------
-       renderTableHeaderColSelector — رندر Part TABLE_HEADER_COL_SELECTOR
-       Composition با ComponentInputListSelector برای انتخاب/مرتب‌سازی ستون‌ها
+       renderTableHeaderColSelector â€” Ø±Ù†Ø¯Ø± Part TABLE_HEADER_COL_SELECTOR
+       Composition Ø¨Ø§ ComponentInputListSelector Ø¨Ø±Ø§ÛŒ Ø§Ù†ØªØ®Ø§Ø¨/Ù…Ø±ØªØ¨â€ŒØ³Ø§Ø²ÛŒ Ø³ØªÙˆÙ†â€ŒÙ‡Ø§
     --------------------------------------------- */
     protected renderTableHeaderColSelector(
         attrsDefault?: PartAttrDefault,
@@ -428,7 +428,7 @@ export class ComponentTable extends ComponentTableBase {
 
     /* ---------------------------------------------
        HELPER: Get columns selector items
-       تبدیل prop_header + prop_order به ColumnItem[]
+       ØªØ¨Ø¯ÛŒÙ„ prop_header + prop_order Ø¨Ù‡ ColumnItem[]
     --------------------------------------------- */
     private fn_onGetColumnsSelector(order: string[], header: TableHeaderItem[]): ColumnItem[] {
         if (!header) return [];

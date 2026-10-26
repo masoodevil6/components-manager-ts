@@ -12,7 +12,7 @@ import {createElementPositionStep} from "./Step";
 import {ComponentElementPositionBase} from "./ComponentElementPositionBase";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
 
-export class ComponentElementPosition extends ComponentElementPositionBase {
+export class ComponentElementPosition extends ComponentElementPositionBase<ReturnType<typeof createElementPositionStep>>{
     constructor(config?: Partial<StructurePropsType & PropsConfigType>, methods?: MethodsConfigType<ComponentElementPosition>, identity?: {unique?: any; emit?: any; events?: Record<string, any> | null}) {
         super("element-position", identity, createElementPositionStep());
         this.renderComponent(config as any, methods as any, identity?.events ?? null);

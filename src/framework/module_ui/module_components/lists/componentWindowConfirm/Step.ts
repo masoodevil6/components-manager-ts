@@ -1,3 +1,4 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 // --------------------------------
 
@@ -11,13 +12,13 @@ import * as CoreEvent from "@/core_event";
  *   cancel   ← Event Engine endpoint
  */
 export function createWindowConfirmStep() {
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {
-            confirm: CoreEvent.Step({
+            confirm: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),
-            cancel: CoreEvent.Step({
+            cancel: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),

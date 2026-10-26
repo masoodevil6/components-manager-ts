@@ -21,29 +21,29 @@ import {Keys} from "../../../module_categories/languages";
 
 
 /**
- * ComponentPositionMenu — کلاس نهایی (Plan 12.1 — مهاجرت از Legacy)
+ * ComponentPositionMenu â€” Ú©Ù„Ø§Ø³ Ù†Ù‡Ø§ÛŒÛŒ (Plan 12.1 â€” Ù…Ù‡Ø§Ø¬Ø±Øª Ø§Ø² Legacy)
  *
- * معماری Composition:
- *   ComponentPositionMenu HAS-A ComponentFloatMenu (نه IS-A)
- *   ComponentFloatMenu در renderFormFloatMenu ساخته می‌شود
- *   و content آن = selector + body + buttons (محتوای اختصاصی)
+ * Ù…Ø¹Ù…Ø§Ø±ÛŒ Composition:
+ *   ComponentPositionMenu HAS-A ComponentFloatMenu (Ù†Ù‡ IS-A)
+ *   ComponentFloatMenu Ø¯Ø± renderFormFloatMenu Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯
+ *   Ùˆ content Ø¢Ù† = selector + body + buttons (Ù…Ø­ØªÙˆØ§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ)
  *
- * Constructor امضا: (config, methods, identity?)
- *   config  — شامل propهای پایه + propهای اختصاصی (prop_menuSelector, ...)
- *   methods — methodهای اختصاصی (CLICK_OPEN, CLICK_ACCEPT, CLICK_REJECT)
- *   identity — { unique?, emit?, events? }
+ * Constructor Ø§Ù…Ø¶Ø§: (config, methods, identity?)
+ *   config  â€” Ø´Ø§Ù…Ù„ propÙ‡Ø§ÛŒ Ù¾Ø§ÛŒÙ‡ + propÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (prop_menuSelector, ...)
+ *   methods â€” methodÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (CLICK_OPEN, CLICK_ACCEPT, CLICK_REJECT)
+ *   identity â€” { unique?, emit?, events? }
  *
- * Behavior بازیابی‌شده از Legacy:
- *   ۱. Composition با ComponentFloatMenu — منوی شناور با positioning
- *   ۲. Composition با ComponentButton — دکمه‌های Accept/Reject
- *   ۳. Outside-click detection — document click listener برای بستن منو
- *   ۴. Conditional rendering نوار دکمه‌ها — conditionWhen روی Accept/Reject has
- *   ۵. Style getters مستقل — هر style منطق جداگانه دارد
+ * Behavior Ø¨Ø§Ø²ÛŒØ§Ø¨ÛŒâ€ŒØ´Ø¯Ù‡ Ø§Ø² Legacy:
+ *   Û±. Composition Ø¨Ø§ ComponentFloatMenu â€” Ù…Ù†ÙˆÛŒ Ø´Ù†Ø§ÙˆØ± Ø¨Ø§ positioning
+ *   Û². Composition Ø¨Ø§ ComponentButton â€” Ø¯Ú©Ù…Ù‡â€ŒÙ‡Ø§ÛŒ Accept/Reject
+ *   Û³. Outside-click detection â€” document click listener Ø¨Ø±Ø§ÛŒ Ø¨Ø³ØªÙ† Ù…Ù†Ùˆ
+ *   Û´. Conditional rendering Ù†ÙˆØ§Ø± Ø¯Ú©Ù…Ù‡â€ŒÙ‡Ø§ â€” conditionWhen Ø±ÙˆÛŒ Accept/Reject has
+ *   Ûµ. Style getters Ù…Ø³ØªÙ‚Ù„ â€” Ù‡Ø± style Ù…Ù†Ø·Ù‚ Ø¬Ø¯Ø§Ú¯Ø§Ù†Ù‡ Ø¯Ø§Ø±Ø¯
  */
-export class ComponentPositionMenu extends ComponentPositionMenuBase {
+export class ComponentPositionMenu extends ComponentPositionMenuBase<ReturnType<typeof createPositionMenuStep>>{
 
     /* ---------------------------------------------
-       Internal State — document click listener برای outside-click detection
+       Internal State â€” document click listener Ø¨Ø±Ø§ÛŒ outside-click detection
     --------------------------------------------- */
     private _ON_MENU_OPEN: ((event: MouseEvent) => void) | null = null;
 
@@ -70,7 +70,7 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
 
 
     /* ---------------------------------------------
-       Plan 8.2.7 — Component Disposal
+       Plan 8.2.7 â€” Component Disposal
     --------------------------------------------- */
     dispose(): void {
         this.pr_cleanupDocumentListener();
@@ -79,9 +79,9 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
 
 
     /* ---------------------------------------------
-       Plan 11.2 — renderContentComponent
-       لایه ساختار از طریق Schema پایه رندر می‌شود.
-       renderContentComponent فقط محتوای اختصاصی را رندر می‌کند.
+       Plan 11.2 â€” renderContentComponent
+       Ù„Ø§ÛŒÙ‡ Ø³Ø§Ø®ØªØ§Ø± Ø§Ø² Ø·Ø±ÛŒÙ‚ Schema Ù¾Ø§ÛŒÙ‡ Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒØ´ÙˆØ¯.
+       renderContentComponent ÙÙ‚Ø· Ù…Ø­ØªÙˆØ§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ Ø±Ø§ Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒÚ©Ù†Ø¯.
     --------------------------------------------- */
     override renderContentComponent(
         attrsDefault?: any,
@@ -93,8 +93,8 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
 
 
     /* ---------------------------------------------
-       renderManagerComponent — Routing
-       Plan 11.2 — COMPONENT + STRUCTURE از Trait، بقیه اختصاصی
+       renderManagerComponent â€” Routing
+       Plan 11.2 â€” COMPONENT + STRUCTURE Ø§Ø² TraitØŒ Ø¨Ù‚ÛŒÙ‡ Ø§Ø®ØªØµØ§ØµÛŒ
     --------------------------------------------- */
     override renderManagerComponent(
         partName:     string,
@@ -104,12 +104,12 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
     ): CoreReactive.App {
 
         switch (partName) {
-            // --- Plan 11.2: Schema پایه ---
+            // --- Plan 11.2: Schema Ù¾Ø§ÛŒÙ‡ ---
             case ComponentStructureTrait.schemas.COMPONENT.part:
                 return ComponentStructureTrait.renderComponentSchema(this, attrsDefault, data);
             case ComponentStructureTrait.schemas.STRUCTURE.part:
                 return ComponentStructureTrait.renderStructureSchema(this, attrsDefault, data);
-            // --- Schema اختصاصی ---
+            // --- Schema Ø§Ø®ØªØµØ§ØµÛŒ ---
             case Schemas.FORM_FLOAT_MENU.part:
                 return this.renderFormFloatMenu(attrsDefault, data, extra);
             case Schemas.FORM_FLOAT_MENU_SELECTOR.part:
@@ -131,8 +131,8 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
 
 
     /* ---------------------------------------------
-       renderFormFloatMenu — رندر Part اصلی
-       از ComponentFloatMenu (Category callable) استفاده می‌کند
+       renderFormFloatMenu â€” Ø±Ù†Ø¯Ø± Part Ø§ØµÙ„ÛŒ
+       Ø§Ø² ComponentFloatMenu (Category callable) Ø§Ø³ØªÙØ§Ø¯Ù‡ Ù…ÛŒâ€ŒÚ©Ù†Ø¯
     --------------------------------------------- */
     protected renderFormFloatMenu(
         attrsDefault?: any,
@@ -184,7 +184,7 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
 
 
     /* ---------------------------------------------
-       renderFormFloatMenuSelector — رندر selector (trigger)
+       renderFormFloatMenuSelector â€” Ø±Ù†Ø¯Ø± selector (trigger)
     --------------------------------------------- */
     protected renderFormFloatMenuSelector(
         attrsDefault?: any,
@@ -232,7 +232,7 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
 
 
     /* ---------------------------------------------
-       renderFormFloatMenuBody — رندر body container
+       renderFormFloatMenuBody â€” Ø±Ù†Ø¯Ø± body container
     --------------------------------------------- */
     protected renderFormFloatMenuBody(
         attrsDefault?: any,
@@ -256,7 +256,7 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
 
 
     /* ---------------------------------------------
-       renderFormFloatMenuBodyContent — رندر body content با scroll
+       renderFormFloatMenuBodyContent â€” Ø±Ù†Ø¯Ø± body content Ø¨Ø§ scroll
     --------------------------------------------- */
     protected renderFormFloatMenuBodyContent(
         attrsDefault?: any,
@@ -290,8 +290,8 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
 
 
     /* ---------------------------------------------
-       renderFormFloatMenuBodyButtons — رندر نوار دکمه‌ها
-       Conditional: فقط اگر هم Accept و هم Reject نمایش داده شوند
+       renderFormFloatMenuBodyButtons â€” Ø±Ù†Ø¯Ø± Ù†ÙˆØ§Ø± Ø¯Ú©Ù…Ù‡â€ŒÙ‡Ø§
+       Conditional: ÙÙ‚Ø· Ø§Ú¯Ø± Ù‡Ù… Accept Ùˆ Ù‡Ù… Reject Ù†Ù…Ø§ÛŒØ´ Ø¯Ø§Ø¯Ù‡ Ø´ÙˆÙ†Ø¯
     --------------------------------------------- */
     protected renderFormFloatMenuBodyButtons(
         attrsDefault?: any,
@@ -344,8 +344,8 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
 
 
     /* ---------------------------------------------
-       renderFormFloatMenuBodyButtonsAccept — رندر دکمه Accept
-       از ComponentButton (Category callable) استفاده می‌کند
+       renderFormFloatMenuBodyButtonsAccept â€” Ø±Ù†Ø¯Ø± Ø¯Ú©Ù…Ù‡ Accept
+       Ø§Ø² ComponentButton (Category callable) Ø§Ø³ØªÙØ§Ø¯Ù‡ Ù…ÛŒâ€ŒÚ©Ù†Ø¯
     --------------------------------------------- */
     protected renderFormFloatMenuBodyButtonsAccept(
         attrsDefault?: any,
@@ -397,8 +397,8 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
 
 
     /* ---------------------------------------------
-       renderFormFloatMenuBodyButtonsReject — رندر دکمه Reject
-       از ComponentButton (Category callable) استفاده می‌کند
+       renderFormFloatMenuBodyButtonsReject â€” Ø±Ù†Ø¯Ø± Ø¯Ú©Ù…Ù‡ Reject
+       Ø§Ø² ComponentButton (Category callable) Ø§Ø³ØªÙØ§Ø¯Ù‡ Ù…ÛŒâ€ŒÚ©Ù†Ø¯
     --------------------------------------------- */
     protected renderFormFloatMenuBodyButtonsReject(
         attrsDefault?: any,
@@ -449,8 +449,8 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase {
 
     /// ---------------------
     ///  Private Style Getters
-    ///  هر متد یک CoreObservable.App.computed برمی‌گرداند
-    ///  توسعه‌پذیر: هر style منطق مستقل دارد
+    ///  Ù‡Ø± Ù…ØªØ¯ ÛŒÚ© CoreObservable.App.computed Ø¨Ø±Ù…ÛŒâ€ŒÚ¯Ø±Ø¯Ø§Ù†Ø¯
+    ///  ØªÙˆØ³Ø¹Ù‡â€ŒÙ¾Ø°ÛŒØ±: Ù‡Ø± style Ù…Ù†Ø·Ù‚ Ù…Ø³ØªÙ‚Ù„ Ø¯Ø§Ø±Ø¯
     /// ---------------------
 
     private getStyleBodyContentHeight(prop_menuBodyHeight: any) {

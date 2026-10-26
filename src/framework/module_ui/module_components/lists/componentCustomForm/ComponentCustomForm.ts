@@ -42,7 +42,7 @@ type DisposableChild = {
 
 type EditorEvent = (event: Event) => void;
 
-export class ComponentCustomForm extends ComponentCustomFormBase {
+export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<typeof createCustomFormStep>>{
     private static _ID = 0;
     private readonly _VIEW = new CoreObservable.App<ComponentLayout.LayoutContentItem[] | null>(null);
     private readonly _DYNAMIC_CHILDREN: DisposableChild[] = [];

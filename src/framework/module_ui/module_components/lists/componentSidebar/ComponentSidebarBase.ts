@@ -10,39 +10,39 @@ import {Definition}               from "./Definition";
 
 
 /**
- * ComponentSidebarBase — ترکیب config پایه و اختصاصی
+ * ComponentSidebarBase â€” ØªØ±Ú©ÛŒØ¨ config Ù¾Ø§ÛŒÙ‡ Ùˆ Ø§Ø®ØªØµØ§ØµÛŒ
  *
- * ارث از CoreComponents.App (ClComponentBase) — نه ComponentStructure.
- * ComponentSidebar خودش یک Component مستقل است.
- * ComponentStructure به‌عنوان فرزند در renderContentComponent استفاده می‌شود.
+ * Ø§Ø±Ø« Ø§Ø² CoreComponents.App (ClComponentBase) â€” Ù†Ù‡ ComponentStructure.
+ * ComponentSidebar Ø®ÙˆØ¯Ø´ ÛŒÚ© Component Ù…Ø³ØªÙ‚Ù„ Ø§Ø³Øª.
+ * ComponentStructure Ø¨Ù‡â€ŒØ¹Ù†ÙˆØ§Ù† ÙØ±Ø²Ù†Ø¯ Ø¯Ø± renderContentComponent Ø§Ø³ØªÙØ§Ø¯Ù‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯.
  *
- * ۷ prop پایه ComponentStructure از ComponentStructureTrait.props در _COMPONENT_PATTERN
- * ثبت می‌شوند تا کاربر بتواند آن‌ها را set کند — سپس در renderContentComponent
- * به ComponentStructure.create() forward می‌شوند.
+ * Û· prop Ù¾Ø§ÛŒÙ‡ ComponentStructure Ø§Ø² ComponentStructureTrait.props Ø¯Ø± _COMPONENT_PATTERN
+ * Ø«Ø¨Øª Ù…ÛŒâ€ŒØ´ÙˆÙ†Ø¯ ØªØ§ Ú©Ø§Ø±Ø¨Ø± Ø¨ØªÙˆØ§Ù†Ø¯ Ø¢Ù†â€ŒÙ‡Ø§ Ø±Ø§ set Ú©Ù†Ø¯ â€” Ø³Ù¾Ø³ Ø¯Ø± renderContentComponent
+ * Ø¨Ù‡ ComponentStructure.create() forward Ù…ÛŒâ€ŒØ´ÙˆÙ†Ø¯.
  *
  * Step Node (Plan 9.1 + 8.2.7):
- *   _COMPONENT_STEP — درخت Workflow داخلی Component (داخلی)
+ *   _COMPONENT_STEP â€” Ø¯Ø±Ø®Øª Workflow Ø¯Ø§Ø®Ù„ÛŒ Component (Ø¯Ø§Ø®Ù„ÛŒ)
  */
-export class ComponentSidebarBase extends CoreComponents.App<
+export class ComponentSidebarBase<TWorkflow extends CoreComponents.ComponentWorkflow<any> = CoreComponents.ComponentWorkflow> extends CoreComponents.App<
     PropsType & Record<string, any>,
     SchemasType,
     any,
-    MethodsType
-> {
+    MethodsType,
+    TWorkflow> {
 
     /**
-     * Step Node — درخت Workflow داخلی ComponentSidebar
+     * Step Node â€” Ø¯Ø±Ø®Øª Workflow Ø¯Ø§Ø®Ù„ÛŒ ComponentSidebar
      */
-    protected _COMPONENT_STEP: CoreEvent.TStepInstance<any> | null = null;
+    protected _COMPONENT_STEP: TWorkflow | null = null;
 
 
     /**
      * constructor (Plan 8.2.7)
      *
-     * @param componentName — نام Component (default: "sidebar")
-     * @param elId          — شناسه المان (default: null)
-     * @param identity      — بیرونی { unique?, emit?, events? }
-     * @param step          — داخلی (Workflow خاص این Component)
+     * @param componentName â€” Ù†Ø§Ù… Component (default: "sidebar")
+     * @param elId          â€” Ø´Ù†Ø§Ø³Ù‡ Ø§Ù„Ù…Ø§Ù† (default: null)
+     * @param identity      â€” Ø¨ÛŒØ±ÙˆÙ†ÛŒ { unique?, emit?, events? }
+     * @param step          â€” Ø¯Ø§Ø®Ù„ÛŒ (Workflow Ø®Ø§Øµ Ø§ÛŒÙ† Component)
      */
     constructor(
         componentName: string = "sidebar",
@@ -52,7 +52,7 @@ export class ComponentSidebarBase extends CoreComponents.App<
             emit?:   CoreEvent.TEmitHandler | null;
             events?: Record<string, any> | null;
         },
-        step?: CoreEvent.TStepInstance<any>,
+        step?: TWorkflow,
     ) {
         super(componentName, elId);
 
@@ -61,7 +61,7 @@ export class ComponentSidebarBase extends CoreComponents.App<
 
         this._COMPONENT_STEP   = step ?? null;
 
-        // Plan 8.2.7 — SubEvent
+        // Plan 8.2.7 â€” SubEvent
         if (step && identity?.unique && typeof (identity.unique as any).identity === "symbol") {
             CoreEvent.SubEvent(identity.unique as CoreEvent.TStepRef, componentName, step);
         }
@@ -69,7 +69,7 @@ export class ComponentSidebarBase extends CoreComponents.App<
 
 
     /**
-     * Disposal — پاک‌سازی کل subtree از رجیستری CoreEvent (Plan 8.2.7 / 9.1)
+     * Disposal â€” Ù¾Ø§Ú©â€ŒØ³Ø§Ø²ÛŒ Ú©Ù„ subtree Ø§Ø² Ø±Ø¬ÛŒØ³ØªØ±ÛŒ CoreEvent (Plan 8.2.7 / 9.1)
      */
     disposeStep(): void {
         if (this._COMPONENT_STEP) {

@@ -1,3 +1,4 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 // --------------------------------
 
@@ -8,7 +9,7 @@ import * as CoreEvent from "@/core_event";
  * هر ComponentTooltip Instance باید Step Instance مستقل داشته باشد.
  */
 export function createTooltipStep() {
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {},
     });
 }

@@ -10,16 +10,16 @@ import {Definition}               from "./Definition";
 
 
 /**
- * ComponentTabsBase — ترکیب config پایه و اختصاصی (Plan 15.1.0)
+ * ComponentTabsBase â€” ØªØ±Ú©ÛŒØ¨ config Ù¾Ø§ÛŒÙ‡ Ùˆ Ø§Ø®ØªØµØ§ØµÛŒ (Plan 15.1.0)
  */
-export class ComponentTabsBase extends CoreComponents.App<
+export class ComponentTabsBase<TWorkflow extends CoreComponents.ComponentWorkflow<any> = CoreComponents.ComponentWorkflow> extends CoreComponents.App<
     PropsType & Record<string, any>,
     SchemasType,
     any,
-    MethodsType
-> {
+    MethodsType,
+    TWorkflow> {
 
-    protected _COMPONENT_STEP: CoreEvent.TStepInstance<any> | null = null;
+    protected _COMPONENT_STEP: TWorkflow | null = null;
 
     constructor(
         componentName: string = "tabs",
@@ -29,7 +29,7 @@ export class ComponentTabsBase extends CoreComponents.App<
             emit?:   CoreEvent.TEmitHandler | null;
             events?: Record<string, any> | null;
         },
-        step?: CoreEvent.TStepInstance<any>,
+        step?: TWorkflow,
     ) {
         super(componentName, elId);
 

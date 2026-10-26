@@ -6,9 +6,10 @@ import {Schemas, SchemasType} from "./Schemas";
 import {Methods, MethodsType} from "./Methods";
 import {Definition} from "./Definition";
 
-export class ComponentSelectCustomSimpleBase extends CoreComponents.App<PropsType & Record<string, any>, SchemasType, any, MethodsType> {
-    protected _COMPONENT_STEP: CoreEvent.TStepInstance<any> | null = null;
-    constructor(componentName = "select-custom-simple", identity?: {unique?: any; emit?: any; events?: Record<string, any> | null}, step?: CoreEvent.TStepInstance<any>) {
+export class ComponentSelectCustomSimpleBase<TWorkflow extends CoreComponents.ComponentWorkflow<any> = CoreComponents.ComponentWorkflow> extends CoreComponents.App<PropsType & Record<string, any>, SchemasType, any, MethodsType,
+    TWorkflow> {
+    protected _COMPONENT_STEP: TWorkflow | null = null;
+    constructor(componentName = "select-custom-simple", identity?: {unique?: any; emit?: any; events?: Record<string, any> | null}, step?: TWorkflow) {
         super(componentName, null);
         this._COMPONENT_UNIQUE = identity?.unique ?? null;
         this._COMPONENT_EMIT = identity?.emit ?? null;

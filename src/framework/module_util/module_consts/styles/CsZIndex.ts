@@ -17,5 +17,7 @@ export enum CsZIndex {
     blur_popup=       300,
     popup=            301,
     SELECTOR_POPUP=   302,
+
+    page_setting=   1100,
 }
 

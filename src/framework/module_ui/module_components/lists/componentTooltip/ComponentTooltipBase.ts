@@ -10,40 +10,40 @@ import {Definition}               from "./Definition";
 
 
 /**
- * ComponentTooltipBase — ترکیب config پایه و اختصاصی (Plan 14.1.0)
+ * ComponentTooltipBase â€” ØªØ±Ú©ÛŒØ¨ config Ù¾Ø§ÛŒÙ‡ Ùˆ Ø§Ø®ØªØµØ§ØµÛŒ (Plan 14.1.0)
  *
- * ارث از CoreComponents.App (ClComponentBase) — نه ComponentStructure.
- * ComponentTooltip خودش یک Component مستقل است؛ ComponentFloatMenu به‌عنوان فرزند
- * در renderTooltipFloatMenu از طریق مستقیم استفاده می‌شود (Composition).
+ * Ø§Ø±Ø« Ø§Ø² CoreComponents.App (ClComponentBase) â€” Ù†Ù‡ ComponentStructure.
+ * ComponentTooltip Ø®ÙˆØ¯Ø´ ÛŒÚ© Component Ù…Ø³ØªÙ‚Ù„ Ø§Ø³ØªØ› ComponentFloatMenu Ø¨Ù‡â€ŒØ¹Ù†ÙˆØ§Ù† ÙØ±Ø²Ù†Ø¯
+ * Ø¯Ø± renderTooltipFloatMenu Ø§Ø² Ø·Ø±ÛŒÙ‚ Ù…Ø³ØªÙ‚ÛŒÙ… Ø§Ø³ØªÙØ§Ø¯Ù‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯ (Composition).
  *
- * ۷ prop پایه ComponentStructure از ComponentStructureTrait.props در _COMPONENT_PATTERN
- * ثبت می‌شوند تا کاربر بتواند آن‌ها را set کند — سپس در renderContentComponent
- * به رندر اختصاصی forward می‌شوند.
+ * Û· prop Ù¾Ø§ÛŒÙ‡ ComponentStructure Ø§Ø² ComponentStructureTrait.props Ø¯Ø± _COMPONENT_PATTERN
+ * Ø«Ø¨Øª Ù…ÛŒâ€ŒØ´ÙˆÙ†Ø¯ ØªØ§ Ú©Ø§Ø±Ø¨Ø± Ø¨ØªÙˆØ§Ù†Ø¯ Ø¢Ù†â€ŒÙ‡Ø§ Ø±Ø§ set Ú©Ù†Ø¯ â€” Ø³Ù¾Ø³ Ø¯Ø± renderContentComponent
+ * Ø¨Ù‡ Ø±Ù†Ø¯Ø± Ø§Ø®ØªØµØ§ØµÛŒ forward Ù…ÛŒâ€ŒØ´ÙˆÙ†Ø¯.
  *
- * Plan 8.2.7 — SubEvent:
- *   اگر Parent Step (identity.unique) و Child Step (step) هر دو وجود دارند،
- *   Child به‌عنوان SubEvent زیر Parent ثبت می‌شود.
+ * Plan 8.2.7 â€” SubEvent:
+ *   Ø§Ú¯Ø± Parent Step (identity.unique) Ùˆ Child Step (step) Ù‡Ø± Ø¯Ùˆ ÙˆØ¬ÙˆØ¯ Ø¯Ø§Ø±Ù†Ø¯ØŒ
+ *   Child Ø¨Ù‡â€ŒØ¹Ù†ÙˆØ§Ù† SubEvent Ø²ÛŒØ± Parent Ø«Ø¨Øª Ù…ÛŒâ€ŒØ´ÙˆØ¯.
  */
-export class ComponentTooltipBase extends CoreComponents.App<
+export class ComponentTooltipBase<TWorkflow extends CoreComponents.ComponentWorkflow<any> = CoreComponents.ComponentWorkflow> extends CoreComponents.App<
     PropsType & Record<string, any>,
     SchemasType,
     any,
-    MethodsType
-> {
+    MethodsType,
+    TWorkflow> {
 
     /**
-     * Step Node — درخت Workflow داخلی ComponentTooltip
+     * Step Node â€” Ø¯Ø±Ø®Øª Workflow Ø¯Ø§Ø®Ù„ÛŒ ComponentTooltip
      */
-    protected _COMPONENT_STEP: CoreEvent.TStepInstance<any> | null = null;
+    protected _COMPONENT_STEP: TWorkflow | null = null;
 
 
     /**
      * constructor (Plan 8.2.7)
      *
-     * @param componentName — نام Component (default: "tooltip")
-     * @param elId          — شناسه المان (default: null)
-     * @param identity      — بیرونی { unique?, emit?, events? }
-     * @param step          — داخلی (Workflow خاص این Component)
+     * @param componentName â€” Ù†Ø§Ù… Component (default: "tooltip")
+     * @param elId          â€” Ø´Ù†Ø§Ø³Ù‡ Ø§Ù„Ù…Ø§Ù† (default: null)
+     * @param identity      â€” Ø¨ÛŒØ±ÙˆÙ†ÛŒ { unique?, emit?, events? }
+     * @param step          â€” Ø¯Ø§Ø®Ù„ÛŒ (Workflow Ø®Ø§Øµ Ø§ÛŒÙ† Component)
      */
     constructor(
         componentName: string = "tooltip",
@@ -53,7 +53,7 @@ export class ComponentTooltipBase extends CoreComponents.App<
             emit?:   CoreEvent.TEmitHandler | null;
             events?: Record<string, any> | null;
         },
-        step?: CoreEvent.TStepInstance<any>,
+        step?: TWorkflow,
     ) {
         super(componentName, elId);
 
@@ -62,7 +62,7 @@ export class ComponentTooltipBase extends CoreComponents.App<
 
         this._COMPONENT_STEP   = step ?? null;
 
-        // Plan 8.2.7 — SubEvent
+        // Plan 8.2.7 â€” SubEvent
         if (step && identity?.unique && typeof (identity.unique as any).identity === "symbol") {
             CoreEvent.SubEvent(identity.unique as CoreEvent.TStepRef, componentName, step);
         }
@@ -70,7 +70,7 @@ export class ComponentTooltipBase extends CoreComponents.App<
 
 
     /**
-     * Disposal — پاک‌سازی کل subtree از رجیستری CoreEvent (Plan 8.2.7 / 9.1)
+     * Disposal â€” Ù¾Ø§Ú©â€ŒØ³Ø§Ø²ÛŒ Ú©Ù„ subtree Ø§Ø² Ø±Ø¬ÛŒØ³ØªØ±ÛŒ CoreEvent (Plan 8.2.7 / 9.1)
      */
     disposeStep(): void {
         if (this._COMPONENT_STEP) {

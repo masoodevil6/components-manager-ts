@@ -11,7 +11,7 @@ import {Schemas} from "./Schemas";
 import {createCardViewStep} from "./Step";
 import * as ComponentBorder from "../componentBorder";
 
-export class ComponentCardViewInfo extends ComponentCardViewBase {
+export class ComponentCardViewInfo extends ComponentCardViewBase<ReturnType<typeof createCardViewStep>>{
     private _BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;
 
     constructor(

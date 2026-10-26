@@ -1,8 +1,9 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 
 export function createInputSizeStep() {
-    const endpoint = () => CoreEvent.Step({request: CoreEvent.Request(), response: CoreEvent.Response({value: null as number | null})});
-    return CoreEvent.Step({children: {
+    const endpoint = () => DefineWorkflow({request: CoreEvent.Request(), response: CoreEvent.Response({value: null as number | null})});
+    return DefineWorkflow({children: {
         inputChange: endpoint(),
         inputFocus: endpoint(),
         inputBlur: endpoint(),

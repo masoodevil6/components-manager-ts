@@ -1,10 +1,11 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 import {CodeMirrorLanguage} from "./Props";
 
 export function createCodeMirrorStep() {
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {
-            change: CoreEvent.Step({
+            change: DefineWorkflow({
                 request: CoreEvent.Request(),
                 response: CoreEvent.Response({
                     value: "" as string,

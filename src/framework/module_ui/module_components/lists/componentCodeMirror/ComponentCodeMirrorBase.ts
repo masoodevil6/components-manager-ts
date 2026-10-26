@@ -6,19 +6,19 @@ import {Schemas, SchemasType} from "./Schemas";
 import {Methods, MethodsType} from "./Methods";
 import {Definition} from "./Definition";
 
-export class ComponentCodeMirrorBase extends CoreComponents.App<
+export class ComponentCodeMirrorBase<TWorkflow extends CoreComponents.ComponentWorkflow<any> = CoreComponents.ComponentWorkflow> extends CoreComponents.App<
     PropsType & Record<string, any>,
     SchemasType,
     any,
-    MethodsType
-> {
-    protected _COMPONENT_STEP: CoreEvent.TStepInstance<any> | null = null;
+    MethodsType,
+    TWorkflow> {
+    protected _COMPONENT_STEP: TWorkflow | null = null;
 
     constructor(
         componentName = "code-mirror",
         elId: string | null = null,
         identity?: {unique?: any; emit?: any; events?: Record<string, any> | null},
-        step?: CoreEvent.TStepInstance<any>,
+        step?: TWorkflow,
     ) {
         super(componentName, elId);
         this._COMPONENT_UNIQUE = identity?.unique ?? null;

@@ -11,6 +11,7 @@ import {PropsType}           from "./Props";
 import {SchemasType}         from "./Schemas";
 import {MethodsType}         from "./Methods";
 import {ComponentIdentity}   from "@/core_components";
+import type {ComponentWorkflow} from "@/core_components";
 
 
 /**
@@ -49,12 +50,14 @@ export abstract class ComponentStructureBase<
     TProp extends Record<string, any>      = PropsType,
     TSchemas                               = SchemasType,
     TMethods extends Record<string, any>   = MethodsType,
-    TIdentity extends ComponentIdentity    = ComponentIdentity
+    TIdentity extends ComponentIdentity    = ComponentIdentity,
+    TWorkflow extends ComponentWorkflow<any> = ComponentWorkflow
 > extends CoreComponents.App<
     TProp,
     TSchemas,
     any,
-    TMethods
+    TMethods,
+    TWorkflow
 > {
 
 
@@ -86,7 +89,7 @@ export abstract class ComponentStructureBase<
 
        فرزند: super("button", null, identity, ButtonStep)
     --------------------------------------------- */
-    protected _COMPONENT_STEP: CoreEvent.TStepInstance | null = null;
+    protected _COMPONENT_STEP: TWorkflow | null = null;
 
 
     /* ---------------------------------------------
@@ -99,7 +102,7 @@ export abstract class ComponentStructureBase<
         componentName: string = "structure",
         elId: string | null   = null,
         identity?: Partial<TIdentity>,
-        step?:    CoreEvent.TStepInstance,
+        step?:    TWorkflow,
     ) {
         super(componentName, elId);
 
@@ -108,6 +111,7 @@ export abstract class ComponentStructureBase<
         this._COMPONENT_EVENTS = identity?.events ?? null;
 
         this._COMPONENT_STEP   = step ?? null;
+        if (step) this.setComponentWorkflow(step);
     }
 
 

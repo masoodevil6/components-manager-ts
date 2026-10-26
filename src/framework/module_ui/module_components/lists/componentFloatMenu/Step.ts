@@ -1,3 +1,4 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 // --------------------------------
 
@@ -10,9 +11,9 @@ import * as CoreEvent from "@/core_event";
  *   click ← Event Engine endpoint (unique روی <section>)
  */
 export function createFloatMenuStep() {
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {
-            click: CoreEvent.Step({
+            click: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),

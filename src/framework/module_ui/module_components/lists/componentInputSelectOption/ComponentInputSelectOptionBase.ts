@@ -7,10 +7,11 @@ import {Schemas, SchemasType} from "./Schemas";
 import {Methods, MethodsType} from "./Methods";
 import {Definition} from "./Definition";
 
-export class ComponentInputSelectOptionBase extends CoreComponents.App<PropsType & Record<string, any>, SchemasType, any, MethodsType> {
-    protected _COMPONENT_STEP: CoreEvent.TStepInstance<any> | null = null;
+export class ComponentInputSelectOptionBase<TWorkflow extends CoreComponents.ComponentWorkflow<any> = CoreComponents.ComponentWorkflow> extends CoreComponents.App<PropsType & Record<string, any>, SchemasType, any, MethodsType,
+    TWorkflow> {
+    protected _COMPONENT_STEP: TWorkflow | null = null;
 
-    constructor(identity?: {unique?: CoreEvent.TStepRef | null; emit?: CoreEvent.TEmitHandler | null; events?: Record<string, any> | null}, step?: CoreEvent.TStepInstance<any>) {
+    constructor(identity?: {unique?: CoreEvent.TStepRef | null; emit?: CoreEvent.TEmitHandler | null; events?: Record<string, any> | null}, step?: TWorkflow) {
         super("input-select-option", null);
         this._COMPONENT_UNIQUE = identity?.unique ?? null;
         this._COMPONENT_EMIT = identity?.emit ?? null;

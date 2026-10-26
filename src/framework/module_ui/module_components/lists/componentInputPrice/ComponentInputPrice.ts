@@ -16,7 +16,7 @@ import * as ComponentValidate from "../componentValidate";
 
 type Disposable = {dispose?: () => void; disposeStep?: () => void};
 
-export class ComponentInputPrice extends ComponentInputPriceBase {
+export class ComponentInputPrice extends ComponentInputPriceBase<ReturnType<typeof createInputPriceStep>>{
     private _INPUT_COMPONENT: InstanceType<typeof ComponentInput.Component> | null = null;
     private readonly _DISPLAY_VALUE = new CoreObservable.App<string | null>(null);
     private readonly _NUMERIC_VALUE = new CoreObservable.App<number | null>(null);

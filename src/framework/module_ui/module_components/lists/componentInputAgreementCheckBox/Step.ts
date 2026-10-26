@@ -1,3 +1,4 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 // --------------------------------
 
@@ -9,13 +10,13 @@ import * as CoreEvent from "@/core_event";
  *   هر ComponentInputAgreementCheckBox Instance باید Step Instance مستقل داشته باشد.
  */
 export function createInputAgreementCheckBoxStep() {
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {
-            clickAll: CoreEvent.Step({
+            clickAll: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),
-            clickItem: CoreEvent.Step({
+            clickItem: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),

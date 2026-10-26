@@ -22,7 +22,7 @@ import * as ComponentWebCode from "../componentWebCode";
 
 type DisposableChild = {dispose?: () => void; disposeStep?: () => void};
 
-export class ComponentWidget extends ComponentWidgetBase {
+export class ComponentWidget extends ComponentWidgetBase<ReturnType<typeof createWidgetStep>>{
     private readonly _IS_LOADING = new CoreObservable.App(false);
     private readonly _SHOW_404 = new CoreObservable.App(false);
     private readonly _MESSAGES = new CoreObservable.App<unknown[]>([]);

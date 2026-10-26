@@ -19,6 +19,18 @@ export const Schemas = {
         name: Keys.category.components.page.schemas.root.name,
         description: Keys.category.components.page.schemas.root.description,
     },
+    SETTING: {
+        part: "part-page-setting",
+        props: [Props.prop_setting],
+        name: Keys.category.components.page.schemas.setting.name,
+        description: Keys.category.components.page.schemas.setting.description,
+    },
+    CURRENT: {
+        part: "part-page-current",
+        props: [],
+        name: Keys.category.components.page.schemas.current.name,
+        description: Keys.category.components.page.schemas.current.description,
+    },
     HEADER: {
         part: "part-page-header",
         props: [Props.prop_header],

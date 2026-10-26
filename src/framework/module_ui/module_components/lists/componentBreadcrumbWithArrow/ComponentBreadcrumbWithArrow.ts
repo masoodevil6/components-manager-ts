@@ -16,7 +16,7 @@ import type {TSvgPoint} from "@/util_shapes";
 
 type Layout = {mobile: boolean; width: number; height: number; count: number; stepX: number; margin: number; rtl: boolean; sizeName: any};
 
-export class ComponentBreadcrumbWithArrow extends ComponentBreadcrumbWithArrowBase {
+export class ComponentBreadcrumbWithArrow extends ComponentBreadcrumbWithArrowBase<ReturnType<typeof createBreadcrumbWithArrowStep>>{
     private readonly _INSTANCE_CLASS = "component-breadcrumb-with-arrow-" + this._COMPONENT_RANDOM_ID;
     private readonly _CONTAINER_WIDTH = new CoreObservable.App<number>(768);
     private _RESIZE_OBSERVER: ResizeObserver | null = null;

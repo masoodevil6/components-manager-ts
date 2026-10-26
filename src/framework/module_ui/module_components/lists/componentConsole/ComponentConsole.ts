@@ -41,7 +41,7 @@ const COPY_ICON: UiIcons.IIconDefinition = {
     },
 };
 
-export class ComponentConsole extends ComponentConsoleBase {
+export class ComponentConsole extends ComponentConsoleBase<ReturnType<typeof createConsoleStep>>{
     private _BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;
     private _HEADER_BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;
     private _TABS: InstanceType<typeof ComponentTabs.Component> | null = null;

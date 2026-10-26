@@ -29,7 +29,7 @@ const getBreadcrumbHeight = (sizeName: any): string => UtilStyle.Css_SizeCalc(
     UtilStyle.Css_Padding(sizeName) as any,
 );
 
-export class ComponentBreadcrumbShadow extends ComponentBreadcrumbShadowBase {
+export class ComponentBreadcrumbShadow extends ComponentBreadcrumbShadowBase<ReturnType<typeof createBreadcrumbShadowStep>>{
     private readonly _INSTANCE_CLASS = `component-breadcrumb-shadow-${this._COMPONENT_RANDOM_ID}`;
     private _ROOT_BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;
     private _BACK_ICON: InstanceType<typeof ComponentIcon.Component> | null = null;
@@ -262,6 +262,10 @@ export class ComponentBreadcrumbShadow extends ComponentBreadcrumbShadowBase {
         );
         const navStyle = CoreObservable.App.computed(
             (directionRtl: boolean, sizeName: any) => ({
+                // Keep the z-indexes used to overlap breadcrumb items inside the
+                // navigation row. Without a local stacking context, those item
+                // layers can escape the page header and cover higher page overlays.
+                position: "relative", zIndex: "0",
                 display: "flex", flex: "0 0 auto", alignItems: "stretch", direction: directionRtl ? "rtl" : "ltr",
                 height: getBreadcrumbHeight(sizeName), fontSize: UtilStyle.Css_FontSize(sizeName),
             }), [rtl, size], this.getScope(),

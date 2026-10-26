@@ -20,7 +20,7 @@ import * as ComponentValidate from "../componentValidate";
 
 type Child = {dispose?: () => void; disposeStep?: () => void};
 
-export class ComponentInputEmail extends ComponentInputEmailBase {
+export class ComponentInputEmail extends ComponentInputEmailBase<ReturnType<typeof createInputEmailStep>>{
     private static _INSTANCE_COUNT = 0;
     private readonly _INPUT_ID = `component-input-email-${++ComponentInputEmail._INSTANCE_COUNT}`;
     private _INPUT_SIMPLE: InstanceType<typeof ComponentInputSimple.Component> | null = null;
@@ -180,8 +180,8 @@ export class ComponentInputEmail extends ComponentInputEmailBase {
         const disabled = data?.prop_isDisable ?? bind.prop_isDisable;
         return CoreObservable.App.conditionWhen([enabled, rules, disabled], (hasRules, list, isDisabled) => !!hasRules && !isDisabled && Array.isArray(list) && list.length > 0, () => {
             const emailRule = new UtilValidators.validates.IsEmail(
-                {En: "Email", Fa: "ایمیل"},
-                {En: "Please enter a valid email address", Fa: "لطفاً یک نشانی ایمیل معتبر وارد کنید"},
+                {En: "Email", Fa: "Ø§ÛŒÙ…ÛŒÙ„"},
+                {En: "Please enter a valid email address", Fa: "Ù„Ø·ÙØ§Ù‹ ÛŒÚ© Ù†Ø´Ø§Ù†ÛŒ Ø§ÛŒÙ…ÛŒÙ„ Ù…Ø¹ØªØ¨Ø± ÙˆØ§Ø±Ø¯ Ú©Ù†ÛŒØ¯"},
             );
             const validator = new ComponentValidate.Component({
                 prop_listRules: CoreObservable.App.computed((list: any[]) => {

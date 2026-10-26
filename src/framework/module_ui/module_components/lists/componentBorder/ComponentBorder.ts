@@ -16,28 +16,28 @@ import {PropsType as StructurePropsType} from "../componentStructure/Props";
 
 
 /**
- * ComponentBorder — کلاس نهایی
+ * ComponentBorder â€” Ú©Ù„Ø§Ø³ Ù†Ù‡Ø§ÛŒÛŒ
  *
- * معماری Composition:
- *   ComponentBorder HAS-A ComponentStructure (نه IS-A)
- *   ComponentStructure در renderContentComponent ساخته می‌شود
- *   و content آن = renderBorder (محتوای اختصاصی ComponentBorder)
+ * Ù…Ø¹Ù…Ø§Ø±ÛŒ Composition:
+ *   ComponentBorder HAS-A ComponentStructure (Ù†Ù‡ IS-A)
+ *   ComponentStructure Ø¯Ø± renderContentComponent Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯
+ *   Ùˆ content Ø¢Ù† = renderBorder (Ù…Ø­ØªÙˆØ§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ ComponentBorder)
  *
- * Constructor امضا: (config, methods, identity?)
- *   config  — شامل propهای پایه + propهای اختصاصی
- *   methods — methodهای اختصاصی (CLICK_BORDER, MOUSE_UP_BORDER, ...)
- *   identity — { unique?, emit?, events? }
+ * Constructor Ø§Ù…Ø¶Ø§: (config, methods, identity?)
+ *   config  â€” Ø´Ø§Ù…Ù„ propÙ‡Ø§ÛŒ Ù¾Ø§ÛŒÙ‡ + propÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ
+ *   methods â€” methodÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (CLICK_BORDER, MOUSE_UP_BORDER, ...)
+ *   identity â€” { unique?, emit?, events? }
  *
- * الگوی تقسیم‌بندی متدها (مطابق ComponentButton):
- *   - renderBorder() فقط ساختار کلی — تمام style‌ها در متدهای private
- *   - هر style یک متد private مستقل با CoreObservable.App.computed
- *   - _HOVER_STATE جایگزین el.hover قدیمی
+ * Ø§Ù„Ú¯ÙˆÛŒ ØªÙ‚Ø³ÛŒÙ…â€ŒØ¨Ù†Ø¯ÛŒ Ù…ØªØ¯Ù‡Ø§ (Ù…Ø·Ø§Ø¨Ù‚ ComponentButton):
+ *   - renderBorder() ÙÙ‚Ø· Ø³Ø§Ø®ØªØ§Ø± Ú©Ù„ÛŒ â€” ØªÙ…Ø§Ù… styleâ€ŒÙ‡Ø§ Ø¯Ø± Ù…ØªØ¯Ù‡Ø§ÛŒ private
+ *   - Ù‡Ø± style ÛŒÚ© Ù…ØªØ¯ private Ù…Ø³ØªÙ‚Ù„ Ø¨Ø§ CoreObservable.App.computed
+ *   - _HOVER_STATE Ø¬Ø§ÛŒÚ¯Ø²ÛŒÙ† el.hover Ù‚Ø¯ÛŒÙ…ÛŒ
  */
-export class ComponentBorder extends ComponentBorderBase {
+export class ComponentBorder extends ComponentBorderBase<ReturnType<typeof createBorderStep>>{
 
     /* ---------------------------------------------
-       Hover State — معادل el.hover قدیمی
-       Observable داخلی کلاس — توسط on: {mouseenter/mouseleave} تغذیه می‌شود
+       Hover State â€” Ù…Ø¹Ø§Ø¯Ù„ el.hover Ù‚Ø¯ÛŒÙ…ÛŒ
+       Observable Ø¯Ø§Ø®Ù„ÛŒ Ú©Ù„Ø§Ø³ â€” ØªÙˆØ³Ø· on: {mouseenter/mouseleave} ØªØºØ°ÛŒÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯
     --------------------------------------------- */
     private readonly _HOVER_STATE = new CoreObservable.App<boolean>(false);
 
@@ -64,7 +64,7 @@ export class ComponentBorder extends ComponentBorderBase {
 
 
     /* ---------------------------------------------
-       Plan 8.2.7 — Component Disposal
+       Plan 8.2.7 â€” Component Disposal
     --------------------------------------------- */
     dispose(): void {
         this.disposeStep();
@@ -72,8 +72,8 @@ export class ComponentBorder extends ComponentBorderBase {
 
 
     /* ---------------------------------------------
-       Plan 11.2 — renderContentComponent
-       لایه ساختار از طریق Schema پایه رندر می‌شود.
+       Plan 11.2 â€” renderContentComponent
+       Ù„Ø§ÛŒÙ‡ Ø³Ø§Ø®ØªØ§Ø± Ø§Ø² Ø·Ø±ÛŒÙ‚ Schema Ù¾Ø§ÛŒÙ‡ Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒØ´ÙˆØ¯.
     --------------------------------------------- */
     override renderContentComponent(
         attrsDefault: PartAttrDefault,
@@ -85,8 +85,8 @@ export class ComponentBorder extends ComponentBorderBase {
 
 
     /* ---------------------------------------------
-       renderManagerComponent — Routing
-       Plan 11.2 — COMPONENT + STRUCTURE از Trait، بقیه اختصاصی
+       renderManagerComponent â€” Routing
+       Plan 11.2 â€” COMPONENT + STRUCTURE Ø§Ø² TraitØŒ Ø¨Ù‚ÛŒÙ‡ Ø§Ø®ØªØµØ§ØµÛŒ
     --------------------------------------------- */
     override renderManagerComponent(
         partName:     string,
@@ -96,12 +96,12 @@ export class ComponentBorder extends ComponentBorderBase {
     ): CoreReactive.App {
 
         switch (partName) {
-            // --- Plan 11.2: Schema پایه ---
+            // --- Plan 11.2: Schema Ù¾Ø§ÛŒÙ‡ ---
             case ComponentStructureTrait.schemas.COMPONENT.part:
                 return ComponentStructureTrait.renderComponentSchema(this, attrsDefault, data);
             case ComponentStructureTrait.schemas.STRUCTURE.part:
                 return ComponentStructureTrait.renderStructureSchema(this, attrsDefault, data);
-            // --- Schema اختصاصی ---
+            // --- Schema Ø§Ø®ØªØµØ§ØµÛŒ ---
             case Schemas.BORDER.part:
                 return this.renderBorder(attrsDefault, data, extra);
             default:
@@ -111,8 +111,8 @@ export class ComponentBorder extends ComponentBorderBase {
 
 
     /* ---------------------------------------------
-       renderBorder — رندر Part BORDER اصلی
-       فقط ساختار کلی — تمام style‌های computed در متدهای private
+       renderBorder â€” Ø±Ù†Ø¯Ø± Part BORDER Ø§ØµÙ„ÛŒ
+       ÙÙ‚Ø· Ø³Ø§Ø®ØªØ§Ø± Ú©Ù„ÛŒ â€” ØªÙ…Ø§Ù… styleâ€ŒÙ‡Ø§ÛŒ computed Ø¯Ø± Ù…ØªØ¯Ù‡Ø§ÛŒ private
     --------------------------------------------- */
     protected renderBorder(
         attrsDefault?: PartAttrDefault,
@@ -228,7 +228,7 @@ export class ComponentBorder extends ComponentBorderBase {
 
 
     /* ---------------------------------------------
-       Arrow CSS — استایل ثابت :after
+       Arrow CSS â€” Ø§Ø³ØªØ§ÛŒÙ„ Ø«Ø§Ø¨Øª :after
     --------------------------------------------- */
     private getArrowCssCustom(elementId?: string): string {
         const selector = elementId ?? this.getPartId(Schemas.BORDER.part);
@@ -252,8 +252,8 @@ export class ComponentBorder extends ComponentBorderBase {
 
     /// ---------------------
     ///  Private Style Getters
-    ///  هر متد یک CoreObservable.App.computed برمی‌گرداند
-    ///  توسعه‌پذیر: هر style منطق مستقل دارد
+    ///  Ù‡Ø± Ù…ØªØ¯ ÛŒÚ© CoreObservable.App.computed Ø¨Ø±Ù…ÛŒâ€ŒÚ¯Ø±Ø¯Ø§Ù†Ø¯
+    ///  ØªÙˆØ³Ø¹Ù‡â€ŒÙ¾Ø°ÛŒØ±: Ù‡Ø± style Ù…Ù†Ø·Ù‚ Ù…Ø³ØªÙ‚Ù„ Ø¯Ø§Ø±Ø¯
     /// ---------------------
 
     private getStyleOpacity(prop_borderOpacity) {

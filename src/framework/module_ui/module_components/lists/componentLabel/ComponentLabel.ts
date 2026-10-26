@@ -19,37 +19,37 @@ import * as ComponentMenuMore from "../componentMenuMore";
 
 
 /**
- * ComponentLabel — کلاس نهایی (Plan 13.1.0)
+ * ComponentLabel â€” Ú©Ù„Ø§Ø³ Ù†Ù‡Ø§ÛŒÛŒ (Plan 13.1.0)
  *
- * معماری Composition:
- *   ComponentLabel HAS-A ComponentBorder (نه IS-A)
- *   ComponentBorder مهاجرت‌شده در renderLabelBorder از طریق مستقیم
- *   new ComponentBorder.Component ساخته می‌شود — نه new مستقیم.
+ * Ù…Ø¹Ù…Ø§Ø±ÛŒ Composition:
+ *   ComponentLabel HAS-A ComponentBorder (Ù†Ù‡ IS-A)
+ *   ComponentBorder Ù…Ù‡Ø§Ø¬Ø±Øªâ€ŒØ´Ø¯Ù‡ Ø¯Ø± renderLabelBorder Ø§Ø² Ø·Ø±ÛŒÙ‚ Ù…Ø³ØªÙ‚ÛŒÙ…
+ *   new ComponentBorder.Component Ø³Ø§Ø®ØªÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯ â€” Ù†Ù‡ new Ù…Ø³ØªÙ‚ÛŒÙ….
  *
- * Constructor امضا: (config, methods, identity?)
- *   config  — شامل propهای پایه + propهای اختصاصی
- *   methods — methodهای اختصاصی (CLICK)
- *   identity — { unique?, emit?, events? }
+ * Constructor Ø§Ù…Ø¶Ø§: (config, methods, identity?)
+ *   config  â€” Ø´Ø§Ù…Ù„ propÙ‡Ø§ÛŒ Ù¾Ø§ÛŒÙ‡ + propÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ
+ *   methods â€” methodÙ‡Ø§ÛŒ Ø§Ø®ØªØµØ§ØµÛŒ (CLICK)
+ *   identity â€” { unique?, emit?, events? }
  *
- * الگوی تقسیم‌بندی متدها (مطابق Plan 12.1):
- *   - هر render method فقط ساختار — تمام styleهای computed در متدهای private
- *   - Tooltip: رندر شرطی با conditionWhen + popup CSS-only (بدون listener JS)
- *   - renderContentComponent = executeSchemaPart(BORDER) — قرارداد 11.2 §۲.۵ (Plan 13.1.1)
- *   - prop_labelShow در renderLabelBorder اعمال می‌شود — مسیر رندر BORDER یکتاست
- *     (فقط renderManagerComponent("part-label-border")) — Plan 13.1.1
+ * Ø§Ù„Ú¯ÙˆÛŒ ØªÙ‚Ø³ÛŒÙ…â€ŒØ¨Ù†Ø¯ÛŒ Ù…ØªØ¯Ù‡Ø§ (Ù…Ø·Ø§Ø¨Ù‚ Plan 12.1):
+ *   - Ù‡Ø± render method ÙÙ‚Ø· Ø³Ø§Ø®ØªØ§Ø± â€” ØªÙ…Ø§Ù… styleÙ‡Ø§ÛŒ computed Ø¯Ø± Ù…ØªØ¯Ù‡Ø§ÛŒ private
+ *   - Tooltip: Ø±Ù†Ø¯Ø± Ø´Ø±Ø·ÛŒ Ø¨Ø§ conditionWhen + popup CSS-only (Ø¨Ø¯ÙˆÙ† listener JS)
+ *   - renderContentComponent = executeSchemaPart(BORDER) â€” Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯ 11.2 Â§Û².Ûµ (Plan 13.1.1)
+ *   - prop_labelShow Ø¯Ø± renderLabelBorder Ø§Ø¹Ù…Ø§Ù„ Ù…ÛŒâ€ŒØ´ÙˆØ¯ â€” Ù…Ø³ÛŒØ± Ø±Ù†Ø¯Ø± BORDER ÛŒÚ©ØªØ§Ø³Øª
+ *     (ÙÙ‚Ø· renderManagerComponent("part-label-border")) â€” Plan 13.1.1
  *
- * Plan 13.1.2 — رفع باگ‌های بحرانی:
- *   - Tooltip parameter mismatch (desc/icon جابجا + show بدون observable) اصلاح شد
- *   - Composition با ComponentFloatMenu (مثل legacy) — popup کامل با ComponentBorder
- *   - Composition: new ComponentBorder.Component (مستقیم — بدون UiCategory)
+ * Plan 13.1.2 â€” Ø±ÙØ¹ Ø¨Ø§Ú¯â€ŒÙ‡Ø§ÛŒ Ø¨Ø­Ø±Ø§Ù†ÛŒ:
+ *   - Tooltip parameter mismatch (desc/icon Ø¬Ø§Ø¨Ø¬Ø§ + show Ø¨Ø¯ÙˆÙ† observable) Ø§ØµÙ„Ø§Ø­ Ø´Ø¯
+ *   - Composition Ø¨Ø§ ComponentFloatMenu (Ù…Ø«Ù„ legacy) â€” popup Ú©Ø§Ù…Ù„ Ø¨Ø§ ComponentBorder
+ *   - Composition: new ComponentBorder.Component (Ù…Ø³ØªÙ‚ÛŒÙ… â€” Ø¨Ø¯ÙˆÙ† UiCategory)
  *
- * بازیابی Behavior از Legacy:
- *   - label قابل‌کلیک → CLICK method روی Border composition
- *   - binding به input با for → attrsBind: {for}
- *   - tooltip شرطی → conditionWhen(prop_labelTooltipDescription != null)
- *   - fontSize واکنش‌گرا → computed روی CoreConfig.Settings.SizeName
+ * Ø¨Ø§Ø²ÛŒØ§Ø¨ÛŒ Behavior Ø§Ø² Legacy:
+ *   - label Ù‚Ø§Ø¨Ù„â€ŒÚ©Ù„ÛŒÚ© â†’ CLICK method Ø±ÙˆÛŒ Border composition
+ *   - binding Ø¨Ù‡ input Ø¨Ø§ for â†’ attrsBind: {for}
+ *   - tooltip Ø´Ø±Ø·ÛŒ â†’ conditionWhen(prop_labelTooltipDescription != null)
+ *   - fontSize ÙˆØ§Ú©Ù†Ø´â€ŒÚ¯Ø±Ø§ â†’ computed Ø±ÙˆÛŒ CoreConfig.Settings.SizeName
  */
-export class ComponentLabel extends ComponentLabelBase {
+export class ComponentLabel extends ComponentLabelBase<ReturnType<typeof createLabelStep>>{
     private _MENU_MORE: ComponentMenuMore.Component | null = null;
 
 
@@ -75,8 +75,8 @@ export class ComponentLabel extends ComponentLabelBase {
 
 
     /* ---------------------------------------------
-       Plan 8.2.7 — Component Disposal
-       Tooltip بدون listener JS است — فقط Event Tree پاک می‌شود
+       Plan 8.2.7 â€” Component Disposal
+       Tooltip Ø¨Ø¯ÙˆÙ† listener JS Ø§Ø³Øª â€” ÙÙ‚Ø· Event Tree Ù¾Ø§Ú© Ù…ÛŒâ€ŒØ´ÙˆØ¯
     --------------------------------------------- */
     dispose(): void {
         this._MENU_MORE?.dispose();
@@ -86,10 +86,10 @@ export class ComponentLabel extends ComponentLabelBase {
 
 
    /* ---------------------------------------------
-      Plan 13.1.1 — قرارداد ۱۱.۲ §۲.۵:
-      renderContentComponent فقط Schema اختصاصی اول را رندر می‌کند.
-      هر منطق شرطی/تزئینی به خودِ Schemaها منتقل می‌شود
-      (prop_labelShow → renderLabelBorder).
+      Plan 13.1.1 â€” Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯ Û±Û±.Û² Â§Û².Ûµ:
+      renderContentComponent ÙÙ‚Ø· Schema Ø§Ø®ØªØµØ§ØµÛŒ Ø§ÙˆÙ„ Ø±Ø§ Ø±Ù†Ø¯Ø± Ù…ÛŒâ€ŒÚ©Ù†Ø¯.
+      Ù‡Ø± Ù…Ù†Ø·Ù‚ Ø´Ø±Ø·ÛŒ/ØªØ²Ø¦ÛŒÙ†ÛŒ Ø¨Ù‡ Ø®ÙˆØ¯Ù SchemaÙ‡Ø§ Ù…Ù†ØªÙ‚Ù„ Ù…ÛŒâ€ŒØ´ÙˆØ¯
+      (prop_labelShow â†’ renderLabelBorder).
    --------------------------------------------- */
    override renderContentComponent(
        attrsDefault: PartAttrDefault,
@@ -101,11 +101,11 @@ export class ComponentLabel extends ComponentLabelBase {
 
 
     /* ---------------------------------------------
-      renderManagerComponent — Routing
-      Plan 11.2 — COMPONENT + STRUCTURE از Trait، بقیه اختصاصی
-      Plan 13.1.1 — مسیر رندر BORDER یکتا شد: STRUCTURE (Trait) →
-      renderContentComponent → executeSchemaPart(BORDER) → همین switch.
-      مسیر مستقیم renderContentComponent → renderLabelBorder حذف شد.
+      renderManagerComponent â€” Routing
+      Plan 11.2 â€” COMPONENT + STRUCTURE Ø§Ø² TraitØŒ Ø¨Ù‚ÛŒÙ‡ Ø§Ø®ØªØµØ§ØµÛŒ
+      Plan 13.1.1 â€” Ù…Ø³ÛŒØ± Ø±Ù†Ø¯Ø± BORDER ÛŒÚ©ØªØ§ Ø´Ø¯: STRUCTURE (Trait) â†’
+      renderContentComponent â†’ executeSchemaPart(BORDER) â†’ Ù‡Ù…ÛŒÙ† switch.
+      Ù…Ø³ÛŒØ± Ù…Ø³ØªÙ‚ÛŒÙ… renderContentComponent â†’ renderLabelBorder Ø­Ø°Ù Ø´Ø¯.
    --------------------------------------------- */
     override renderManagerComponent(
         partName:     string,
@@ -115,12 +115,12 @@ export class ComponentLabel extends ComponentLabelBase {
     ): CoreReactive.App {
 
         switch (partName) {
-            // --- Plan 11.2: Schema پایه ---
+            // --- Plan 11.2: Schema Ù¾Ø§ÛŒÙ‡ ---
             case ComponentStructureTrait.schemas.COMPONENT.part:
                 return ComponentStructureTrait.renderComponentSchema(this, attrsDefault, data);
             case ComponentStructureTrait.schemas.STRUCTURE.part:
                 return ComponentStructureTrait.renderStructureSchema(this, attrsDefault, data);
-            // --- Schema اختصاصی ---
+            // --- Schema Ø§Ø®ØªØµØ§ØµÛŒ ---
             case Schemas.BORDER.part:
                 return this.renderLabelBorder(attrsDefault, data, extra);
             case Schemas.BORDER_CONTENT.part:
@@ -138,21 +138,21 @@ export class ComponentLabel extends ComponentLabelBase {
 
 
     /* ---------------------------------------------
-      renderLabelBorder — رندر Part BORDER
-      Composition: new ComponentBorder.Component (مستقیم — مهاجرت‌شده Plan 12.1)
-      + click → this.executeMethod("CLICK", ...)
+      renderLabelBorder â€” Ø±Ù†Ø¯Ø± Part BORDER
+      Composition: new ComponentBorder.Component (Ù…Ø³ØªÙ‚ÛŒÙ… â€” Ù…Ù‡Ø§Ø¬Ø±Øªâ€ŒØ´Ø¯Ù‡ Plan 12.1)
+      + click â†’ this.executeMethod("CLICK", ...)
 
-      Plan 13.1.1 — منطق show از renderContentComponent به اینجا منتقل شد:
-      prop_labelShow=false → null (رفتار Legacy حفظ می‌شود) و
-      هر دو مسیر رسیدن به این متد (STRUCTURE→content→executeSchemaPart و
-      renderManagerComponent مستقیم) دقیقاً یک رفتار دارند.
+      Plan 13.1.1 â€” Ù…Ù†Ø·Ù‚ show Ø§Ø² renderContentComponent Ø¨Ù‡ Ø§ÛŒÙ†Ø¬Ø§ Ù…Ù†ØªÙ‚Ù„ Ø´Ø¯:
+      prop_labelShow=false â†’ null (Ø±ÙØªØ§Ø± Legacy Ø­ÙØ¸ Ù…ÛŒâ€ŒØ´ÙˆØ¯) Ùˆ
+      Ù‡Ø± Ø¯Ùˆ Ù…Ø³ÛŒØ± Ø±Ø³ÛŒØ¯Ù† Ø¨Ù‡ Ø§ÛŒÙ† Ù…ØªØ¯ (STRUCTUREâ†’contentâ†’executeSchemaPart Ùˆ
+      renderManagerComponent Ù…Ø³ØªÙ‚ÛŒÙ…) Ø¯Ù‚ÛŒÙ‚Ø§Ù‹ ÛŒÚ© Ø±ÙØªØ§Ø± Ø¯Ø§Ø±Ù†Ø¯.
 
-      Plan 13.1.2 — wrapper span لازم است چون computed خروجی ClObservable است
-      (نه ClReactiveElement) — span observable را به‌عنوان children میزبانی می‌کند.
+      Plan 13.1.2 â€” wrapper span Ù„Ø§Ø²Ù… Ø§Ø³Øª Ú†ÙˆÙ† computed Ø®Ø±ÙˆØ¬ÛŒ ClObservable Ø§Ø³Øª
+      (Ù†Ù‡ ClReactiveElement) â€” span observable Ø±Ø§ Ø¨Ù‡â€ŒØ¹Ù†ÙˆØ§Ù† children Ù…ÛŒØ²Ø¨Ø§Ù†ÛŒ Ù…ÛŒâ€ŒÚ©Ù†Ø¯.
 
-      نکته prop_labelRadius: ComponentBorder جدید radius را از SizeName سراسری
-      محاسبه می‌کند (prop روش radius ندارد) — پس radius اختصاصی Label از طریق
-      prop_borderStyles computed تزریق می‌شود.
+      Ù†Ú©ØªÙ‡ prop_labelRadius: ComponentBorder Ø¬Ø¯ÛŒØ¯ radius Ø±Ø§ Ø§Ø² SizeName Ø³Ø±Ø§Ø³Ø±ÛŒ
+      Ù…Ø­Ø§Ø³Ø¨Ù‡ Ù…ÛŒâ€ŒÚ©Ù†Ø¯ (prop Ø±ÙˆØ´ radius Ù†Ø¯Ø§Ø±Ø¯) â€” Ù¾Ø³ radius Ø§Ø®ØªØµØ§ØµÛŒ Label Ø§Ø² Ø·Ø±ÛŒÙ‚
+      prop_borderStyles computed ØªØ²Ø±ÛŒÙ‚ Ù…ÛŒâ€ŒØ´ÙˆØ¯.
    --------------------------------------------- */
       protected renderLabelBorder(
           attrsDefault?: PartAttrDefault,
@@ -179,9 +179,9 @@ export class ComponentLabel extends ComponentLabelBase {
               dataKeys: data ? Object.keys(data) : [],
           });
 
-          // Plan 13.1.2 — computed خروجی ClObservable است نه ClReactiveElement؛
-          // wrapper span لازم است تا observable را به‌عنوان children میزبانی کند.
-          // prop_labelShow=false → children: [null] (محتوای خالی) — رفتار Legacy حفظ
+          // Plan 13.1.2 â€” computed Ø®Ø±ÙˆØ¬ÛŒ ClObservable Ø§Ø³Øª Ù†Ù‡ ClReactiveElementØ›
+          // wrapper span Ù„Ø§Ø²Ù… Ø§Ø³Øª ØªØ§ observable Ø±Ø§ Ø¨Ù‡â€ŒØ¹Ù†ÙˆØ§Ù† children Ù…ÛŒØ²Ø¨Ø§Ù†ÛŒ Ú©Ù†Ø¯.
+          // prop_labelShow=false â†’ children: [null] (Ù…Ø­ØªÙˆØ§ÛŒ Ø®Ø§Ù„ÛŒ) â€” Ø±ÙØªØ§Ø± Legacy Ø­ÙØ¸
           const borderElement = CoreObservable.App.computed(
               (show) => {
                   console.log("[DEBUG borderElement computed]", { show, willRender: !!show });
@@ -208,10 +208,10 @@ export class ComponentLabel extends ComponentLabelBase {
    
    
       /* ---------------------------------------------
-         Plan 13.1.1 — buildBorderElement (private)
-         ساخت Composition Border — کد Plan 13.1.0 عیناً منتقل شده
-         (بدون تغییر رفتار): computed prop_borderStyles، cast الگوی پروژه،
-         CLICK_BORDER delegate، identity step.
+         Plan 13.1.1 â€” buildBorderElement (private)
+         Ø³Ø§Ø®Øª Composition Border â€” Ú©Ø¯ Plan 13.1.0 Ø¹ÛŒÙ†Ø§Ù‹ Ù…Ù†ØªÙ‚Ù„ Ø´Ø¯Ù‡
+         (Ø¨Ø¯ÙˆÙ† ØªØºÛŒÛŒØ± Ø±ÙØªØ§Ø±): computed prop_borderStylesØŒ cast Ø§Ù„Ú¯ÙˆÛŒ Ù¾Ø±ÙˆÚ˜Ù‡ØŒ
+         CLICK_BORDER delegateØŒ identity step.
       --------------------------------------------- */
       private buildBorderElement(
           data?: Record<string, CoreObservable.App<any>>,
@@ -225,7 +225,7 @@ export class ComponentLabel extends ComponentLabelBase {
    
           if (!label) return null as any;
    
-          // تزریق radius اختصاصی Label به Border (قابل‌گسترش به استایل‌های دیگر)
+          // ØªØ²Ø±ÛŒÙ‚ radius Ø§Ø®ØªØµØ§ØµÛŒ Label Ø¨Ù‡ Border (Ù‚Ø§Ø¨Ù„â€ŒÚ¯Ø³ØªØ±Ø´ Ø¨Ù‡ Ø§Ø³ØªØ§ÛŒÙ„â€ŒÙ‡Ø§ÛŒ Ø¯ÛŒÚ¯Ø±)
           const prop_borderStyles = CoreObservable.App.computed(
               (radius, topLeft, topRight, bottomLeft, bottomRight, sizeName) => {
                   const zero = UtilStyle.Css_SizeUnit(0, UtilConst.Units.PEXEL);
@@ -251,10 +251,10 @@ export class ComponentLabel extends ComponentLabelBase {
               this.getScope(),
           );
    
-         // تزریق propهای Observable خود Label به config کامپوننت Border —
-         // در runtime، #getReadyUserConfigAndDefaultConfig خودش Observable را
-         // تشخیص می‌دهد و مستقیم ذخیره می‌کند («if Observable → store directly»)
-         // مستقیم از ComponentBorder.Component — بدون وابستگی به UiCategory
+         // ØªØ²Ø±ÛŒÙ‚ propÙ‡Ø§ÛŒ Observable Ø®ÙˆØ¯ Label Ø¨Ù‡ config Ú©Ø§Ù…Ù¾ÙˆÙ†Ù†Øª Border â€”
+         // Ø¯Ø± runtimeØŒ #getReadyUserConfigAndDefaultConfig Ø®ÙˆØ¯Ø´ Observable Ø±Ø§
+         // ØªØ´Ø®ÛŒØµ Ù…ÛŒâ€ŒØ¯Ù‡Ø¯ Ùˆ Ù…Ø³ØªÙ‚ÛŒÙ… Ø°Ø®ÛŒØ±Ù‡ Ù…ÛŒâ€ŒÚ©Ù†Ø¯ (Â«if Observable â†’ store directlyÂ»)
+         // Ù…Ø³ØªÙ‚ÛŒÙ… Ø§Ø² ComponentBorder.Component â€” Ø¨Ø¯ÙˆÙ† ÙˆØ§Ø¨Ø³ØªÚ¯ÛŒ Ø¨Ù‡ UiCategory
          return new ComponentBorder.Component(
              {
                  prop_borderClass:            ["position-relative", "px-2"],
@@ -269,7 +269,7 @@ export class ComponentLabel extends ComponentLabelBase {
                  },
              },
              {
-                 // Plan 8.2.7/9.1 — identity: Step داخلی Label برای click
+                 // Plan 8.2.7/9.1 â€” identity: Step Ø¯Ø§Ø®Ù„ÛŒ Label Ø¨Ø±Ø§ÛŒ click
                  unique: (this as any)._COMPONENT_STEP?.click ?? undefined,
              },
          ).getReactiveElement() as CoreReactive.App;
@@ -277,12 +277,12 @@ export class ComponentLabel extends ComponentLabelBase {
 
 
     /* ---------------------------------------------
-       renderLabelContent — رندر Part BORDER_CONTENT
+       renderLabelContent â€” Ø±Ù†Ø¯Ø± Part BORDER_CONTENT
        section.position-relative + cursor: pointer + children [TITLE, MENU_MORE, TOOLTIP]
        (Legacy: templateFn_render_borderContent)
 
-       Plan 13.1.3 — بازگشت به layout legacy:
-       tooltip نباید وارد flow متن شود؛ خود schema tooltip absolute می‌شود.
+       Plan 13.1.3 â€” Ø¨Ø§Ø²Ú¯Ø´Øª Ø¨Ù‡ layout legacy:
+       tooltip Ù†Ø¨Ø§ÛŒØ¯ ÙˆØ§Ø±Ø¯ flow Ù…ØªÙ† Ø´ÙˆØ¯Ø› Ø®ÙˆØ¯ schema tooltip absolute Ù…ÛŒâ€ŒØ´ÙˆØ¯.
     --------------------------------------------- */
     protected renderLabelContent(
         attrsDefault?: PartAttrDefault,
@@ -401,7 +401,11 @@ export class ComponentLabel extends ComponentLabelBase {
                                 const availableGroups = groups.get() as LabelGroup[] | null;
                                 const selectedGroup = availableGroups?.find((group) => group.id === item.id);
                                 if (!selectedGroup) return;
+                                const previousGroupId = selected.get() as string | null;
                                 this.set("prop_labelGroupSelected", selectedGroup.id);
+                                if (previousGroupId !== selectedGroup.id) {
+                                    this.executeMethod("CHANGE_GROUP", event, { GROUP: selectedGroup });
+                                }
                                 this.executeMethod("SELECT_MENU_ITEM", event, {
                                     ITEM: selectedGroup,
                                     PARENT: dataArgs?.PARENT ?? null,
@@ -431,10 +435,10 @@ export class ComponentLabel extends ComponentLabelBase {
 
 
     /* ---------------------------------------------
-       renderLabelTitle — رندر Part BORDER_CONTENT_TITLE
-       attrsBind: {for: prop_labelFor} — for-accessibility
+       renderLabelTitle â€” Ø±Ù†Ø¯Ø± Part BORDER_CONTENT_TITLE
+       attrsBind: {for: prop_labelFor} â€” for-accessibility
        stylesBind: {...prop_labelStyle, color} + classBind
-       فرزند <b> با fontSize واکنش‌گرا از SizeName سراسری
+       ÙØ±Ø²Ù†Ø¯ <b> Ø¨Ø§ fontSize ÙˆØ§Ú©Ù†Ø´â€ŒÚ¯Ø±Ø§ Ø§Ø² SizeName Ø³Ø±Ø§Ø³Ø±ÛŒ
        (Legacy: templateFn_render_borderContentLabel)
     --------------------------------------------- */
     protected renderLabelTitle(
@@ -467,10 +471,10 @@ export class ComponentLabel extends ComponentLabelBase {
                 for: prop_labelFor,
             },
 
-            // reactive merge — prop_labelStyle یک Observable از Record است؛
-            // spread کردن آن فلگ برند را کپی می‌کند ولی متدهای get/subscribe
-            // (روی prototype) را نه → «observable.get is not a function».
-            // راه‌حل: merge دو prop در یک Observable واحد با computed.
+            // reactive merge â€” prop_labelStyle ÛŒÚ© Observable Ø§Ø² Record Ø§Ø³ØªØ›
+            // spread Ú©Ø±Ø¯Ù† Ø¢Ù† ÙÙ„Ú¯ Ø¨Ø±Ù†Ø¯ Ø±Ø§ Ú©Ù¾ÛŒ Ù…ÛŒâ€ŒÚ©Ù†Ø¯ ÙˆÙ„ÛŒ Ù…ØªØ¯Ù‡Ø§ÛŒ get/subscribe
+            // (Ø±ÙˆÛŒ prototype) Ø±Ø§ Ù†Ù‡ â†’ Â«observable.get is not a functionÂ».
+            // Ø±Ø§Ù‡â€ŒØ­Ù„: merge Ø¯Ùˆ prop Ø¯Ø± ÛŒÚ© Observable ÙˆØ§Ø­Ø¯ Ø¨Ø§ computed.
             stylesBind: CoreObservable.App.computed(
                 (styleMap, color) => ({
                     ...(styleMap ?? {}),
@@ -497,8 +501,8 @@ export class ComponentLabel extends ComponentLabelBase {
 
 
     /* ---------------------------------------------
-       renderLabelTooltip — رندر Part BORDER_CONTENT_TOOLTIP
-       Plan 13.1.5 — استخراج به ComponentTooltipTrait
+       renderLabelTooltip â€” Ø±Ù†Ø¯Ø± Part BORDER_CONTENT_TOOLTIP
+       Plan 13.1.5 â€” Ø§Ø³ØªØ®Ø±Ø§Ø¬ Ø¨Ù‡ ComponentTooltipTrait
     --------------------------------------------- */
     protected renderLabelTooltip(
         attrsDefault?: PartAttrDefault,
@@ -521,7 +525,7 @@ export class ComponentLabel extends ComponentLabelBase {
 
     /// ---------------------
     ///  Private Style Getters
-    ///  الگوی Plan 12.1 §۰.۳ — هر متد یک CoreObservable.App.computed برمی‌گرداند
+    ///  Ø§Ù„Ú¯ÙˆÛŒ Plan 12.1 Â§Û°.Û³ â€” Ù‡Ø± Ù…ØªØ¯ ÛŒÚ© CoreObservable.App.computed Ø¨Ø±Ù…ÛŒâ€ŒÚ¯Ø±Ø¯Ø§Ù†Ø¯
     /// ---------------------
 
     private getStyleTitleFontSize() {

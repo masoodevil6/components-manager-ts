@@ -1,3 +1,4 @@
+import {DefineWorkflow} from "@/core_components";
 import * as CoreEvent from "@/core_event";
 // --------------------------------
 
@@ -9,17 +10,17 @@ import * as CoreEvent from "@/core_event";
  *   هر ComponentInputListSelector Instance باید Step Instance مستقل داشته باشد.
  */
 export function createInputListSelectorStep() {
-    return CoreEvent.Step({
+    return DefineWorkflow({
         children: {
-            clickIcon: CoreEvent.Step({
+            clickIcon: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),
-            clickAccept: CoreEvent.Step({
+            clickAccept: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),
-            clickReject: CoreEvent.Step({
+            clickReject: DefineWorkflow({
                 request:  CoreEvent.Request(),
                 response: CoreEvent.Response({ value: "" }),
             }),

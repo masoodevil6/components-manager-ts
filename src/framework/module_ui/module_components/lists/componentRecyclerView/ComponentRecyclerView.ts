@@ -16,14 +16,14 @@ import type {MethodsConfigType}     from "./Methods";
 
 
 /**
- * ComponentRecyclerView — رندر لیست با جهت‌دهی (Plan 15.1.0)
+ * ComponentRecyclerView â€” Ø±Ù†Ø¯Ø± Ù„ÛŒØ³Øª Ø¨Ø§ Ø¬Ù‡Øªâ€ŒØ¯Ù‡ÛŒ (Plan 15.1.0)
  *
- * بازیابی Behavior از Legacy:
- *   - direction → flex-row / flex-row-reverse / flex-column / flex-column-reverse
- *   - children از prop_formComponents
- *   - stylesBind با computed merge (prop_formStyles)
+ * Ø¨Ø§Ø²ÛŒØ§Ø¨ÛŒ Behavior Ø§Ø² Legacy:
+ *   - direction â†’ flex-row / flex-row-reverse / flex-column / flex-column-reverse
+ *   - children Ø§Ø² prop_formComponents
+ *   - stylesBind Ø¨Ø§ computed merge (prop_formStyles)
  */
-export class ComponentRecyclerView extends ComponentRecyclerViewBase {
+export class ComponentRecyclerView extends ComponentRecyclerViewBase<ReturnType<typeof createRecyclerViewStep>>{
 
     constructor(
         config?:  any,
@@ -66,12 +66,12 @@ export class ComponentRecyclerView extends ComponentRecyclerViewBase {
     ): CoreReactive.App {
 
         switch (partName) {
-            // --- Plan 11.2: Schema پایه ---
+            // --- Plan 11.2: Schema Ù¾Ø§ÛŒÙ‡ ---
             case ComponentStructureTrait.schemas.COMPONENT.part:
                 return ComponentStructureTrait.renderComponentSchema(this, attrsDefault, data);
             case ComponentStructureTrait.schemas.STRUCTURE.part:
                 return ComponentStructureTrait.renderStructureSchema(this, attrsDefault, data);
-            // --- Schema اختصاصی ---
+            // --- Schema Ø§Ø®ØªØµØ§ØµÛŒ ---
             case Schemas.COMPONENTS.part:
                 return this.renderComponents(attrsDefault, data, extra);
             default:
@@ -81,7 +81,7 @@ export class ComponentRecyclerView extends ComponentRecyclerViewBase {
 
 
     /* ---------------------------------------------
-       renderComponents — رندر Part COMPONENTS
+       renderComponents â€” Ø±Ù†Ø¯Ø± Part COMPONENTS
        section.d-flex + classBind(direction) + children
     --------------------------------------------- */
     protected renderComponents(
@@ -130,7 +130,7 @@ export class ComponentRecyclerView extends ComponentRecyclerViewBase {
 
 
     /* ---------------------------------------------
-       renderEmptyContent — fallback خالی
+       renderEmptyContent â€” fallback Ø®Ø§Ù„ÛŒ
     --------------------------------------------- */
     public renderEmptyContent(
         attrsDefault?: PartAttrDefault,

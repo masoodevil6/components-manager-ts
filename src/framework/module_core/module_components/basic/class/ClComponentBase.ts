@@ -2,6 +2,8 @@ import * as CoreConfigs                                                         
 import * as CoreObservable                                                                   from "@/core_observable";
 import * as CoreReactive                                                                     from "@/core_reactive";
 import * as CoreEvent                                                                        from "@/core_event";
+import {Define_ComponentWorkflow}                                                          from "../../tools/workflow";
+import type {Interface_ComponentWorkflow}                                                    from "../../tools/workflow";
 // --------------------------------
 import {AbComponentConnector        as ComponentConnector}                                   from "../abstract/AbComponentConnector";
 import {TPartAttrDefault            as PartAttrDefault}                                      from "../../basic/types/TPartAttrDefault";
@@ -20,10 +22,12 @@ export class ClComponentBase<
     TProp extends Record<string, any> ,
     TSchemas ,
     TTemplate ,
-    TMethods extends Record<string, MethodCallback<any , any>>
+    TMethods extends Record<string, MethodCallback<any , any>>,
+    TWorkflow extends Interface_ComponentWorkflow<any> = Interface_ComponentWorkflow
     > extends ComponentConnector{
 
     protected _renderScope = new CoreObservable.Scope();
+    private _resettingRenderScope = false;
 
     protected _COMPONENT_PATTERN! : { [K in    PropType<TProp>]?:            PropInterface<TProp[K]> }
 
@@ -34,6 +38,8 @@ export class ClComponentBase<
     protected _COMPONENT_TEMPLATES! : { [K in  TemplateType<TTemplate>]?:    TemplateInterface<TProp> } ;
 
     _COMPONENT_PROPS_BIND: Record<string, CoreObservable.App<any>> = {};
+
+    protected _COMPONENT_WORKFLOW: TWorkflow = Define_ComponentWorkflow() as TWorkflow;
 
     _COMPONENT_CONFIG!: Record<string, any>;
 
@@ -71,6 +77,11 @@ export class ClComponentBase<
     }
 
     renderComponent(config: TProp , methods: TMethods , events = null , unique: CoreEvent.TStepRef | null = null , emit: CoreEvent.TEmitHandler | null = null) {
+
+        const componentStep = (this as any)._COMPONENT_STEP as CoreEvent.TStepRef | null | undefined;
+        if (componentStep?.identity && componentStep.identity !== this._COMPONENT_WORKFLOW.identity) {
+            this.setComponentWorkflow(componentStep as TWorkflow);
+        }
 
         // اگر unique/emit پاس داده شد، override کن؛ وگرنه از مقادیر قبلی استفاده کن
         // (برای Componentهایی که identity را در constructor set می‌کنند)
@@ -113,6 +124,32 @@ export class ClComponentBase<
             Object.keys(events).forEach(key=> {
                 this._COMPONENT_CONTENT.on(key , events[key])
             })
+        }
+    }
+
+    /** Replace the default empty StepRegister with this component's typed event workflow. */
+    protected setComponentWorkflow<TNext extends CoreEvent.TStepRef>(workflow: TNext): TNext {
+        if (workflow.identity === this._COMPONENT_WORKFLOW.identity) return workflow;
+        this.disposeWorkflowIfRegistered(this._COMPONENT_WORKFLOW);
+        this._COMPONENT_WORKFLOW = workflow as unknown as TWorkflow;
+        return workflow;
+    }
+
+    getComponentWorkflow(): TWorkflow {
+        return this._COMPONENT_WORKFLOW;
+    }
+
+    private disposeComponentWorkflow(): void {
+        this.disposeWorkflowIfRegistered(this._COMPONENT_WORKFLOW);
+        const componentStep = (this as any)._COMPONENT_STEP as CoreEvent.TStepRef | null | undefined;
+        if (componentStep?.identity === this._COMPONENT_WORKFLOW.identity) {
+            (this as any)._COMPONENT_STEP = null;
+        }
+    }
+
+    private disposeWorkflowIfRegistered(workflow: CoreEvent.TStepRef): void {
+        if (CoreEvent.App.getRegistry().some((step) => step.identity === workflow.identity)) {
+            CoreEvent.dispose(workflow);
         }
     }
 
@@ -199,8 +236,10 @@ export class ClComponentBase<
     //--------------------------------------------------
 
     protected createComponentElement(){
+        this._resettingRenderScope = true;
         this._renderScope.dispose();
         this._renderScope = new CoreObservable.Scope();
+        this._resettingRenderScope = false;
 
         // اولین Part تعریف‌شده در Schema به عنوان بخش اصلی (Root) کامپوننت رندر می‌شود
         const firstSchema = Object.values(this._COMPONENT_SCHEMA)[0] as SchemaInterface<any, any> | undefined;
@@ -220,6 +259,10 @@ export class ClComponentBase<
                 }
             }
         }
+
+        this._renderScope.track(() => {
+            if (!this._resettingRenderScope) this.disposeComponentWorkflow();
+        });
     }
 
 

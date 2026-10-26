@@ -19,7 +19,7 @@ import {createPageCardInfoStep} from "./Step";
 
 type DisposableChild = {dispose?: () => void; disposeStep?: () => void};
 
-export class ComponentPageCardInfo extends ComponentPageCardInfoBase {
+export class ComponentPageCardInfo extends ComponentPageCardInfoBase<ReturnType<typeof createPageCardInfoStep>>{
     private _BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;
     private readonly _CHILDREN: DisposableChild[] = [];
     private _DISPOSED = false;
