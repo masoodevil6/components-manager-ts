@@ -1,4 +1,5 @@
-import {ITemplate} from "@/core_route";
+import {Navigate} from "@/core_route";
+import type {ITemplate} from "@/core_route";
 import * as CoreObservable from "@/core_observable";
 import * as CoreReactive from "@/core_reactive";
 import * as CoreComponents from "@/core_components";
@@ -102,7 +103,7 @@ export class ClComponentsPage implements ITemplate {
                             prop_title: entry.definition.name,
                             prop_content: details,
                         }, {
-                            CLICK: () => { window.location.href = `/components/${encodeURIComponent(entry.definition.name)}`; },
+                            CLICK: () => { Navigate(`/components/${encodeURIComponent(entry.definition.name)}`); },
                         });
                         renderedCards.push(card);
                         return CoreReactive.App.section({
@@ -209,9 +210,9 @@ export class ClComponentsPage implements ITemplate {
                 action: "toggleFilters",
             }],
         }, {
-            BACK: () => { window.location.href = "/"; },
+            BACK: () => { Navigate("/"); },
             SELECT_NAV_ITEM: (_event: Event, args: any) => {
-                if (args?.NAME === "home") window.location.href = "/";
+                if (args?.NAME === "home") Navigate("/");
             },
             SELECT_OPTION: (_event: Event, args: any) => {
                 if (args?.NAME !== "toggleFilters") return;

@@ -83,6 +83,14 @@ export const Props = {
         OptionShow: true,
         OptionGroup: PropGroups.header,
     }),
+    prop_hasHeaderChildrenMode: Define_ComponentProp<boolean>({
+        prop: "prop_hasHeaderChildrenMode",
+        default: false,
+        name: translation.props.hasHeaderChildrenMode.name,
+        description: translation.props.hasHeaderChildrenMode.description,
+        OptionShow: true,
+        OptionGroup: PropGroups.header,
+    }),
     prop_hasTabComponent: Define_ComponentProp<boolean>({
         prop: "prop_hasTabComponent",
         default: true,

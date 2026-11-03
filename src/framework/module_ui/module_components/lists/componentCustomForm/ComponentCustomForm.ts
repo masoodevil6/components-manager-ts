@@ -1,17 +1,20 @@
 import * as CoreObservable from "@/core_observable";
 import * as CoreReactive from "@/core_reactive";
+import * as CoreEvent from "@/core_event";
+import * as Core from "@/core";
+import * as CoreComponents from "@/core_components";
 import * as CoreLanguage from "@/core_languages";
 import {PartAttrDefault} from "@/core_components";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
 import * as ComponentLayout from "../componentLayout";
+import * as ComponentLayoutCreator from "../componentLayoutCreator";
 import * as ComponentForm from "../componentForm";
 import * as ComponentCollapse from "../componentCollapse";
 import * as ComponentCollapseLine from "../componentCollapseLine";
 import * as ComponentInput from "../componentInput";
 import * as ComponentWindow from "../componentWindow";
 import * as ComponentWindowConfirm from "../componentWindowConfirm";
-import * as ComponentInputSelectOption from "../componentInputSelectOption";
 import * as ComponentInputDescription from "../componentInputDescription";
 import * as ComponentInputCheckBox from "../componentInputCheckBox";
 import * as ComponentInputRadioBox from "../componentInputRadioBox";
@@ -22,6 +25,8 @@ import {InputSimpleTypes} from "../componentInputSimple/Props";
 import {Keys} from "../../../module_categories/languages";
 import * as UiIcons from "@/ui_icons";
 import {LayoutColumn} from "../componentLayout/Props";
+import {LayoutCreatorMode} from "../componentLayoutCreator/Props";
+import type {LayoutCreatorContentItem, LayoutCreatorItemState} from "../componentLayoutCreator/Props";
 import {ComponentCustomFormBase} from "./ComponentCustomFormBase";
 import {
     CustomFormField,
@@ -42,6 +47,14 @@ type DisposableChild = {
 
 type EditorEvent = (event: Event) => void;
 
+const CUSTOM_FORM_LAYOUT_ALLOWED_COMPONENTS = Object.freeze([
+    ComponentInput.Component,
+    ComponentInputDescription.Component,
+    ComponentInputCheckBox.Component,
+    ComponentInputRadioBox.Component,
+    ComponentInputListSelector.Component,
+] as const);
+
 export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<typeof createCustomFormStep>>{
     private static _ID = 0;
     private readonly _VIEW = new CoreObservable.App<ComponentLayout.LayoutContentItem[] | null>(null);
@@ -51,7 +64,10 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
     private _DELETE_CONFIRM: ComponentWindowConfirm.Component | null = null;
     private _DELETE_CONFIRM_ELEMENT: HTMLElement | null = null;
     private _PENDING_DELETE_GROUP_ID: string | null = null;
+    private _GROUP_SETTINGS_WORKFLOW_SOURCE: CoreEvent.TStepRef | null = null;
+    private _GROUP_SETTINGS_PAGE_SETTING_ENDPOINT: CoreEvent.TStepRef | null = null;
     private _LOCAL_VALUES: Record<string, unknown> = {};
+    private _SKIP_GROUPS_REBUILD = false;
     private _DISPOSED = false;
 
     constructor(
@@ -61,6 +77,7 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
     ) {
         super(identity, createCustomFormStep());
         this._LOCAL_VALUES = {...(this.readValue<Record<string, unknown>>(config?.prop_customFormValues) ?? {})};
+        this.registerGroupSettingsEndpoint();
         this.renderComponent({...config} as any, methods as any, identity?.events ?? null);
         this.watchProps();
     }
@@ -72,6 +89,7 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
     dispose(): void {
         if (this._DISPOSED) return;
         this._DISPOSED = true;
+        this.closeGroupSettingsPageSetting();
         this._VIEW.set(null);
         this.disposeDynamicChildren();
         this._DELETE_CONFIRM_ELEMENT?.remove();
@@ -136,6 +154,10 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
                 if (propName === "prop_customFormValues") {
                     this._LOCAL_VALUES = {...(this.readValue<Record<string, unknown>>(this.get(propName)) ?? {})};
                 }
+                if (propName === "prop_customFormGroups" && this._SKIP_GROUPS_REBUILD) {
+                    this._SKIP_GROUPS_REBUILD = false;
+                    return;
+                }
                 this.rebuildView();
             }, this.getScope());
         }
@@ -196,7 +218,7 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
             prop_content: addGroupIcon.getReactiveElement(),
         } as any, {
             CLICK_BORDER: (event) => {
-                this.openGroupSettings(null, event);
+                this.openGroupSettingsWindow(null, event);
             },
         } as any);
         const addGroupElement = addGroup.getElement() as HTMLElement;
@@ -233,90 +255,45 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
     }
 
     private renderEditGroup(group: CustomFormGroup): CoreReactive.App {
-        const fields = Array.isArray(group.fields) ? group.fields : [];
-        const fieldRows = fields.map((field) => this.renderEditField(group, field));
-        const addFieldLabel = this.translate(Keys.category.components.fetch.form.customForm.editor.addField);
-        const addFieldIcon = new ComponentIcon.Component({
-            styles: {
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "20px",
-                height: "20px",
-                flex: "0 0 20px",
-            } as any,
-            prop_structureStyles: {
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "100%",
-                height: "100%",
-            },
-            prop_icon: UiIcons.CreateIcon(UiIcons.Src.CalcPlus.Definition, {size: 20}),
-            prop_iconTitle: addFieldLabel,
-            prop_iconStyles: {display: "flex", width: "100%", height: "100%", pointerEvents: "none"},
-        } as any);
-        const addField = new ComponentBorder.Component({
-            prop_borderType: ComponentBorder.BorderTypes.DASHED,
-            prop_borderClass: ["w-100"],
-            prop_borderStyles: {
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                minHeight: "3rem",
-                padding: "0.75rem",
-                cursor: "pointer",
-                boxSizing: "border-box",
-            },
-            prop_content: addFieldIcon.getReactiveElement(),
+        const initialLayoutContent = this.createEditGroupLayoutContent(group);
+        const groupLayout = new ComponentLayoutCreator.Component({
+            prop_workflowChildName: `${Core.Dictionary.WorkflowNodeNames.customFormGroupLayout}_${group.id}`,
+            prop_mode: LayoutCreatorMode.EDIT,
+            prop_components: [...CUSTOM_FORM_LAYOUT_ALLOWED_COMPONENTS],
+            prop_defaultColumn: this.getGroupLayoutColumn(group.columns),
+            prop_initialLayoutContent: initialLayoutContent,
         } as any, {
-            CLICK_BORDER: (event) => {
-                const id = this.nextId("field");
-                this.updateGroup(group.id, (current) => ({
-                    ...current,
-                    fields: [...(current.fields ?? []), {
-                        id,
-                        name: id.replace(/-/g, "_"),
-                        label: "New field",
-                        type: CustomFormFieldType.INPUT,
-                        value: "",
-                    }],
-                }), event);
-            },
+            CONTENT_CHANGE: (event, dataArgs) => this.updateGroupFieldsFromLayout(group.id, dataArgs?.ITEMS ?? [], event),
         } as any);
-        const addFieldElement = addField.getElement() as HTMLElement;
-        addFieldElement.setAttribute("role", "button");
-        addFieldElement.setAttribute("tabindex", "0");
-        addFieldElement.setAttribute("aria-label", addFieldLabel);
-        addFieldElement.title = addFieldLabel;
-        addFieldElement.addEventListener("keydown", (event: KeyboardEvent) => {
-            if (event.key !== "Enter" && event.key !== " ") return;
-            event.preventDefault();
-            addFieldElement.click();
-        });
-        this._DYNAMIC_CHILDREN.push(addFieldIcon, addField);
-        const body = CoreReactive.App.section({
-            className: ["d-flex", "flex-column", "gap-2", "p-2"],
-            children: [...fieldRows, addField.getReactiveElement() as CoreReactive.App],
-        });
+        this._DYNAMIC_CHILDREN.push(groupLayout);
+
+        const groupTitleInput = new ComponentInput.Component({
+            prop_workflowChildName: `${Core.Dictionary.WorkflowNodeNames.customFormGroupTitle}_${group.id}`,
+            prop_name: `custom-form-group-title-${group.id}`,
+            prop_value: group.title,
+            prop_labelShow: false,
+            styles: {width: "100%", minWidth: "0"},
+            prop_structureStyles: {width: "100%", minWidth: "0"},
+        } as any, {
+            INPUT_CHANGE: (event, _data, args) => this.updateGroupTitle(group.id, String(args?.VALUE ?? ""), event),
+        } as any);
+        (groupTitleInput.getElement() as HTMLElement).addEventListener("click", (event) => event.stopPropagation());
+        this._DYNAMIC_CHILDREN.push(groupTitleInput);
+
         const collapse = new ComponentCollapse.Component({
+            prop_workflowChildName: group.id,
             prop_collapseBodyIsOpen: group.bodyIsOpen ?? true,
-            prop_collapseTitle: group.title || this.translate(Keys.category.components.fetch.form.customForm.editor.groupTitle),
-            prop_collapseBody: body,
+            prop_collapseTitle: groupTitleInput.getReactiveElement(),
+            prop_collapseBody: groupLayout.getReactiveElement() as CoreReactive.App,
             prop_collapseMenuItems: [{
-                id: `settings-${group.id}`,
-                title: this.translate(Keys.category.components.fetch.form.customForm.editor.groupSettings),
-                action: "group-settings",
-                icon: UiIcons.Src.FileSetting.Definition,
-            }, {
                 id: `delete-${group.id}`,
-                title: this.translate(Keys.category.components.fetch.form.customForm.editor.removeGroup),
+                title: "",
+                ariaLabel: this.translate(Keys.category.components.fetch.form.customForm.editor.removeGroup),
                 action: "delete-group",
                 icon: UiIcons.Src.FilesDelete.Definition,
             }],
         } as any, {
             SELECT_MENU_ITEM: (event, dataArgs) => {
-                if (dataArgs?.ITEM?.action === "group-settings") this.openGroupSettings(group.id, event);
                 if (dataArgs?.ITEM?.action === "delete-group") this.confirmRemoveGroup(group.id, event);
             },
         } as any);
@@ -324,41 +301,14 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
         return collapse.getReactiveElement() as CoreReactive.App;
     }
 
-    private renderEditField(group: CustomFormGroup, field: CustomFormField): CoreReactive.App {
-        const editorKeys = Keys.category.components.fetch.form.customForm.editor;
-        const fields: CoreReactive.App[] = [
-            this.editorInput(this.translate(editorKeys.fieldName), field.name, (name, event) => this.updateField(group.id, field.id, {name}, event)),
-            this.editorInput(this.translate(editorKeys.fieldLabel), field.label, (label, event) => this.updateField(group.id, field.id, {label}, event)),
-            this.editorSelect(this.translate(editorKeys.fieldType), field.type, [
-                [CustomFormFieldType.INPUT, this.translate(editorKeys.input)],
-                [CustomFormFieldType.TEXTAREA, this.translate(editorKeys.textarea)],
-                [CustomFormFieldType.CHECKBOX, this.translate(editorKeys.checkbox)],
-                [CustomFormFieldType.RADIO, this.translate(editorKeys.radio)],
-                [CustomFormFieldType.SELECT, this.translate(editorKeys.select)],
-            ], (type, event) => this.updateField(group.id, field.id, {type: type as CustomFormFieldType}, event)),
-            this.editorInput(this.translate(editorKeys.fieldPlaceholder), field.placeholder ?? "", (placeholder, event) => this.updateField(group.id, field.id, {placeholder: placeholder || null}, event)),
-            this.editorCheckbox(this.translate(editorKeys.required), Boolean(field.required), (required, event) => this.updateField(group.id, field.id, {required}, event)),
-        ];
-
-        if (field.type === CustomFormFieldType.RADIO || field.type === CustomFormFieldType.SELECT) {
-            const optionText = (field.options ?? []).map((option) => option.label).join(", ");
-            fields.push(this.editorInput(this.translate(editorKeys.options), optionText, (value, event) => {
-                const options = value.split(",").map((label) => label.trim()).filter(Boolean).map((label) => ({label, value: label}));
-                this.updateField(group.id, field.id, {options}, event);
-            }));
-        }
-
-        fields.push(this.editorButton(this.translate(editorKeys.removeField), (event) => {
-            this.updateGroup(group.id, (current) => ({
-                ...current,
-                fields: (current.fields ?? []).filter((item) => item.id !== field.id),
-            }), event);
-        }));
-
-        return CoreReactive.App.div({
-            attrs: {"data-field-id": field.id},
-            className: ["d-flex", "flex-wrap", "gap-2", "align-items-end", "border", "rounded", "p-2"],
-            children: fields,
+    private createEditGroupLayoutContent(group: CustomFormGroup): LayoutCreatorContentItem[] {
+        return (Array.isArray(group.fields) ? group.fields : []).map((field) => {
+            const rendered = this.createRunField(field, group.id, false);
+            return {
+                content: rendered.component as any,
+                col: field.col ?? this.getGroupLayoutColumn(group.columns),
+                workflowChildName: field.id,
+            };
         });
     }
 
@@ -384,21 +334,29 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
 
     private renderRunGroup(group: CustomFormGroup): CoreReactive.App {
         const column = this.getGroupLayoutColumn(group.columns);
-        const layoutItems = (Array.isArray(group.fields) ? group.fields : []).map((field) => ({
-            content: CoreReactive.App.section({
-                className: ["d-flex", "flex-column", "gap-2"],
-                children: this.renderRunField(field),
-            }),
-        }));
-        const layout = new ComponentLayout.Component({
-            prop_col: column,
-            prop_layoutContent: layoutItems,
+        const fields = Array.isArray(group.fields) ? group.fields : [];
+        const layoutItems: LayoutCreatorContentItem[] = [];
+        const auxiliaryContent: CoreReactive.App[] = [];
+        for (const field of fields) {
+            const rendered = this.createRunField(field, group.id);
+            layoutItems.push({
+                content: rendered.component as any,
+                col: field.col ?? column,
+                workflowChildName: this.getFieldWorkflowChildName(group.id, field),
+            });
+            auxiliaryContent.push(...rendered.auxiliary);
+        }
+        const layout = new ComponentLayoutCreator.Component({
+            prop_workflowChildName: `${Core.Dictionary.WorkflowNodeNames.customFormGroupLayout}_${group.id}`,
+            prop_mode: LayoutCreatorMode.RENDER,
+            prop_components: [...CUSTOM_FORM_LAYOUT_ALLOWED_COMPONENTS],
+            prop_initialLayoutContent: layoutItems,
         } as any);
         this._DYNAMIC_CHILDREN.push(layout);
         const body = CoreReactive.App.section({
             attrs: {"aria-label": group.title || "Form group"},
             className: ["d-flex", "flex-column", "p-2"],
-            children: [layout.getReactiveElement() as CoreReactive.App],
+            children: [layout.getReactiveElement() as CoreReactive.App, ...auxiliaryContent],
         });
         const collapse = new ComponentCollapseLine.Component({
             prop_collapseLineCanCollapse: true,
@@ -412,6 +370,7 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
 
     private confirmRemoveGroup(groupId: string, event: Event): void {
         if (!this.getGroups().some((group) => group.id === groupId)) return;
+        event.stopPropagation();
         this._PENDING_DELETE_GROUP_ID = groupId;
 
         if (!this._DELETE_CONFIRM) {
@@ -438,12 +397,195 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
             this._DELETE_CONFIRM_ELEMENT = this._DELETE_CONFIRM.getElement() as HTMLElement;
             document.body.appendChild(this._DELETE_CONFIRM_ELEMENT);
             this._DELETE_CONFIRM.call_close();
+            window.setTimeout(() => {
+                if (!this._DISPOSED && this._DELETE_CONFIRM) this._DELETE_CONFIRM.call_open();
+            }, 0);
+            return;
         }
 
-        this._DELETE_CONFIRM.call_open(event);
+        this._DELETE_CONFIRM.call_open();
     }
 
     private openGroupSettings(groupId: string | null, event: Event): void {
+        if (!this.openGroupSettingsInPageSetting(groupId)) {
+            this.openGroupSettingsWindow(groupId, event);
+        }
+    }
+
+    private openGroupSettingsInPageSetting(groupId: string | null): boolean {
+        const source = this.getComponentWorkflow() as CoreEvent.TStepRef;
+        if (!source) return false;
+
+        const match = CoreEvent.findWorkflowNodes(source, Core.Dictionary.WorkflowNodeNames.setting)
+            .find(({node}) =>
+                CoreComponents.Tools.Workflow.Get_ComponentWorkflowMetadata(node)?.kind !== "component"
+                && CoreEvent.App.hasEmit(node),
+            );
+        if (!match) return false;
+
+        this.closeGroupSettingsPageSetting();
+        for (const resource of [...this._GROUP_SETTINGS_WINDOWS.values()]) resource.dispose?.();
+
+        const group = groupId === null ? null : this.getGroups().find((item) => item.id === groupId) ?? null;
+        if (groupId !== null && !group) return false;
+
+        const settingsKey = groupId ?? "new-group";
+        const editorKeys = Keys.category.components.fetch.form.customForm.editor;
+        let titleDraft = group?.title ?? "";
+        const titleInput = new ComponentInput.Component({
+            prop_workflowChildName: Core.Dictionary.WorkflowNodeNames.customFormGroupTitle,
+            prop_name: `custom-form-group-title-${settingsKey}`,
+            prop_value: titleDraft,
+            prop_labelTitle: this.translate(editorKeys.groupTitle),
+        } as any, {
+            INPUT_CHANGE: (_inputEvent, _data, args) => { titleDraft = String(args?.VALUE ?? ""); },
+        } as any);
+        const close = (): void => {
+            this.closeGroupSettingsPageSetting();
+        };
+        const cancelButton = this.editorButton(this.translate(editorKeys.cancel), () => {
+            this.requestGroupSettingsUpdate(match.node, {action: "cancel"});
+            close();
+        });
+        const saveButton = this.editorButton(this.translate(editorKeys.save), () => {
+            const response = this.requestGroupSettingsUpdate(match.node, {
+                action: "save",
+                groupId,
+                title: titleDraft,
+            });
+            if (response?.status === "success" && response.value?.applied === true) close();
+        });
+        const content = CoreReactive.App.section({
+            attrs: {"data-custom-form-group-settings": settingsKey},
+            styles: {
+                display: "flex",
+                flexDirection: "column",
+                width: "100%",
+                height: "100%",
+                minHeight: "0",
+                boxSizing: "border-box",
+            },
+            children: [
+                CoreReactive.App.h3({
+                    className: ["border-bottom", "p-3", "m-0"],
+                    children: [this.translate(editorKeys.groupSettings)],
+                }),
+                CoreReactive.App.div({
+                    className: ["d-flex", "flex-column", "gap-3", "p-3"],
+                    styles: {flex: "1 1 auto", minHeight: "0", overflowY: "auto"},
+                    children: [
+                        titleInput.getReactiveElement() as CoreReactive.App,
+                    ],
+                }),
+                CoreReactive.App.div({
+                    className: ["border-top", "p-3"],
+                    styles: {
+                        display: "grid",
+                        gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                        gap: "var(--marginMedium)",
+                        flex: "0 0 auto",
+                    },
+                    children: [cancelButton, saveButton],
+                }),
+            ],
+        });
+
+        let disposed = false;
+        const resource: DisposableChild = {
+            dispose: () => {
+                if (disposed) return;
+                disposed = true;
+                titleInput.dispose();
+                if (this._GROUP_SETTINGS_WINDOWS.get(settingsKey) === resource) {
+                    this._GROUP_SETTINGS_WINDOWS.delete(settingsKey);
+                }
+                const index = this._DYNAMIC_CHILDREN.indexOf(resource);
+                if (index >= 0) this._DYNAMIC_CHILDREN.splice(index, 1);
+            },
+        };
+        this._GROUP_SETTINGS_WINDOWS.set(settingsKey, resource);
+        this._DYNAMIC_CHILDREN.push(resource);
+
+        const openResponse = CoreEvent.App.request(
+            CoreEvent.requestMap([[match.node, {content}]]),
+            source,
+        ).get(match.node);
+        if (openResponse?.status !== "success" || openResponse.value?.opened !== true) {
+            resource.dispose?.();
+            return false;
+        }
+
+        this._GROUP_SETTINGS_WORKFLOW_SOURCE = source;
+        this._GROUP_SETTINGS_PAGE_SETTING_ENDPOINT = match.node;
+        return true;
+    }
+
+    private requestGroupSettingsUpdate(
+        pageSetting: CoreEvent.TStepRef,
+        payload: {action: "save" | "cancel"; groupId?: string | null; title?: string},
+    ): CoreEvent.ClResponse | undefined {
+        const groupSettingsStep = CoreEvent.getChild(
+            this._COMPONENT_STEP as CoreEvent.TStepRef,
+            Core.Dictionary.WorkflowNodeNames.customFormGroupSettings,
+        );
+        if (!groupSettingsStep || !CoreEvent.App.hasEmit(groupSettingsStep)) return undefined;
+        return CoreEvent.App.request(
+            CoreEvent.requestMap([[groupSettingsStep, payload]]),
+            pageSetting,
+        ).get(groupSettingsStep);
+    }
+
+    private registerGroupSettingsEndpoint(): void {
+        const groupSettingsStep = this._COMPONENT_STEP
+            ? CoreEvent.getChild(
+                this._COMPONENT_STEP as CoreEvent.TStepRef,
+                Core.Dictionary.WorkflowNodeNames.customFormGroupSettings,
+            )
+            : null;
+        if (!groupSettingsStep) return;
+
+        CoreEvent.App.registerEmit(groupSettingsStep, (request: CoreEvent.ClRequest) => {
+            const payload = request.payload as {
+                action?: string;
+                groupId?: string | null;
+                title?: string;
+            };
+            if (payload.action !== "save") return {applied: false, cancelled: payload.action === "cancel"};
+
+            const title = String(payload.title ?? "");
+            const event = new Event("custom-form-group-settings");
+            if (payload.groupId == null) {
+                if (!title.trim()) return {applied: false};
+                const createdGroup: CustomFormGroup = {
+                    id: this.nextId("group"),
+                    title: title.trim(),
+                    bodyIsOpen: true,
+                    columns: 1,
+                    fields: [],
+                };
+                this.updateTemplate([...this.getGroups(), createdGroup], event);
+                return {applied: true, group: createdGroup};
+            }
+
+            const group = this.getGroups().find((item) => item.id === payload.groupId);
+            if (!group) return {applied: false};
+            this.updateGroup(payload.groupId, (current) => ({...current, title}), event);
+            return {applied: true, group: {...group, title}};
+        });
+    }
+
+    private closeGroupSettingsPageSetting(): void {
+        const source = this._GROUP_SETTINGS_WORKFLOW_SOURCE;
+        const endpoint = this._GROUP_SETTINGS_PAGE_SETTING_ENDPOINT;
+        this._GROUP_SETTINGS_WORKFLOW_SOURCE = null;
+        this._GROUP_SETTINGS_PAGE_SETTING_ENDPOINT = null;
+        if (source && endpoint && CoreEvent.App.hasEmit(endpoint)) {
+            CoreEvent.App.request(CoreEvent.requestMap([[endpoint, {close: true}]]), source);
+        }
+        for (const resource of [...this._GROUP_SETTINGS_WINDOWS.values()]) resource.dispose?.();
+    }
+
+    private openGroupSettingsWindow(groupId: string | null, event: Event): void {
         const settingsKey = groupId ?? "new-group";
         const existing = this._GROUP_SETTINGS_WINDOWS.get(settingsKey) as (DisposableChild & {call_open?: () => void}) | undefined;
         if (existing) {
@@ -456,7 +598,6 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
 
         const editorKeys = Keys.category.components.fetch.form.customForm.editor;
         let titleDraft = group?.title ?? "";
-        let columnsDraft = this.getGroupColumnCount(group?.columns);
         const titleInput = new ComponentInput.Component({
             prop_name: `custom-form-group-title-${settingsKey}`,
             prop_value: titleDraft,
@@ -464,23 +605,9 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
         } as any, {
             INPUT_CHANGE: (_inputEvent, _data, args) => { titleDraft = String(args?.VALUE ?? ""); },
         } as any);
-        const columnsSelect = new ComponentInputSelectOption.Component({
-            prop_name: `custom-form-group-columns-${settingsKey}`,
-            prop_itemSelected: columnsDraft,
-            prop_labelTitle: this.translate(editorKeys.columns),
-            prop_options: [1, 2, 3, 4].map((value) => ({id: value, name: value})),
-        } as any, {
-            SELECT_CHANGE: (_selectEvent, _data, args) => {
-                const value = Number(args?.VALUE);
-                if (value >= 1 && value <= 4) columnsDraft = value as 1 | 2 | 3 | 4;
-            },
-        } as any);
         const windowBody = CoreReactive.App.section({
             className: ["d-flex", "flex-column", "gap-3", "p-3"],
-            children: [
-                titleInput.getReactiveElement() as CoreReactive.App,
-                columnsSelect.getReactiveElement() as CoreReactive.App,
-            ],
+            children: [titleInput.getReactiveElement() as CoreReactive.App],
         });
 
         let windowComponent!: ComponentWindow.Component;
@@ -496,14 +623,13 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
             windowComponent.getScope().dispose();
             windowComponent.dispose();
             titleInput.dispose();
-            columnsSelect.dispose();
             if (this._GROUP_SETTINGS_WINDOWS.get(settingsKey) === resource) this._GROUP_SETTINGS_WINDOWS.delete(settingsKey);
             const childIndex = this._DYNAMIC_CHILDREN.indexOf(resource);
             if (childIndex >= 0) this._DYNAMIC_CHILDREN.splice(childIndex, 1);
         };
         const resource: DisposableChild & {call_open?: () => void} = {dispose: disposeSettings};
         windowComponent = new ComponentWindow.Component({
-            prop_title: this.translate(editorKeys.groupSettings),
+            prop_title: this.translate(groupId === null ? editorKeys.addGroup : editorKeys.groupSettings),
             prop_body: windowBody,
             prop_acceptText: this.translate(editorKeys.save),
             prop_cancelText: this.translate(editorKeys.cancel),
@@ -522,12 +648,12 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
                             id: this.nextId("group"),
                             title,
                             bodyIsOpen: true,
-                            columns: columnsDraft,
+                            columns: 1,
                             fields: [],
                         }], acceptEvent);
                         return;
                     }
-                    this.updateGroup(groupId, (current) => ({...current, title: titleDraft, columns: columnsDraft}), acceptEvent);
+                    this.updateGroup(groupId, (current) => ({...current, title: titleDraft}), acceptEvent);
                 }, 225);
             },
             CLOSE: () => {
@@ -554,16 +680,81 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
         }
     }
 
-    private renderRunField(field: CustomFormField): CoreReactive.App[] {
+    private updateGroupFieldsFromLayout(groupId: string, items: LayoutCreatorItemState[], event: Event): void {
+        const fields = items.flatMap((item, index) => {
+            const field = this.createFieldFromLayoutItem(item, index);
+            return field ? [field] : [];
+        });
+        const groups = this.getGroups().map((group) => group.id === groupId ? {...group, fields} : group);
+        this._SKIP_GROUPS_REBUILD = true;
+        this.updateTemplate(groups, event);
+    }
+
+    private updateGroupTitle(groupId: string, title: string, event: Event): void {
+        const groups = this.getGroups().map((group) => group.id === groupId ? {...group, title} : group);
+        this._SKIP_GROUPS_REBUILD = true;
+        this.updateTemplate(groups, event);
+    }
+
+    private createFieldFromLayoutItem(item: LayoutCreatorItemState, index: number): CustomFormField | null {
+        const type = item.component === ComponentInput.Component
+            ? CustomFormFieldType.INPUT
+            : item.component === ComponentInputDescription.Component
+                ? CustomFormFieldType.TEXTAREA
+                : item.component === ComponentInputCheckBox.Component
+                    ? CustomFormFieldType.CHECKBOX
+                    : item.component === ComponentInputRadioBox.Component
+                        ? CustomFormFieldType.RADIO
+                        : item.component === ComponentInputListSelector.Component
+                            ? CustomFormFieldType.SELECT
+                            : null;
+        if (!type) return null;
+
+        const properties = item.properties ?? {};
+        const sourceColumns = this.readValue<any[]>(properties.prop_columns) ?? [];
+        const sourceOptions = this.readValue<any[]>(properties.prop_options) ?? sourceColumns;
+        const options = sourceOptions.map((option) => {
+            const value = option?.value ?? option?.id;
+            return {value, label: String(option?.label ?? option?.title ?? option?.name ?? value ?? "")};
+        }).filter((option) => option.value !== undefined);
+        const selectedValues = sourceColumns.filter((option) => option?.selected).map((option) => option.id);
+        const value = type === CustomFormFieldType.RADIO
+            ? this.readValue(properties.prop_itemSelected)
+            : type === CustomFormFieldType.SELECT
+                ? selectedValues
+                : this.readValue(properties.prop_value);
+        const id = item.workflowChildName || `field-${index + 1}`;
+        const name = String(this.readValue(properties.prop_name) ?? id);
+        return {
+            id,
+            name,
+            label: String(this.readValue(properties.prop_labelTitle) ?? this.readValue(properties.prop_title) ?? ""),
+            type,
+            value,
+            placeholder: this.readValue(properties.prop_placeholder) ?? null,
+            required: Boolean(this.readValue(properties.prop_required) ?? this.readValue(properties.prop_isRequired) ?? false),
+            options,
+            props: {...properties},
+            col: item.col ?? null,
+        };
+    }
+
+    private createRunField(
+        field: CustomFormField,
+        groupId: string,
+        includeAuxiliary: boolean = true,
+    ): {component: DisposableChild; auxiliary: CoreReactive.App[]} {
         const name = field.name || field.id;
         const currentValue = this.resolveFieldValue(field, name);
         const customProps = field.props && typeof field.props === "object" ? {...field.props} : {};
         const report = (event: Event, value: unknown) => this.reportValue(field, name, value, event);
+        const workflowChildName = this.getFieldWorkflowChildName(groupId, field);
 
         switch (field.type) {
             case CustomFormFieldType.TEXTAREA: {
                 const child = new ComponentInputDescription.Component({
                     ...customProps,
+                    prop_workflowChildName: workflowChildName,
                     prop_name: name,
                     prop_value: this.stringValue(currentValue),
                     prop_labelTitle: field.label,
@@ -572,30 +763,32 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
                     INPUT_CHANGE: (event, _data, args) => report(event, args?.VALUE),
                 } as any);
                 this.trackField(child, field);
-                return [child.getReactiveElement() as CoreReactive.App];
+                return {component: child, auxiliary: []};
             }
             case CustomFormFieldType.CHECKBOX: {
-                const hidden = this.hiddenValue(name, currentValue);
+                const hidden = includeAuxiliary ? this.hiddenValue(name, currentValue) : null;
                 const child = new ComponentInputCheckBox.Component({
                     ...customProps,
+                    prop_workflowChildName: workflowChildName,
                     prop_name: name,
                     prop_value: currentValue ?? false,
                     prop_labelTitle: field.label,
                 } as any, {
                     CLICK: (event, _data, args) => {
                         const value = args?.VALUE;
-                        this.setHiddenValue(hidden, value);
+                        if (hidden) this.setHiddenValue(hidden, value);
                         report(event, value);
                     },
                 } as any);
                 this.trackField(child, field);
-                return [child.getReactiveElement() as CoreReactive.App, hidden];
+                return {component: child, auxiliary: hidden ? [hidden] : []};
             }
             case CustomFormFieldType.RADIO: {
                 const selected = new CoreObservable.App<string | number | null>(currentValue as string | number | null ?? null);
-                const hidden = this.hiddenValue(name, currentValue);
+                const hidden = includeAuxiliary ? this.hiddenValue(name, currentValue) : null;
                 const child = new ComponentInputRadioBox.Component({
                     ...customProps,
+                    prop_workflowChildName: workflowChildName,
                     prop_name: name,
                     prop_title: field.label,
                     prop_options: (field.options ?? []).map((option) => ({id: option.value, name: option.label})),
@@ -603,12 +796,12 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
                 } as any, {
                     SELECT_ITEM: (event, _data, args) => {
                         const value = args?.VALUE ?? selected.get();
-                        this.setHiddenValue(hidden, value);
+                        if (hidden) this.setHiddenValue(hidden, value);
                         report(event, value);
                     },
                 } as any);
                 this.trackField(child, field);
-                return [child.getReactiveElement() as CoreReactive.App, hidden];
+                return {component: child, auxiliary: hidden ? [hidden] : []};
             }
             case CustomFormFieldType.SELECT: {
                 const selectedValues = Array.isArray(currentValue) ? currentValue : currentValue == null ? [] : [currentValue];
@@ -619,26 +812,28 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
                 })));
                 const initialSelected = (columns.get() as Array<{id: string | number; selected: boolean}>)
                     .filter((option) => option.selected).map((option) => option.id);
-                const hidden = this.hiddenValue(name, initialSelected.join(","));
+                const hidden = includeAuxiliary ? this.hiddenValue(name, initialSelected.join(",")) : null;
                 const child = new ComponentInputListSelector.Component({
                     ...customProps,
+                    prop_workflowChildName: workflowChildName,
                     prop_columns: columns as any,
                     prop_labelTitle: field.label,
                 } as any, {
                     CALLBACK_COL_SELECTOR: (event) => {
                         const value = (columns.get() as Array<{id: string | number; selected: boolean}>)
                             .filter((option) => option.selected).map((option) => option.id);
-                        this.setHiddenValue(hidden, value.join(","));
+                        if (hidden) this.setHiddenValue(hidden, value.join(","));
                         report(event, value);
                     },
                 } as any);
                 this.trackField(child, field);
-                return [child.getReactiveElement() as CoreReactive.App, hidden];
+                return {component: child, auxiliary: hidden ? [hidden] : []};
             }
             case CustomFormFieldType.INPUT:
             default: {
                 const child = new ComponentInput.Component({
                     ...customProps,
+                    prop_workflowChildName: workflowChildName,
                     prop_name: name,
                     prop_value: this.stringValue(currentValue),
                     prop_labelTitle: field.label,
@@ -648,9 +843,13 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
                     INPUT_CHANGE: (event, _data, args) => report(event, args?.VALUE),
                 } as any);
                 this.trackField(child, field);
-                return [child.getReactiveElement() as CoreReactive.App];
+                return {component: child, auxiliary: []};
             }
         }
+    }
+
+    private getFieldWorkflowChildName(groupId: string, field: CustomFormField): string {
+        return field.id || `${Core.Dictionary.WorkflowNodeNames.customFormGroupLayout}_${groupId}`;
     }
 
     private trackField(child: DisposableChild, field: CustomFormField): void {
@@ -714,13 +913,6 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
         this.updateTemplate(groups, event);
     }
 
-    private updateField(groupId: string, fieldId: string, patch: Partial<CustomFormField>, event: Event): void {
-        this.updateGroup(groupId, (group) => ({
-            ...group,
-            fields: (group.fields ?? []).map((field) => field.id === fieldId ? {...field, ...patch} : field),
-        }), event);
-    }
-
     private getGroups(): CustomFormGroup[] {
         const groups = this.readValue<CustomFormGroup[]>(this.get("prop_customFormGroups"));
         return Array.isArray(groups) ? groups : [];
@@ -737,43 +929,6 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
                     className: ["form-control"],
                     on: {change: (event) => onChange((event.currentTarget as HTMLInputElement).value, event)},
                 }),
-            ],
-        });
-    }
-
-    private editorSelect(
-        label: string,
-        value: string,
-        options: Array<[string, string]>,
-        onChange: (value: string, event: Event) => void,
-    ): CoreReactive.App {
-        return CoreReactive.App.label({
-            className: ["d-flex", "flex-column", "gap-1"],
-            children: [
-                CoreReactive.App.span({props: {textContent: label}}),
-                CoreReactive.App.select({
-                    attrs: {"aria-label": label},
-                    className: ["form-select"],
-                    children: options.map(([optionValue, title]) => CoreReactive.App.option({
-                        attrs: {value: optionValue, selected: optionValue === value},
-                        children: [title],
-                    })),
-                    on: {change: (event) => onChange((event.currentTarget as HTMLSelectElement).value, event)},
-                }),
-            ],
-        });
-    }
-
-    private editorCheckbox(label: string, checked: boolean, onChange: (value: boolean, event: Event) => void): CoreReactive.App {
-        return CoreReactive.App.label({
-            className: ["d-flex", "align-items-center", "gap-1"],
-            children: [
-                CoreReactive.App.input({
-                    attrs: {type: "checkbox", "aria-label": label},
-                    props: {checked},
-                    on: {change: (event) => onChange((event.currentTarget as HTMLInputElement).checked, event)},
-                }),
-                CoreReactive.App.span({props: {textContent: label}}),
             ],
         });
     }

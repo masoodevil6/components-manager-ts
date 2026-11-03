@@ -23,6 +23,7 @@ export const EditMode: ComponentExample = {
                 {
                     id: "identity",
                     title: "Identity",
+                    columns: 2,
                     fields: [
                         {id: "full-name", name: "fullName", label: "Full name", type: CustomFormFieldType.INPUT, required: true},
                         {id: "bio", name: "bio", label: "About", type: CustomFormFieldType.TEXTAREA},
@@ -31,6 +32,7 @@ export const EditMode: ComponentExample = {
                 {
                     id: "preferences",
                     title: "Preferences",
+                    columns: 1,
                     fields: [
                         {id: "contact", name: "contact", label: "Contact method", type: CustomFormFieldType.RADIO, options: [{label: "Email", value: "email"}, {label: "Phone", value: "phone"}]},
                     ],

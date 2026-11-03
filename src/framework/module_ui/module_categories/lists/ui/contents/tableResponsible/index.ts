@@ -1,0 +1,1 @@
+export {TableResponsible} from "./Definition";

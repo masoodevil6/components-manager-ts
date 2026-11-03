@@ -3,6 +3,7 @@ import * as CoreReactive from "@/core_reactive";
 import * as CoreObservable from "@/core_observable";
 import * as CoreConfig from "@/core_configs";
 import * as CoreEvent from "@/core_event";
+import * as Core from "@/core";
 import * as CoreLanguage from "@/core_languages";
 import * as UtilOptionsStd from "@/util_options_std";
 import {PartAttrDefault} from "@/core_components";
@@ -16,6 +17,7 @@ import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {Keys} from "../../../module_categories/languages";
 import {Props, LayoutCreatorMode} from "./Props";
+import type {LayoutCreatorContentItem, LayoutCreatorItemState} from "./Props";
 import type {PropsConfigType as LayoutCreatorPropsConfigType, PropsType as LayoutCreatorPropsType} from "./Props";
 import {Schemas} from "./Schemas";
 import {Definition} from "./Definition";
@@ -38,15 +40,24 @@ export class ComponentLayoutCreator extends ComponentStructure.Component {
     } as any);
 
     private readonly _COLUMN_CREATORS: ComponentElementCreator.Component[] = [];
-    private readonly _COLUMN_ITEM_COLS = new Map<ComponentElementCreator.Component, ComponentLayout.LayoutColumn | null>();
+    private readonly _COLUMN_ITEM_BASE_COLS = new Map<ComponentElementCreator.Component, ComponentLayout.LayoutColumn | null>();
+    private readonly _COLUMN_ITEM_COL_OVERRIDES = new Map<ComponentElementCreator.Component, ComponentLayout.LayoutColumn>();
+    private readonly _COLUMN_ITEM_OPTIONS = new Map<ComponentElementCreator.Component, Pick<ComponentLayout.LayoutContentItem, "class" | "styles">>();
+    private readonly _COLUMN_ITEM_WORKFLOW_NAMES = new Map<ComponentElementCreator.Component, string>();
     private readonly _COLUMN_VERSION = new CoreObservable.App(0);
+    private readonly _MAIN_LAYOUT_COLUMN = new CoreObservable.App(ComponentLayout.LayoutColumn.CUSTOM);
+    private readonly _CHILDREN_DISPLAY_MODE = new CoreObservable.App<ComponentElementCreator.ElementCreatorMode.EDIT | ComponentElementCreator.ElementCreatorMode.RENDER>(
+        ComponentElementCreator.ElementCreatorMode.EDIT,
+    );
+    private _MAIN_CREATOR_MODE: CoreObservable.App<ComponentElementCreator.ElementCreatorMode> | null = null;
     private _COLUMN_CREATOR_MODE: CoreObservable.App<ComponentElementCreator.ElementCreatorMode> | null = null;
     private _LAYOUT_CONTENT: CoreObservable.App<ComponentLayout.LayoutContentItem[]> | null = null;
     private _MAIN_ELEMENT_CREATOR: ComponentElementCreator.Component | null = null;
     private _ADD_COLUMN_SETTINGS_CREATOR: ComponentElementCreator.Component | null = null;
     private _ADD_COLUMN_BORDER: ComponentBorder.Component | null = null;
     private _ADD_COLUMN_ICON: ComponentIcon.Component | null = null;
-    private _ACTIVE_SETTINGS_CREATOR: ComponentElementCreator.Component | null = null;
+    private _INITIAL_LAYOUT_CONTENT_SEEDED = false;
+    private _COLUMN_ID_SEQUENCE = 0;
     private _DISPOSED = false;
 
     constructor(
@@ -62,9 +73,11 @@ export class ComponentLayoutCreator extends ComponentStructure.Component {
         if (this._DISPOSED) return;
         this._DISPOSED = true;
         for (const creator of this._COLUMN_CREATORS.splice(0).reverse()) creator.dispose();
-        this._COLUMN_ITEM_COLS.clear();
+        this._COLUMN_ITEM_BASE_COLS.clear();
+        this._COLUMN_ITEM_COL_OVERRIDES.clear();
+        this._COLUMN_ITEM_OPTIONS.clear();
+        this._COLUMN_ITEM_WORKFLOW_NAMES.clear();
         this._ADD_COLUMN_SETTINGS_CREATOR?.dispose();
-        this._ACTIVE_SETTINGS_CREATOR = null;
         this._ADD_COLUMN_BORDER?.dispose();
         (this._ADD_COLUMN_ICON as any)?.getScope?.().dispose?.();
         this._MAIN_ELEMENT_CREATOR?.dispose();
@@ -73,6 +86,7 @@ export class ComponentLayoutCreator extends ComponentStructure.Component {
         this._MAIN_ELEMENT_CREATOR = null;
         this._ADD_COLUMN_SETTINGS_CREATOR = null;
         this._LAYOUT_CONTENT = null;
+        this._MAIN_CREATOR_MODE = null;
         this._COLUMN_CREATOR_MODE = null;
         this.getScope().dispose();
     }
@@ -113,39 +127,70 @@ export class ComponentLayoutCreator extends ComponentStructure.Component {
     ): CoreReactive.App {
         const mode = data?.["prop_mode"] ?? this._COMPONENT_PROPS_BIND.prop_mode;
         const components = data?.["prop_components"] ?? this._COMPONENT_PROPS_BIND.prop_components;
-        this._COLUMN_CREATOR_MODE ??= CoreObservable.App.computed(
+        const initialLayoutContent = data?.["prop_initialLayoutContent"] ?? this._COMPONENT_PROPS_BIND.prop_initialLayoutContent;
+        const currentMode = CoreObservable.App.isObservable(mode) ? mode.get() : mode;
+        const configuredContent = CoreObservable.App.isObservable(initialLayoutContent)
+            ? initialLayoutContent.get()
+            : initialLayoutContent;
+        this._MAIN_CREATOR_MODE ??= CoreObservable.App.computed(
             (layoutMode: LayoutCreatorMode) => layoutMode === LayoutCreatorMode.EDIT
                 ? ComponentElementCreator.ElementCreatorMode.EDIT
                 : ComponentElementCreator.ElementCreatorMode.RENDER,
             [mode],
             this.getScope(),
         );
+        this._COLUMN_CREATOR_MODE ??= CoreObservable.App.computed(
+            (layoutMode: LayoutCreatorMode, childrenDisplayMode: ComponentElementCreator.ElementCreatorMode.EDIT | ComponentElementCreator.ElementCreatorMode.RENDER) =>
+                layoutMode === LayoutCreatorMode.EDIT
+                    ? childrenDisplayMode
+                    : ComponentElementCreator.ElementCreatorMode.RENDER,
+            [mode, this._CHILDREN_DISPLAY_MODE],
+            this.getScope(),
+        );
 
-        if (this._COLUMN_CREATORS.length === 0) this.createColumnCreator(undefined, undefined, components);
+        if (currentMode === LayoutCreatorMode.EDIT && !this._INITIAL_LAYOUT_CONTENT_SEEDED && configuredContent != null) {
+            this.seedInitialLayoutContent(
+                this.validateInitialLayoutContent(configuredContent),
+                components as CoreObservable.App<any>,
+            );
+            this._INITIAL_LAYOUT_CONTENT_SEEDED = true;
+        }
+
         this._ADD_COLUMN_BORDER ??= this.createAddColumnBorder();
         this._LAYOUT_CONTENT ??= CoreObservable.App.computed(
-            (layoutMode: LayoutCreatorMode, _version: number) => {
+            (
+                layoutMode: LayoutCreatorMode,
+                _version: number,
+                configuredContent: LayoutCreatorContentItem[] | null,
+                sharedColumn: ComponentLayout.LayoutColumn,
+            ) => {
+                if (layoutMode === LayoutCreatorMode.RENDER && configuredContent != null) {
+                    return this.validateInitialLayoutContent(configuredContent);
+                }
                 const content: ComponentLayout.LayoutContentItem[] = this._COLUMN_CREATORS.map((creator) => ({
                     content: creator,
-                    col: this._COLUMN_ITEM_COLS.has(creator)
-                        ? this._COLUMN_ITEM_COLS.get(creator) ?? null
-                        : ComponentLayout.LayoutColumn.COL_4,
+                    col: this.getEffectiveColumn(creator, sharedColumn),
+                    ...this._COLUMN_ITEM_OPTIONS.get(creator),
                 }));
                 if (layoutMode === LayoutCreatorMode.EDIT && this._ADD_COLUMN_BORDER) {
-                    content.push({content: this._ADD_COLUMN_BORDER, col: ComponentLayout.LayoutColumn.COL_4});
+                    content.push({
+                        content: this._ADD_COLUMN_BORDER,
+                        col: sharedColumn !== ComponentLayout.LayoutColumn.CUSTOM ? sharedColumn : this.getSuggestedColumn(),
+                    });
                 }
                 return content;
             },
-            [mode, this._COLUMN_VERSION],
+            [mode, this._COLUMN_VERSION, initialLayoutContent, this._MAIN_LAYOUT_COLUMN],
             this.getScope(),
         );
 
         this._MAIN_ELEMENT_CREATOR ??= new ComponentElementCreator.Component({
-            prop_mode: this._COLUMN_CREATOR_MODE as any,
+            prop_mode: this._MAIN_CREATOR_MODE as any,
             prop_components: components as any,
             prop_settingsUsePageSetting: true,
             prop_hasHeaderSetting: false,
             prop_hasHeaderDelete: false,
+            prop_hasHeaderChildrenMode: true,
             prop_hasTabComponent: false,
             prop_component: ComponentLayout.Component,
             prop_componentProperties: {
@@ -154,7 +199,8 @@ export class ComponentLayoutCreator extends ComponentStructure.Component {
             },
         } as any, {
             CLICK_DELETE: (event) => this.executeMethod("DELETE_LAYOUT", event, {}),
-            COLUMN_CHANGE: (_event, dataArgs) => this.updateMainLayoutColumn(dataArgs?.COLUMN),
+            COLUMN_CHANGE: (event, dataArgs) => this.updateMainLayoutColumn(dataArgs?.COLUMN, event),
+            CHILDREN_DISPLAY_CHANGE: (_event, dataArgs) => this.updateChildrenDisplayMode(dataArgs?.MODE),
         } as any);
 
         return CoreReactive.App.section({
@@ -164,10 +210,66 @@ export class ComponentLayoutCreator extends ComponentStructure.Component {
         });
     }
 
+    private validateInitialLayoutContent(content: unknown): LayoutCreatorContentItem[] {
+        if (!Array.isArray(content)) {
+            throw new TypeError("[ComponentLayoutCreator] prop_initialLayoutContent must be an array of component items.");
+        }
+
+        return content.map((item: any, index: number) => {
+            const component = item?.content;
+            if (
+                !item ||
+                typeof item !== "object" ||
+                typeof component?.getElement !== "function" ||
+                typeof component?.getComponentWorkflow !== "function"
+            ) {
+                throw new TypeError(
+                    `[ComponentLayoutCreator] prop_initialLayoutContent[${index}].content must be a component instance.`,
+                );
+            }
+            if (item.styles === undefined) return item as LayoutCreatorContentItem;
+            return {
+                ...item,
+                styles: UtilOptionsStd.ValidateStandardStyles(
+                    item.styles,
+                    `prop_initialLayoutContent[${index}].styles`,
+                ),
+            } as LayoutCreatorContentItem;
+        });
+    }
+
+    private seedInitialLayoutContent(
+        items: LayoutCreatorContentItem[],
+        components: CoreObservable.App<any>,
+    ): void {
+        for (const item of items) {
+            const componentInstance = item.content as any;
+            const componentClass = componentInstance.constructor as Function;
+            const componentProperties = Object.fromEntries(
+                Object.entries(componentInstance._COMPONENT_PROPS_BIND ?? {})
+                    .map(([name, value]: [string, any]) => [name, typeof value?.get === "function" ? value.get() : value]),
+            );
+            const creator = this.createColumnCreator(
+                componentClass,
+                componentProperties,
+                components,
+                item.workflowChildName,
+            );
+            const defaultColumn = this.get("prop_defaultColumn") as ComponentLayout.LayoutColumn | null;
+            this._COLUMN_ITEM_BASE_COLS.set(creator, item.col ?? defaultColumn);
+            if (item.col != null) this._COLUMN_ITEM_COL_OVERRIDES.set(creator, item.col);
+            this._COLUMN_ITEM_OPTIONS.set(creator, {
+                ...(item.class !== undefined ? {class: item.class} : {}),
+                ...(item.styles !== undefined ? {styles: item.styles} : {}),
+            });
+        }
+    }
+
     private createColumnCreator(
         selectedComponent?: Function,
         propertiesOverride?: Record<string, any>,
         components: CoreObservable.App<any> = this._COMPONENT_PROPS_BIND.prop_components,
+        workflowChildName?: string,
     ): ComponentElementCreator.Component {
         const mainComponent = this._MAIN_ELEMENT_CREATOR?.get("prop_component") as Function | null;
         const mainProperties = this._MAIN_ELEMENT_CREATOR?.get("prop_componentProperties") as Record<string, any> | null;
@@ -175,13 +277,15 @@ export class ComponentLayoutCreator extends ComponentStructure.Component {
         const columnProperties = selectedComponent
             ? {...(propertiesOverride ?? {})}
             : mainProperties
-                ? {...mainProperties, prop_layoutContent: this.createColumnPreviewContent()}
+                ? {...mainProperties, prop_layoutContent: []}
                 : {
                     prop_col: ComponentLayout.LayoutColumn.CUSTOM,
-                    prop_layoutContent: this.createColumnPreviewContent(),
+                    prop_layoutContent: [],
                 };
+        const stableWorkflowChildName = workflowChildName ?? this.createColumnWorkflowChildName();
         let creator!: ComponentElementCreator.Component;
         creator = new ComponentElementCreator.Component({
+            prop_workflowChildName: stableWorkflowChildName,
             prop_mode: this._COLUMN_CREATOR_MODE as any,
             prop_components: components as any,
             prop_settingsUsePageSetting: true,
@@ -192,13 +296,45 @@ export class ComponentLayoutCreator extends ComponentStructure.Component {
             prop_componentProperties: this.withDefaultColumnMargin(columnProperties),
         } as any, {
             CLICK_DELETE: (event) => this.removeColumnCreator(creator, event),
-            COLUMN_CHANGE: (_event, dataArgs) => this.updateColumnItemCol(creator, dataArgs?.COLUMN),
-            SETTINGS_OPEN: (event, dataArgs) => this.openComponentSettings(creator, event, dataArgs),
-            SETTINGS_CLOSE: (event) => this.closeComponentSettings(creator, event),
+            COLUMN_CHANGE: (event, dataArgs) => this.updateColumnItemCol(creator, dataArgs?.COLUMN, event),
+            SETTINGS_APPLY: (event) => this.notifyLayoutContentChange(event),
+            STYLE_CHANGE: () => this.notifyLayoutContentChange(new Event("layout-style-change")),
         } as any);
-        this._COLUMN_ITEM_COLS.set(creator, ComponentLayout.LayoutColumn.COL_4);
+        this._COLUMN_ITEM_BASE_COLS.set(creator, this.getSuggestedColumn());
+        this._COLUMN_ITEM_WORKFLOW_NAMES.set(creator, stableWorkflowChildName);
         this._COLUMN_CREATORS.push(creator);
         return creator;
+    }
+
+    private getEffectiveColumn(
+        creator: ComponentElementCreator.Component,
+        sharedColumn = this._MAIN_LAYOUT_COLUMN.get(),
+    ): ComponentLayout.LayoutColumn | null {
+        if (this._COLUMN_ITEM_COL_OVERRIDES.has(creator)) {
+            return this._COLUMN_ITEM_COL_OVERRIDES.get(creator) ?? null;
+        }
+        if (sharedColumn !== ComponentLayout.LayoutColumn.CUSTOM) return sharedColumn;
+        return this._COLUMN_ITEM_BASE_COLS.has(creator)
+            ? this._COLUMN_ITEM_BASE_COLS.get(creator) ?? null
+            : this.getSuggestedColumn();
+    }
+
+    private getSuggestedColumn(): ComponentLayout.LayoutColumn {
+        const sharedColumn = this._MAIN_LAYOUT_COLUMN.get();
+        if (sharedColumn && sharedColumn !== ComponentLayout.LayoutColumn.CUSTOM) return sharedColumn;
+
+        for (let index = this._COLUMN_CREATORS.length - 1; index >= 0; index--) {
+            const creator = this._COLUMN_CREATORS[index];
+            const column = this._COLUMN_ITEM_COL_OVERRIDES.has(creator)
+                ? this._COLUMN_ITEM_COL_OVERRIDES.get(creator)
+                : this._COLUMN_ITEM_BASE_COLS.get(creator);
+            if (column && column !== ComponentLayout.LayoutColumn.CUSTOM) return column;
+        }
+
+        const configuredDefault = this.get("prop_defaultColumn") as ComponentLayout.LayoutColumn | null;
+        return configuredDefault && configuredDefault !== ComponentLayout.LayoutColumn.CUSTOM
+            ? configuredDefault
+            : ComponentLayout.LayoutColumn.COL_12;
     }
 
     private withDefaultColumnMargin(properties: Record<string, any>): Record<string, any> {
@@ -228,30 +364,6 @@ export class ComponentLayoutCreator extends ComponentStructure.Component {
         }
 
         return result;
-    }
-
-    private createColumnPreviewContent(): ComponentLayout.LayoutContentItem[] {
-        const items: Array<{content: string; col: ComponentLayout.LayoutColumn | null}> = [
-            {content: "Shared width: prop_col is applied to every item", col: null},
-            {content: "CUSTOM · COL_6 · item 1", col: ComponentLayout.LayoutColumn.COL_6},
-            {content: "CUSTOM · COL_6 · item 2", col: ComponentLayout.LayoutColumn.COL_6},
-            {content: "CUSTOM · COL_4 · item 1", col: ComponentLayout.LayoutColumn.COL_4},
-            {content: "CUSTOM · COL_4 · item 2", col: ComponentLayout.LayoutColumn.COL_4},
-            {content: "CUSTOM · COL_4 · item 3", col: ComponentLayout.LayoutColumn.COL_4},
-            {content: "Per-item classes and styles are supported", col: null},
-            {content: "Add a column to compare its layout", col: null},
-        ];
-
-        return items.map((item) => ({
-            ...item,
-            class: ["border", "rounded", "p-2", "h-100"],
-            styles: {
-                minHeight: "3rem",
-                display: "flex",
-                alignItems: "center",
-                boxSizing: "border-box",
-            },
-        }));
     }
 
     private createAddColumnBorder(): ComponentBorder.Component {
@@ -310,111 +422,108 @@ export class ComponentLayoutCreator extends ComponentStructure.Component {
 
     private addColumnCreator(event: Event): void {
         if (this._DISPOSED) return;
-        this._ADD_COLUMN_SETTINGS_CREATOR ??= new ComponentElementCreator.Component({
-            prop_mode: ComponentElementCreator.ElementCreatorMode.SETTING_CREATE,
-            prop_components: this._COMPONENT_PROPS_BIND.prop_components as any,
-            prop_settingsUsePageSetting: true,
-            prop_settingsUseExternalPageSetting: true,
-            prop_component: null,
-            prop_componentProperties: {},
-        } as any, {
-            SETTINGS_APPLY: (_applyEvent, dataArgs) => {
-                if (this._DISPOSED) return;
-                const selectedComponent = dataArgs?.COMPONENT as Function | null;
-                if (!selectedComponent) return;
-                this.createColumnCreator(selectedComponent, dataArgs?.PROPERTIES as Record<string, any>);
-                this._COLUMN_VERSION.set(this._COLUMN_VERSION.get() + 1);
-            },
-            SETTINGS_OPEN: (openEvent, dataArgs) => this.openComponentSettings(
-                this._ADD_COLUMN_SETTINGS_CREATOR!,
-                openEvent,
-                dataArgs,
-            ),
-            SETTINGS_CLOSE: (closeEvent) => this.closeComponentSettings(this._ADD_COLUMN_SETTINGS_CREATOR!, closeEvent),
-        } as any);
+        if (!this._ADD_COLUMN_SETTINGS_CREATOR) {
+            this._ADD_COLUMN_SETTINGS_CREATOR = new ComponentElementCreator.Component({
+                prop_mode: ComponentElementCreator.ElementCreatorMode.SETTING_CREATE,
+                prop_components: this._COMPONENT_PROPS_BIND.prop_components as any,
+                prop_settingsUsePageSetting: true,
+                prop_settingsUseExternalPageSetting: true,
+                prop_component: null,
+                prop_componentProperties: {},
+            } as any, {
+                SETTINGS_APPLY: (_applyEvent, dataArgs) => {
+                    if (this._DISPOSED) return;
+                    const selectedComponent = dataArgs?.COMPONENT as Function | null;
+                    if (!selectedComponent) return;
+                    this.createColumnCreator(selectedComponent, dataArgs?.PROPERTIES as Record<string, any>);
+                    this._COLUMN_VERSION.set(this._COLUMN_VERSION.get() + 1);
+                    this.notifyLayoutContentChange(_applyEvent);
+                },
+            } as any);
+        }
 
         this._ADD_COLUMN_SETTINGS_CREATOR.set("prop_mode", ComponentElementCreator.ElementCreatorMode.SETTING_CREATE);
         this._ADD_COLUMN_SETTINGS_CREATOR.set("prop_component", null);
         this._ADD_COLUMN_SETTINGS_CREATOR.set("prop_componentProperties", {});
-        this._ADD_COLUMN_SETTINGS_CREATOR.call_openSettingsPage(event, this.getElement());
-    }
-
-    private findPageSettingEndpoint(): CoreEvent.TStepRef | null {
-        const root = this.getPageWorkflowRoot();
-        if (!root) return null;
-        const pageStep = CoreEvent.getChild(root, "page");
-        return pageStep ? CoreEvent.getChild(pageStep, "setting") : null;
-    }
-
-    private getPageWorkflowRoot(): CoreEvent.TStepRef | null {
-        let step: any = this._COMPONENT_UNIQUE;
-        if (!step || typeof step.getParent !== "function") return null;
-        while (step.getParent()) step = step.getParent();
-        return step as CoreEvent.TStepRef;
-    }
-
-    private getPageWorkflowSource(): CoreEvent.TStepRef | null {
-        const root = this.getPageWorkflowRoot();
-        return root ? CoreEvent.getChild(root, "showWorkflow") : null;
-    }
-
-    private openComponentSettings(
-        creator: ComponentElementCreator.Component,
-        _event: Event,
-        dataArgs?: {CONTENT?: CoreReactive.App | null},
-    ): void {
-        const content = dataArgs?.CONTENT;
-        const endpoint = this.findPageSettingEndpoint();
-        const source = this.getPageWorkflowSource();
-        const response = endpoint && content
-            ? CoreEvent.App.request(CoreEvent.requestMap([[endpoint, {content}]]), source).get(endpoint)
-            : null;
-
-        if (response?.status === "success" && response.value?.opened === true) {
-            this._ACTIVE_SETTINGS_CREATOR = creator;
-            return;
-        }
-
-        if (content) creator.call_showSettingsPageSetting(content, this.getElement());
-    }
-
-    private closeComponentSettings(creator: ComponentElementCreator.Component, _event?: Event): void {
-        if (this._ACTIVE_SETTINGS_CREATOR !== creator) return;
-        const endpoint = this.findPageSettingEndpoint();
-        const source = this.getPageWorkflowSource();
-        if (endpoint) {
-            CoreEvent.App.request(CoreEvent.requestMap([[endpoint, {close: true}]]), source);
-        }
-        this._ACTIVE_SETTINGS_CREATOR = null;
+        this._ADD_COLUMN_SETTINGS_CREATOR.call_openSettingsPage(
+            event,
+            this.getElement(),
+            this.getComponentWorkflow() as CoreEvent.TStepRef,
+        );
     }
 
     private removeColumnCreator(creator: ComponentElementCreator.Component, event: Event): void {
         const index = this._COLUMN_CREATORS.indexOf(creator);
         if (index < 0) return;
         this._COLUMN_CREATORS.splice(index, 1);
-        this._COLUMN_ITEM_COLS.delete(creator);
+        this._COLUMN_ITEM_BASE_COLS.delete(creator);
+        this._COLUMN_ITEM_COL_OVERRIDES.delete(creator);
+        this._COLUMN_ITEM_OPTIONS.delete(creator);
+        this._COLUMN_ITEM_WORKFLOW_NAMES.delete(creator);
         this._COLUMN_VERSION.set(this._COLUMN_VERSION.get() + 1);
         this.executeMethod("DELETE_COLUMN", event, {COLUMN_INDEX: index});
         creator.dispose();
+        this.notifyLayoutContentChange(event);
     }
 
     private updateColumnItemCol(
         creator: ComponentElementCreator.Component,
         column: ComponentLayout.LayoutColumn | null | undefined,
+        event: Event,
     ): void {
         if (!this._COLUMN_CREATORS.includes(creator)) return;
         if (column !== null && !Object.values(ComponentLayout.LayoutColumn).includes(column as ComponentLayout.LayoutColumn)) return;
-        this._COLUMN_ITEM_COLS.set(creator, column ?? null);
+        if (column == null) {
+            this._COLUMN_ITEM_COL_OVERRIDES.delete(creator);
+        } else {
+            this._COLUMN_ITEM_COL_OVERRIDES.set(creator, column);
+        }
         this._COLUMN_VERSION.set(this._COLUMN_VERSION.get() + 1);
+        this.notifyLayoutContentChange(event);
     }
 
-    private updateMainLayoutColumn(column: ComponentLayout.LayoutColumn | null | undefined): void {
+    private createColumnWorkflowChildName(): string {
+        let name = "";
+        do {
+            name = `${Core.Dictionary.WorkflowNodeNames.layout}_${++this._COLUMN_ID_SEQUENCE}`;
+        } while ([...this._COLUMN_ITEM_WORKFLOW_NAMES.values()].includes(name));
+        return name;
+    }
+
+    private notifyLayoutContentChange(event: Event): void {
+        const items: LayoutCreatorItemState[] = this._COLUMN_CREATORS.flatMap((creator) => {
+            const component = creator.get("prop_component") as Function | null;
+            if (!component) return [];
+            const sourceProperties = creator.get("prop_componentProperties") as Record<string, any> | null;
+            const properties = Object.fromEntries(
+                Object.entries(sourceProperties ?? {}).map(([name, value]) => [
+                    name,
+                    CoreObservable.App.isObservable(value) ? value.get() : value,
+                ]),
+            );
+            const workflowChildName = this._COLUMN_ITEM_WORKFLOW_NAMES.get(creator);
+            if (!workflowChildName) return [];
+            return [{
+                component,
+                properties,
+                workflowChildName,
+                col: this._COLUMN_ITEM_COL_OVERRIDES.get(creator) ?? null,
+                ...this._COLUMN_ITEM_OPTIONS.get(creator),
+            }];
+        });
+        this.executeMethod("CONTENT_CHANGE", event, {ITEMS: items});
+    }
+
+    private updateMainLayoutColumn(column: ComponentLayout.LayoutColumn | null | undefined, event: Event): void {
         if (!this._MAIN_ELEMENT_CREATOR) return;
         if (column !== null && !Object.values(ComponentLayout.LayoutColumn).includes(column as ComponentLayout.LayoutColumn)) return;
-        const currentProperties = this._MAIN_ELEMENT_CREATOR.get("prop_componentProperties") as Record<string, any> ?? {};
-        this._MAIN_ELEMENT_CREATOR.set("prop_componentProperties", {
-            ...currentProperties,
-            prop_col: column ?? ComponentLayout.LayoutColumn.CUSTOM,
-        });
+        this._MAIN_LAYOUT_COLUMN.set(column ?? ComponentLayout.LayoutColumn.CUSTOM);
+        this._COLUMN_VERSION.set(this._COLUMN_VERSION.get() + 1);
+        this.notifyLayoutContentChange(event);
+    }
+
+    private updateChildrenDisplayMode(mode: ComponentElementCreator.ElementCreatorMode.EDIT | ComponentElementCreator.ElementCreatorMode.RENDER | undefined): void {
+        if (mode !== ComponentElementCreator.ElementCreatorMode.EDIT && mode !== ComponentElementCreator.ElementCreatorMode.RENDER) return;
+        this._CHILDREN_DISPLAY_MODE.set(mode);
     }
 }

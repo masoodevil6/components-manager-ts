@@ -11,3 +11,21 @@ export type Interface_ComponentWorkflow<
     getChild(key: string): CoreEvent.TStepRef | undefined;
     getChildEntries(): ReadonlyArray<readonly [string, CoreEvent.TStepRef]>;
 };
+
+/** A live component instance that can contribute its workflow to a parent. */
+export type Interface_ComponentWorkflowChild<
+    TWorkflow extends CoreEvent.TStepRef = CoreEvent.TStepRef,
+> = {
+    getComponentWorkflow(): TWorkflow;
+    get(propName: string): unknown;
+    getReactiveElement?(): unknown;
+    getElement?(): unknown;
+    dispose?(): void;
+    _COMPONENT_NAME?: string;
+};
+
+export type TComponentWorkflowNodeMetadata = {
+    component?: {name: string; id: string};
+    childName?: string;
+    kind?: "component" | "children";
+};

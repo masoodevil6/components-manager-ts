@@ -2,6 +2,7 @@ import * as CoreComponents from "@/core_components";
 import * as CoreReactive from "@/core_reactive";
 import * as CoreObservable from "@/core_observable";
 import * as CoreEvent from "@/core_event";
+import * as Core from "@/core";
 import * as CoreConfig from "@/core_configs";
 import * as CoreLanguage from "@/core_languages";
 import * as UiCategory from "@/ui_categories";
@@ -92,7 +93,11 @@ export class ComponentElementCreator extends ComponentStructure.Component<
     private _SETTINGS_WINDOW_ELEMENT: HTMLElement | null = null;
     private _SETTINGS_PAGE_SETTING: ComponentPageSetting.Component | null = null;
     private _SETTINGS_PAGE_SETTING_ELEMENT: HTMLElement | null = null;
-    private _SETTINGS_PAGE_ACCEPT_BUTTON: ComponentButton.Component | null = null;
+    private _SETTINGS_WORKFLOW_SOURCE: CoreEvent.TStepRef | null = null;
+    private _SETTINGS_PAGE_SETTING_ENDPOINT: CoreEvent.TStepRef | null = null;
+    private _CSS_WORKFLOW_SOURCE: CoreEvent.TStepRef | null = null;
+    private _CSS_PAGE_SETTING_ENDPOINT: CoreEvent.TStepRef | null = null;
+    private readonly _SETTINGS_ACCEPT_DISABLED = new CoreObservable.App(true);
     private _SETTINGS_WINDOW_OPEN = false;
     private _SETTINGS_CLOSE_TIMER: number | null = null;
     private _SETTINGS_MODE: ElementCreatorMode.SETTING_CREATE | ElementCreatorMode.SETTING_EDIT | null = null;
@@ -125,10 +130,11 @@ export class ComponentElementCreator extends ComponentStructure.Component<
     private readonly _OPTIONS_CONTENT = new CoreObservable.App<any>(null);
     private readonly _ROOT_HOVER = new CoreObservable.App(false);
     private readonly _ROOT_FOCUS = new CoreObservable.App(false);
-    private _DOCUMENT_POINTER_MOVE_HANDLER: ((event: PointerEvent) => void) | null = null;
+    private _DOCUMENT_POINTER_MOVE_HANDLER: ((event: PointerEvent | MouseEvent) => void) | null = null;
     private _DOCUMENT_FOCUS_IN_HANDLER: ((event: FocusEvent) => void) | null = null;
     private _DOCUMENT_FOCUS_OUT_HANDLER: ((event: FocusEvent) => void) | null = null;
     private _OPTIONS_HIDE_TIMEOUT: number | null = null;
+    private _EDIT_MODE_ACTIVE = false;
     private _DISPOSED = false;
 
     constructor(
@@ -140,6 +146,19 @@ export class ComponentElementCreator extends ComponentStructure.Component<
         super("elementCreator", null, identity as any, step);
         this._STEP = step;
         this.renderComponent(config as any, methods as any, identity?.events ?? null);
+        CoreEvent.App.registerEmit(this._STEP.styleChanged, (request: CoreEvent.ClRequest) => {
+            const values = request.payload?.values;
+            if (!values || typeof values !== "object" || Array.isArray(values)) {
+                return {applied: false, values: null};
+            }
+            if (this.applyCssStylesToComponentProperties(values)) {
+                this.executeMethod("STYLE_CHANGE", undefined, {
+                    COMPONENT: this._COMPONENT_PROPS_BIND.prop_component.get(),
+                    PROPERTIES: this._COMPONENT_PROPS_BIND.prop_componentProperties.get(),
+                });
+            }
+            return {applied: true, values};
+        });
     }
 
     override getElement(): HTMLElement {
@@ -149,6 +168,8 @@ export class ComponentElementCreator extends ComponentStructure.Component<
     dispose(): void {
         if (this._DISPOSED) return;
         this._DISPOSED = true;
+        this.closeSettingsPageSetting();
+        this.closeCssPageSetting();
         this.stopDocumentPointerTracking();
         this.clearOptionsHideTimeout();
         this.disposeRenderedComponent();
@@ -193,10 +214,16 @@ export class ComponentElementCreator extends ComponentStructure.Component<
         data: Record<string, CoreObservable.App<any>>,
         extra?: any,
     ): CoreReactive.App {
-        if (partName === Schemas.RENDER.part) {
-            return this.renderElementCreator(attrsDefault, data);
+        switch (partName) {
+            case ComponentStructureTrait.schemas.COMPONENT.part:
+                return ComponentStructureTrait.renderComponentSchema(this, attrsDefault, data);
+            case ComponentStructureTrait.schemas.STRUCTURE.part:
+                return ComponentStructureTrait.renderStructureSchema(this, attrsDefault, data);
+            case Schemas.RENDER.part:
+                return this.renderElementCreator(attrsDefault, data);
+            default:
+                return super.renderManagerComponent(partName, attrsDefault, data, extra);
         }
-        return super.renderManagerComponent(partName, attrsDefault, data, extra);
     }
 
     private renderElementCreator(
@@ -209,12 +236,14 @@ export class ComponentElementCreator extends ComponentStructure.Component<
         const renderedMode = CoreObservable.App.computed(
             (mode: ElementCreatorMode, componentReference: Function | null, properties: Record<string, any>) => {
                 if (mode === ElementCreatorMode.SETTING_CREATE || mode === ElementCreatorMode.SETTING_EDIT) {
+                    this.setEditModeActive(false);
                     this.disposeRenderedComponent();
                     this.disposeRootBorder();
                     return this.renderSettingMode();
                 }
                 const renderedComponent = this.createRenderedComponent(componentReference, properties);
                 if (mode === ElementCreatorMode.EDIT) return this.renderEditMode(renderedComponent);
+                this.setEditModeActive(false);
                 this.disposeRootBorder();
                 return this.renderWithMargin(renderedComponent, "part-element-creator-render-content");
             },
@@ -230,9 +259,10 @@ export class ComponentElementCreator extends ComponentStructure.Component<
     }
 
     private renderEditMode(renderedComponent: CoreReactive.App | HTMLElement | null): CoreReactive.App {
+        this.setEditModeActive(true);
         this.disposeRootBorder();
         this._OPTIONS_MENU_ITEMS ??= CoreObservable.App.computed(
-            (hasSetting: boolean, hasDelete: boolean, hasColumn: boolean) => {
+            (hasSetting: boolean, hasDelete: boolean, hasColumn: boolean, hasChildrenDisplayMode: boolean) => {
                 const items: ComponentMenuMore.MenuMoreEntry[] = [];
                 if (hasSetting) items.push({id: "settings", icon: UiIcons.Src.FileSetting.Definition, action: "CLICK_SETTINGS"});
                 if (hasDelete) items.push({id: "delete", icon: UiIcons.Src.FilesDelete.Definition, action: "CLICK_DELETE"});
@@ -249,12 +279,31 @@ export class ComponentElementCreator extends ComponentStructure.Component<
                         })),
                     ],
                 });
+                if (hasChildrenDisplayMode) items.push({
+                    id: "children-display-mode",
+                    icon: UiIcons.Src.InputSelectOption.Definition,
+                    children: [
+                        {
+                            id: "children-display-editor",
+                            title: CoreLanguage.App.translate(Keys.category.components.basic.elementCreator.editor.childrenEditorMode).get(),
+                            icon: UiIcons.Src.FilesEdit.Definition,
+                            action: "SET_CHILDREN_DISPLAY_EDITOR",
+                        },
+                        {
+                            id: "children-display-rendered",
+                            title: CoreLanguage.App.translate(Keys.category.components.basic.elementCreator.editor.childrenRenderedMode).get(),
+                            icon: UiIcons.Src.FilesZoom.Definition,
+                            action: "SET_CHILDREN_DISPLAY_RENDERED",
+                        },
+                    ],
+                });
                 return items;
             },
             [
                 this._COMPONENT_PROPS_BIND.prop_hasHeaderSetting,
                 this._COMPONENT_PROPS_BIND.prop_hasHeaderDelete,
                 this._COMPONENT_PROPS_BIND.prop_hasHeaderColumn,
+                this._COMPONENT_PROPS_BIND.prop_hasHeaderChildrenMode,
             ],
             this.getScope(),
         );
@@ -370,6 +419,20 @@ export class ComponentElementCreator extends ComponentStructure.Component<
         rootBorder?.dispose?.();
         rootBorder?.getScope?.().dispose();
         this._ROOT_BORDER = null;
+
+        const optionsEffect = this._OPTIONS_EFFECT as any;
+        optionsEffect?.dispose?.();
+        optionsEffect?.getScope?.().dispose?.();
+        this._OPTIONS_EFFECT = null;
+
+        const optionsBorder = this._OPTIONS_BORDER as any;
+        optionsBorder?.dispose?.();
+        optionsBorder?.getScope?.().dispose?.();
+        this._OPTIONS_BORDER = null;
+
+        this._OPTIONS_MENU?.dispose();
+        this._OPTIONS_MENU = null;
+        this._OPTIONS_BORDER_CONTENT = null;
     }
 
     private renderSettingMode(): CoreReactive.App {
@@ -419,6 +482,7 @@ export class ComponentElementCreator extends ComponentStructure.Component<
         this.disposeSettingsChildren();
         this._SETTINGS_DRAFT = {...(properties ?? {})};
         this._SETTINGS_SELECTED_COMPONENT = mode === ElementCreatorMode.SETTING_CREATE ? null : componentReference;
+        this._SETTINGS_ACCEPT_DISABLED.set(this._SETTINGS_SELECTED_COMPONENT == null);
         this.readRegisteredComponents();
         const matchingEntry = this._SETTINGS_SELECTED_COMPONENT
             ? this.findRegisteredComponent(componentReference)
@@ -465,12 +529,11 @@ export class ComponentElementCreator extends ComponentStructure.Component<
             prop_btnVariant: ButtonVariants.PRIMARY,
             prop_btnSemantic: ButtonSemantic.SUBMIT,
             prop_btnWidth: "100%",
-            prop_btnDisabled: this._SETTINGS_SELECTED_COMPONENT == null,
+            prop_btnDisabled: this._SETTINGS_ACCEPT_DISABLED,
         } as any, {
             CLICK: (event: Event) => this.applySettingsDraft(event),
         } as any);
         this._SETTINGS_CHILDREN.push(cancelButton as any, acceptButton as any);
-        this._SETTINGS_PAGE_ACCEPT_BUTTON = acceptButton;
 
         return CoreReactive.App.section({
             styles: {
@@ -599,11 +662,10 @@ export class ComponentElementCreator extends ComponentStructure.Component<
             const editors = visibleProps.map((prop) => this.createSettingsEditor(prop, properties));
             if (editors.length === 0) continue;
 
-            const columnCount = Math.min(12, Math.max(1, Math.floor(Number(group.descriptor?.col) || 2)));
             const collapseBody = CoreReactive.App.section({
                 styles: {
                     display: "grid",
-                    gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`,
+                    gridTemplateColumns: "minmax(0, 1fr)",
                     gap: "var(--marginMedium)",
                     width: "100%",
                 },
@@ -687,29 +749,25 @@ export class ComponentElementCreator extends ComponentStructure.Component<
     }
 
     private getFilteredComponentEntries(categoryKey: string): any[] {
-        let configuredComponents: any = this._COMPONENT_PROPS_BIND.prop_components?.get?.();
-        const seenObservables = new Set<any>();
-        while (CoreObservable.App.isObservable(configuredComponents) && !seenObservables.has(configuredComponents)) {
-            seenObservables.add(configuredComponents);
-            configuredComponents = configuredComponents.get();
-        }
-        const allowedComponents: Function[] | null = Array.isArray(configuredComponents)
-            ? configuredComponents.filter((component): component is Function => typeof component === "function")
-            : null;
+        const allowedComponents = this.getConfiguredComponentAllowList();
         const allowedReferences = allowedComponents === null ? null : new Set(allowedComponents);
         const allowedIds = allowedComponents === null
             ? null
-            : new Set(allowedComponents.map((component) => this.getComponentReferenceId(component)).filter((id): id is string => id !== null));
-        const entries = allowedReferences === null || allowedIds === null
+            : new Set(allowedComponents
+                .map((component) => this.getComponentReferenceId(component))
+                .filter((id): id is string => id !== null));
+        const entries = allowedReferences === null
             ? [...this._SETTINGS_REGISTERED_COMPONENTS]
             : this._SETTINGS_REGISTERED_COMPONENTS.filter((entry) =>
-                allowedReferences.has(entry.component) || allowedIds.has(entry.componentId),
+                allowedReferences.has(entry.component) || allowedIds!.has(entry.componentId),
             );
 
         // Keep the currently rendered component available while editing even if
-        // it is no longer in the allow-list; the list controls new selections.
+        // it is no longer in the allow-list. It remains editable, while changing
+        // to another component is still checked against the allow-list.
         const selectedComponent = this._SETTINGS_SELECTED_COMPONENT;
-        if (this._SETTINGS_MODE === ElementCreatorMode.SETTING_EDIT && selectedComponent && !entries.some((entry) => entry.component === selectedComponent)) {
+        if (this._SETTINGS_MODE === ElementCreatorMode.SETTING_EDIT && selectedComponent &&
+            !entries.some((entry) => this.isEntryForComponent(entry, selectedComponent))) {
             const currentEntry = this.findRegisteredComponent(selectedComponent) ?? this.getCurrentUnlistedEntry();
             if (currentEntry) entries.push(currentEntry);
         }
@@ -717,6 +775,38 @@ export class ComponentElementCreator extends ComponentStructure.Component<
         return categoryKey === "__all__"
             ? entries
             : entries.filter((entry) => entry.categoryKey === categoryKey);
+    }
+
+    private getConfiguredComponentAllowList(): Function[] | null {
+        let configuredComponents: any = this._COMPONENT_PROPS_BIND.prop_components?.get?.();
+        const seenObservables = new Set<any>();
+        while (CoreObservable.App.isObservable(configuredComponents) && !seenObservables.has(configuredComponents)) {
+            seenObservables.add(configuredComponents);
+            configuredComponents = configuredComponents.get();
+        }
+        if (configuredComponents == null) return null;
+        if (!Array.isArray(configuredComponents)) return [];
+        return configuredComponents.filter((component): component is Function => typeof component === "function");
+    }
+
+    private isEntryForComponent(entry: any, componentReference: Function): boolean {
+        if (entry?.component === componentReference) return true;
+        const componentId = this.getComponentReferenceId(componentReference);
+        return componentId !== null && entry?.componentId === componentId;
+    }
+
+    private isComponentAllowedForSettings(componentReference: Function | null): boolean {
+        if (!componentReference) return false;
+        const allowedComponents = this.getConfiguredComponentAllowList();
+        if (allowedComponents === null) return true;
+        const componentId = this.getComponentReferenceId(componentReference);
+        const isListed = allowedComponents.some((component) =>
+            component === componentReference ||
+            (componentId !== null && this.getComponentReferenceId(component) === componentId),
+        );
+        if (isListed) return true;
+        return this._SETTINGS_MODE === ElementCreatorMode.SETTING_EDIT &&
+            componentReference === this._SETTINGS_COMPONENT_REFERENCE;
     }
 
     private getComponentReferenceId(componentReference: Function): string | null {
@@ -776,6 +866,10 @@ export class ComponentElementCreator extends ComponentStructure.Component<
     }
 
     private refreshSettingsTabs(): void {
+        // Enable the page action before updating the tabs. Rendering the new
+        // props tab can synchronously rebuild a workflow subtree and throw,
+        // which must not leave the Add component button disabled.
+        this._SETTINGS_ACCEPT_DISABLED.set(!this.isComponentAllowedForSettings(this._SETTINGS_SELECTED_COMPONENT));
         if (!this._SETTINGS_TABS) return;
         this.disposeSettingsPropChildren();
         const propertiesBody = this._SETTINGS_SELECTED_COMPONENT
@@ -787,8 +881,7 @@ export class ComponentElementCreator extends ComponentStructure.Component<
         if (!tabs.some((tab) => tab.id === selectedTab)) {
             this._SETTINGS_TABS.set("prop_tabSelected", tabs[0]?.id ?? null);
         }
-        this._SETTINGS_WINDOW?.set("prop_showAccept", this._SETTINGS_SELECTED_COMPONENT != null);
-        this._SETTINGS_PAGE_ACCEPT_BUTTON?.set("prop_btnDisabled", this._SETTINGS_SELECTED_COMPONENT == null);
+        this._SETTINGS_WINDOW?.set("prop_showAccept", this.isComponentAllowedForSettings(this._SETTINGS_SELECTED_COMPONENT));
     }
 
     private getComponentDefaultProperties(componentReference: Function): Record<string, any> {
@@ -933,7 +1026,7 @@ export class ComponentElementCreator extends ComponentStructure.Component<
 
     private applySettingsDraft(event: Event): void {
         const componentReference = this._SETTINGS_SELECTED_COMPONENT;
-        if (!componentReference) return;
+        if (!this.isComponentAllowedForSettings(componentReference)) return;
         const componentBinding = this._COMPONENT_PROPS_BIND.prop_component;
         const propertiesBinding = this._COMPONENT_PROPS_BIND.prop_componentProperties;
         const currentProperties = propertiesBinding?.get?.() ?? {};
@@ -945,7 +1038,7 @@ export class ComponentElementCreator extends ComponentStructure.Component<
         componentBinding?.set?.(componentReference);
         propertiesBinding?.set?.(properties);
         this.executeMethod("SETTINGS_APPLY", event, {COMPONENT: componentReference, PROPERTIES: properties});
-        if (this._SETTINGS_PAGE_SETTING) this.closeSettingsPageSetting();
+        this.closeSettingsPageSetting();
         this.executeMethod("SETTINGS_CLOSE", event, {});
     }
 
@@ -970,7 +1063,6 @@ export class ComponentElementCreator extends ComponentStructure.Component<
             child.dispose?.();
         }
         this._SETTINGS_TABS = null;
-        this._SETTINGS_PAGE_ACCEPT_BUTTON = null;
         this._SETTINGS_CATEGORY_SELECT = null;
         this._SETTINGS_COMPONENT_SELECT = null;
         this._SETTINGS_COMPONENT_TAB_BODY = null;
@@ -1006,11 +1098,40 @@ export class ComponentElementCreator extends ComponentStructure.Component<
     }
 
     private closeSettingsPageSetting(): void {
+        const source = this._SETTINGS_WORKFLOW_SOURCE;
+        const endpoint = this._SETTINGS_PAGE_SETTING_ENDPOINT;
+        this._SETTINGS_WORKFLOW_SOURCE = null;
+        this._SETTINGS_PAGE_SETTING_ENDPOINT = null;
+        if (source && endpoint && CoreEvent.App.hasEmit(endpoint)) {
+            CoreEvent.App.request(CoreEvent.requestMap([[endpoint, {close: true}]]), source);
+        }
         this._SETTINGS_WINDOW_OPEN = false;
         this._SETTINGS_PAGE_SETTING?.set("prop_sidebarIsOpen", false);
     }
 
+    private findPageSettingEndpoint(source: CoreEvent.TStepRef): CoreEvent.TStepRef | null {
+        const candidates = CoreEvent.findWorkflowNodes(source, Core.Dictionary.WorkflowNodeNames.setting);
+        const match = candidates
+            .find(({node}) =>
+                CoreComponents.Tools.Workflow.Get_ComponentWorkflowMetadata(node)?.kind !== "component"
+                && CoreEvent.App.hasEmit(node),
+            );
+        return match?.node ?? null;
+    }
+
     private closeCssPageSetting(): void {
+        const source = this._CSS_WORKFLOW_SOURCE;
+        const endpoint = this._CSS_PAGE_SETTING_ENDPOINT;
+        this._CSS_WORKFLOW_SOURCE = null;
+        this._CSS_PAGE_SETTING_ENDPOINT = null;
+        if (source && endpoint && CoreEvent.App.hasEmit(endpoint)) {
+            CoreEvent.App.request(CoreEvent.requestMap([[endpoint, {close: true}]]), source);
+            this._CSS_STYLE_VALUES_UNSUBSCRIBE?.();
+            this._CSS_STYLE_VALUES_UNSUBSCRIBE = null;
+            // The page setting slot owns and disposes the rendered styles component
+            // when it clears its content. Create a fresh editor the next time it opens.
+            this._CSS_STYLES_COMPONENT = null;
+        }
         this._CSS_PAGE_SETTING?.set("prop_sidebarIsOpen", false);
     }
 
@@ -1063,23 +1184,36 @@ export class ComponentElementCreator extends ComponentStructure.Component<
         this._SETTINGS_WINDOW_OPEN = true;
     }
 
-    private openSettingsPageSetting(mountHost?: HTMLElement): void {
+    private openSettingsPageSetting(mountHost?: HTMLElement, workflowSource?: CoreEvent.TStepRef): void {
+        this.closeSettingsPageSetting();
         const {content, mode} = this.prepareSettingsPageSetting();
-        if (this._COMPONENT_PROPS_BIND.prop_settingsUseExternalPageSetting.get()) {
-            this._SETTINGS_WINDOW_OPEN = true;
-            this.executeMethod("SETTINGS_OPEN", undefined, {CONTENT: content, MODE: mode});
-            return;
+        const source = workflowSource ?? this.getComponentWorkflow() as CoreEvent.TStepRef;
+        const endpoint = source ? this.findPageSettingEndpoint(source) : null;
+        if (endpoint && source) {
+            const response = CoreEvent.App.request(
+                CoreEvent.requestMap([[endpoint, {content}]]),
+                source,
+            ).get(endpoint);
+            if (response?.status === "success" && response.value?.opened === true) {
+                this._SETTINGS_WORKFLOW_SOURCE = source;
+                this._SETTINGS_PAGE_SETTING_ENDPOINT = endpoint;
+                this._SETTINGS_WINDOW_OPEN = true;
+                this.executeMethod("SETTINGS_OPEN", undefined, {CONTENT: content, MODE: mode});
+                return;
+            }
         }
         this.showSettingsPageSetting(content, mountHost);
+        this.executeMethod("SETTINGS_OPEN", undefined, {CONTENT: content, MODE: mode});
     }
 
     call_showSettingsPageSetting(content: CoreReactive.App, mountHost?: HTMLElement): void {
         this.showSettingsPageSetting(content, mountHost);
     }
 
-    private openCssPageSetting(): void {
+    private openCssPageSetting(workflowSource?: CoreEvent.TStepRef): void {
         this.closeSettingsPageSetting();
         if (this._SETTINGS_WINDOW) this.disposeSettingsWindow();
+        this.closeCssPageSetting();
 
         const properties = (this._COMPONENT_PROPS_BIND.prop_componentProperties.get() ?? {}) as Record<string, any>;
         this.syncCssStyleValues(
@@ -1088,20 +1222,26 @@ export class ComponentElementCreator extends ComponentStructure.Component<
         );
         if (!this._CSS_STYLE_VALUES_UNSUBSCRIBE) {
             this._CSS_STYLE_VALUES_UNSUBSCRIBE = this._CSS_STYLE_VALUES.subscribe((values) => {
-                this.applyCssStylesToComponentProperties(values ?? {});
+                this.dispatchCssStyleChange(values ?? {});
             }, this.getScope());
         }
-        if (!this._CSS_STYLES_COMPONENT) {
-            this._CSS_STYLES_COMPONENT = new ComponentStyles.Component({
-                prop_styleGroups: CSS_STYLE_PROPERTIES,
-                prop_value: this._CSS_STYLE_VALUES,
-                prop_structureStyles: {width: "100%", height: "100%", minHeight: "0"},
-                styles: {width: "100%", height: "100%", minHeight: "0"},
-            } as any);
+        const source = workflowSource ?? this.getComponentWorkflow() as CoreEvent.TStepRef;
+        const endpoint = source ? this.findPageSettingEndpoint(source) : null;
+        const content = this.createCssStylesContent();
+        if (source && endpoint) {
+            const response = CoreEvent.App.request(
+                CoreEvent.requestMap([[endpoint, {content, view: "styles"}]]),
+                source,
+            ).get(endpoint);
+            if (response?.status === "success" && response.value?.opened === true) {
+                this._CSS_WORKFLOW_SOURCE = source;
+                this._CSS_PAGE_SETTING_ENDPOINT = endpoint;
+                return;
+            }
         }
         if (!this._CSS_PAGE_SETTING) {
             this._CSS_PAGE_SETTING = new ComponentPageSetting.Component({
-                prop_content: this._CSS_STYLES_COMPONENT.getReactiveElement(),
+                prop_content: content,
                 prop_contentScrollY: false,
                 prop_sidebarWidth: 480,
                 prop_sidebarIsOpen: true,
@@ -1111,27 +1251,46 @@ export class ComponentElementCreator extends ComponentStructure.Component<
             this._CSS_PAGE_SETTING_ELEMENT.style.display = "none";
             this.getElement().appendChild(this._CSS_PAGE_SETTING_ELEMENT);
         } else {
+            this._CSS_PAGE_SETTING.set("prop_content", content);
             this._CSS_PAGE_SETTING.set("prop_sidebarIsOpen", true);
         }
     }
 
+    private createCssStylesContent(): CoreReactive.App {
+        if (!this._CSS_STYLES_COMPONENT) {
+            this._CSS_STYLES_COMPONENT = new ComponentStyles.Component({
+                prop_workflowChildName: Core.Dictionary.WorkflowNodeNames.elementCreatorStyles,
+                prop_styleGroups: CSS_STYLE_PROPERTIES,
+                prop_value: this._CSS_STYLE_VALUES,
+                prop_structureStyles: {width: "100%", height: "100%", minHeight: "0"},
+                styles: {width: "100%", height: "100%", minHeight: "0"},
+            } as any);
+        }
+        return CoreComponents.Tools.Workflow.With_ComponentWorkflowComposition(
+            () => {},
+            () => this._CSS_STYLES_COMPONENT!.getReactiveElement(),
+        );
+    }
+
     private disposeCssPageSetting(): void {
+        const pageSetting = this._CSS_PAGE_SETTING;
+        const stylesComponent = this._CSS_STYLES_COMPONENT;
         this._CSS_STYLE_VALUES_UNSUBSCRIBE?.();
         this._CSS_STYLE_VALUES_UNSUBSCRIBE = null;
         this._CSS_PAGE_SETTING_ELEMENT?.remove();
         this._CSS_PAGE_SETTING_ELEMENT = null;
-        this._CSS_PAGE_SETTING?.dispose();
+        pageSetting?.dispose();
         this._CSS_PAGE_SETTING = null;
-        this._CSS_STYLES_COMPONENT?.dispose();
+        if (!pageSetting) stylesComponent?.dispose();
         this._CSS_STYLES_COMPONENT = null;
         this._CSS_STYLE_SOURCE = null;
         this._CSS_STYLE_COMPONENT_REFERENCE = null;
         this._CSS_STYLE_VALUES.set({});
     }
 
-    private applyCssStylesToComponentProperties(values: Record<string, any>): void {
+    private applyCssStylesToComponentProperties(values: Record<string, any>): boolean {
         const currentProperties = this._COMPONENT_PROPS_BIND.prop_componentProperties.get();
-        if (!currentProperties || typeof currentProperties !== "object") return;
+        if (!currentProperties || typeof currentProperties !== "object") return false;
 
         const configuredStyles = currentProperties.prop_structureStyles;
         const resolvedStyles = CoreObservable.App.isObservable(configuredStyles)
@@ -1153,12 +1312,13 @@ export class ComponentElementCreator extends ComponentStructure.Component<
         };
         const styleNames = new Set([...Object.keys(currentStyles), ...Object.keys(nextStyles)]);
         const hasChanged = [...styleNames].some((styleName) => !Object.is(currentStyles[styleName], nextStyles[styleName]));
-        if (!hasChanged) return;
+        if (!hasChanged) return false;
 
         this._COMPONENT_PROPS_BIND.prop_componentProperties.set({
             ...currentProperties,
             prop_structureStyles: nextStyles,
         });
+        return true;
     }
 
     private createRenderedComponent(componentReference: Function | null, properties: Record<string, any>): CoreReactive.App | HTMLElement | null {
@@ -1221,6 +1381,20 @@ export class ComponentElementCreator extends ComponentStructure.Component<
             : values);
     }
 
+    private dispatchCssStyleChange(values: Record<string, any>): void {
+        const componentWorkflow = this._CSS_STYLES_COMPONENT?.getComponentWorkflow?.() as CoreEvent.TStepRef | undefined;
+        const source = componentWorkflow ?? this.getComponentWorkflow() as CoreEvent.TStepRef;
+        const endpointName = Core.Dictionary.WorkflowNodeNames.elementCreatorStyleChanged;
+        const endpoint = source
+            ? CoreEvent.findWorkflowNodes(source, endpointName).find(({node}) => CoreEvent.App.hasEmit(node))?.node
+            : null;
+        const target = endpoint ?? this._STEP.styleChanged as CoreEvent.TStepRef;
+        CoreEvent.App.request(
+            CoreEvent.requestMap([[target, {values: {...values}}]]),
+            source ?? this._STEP as CoreEvent.TStepRef,
+        );
+    }
+
     private withoutMarginStyles(styles: Record<string, any> | null | undefined): Record<string, any> {
         return Object.fromEntries(
             Object.entries(styles ?? {}).filter(([styleName]) => {
@@ -1272,24 +1446,48 @@ export class ComponentElementCreator extends ComponentStructure.Component<
         const isVisible = this._ROOT_HOVER.get() || this._ROOT_FOCUS.get();
         const content = isVisible ? this._OPTIONS_BORDER_CONTENT : null;
         if (this._OPTIONS_CONTENT.get() !== content) this._OPTIONS_CONTENT.set(content);
-        if (isVisible) this.startDocumentPointerTracking();
+        if (this._EDIT_MODE_ACTIVE) this.startDocumentPointerTracking();
         else this.stopDocumentPointerTracking();
+    }
+
+    private setEditModeActive(isActive: boolean): void {
+        this._EDIT_MODE_ACTIVE = isActive;
+        if (isActive) {
+            this.startDocumentPointerTracking();
+            return;
+        }
+
+        this.clearOptionsHideTimeout();
+        this._ROOT_HOVER.set(false);
+        this._ROOT_FOCUS.set(false);
+        if (this._OPTIONS_CONTENT.get() !== null) this._OPTIONS_CONTENT.set(null);
+        this.stopDocumentPointerTracking();
     }
 
     private startDocumentPointerTracking(): void {
         if (this._DOCUMENT_POINTER_MOVE_HANDLER) return;
-        this._DOCUMENT_POINTER_MOVE_HANDLER = (event: PointerEvent) => {
-            if (this._ROOT_FOCUS.get()) return;
+        this._DOCUMENT_POINTER_MOVE_HANDLER = (event: PointerEvent | MouseEvent) => {
             const target = event.target;
             const isInsideCreator = target instanceof Node && this.getElement().contains(target);
             const isInsideMenu = this._OPTIONS_MENU?.containsTarget(target) ?? false;
-            if (isInsideCreator || isInsideMenu) {
+            if (isInsideCreator) {
+                this.clearOptionsHideTimeout();
+                if (!this._ROOT_HOVER.get()) {
+                    this._ROOT_HOVER.set(true);
+                    this.updateOptionsVisibility();
+                }
+                return;
+            }
+            if (isInsideMenu) {
                 this.clearOptionsHideTimeout();
                 return;
             }
+            if (this._ROOT_FOCUS.get()) return;
             this.scheduleOptionsHide();
         };
         document.addEventListener("pointermove", this._DOCUMENT_POINTER_MOVE_HANDLER, true);
+        document.addEventListener("mousemove", this._DOCUMENT_POINTER_MOVE_HANDLER as (event: MouseEvent) => void, true);
+        document.addEventListener("mouseover", this._DOCUMENT_POINTER_MOVE_HANDLER as (event: MouseEvent) => void, true);
         this._DOCUMENT_FOCUS_IN_HANDLER = (event: FocusEvent) => {
             const target = event.target;
             const isInsideCreator = target instanceof Node && this.getElement().contains(target);
@@ -1313,7 +1511,7 @@ export class ComponentElementCreator extends ComponentStructure.Component<
     }
 
     private scheduleOptionsHide(): void {
-        if (this._ROOT_FOCUS.get() || this._OPTIONS_HIDE_TIMEOUT !== null) return;
+        if (!this._ROOT_HOVER.get() || this._ROOT_FOCUS.get() || this._OPTIONS_HIDE_TIMEOUT !== null) return;
         this._OPTIONS_HIDE_TIMEOUT = window.setTimeout(() => {
             this._OPTIONS_HIDE_TIMEOUT = null;
             if (this._ROOT_FOCUS.get()) return;
@@ -1331,6 +1529,8 @@ export class ComponentElementCreator extends ComponentStructure.Component<
     private stopDocumentPointerTracking(): void {
         if (this._DOCUMENT_POINTER_MOVE_HANDLER) {
             document.removeEventListener("pointermove", this._DOCUMENT_POINTER_MOVE_HANDLER, true);
+            document.removeEventListener("mousemove", this._DOCUMENT_POINTER_MOVE_HANDLER as (event: MouseEvent) => void, true);
+            document.removeEventListener("mouseover", this._DOCUMENT_POINTER_MOVE_HANDLER as (event: MouseEvent) => void, true);
             this._DOCUMENT_POINTER_MOVE_HANDLER = null;
         }
         if (this._DOCUMENT_FOCUS_IN_HANDLER) {
@@ -1345,20 +1545,30 @@ export class ComponentElementCreator extends ComponentStructure.Component<
 
     private handleOptionSelection(event: Event, action?: string): void {
         if (action === "CLICK_SETTINGS") {
-            if (this._COMPONENT_PROPS_BIND.prop_settingsUsePageSetting.get()) this.call_openSettingsPage(event);
-            else this.call_openSettings(event);
+            const workflowSource = this.getComponentWorkflow() as CoreEvent.TStepRef;
+            const pageSettingExists = !!this.findPageSettingEndpoint(workflowSource);
+            if (this._COMPONENT_PROPS_BIND.prop_settingsUsePageSetting.get() || pageSettingExists) {
+                this.call_openSettingsPage(event, undefined, workflowSource);
+            } else {
+                this.call_openSettings(event);
+            }
         } else if (action === "CLICK_DELETE") {
             this.openDeleteConfirm();
         } else if (action === "CLICK_CSS") {
-            this.openCssPageSetting();
+            this.openCssPageSetting(this.getComponentWorkflow() as CoreEvent.TStepRef);
         } else if (action === "SET_COLUMN_NULL") {
             this.executeMethod("COLUMN_CHANGE", event, {COLUMN: null});
+        } else if (action === "SET_CHILDREN_DISPLAY_EDITOR") {
+            this.executeMethod("CHILDREN_DISPLAY_CHANGE", event, {MODE: ElementCreatorMode.EDIT});
+        } else if (action === "SET_CHILDREN_DISPLAY_RENDERED") {
+            this.executeMethod("CHILDREN_DISPLAY_CHANGE", event, {MODE: ElementCreatorMode.RENDER});
         } else if (Object.values(LayoutColumn).includes(action as LayoutColumn)) {
             this.executeMethod("COLUMN_CHANGE", event, {COLUMN: action as LayoutColumn});
         }
     }
 
     private openSettingsWindow(): void {
+        this.closeSettingsPageSetting();
         this.closeCssPageSetting();
         if (this._SETTINGS_PAGE_SETTING) this.disposeSettingsPageSetting();
         const configuredMode = this._COMPONENT_PROPS_BIND.prop_mode.get() as ElementCreatorMode;
@@ -1394,8 +1604,8 @@ export class ComponentElementCreator extends ComponentStructure.Component<
         this.executeMethod("CLICK_SETTINGS", event);
     }
 
-    call_openSettingsPage(event?: Event, mountHost?: HTMLElement): void {
-        this.openSettingsPageSetting(mountHost);
+    call_openSettingsPage(event?: Event, mountHost?: HTMLElement, workflowSource?: CoreEvent.TStepRef): void {
+        this.openSettingsPageSetting(mountHost, workflowSource);
         this.executeMethod("CLICK_SETTINGS", event);
     }
 

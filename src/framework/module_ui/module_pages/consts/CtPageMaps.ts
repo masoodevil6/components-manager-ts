@@ -10,6 +10,8 @@ import {ClComponentsPage as ComponentsPage} from "../pages/components/ClComponen
 import {ClComponentDetailsPage as ComponentDetailsPage} from "../pages/components/ClComponentDetailsPage";
 import {ClPagerPage as PagerPage} from "../pages/pager/ClPagerPage";
 import {ClTestPage as TestPage} from "../pages/test/ClTestPage";
+import {ClPageV2 as PageV2} from "../v2/ClPageV2";
+import {PageV2Example} from "../v2/examples/PageV2Example";
 import * as CoreObservable from "@/core_observable";
 
 
@@ -68,6 +70,16 @@ export const CtPageMaps: TRouter = {
         template:      ComponentDetailsPage,
         data:          { },
         headerTitle:   new CoreObservable.App("Component"),
+    },
+
+    "/home": {
+        template:      PageV2,
+        data:          PageV2Example,
+        headerTitle:   new CoreObservable.App("Home"),
+    },
+
+    "/v2": {
+        redirectTo: "/home",
     },
 
 }

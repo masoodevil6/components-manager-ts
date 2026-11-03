@@ -1,0 +1,12 @@
+export {ComponentTableResponsible as Component} from "./ComponentTableResponsible";
+export {ComponentTableResponsibleBase as Base} from "./ComponentTableResponsibleBase";
+export {Definition} from "./Definition";
+export {Props, TableResponsibleViewMode} from "./Props";
+export type {PropsType, PropsConfigType, TableResponsibleHeaderItem, TableResponsibleRowOption} from "./Props";
+export {Schemas} from "./Schemas";
+export type {SchemasType} from "./Schemas";
+export {Methods} from "./Methods";
+export type {MethodsType, MethodsDataArgs, MethodsConfigType} from "./Methods";
+export {createTableResponsibleStep} from "./Step";
+export {Examples} from "./examples";
+export type {ComponentTableResponsibleExamplesType} from "./examples";

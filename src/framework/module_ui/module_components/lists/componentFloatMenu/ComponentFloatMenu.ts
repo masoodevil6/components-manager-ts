@@ -72,8 +72,6 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase<ReturnType<typeof
     private _RELATED_TARGET_CONTAINS: ((target: EventTarget | null) => boolean) | null = null;
     private _SELECTOR_CLICK_HANDLER: ((event: Event) => void) | null = null;
     private _SELECTOR_CLICK_ROOT: HTMLElement | null = null;
-    private _PORTAL_OFFSET_X = 0;
-    private _PORTAL_OFFSET_Y = 0;
     private readonly _PORTAL_PLACEMENT = new CoreObservable.App<DirectionTypes | null>(null);
 
 
@@ -433,6 +431,13 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase<ReturnType<typeof
         const prop_floatShowControlWithSelf = data?.["prop_floatShowControlWithSelf"] ?? bind.prop_floatShowControlWithSelf;
         const prop_floatIsShow       = data?.["prop_floatIsShow"]              ?? bind.prop_floatIsShow;
 
+        // This part can be evaluated again when the popup visibility changes.
+        // Keep its Border component stable so embedded content (for example the
+        // column checkboxes) is not reparented from an obsolete Border instance.
+        if (this._BORDER_INSTANCE) {
+            return this._BORDER_INSTANCE.getReactiveElement();
+        }
+
         const floatBorderHas = CoreObservable.App.computed(
             (width: UtilConst.Sizes | number | null) => width != null && width !== 0,
             [prop_floatBorderWidth],
@@ -467,7 +472,10 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase<ReturnType<typeof
                 prop_borderArrowType:         borderArrowType as any,
                 prop_borderArrowPosition:     prop_floatArrowPosition,
                 prop_borderArrowWidth:        prop_floatArrowWidth,
-                prop_content:                 prop_floatContent,
+                prop_content:                 CoreReactive.App.part("div", {
+                    attrs: {"data-float-menu-scroll-content": ""},
+                    children: [prop_floatContent],
+                }),
                 prop_borderRadius:            prop_floatBorderRadius,
                 prop_borderWidth:             prop_floatBorderWidth,
                 prop_width:                   prop_floatWidth,
@@ -552,23 +560,29 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase<ReturnType<typeof
             if (border) this._POSITION_OBSERVER.observe(border);
             if (usePortal && root) {
                 this._POSITION_OBSERVER.observe(root);
-                this.getVerticalClipAncestors(root).forEach((ancestor) => this._POSITION_OBSERVER?.observe(ancestor));
+                this.getClipAncestors(root).forEach((ancestor) => this._POSITION_OBSERVER?.observe(ancestor));
             }
             this._POSITION_OBSERVED_POPUP = popup;
         }
 
         const viewport = window.visualViewport;
         const leftEdge = Math.max(0, viewport?.offsetLeft ?? 0);
+        const topEdge = Math.max(0, viewport?.offsetTop ?? 0);
         const rightEdge = Math.min(window.innerWidth, leftEdge + (viewport?.width ?? window.innerWidth));
+        const bottomEdge = Math.min(window.innerHeight, topEdge + (viewport?.height ?? window.innerHeight));
         const gap = 8;
         const rootRect = root?.getBoundingClientRect();
         const configuredDirection = this._COMPONENT_PROPS_BIND.prop_floatDirectionType?.get?.() as DirectionTypes | undefined;
-        // `translate` is independent of the transform used for vertical placement.
-        popup.style.translate = "0px 0px";
         const availableWidth = Math.max(0, rightEdge - leftEdge - gap * 2);
+        const availableHeight = Math.max(0, bottomEdge - topEdge - gap * 2);
 
         popup.style.boxSizing = "border-box";
         popup.style.maxWidth = `${availableWidth}px`;
+        if (!usePortal) {
+            popup.style.translate = "0px 0px";
+            popup.style.maxHeight = "";
+            popup.style.overflowY = "";
+        }
         const minWidthSource = this._COMPONENT_PROPS_BIND.prop_floatMinWidth?.get?.();
         const currentMinWidth = getComputedStyle(popup).minWidth;
         const percentageMinWidth = typeof minWidthSource === "string" ? minWidthSource.trim().match(/^(-?(?:\d+\.?\d*|\.\d+))%$/) : null;
@@ -583,8 +597,6 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase<ReturnType<typeof
         if (usePortal && root && rootRect) {
             const currentRect = popup.getBoundingClientRect();
             if (!this._PORTALLED_POPUP) {
-                this._PORTAL_OFFSET_X = currentRect.left - rootRect.left;
-                this._PORTAL_OFFSET_Y = currentRect.top - rootRect.top;
                 this._PORTAL_PLACEHOLDER = document.createComment("float-menu-portal");
                 popup.before(this._PORTAL_PLACEHOLDER);
                 document.body.appendChild(popup);
@@ -608,22 +620,38 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase<ReturnType<typeof
                 ? UtilConst.ZIndex.page_setting + 2
                 : UtilStyle.Css_ZIndex(UtilConst.ZIndex.SELECTOR_POPUP) + 2;
             popup.style.zIndex = `${popupZIndex}`;
-            popup.style.left = `${rootRect.left + this._PORTAL_OFFSET_X}px`;
             popup.style.right = "auto";
             popup.style.bottom = "auto";
             popup.style.transform = "none";
             popup.style.margin = "0px";
+            popup.style.maxHeight = "none";
+            popup.style.overflowY = "visible";
+            popup.style.translate = "none";
             popup.style.width = `${Math.min(portalWidth, availableWidth)}px`;
+            popup.style.direction = CoreConfig.Settings.DirectionRtl.get() ? "rtl" : "ltr";
+
+            const scrollContent = popup.querySelector<HTMLElement>("[data-float-menu-scroll-content]");
+            if (scrollContent) {
+                scrollContent.style.maxHeight = "";
+                scrollContent.style.overflowY = "visible";
+            }
 
             let effectiveDirection = configuredDirection;
+            let popupWidth = popup.getBoundingClientRect().width;
+            let popupHeight = popup.getBoundingClientRect().height;
+            const arrowWidth = Number(this._COMPONENT_PROPS_BIND.prop_floatArrowWidth?.get?.()) || 0;
+            const distance = Number(this._COMPONENT_PROPS_BIND.prop_floatDistance?.get?.()) || 0;
+            const offset = Math.max(0, arrowWidth + distance);
+            const positionValue = this._COMPONENT_PROPS_BIND.prop_floatPosition?.get?.();
+            const positionPercent = positionValue == null || positionValue === ""
+                ? null
+                : parseFloat(String(positionValue)) / 100;
+
             if (configuredDirection === DirectionTypes.TOP || configuredDirection === DirectionTypes.BOTTOM) {
-                const bounds = this.getVerticalClipBounds(root);
-                const popupHeight = Math.max(popup.getBoundingClientRect().height, popup.scrollHeight);
-                const arrowWidth = Number(this._COMPONENT_PROPS_BIND.prop_floatArrowWidth?.get?.()) || 0;
-                const distance = Number(this._COMPONENT_PROPS_BIND.prop_floatDistance?.get?.()) || 0;
-                const offset = Math.max(0, arrowWidth + distance);
-                const availableAbove = Math.max(0, rootRect.top - bounds.top);
-                const availableBelow = Math.max(0, bounds.bottom - rootRect.bottom);
+                // A portalled menu escapes scroll containers, so choose its side
+                // using the visible viewport rather than the old clipping box.
+                const availableAbove = Math.max(0, rootRect.top - topEdge - gap);
+                const availableBelow = Math.max(0, bottomEdge - rootRect.bottom - gap);
                 const fitsAbove = popupHeight + offset <= availableAbove;
                 const fitsBelow = popupHeight + offset <= availableBelow;
 
@@ -634,60 +662,112 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase<ReturnType<typeof
                 }
 
                 this._PORTAL_PLACEMENT.set(effectiveDirection === configuredDirection ? null : effectiveDirection);
+                const availableOnSide = effectiveDirection === DirectionTypes.TOP ? availableAbove : availableBelow;
+                const maxHeightOnSide = Math.max(0, availableOnSide - offset);
+                popupHeight = this.constrainPortalContentHeight(popup, Math.min(availableHeight, maxHeightOnSide));
 
                 const top = effectiveDirection === DirectionTypes.TOP
                     ? rootRect.top - popupHeight - offset
                     : effectiveDirection === DirectionTypes.BOTTOM
                         ? rootRect.bottom + offset
-                        : rootRect.top + this._PORTAL_OFFSET_Y;
+                        : rootRect.bottom + offset;
+                const rtl = CoreConfig.Settings.DirectionRtl.get();
+                const horizontalOffset = positionPercent === null ? 0 : rootRect.width * positionPercent;
+                const left = rtl
+                    ? rootRect.left + horizontalOffset
+                    : rootRect.right - popupWidth - horizontalOffset;
+                popup.style.top = `${top}px`;
+                popup.style.left = `${left}px`;
+            } else if (configuredDirection === DirectionTypes.LEFT || configuredDirection === DirectionTypes.RIGHT) {
+                const availableLeft = Math.max(0, rootRect.left - leftEdge - gap);
+                const availableRight = Math.max(0, rightEdge - rootRect.right - gap);
+                const fitsLeft = popupWidth + offset <= availableLeft;
+                const fitsRight = popupWidth + offset <= availableRight;
+
+                if (configuredDirection === DirectionTypes.LEFT && !fitsLeft && (fitsRight || availableRight > availableLeft)) {
+                    effectiveDirection = DirectionTypes.RIGHT;
+                } else if (configuredDirection === DirectionTypes.RIGHT && !fitsRight && (fitsLeft || availableLeft > availableRight)) {
+                    effectiveDirection = DirectionTypes.LEFT;
+                }
+
+                this._PORTAL_PLACEMENT.set(effectiveDirection === configuredDirection ? null : effectiveDirection);
+                const availableOnSide = effectiveDirection === DirectionTypes.LEFT ? availableLeft : availableRight;
+                const maxWidthOnSide = Math.max(0, availableOnSide - offset);
+                popup.style.maxWidth = `${Math.min(availableWidth, maxWidthOnSide < popupWidth ? maxWidthOnSide : availableWidth)}px`;
+                popupWidth = popup.getBoundingClientRect().width;
+                popupHeight = this.constrainPortalContentHeight(popup, availableHeight);
+                const left = effectiveDirection === DirectionTypes.LEFT
+                    ? rootRect.left - popupWidth - offset
+                    : rootRect.right + offset;
+                const verticalPercent = positionPercent ?? 0.5;
+                const top = rootRect.top + rootRect.height * verticalPercent - popupHeight / 2;
+                popup.style.left = `${left}px`;
                 popup.style.top = `${top}px`;
             } else {
                 this._PORTAL_PLACEMENT.set(null);
-                popup.style.top = `${rootRect.top + this._PORTAL_OFFSET_Y}px`;
+                popup.style.left = `${rootRect.left}px`;
+                popup.style.top = `${rootRect.bottom + offset}px`;
+                popupHeight = this.constrainPortalContentHeight(popup, availableHeight);
             }
+
+            const desiredLeft = parseFloat(popup.style.left) || 0;
+            const desiredTop = parseFloat(popup.style.top) || 0;
+            const maxLeft = Math.max(leftEdge + gap, rightEdge - popupWidth - gap);
+            const maxTop = Math.max(topEdge + gap, bottomEdge - popupHeight - gap);
+            popup.style.left = `${Math.min(Math.max(desiredLeft, leftEdge + gap), maxLeft)}px`;
+            popup.style.top = `${Math.min(Math.max(desiredTop, topEdge + gap), maxTop)}px`;
         }
 
-        const adjustedRect = popup.getBoundingClientRect();
-        const overflowLeft = leftEdge + gap - adjustedRect.left;
-        const overflowRight = adjustedRect.right - (rightEdge - gap);
-        if (overflowLeft > 0) popup.style.translate = `${overflowLeft}px 0px`;
-        else if (overflowRight > 0) popup.style.translate = `${-overflowRight}px 0px`;
+        if (!usePortal) {
+            const adjustedRect = popup.getBoundingClientRect();
+            const overflowLeft = leftEdge + gap - adjustedRect.left;
+            const overflowRight = adjustedRect.right - (rightEdge - gap);
+            if (overflowLeft > 0) popup.style.translate = `${overflowLeft}px 0px`;
+            else if (overflowRight > 0) popup.style.translate = `${-overflowRight}px 0px`;
+        }
+
         popup.style.visibility = "visible";
+    }
+
+    /** Constrain only the menu contents so the surrounding Border stays visible and stationary. */
+    private constrainPortalContentHeight(popup: HTMLElement, maxHeight: number): number {
+        const content = popup.querySelector<HTMLElement>("[data-float-menu-scroll-content]");
+        if (!content) {
+            popup.style.maxHeight = `${maxHeight}px`;
+            popup.style.overflowY = "auto";
+            return popup.getBoundingClientRect().height;
+        }
+
+        const popupHeight = popup.getBoundingClientRect().height;
+        if (popupHeight <= maxHeight) return popupHeight;
+
+        const contentHeight = content.getBoundingClientRect().height;
+        const borderAndPaddingHeight = Math.max(0, popupHeight - contentHeight);
+        content.style.boxSizing = "border-box";
+        content.style.maxHeight = `${Math.max(0, maxHeight - borderAndPaddingHeight)}px`;
+        content.style.overflowY = "auto";
+        return popup.getBoundingClientRect().height;
     }
 
     private _isPortalEnabled(): boolean {
         return this._COMPONENT_PROPS_BIND.prop_floatUsePortal?.get?.() === true;
     }
 
-    private getVerticalClipAncestors(element: HTMLElement): HTMLElement[] {
+    private getClipAncestors(element: HTMLElement): HTMLElement[] {
         const ancestors: HTMLElement[] = [];
         let ancestor = element.parentElement;
 
         while (ancestor && ancestor !== document.body && ancestor !== document.documentElement) {
+            const overflowX = getComputedStyle(ancestor).overflowX;
             const overflowY = getComputedStyle(ancestor).overflowY;
-            if (["auto", "scroll", "overlay", "hidden", "clip"].includes(overflowY)) {
+            if (["auto", "scroll", "overlay", "hidden", "clip"].includes(overflowX)
+                || ["auto", "scroll", "overlay", "hidden", "clip"].includes(overflowY)) {
                 ancestors.push(ancestor);
             }
             ancestor = ancestor.parentElement;
         }
 
         return ancestors;
-    }
-
-    private getVerticalClipBounds(element: HTMLElement): {top: number; bottom: number} {
-        const viewport = window.visualViewport;
-        let top = Math.max(0, viewport?.offsetTop ?? 0);
-        let bottom = Math.min(window.innerHeight, top + (viewport?.height ?? window.innerHeight));
-
-        for (const ancestor of this.getVerticalClipAncestors(element)) {
-            if (ancestor.clientHeight <= 0) continue;
-            const rect = ancestor.getBoundingClientRect();
-            const clipTop = rect.top + ancestor.clientTop;
-            top = Math.max(top, clipTop);
-            bottom = Math.min(bottom, clipTop + ancestor.clientHeight);
-        }
-
-        return {top, bottom: Math.max(top, bottom)};
     }
 
     private _isInsideMenu(target: EventTarget | null, root?: Node | null): boolean {

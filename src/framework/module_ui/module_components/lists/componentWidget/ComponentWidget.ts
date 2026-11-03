@@ -4,6 +4,7 @@ import * as CoreConfig from "@/core_configs";
 import * as UiCategory from "@/ui_categories";
 import * as UtilTools from "@/util_tools";
 import * as UiIcons from "@/ui_icons";
+import * as CoreComponents from "@/core_components";
 import {PartAttrDefault} from "@/core_components";
 import {ComponentWidgetBase} from "./ComponentWidgetBase";
 import type {ControllerRequest, PropsConfigType, WidgetFetchConfig} from "./Props";
@@ -173,13 +174,11 @@ export class ComponentWidget extends ComponentWidgetBase<ReturnType<typeof creat
             prop_show: this._IS_LOADING as any,
             prop_structureClass: ["position-absolute"],
             prop_structureStyles: {position: "absolute", left: "0", top: "0", width: "100%", height: "100%"},
-            styles: {position: "absolute", left: "0", top: "0", width: "100%", height: "100%"},
         } as any);
         const webCode = new ComponentWebCode.Component({
             prop_show: this._SHOW_404 as any,
             prop_structureClass: ["position-absolute"],
             prop_structureStyles: {position: "absolute", left: "0", top: "0", width: "100%", height: "100%", overflow: "hidden"},
-            styles: {position: "absolute", left: "0", top: "0", width: "100%", height: "100%"},
         } as any, {
             RETRY_CLICK: (event) => {
                 const currentController = this.readValue<ControllerRequest>(this._COMPONENT_PROPS_BIND.prop_controller);
@@ -228,8 +227,15 @@ export class ComponentWidget extends ComponentWidgetBase<ReturnType<typeof creat
     private normalizeContent(content: any): any {
         if (content == null || content === false) return null;
         if (Array.isArray(content)) return content.map((item) => this.normalizeContent(item));
+        if (typeof content?.getComponentWorkflow === "function") return this.renderWorkflowSlot(content, "content");
         if (typeof content === "string" || typeof content === "number") return CoreReactive.App.span({props: {textContent: String(content)}});
-        if (typeof HTMLElement !== "undefined" && content instanceof HTMLElement) return content;
+        if (typeof Element !== "undefined" && content instanceof Element) {
+            const owner = CoreComponents.Tools.Workflow.Get_ComponentWorkflowElementOwner(content) as any;
+            if (owner) return this.renderWorkflowSlot(owner, "content");
+            CoreComponents.Tools.Workflow.Get_ComponentWorkflowElementDescendants(content)
+                .forEach((component) => this.renderWorkflowChild(component));
+            return content;
+        }
         if (content instanceof CoreReactive.App) return content;
         if (typeof content?.getReactiveElement === "function") return content.getReactiveElement();
         if (typeof content?.getElement === "function") return content.getElement();

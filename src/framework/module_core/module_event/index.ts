@@ -81,6 +81,19 @@ export const SubEvent = (
     registerAll(childStep);
 };
 
+/** Detach one child Step without disposing it; stale cleanup can pass `expectedChild`. */
+export const DetachSubEvent = (
+    parent: TStepRef,
+    key: string,
+    expectedChild?: TStepRef,
+): TStepRef | null => {
+    const parentStep = parent as ClStep;
+    const current = parentStep.getChild(key);
+    if (!current) return null;
+    if (expectedChild && current.identity !== expectedChild.identity) return null;
+    return parentStep.removeChild(key) ?? null;
+};
+
 /**
  * دسترسی read-only Parent → Child (Plan 8.2.7)
  *
@@ -146,6 +159,103 @@ export const Response = (value: any = null) => new ClResponse({} as any, "", val
  * (بند ۲۰ پلن 4.3: CoreEvent.monitor برای اتصال Monitor آینده)
  */
 export const App: ClEventDispatcher = new ClEventDispatcher();
+
+/** A node match ranked by its tree distance from the source node. */
+export type TWorkflowNodeMatch = {
+    readonly node: TStepRef;
+    readonly root: TStepRef;
+    readonly distance: number;
+    readonly path: readonly string[];
+};
+
+/**
+ * Find every node with `targetName`, ranked from nearest to farthest from
+ * the source. String names are matched against CoreEvent child keys (the values
+ * supplied through WorkflowNodeNames); a StepRef source is matched by identity.
+ *
+ * Pass `root` to limit the search to one workflow tree. If omitted, all
+ * registered workflow roots are searched for a string source. A StepRef source
+ * scopes the search to its owning workflow root. Target names may have multiple matches.
+ */
+export function findWorkflowNodes(source: TStepRef, targetName: string): TWorkflowNodeMatch[];
+export function findWorkflowNodes(sourceName: string, targetName: string, root?: TStepRef): TWorkflowNodeMatch[];
+export function findWorkflowNodes(
+    source: string | TStepRef,
+    targetName: string,
+    root?: TStepRef,
+): TWorkflowNodeMatch[] {
+    const sourceName = typeof source === "string" ? source : null;
+    if (sourceName !== null && sourceName.trim().length === 0) {
+        throw new TypeError("[CoreEvent] findWorkflowNodes requires a non-empty source node name.");
+    }
+    if (typeof targetName !== "string" || targetName.trim().length === 0) {
+        throw new TypeError("[CoreEvent] findWorkflowNodes requires a non-empty target node name.");
+    }
+
+    let searchRoot = root as ClStep | undefined;
+    if (!searchRoot && sourceName === null) {
+        let sourceRoot = source as ClStep;
+        while (sourceRoot.getParent()) sourceRoot = sourceRoot.getParent() as ClStep;
+        searchRoot = sourceRoot;
+    }
+
+    const registeredSteps = App.getRegistry() as ClStep[];
+    const roots = searchRoot
+        ? [searchRoot]
+        : registeredSteps.filter(step => step.getParent() === null);
+    const located: Array<{node: ClStep; root: ClStep; path: string[]; rootIdentity: symbol}> = [];
+
+    const visit = (step: ClStep, path: string[], workflowRoot: ClStep, ancestors: Set<symbol>): void => {
+        if (ancestors.has(step.identity)) return;
+        const nextAncestors = new Set(ancestors).add(step.identity);
+
+        for (const [childName, child] of step.getChildEntries()) {
+            const childPath = [...path, childName];
+            located.push({node: child as ClStep, root: workflowRoot, path: childPath, rootIdentity: workflowRoot.identity});
+            visit(child as ClStep, childPath, workflowRoot, nextAncestors);
+        }
+    };
+
+    for (const workflowRoot of roots) {
+        const rootKey = workflowRoot.getParentKey();
+        const rootPath = rootKey ? [rootKey] : [];
+        located.push({node: workflowRoot, root: workflowRoot, path: rootPath, rootIdentity: workflowRoot.identity});
+        visit(workflowRoot, rootPath, workflowRoot, new Set());
+    }
+
+    const sourceMatches = located.filter(({node, path}) => sourceName === null
+        ? node.identity === (source as ClStep).identity
+        : path[path.length - 1] === sourceName);
+    if (sourceMatches.length === 0) {
+        throw new Error(`[CoreEvent] Source workflow node "${sourceName ?? (source as ClStep).unique}" was not found.`);
+    }
+    if (sourceMatches.length > 1) {
+        throw new Error(
+            `[CoreEvent] Source workflow node name "${sourceName ?? (source as ClStep).unique}" is ambiguous. ` +
+            `Pass a narrower workflow root.`
+        );
+    }
+
+    const sourceMatch = sourceMatches[0];
+    const sourcePath = sourceMatch.path;
+    const distanceBetween = (left: readonly string[], right: readonly string[]): number => {
+        let commonLength = 0;
+        while (commonLength < left.length && commonLength < right.length && left[commonLength] === right[commonLength]) {
+            commonLength++;
+        }
+        return left.length + right.length - (2 * commonLength);
+    };
+
+    return located
+        .map((candidate, order) => ({
+            ...candidate,
+            order,
+            distance: distanceBetween(sourcePath, candidate.path)
+        }))
+        .filter(({path, rootIdentity}) => path[path.length - 1] === targetName && rootIdentity === sourceMatch.rootIdentity)
+        .sort((left, right) => left.distance - right.distance || left.order - right.order)
+        .map(({node, root, path, distance}) => ({node, root, path, distance}));
+}
 
 
 /* ═══════════════════════════════════════════════════════════════

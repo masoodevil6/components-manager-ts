@@ -2,7 +2,16 @@ import * as CoreConfigs                                                         
 import * as CoreObservable                                                                   from "@/core_observable";
 import * as CoreReactive                                                                     from "@/core_reactive";
 import * as CoreEvent                                                                        from "@/core_event";
-import {Define_ComponentWorkflow}                                                          from "../../tools/workflow";
+import {
+    Attach_Current_ComponentWorkflowChild,
+    Attach_ComponentWorkflow,
+    Detach_ComponentWorkflow,
+    Define_ComponentWorkflow,
+    Get_ComponentWorkflowMetadata,
+    Register_ComponentWorkflowElement,
+    Set_ComponentWorkflowMetadata,
+    With_ComponentWorkflowComposition,
+}                                                                                           from "../../tools/workflow";
 import type {Interface_ComponentWorkflow}                                                    from "../../tools/workflow";
 // --------------------------------
 import {AbComponentConnector        as ComponentConnector}                                   from "../abstract/AbComponentConnector";
@@ -40,6 +49,11 @@ export class ClComponentBase<
     _COMPONENT_PROPS_BIND: Record<string, CoreObservable.App<any>> = {};
 
     protected _COMPONENT_WORKFLOW: TWorkflow = Define_ComponentWorkflow() as TWorkflow;
+    private _workflowChildComponents = new Map<string, {workflow: CoreEvent.TStepRef; component: any}>();
+    private _workflowChildSlotNames = new Map<string, string>();
+    private _activeWorkflowChildNames: Set<string> | null = null;
+    private _workflowChildAutoNames = new WeakMap<object, string>();
+    private _workflowChildNameCounters = new Map<string, number>();
 
     _COMPONENT_CONFIG!: Record<string, any>;
 
@@ -82,6 +96,15 @@ export class ClComponentBase<
         if (componentStep?.identity && componentStep.identity !== this._COMPONENT_WORKFLOW.identity) {
             this.setComponentWorkflow(componentStep as TWorkflow);
         }
+
+        const definition = (this as any)._COMPONENT_DEFINITION;
+        Set_ComponentWorkflowMetadata(this._COMPONENT_WORKFLOW, {
+            kind: "component",
+            component: {
+                name: definition?.name ?? this._COMPONENT_NAME,
+                id: definition?.id ?? this._COMPONENT_ID ?? this._COMPONENT_NAME,
+            },
+        });
 
         // اگر unique/emit پاس داده شد، override کن؛ وگرنه از مقادیر قبلی استفاده کن
         // (برای Componentهایی که identity را در constructor set می‌کنند)
@@ -139,7 +162,158 @@ export class ClComponentBase<
         return this._COMPONENT_WORKFLOW;
     }
 
+    getComponentDefinition(): unknown {
+        return (this as any)._COMPONENT_DEFINITION ?? null;
+    }
+
+    /** Attach a live child component and return its reactive element for rendering. */
+    protected renderWorkflowChild(child: any, fallbackName?: string): any {
+        if (child == null || typeof child.getComponentWorkflow !== "function") {
+            if (child && typeof child.getReactiveElement === "function") return child.getReactiveElement();
+            if (child && typeof child.getElement === "function") return child.getElement();
+            return child;
+        }
+
+        const configuredName = typeof child.get === "function"
+            ? child.get("prop_workflowChildName")
+            : null;
+        const childWorkflow = child.getComponentWorkflow() as CoreEvent.TStepRef;
+        const childName = typeof configuredName === "string" && configuredName.trim().length > 0
+            ? configuredName.trim()
+            : fallbackName || this.createAutomaticWorkflowChildName(child, childWorkflow);
+        this._activeWorkflowChildNames?.add(childName);
+        const current = this._workflowChildComponents.get(childName);
+        if (current && current.workflow.identity !== childWorkflow.identity) {
+            this.removeWorkflowChild(childName);
+        }
+
+        const definition = typeof child.getComponentDefinition === "function"
+            ? child.getComponentDefinition() as any
+            : child._COMPONENT_DEFINITION;
+        Attach_ComponentWorkflow(this._COMPONENT_WORKFLOW, childName, childWorkflow, {
+            component: {
+                name: definition?.name ?? child._COMPONENT_NAME ?? "component",
+                id: definition?.id ?? child._COMPONENT_ID ?? child._COMPONENT_NAME ?? "component",
+            },
+        });
+        this._workflowChildComponents.set(childName, {workflow: childWorkflow, component: child});
+
+        if (typeof child.getReactiveElement === "function") return child.getReactiveElement();
+        return typeof child.getElement === "function" ? child.getElement() : child;
+    }
+
+    /** Resolve a named slot and remove its old workflow when the slot stops holding a component. */
+    protected renderWorkflowSlot(child: any, slotName?: string): any {
+        if (child && typeof child.getComponentWorkflow === "function") {
+            const configuredName = typeof child.get === "function"
+                ? child.get("prop_workflowChildName")
+                : null;
+            const childName = configuredName || slotName;
+            if (slotName && typeof childName === "string") {
+                const previousName = this._workflowChildSlotNames.get(slotName);
+                if (previousName && previousName !== childName) this.removeWorkflowChild(previousName);
+            }
+            const rendered = this.renderWorkflowChild(child, slotName);
+            if (slotName && typeof childName === "string") this._workflowChildSlotNames.set(slotName, childName);
+            return rendered;
+        }
+        if (slotName) this.clearWorkflowChildSlot(slotName);
+        return this.renderWorkflowChild(child);
+    }
+
+    protected clearWorkflowChildSlot(slotName: string): void {
+        const childName = this._workflowChildSlotNames.get(slotName) ?? slotName;
+        this.removeWorkflowChild(childName);
+        this._workflowChildSlotNames.delete(slotName);
+    }
+
+    protected beginWorkflowChildComposition(): Set<string> {
+        const activeNames = new Set<string>();
+        this._activeWorkflowChildNames = activeNames;
+        this._workflowChildNameCounters.clear();
+        return activeNames;
+    }
+
+    private createAutomaticWorkflowChildName(child: any, childWorkflow: CoreEvent.TStepRef): string {
+        for (const [name, current] of this._workflowChildComponents) {
+            if (current.workflow.identity === childWorkflow.identity) return name;
+        }
+
+        const cachedName = this._workflowChildAutoNames.get(child);
+        const cachedCurrent = cachedName ? this._workflowChildComponents.get(cachedName) : null;
+        if (cachedName && (!cachedCurrent || cachedCurrent.workflow.identity === childWorkflow.identity
+            || (this._activeWorkflowChildNames && !this._activeWorkflowChildNames.has(cachedName)))) {
+            this.reserveAutomaticWorkflowChildName(cachedName);
+            return cachedName;
+        }
+
+        const definition = typeof child.getComponentDefinition === "function"
+            ? child.getComponentDefinition() as any
+            : child._COMPONENT_DEFINITION;
+        const metadataName = Get_ComponentWorkflowMetadata(childWorkflow)?.component?.name;
+        const rawName = definition?.name ?? metadataName ?? child._COMPONENT_NAME ?? "component";
+        const baseName = String(rawName).replace(/^component[_-]?/i, "");
+        const normalizedBase = baseName.length > 0
+            ? `${baseName[0].toLowerCase()}${baseName.slice(1)}`
+            : "component";
+
+        let index = this._workflowChildNameCounters.get(normalizedBase) ?? 0;
+        let candidate = index === 0 ? normalizedBase : `${normalizedBase}${index + 1}`;
+        while (true) {
+            const current = this._workflowChildComponents.get(candidate);
+            const canReplacePreviousCompositionChild = this._activeWorkflowChildNames !== null
+                && !this._activeWorkflowChildNames.has(candidate);
+            if (!current || current.workflow.identity === childWorkflow.identity || canReplacePreviousCompositionChild) break;
+            index++;
+            candidate = `${normalizedBase}${index + 1}`;
+        }
+
+        this._workflowChildNameCounters.set(normalizedBase, index + 1);
+        this._workflowChildAutoNames.set(child, candidate);
+        return candidate;
+    }
+
+    private reserveAutomaticWorkflowChildName(name: string): void {
+        const match = /^(.*?)(\d+)?$/.exec(name);
+        if (!match) return;
+        const baseName = match[1];
+        const index = match[2] ? Number(match[2]) : 1;
+        this._workflowChildNameCounters.set(
+            baseName,
+            Math.max(this._workflowChildNameCounters.get(baseName) ?? 0, index),
+        );
+    }
+
+    protected endWorkflowChildComposition(activeNames: Set<string>): void {
+        if (this._activeWorkflowChildNames === activeNames) this._activeWorkflowChildNames = null;
+        for (const childName of this._workflowChildComponents.keys()) {
+            if (!activeNames.has(childName)) this.removeWorkflowChild(childName);
+        }
+    }
+
+    private removeWorkflowChild(childName: string): void {
+        const child = this._workflowChildComponents.get(childName);
+        if (!child) return;
+        Detach_ComponentWorkflow(this._COMPONENT_WORKFLOW, childName, child.workflow);
+        child.component?.dispose?.();
+        this._workflowChildComponents.delete(childName);
+        for (const [slotName, mappedName] of this._workflowChildSlotNames) {
+            if (mappedName === childName) this._workflowChildSlotNames.delete(slotName);
+        }
+    }
+
+    private disposeWorkflowChildren(): void {
+        for (const [childName, child] of this._workflowChildComponents) {
+            Detach_ComponentWorkflow(this._COMPONENT_WORKFLOW, childName, child.workflow);
+            child.component?.dispose?.();
+        }
+        this._workflowChildComponents.clear();
+        this._workflowChildSlotNames.clear();
+        this._activeWorkflowChildNames = null;
+    }
+
     private disposeComponentWorkflow(): void {
+        this.disposeWorkflowChildren();
         this.disposeWorkflowIfRegistered(this._COMPONENT_WORKFLOW);
         const componentStep = (this as any)._COMPONENT_STEP as CoreEvent.TStepRef | null | undefined;
         if (componentStep?.identity === this._COMPONENT_WORKFLOW.identity) {
@@ -288,12 +462,18 @@ export class ClComponentBase<
                             "id":                 this.getPartId(partName),
                         }
 
-                        if (itemPart.hasOwnProperty('method') && typeof itemPart.method == "function"){
-                            result = itemPart.method.call(this , attrsDefault , data , extra);
-                        }
-                        else {
-                            result = this.renderManagerComponent(partName , attrsDefault , data , extra);
-                        }
+                        result = With_ComponentWorkflowComposition(
+                            (child, childName) => {
+                                if (child !== this) this.renderWorkflowChild(child, childName);
+                            },
+                            () => {
+                                if (itemPart.hasOwnProperty('method') && typeof itemPart.method == "function"){
+                                    return itemPart.method.call(this , attrsDefault , data , extra);
+                                }
+                                return this.renderManagerComponent(partName , attrsDefault , data , extra);
+                            },
+                            this._COMPONENT_WORKFLOW,
+                        );
                     }
                 }
             })
@@ -314,14 +494,21 @@ export class ClComponentBase<
 
 
     getReactiveElement() {
+        Attach_Current_ComponentWorkflowChild(this);
+        if (this._COMPONENT_CONTENT?.getElement) {
+            Register_ComponentWorkflowElement(this._COMPONENT_CONTENT.getElement(), this);
+        }
         if (this._COMPONENT_CONTENT && typeof this._COMPONENT_CONTENT.getReactiveElement === 'function') {
             return this._COMPONENT_CONTENT.getReactiveElement();
         }
         return this._COMPONENT_CONTENT;
     }
     getElement() {
+        Attach_Current_ComponentWorkflowChild(this);
         if (this._COMPONENT_CONTENT && typeof this._COMPONENT_CONTENT.getElement === 'function') {
-            return this._COMPONENT_CONTENT.getElement();
+            const element = this._COMPONENT_CONTENT.getElement();
+            Register_ComponentWorkflowElement(element, this);
+            return element;
         }
         return this._COMPONENT_CONTENT;
     }

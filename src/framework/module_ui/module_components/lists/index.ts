@@ -166,6 +166,13 @@ import {Schemas    as TableSchemas}            from "./componentTable/Schemas";
 import {Methods    as TableMethods}            from "./componentTable/Methods";
 import {Examples   as TableExamples}           from "./componentTable/examples";
 // --------------------------------
+import {Component as ComponentTableResponsibleClass} from "./componentTableResponsible";
+import {Definition as TableResponsibleDefinition} from "./componentTableResponsible/Definition";
+import {Props as TableResponsibleProps} from "./componentTableResponsible/Props";
+import {Schemas as TableResponsibleSchemas} from "./componentTableResponsible/Schemas";
+import {Methods as TableResponsibleMethods} from "./componentTableResponsible/Methods";
+import {Examples as TableResponsibleExamples} from "./componentTableResponsible/examples";
+// --------------------------------
 import {Component as ComponentInputCheckBoxClass} from "./componentInputCheckBox";
 import {Definition as InputCheckBoxDefinition}    from "./componentInputCheckBox/Definition";
 import {Props      as InputCheckBoxProps}         from "./componentInputCheckBox/Props";
@@ -360,6 +367,7 @@ import {Examples   as MouseScrollerExamples}          from "./componentMouseScro
 import * as Workflow from "./componentWorkflow";
 import * as InputAcl from "./componentInputAcl";
 import * as CardViewInfo from "./componentCardViewInfo";
+import * as CardRowInfo from "./componentCardRowInfo";
 import * as CardViewClicable from "./componentCardViewClicable";
 import * as ComponentBreadcrumb from "./componentBreadcrumb";
 import * as ComponentBreadcrumbWithArrow from "./componentBreadcrumbWithArrow";
@@ -614,6 +622,15 @@ CoreComponents.ComponentManager.register({
     methods:     TableMethods,
     examples:    TableExamples,
     constructor: ComponentTableClass as any,
+});
+
+CoreComponents.ComponentManager.register({
+    definition:  TableResponsibleDefinition,
+    props:       TableResponsibleProps,
+    schemas:     TableResponsibleSchemas,
+    methods:     TableResponsibleMethods,
+    examples:    TableResponsibleExamples,
+    constructor: ComponentTableResponsibleClass as any,
 });
 
 
@@ -930,6 +947,14 @@ CoreComponents.ComponentManager.register({
     constructor: CardViewInfo.Component as any,
 });
 CoreComponents.ComponentManager.register({
+    definition: CardRowInfo.Definition,
+    props: CardRowInfo.Props,
+    schemas: CardRowInfo.Schemas,
+    methods: CardRowInfo.Methods,
+    examples: CardRowInfo.Examples,
+    constructor: CardRowInfo.Component as any,
+});
+CoreComponents.ComponentManager.register({
     definition: CardViewClicable.Definition,
     props: CardViewClicable.Props,
     schemas: CardViewClicable.Schemas,
@@ -1025,6 +1050,7 @@ export * as ComponentJsonTree from "./componentJsonTree";
 export * as ComponentWindow      from "./componentWindow";
 export * as ComponentWindowConfirm from "./componentWindowConfirm";
 export * as ComponentTable       from "./componentTable";
+export * as ComponentTableResponsible from "./componentTableResponsible";
 export * as ComponentInputCheckBox from "./componentInputCheckBox";
 export * as ComponentInputRadioBox from "./componentInputRadioBox";
 export * as ComponentInputSelectOption from "./componentInputSelectOption";
@@ -1057,6 +1083,7 @@ export * as ComponentSidebar       from "./componentSidebar";
 export * as ComponentMouseScroller from "./componentMouseScroller";
 export * as ComponentWorkflow from "./componentWorkflow";
 export * as ComponentCardViewInfo from "./componentCardViewInfo";
+export * as ComponentCardRowInfo from "./componentCardRowInfo";
 export * as ComponentCardViewClicable from "./componentCardViewClicable";
 export * as ComponentBreadcrumb from "./componentBreadcrumb";
 export * as ComponentBreadcrumbWithArrow from "./componentBreadcrumbWithArrow";

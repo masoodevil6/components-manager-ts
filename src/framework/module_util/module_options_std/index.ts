@@ -1,6 +1,8 @@
 export {Render, CreateSizesInputSelectOption, CreateSizesRender} from "./render";
 export type {SizesInputSelectOptionCreator} from "./render";
 export * as Group from "./group";
+export {Layout, LayoutStyleProperties, DisplayValue, AlignItemsValue, IsStandardStyleProperty, ValidateStandardStyles} from "./group";
+export type {LayoutStyleProperty, StandardStyleProperty, StandardStyles} from "./group";
 export {
     BorderDirection,
     BorderStyleDirection,

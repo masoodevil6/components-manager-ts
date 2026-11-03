@@ -1,2 +1,2 @@
 export * as Tests from "./tests";
-export * as Header from "./header";
+export * as MyPage from "./myPage";

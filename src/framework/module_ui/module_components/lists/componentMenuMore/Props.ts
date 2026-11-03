@@ -22,6 +22,7 @@ export enum MenuMoreDirection {
 export type MenuMoreItem = {
     id: string;
     title?: string;
+    ariaLabel?: string;
     icon?: UiIcons.IIconDefinition | null;
     action?: string;
     openOn?: "click" | "hover";

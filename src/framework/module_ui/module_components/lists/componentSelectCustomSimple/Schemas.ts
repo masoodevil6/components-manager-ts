@@ -16,7 +16,7 @@ export const Schemas = {
     SELECT_BODY: {part: "part-select-custom-simple-body", props: [Props.prop_selectOptions, Props.prop_selectValue, Props.prop_selectDisable], name: Keys.category.components.selectCustomSimple.schemas.selectBody.name, description: Keys.category.components.selectCustomSimple.schemas.selectBody.description},
     SELECT_SEARCH: {part: "part-select-custom-simple-search", props: [Props.prop_selectDisable], name: Keys.category.components.selectCustomSimple.schemas.selectSearch.name, description: Keys.category.components.selectCustomSimple.schemas.selectSearch.description},
     SELECT_OPTIONS: {part: "part-select-custom-simple-options", props: [Props.prop_selectOptions, Props.prop_selectValue, Props.prop_selectDisable], name: Keys.category.components.selectCustomSimple.schemas.selectOptions.name, description: Keys.category.components.selectCustomSimple.schemas.selectOptions.description},
-    SELECT_OPTION: {part: "part-select-custom-simple-option", props: [Props.prop_selectValue], name: Keys.category.components.selectCustomSimple.schemas.selectOption.name, description: Keys.category.components.selectCustomSimple.schemas.selectOption.description},
+    SELECT_OPTION: {part: "part-select-custom-simple-option", props: [Props.prop_selectValue, Props.prop_prefixItemsWidth], name: Keys.category.components.selectCustomSimple.schemas.selectOption.name, description: Keys.category.components.selectCustomSimple.schemas.selectOption.description},
 } satisfies CoreComponents.ComponentSchemas;
 
 export type SchemasType = ExtractSchemasType<typeof Schemas>;

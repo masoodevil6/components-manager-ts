@@ -1,9 +1,31 @@
 import * as CoreComponents from "@/core_components";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
 import {Keys} from "../../../module_categories/languages";
+import {LayoutColumn} from "../componentLayout/Props";
+import type {LayoutContentItem} from "../componentLayout/Props";
+import type {StandardStyles} from "@/util_options_std";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
 
 const translation = Keys.category.components.basic.layoutCreator;
+
+export type LayoutCreatorComponentInstance = {
+    getElement(): unknown;
+    getComponentWorkflow(): unknown;
+};
+
+export type LayoutCreatorContentItem = Omit<LayoutContentItem, "content" | "styles"> & {
+    content: LayoutCreatorComponentInstance;
+    styles?: StandardStyles;
+};
+
+export type LayoutCreatorItemState = {
+    component: Function;
+    properties: Record<string, any>;
+    workflowChildName: string;
+    col: LayoutContentItem["col"];
+    class?: LayoutContentItem["class"];
+    styles?: StandardStyles;
+};
 
 export enum LayoutCreatorMode {
     RENDER = "RENDER",
@@ -22,6 +44,18 @@ export const Props = {
         default: null,
         name: translation.props.components.name,
         description: translation.props.components.description,
+    }),
+    prop_defaultColumn: Define_ComponentProp<LayoutColumn | null>({
+        prop: "prop_defaultColumn",
+        default: null,
+        name: translation.props.defaultColumn.name,
+        description: translation.props.defaultColumn.description,
+    }),
+    prop_initialLayoutContent: Define_ComponentProp<LayoutCreatorContentItem[] | null>({
+        prop: "prop_initialLayoutContent",
+        default: null,
+        name: translation.props.initialLayoutContent.name,
+        description: translation.props.initialLayoutContent.description,
     }),
 } satisfies CoreComponents.ComponentProps;
 

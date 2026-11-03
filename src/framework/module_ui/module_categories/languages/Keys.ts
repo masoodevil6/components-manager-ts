@@ -412,6 +412,10 @@ export const Keys = {
                             name:        CreateTranslationKey() ,
                             description: CreateTranslationKey() ,
                         },
+                        hasHeaderChildrenMode: {
+                            name:        CreateTranslationKey() ,
+                            description: CreateTranslationKey() ,
+                        },
                         hasTabComponent: {
                             name:        CreateTranslationKey() ,
                             description: CreateTranslationKey() ,
@@ -438,6 +442,8 @@ export const Keys = {
                     editor: {
                         addComponent: CreateTranslationKey(),
                         cancel: CreateTranslationKey(),
+                        childrenEditorMode: CreateTranslationKey(),
+                        childrenRenderedMode: CreateTranslationKey(),
                     },
                     schemas: {
                         render: {
@@ -473,6 +479,14 @@ export const Keys = {
                             name:        CreateTranslationKey() ,
                             description: CreateTranslationKey() ,
                         },
+                        defaultColumn: {
+                            name:        CreateTranslationKey() ,
+                            description: CreateTranslationKey() ,
+                        },
+                        initialLayoutContent: {
+                            name:        CreateTranslationKey() ,
+                            description: CreateTranslationKey() ,
+                        },
                     },
                     editor: {
                         addColumn: CreateTranslationKey(),
@@ -483,6 +497,10 @@ export const Keys = {
                             description: CreateTranslationKey(),
                         },
                         deleteColumn: {
+                            name: CreateTranslationKey(),
+                            description: CreateTranslationKey(),
+                        },
+                        contentChange: {
                             name: CreateTranslationKey(),
                             description: CreateTranslationKey(),
                         },
@@ -928,6 +946,7 @@ export const Keys = {
                     withNavigationAndAside: {name: CreateTranslationKey(), description: CreateTranslationKey()},
                     contentOnly: {name: CreateTranslationKey(), description: CreateTranslationKey()},
                     coreEventSetting: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    workflowComposition: {name: CreateTranslationKey(), description: CreateTranslationKey()},
                 },
             },
             effective: {
@@ -1617,6 +1636,7 @@ export const Keys = {
                     selectHeaderStylesEnabled: {name: CreateTranslationKey(), description: CreateTranslationKey()},
                     selectPlaceholder: {name: CreateTranslationKey(), description: CreateTranslationKey()},
                     selectOptions: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    prefixItemsWidth: {name: CreateTranslationKey(), description: CreateTranslationKey()},
                     selectTypeShow: {name: CreateTranslationKey(), description: CreateTranslationKey()},
                     selectBorderTopLeftRadiusHas: {name: CreateTranslationKey(), description: CreateTranslationKey()},
                     selectBorderTopRightRadiusHas: {name: CreateTranslationKey(), description: CreateTranslationKey()},
@@ -2940,6 +2960,8 @@ export const Keys = {
                     tableHeadStyles:            { name: CreateTranslationKey() , description: CreateTranslationKey() },
                     tableItemHeadClass:         { name: CreateTranslationKey() , description: CreateTranslationKey() },
                     tableItemHeadStyles:        { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    columnSelectorBackgroundColor: { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    columnSelectorColor:        { name: CreateTranslationKey() , description: CreateTranslationKey() },
                     order:                      { name: CreateTranslationKey() , description: CreateTranslationKey() },
                     header:                     { name: CreateTranslationKey() , description: CreateTranslationKey() },
                     headerIconSize:             { name: CreateTranslationKey() , description: CreateTranslationKey() },
@@ -2948,6 +2970,7 @@ export const Keys = {
                     tableBodyStyles:            { name: CreateTranslationKey() , description: CreateTranslationKey() },
                     tableItemBodyClass:         { name: CreateTranslationKey() , description: CreateTranslationKey() },
                     tableItemBodyStyles:        { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    tableItemBodyHoverStyles:   { name: CreateTranslationKey() , description: CreateTranslationKey() },
                     data:                       { name: CreateTranslationKey() , description: CreateTranslationKey() },
                     valueType:                  { name: CreateTranslationKey() , description: CreateTranslationKey() },
                     valueRow:                   { name: CreateTranslationKey() , description: CreateTranslationKey() },
@@ -2976,6 +2999,50 @@ export const Keys = {
 
                 examples: {
                     default: { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                },
+            },
+
+            /// TableResponsible
+            tableResponsible: {
+                name: CreateTranslationKey(),
+                description: CreateTranslationKey(),
+                props: {
+                    viewMode: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    mobileBreakpoint: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    formClass: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    formStyles: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    size: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    order: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    header: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    data: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    rowKey: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    rowOptions: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    doColSelector: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    headerBackgroundColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    headerColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    bodyBackgroundColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    bodyColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    bodyHoverBackgroundColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    bodyHoverColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    columnSelectorBackgroundColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    columnSelectorColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    cardIconColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    headerIconSize: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+                schemas: {
+                    content: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+                methods: {
+                    clickRowOption: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    callbackColSelector: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    changeViewMode: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+                examples: {
+                    default: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    responsive: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    tableOnly: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    cardsOnly: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    rowOptions: {name: CreateTranslationKey(), description: CreateTranslationKey()},
                 },
             },
 
@@ -3114,6 +3181,8 @@ export const Keys = {
                     sidebarDirection:         { name: CreateTranslationKey() , description: CreateTranslationKey() },
                     sidebarIsOpen:            { name: CreateTranslationKey() , description: CreateTranslationKey() },
                     sidebarDuration:          { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    delayOpen:                { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    delayClose:               { name: CreateTranslationKey() , description: CreateTranslationKey() },
                     sidebarContent:           { name: CreateTranslationKey() , description: CreateTranslationKey() },
                     sidebarPositionStart:     { name: CreateTranslationKey() , description: CreateTranslationKey() },
                     sidebarPositionEnd:       { name: CreateTranslationKey() , description: CreateTranslationKey() },
@@ -3157,6 +3226,33 @@ export const Keys = {
                 },
                 examples: {
                     default: { name: CreateTranslationKey(), description: CreateTranslationKey() },
+                },
+            },
+
+            /// CardRowInfo
+            cardRowInfo: {
+                name: CreateTranslationKey(),
+                description: CreateTranslationKey(),
+                props: {
+                    borderClass: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    borderStyles: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    rows: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    titleWidth: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    options: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    optionsOpacity: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    menuBackgroundColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    itemBackgroundColorHover: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+                schemas: {
+                    card: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+                methods: {
+                    selectOption: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+                examples: {
+                    default: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    withOptions: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    customContent: {name: CreateTranslationKey(), description: CreateTranslationKey()},
                 },
             },
 

@@ -3,11 +3,12 @@ import * as CoreReactive from "@/core_reactive";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
 import {Keys} from "../../../module_categories/languages";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
+import type {ComponentWorkflowChild} from "@/core_components";
 
 const translation = Keys.category.components.basic.pageSetting;
 
 export const Props = {
-    prop_content: Define_ComponentProp<CoreReactive.App | string | HTMLElement | null>({
+    prop_content: Define_ComponentProp<CoreReactive.App | ComponentWorkflowChild | string | HTMLElement | null>({
         prop: "prop_content",
         default: "",
         name: translation.props.content.name,

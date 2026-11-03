@@ -24,7 +24,7 @@ describe("ComponentInputSimple", () => {
 
         const input = root.querySelector("input") as HTMLInputElement;
         const border = root.querySelector('[data-part-name="part-border"]') as HTMLElement;
-        expect(input.name).toBe("email[value]");
+        expect(input.name).toBe("email");
         expect(input.value).toBe("initial");
         expect(input.placeholder).toBe("name@example.com");
 

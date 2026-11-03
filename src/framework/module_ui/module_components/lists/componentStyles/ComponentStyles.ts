@@ -115,7 +115,7 @@ export class ComponentStyles extends ComponentStructure.Component {
     const valuesObservable = data?.prop_value ?? bind.prop_value;
     const selectedProperties = this.readStyleGroups(selectionObservable);
     const values = this.readValues(valuesObservable);
-    const collapses = this.getStyleGroupCollapses(selectedProperties, values);
+    const collapses = this.getStyleGroupCollapses(selectedProperties);
     const boxModelGroupKeys = new Set<string>([
       UtilOptionsStd.Group.Margin.Key,
       UtilOptionsStd.Group.Padding.Key,
@@ -256,7 +256,6 @@ export class ComponentStyles extends ComponentStructure.Component {
 
   private getStyleGroupCollapses(
     selectedProperties: string[],
-    values: Record<string, any>,
   ): ComponentCollapse.Component[] {
     const selectedByGroup = new Map<string, string[]>();
     for (const property of selectedProperties) {
@@ -272,152 +271,26 @@ export class ComponentStyles extends ComponentStructure.Component {
       const collapseKey = groupKey;
       if (this._STYLE_GROUP_COLLAPSES.has(collapseKey)) continue;
 
-      let editors: any[] = [];
-      if (isSizeElementGroup) {
-        editors = this.createElementSizeEditors(properties, values);
-      } else if (groupKey === UtilOptionsStd.Group.Text.Key) {
-        editors = this.createTextStyleEditors(properties, values);
-      } else if (groupKey === UtilOptionsStd.Group.Colors.Key) {
-        editors = this.createColorEditors(properties, values);
-      } else if (groupKey === UtilOptionsStd.Group.Border.Key) {
-        const borderWidthProperties = properties.filter((property) =>
-          Object.values(UtilOptionsStd.Group.Border.Direction).includes(property as UtilOptionsStd.BorderDirection),
-        ) as UtilOptionsStd.BorderDirection[];
-        let borderWidthEditors: any[] = [];
-        if (borderWidthProperties.length > 0) {
-          borderWidthEditors = UtilOptionsStd.Group.Border.createDirectionEditors(
-            INPUT_COMPONENTS,
-            this.pickValues(borderWidthProperties, values),
-            {
-              directions: borderWidthProperties,
-              directionTitles: {
-                [UtilOptionsStd.Group.Border.Direction.TOP]: this.label(Keys.category.components.basic.styles.props.borderTop.name, "Border top"),
-                [UtilOptionsStd.Group.Border.Direction.RIGHT]: this.label(Keys.category.components.basic.styles.props.borderRight.name, "Border right"),
-                [UtilOptionsStd.Group.Border.Direction.BOTTOM]: this.label(Keys.category.components.basic.styles.props.borderBottom.name, "Border bottom"),
-                [UtilOptionsStd.Group.Border.Direction.LEFT]: this.label(Keys.category.components.basic.styles.props.borderLeft.name, "Border left"),
-              },
-              labels: this.borderInputLabels(),
-              onChange: (property, value) => this.setPropValue(property, value),
-            },
-          );
-        }
-        const borderColorEditors = this.createBorderColorEditors(properties, values);
-        const borderStyleProperties = properties.filter((property) =>
-          Object.values(UtilOptionsStd.Group.Border.Style.Direction).includes(property as UtilOptionsStd.BorderStyleDirection),
-        ) as UtilOptionsStd.BorderStyleDirection[];
-        const borderStyleEditors = UtilOptionsStd.Group.Border.Style.createDirectionEditors(
-          this.pickValues(borderStyleProperties, values) as UtilOptionsStd.BorderStyleGroupValue<string | null>,
-          {
-            selector: ComponentInputSelectOption.Component,
-            directions: borderStyleProperties,
-            directionTitles: {
-              [UtilOptionsStd.Group.Border.Style.Direction.TOP]: this.label(Keys.category.components.basic.styles.props.borderTopStyle.name, "Border top style"),
-              [UtilOptionsStd.Group.Border.Style.Direction.RIGHT]: this.label(Keys.category.components.basic.styles.props.borderRightStyle.name, "Border right style"),
-              [UtilOptionsStd.Group.Border.Style.Direction.BOTTOM]: this.label(Keys.category.components.basic.styles.props.borderBottomStyle.name, "Border bottom style"),
-              [UtilOptionsStd.Group.Border.Style.Direction.LEFT]: this.label(Keys.category.components.basic.styles.props.borderLeftStyle.name, "Border left style"),
-            },
-            onChange: (property, value) => this.setPropValue(property, value),
-          },
-        );
-        const editorsBySide = new Map<string, any[]>();
-        for (const editor of [...borderWidthEditors, ...borderStyleEditors, ...borderColorEditors]) {
-          const side = editor.direction.split("-")[1];
-          const sideEditors = editorsBySide.get(side) ?? [];
-          sideEditors.push(editor);
-          editorsBySide.set(side, sideEditors);
-        }
-        editors = ["top", "right", "bottom", "left"].flatMap((side) => editorsBySide.get(side) ?? []);
-      } else if (groupKey === UtilOptionsStd.Group.Margin.Key) {
-        editors = UtilOptionsStd.Group.Margin.createDirectionEditors(
-          this.pickValues(properties, values) as UtilOptionsStd.MarginGroupValues,
-          {
-            components: INPUT_COMPONENTS,
-            directions: properties as UtilOptionsStd.MarginDirection[],
-            directionTitles: {
-              [UtilOptionsStd.Group.Margin.Direction.TOP]: this.label(Keys.category.components.basic.styles.props.marginTop.name, "Margin top"),
-              [UtilOptionsStd.Group.Margin.Direction.RIGHT]: this.label(Keys.category.components.basic.styles.props.marginRight.name, "Margin right"),
-              [UtilOptionsStd.Group.Margin.Direction.BOTTOM]: this.label(Keys.category.components.basic.styles.props.marginBottom.name, "Margin bottom"),
-              [UtilOptionsStd.Group.Margin.Direction.LEFT]: this.label(Keys.category.components.basic.styles.props.marginLeft.name, "Margin left"),
-            },
-            labels: this.inputLabels("margin"),
-            onChange: (property, value) => this.setPropValue(property, value),
-          },
-        );
-      } else if (groupKey === UtilOptionsStd.Group.Padding.Key) {
-        editors = UtilOptionsStd.Group.Padding.createDirectionEditors(
-          this.pickValues(properties, values) as UtilOptionsStd.PaddingGroupValues,
-          {
-            components: INPUT_COMPONENTS,
-            directions: properties as UtilOptionsStd.PaddingDirection[],
-            directionTitles: {
-              [UtilOptionsStd.Group.Padding.Direction.TOP]: this.label(Keys.category.components.basic.styles.props.paddingTop.name, "Padding top"),
-              [UtilOptionsStd.Group.Padding.Direction.RIGHT]: this.label(Keys.category.components.basic.styles.props.paddingRight.name, "Padding right"),
-              [UtilOptionsStd.Group.Padding.Direction.BOTTOM]: this.label(Keys.category.components.basic.styles.props.paddingBottom.name, "Padding bottom"),
-              [UtilOptionsStd.Group.Padding.Direction.LEFT]: this.label(Keys.category.components.basic.styles.props.paddingLeft.name, "Padding left"),
-            },
-            labels: this.inputLabels("padding"),
-            onChange: (property, value) => this.setPropValue(property, value),
-          },
-        );
-      } else if (groupKey === UtilOptionsStd.Group.BorderRadius.Key) {
-        editors = UtilOptionsStd.Group.BorderRadius.createCornerEditors(
-          this.pickValues(properties, values) as UtilOptionsStd.BorderRadiusGroupValues,
-          {
-            components: INPUT_COMPONENTS,
-            corners: properties as UtilOptionsStd.BorderRadiusCorner[],
-            cornerTitles: {
-              [UtilOptionsStd.Group.BorderRadius.Corner.TOP_LEFT]: this.label(Keys.category.components.basic.styles.props.borderRadiusTopLeft.name, "Border radius top left"),
-              [UtilOptionsStd.Group.BorderRadius.Corner.TOP_RIGHT]: this.label(Keys.category.components.basic.styles.props.borderRadiusTopRight.name, "Border radius top right"),
-              [UtilOptionsStd.Group.BorderRadius.Corner.BOTTOM_RIGHT]: this.label(Keys.category.components.basic.styles.props.borderRadiusBottomRight.name, "Border radius bottom right"),
-              [UtilOptionsStd.Group.BorderRadius.Corner.BOTTOM_LEFT]: this.label(Keys.category.components.basic.styles.props.borderRadiusBottomLeft.name, "Border radius bottom left"),
-            },
-            labels: this.inputLabels("borderRadius"),
-            onChange: (property, value) => this.setPropValue(property, value),
-          },
-        );
-      }
-
-      if (editors.length === 0) continue;
-      const controls = editors.map(({component}: any) => {
-        this._STYLE_GROUP_EDITORS.push(component);
-        return CoreReactive.App.div({
-          className: ["col-12"],
-          children: [component.getReactiveElement() as CoreReactive.App],
-        });
-      });
       const titleKey = isSizeElementGroup
         ? Keys.category.components.basic.styles.groups.elementSize.name
         : groupKey === UtilOptionsStd.Group.Text.Key
           ? Keys.category.components.basic.styles.groups.text.name
           : groupKey === UtilOptionsStd.Group.Colors.Key
             ? Keys.category.components.basic.styles.groups.colors.name
-          : groupKey === UtilOptionsStd.Group.Border.Key
-            ? Keys.category.components.basic.styles.groups.border.name
-            : groupKey === UtilOptionsStd.Group.Margin.Key
-              ? Keys.category.components.basic.styles.groups.margin.name
-              : groupKey === UtilOptionsStd.Group.Padding.Key
-                ? Keys.category.components.basic.styles.groups.padding.name
-                : Keys.category.components.basic.styles.groups.borderRadius.name;
+            : groupKey === UtilOptionsStd.Group.Border.Key
+              ? Keys.category.components.basic.styles.groups.border.name
+              : groupKey === UtilOptionsStd.Group.Margin.Key
+                ? Keys.category.components.basic.styles.groups.margin.name
+                : groupKey === UtilOptionsStd.Group.Padding.Key
+                  ? Keys.category.components.basic.styles.groups.padding.name
+                  : Keys.category.components.basic.styles.groups.borderRadius.name;
       const standardGroup = UtilOptionsStd.Group.Resolve(groupKey);
-      const bodyContent = CoreReactive.App.div({className: ["row", "g-3"], children: controls});
       const groupPalette = this.getStyleGroupBorderPalette(groupKey);
-      let collapseBody: any = bodyContent;
-      if (groupPalette) {
-        const bodyBorder = new ComponentBorder.Component({
-          prop_content: bodyContent as any,
-          prop_contentBackgroundColor: groupPalette.background,
-          prop_contentColor: UtilStyle.Css_Color(UtilConst.ColorMain.DARK, UtilConst.ColorGrad.GRADE_1),
-          prop_borderColor: groupPalette.border,
-          prop_borderType: ComponentBorder.BorderTypes.SOLID,
-          prop_borderClass: ["w-100"],
-          prop_borderStyles: {padding: "0.75rem", boxSizing: "border-box"},
-        } as any);
-        this._STYLE_GROUP_BORDERS.push(bodyBorder);
-        collapseBody = bodyBorder.getReactiveElement();
-      }
-      const collapse = new ComponentCollapse.Component({
+      let bodyCreated = false;
+      let collapse: ComponentCollapse.Component;
+      collapse = new ComponentCollapse.Component({
         prop_collapseTitle: this.translate(titleKey, isSizeElementGroup ? "Element size" : standardGroup?.Title ?? "Text"),
-        prop_collapseBody: collapseBody as any,
+        prop_collapseBody: CoreReactive.App.div({className: ["row", "g-3"], children: []}),
         prop_collapseBodyIsOpen: false,
         prop_collapseBorderClass: ["w-100"],
         ...(groupPalette ? {
@@ -425,7 +298,18 @@ export class ComponentStyles extends ComponentStructure.Component {
           prop_collapseBorderColor: groupPalette.border,
           prop_collapseTitleColor: UtilStyle.Css_Color(UtilConst.ColorMain.DARK, UtilConst.ColorGrad.GRADE_1),
         } : {}),
-      });
+      } as any, {
+        CLICK: (_event, _dataArgs, componentArgs) => {
+          if (!componentArgs?.IS_OPEN || bodyCreated) return;
+          const body = this.createStyleGroupBody(
+            groupKey,
+            properties,
+            this.readValues(this.get("prop_value")),
+          );
+          bodyCreated = true;
+          if (body) collapse.set("prop_collapseBody", body);
+        },
+      } as any);
       this._STYLE_GROUP_COLLAPSES.set(collapseKey, collapse);
     }
     const groupOrder = [
@@ -444,6 +328,144 @@ export class ComponentStyles extends ComponentStructure.Component {
         - (groupOrderIndex.get(groupB) ?? Number.MAX_SAFE_INTEGER),
       )
       .map(([, collapse]) => collapse);
+  }
+
+  private createStyleGroupBody(
+    groupKey: string,
+    properties: string[],
+    values: Record<string, any>,
+  ): CoreReactive.App | null {
+    const isSizeElementGroup = groupKey === STYLE_GROUP_SIZE_ELEMENT_KEY;
+    let editors: any[] = [];
+    if (isSizeElementGroup) {
+      editors = this.createElementSizeEditors(properties, values);
+    } else if (groupKey === UtilOptionsStd.Group.Text.Key) {
+      editors = this.createTextStyleEditors(properties, values);
+    } else if (groupKey === UtilOptionsStd.Group.Colors.Key) {
+      editors = this.createColorEditors(properties, values);
+    } else if (groupKey === UtilOptionsStd.Group.Border.Key) {
+      const borderWidthProperties = properties.filter((property) =>
+        Object.values(UtilOptionsStd.Group.Border.Direction).includes(property as UtilOptionsStd.BorderDirection),
+      ) as UtilOptionsStd.BorderDirection[];
+      let borderWidthEditors: any[] = [];
+      if (borderWidthProperties.length > 0) {
+        borderWidthEditors = UtilOptionsStd.Group.Border.createDirectionEditors(
+          INPUT_COMPONENTS,
+          this.pickValues(borderWidthProperties, values),
+          {
+            directions: borderWidthProperties,
+            directionTitles: {
+              [UtilOptionsStd.Group.Border.Direction.TOP]: this.label(Keys.category.components.basic.styles.props.borderTop.name, "Border top"),
+              [UtilOptionsStd.Group.Border.Direction.RIGHT]: this.label(Keys.category.components.basic.styles.props.borderRight.name, "Border right"),
+              [UtilOptionsStd.Group.Border.Direction.BOTTOM]: this.label(Keys.category.components.basic.styles.props.borderBottom.name, "Border bottom"),
+              [UtilOptionsStd.Group.Border.Direction.LEFT]: this.label(Keys.category.components.basic.styles.props.borderLeft.name, "Border left"),
+            },
+            labels: this.borderInputLabels(),
+            onChange: (property, value) => this.setPropValue(property, value),
+          },
+        );
+      }
+      const borderColorEditors = this.createBorderColorEditors(properties, values);
+      const borderStyleProperties = properties.filter((property) =>
+        Object.values(UtilOptionsStd.Group.Border.Style.Direction).includes(property as UtilOptionsStd.BorderStyleDirection),
+      ) as UtilOptionsStd.BorderStyleDirection[];
+      const borderStyleEditors = UtilOptionsStd.Group.Border.Style.createDirectionEditors(
+        this.pickValues(borderStyleProperties, values) as UtilOptionsStd.BorderStyleGroupValue<string | null>,
+        {
+          selector: ComponentInputSelectOption.Component,
+          directions: borderStyleProperties,
+          directionTitles: {
+            [UtilOptionsStd.Group.Border.Style.Direction.TOP]: this.label(Keys.category.components.basic.styles.props.borderTopStyle.name, "Border top style"),
+            [UtilOptionsStd.Group.Border.Style.Direction.RIGHT]: this.label(Keys.category.components.basic.styles.props.borderRightStyle.name, "Border right style"),
+            [UtilOptionsStd.Group.Border.Style.Direction.BOTTOM]: this.label(Keys.category.components.basic.styles.props.borderBottomStyle.name, "Border bottom style"),
+            [UtilOptionsStd.Group.Border.Style.Direction.LEFT]: this.label(Keys.category.components.basic.styles.props.borderLeftStyle.name, "Border left style"),
+          },
+          onChange: (property, value) => this.setPropValue(property, value),
+        },
+      );
+      const editorsBySide = new Map<string, any[]>();
+      for (const editor of [...borderWidthEditors, ...borderStyleEditors, ...borderColorEditors]) {
+        const side = editor.direction.split("-")[1];
+        const sideEditors = editorsBySide.get(side) ?? [];
+        sideEditors.push(editor);
+        editorsBySide.set(side, sideEditors);
+      }
+      editors = ["top", "right", "bottom", "left"].flatMap((side) => editorsBySide.get(side) ?? []);
+    } else if (groupKey === UtilOptionsStd.Group.Margin.Key) {
+      editors = UtilOptionsStd.Group.Margin.createDirectionEditors(
+        this.pickValues(properties, values) as UtilOptionsStd.MarginGroupValues,
+        {
+          components: INPUT_COMPONENTS,
+          directions: properties as UtilOptionsStd.MarginDirection[],
+          directionTitles: {
+            [UtilOptionsStd.Group.Margin.Direction.TOP]: this.label(Keys.category.components.basic.styles.props.marginTop.name, "Margin top"),
+            [UtilOptionsStd.Group.Margin.Direction.RIGHT]: this.label(Keys.category.components.basic.styles.props.marginRight.name, "Margin right"),
+            [UtilOptionsStd.Group.Margin.Direction.BOTTOM]: this.label(Keys.category.components.basic.styles.props.marginBottom.name, "Margin bottom"),
+            [UtilOptionsStd.Group.Margin.Direction.LEFT]: this.label(Keys.category.components.basic.styles.props.marginLeft.name, "Margin left"),
+          },
+          labels: this.inputLabels("margin"),
+          onChange: (property, value) => this.setPropValue(property, value),
+        },
+      );
+    } else if (groupKey === UtilOptionsStd.Group.Padding.Key) {
+      editors = UtilOptionsStd.Group.Padding.createDirectionEditors(
+        this.pickValues(properties, values) as UtilOptionsStd.PaddingGroupValues,
+        {
+          components: INPUT_COMPONENTS,
+          directions: properties as UtilOptionsStd.PaddingDirection[],
+          directionTitles: {
+            [UtilOptionsStd.Group.Padding.Direction.TOP]: this.label(Keys.category.components.basic.styles.props.paddingTop.name, "Padding top"),
+            [UtilOptionsStd.Group.Padding.Direction.RIGHT]: this.label(Keys.category.components.basic.styles.props.paddingRight.name, "Padding right"),
+            [UtilOptionsStd.Group.Padding.Direction.BOTTOM]: this.label(Keys.category.components.basic.styles.props.paddingBottom.name, "Padding bottom"),
+            [UtilOptionsStd.Group.Padding.Direction.LEFT]: this.label(Keys.category.components.basic.styles.props.paddingLeft.name, "Padding left"),
+          },
+          labels: this.inputLabels("padding"),
+          onChange: (property, value) => this.setPropValue(property, value),
+        },
+      );
+    } else if (groupKey === UtilOptionsStd.Group.BorderRadius.Key) {
+      editors = UtilOptionsStd.Group.BorderRadius.createCornerEditors(
+        this.pickValues(properties, values) as UtilOptionsStd.BorderRadiusGroupValues,
+        {
+          components: INPUT_COMPONENTS,
+          corners: properties as UtilOptionsStd.BorderRadiusCorner[],
+          cornerTitles: {
+            [UtilOptionsStd.Group.BorderRadius.Corner.TOP_LEFT]: this.label(Keys.category.components.basic.styles.props.borderRadiusTopLeft.name, "Border radius top left"),
+            [UtilOptionsStd.Group.BorderRadius.Corner.TOP_RIGHT]: this.label(Keys.category.components.basic.styles.props.borderRadiusTopRight.name, "Border radius top right"),
+            [UtilOptionsStd.Group.BorderRadius.Corner.BOTTOM_RIGHT]: this.label(Keys.category.components.basic.styles.props.borderRadiusBottomRight.name, "Border radius bottom right"),
+            [UtilOptionsStd.Group.BorderRadius.Corner.BOTTOM_LEFT]: this.label(Keys.category.components.basic.styles.props.borderRadiusBottomLeft.name, "Border radius bottom left"),
+          },
+          labels: this.inputLabels("borderRadius"),
+          onChange: (property, value) => this.setPropValue(property, value),
+        },
+      );
+    }
+
+    if (editors.length === 0) return null;
+    const controls = editors.map(({component}: any) => {
+      this._STYLE_GROUP_EDITORS.push(component);
+      return CoreReactive.App.div({
+        className: ["col-12"],
+        children: [component.getReactiveElement() as CoreReactive.App],
+      });
+    });
+    const bodyContent = CoreReactive.App.div({className: ["row", "g-3"], children: controls});
+    const groupPalette = this.getStyleGroupBorderPalette(groupKey);
+    let collapseBody: any = bodyContent;
+    if (groupPalette) {
+      const bodyBorder = new ComponentBorder.Component({
+        prop_content: bodyContent as any,
+        prop_contentBackgroundColor: groupPalette.background,
+        prop_contentColor: UtilStyle.Css_Color(UtilConst.ColorMain.DARK, UtilConst.ColorGrad.GRADE_1),
+        prop_borderColor: groupPalette.border,
+        prop_borderType: ComponentBorder.BorderTypes.SOLID,
+        prop_borderClass: ["w-100"],
+        prop_borderStyles: {padding: "0.75rem", boxSizing: "border-box"},
+      } as any);
+      this._STYLE_GROUP_BORDERS.push(bodyBorder);
+      collapseBody = bodyBorder.getReactiveElement();
+    }
+    return collapseBody as CoreReactive.App;
   }
 
   private getStyleGroupBorderPalette(groupKey: string): {background: string; border: string} | null {

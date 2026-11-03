@@ -151,7 +151,7 @@ export class ComponentInputDescriptionSimple extends ComponentInputDescriptionSi
         const textarea = CoreReactive.App.create("textarea", {
             attrs: {...attrsDefault},
             attrsBind: {
-                name: CoreObservable.App.computed((fieldName) => fieldName == null ? null : `${fieldName}[value]`, [name], this.getScope()),
+                name,
                 placeholder,
                 rows: CoreObservable.App.computed((rowCount) => Number.isFinite(Number(rowCount)) ? Math.max(1, Math.floor(Number(rowCount))) : 4, [rows], this.getScope()),
                 disabled: CoreObservable.App.computed((status) => status ? "disabled" : null, [disabled], this.getScope()),

@@ -1,5 +1,6 @@
 import * as CoreComponents from "@/core_components";
 import * as CoreEvent from "@/core_event";
+import * as Core from "@/core";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {Props, PropsType} from "./Props";
 import {Schemas, SchemasType} from "./Schemas";
@@ -20,7 +21,7 @@ export class ComponentLayoutBase<TWorkflow extends CoreComponents.ComponentWorkf
         this._COMPONENT_STEP = step ?? null;
 
         if (step && identity?.unique && typeof (identity.unique as any).identity === "symbol") {
-            CoreEvent.SubEvent(identity.unique, "layout", step);
+            CoreEvent.SubEvent(identity.unique, Core.Dictionary.WorkflowNodeNames.layout, step);
         }
     }
 

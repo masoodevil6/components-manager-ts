@@ -41,6 +41,10 @@ export const Methods = {
         dataArgs: {
             optionName: "" as string,
             optionId:   "" as string,
+            rowIndex:  undefined as number | undefined,
+            row:       undefined as any,
+            option:    undefined as any,
+            value:     undefined as any,
         } as const,
     },
 

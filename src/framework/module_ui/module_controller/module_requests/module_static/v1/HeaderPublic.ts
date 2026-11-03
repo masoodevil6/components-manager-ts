@@ -6,11 +6,12 @@ export const HEADER_PUBLIC_SOURCE = "framework.ui.controller.requests.static.v1.
 
 const HEADER_PUBLIC_WIDGET_SOURCE = [
     "return UiCategory.UI.Pages.Header.PageHeader({",
+    '    prop_workflowChildName: String(response?.workflowChildName ?? "header"),',
     '    prop_pageTitle: String(response?.pageTitle ?? "Public page"),',
     '    prop_hasIconBack: response?.hasIconBack !== false,',
     '    prop_pageNav: Array.isArray(response?.pageNav) ? response.pageNav : [],',
     '    prop_optionsList: Array.isArray(response?.optionsList) ? response.optionsList : [],',
-    "});",
+    "}, response?.methods ?? {});",
 ].join("\n");
 
 export type HeaderPublicParams = Record<string, unknown> & {
@@ -18,6 +19,8 @@ export type HeaderPublicParams = Record<string, unknown> & {
     hasIconBack?: boolean | string | null;
     pageNav?: Array<{name: string; title: string}> | string | null;
     optionsList?: Array<Record<string, unknown>> | string | null;
+    workflowChildName?: string | null;
+    methods?: Record<string, (...args: any[]) => any> | null;
 };
 
 const parseList = <T>(value: T[] | string | null | undefined, fallback: T[]): T[] => {
@@ -43,6 +46,7 @@ export const headerPublic = (params: HeaderPublicParams = {}) => {
     const optionsList = parseList(params.optionsList, [
         {id: "help", title: "Help", action: "help"},
     ]);
+    const workflowChildName = params.workflowChildName?.trim() || "header";
 
     return new RequestManager({
         state: HttpStatusCode.OK,
@@ -53,6 +57,8 @@ export const headerPublic = (params: HeaderPublicParams = {}) => {
             hasIconBack,
             pageNav,
             optionsList,
+            workflowChildName,
+            methods: params.methods ?? {},
         },
         source: HEADER_PUBLIC_WIDGET_SOURCE,
         reference: {

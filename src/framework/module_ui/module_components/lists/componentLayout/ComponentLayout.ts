@@ -90,9 +90,10 @@ export class ComponentLayout extends ComponentLayoutBase<ReturnType<typeof creat
 
     private renderLayoutContent(content: unknown, column: LayoutColumn): CoreReactive.App {
         const items = this.getLayoutItems(content);
-        return CoreReactive.App.div({
-            className: ["row", "g-0"],
-            children: items.map((item) => {
+        const activeChildren = this.beginWorkflowChildComposition();
+        let renderedItems: CoreReactive.App[];
+        try {
+            renderedItems = items.map((item) => {
                 const itemColumn = column === LayoutColumn.CUSTOM
                     ? item.col ?? column
                     : column;
@@ -107,9 +108,15 @@ export class ComponentLayout extends ComponentLayoutBase<ReturnType<typeof creat
                 return CoreReactive.App.div({
                     className: classes,
                     styles: {...(item.styles ?? {})},
-                    children: [this.normalizeContent(item.content)],
+                    children: [this.normalizeContent(item.content, item.workflowChildName)],
                 });
-            }),
+            });
+        } finally {
+            this.endWorkflowChildComposition(activeChildren);
+        }
+        return CoreReactive.App.div({
+            className: ["row", "g-0"],
+            children: renderedItems,
         });
     }
 
@@ -128,7 +135,7 @@ export class ComponentLayout extends ComponentLayoutBase<ReturnType<typeof creat
         return typeof value === "string" && value.length > 0 ? value.split(/\s+/) : [];
     }
 
-    private normalizeContent(content: any): any {
+    private normalizeContent(content: any, workflowChildName?: string): any {
         if (content == null || content === false) return null;
         if (Array.isArray(content)) return content.map((item) => this.normalizeContent(item));
         if (typeof content === "string" || typeof content === "number") {
@@ -136,10 +143,13 @@ export class ComponentLayout extends ComponentLayoutBase<ReturnType<typeof creat
         }
         if (typeof HTMLElement !== "undefined" && content instanceof HTMLElement) return content;
         if (content instanceof CoreReactive.App) return content;
+        if (typeof content?.getComponentWorkflow === "function") {
+            return this.renderWorkflowSlot(content, workflowChildName);
+        }
         if (typeof content?.getReactiveElement === "function") return content.getReactiveElement();
         if (typeof content?.getElement === "function") return content.getElement();
         if (CoreObservable.App.isObservable(content)) {
-            return content.map((value: any) => this.normalizeContent(value), this.getScope());
+            return content.map((value: any) => this.normalizeContent(value, workflowChildName), this.getScope());
         }
         return null;
     }

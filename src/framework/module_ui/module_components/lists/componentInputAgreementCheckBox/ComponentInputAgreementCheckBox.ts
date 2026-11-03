@@ -300,7 +300,7 @@ export class ComponentInputAgreementCheckBox extends ComponentInputAgreementChec
                                 if (itemCheckBox != null && itemCheckBox.hasOwnProperty("id")) {
                                     items.push({
                                         id:    itemCheckBox.id,
-                                        body:  this.executeSchemaPart(
+                                        body:  () => this.executeSchemaPart(
                                             Schemas.MAIN_CHECK_BOX_LIST_CHECK_BOX_ITEM.part,
                                             { itemCheckBox },
                                         ) as CoreReactive.App,

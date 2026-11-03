@@ -1,4 +1,5 @@
-import {ITemplate} from "@/core_route";
+import {Navigate} from "@/core_route";
+import type {ITemplate} from "@/core_route";
 import * as CoreObservable from "@/core_observable";
 import * as CoreReactive from "@/core_reactive";
 import * as UiCategory from "@/ui_categories";
@@ -127,9 +128,9 @@ export class ClPagerPage implements ITemplate {
             prop_hasIconBack: true,
             prop_pageNav: [{name: "home", title: "Home"}],
         }, {
-            BACK: () => { window.location.href = "/"; },
+            BACK: () => { Navigate("/"); },
             SELECT_NAV_ITEM: (_event: Event, args: any) => {
-                if (args?.NAME === "home") window.location.href = "/";
+                if (args?.NAME === "home") Navigate("/");
             },
         } as any).getElement();
 

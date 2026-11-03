@@ -1,6 +1,13 @@
 import * as CoreObservable  from "@/core_observable";
 import * as CoreEvent       from "@/core_event";
 import * as Util            from "@/util";
+import {
+    Attach_Current_ComponentWorkflowChild,
+    Capture_ComponentWorkflowComposition,
+    Get_ComponentWorkflowElementDescendants,
+    Get_ComponentWorkflowElementOwner,
+    With_ComponentWorkflowComposition,
+} from "../../module_components/tools/workflow/ComponentWorkflowComposition";
 ///------------------------------
 import {EnElementNamespace} from "../enums/EnElementNamespace";
 
@@ -344,6 +351,28 @@ export class ClReactiveElement {
     private _setChildren(children: any) {
        // this.element.textContent = "";
         this._children = [];
+        const workflowComposition = Capture_ComponentWorkflowComposition();
+        const withWorkflowComposition = <T>(render: () => T): T => workflowComposition
+            ? With_ComponentWorkflowComposition(workflowComposition, render)
+            : render();
+        const renderWorkflowComponent = (component: any): any => withWorkflowComposition(() => {
+            if (typeof component?.getReactiveElement === "function") return component.getReactiveElement();
+            if (typeof component?.getElement === "function") return component.getElement();
+            return null;
+        });
+        const attachEmbeddedWorkflowComponents = (element: Element): void => {
+            if (!workflowComposition) return;
+            withWorkflowComposition(() => {
+                const owner = Get_ComponentWorkflowElementOwner(element);
+                if (owner) {
+                    Attach_Current_ComponentWorkflowChild(owner);
+                    return;
+                }
+                Get_ComponentWorkflowElementDescendants(element).forEach((component) => {
+                    Attach_Current_ComponentWorkflowChild(component);
+                });
+            });
+        };
 
         // اگر function است اجرا کن
         if (typeof children === "function") {
@@ -358,9 +387,14 @@ export class ClReactiveElement {
                 return;
             }
 
+            if (typeof child?.getComponentWorkflow === "function") {
+                append(renderWorkflowComponent(child));
+                return;
+            }
+
             if (CoreObservable.App.isObservable(child)) {
                 if (!(child instanceof CoreObservable.App)) {
-                    console.log("[DEBUG _setChildren] instanceof FAILED but isObservable PASSED — module duplication!", { child, value: child.get(), tagName: this.element.tagName });
+                    console.log("[DEBUG _setChildren] instanceof FAILED but isObservable PASSED — module duplication!", { child, value: (child as any).get(), tagName: this.element.tagName });
                 } else {
                     console.log("[DEBUG _setChildren] instanceof CoreObservable.App PASSED", { child, value: child.get(), tagName: this.element.tagName });
                 }
@@ -388,12 +422,19 @@ export class ClReactiveElement {
                             return;
                         }
 
+                        if (typeof v?.getComponentWorkflow === "function") {
+                            insert(renderWorkflowComponent(v));
+                            return;
+                        }
+
                         if (v instanceof ClReactiveElement) {
+                            attachEmbeddedWorkflowComponents(v.element);
                             end.before(v.element);
                             return;
                         }
 
-                        if (v instanceof HTMLElement) {
+                        if (typeof Element !== "undefined" && v instanceof Element) {
+                            attachEmbeddedWorkflowComponents(v);
                             end.before(v);
                             return;
                         }
@@ -422,12 +463,14 @@ export class ClReactiveElement {
             }
 
             if (child instanceof ClReactiveElement) {
+                attachEmbeddedWorkflowComponents(child.element);
                 this._children.push(child);
                 this.element.appendChild(child.element);
                 return;
             }
 
-            if (child instanceof HTMLElement) {
+            if (typeof Element !== "undefined" && child instanceof Element) {
+                attachEmbeddedWorkflowComponents(child);
                 this._children.push(child);
                 this.element.appendChild(child);
                 return;

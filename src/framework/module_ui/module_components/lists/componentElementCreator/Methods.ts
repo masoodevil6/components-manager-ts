@@ -27,9 +27,24 @@ export const Methods = {
         args: {},
         dataArgs: {COLUMN: null as LayoutColumn | null},
     },
+    CHILDREN_DISPLAY_CHANGE: {
+        name: "fn_onChildrenDisplayChange",
+        description: "Callback when the child component display mode changes",
+        args: {},
+        dataArgs: {MODE: "EDIT" as ElementCreatorMode.EDIT | ElementCreatorMode.RENDER},
+    },
     SETTINGS_APPLY: {
         name: "fn_onSettingsApply",
         description: "Callback after the reference component settings are applied",
+        args: {},
+        dataArgs: {
+            COMPONENT: null as Function | null,
+            PROPERTIES: {} as Record<string, any>,
+        },
+    },
+    STYLE_CHANGE: {
+        name: "fn_onStyleChange",
+        description: "Callback after reference component styles are changed",
         args: {},
         dataArgs: {
             COMPONENT: null as Function | null,

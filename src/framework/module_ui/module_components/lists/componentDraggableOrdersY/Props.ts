@@ -9,7 +9,7 @@ import type {
 
 export type DraggableItem = {
     id: string | number;
-    body: CoreReactive.App;
+    body: CoreReactive.App | (() => CoreReactive.App);
     isPin?: boolean;
 };
 

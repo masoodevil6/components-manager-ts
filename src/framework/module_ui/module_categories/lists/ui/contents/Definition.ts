@@ -10,6 +10,7 @@ import {Tabs}            from "./tabs"
 import {Window}          from "./window"
 import {WindowConfirm}  from "./windowConfirm"
 import {Table}            from "./table"
+import {TableResponsible} from "./tableResponsible"
 import {ListSelectedScroller} from "./listSelectedScroller"
 import {Loading}           from "./loading"
 import {Sidebar}           from "./sidebar"
@@ -17,6 +18,7 @@ import {MouseScroller}     from "./mouseScroller"
 import {Workflow}          from "./workflow"
 import {TimerDown}         from "./timerDown"
 import {CardViewInfo}      from "./cardViewInfo"
+import {CardRowInfo}       from "./cardRowInfo"
 import {CardViewClicable}  from "./cardViewClicable"
 
 export const Definition : UICategories.TCategoryComponentDefinition = {
@@ -35,6 +37,7 @@ export const Definition : UICategories.TCategoryComponentDefinition = {
         Window,
         WindowConfirm,
         Table,
+        TableResponsible,
         ListSelectedScroller,
         Loading,
         Sidebar,
@@ -42,6 +45,7 @@ export const Definition : UICategories.TCategoryComponentDefinition = {
         Workflow,
         TimerDown,
         CardViewInfo,
+        CardRowInfo,
         CardViewClicable,
     ],
 }

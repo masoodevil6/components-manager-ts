@@ -46,6 +46,7 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase<ReturnType<
        Internal State â€” document click listener Ø¨Ø±Ø§ÛŒ outside-click detection
     --------------------------------------------- */
     private _ON_MENU_OPEN: ((event: MouseEvent) => void) | null = null;
+    private _FLOAT_MENU_INSTANCE: {containsTarget?: (target: EventTarget | null) => boolean; setShow?: (show: boolean) => void} | null = null;
 
 
     constructor(
@@ -74,6 +75,7 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase<ReturnType<
     --------------------------------------------- */
     dispose(): void {
         this.pr_cleanupDocumentListener();
+        this._FLOAT_MENU_INSTANCE = null;
         this.disposeStep();
     }
 
@@ -160,6 +162,7 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase<ReturnType<
                 prop_floatArrowWidth:          0,
                 prop_floatShowControlWithSelf: true,
                 prop_floatIsShow:              prop_menuIsOpen,
+                prop_floatUsePortal:            true,
                 prop_floatStyles: {
                     display: "block",
                     marginTop: UtilStyle.Css_SizeUnit(10, UtilConst.Units.PEXEL),
@@ -171,6 +174,7 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase<ReturnType<
             },
             {},
         );
+        this._FLOAT_MENU_INSTANCE = floatMenu as typeof this._FLOAT_MENU_INSTANCE;
 
         // Preserve attrsDefault (id/class/...) on a wrapper so outside-click can detect by part id
         return CoreReactive.App.part("section", {
@@ -207,18 +211,19 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase<ReturnType<
             ],
             on: {
                 click: (event: Event) => {
-                    const wasOpen = this.get("prop_menuIsOpen");
-                    const willOpen = !wasOpen;
+                    // ComponentFloatMenu handles the trigger click in capture
+                    // phase and updates this shared prop. Read its resulting
+                    // state here; toggling it again would immediately close
+                    // every click-opened menu.
+                    const isOpen = this.get("prop_menuIsOpen");
 
                     // Notify only when opening
-                    if (willOpen) {
+                    if (isOpen) {
                         this.executeMethod("CLICK_OPEN", event, {});
                     }
 
-                    this.set("prop_menuIsOpen", willOpen);
-
                     // Manage outside-click listener correctly
-                    if (willOpen) {
+                    if (isOpen) {
                         this._ON_MENU_OPEN = this._ON_MENU_OPEN ?? this.pr_handleMenuClose.bind(this, true);
                         document.addEventListener("click", this._ON_MENU_OPEN as any);
                         requestAnimationFrame(() => this.pr_adjustFloatPosition());
@@ -515,11 +520,18 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase<ReturnType<
     private pr_handleMenuClose(checkChild: boolean, event: Event) {
         const target = event.target as HTMLElement;
         const menuId = this.getPartId("part-formFloatMenu");
-        if (checkChild && target.closest(`#${menuId}`)) {
+        if (checkChild && (
+            target.closest(`#${menuId}`)
+            || this._FLOAT_MENU_INSTANCE?.containsTarget?.(target)
+        )) {
             return;
         }
 
-        this.set("prop_menuIsOpen", false);
+        if (this._FLOAT_MENU_INSTANCE?.setShow) {
+            this._FLOAT_MENU_INSTANCE.setShow(false);
+        } else {
+            this.set("prop_menuIsOpen", false);
+        }
         this.pr_cleanupDocumentListener();
 
         if (checkChild) {

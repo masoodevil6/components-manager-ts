@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Component Workflow Composition — Vision</title>
+  <style>
+    :root { color-scheme: light; font-family: Inter, "Segoe UI", Tahoma, sans-serif; color: #17263e; background: #edf2f8; }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body { display: flex; flex-direction: column; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .8rem 1.1rem; background: #fff; border-bottom: 1px solid #dbe4ef; box-shadow: 0 3px 16px #273c5c12; z-index: 1; }
+    .heading { min-width: 0; }
+    h1 { margin: 0; font-size: 1.05rem; }
+    p { margin: .2rem 0 0; color: #61728a; font-size: .82rem; }
+    nav { display: flex; align-items: center; gap: .4rem; }
+    button { border: 1px solid #cfdae8; border-radius: 9px; padding: .48rem .7rem; color: #243852; background: #f8faff; font: inherit; cursor: pointer; }
+    button:hover { background: #eaf2ff; border-color: #9dbce5; }
+    #workflowJsonButton { color: #fff; background: #315f9d; border-color: #315f9d; font-weight: 650; }
+    #workflowJsonButton:hover { background: #244c82; }
+    #zoomLabel { min-width: 3.5rem; text-align: center; color: #52657e; font-size: .85rem; }
+    main { flex: 1; min-height: 0; overflow: auto; padding: 1rem; cursor: grab; }
+    main.dragging { cursor: grabbing; user-select: none; }
+    #diagram { display: block; width: min(100%, 2400px); height: auto; margin: 0 auto; background: #f2f6fc; border-radius: 14px; box-shadow: 0 8px 30px #263b5c18; transform-origin: top left; }
+    dialog { width: min(1080px, calc(100vw - 32px)); max-height: 90vh; padding: 0; border: 1px solid #d5dfed; border-radius: 18px; color: #17263e; box-shadow: 0 24px 80px #14243f40; }
+    dialog::backdrop { background: #13233d80; backdrop-filter: blur(3px); }
+    .dialogHeader { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.2rem; border-bottom: 1px solid #e0e7f0; }
+    .dialogHeader h2 { margin: 0; font-size: 1.1rem; }
+    .dialogHeader p { margin-top: .25rem; }
+    .dialogBody { padding: 1rem 1.2rem 1.2rem; overflow: auto; max-height: calc(90vh - 84px); }
+    .jsonGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .jsonPanel { min-width: 0; }
+    .jsonPanel h3 { margin: 0 0 .55rem; font-size: .92rem; }
+    .jsonPanel pre { margin: 0; min-height: 250px; max-height: 62vh; overflow: auto; padding: 1rem; border: 1px solid #263d5b; border-radius: 12px; color: #dce8f7; background: #101d30; font: .82rem/1.65 Consolas, Menlo, monospace; tab-size: 2; }
+    .dictionaryPanel { min-width: 0; border: 1px solid #d7e1ef; border-radius: 12px; overflow: hidden; background: #f8faff; }
+    .dictionaryPanel h3 { margin: 0; padding: .85rem 1rem; border-bottom: 1px solid #d7e1ef; font-size: .92rem; }
+    .dictionaryType { display: flex; align-items: center; justify-content: space-between; gap: .55rem; padding: .75rem 1rem; color: #4e3d85; font: 700 .82rem Consolas, Menlo, monospace; background: #f0ebff; border-bottom: 1px solid #ded5fa; }
+    .dictionaryShape { color: #74679b; font-size: .72rem; font-weight: 500; }
+    .dictionaryPanel table { width: 100%; border-collapse: collapse; font-size: .78rem; }
+    .dictionaryPanel th, .dictionaryPanel td { padding: .65rem .8rem; border-bottom: 1px solid #e4eaf2; text-align: left; vertical-align: top; }
+    .dictionaryPanel th { color: #64758c; background: #fff; font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; }
+    .dictionaryPanel td code { color: #2e4770; font: .75rem/1.5 Consolas, Menlo, monospace; overflow-wrap: anywhere; }
+    .dictionaryPanel tr:last-child td { border-bottom: 0; }
+    .eventPanel { margin-top: 1rem; }
+    .renderPanel { margin-bottom: 1rem; }
+    .renderPanel h3 { margin: 0 0 .55rem; font-size: .92rem; }
+    .renderPanel pre { margin: 0; max-height: 40vh; overflow: auto; padding: 1rem; border: 1px solid #263d5b; border-radius: 12px; color: #dce8f7; background: #101d30; font: .82rem/1.65 Consolas, Menlo, monospace; tab-size: 2; }
+    .jsonLine { display: block; min-height: 1.65em; padding-left: 3.6em; position: relative; white-space: pre; }
+    .jsonLine::before { position: absolute; left: 0; width: 2.6em; color: #6f829d; text-align: right; content: counter(line); counter-increment: line; }
+    .jsonPanel pre code { counter-reset: line; }
+    .json-key { color: #9dccff; }.json-string { color: #b8e5b6; }.json-literal { color: #e6be7b; }.json-number { color: #d7b5ff; }
+    .jsonNote { margin: .9rem 0 0; color: #60728b; font-size: .82rem; line-height: 1.5; }
+    @media (max-width: 700px) { header { align-items: flex-start; flex-direction: column; } nav { width: 100%; } }
+    @media (max-width: 850px) { .jsonGrid { grid-template-columns: 1fr; } .jsonPanel pre { max-height: 45vh; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="heading">
+      <h1>Component Workflow Composition</h1>
+      <p>Architecture vision · component tree, explicit CoreEvent flow, naming, and inspection</p>
+    </div>
+    <nav aria-label="Diagram controls">
+      <button id="workflowJsonButton" type="button" title="Show the workflow data as formatted JSON">Workflow JSON</button>
+      <button id="fit" type="button" title="Fit diagram to viewport">Fit</button>
+      <button id="out" type="button" title="Zoom out">−</button>
+      <span id="zoomLabel">100%</span>
+      <button id="in" type="button" title="Zoom in">+</button>
+      <button id="reset" type="button" title="Reset zoom">Reset</button>
+    </nav>
+  </header>
+  <main id="viewport" aria-label="Scrollable workflow architecture diagram">
+    <img id="diagram" src="component-workflow-vision.svg" alt="Component workflow composition architecture vision diagram">
+  </main>
+  <dialog id="workflowDialog" aria-labelledby="workflowDialogTitle">
+    <div class="dialogHeader">
+      <div>
+        <h2 id="workflowDialogTitle">Workflow JSON</h2>
+        <p>Render the component, compose its workflow, find the named node, then send an event</p>
+      </div>
+      <button id="closeWorkflowDialog" type="button" aria-label="Close workflow JSON">Close</button>
+    </div>
+    <div class="dialogBody">
+      <section class="renderPanel" aria-label="Rendered component structure">
+        <h3>Step 1 · Rendered component structure</h3>
+        <pre><code id="componentRenderCode"></code></pre>
+        <p class="jsonNote">The component title comes from its Definition.name. WorkflowNodeNames provides only the stable child slot under its parent.</p>
+      </section>
+      <div class="jsonGrid">
+        <section class="jsonPanel" aria-label="Composed workflow tree">
+          <h3>Step 2 · Composed workflow tree</h3>
+          <pre><code id="workflowJsonData"></code></pre>
+        </section>
+        <section class="dictionaryPanel" aria-label="Workflow node names">
+          <h3>Step 3 · WorkflowNodeNames</h3>
+          <div class="dictionaryType"><span>type → WorkflowNodeNames</span><span class="dictionaryShape">stable child slot names</span></div>
+          <table>
+            <thead><tr><th>Dictionary name</th><th>child name value</th></tr></thead>
+            <tbody id="workflowNodeNamesRows"></tbody>
+          </table>
+        </section>
+      </div>
+      <section class="jsonPanel eventPanel" aria-label="Example event request">
+          <h3>Step 4 · Resolve a node and send a request</h3>
+          <pre><code id="eventJsonData"></code></pre>
+      </section>
+      <p class="jsonNote">The page workflow contains Layout under the stable child key WorkflowNodeNames.layout. From secondaryInput, findWorkflowNodes locates that named Layout node; getChild then retrieves its showPopup step. A standalone CoreEvent root has no child key, so name-based lookup needs a containing workflow root.</p>
+    </div>
+  </dialog>
+  <script>
+    const viewport = document.getElementById("viewport");
+    const diagram = document.getElementById("diagram");
+    const zoomLabel = document.getElementById("zoomLabel");
+    let zoom = 1;
+    let baseWidth = 0;
+    const update = () => {
+      if (!baseWidth) return;
+      diagram.style.width = `${Math.round(baseWidth * zoom)}px`;
+      zoomLabel.textContent = `${Math.round(zoom * 100)}%`;
+    };
+    const fit = () => {
+      if (!diagram.naturalWidth) return;
+      baseWidth = Math.min(viewport.clientWidth - 32, diagram.naturalWidth);
+      zoom = 1;
+      update();
+      viewport.scrollTo({ left: 0, top: 0, behavior: "smooth" });
+    };
+    document.getElementById("fit").addEventListener("click", fit);
+    document.getElementById("in").addEventListener("click", () => { zoom = Math.min(zoom * 1.2, 4); update(); });
+    document.getElementById("out").addEventListener("click", () => { zoom = Math.max(zoom / 1.2, 0.35); update(); });
+    document.getElementById("reset").addEventListener("click", () => { zoom = 1; update(); });
+    diagram.addEventListener("load", fit);
+    window.addEventListener("resize", fit);
+
+    const workflowNodeNames = {
+      layout: "layout",
+      primaryInput: "primaryInput",
+      secondaryInput: "secondaryInput"
+    };
+    const workflowExample = {
+      component: { name: "componentPage", id: "component_page" },
+      workflow: {
+        root: "component_page",
+        steps: {},
+        children: {
+          [workflowNodeNames.layout]: {
+            component: { name: "componentLayout", id: "component_layout" },
+            workflow: {
+              root: "component_layout",
+              steps: {
+                childInputChanged: { name: "childInputChanged", unique: "<layout-step-id>" },
+                showPopup: { name: "showPopup", unique: "<layout-popup-step-id>" }
+              },
+              children: {
+                [workflowNodeNames.primaryInput]: {
+                  component: { name: "componentInput", id: "component_input" },
+                  workflow: {
+                    root: "component_input",
+                    steps: {
+                      inputChange: { name: "inputChange", unique: "<primary-input-step-id>" }
+                    },
+                    children: {}
+                  }
+                },
+                [workflowNodeNames.secondaryInput]: {
+                  component: { name: "componentInput", id: "component_input" },
+                  workflow: {
+                    root: "component_input",
+                    steps: {
+                      inputChange: { name: "inputChange", unique: "<secondary-input-step-id>" }
+                    },
+                    children: {}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    };
+    const eventExample = [
+      "// pageWorkflow contains the layout node under WorkflowNodeNames.layout",
+      "const layoutCandidates = CoreEvent.findWorkflowNodes(",
+      "  WorkflowNodeNames.secondaryInput,",
+      "  WorkflowNodeNames.layout,",
+      "  pageWorkflow",
+      ");",
+      "const targetLayout = layoutCandidates[0]?.node; // closest candidate",
+      "const targetStep = targetLayout && CoreEvent.getChild(targetLayout, \"showPopup\");",
+      "const sourceNode = targetLayout && CoreEvent.getChild(targetLayout, WorkflowNodeNames.secondaryInput);",
+      "const sourceStep = sourceNode && CoreEvent.getChild(sourceNode, \"inputChange\");",
+      "if (!targetStep || !sourceStep) throw new Error(\"Workflow step not found\");",
+      "CoreEvent.App.request(",
+      "  CoreEvent.requestMap([[targetStep, { openedBy: WorkflowNodeNames.secondaryInput }]]),",
+      "  sourceStep",
+      ");"
+    ];
+    const componentRenderSource = [
+      'const primaryInput = UiCategory.UI.Inputs.Input({',
+      '  prop_workflowChildName: WorkflowNodeNames.primaryInput,',
+      '  prop_name: "primaryInput",',
+      '  prop_value: ""',
+      '}).getElement();',
+      '',
+      'const secondaryInput = UiCategory.UI.Inputs.Input({',
+      '  prop_workflowChildName: WorkflowNodeNames.secondaryInput,',
+      '  prop_name: "secondaryInput",',
+      '  prop_value: ""',
+      '}).getElement();',
+      '',
+      'const component = UiCategory.UI.Basic.Layout({',
+      '  prop_workflowChildName: WorkflowNodeNames.layout,',
+      '  prop_col: LayoutColumn.COL_12,',
+      '  prop_layoutContent: [',
+      '    { content: primaryInput, col: LayoutColumn.COL_6 },',
+      '    { content: secondaryInput, col: LayoutColumn.COL_6 }',
+      '  ]',
+      '}).getElement();',
+    ].join("\n");
+    const escapeHtml = text => text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+    document.getElementById("componentRenderCode").innerHTML = componentRenderSource.split("\n")
+      .map(line => '<span class="jsonLine">' + (escapeHtml(line) || " ") + '</span>').join("");
+    const highlightJson = value => {
+      const escaped = JSON.stringify(value, null, 2)
+        .replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+      const highlighted = escaped.replace(/("(?:\\.|[^"\\])*"(?=\s*:))|("(?:\\.|[^"\\])*")|\b(true|false|null)\b|\b(-?\d+(?:\.\d+)?)\b/g,
+        (token, key, string, literal, number) => `<span class="${key ? "json-key" : string ? "json-string" : literal ? "json-literal" : "json-number"}">${token}</span>`);
+      return highlighted.split("\n").map(line => `<span class="jsonLine">${line || " "}</span>`).join("");
+    };
+    document.getElementById("workflowJsonData").innerHTML = highlightJson(workflowExample);
+    document.getElementById("eventJsonData").innerHTML = eventExample
+      .map(line => '<span class="jsonLine">' + (escapeHtml(line) || " ") + '</span>').join("");
+    document.getElementById("workflowNodeNamesRows").innerHTML = Object.entries(workflowNodeNames)
+      .map(([name, value]) => '<tr><td><code>' + escapeHtml(name) + '</code></td><td><code>' + escapeHtml(value) + '</code></td></tr>')
+      .join("");
+    const workflowDialog = document.getElementById("workflowDialog");
+    document.getElementById("workflowJsonButton").addEventListener("click", () => workflowDialog.showModal());
+    document.getElementById("closeWorkflowDialog").addEventListener("click", () => workflowDialog.close());
+    workflowDialog.addEventListener("click", event => {
+      if (event.target === workflowDialog) workflowDialog.close();
+    });
+
+    let drag = null;
+    viewport.addEventListener("pointerdown", event => {
+      if (event.target.closest("button")) return;
+      drag = { x: event.clientX, y: event.clientY, left: viewport.scrollLeft, top: viewport.scrollTop };
+      viewport.classList.add("dragging");
+      viewport.setPointerCapture(event.pointerId);
+    });
+    viewport.addEventListener("pointermove", event => {
+      if (!drag) return;
+      viewport.scrollLeft = drag.left - (event.clientX - drag.x);
+      viewport.scrollTop = drag.top - (event.clientY - drag.y);
+    });
+    const stopDrag = () => { drag = null; viewport.classList.remove("dragging"); };
+    viewport.addEventListener("pointerup", stopDrag);
+    viewport.addEventListener("pointercancel", stopDrag);
+    viewport.addEventListener("wheel", event => {
+      if (!event.ctrlKey) return;
+      event.preventDefault();
+      zoom = Math.max(.35, Math.min(4, zoom * (event.deltaY < 0 ? 1.08 : 1 / 1.08)));
+      update();
+    }, { passive: false });
+  </script>
+</body>
+</html>

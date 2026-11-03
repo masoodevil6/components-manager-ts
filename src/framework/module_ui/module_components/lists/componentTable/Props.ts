@@ -1,7 +1,9 @@
 import * as CoreComponents from "@/core_components";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
 import {Keys}                from "../../../module_categories/languages";
+import * as UiIcons          from "@/ui_icons";
 import * as UtilConst        from "@/util_consts";
+import * as UtilStyle        from "@/util_styles";
 import type {
     ExtractPropsType,
     ExtractPropsConfigType,
@@ -15,16 +17,27 @@ import type {
 export type TableHeaderItem = {
     id:      string;
     content?: string;
-    icon?:   string | ((size: number, color?: string) => string);
+    icon?:   UiIcons.IIconDefinition | string | ((size: number, color?: string) => string);
     width?:  number;
 };
 
-export type TableDataRow = Record<string, string | { content: string }>;
+export type TableDataRow = Record<string, string | number | null | { content: string | number | null }>;
 
-export type TableRowOption = {
+export type TableLegacyRowOption = {
     html:  string | ((size: string, color?: string) => string);
     attrs: { id: string; name?: string; title?: string };
 };
+
+/** Typed row action used by responsive wrappers; valueKey resolves against the clicked row. */
+export type TableActionOption = {
+    id: string;
+    title: string;
+    action: string;
+    valueKey: string;
+    icon?: UiIcons.IIconDefinition | null;
+};
+
+export type TableRowOption = TableLegacyRowOption | TableActionOption;
 
 
 /**
@@ -129,6 +142,20 @@ export const Props = {
         description:  Keys.category.components.table.props.tableItemHeadStyles.description,
     }),
 
+    prop_backgroundColorIconColumnSelector: Define_ComponentProp<string | null>({
+        prop:         "prop_backgroundColorIconColumnSelector",
+        default:      null,
+        name:         Keys.category.components.table.props.columnSelectorBackgroundColor.name,
+        description:  Keys.category.components.table.props.columnSelectorBackgroundColor.description,
+    }),
+
+    prop_colorIconColumnSelector: Define_ComponentProp<string | null>({
+        prop:         "prop_colorIconColumnSelector",
+        default:      null,
+        name:         Keys.category.components.table.props.columnSelectorColor.name,
+        description:  Keys.category.components.table.props.columnSelectorColor.description,
+    }),
+
     prop_order: Define_ComponentProp<string[]>({
         prop:         "prop_order",
         default:      [],
@@ -152,7 +179,7 @@ export const Props = {
 
     prop_headerIconColor: Define_ComponentProp<string>({
         prop:         "prop_headerIconColor",
-        default:      "",
+        default:      UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
         name:         Keys.category.components.table.props.headerIconColor.name,
         description:  Keys.category.components.table.props.headerIconColor.description,
     }),
@@ -183,6 +210,13 @@ export const Props = {
         default:      {},
         name:         Keys.category.components.table.props.tableItemBodyStyles.name,
         description:  Keys.category.components.table.props.tableItemBodyStyles.description,
+    }),
+
+    prop_tableItemBodyHoverStyles: Define_ComponentProp<Record<string, string>>({
+        prop:         "prop_tableItemBodyHoverStyles",
+        default:      {},
+        name:         Keys.category.components.table.props.tableItemBodyHoverStyles.name,
+        description:  Keys.category.components.table.props.tableItemBodyHoverStyles.description,
     }),
 
     prop_data: Define_ComponentProp<TableDataRow[]>({

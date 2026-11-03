@@ -1,4 +1,5 @@
-import {ITemplate} from "@/core_route";
+import {Navigate} from "@/core_route";
+import type {ITemplate} from "@/core_route";
 import * as CoreObservable from "@/core_observable";
 import * as CoreReactive from "@/core_reactive";
 import * as CoreLanguage from "@/core_languages";
@@ -214,9 +215,9 @@ export class ClIconPage implements ITemplate {
                 action: "toggleFilters",
             }],
         }, {
-            BACK: () => { window.location.href = "/"; },
+            BACK: () => { Navigate("/"); },
             SELECT_NAV_ITEM: (_event: Event, args: any) => {
-                if (args?.NAME === "home") window.location.href = "/";
+                if (args?.NAME === "home") Navigate("/");
             },
             SELECT_OPTION: (_event: Event, args: any) => {
                 if (args?.NAME !== "toggleFilters") return;

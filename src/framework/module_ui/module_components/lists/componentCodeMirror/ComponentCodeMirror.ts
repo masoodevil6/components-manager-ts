@@ -23,6 +23,8 @@ import {json} from "@codemirror/lang-json";
 import * as CoreReactive from "@/core_reactive";
 import * as CoreObservable from "@/core_observable";
 import * as CoreConfig from "@/core_configs";
+import * as CoreComponents from "@/core_components";
+import * as CoreEvent from "@/core_event";
 import * as UtilConst from "@/util_consts";
 import * as UtilStyle from "@/util_styles";
 import * as UiIcons from "@/ui_icons";
@@ -107,6 +109,10 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase<ReturnType<type
     private _RUN_PANE: CoreReactive.App | null = null;
     private _RUN_PANEL: HTMLElement | null = null;
     private _RUN_FRAME: HTMLIFrameElement | null = null;
+    private readonly _RUN_OUTPUT_WORKFLOW_CHILDREN = new Map<string, {
+        workflow: CoreEvent.TStepRef;
+        component: any;
+    }>();
     private _CONSOLE_COMPONENT: InstanceType<typeof ComponentConsole.Component> | null = null;
     private _CONSOLE_PANE: CoreReactive.App | null = null;
     private readonly _CONSOLE_ENTRIES = new CoreObservable.App<ConsoleEntry[]>([]);
@@ -137,6 +143,7 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase<ReturnType<type
     dispose(): void {
         if (this._DISPOSED) return;
         this._DISPOSED = true;
+        this.clearRunOutput();
         this._EDITOR?.destroy();
         this._EDITOR = null;
         this._HEADER_MENU?.dispose();
@@ -960,6 +967,7 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase<ReturnType<type
                     },
                 });
                 if (output instanceof Node) {
+                    this.attachRunOutputWorkflowComponents(output);
                     this._RUN_PANEL.replaceChildren(output);
                 } else if (typeof output === "string") {
                     const outputElement = document.createElement("pre");
@@ -1032,9 +1040,72 @@ export class ComponentCodeMirror extends ComponentCodeMirrorBase<ReturnType<type
     }
 
     private clearRunOutput(): void {
+        this.disposeRunOutputWorkflowComponents();
         this._RUN_FRAME?.remove();
         this._RUN_FRAME = null;
         this._RUN_PANEL?.replaceChildren();
+    }
+
+    private attachRunOutputWorkflowComponents(output: Node): void {
+        const components: any[] = [];
+        const seen = new Set<object>();
+        const visit = (element: Element): void => {
+            const owner = CoreComponents.Tools.Workflow.Get_ComponentWorkflowElementOwner(element) as any;
+            if (owner) {
+                if (!seen.has(owner)) {
+                    seen.add(owner);
+                    components.push(owner);
+                }
+                return;
+            }
+            for (const child of Array.from(element.children)) visit(child);
+        };
+
+        if (output instanceof Element) {
+            visit(output);
+        } else {
+            for (const child of Array.from(output.childNodes)) {
+                if (child instanceof Element) visit(child);
+            }
+        }
+
+        const nameCounts = new Map<string, number>();
+        components.forEach((component) => {
+            const workflow = component?.getComponentWorkflow?.() as CoreEvent.TStepRef | undefined;
+            if (!workflow) return;
+
+            const definition = component.getComponentDefinition?.() ?? component._COMPONENT_DEFINITION ?? {};
+            const configuredName = component.get?.("prop_workflowChildName");
+            const identityName = typeof configuredName === "string" && configuredName.trim()
+                ? configuredName.trim()
+                : String(definition.id ?? definition.name ?? component._COMPONENT_ID ?? "component");
+            const safeName = identityName.replace(/[^a-zA-Z0-9_-]+/g, "-").replace(/^-+|-+$/g, "") || "component";
+            const count = (nameCounts.get(safeName) ?? 0) + 1;
+            nameCounts.set(safeName, count);
+            const childName = `runOutput-${safeName}${count > 1 ? `-${count}` : ""}`;
+
+            CoreComponents.Tools.Workflow.Attach_ComponentWorkflow(
+                this.getComponentWorkflow(),
+                childName,
+                workflow,
+                {
+                    component: {
+                        name: definition.name ?? component._COMPONENT_NAME ?? safeName,
+                        id: definition.id ?? component._COMPONENT_ID ?? safeName,
+                    },
+                },
+            );
+            this._RUN_OUTPUT_WORKFLOW_CHILDREN.set(childName, {workflow, component});
+        });
+    }
+
+    private disposeRunOutputWorkflowComponents(): void {
+        const parent = this.getComponentWorkflow();
+        for (const [childName, child] of this._RUN_OUTPUT_WORKFLOW_CHILDREN) {
+            const detached = CoreComponents.Tools.Workflow.Detach_ComponentWorkflow(parent, childName, child.workflow);
+            if (detached) child.component?.dispose?.();
+        }
+        this._RUN_OUTPUT_WORKFLOW_CHILDREN.clear();
     }
 
     private createRunDocument(source: string, language: CodeMirrorLanguage): string {

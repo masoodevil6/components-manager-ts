@@ -140,7 +140,7 @@ export class ComponentInputSimple extends ComponentInputSimpleBase<ReturnType<ty
         const input = CoreReactive.App.input({
             attrs: {...attrsDefault},
             attrsBind: {
-                name: CoreObservable.App.computed((fieldName) => fieldName == null ? null : `${fieldName}[value]`, [name], this.getScope()),
+                name,
                 type: CoreObservable.App.computed((inputType) => inputType === InputSimpleTypes.STRING ? "text" : inputType ?? "text", [type], this.getScope()),
                 placeholder,
                 min,

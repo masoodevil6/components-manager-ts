@@ -1,4 +1,6 @@
-import {ITemplate} from "@/core_route";
+import {Navigate} from "@/core_route";
+import type {ITemplate} from "@/core_route";
+import * as Core from "@/core";
 import * as CoreReactive from "@/core_reactive";
 import * as CoreComponents from "@/core_components";
 import * as CoreEvent from "@/core_event";
@@ -13,6 +15,8 @@ import {CodeMirrorLanguage} from "../../../module_components/lists/componentCode
 import type {CodeMirrorRunContext} from "../../../module_components/lists/componentCodeMirror/Props";
 import * as ComponentCollapse from "../../../module_components/lists/componentCollapse";
 import * as ComponentJsonTree from "../../../module_components/lists/componentJsonTree";
+import {LayoutColumn} from "../../../module_components/lists/componentLayout/Props";
+import {LayoutCreatorMode} from "../../../module_components/lists/componentLayoutCreator/Props";
 import type {JsonValue} from "../../../module_components/lists/componentJsonTree/Types";
 
 export class ClComponentDetailsPage implements ITemplate {
@@ -32,10 +36,10 @@ export class ClComponentDetailsPage implements ITemplate {
                     {name: "components", title: "Components"},
                 ],
             }, {
-                BACK: () => { window.location.href = "/components"; },
+                BACK: () => { Navigate("/components"); },
                 SELECT_NAV_ITEM: (_event: Event, args: any) => {
-                    if (args?.NAME === "home") window.location.href = "/";
-                    if (args?.NAME === "components") window.location.href = "/components";
+                    if (args?.NAME === "home") Navigate("/");
+                    if (args?.NAME === "components") Navigate("/components");
                 },
             } as any).getElement();
             const page = UiCategory.UI.Pages.Page({
@@ -96,10 +100,10 @@ export class ClComponentDetailsPage implements ITemplate {
                 action: "show-workflow",
             }],
         }, {
-            BACK: () => { window.location.href = "/components"; },
+            BACK: () => { Navigate("/components"); },
             SELECT_NAV_ITEM: (_event: Event, args: any) => {
-                if (args?.NAME === "home") window.location.href = "/";
-                if (args?.NAME === "components") window.location.href = "/components";
+                if (args?.NAME === "home") Navigate("/");
+                if (args?.NAME === "components") Navigate("/components");
             },
             SELECT_OPTION: (_event: Event, args: any) => {
                 if (args?.NAME !== "show-workflow" || !workflowEndpoint) return;
@@ -179,7 +183,7 @@ type WorkflowInspectableComponent = {
     dispose?: () => void;
 };
 
-function readComponentWorkflow(entry: CoreComponents.ComponentRegistryEntry): JsonValue {
+export function readComponentWorkflow(entry: CoreComponents.ComponentRegistryEntry): JsonValue {
     let instance: WorkflowInspectableComponent | null = null;
 
     try {
@@ -237,11 +241,11 @@ function serializeWorkflowStep(step: WorkflowStepLike, key: string): JsonValue {
     };
 }
 
-function formatExampleSource(render: () => HTMLElement): string {
+export function formatExampleSource(render: () => HTMLElement): string {
     return render.toString().trim();
 }
 
-function executeExampleSource(
+export function executeExampleSource(
     render: (context?: {pageWorkflow?: unknown}) => HTMLElement,
     originalSource: string,
     editedSource: string,
@@ -265,6 +269,9 @@ function executeExampleSource(
         "UtilValidators",
         "UtilConst",
         "UtilStyle",
+        "Core",
+        "LayoutColumn",
+        "LayoutCreatorMode",
         `"use strict"; return (${editedSource});`,
     )(
         UiCategory,
@@ -279,6 +286,9 @@ function executeExampleSource(
         UtilValidators,
         UtilConst,
         UtilStyle,
+        Core,
+        LayoutColumn,
+        LayoutCreatorMode,
     );
     const result = typeof evaluated === "function" ? evaluated(exampleContext) : evaluated;
     if (result instanceof Node) return result;

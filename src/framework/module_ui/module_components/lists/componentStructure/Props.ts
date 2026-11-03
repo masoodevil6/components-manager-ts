@@ -57,6 +57,11 @@ export const Props = {
         name:         Keys.category.components.basic.props.prop_structureStyles.name,
         description:  Keys.category.components.basic.props.prop_structureStyles.description,
     },
+    prop_workflowChildName: CoreComponents.DefineProp<string | null>({
+        prop: "prop_workflowChildName",
+        default: null,
+        OptionShow: false,
+    }),
 } satisfies CoreComponents.ComponentProps;
 
 

@@ -162,9 +162,9 @@ export class ClEventDispatcher {
 
     /** آزادسازی Step و emit handler آن از رجیستری‌ها (جلوگیری از memory leak) */
     dispose(step: TStepRef): void {
-        this.emits.delete(step.identity);
-        this.registry.delete(step.identity);
-        ClEventDispatcher._disposedCount++;
+        const hadEmit = this.emits.delete(step.identity);
+        const hadStep = this.registry.delete(step.identity);
+        if (hadEmit || hadStep) ClEventDispatcher._disposedCount++;
     }
 
     /** شمارنده مرکزی requestId — استاتیک تا در همه Dispatcherها یکتا باشد */

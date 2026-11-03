@@ -82,6 +82,20 @@ export const Props = {
         description:  Keys.category.components.sidebar.props.sidebarDuration.description,
     }),
 
+    prop_delayOpen: Define_ComponentProp<number>({
+        prop:         "prop_delayOpen",
+        default:      150,
+        name:         Keys.category.components.sidebar.props.delayOpen.name,
+        description:  Keys.category.components.sidebar.props.delayOpen.description,
+    }),
+
+    prop_delayClose: Define_ComponentProp<number>({
+        prop:         "prop_delayClose",
+        default:      150,
+        name:         Keys.category.components.sidebar.props.delayClose.name,
+        description:  Keys.category.components.sidebar.props.delayClose.description,
+    }),
+
     prop_sidebarContent: Define_ComponentProp<any>({
         prop:         "prop_sidebarContent",
         default:      "",

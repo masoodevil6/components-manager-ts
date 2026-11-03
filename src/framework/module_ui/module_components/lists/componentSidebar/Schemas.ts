@@ -48,6 +48,8 @@ export const Schemas = {
             Props.prop_sidebarIsOpen,
             Props.prop_sidebarDirection,
             Props.prop_sidebarDuration,
+            Props.prop_delayOpen,
+            Props.prop_delayClose,
             Props.prop_sidebarPositionStart,
             Props.prop_sidebarPositionEnd,
             Props.prop_sidebarMargin,
@@ -74,6 +76,8 @@ export const Schemas = {
             Props.prop_sidebarBtnOpenAtStart,
             Props.prop_sidebarDirection,
             Props.prop_sidebarIsOpen,
+            Props.prop_delayOpen,
+            Props.prop_delayClose,
         ],
     },
 
@@ -93,6 +97,8 @@ export const Schemas = {
         props: [
             Props.prop_sidebarBtnOpenSize,
             Props.prop_sidebarIsOpen,
+            Props.prop_delayOpen,
+            Props.prop_delayClose,
             Props.prop_sidebarBtnColor,
             Props.prop_sidebarDirection,
         ],

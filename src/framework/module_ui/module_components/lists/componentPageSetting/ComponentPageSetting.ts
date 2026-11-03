@@ -1,4 +1,5 @@
 import * as CoreComponents from "@/core_components";
+import * as Core from "@/core";
 import * as CoreObservable from "@/core_observable";
 import * as CoreReactive from "@/core_reactive";
 import * as CoreConfig from "@/core_configs";
@@ -96,6 +97,21 @@ export class ComponentPageSetting extends ComponentStructureClass<
         const propWidth = data?.prop_sidebarWidth ?? bind.prop_sidebarWidth;
         const propIsOpen = data?.prop_sidebarIsOpen ?? bind.prop_sidebarIsOpen;
         const propSidebarHasOpenIcon = data?.prop_sidebarHasOpenIcon ?? bind.prop_sidebarHasOpenIcon;
+        const renderContent = (content: any) => {
+            if (content == null) {
+                this.clearWorkflowChildSlot(Core.Dictionary.WorkflowNodeNames.settingsContent);
+                return content;
+            }
+            if (content && typeof content.getComponentWorkflow === "function") {
+                return this.renderWorkflowSlot(content, Core.Dictionary.WorkflowNodeNames.settingsContent);
+            }
+            if (content && typeof content.getReactiveElement === "function") return content.getReactiveElement();
+            if (content && typeof content.getElement === "function") return content.getElement();
+            return content;
+        };
+        const renderedContent = CoreObservable.App.isObservable(propContent)
+            ? propContent.map(renderContent, this.getScope())
+            : renderContent(propContent);
         const sizeName = CoreConfig.Settings.SizeName.observable();
         const scrollableContent = CoreReactive.App.div({
             attrs: {"data-part-name": "part-page-setting-scroll-content"},
@@ -112,7 +128,7 @@ export class ComponentPageSetting extends ComponentStructureClass<
                 paddingLeft: UtilStyle.Css_Padding(size),
                 paddingRight: UtilStyle.Css_Padding(size),
             }), [propContentScrollY, sizeName], this.getScope()),
-            children: propContent == null ? [] : [propContent as any],
+            children: renderedContent == null ? [] : [renderedContent as any],
         });
         const sidebarDirection = CoreObservable.App.computed(
             (isRtl: boolean) => isRtl ? SidebarDirection.RTL : SidebarDirection.LTR,
@@ -130,6 +146,9 @@ export class ComponentPageSetting extends ComponentStructureClass<
             prop_sidebarWidth: propWidth,
             prop_sidebarIsOpen: propIsOpen,
             prop_sidebarDirection: sidebarDirection,
+            // This panel's width and the page content width animate together.
+            prop_delayOpen: 0,
+            prop_delayClose: 0,
             // Keep the sidebar slide in sync with the page slot width animation.
             prop_sidebarDuration: PAGE_SETTING_TRANSITION_MS,
             prop_sidebarBtnOpenHas: propSidebarToggleHas,
@@ -165,6 +184,7 @@ export class ComponentPageSetting extends ComponentStructureClass<
         });
         this._settingPanel = settingPanel.getElement() as HTMLElement;
         this._settingPanel.setAttribute("data-component-page-setting-panel", "");
+        this._settingPanel.setAttribute("data-component-page-setting-layer", "");
 
         const ownerPlaceholder = CoreReactive.App.section({
             attrs: {...attrsDefault},

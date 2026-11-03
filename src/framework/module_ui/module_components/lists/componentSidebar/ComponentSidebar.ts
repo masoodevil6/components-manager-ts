@@ -38,6 +38,10 @@ import {ButtonAction} from "../componentButton/Props";
 export class ComponentSidebar extends ComponentSidebarBase<ReturnType<typeof createSidebarStep>>{
 
     private _DEFAULT_OPACITY: CoreObservable.App<any> | null = null;
+    private _DELAYED_SIDEBAR_IS_OPEN: CoreObservable.App<boolean> | null = null;
+    private _SIDEBAR_IS_OPEN_SOURCE: unknown = null;
+    private _SIDEBAR_IS_OPEN_UNSUBSCRIBE: (() => void) | null = null;
+    private _SIDEBAR_OPEN_DELAY_TIMER: number | null = null;
 
     constructor(
         config?:  Partial<StructurePropsType & SidebarPropsConfigType>,
@@ -64,7 +68,59 @@ export class ComponentSidebar extends ComponentSidebarBase<ReturnType<typeof cre
        Plan 9.1 â€” Component Disposal
     --------------------------------------------- */
     dispose(): void {
+        this.clearSidebarOpenDelay();
+        this._SIDEBAR_IS_OPEN_UNSUBSCRIBE?.();
+        this._SIDEBAR_IS_OPEN_UNSUBSCRIBE = null;
+        this._DELAYED_SIDEBAR_IS_OPEN = null;
+        this._SIDEBAR_IS_OPEN_SOURCE = null;
         this.disposeStep();
+    }
+
+    private clearSidebarOpenDelay(): void {
+        if (this._SIDEBAR_OPEN_DELAY_TIMER === null) return;
+        window.clearTimeout(this._SIDEBAR_OPEN_DELAY_TIMER);
+        this._SIDEBAR_OPEN_DELAY_TIMER = null;
+    }
+
+    private getDelayedSidebarOpenState(
+        propSidebarIsOpen: CoreObservable.App<any>,
+        propDelayOpen: CoreObservable.App<any>,
+        propDelayClose: CoreObservable.App<any>,
+    ): CoreObservable.App<boolean> {
+        if (this._DELAYED_SIDEBAR_IS_OPEN && this._SIDEBAR_IS_OPEN_SOURCE === propSidebarIsOpen) {
+            return this._DELAYED_SIDEBAR_IS_OPEN;
+        }
+
+        this.clearSidebarOpenDelay();
+        this._SIDEBAR_IS_OPEN_UNSUBSCRIBE?.();
+        this._SIDEBAR_IS_OPEN_SOURCE = propSidebarIsOpen;
+        const read = (value: any) => CoreObservable.App.isObservable(value) ? value.get() : value;
+        const delayedState = new CoreObservable.App<boolean>(Boolean(read(propSidebarIsOpen)));
+        this._DELAYED_SIDEBAR_IS_OPEN = delayedState;
+
+        if (CoreObservable.App.isObservable(propSidebarIsOpen)) {
+            this._SIDEBAR_IS_OPEN_UNSUBSCRIBE = propSidebarIsOpen.subscribe((requestedValue) => {
+                const nextIsOpen = Boolean(requestedValue);
+                this.clearSidebarOpenDelay();
+                if (delayedState.get() === nextIsOpen) return;
+
+                const delayValue = read(nextIsOpen ? propDelayOpen : propDelayClose);
+                const delayMs = Math.max(0, Number(delayValue) || 0);
+                if (delayMs === 0) {
+                    delayedState.set(nextIsOpen);
+                    return;
+                }
+
+                this._SIDEBAR_OPEN_DELAY_TIMER = window.setTimeout(() => {
+                    this._SIDEBAR_OPEN_DELAY_TIMER = null;
+                    if (Boolean(read(propSidebarIsOpen)) === nextIsOpen) {
+                        delayedState.set(nextIsOpen);
+                    }
+                }, delayMs);
+            });
+        }
+
+        return delayedState;
     }
 
 
@@ -196,6 +252,8 @@ export class ComponentSidebar extends ComponentSidebarBase<ReturnType<typeof cre
         const prop_sidebarIsOpen       = data?.["prop_sidebarIsOpen"]       ?? bind.prop_sidebarIsOpen;
         const prop_sidebarDirection    = data?.["prop_sidebarDirection"]    ?? bind.prop_sidebarDirection;
         const prop_sidebarDuration     = data?.["prop_sidebarDuration"]     ?? bind.prop_sidebarDuration;
+        const prop_delayOpen           = data?.["prop_delayOpen"]           ?? bind.prop_delayOpen;
+        const prop_delayClose          = data?.["prop_delayClose"]          ?? bind.prop_delayClose;
         const prop_sidebarPositionStart = data?.["prop_sidebarPositionStart"] ?? bind.prop_sidebarPositionStart;
         const prop_sidebarPositionEnd   = data?.["prop_sidebarPositionEnd"]   ?? bind.prop_sidebarPositionEnd;
         const prop_sidebarMargin        = data?.["prop_sidebarMargin"]        ?? bind.prop_sidebarMargin;
@@ -205,6 +263,12 @@ export class ComponentSidebar extends ComponentSidebarBase<ReturnType<typeof cre
             (v) => v,
             [prop_sidebarOpacity],
             this.getScope(),
+        );
+
+        const delayedSidebarIsOpen = this.getDelayedSidebarOpenState(
+            prop_sidebarIsOpen,
+            prop_delayOpen,
+            prop_delayClose,
         );
 
         const sidebarStyles = CoreObservable.App.computed(
@@ -321,7 +385,7 @@ export class ComponentSidebar extends ComponentSidebarBase<ReturnType<typeof cre
 
                 return styles;
             },
-            [prop_sidebarDirection, prop_sidebarDuration, prop_sidebarBorderRadius, prop_sidebarMargin, this._DEFAULT_OPACITY, prop_sidebarIsOpen, prop_sidebarWidth, prop_sidebarPositionStart, prop_sidebarPositionEnd],
+            [prop_sidebarDirection, prop_sidebarDuration, prop_sidebarBorderRadius, prop_sidebarMargin, this._DEFAULT_OPACITY, delayedSidebarIsOpen, prop_sidebarWidth, prop_sidebarPositionStart, prop_sidebarPositionEnd],
             this.getScope(),
         );
 
@@ -394,6 +458,9 @@ export class ComponentSidebar extends ComponentSidebarBase<ReturnType<typeof cre
         const prop_sidebarBtnOpenAtStart = data?.["prop_sidebarBtnOpenAtStart"] ?? bind.prop_sidebarBtnOpenAtStart;
         const prop_sidebarDirection   = data?.["prop_sidebarDirection"]   ?? bind.prop_sidebarDirection;
         const prop_sidebarIsOpen      = data?.["prop_sidebarIsOpen"]      ?? bind.prop_sidebarIsOpen;
+        const prop_delayOpen          = data?.["prop_delayOpen"]          ?? bind.prop_delayOpen;
+        const prop_delayClose         = data?.["prop_delayClose"]         ?? bind.prop_delayClose;
+        const delayedSidebarIsOpen   = this.getDelayedSidebarOpenState(prop_sidebarIsOpen, prop_delayOpen, prop_delayClose);
 
         const positionStyles = CoreObservable.App.computed(
             (btnSize, atStart, direction, isOpen) => {
@@ -448,7 +515,7 @@ export class ComponentSidebar extends ComponentSidebarBase<ReturnType<typeof cre
 
                 return styles;
             },
-            [prop_sidebarBtnOpenSize, prop_sidebarBtnOpenAtStart, prop_sidebarDirection, prop_sidebarIsOpen],
+            [prop_sidebarBtnOpenSize, prop_sidebarBtnOpenAtStart, prop_sidebarDirection, delayedSidebarIsOpen],
             this.getScope(),
         );
 
@@ -527,6 +594,9 @@ export class ComponentSidebar extends ComponentSidebarBase<ReturnType<typeof cre
         const prop_sidebarBtnOpenSize = data?.["prop_sidebarBtnOpenSize"] ?? bind.prop_sidebarBtnOpenSize;
         const prop_sidebarIsOpen     = data?.["prop_sidebarIsOpen"]     ?? bind.prop_sidebarIsOpen;
         const prop_sidebarDirection   = data?.["prop_sidebarDirection"]   ?? bind.prop_sidebarDirection;
+        const prop_delayOpen         = data?.["prop_delayOpen"]          ?? bind.prop_delayOpen;
+        const prop_delayClose        = data?.["prop_delayClose"]         ?? bind.prop_delayClose;
+        const delayedSidebarIsOpen   = this.getDelayedSidebarOpenState(prop_sidebarIsOpen, prop_delayOpen, prop_delayClose);
 
         const iconColor = UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1);
 
@@ -553,7 +623,7 @@ export class ComponentSidebar extends ComponentSidebarBase<ReturnType<typeof cre
                 const iconModule = (UiIcons.Src as any)?.[iconName];
                 return iconModule?.Definition ?? null;
             },
-            [prop_sidebarIsOpen, prop_sidebarDirection],
+            [delayedSidebarIsOpen, prop_sidebarDirection],
             this.getScope(),
         );
 

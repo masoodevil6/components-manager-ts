@@ -191,6 +191,7 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase<Ret
             prop_content: pinIcon,
         });
 
+        const itemBody = typeof item?.body === "function" ? item.body() : item?.body;
         const content = CoreReactive.App.section({
             className: ["position-relative"],
             on: {
@@ -198,7 +199,7 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase<Ret
                 mouseleave: () => iconHover.set(false),
             },
             children: [
-                item?.body,
+                itemBody,
                 position.getElement(),
             ],
         });
@@ -241,31 +242,35 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase<Ret
             prop_borderType: ComponentBorder.BorderTypes.DASHED,
             prop_contentBackgroundColor: bgColor as any,
             prop_borderColor: borderColor as any,
-        } as any, {
-            MOUSE_DOWN_BORDER: (event: Event) => {
-                const target = event.target as HTMLElement;
-                if (target && (target.closest("svg") || target.closest("i"))) return;
-                const enable = ordersStatus?.get?.() ?? true;
-                const pinned = isPinned.get();
-                if (enable && !pinned) {
-                    this.pr_startDrag(event as any as MouseEvent, item);
-                } else if (enable && pinned) {
-                    const up = (ev: MouseEvent) => {
-                        window.removeEventListener('mouseup', up, true);
-                        this.executeMethod('UPDATE', ev as any, {} as any);
-                    };
-                    window.addEventListener('mouseup', up, true);
-                }
-            },
-        } as any).getReactiveElement();
+        } as any, {} as any).getReactiveElement();
 
         return CoreReactive.App.section({
             attrs: {...attrsDefault, "data-order": item?.id},
+            on: {
+                pointerdown: (event: Event) => {
+                    const pointerEvent = event as PointerEvent;
+                    if (pointerEvent.button !== 0) return;
+                    const target = event.target as Element | null;
+                    if (target?.closest("svg, i")) return;
+
+                    const enable = ordersStatus?.get?.() ?? true;
+                    const pinned = isPinned.get();
+                    if (enable && !pinned) {
+                        this.pr_startDrag(pointerEvent, item);
+                    } else if (enable && pinned) {
+                        const up = (ev: PointerEvent) => {
+                            window.removeEventListener("pointerup", up, true);
+                            this.executeMethod("UPDATE", ev, {} as any);
+                        };
+                        window.addEventListener("pointerup", up, true);
+                    }
+                },
+            },
             children: [border],
         });
     }
 
-    private pr_startDrag(e: MouseEvent, item: any) {
+    private pr_startDrag(e: PointerEvent, item: any) {
         const bind = this._COMPONENT_PROPS_BIND as any;
         const enable = bind.prop_draggableOrderStatus?.get?.() ?? true;
         if (!enable) return;
@@ -287,20 +292,58 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase<Ret
             rects.push({ id, top: r.top, mid: r.top + r.height / 2, isPin: !!it?.isPin });
         }
 
-        const move = (ev: MouseEvent) => this.pr_handleMove(ev, item, rects);
-        const up   = (ev: MouseEvent) => this.pr_handleUp(ev, item, rects, move, up);
+        const startX = e.clientX;
+        const startY = e.clientY;
+        const pointerId = e.pointerId;
+        const cleanup = () => {
+            window.removeEventListener("pointermove", move, true);
+            window.removeEventListener("pointerup", up, true);
+            window.removeEventListener("pointercancel", cancel, true);
+        };
+        const cancel = () => {
+            cleanup();
+            if (this._drag?.id !== item?.id) return;
+            this._drag = null;
+            this._dragOverId.set(null);
+            this._dragOverIndex.set(null);
+            (document.body as any).style.userSelect = "";
+        };
+        const move = (ev: PointerEvent) => {
+            if (pointerId != null && ev.pointerId !== pointerId) return;
 
-        window.addEventListener('mousemove', move, true);
-        window.addEventListener('mouseup', up, true);
+            if (!this._drag) {
+                const distance = Math.hypot(ev.clientX - startX, ev.clientY - startY);
+                if (distance < 4) return;
 
-        this._drag = { id: item?.id, overIndex: this.pr_computeOverIndex(e.clientY, rects, item?.id), rects, container };
-        this._dragOverIndex.set(this._drag.overIndex);
-        this._dragOverId.set(this.pr_getUnpinnedIdByIndex(this._drag.overIndex, rects, item?.id));
-        (document.body as any).style.userSelect = 'none';
-        e.preventDefault();
+                this._drag = {
+                    id: item?.id,
+                    overIndex: this.pr_computeOverIndex(ev.clientY, rects, item?.id),
+                    rects,
+                    container,
+                };
+                this._dragOverIndex.set(this._drag.overIndex);
+                this._dragOverId.set(this.pr_getUnpinnedIdByIndex(this._drag.overIndex, rects, item?.id));
+                (document.body as any).style.userSelect = "none";
+                ev.preventDefault();
+                return;
+            }
+
+            this.pr_handleMove(ev, item, rects);
+            ev.preventDefault();
+        };
+        const up = (ev: PointerEvent) => {
+            if (pointerId != null && ev.pointerId !== pointerId) return;
+            cleanup();
+            if (this._drag?.id !== item?.id) return;
+            this.pr_handleUp(ev, item, rects, move, up);
+        };
+
+        window.addEventListener("pointermove", move, true);
+        window.addEventListener("pointerup", up, true);
+        window.addEventListener("pointercancel", cancel, true);
     }
 
-    private pr_handleMove(e: MouseEvent, item: any, rects: any[]) {
+    private pr_handleMove(e: PointerEvent, item: any, rects: any[]) {
         if (!this._drag) return;
         const idx = this.pr_computeOverIndex(e.clientY, rects, this._drag.id);
         if (idx === this._drag.overIndex) return;
@@ -331,16 +374,16 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase<Ret
         });
     }
 
-    private pr_handleUp(e: MouseEvent, item: any, rects: any[], move: any, up: any) {
-        window.removeEventListener('mousemove', move, true);
-        window.removeEventListener('mouseup', up, true);
+    private pr_handleUp(e: PointerEvent, item: any, rects: any[], move: any, up: any) {
+        window.removeEventListener("pointermove", move, true);
+        window.removeEventListener("pointerup", up, true);
 
         const suppressClick = (ev: MouseEvent) => {
             ev.stopPropagation();
             ev.preventDefault();
             window.removeEventListener('click', suppressClick, true);
         };
-        window.addEventListener('click', suppressClick, true);
+        window.addEventListener("click", suppressClick, true);
 
         const drag = this._drag;
         if (drag) this.pr_animateReorderPreview(drag.container);

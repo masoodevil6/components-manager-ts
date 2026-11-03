@@ -262,11 +262,18 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
         const option = extra?.option as SelectCustomSimpleOption | undefined;
         if (!option) return CoreReactive.App.section({attrs: {...attrsDefault}});
         const selected = data?.["prop_selectValue"] ?? this._COMPONENT_PROPS_BIND.prop_selectValue;
+        const prefixItemsWidth = data?.["prop_prefixItemsWidth"] ?? this._COMPONENT_PROPS_BIND.prop_prefixItemsWidth;
         const isSelected = CoreObservable.App.computed((current) => String(current) === String(option.id), [selected], this.getScope());
         const sizeName = CoreConfig.Settings.SizeName.observable();
         const lineHeight = CoreObservable.App.computed((size) => `calc(${UtilStyle.Css_Height(size)})`, [sizeName], this.getScope());
+        const prefixStyles = CoreObservable.App.computed((width: string) => ({
+            width,
+            flex: `0 0 ${width}`,
+            opacity: "0.75",
+            fontWeight: "600",
+        }), [prefixItemsWidth], this.getScope());
         const content = CoreReactive.App.div({className: ["d-flex", "align-items-center", "w-100"], styles: {gap: UtilStyle.Css_Margin(UtilConst.Sizes.M)}, children: [
-            CoreReactive.App.span({styles: {width: "40px", flex: "0 0 40px", opacity: "0.75", fontWeight: "600"}, children: [String(option.prefix ?? "")]}),
+            CoreReactive.App.span({stylesBind: prefixStyles, children: [String(option.prefix ?? "")]}),
             CoreReactive.App.b({className: ["text-truncate"], styles: {minWidth: "0", flex: "1", fontWeight: "500"}, children: [String(option.name ?? "---")]})
         ]});
         const border = new ComponentBorder.Component({

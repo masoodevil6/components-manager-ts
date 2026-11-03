@@ -1,6 +1,8 @@
 import * as CoreObservable from "@/core_observable";
 import * as CoreReactive from "@/core_reactive";
 import * as CoreConfig from "@/core_configs";
+import * as CoreComponents from "@/core_components";
+import * as CoreEvent from "@/core_event";
 import {PartAttrDefault} from "@/core_components";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
@@ -24,6 +26,11 @@ export class ComponentEffectChange extends ComponentEffectChangeBase<ReturnType<
     private _CURRENT_VALUE: EffectChangeContent = null;
     private _EXIT_LAYER: HTMLElement | null = null;
     private _EXIT_VALUE: EffectChangeContent = null;
+    private readonly _CONTENT_WORKFLOW_CHILDREN = new Map<object, Map<string, {
+        workflow: CoreEvent.TStepRef;
+        component: any;
+    }>>();
+    private _CONTENT_WORKFLOW_GENERATION = 0;
     private _LOADING: InstanceType<typeof ComponentLoading.Component> | null = null;
     private _TRANSITION_TIMER: ReturnType<typeof setTimeout> | null = null;
     private readonly _FRAME_CANCELLERS = new Set<() => void>();
@@ -46,6 +53,8 @@ export class ComponentEffectChange extends ComponentEffectChangeBase<ReturnType<
         if (this._DISPOSED) return;
         this._DISPOSED = true;
         this.cancelPendingTransition();
+        this.disposeContentWorkflowChildren(this._CURRENT_VALUE);
+        if (this._EXIT_VALUE !== this._CURRENT_VALUE) this.disposeContentWorkflowChildren(this._EXIT_VALUE);
         this.disposeContent(this._CURRENT_VALUE);
         if (this._EXIT_VALUE !== this._CURRENT_VALUE) this.disposeContent(this._EXIT_VALUE);
         this._LOADING?.dispose();
@@ -138,6 +147,7 @@ export class ComponentEffectChange extends ComponentEffectChangeBase<ReturnType<
 
         const layer = this.createLayer(node);
         this._CONTENT_HOST.appendChild(layer);
+        this.attachContentWorkflowComponents(value, layer);
         this._CURRENT_LAYER = layer;
     }
 
@@ -160,12 +170,16 @@ export class ComponentEffectChange extends ComponentEffectChangeBase<ReturnType<
         const easing = String(this._COMPONENT_PROPS_BIND.prop_easing.get() || "ease-in-out");
         const direction = this._COMPONENT_PROPS_BIND.prop_changeDirection.get() as EffectChangeDirection;
 
-        if (nextLayer) host.appendChild(nextLayer);
+        if (nextLayer) {
+            host.appendChild(nextLayer);
+            this.attachContentWorkflowComponents(nextValue, nextLayer);
+        }
         const nextHeight = nextLayer?.getBoundingClientRect().height ?? 0;
         this._CURRENT_VALUE = nextValue;
         this._CURRENT_LAYER = nextLayer;
 
         if (!previousLayer && !nextLayer) {
+            this.disposeContentWorkflowChildren(previousValue);
             this.disposeContent(previousValue);
             return;
         }
@@ -174,6 +188,7 @@ export class ComponentEffectChange extends ComponentEffectChangeBase<ReturnType<
             previousLayer?.remove();
             if (nextLayer) this.normalizeLayer(nextLayer);
             this.clearHostTransition(host);
+            this.disposeContentWorkflowChildren(previousValue);
             this.disposeContent(previousValue);
             return;
         }
@@ -228,6 +243,7 @@ export class ComponentEffectChange extends ComponentEffectChangeBase<ReturnType<
         this._EXIT_VALUE = null;
         if (this._CURRENT_LAYER) this.normalizeLayer(this._CURRENT_LAYER);
         if (this._CONTENT_HOST) this.clearHostTransition(this._CONTENT_HOST);
+        this.disposeContentWorkflowChildren(previousValue);
         this.disposeContent(previousValue);
         this.executeMethod("TRANSITION_END", new Event("transitionend"), {
             PREVIOUS_CONTENT: previousValue,
@@ -360,7 +376,10 @@ export class ComponentEffectChange extends ComponentEffectChangeBase<ReturnType<
         this._FRAME_CANCELLERS.clear();
 
         this._EXIT_LAYER?.remove();
-        if (this._EXIT_VALUE !== this._CURRENT_VALUE) this.disposeContent(this._EXIT_VALUE);
+        if (this._EXIT_VALUE !== this._CURRENT_VALUE) {
+            this.disposeContentWorkflowChildren(this._EXIT_VALUE);
+            this.disposeContent(this._EXIT_VALUE);
+        }
         this._EXIT_LAYER = null;
         this._EXIT_VALUE = null;
         if (this._CURRENT_LAYER) this.normalizeLayer(this._CURRENT_LAYER);
@@ -370,6 +389,74 @@ export class ComponentEffectChange extends ComponentEffectChangeBase<ReturnType<
     private clearHostTransition(host: HTMLElement): void {
         host.style.transition = "none";
         host.style.height = "";
+    }
+
+    private attachContentWorkflowComponents(value: EffectChangeContent, layer: HTMLElement): void {
+        if (!value || typeof value !== "object") return;
+
+        const components: any[] = [];
+        const seen = new Set<object>();
+        const visit = (element: Element): void => {
+            const owner = CoreComponents.Tools.Workflow.Get_ComponentWorkflowElementOwner(element) as any;
+            if (owner) {
+                if (!seen.has(owner)) {
+                    seen.add(owner);
+                    components.push(owner);
+                }
+                return;
+            }
+            for (const child of Array.from(element.children)) visit(child);
+        };
+        visit(layer);
+
+        const generation = ++this._CONTENT_WORKFLOW_GENERATION;
+        const nameCounts = new Map<string, number>();
+        const attached = new Map<string, {workflow: CoreEvent.TStepRef; component: any}>();
+        components.forEach((component) => {
+            const workflow = component?.getComponentWorkflow?.() as CoreEvent.TStepRef | undefined;
+            if (!workflow) return;
+
+            const definition = component.getComponentDefinition?.() ?? component._COMPONENT_DEFINITION ?? {};
+            const configuredName = component.get?.("prop_workflowChildName");
+            const identityName = typeof configuredName === "string" && configuredName.trim()
+                ? configuredName.trim()
+                : String(definition.id ?? definition.name ?? component._COMPONENT_ID ?? "component");
+            const safeName = identityName.replace(/[^a-zA-Z0-9_-]+/g, "-").replace(/^-+|-+$/g, "") || "component";
+            const count = (nameCounts.get(safeName) ?? 0) + 1;
+            nameCounts.set(safeName, count);
+            const childName = `content-${generation}-${safeName}${count > 1 ? `-${count}` : ""}`;
+
+            CoreComponents.Tools.Workflow.Attach_ComponentWorkflow(
+                this.getComponentWorkflow(),
+                childName,
+                workflow,
+                {
+                    component: {
+                        name: definition.name ?? component._COMPONENT_NAME ?? safeName,
+                        id: definition.id ?? component._COMPONENT_ID ?? safeName,
+                    },
+                },
+            );
+            attached.set(childName, {workflow, component});
+        });
+
+        if (attached.size > 0) this._CONTENT_WORKFLOW_CHILDREN.set(value as object, attached);
+    }
+
+    private disposeContentWorkflowChildren(value: EffectChangeContent): void {
+        if (!value || typeof value !== "object") return;
+        const attached = this._CONTENT_WORKFLOW_CHILDREN.get(value as object);
+        if (!attached) return;
+
+        for (const [childName, child] of attached) {
+            const detached = CoreComponents.Tools.Workflow.Detach_ComponentWorkflow(
+                this.getComponentWorkflow(),
+                childName,
+                child.workflow,
+            );
+            if (detached && child.component !== value) child.component?.dispose?.();
+        }
+        this._CONTENT_WORKFLOW_CHILDREN.delete(value as object);
     }
 
     private disposeContent(value: EffectChangeContent): void {

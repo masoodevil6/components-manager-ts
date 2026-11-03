@@ -1,0 +1,179 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1780" viewBox="0 0 2400 1780" role="img" aria-labelledby="title desc">
+  <title id="title">Component Workflow Composition — Architecture Vision</title>
+  <desc id="desc">A component workflow tree, explicit CoreEvent request flow, predictable child naming model, and inspection/lifecycle guidance.</desc>
+  <defs>
+    <linearGradient id="page" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8fbff"/><stop offset="1" stop-color="#eef3fb"/></linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e8f2ff"/><stop offset="1" stop-color="#d8e9ff"/></linearGradient>
+    <linearGradient id="violet" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f3edff"/><stop offset="1" stop-color="#e6dcff"/></linearGradient>
+    <linearGradient id="amber" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff6df"/><stop offset="1" stop-color="#ffe7ad"/></linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e5f8ef"/><stop offset="1" stop-color="#c9efdc"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#263b5c" flood-opacity=".10"/></filter>
+    <marker id="arrowBlue" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto"><path d="M1 1 L10 6 L1 11 Z" fill="#3976c5"/></marker>
+    <marker id="arrowAmber" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto"><path d="M1 1 L10 6 L1 11 Z" fill="#d18a16"/></marker>
+    <marker id="arrowGreen" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto"><path d="M1 1 L10 6 L1 11 Z" fill="#25865a"/></marker>
+    <style>
+      text{font-family:Inter,Segoe UI,Tahoma,Arial,sans-serif;fill:#17263e}
+      .title{font-size:40px;font-weight:750;letter-spacing:-.6px}.subtitle{font-size:19px;fill:#53647c}
+      .section{font-size:22px;font-weight:720}.cardTitle{font-size:19px;font-weight:700}.body{font-size:16px;fill:#344861}.small{font-size:14px;fill:#53647c}.tiny{font-size:12px;fill:#5f7088}
+      .mono{font-family:Consolas,Menlo,monospace;font-size:14px;fill:#253b59}.chip{font-size:13px;font-weight:700}
+      .card{fill:#fff;stroke:#d9e2ef;stroke-width:1.5;filter:url(#shadow)}.blueCard{fill:url(#blue);stroke:#8db6ed;stroke-width:1.6;filter:url(#shadow)}
+      .violetCard{fill:url(#violet);stroke:#b5a0ed;stroke-width:1.6;filter:url(#shadow)}.amberCard{fill:url(#amber);stroke:#e4bd63;stroke-width:1.6;filter:url(#shadow)}
+      .greenCard{fill:url(#green);stroke:#80c6a0;stroke-width:1.6;filter:url(#shadow)}
+      .solid{fill:none;stroke:#3976c5;stroke-width:3;marker-end:url(#arrowBlue)}.event{fill:none;stroke:#d18a16;stroke-width:3;stroke-dasharray:10 8;marker-end:url(#arrowAmber)}
+      .life{fill:none;stroke:#25865a;stroke-width:2.6;marker-end:url(#arrowGreen)}.divider{stroke:#dfe7f1;stroke-width:1.5}
+    </style>
+  </defs>
+  <rect width="2400" height="1780" fill="url(#page)"/>
+  <rect x="58" y="46" width="2284" height="120" rx="26" fill="#fff" stroke="#dfe7f1" filter="url(#shadow)"/>
+  <text x="94" y="101" class="title">Component Workflow Composition</text>
+  <text x="96" y="137" class="subtitle">Vision for predictable component trees and explicit event communication</text>
+  <rect x="1845" y="77" width="435" height="44" rx="22" fill="#edf4ff" stroke="#bed4f2"/>
+  <text x="2062" y="105" text-anchor="middle" class="chip" fill="#285d9e">COMPOSITION  +  CORE EVENT  +  INSPECTION</text>
+
+  <!-- Main tree -->
+  <rect x="58" y="195" width="1425" height="820" rx="24" class="card"/>
+  <text x="94" y="242" class="section">1 · Composition tree — every component instance owns a workflow</text>
+  <text x="96" y="273" class="small">Solid connectors mean “this component contains that child”; they do not imply event bubbling.</text>
+
+  <rect x="503" y="310" width="520" height="130" rx="18" class="blueCard"/>
+  <rect x="523" y="330" width="140" height="30" rx="15" fill="#3976c5"/>
+  <text x="593" y="350" text-anchor="middle" class="chip" fill="#fff">PARENT NODE</text>
+  <text x="763" y="372" text-anchor="middle" class="cardTitle">componentLayout</text>
+  <text x="763" y="399" text-anchor="middle" class="mono">Definition.name: componentLayout · WorkflowNodeNames.layout</text>
+  <text x="763" y="423" text-anchor="middle" class="small">root: component_layout · steps: childInputChanged, showPopup</text>
+
+  <path d="M763 440 V482 H394 V518" class="solid"/>
+  <path d="M763 482 H1114 V518" class="solid"/>
+  <rect x="536" y="458" width="454" height="36" rx="18" fill="#f0f6ff" stroke="#c5d9f3"/>
+  <text x="763" y="482" text-anchor="middle" class="mono">workflow.children[stable child key]</text>
+
+  <rect x="154" y="520" width="480" height="238" rx="18" class="blueCard"/>
+  <rect x="177" y="540" width="174" height="29" rx="14" fill="#3976c5"/>
+  <text x="264" y="560" text-anchor="middle" class="chip" fill="#fff">CHILD SLOT: primaryInput</text>
+  <text x="394" y="603" text-anchor="middle" class="cardTitle">componentInput</text>
+  <text x="394" y="630" text-anchor="middle" class="mono">component.id = component_input</text>
+  <line x1="188" y1="649" x2="600" y2="649" class="divider"/>
+  <text x="394" y="679" text-anchor="middle" class="small">Definition.name: componentInput · slot: WorkflowNodeNames.primaryInput</text>
+  <rect x="273" y="699" width="242" height="38" rx="19" fill="#fff" stroke="#9ebee7"/>
+  <text x="394" y="724" text-anchor="middle" class="mono">steps.inputChange</text>
+
+  <rect x="874" y="520" width="480" height="238" rx="18" class="blueCard"/>
+  <rect x="897" y="540" width="190" height="29" rx="14" fill="#3976c5"/>
+  <text x="992" y="560" text-anchor="middle" class="chip" fill="#fff">CHILD SLOT: secondaryInput</text>
+  <text x="1114" y="603" text-anchor="middle" class="cardTitle">componentInput</text>
+  <text x="1114" y="630" text-anchor="middle" class="mono">component.id = component_input</text>
+  <line x1="908" y1="649" x2="1320" y2="649" class="divider"/>
+  <text x="1114" y="679" text-anchor="middle" class="small">Definition.name: componentInput · slot: WorkflowNodeNames.secondaryInput</text>
+  <rect x="993" y="699" width="242" height="38" rx="19" fill="#fff" stroke="#9ebee7"/>
+  <text x="1114" y="724" text-anchor="middle" class="mono">steps.inputChange</text>
+
+  <rect x="154" y="798" width="1200" height="166" rx="16" fill="#f7f9fd" stroke="#e0e7f1"/>
+  <text x="184" y="834" class="cardTitle">Conceptual node shape</text>
+  <text x="184" y="865" class="mono">{ component: { name, id }, workflow: { root, steps, children } }</text>
+  <text x="184" y="899" class="body">A child is a complete workflow node nested under a named parent slot. Repeated component types stay unambiguous.</text>
+  <rect x="184" y="918" width="230" height="28" rx="14" fill="#e4efff"/><text x="299" y="937" text-anchor="middle" class="chip" fill="#285d9e">COMPONENT TYPE</text>
+  <rect x="426" y="918" width="245" height="28" rx="14" fill="#eee8ff"/><text x="548" y="937" text-anchor="middle" class="chip" fill="#6545aa">WORKFLOW CHILD KEY</text>
+  <rect x="683" y="918" width="250" height="28" rx="14" fill="#e7f6ed"/><text x="808" y="937" text-anchor="middle" class="chip" fill="#28714d">RUNTIME INSTANCE KEY</text>
+  <text x="958" y="937" class="tiny">Keep these identities separate.</text>
+
+  <!-- Event flow -->
+  <rect x="1510" y="195" width="832" height="820" rx="24" class="card"/>
+  <text x="1546" y="242" class="section">2 · Explicit event flow — child sends to parent</text>
+  <text x="1548" y="273" class="small">Dashed connectors mean a CoreEvent request. Nothing bubbles automatically.</text>
+
+  <rect x="1560" y="318" width="300" height="115" rx="16" class="blueCard"/>
+  <text x="1710" y="354" text-anchor="middle" class="cardTitle">primaryInput</text>
+  <text x="1710" y="384" text-anchor="middle" class="mono">steps.inputChange</text>
+  <text x="1710" y="411" text-anchor="middle" class="small">another child node</text>
+  <rect x="1988" y="318" width="300" height="115" rx="16" class="blueCard"/>
+  <text x="2138" y="354" text-anchor="middle" class="cardTitle">secondaryInput</text>
+  <text x="2138" y="384" text-anchor="middle" class="mono">steps.inputChange</text>
+  <text x="2138" y="411" text-anchor="middle" class="small">event source</text>
+
+  <path d="M2138 433 V489 H1920 V544" class="event"/>
+  <rect x="1762" y="458" width="316" height="54" rx="15" class="amberCard"/>
+  <text x="1920" y="481" text-anchor="middle" class="chip" fill="#855408">NODE LOOKUP + REQUEST</text>
+  <text x="1920" y="501" text-anchor="middle" class="tiny">findWorkflowNodes → request(showPopup, source)</text>
+
+  <rect x="1705" y="544" width="430" height="112" rx="17" class="greenCard"/>
+  <text x="1920" y="580" text-anchor="middle" class="cardTitle">componentLayout workflow</text>
+  <text x="1920" y="609" text-anchor="middle" class="mono">steps.showPopup · receiver</text>
+  <text x="1920" y="636" text-anchor="middle" class="small">handler reads child key + payload</text>
+
+  <rect x="1560" y="697" width="728" height="256" rx="16" fill="#fbfcfe" stroke="#dce5f0"/>
+  <text x="1590" y="733" class="cardTitle">Request payload carries meaning</text>
+  <text x="1590" y="772" class="mono">{ openedBy: "secondaryInput" }</text>
+  <text x="1590" y="809" class="body">secondaryInput resolves the closest named layout node in its containing workflow.</text>
+  <text x="1590" y="833" class="body">The ordered candidate list leaves the final target choice to the source node.</text>
+  <line x1="1590" y1="854" x2="2257" y2="854" class="divider"/>
+  <text x="1590" y="886" class="mono">requestMap([[layout.showPopup, payload]]) ← secondaryInput.inputChange</text>
+  <text x="1590" y="922" class="small">Illustrative shape: attach/register the endpoint, then send a request deliberately.</text>
+
+  <!-- Dictionary/naming -->
+  <rect x="58" y="1045" width="724" height="652" rx="24" class="card"/>
+  <text x="94" y="1092" class="section">3 · Child names and workflow lookup</text>
+  <text x="96" y="1123" class="small">Choose semantic child roles; resolve nodes by stable name.</text>
+  <rect x="96" y="1160" width="300" height="374" rx="18" class="violetCard"/>
+  <text x="246" y="1200" text-anchor="middle" class="cardTitle">Workflow child catalog</text>
+  <text x="122" y="1242" class="small">Form inputs</text>
+  <rect x="118" y="1260" width="256" height="78" rx="12" fill="#fff" stroke="#c9b9ef"/>
+  <text x="246" y="1291" text-anchor="middle" class="chip" fill="#6545aa">Primary input</text>
+  <text x="246" y="1317" text-anchor="middle" class="mono">key: primaryInput</text>
+  <rect x="118" y="1350" width="256" height="78" rx="12" fill="#fff" stroke="#c9b9ef"/>
+  <text x="246" y="1381" text-anchor="middle" class="chip" fill="#6545aa">Secondary input</text>
+  <text x="246" y="1407" text-anchor="middle" class="mono">key: secondaryInput</text>
+  <text x="122" y="1472" class="tiny">Human title + stable key</text>
+
+  <rect x="425" y="1160" width="321" height="374" rx="18" class="card"/>
+  <text x="585" y="1200" text-anchor="middle" class="cardTitle">Keep identities distinct</text>
+  <text x="451" y="1250" class="chip" fill="#285d9e">Type</text><text x="451" y="1275" class="mono">component_input</text>
+  <text x="451" y="1320" class="chip" fill="#6545aa">Parent slot</text><text x="451" y="1345" class="mono">primaryInput</text>
+  <text x="451" y="1390" class="chip" fill="#28714d">Dynamic instance</text><text x="451" y="1415" class="mono">user-42</text>
+  <text x="451" y="1470" class="tiny">Use stable domain IDs for lists.</text>
+
+  <rect x="96" y="1560" width="650" height="100" rx="16" fill="#fff8e8" stroke="#eed390"/>
+  <text x="122" y="1597" class="body">Definition.name identifies the component; WorkflowNodeNames labels its child slot.</text>
+  <text x="122" y="1627" class="body">CoreEvent.findWorkflowNodes ranks named targets from the source node.</text>
+
+  <!-- Assembly and lifecycle -->
+  <rect x="807" y="1045" width="724" height="652" rx="24" class="card"/>
+  <text x="843" y="1092" class="section">4 · Assembly and dynamic children</text>
+  <text x="845" y="1123" class="small">Composition builds the tree; lifecycle keeps it aligned with rendered UI.</text>
+  <rect x="849" y="1170" width="640" height="112" rx="17" class="blueCard"/>
+  <text x="1169" y="1208" text-anchor="middle" class="cardTitle">Parent workflow</text>
+  <text x="1169" y="1240" text-anchor="middle" class="mono">CoreEvent.SubEvent(parent, childKey, childWorkflow)</text>
+  <path d="M1169 1282 V1330" class="life"/>
+  <rect x="849" y="1330" width="640" height="110" rx="17" class="greenCard"/>
+  <text x="1169" y="1371" text-anchor="middle" class="cardTitle">Attach child when rendered</text>
+  <text x="1169" y="1402" text-anchor="middle" class="small">same stable key used by structure and event routing</text>
+  <path d="M1169 1440 V1485" class="life"/>
+  <rect x="849" y="1485" width="640" height="111" rx="17" class="greenCard"/>
+  <text x="1169" y="1527" text-anchor="middle" class="cardTitle">Detach child when removed</text>
+  <text x="1169" y="1558" text-anchor="middle" class="small">RecyclerView items: add/remove by stable item identity</text>
+  <text x="849" y="1645" class="tiny">Avoid random labels and array positions as long-lived identities.</text>
+
+  <!-- Inspector and mental model -->
+  <rect x="1556" y="1045" width="786" height="652" rx="24" class="card"/>
+  <text x="1592" y="1092" class="section">5 · Inspect, debug, and reason about it</text>
+  <text x="1594" y="1123" class="small">Make the composed event graph visible beside the component page.</text>
+  <rect x="1600" y="1170" width="696" height="282" rx="18" class="violetCard"/>
+  <text x="1640" y="1210" class="cardTitle">ComponentJsonTree · workflow inspector</text>
+  <text x="1650" y="1260" class="mono">componentLayout</text>
+  <text x="1680" y="1295" class="mono">├─ children.primaryInput → componentInput</text>
+  <text x="1710" y="1330" class="mono">└─ steps.inputChange</text>
+  <text x="1680" y="1370" class="mono">└─ children.secondaryInput → componentInput</text>
+  <text x="1710" y="1405" class="mono">└─ steps.inputChange</text>
+  <text x="1640" y="1432" class="tiny">Show node path, local steps, child slots, and request edges.</text>
+  <rect x="1600" y="1480" width="696" height="166" rx="17" fill="#f7f9fd" stroke="#dce5f0"/>
+  <text x="1630" y="1520" class="cardTitle">Fast mental model</text>
+  <text x="1630" y="1556" class="body">1. A component instance is a workflow node.</text>
+  <text x="1630" y="1587" class="body">2. A named child slot composes another node under it.</text>
+  <text x="1630" y="1618" class="body">3. Events cross nodes only through an explicit CoreEvent request.</text>
+
+  <!-- Legend -->
+  <rect x="58" y="1720" width="2284" height="1" fill="#dfe7f1"/>
+  <path d="M95 1747 H175" class="solid"/><text x="194" y="1753" class="small">Component composition</text>
+  <path d="M470 1747 H550" class="event"/><text x="569" y="1753" class="small">Explicit event request</text>
+  <path d="M855 1747 H935" class="life"/><text x="954" y="1753" class="small">Lifecycle / attachment flow</text>
+  <text x="2296" y="1753" text-anchor="end" class="tiny">Architecture vision · proposed composition model</text>
+</svg>

@@ -5,27 +5,30 @@ import * as UtilStyle from "@/util_styles";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
 import {Keys} from "../../../module_categories/languages";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
+import type {ComponentWorkflowChild} from "@/core_components";
+
+type PageSlot = CoreReactive.App | string | HTMLElement | ComponentWorkflowChild | null;
 
 export const Props = {
-    prop_setting: Define_ComponentProp<CoreReactive.App | string | HTMLElement | null>({
+    prop_setting: Define_ComponentProp<PageSlot>({
         prop: "prop_setting",
         default: null,
         name: Keys.category.components.page.props.setting.name,
         description: Keys.category.components.page.props.setting.description,
     }),
-    prop_header: Define_ComponentProp<CoreReactive.App | string | null>({
+    prop_header: Define_ComponentProp<PageSlot>({
         prop: "prop_header",
         default: null,
         name: Keys.category.components.page.props.header.name,
         description: Keys.category.components.page.props.header.description,
     }),
-    prop_navigation: Define_ComponentProp<CoreReactive.App | string | null>({
+    prop_navigation: Define_ComponentProp<PageSlot>({
         prop: "prop_navigation",
         default: null,
         name: Keys.category.components.page.props.navigation.name,
         description: Keys.category.components.page.props.navigation.description,
     }),
-    prop_content: Define_ComponentProp<CoreReactive.App | string | null>({
+    prop_content: Define_ComponentProp<PageSlot>({
         prop: "prop_content",
         default: "",
         name: Keys.category.components.page.props.content.name,
@@ -43,7 +46,7 @@ export const Props = {
         name: Keys.category.components.page.props.isFullHeight.name,
         description: Keys.category.components.page.props.isFullHeight.description,
     }),
-    prop_aside: Define_ComponentProp<CoreReactive.App | string | null>({
+    prop_aside: Define_ComponentProp<PageSlot>({
         prop: "prop_aside",
         default: null,
         name: Keys.category.components.page.props.aside.name,
@@ -55,7 +58,7 @@ export const Props = {
         name: Keys.category.components.page.props.asideWidth.name,
         description: Keys.category.components.page.props.asideWidth.description,
     }),
-    prop_footer: Define_ComponentProp<CoreReactive.App | string | null>({
+    prop_footer: Define_ComponentProp<PageSlot>({
         prop: "prop_footer",
         default: null,
         name: Keys.category.components.page.props.footer.name,

@@ -218,6 +218,11 @@ export type {
     LineHeightInputGroupInitialValue,
 } from "./text";
 
+export {Layout, LayoutStyleProperties, DisplayValue, AlignItemsValue} from "./layout";
+export type {LayoutStyleProperty} from "./layout";
+export {IsStandardStyleProperty, ValidateStandardStyles} from "./StandardStyles";
+export type {StandardStyleProperty, StandardStyles} from "./StandardStyles";
+
 import {Border} from "./border";
 import {Margin} from "./margin";
 import {Padding} from "./padding";

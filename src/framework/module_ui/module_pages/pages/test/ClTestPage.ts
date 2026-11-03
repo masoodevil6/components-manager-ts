@@ -1,4 +1,7 @@
-import {ITemplate} from "@/core_route";
+import {Navigate} from "@/core_route";
+import type {ITemplate} from "@/core_route";
+import * as Core from "@/core";
+import * as CoreComponents from "@/core_components";
 import * as CoreConfig from "@/core_configs";
 import * as CoreReactive from "@/core_reactive";
 import * as CoreObservable from "@/core_observable";
@@ -8,9 +11,12 @@ import * as UtilStyle from "@/util_styles";
 import type {RequestState} from "@/ui_controller/module_requests";
 import {RequestMethod} from "@/ui_controller/module_requests/types/RequestMethod";
 import {InputTypes} from "../../../module_components/lists/componentInput/Props";
+import {CustomFormFieldType, CustomFormMode} from "../../../module_components/lists/componentCustomForm/Props";
+import type {CustomFormGroup} from "../../../module_components/lists/componentCustomForm/Props";
 import {MenuMoreOrientation} from "../../../module_components/lists/componentMenuMore";
 import {SelectTypeShow} from "../../../module_components/lists/componentSelectCustomSimple/Props";
 import type {PropsType as ComponentWidgetProps} from "../../../module_components/lists/componentWidget/Props";
+import {executeHomeExample} from "../home/ClHomePage";
 
 type RequestFieldDefinition = {
     name: string;
@@ -37,15 +43,30 @@ type ControllerRequestDefinition = {
     widget?: Partial<ComponentWidgetProps>;
 };
 
+function formatPageControllerPreview(response: RequestState, title: string): RequestState {
+    return UiCategory.UI.Controllers.MyPage.Tools.pageFormat({
+        ...response.data,
+        pageTitle: title,
+        sessionKey: `test-preview-${title.toLocaleLowerCase()}`,
+        controllerSource: response.reference.source,
+    });
+}
+
 type ControllerRequestCategory = {id: string; name: string; children?: ControllerRequestCategory[]};
 
 const CONTROLLER_REQUEST_CATEGORIES: ControllerRequestCategory[] = [
+    {id: "tests", name: "Tests"},
     {
         id: "my-page",
         name: "My Page",
         children: [
-            {id: "tests", name: "Tests"},
-            {id: "header", name: "Header"},
+            {id: "tools", name: "Tools"},
+            {id: "home", name: "Home"},
+            {id: "components", name: "Components"},
+            {id: "icons", name: "Icons"},
+            {id: "controllers", name: "Controllers"},
+            {id: "componentInfo", name: "Component Info"},
+            {id: "workflow", name: "Workflow"},
         ],
     },
 ];
@@ -101,10 +122,10 @@ const CONTROLLER_REQUESTS: ControllerRequestDefinition[] = [
     },
     {
         id: "static.v1.headerPublic",
-        categoryId: "header",
+        categoryId: "tools",
         name: "headerPublic",
         method: RequestMethod.INTERNAL,
-        run: UiCategory.UI.Controllers.Header.headerPublic,
+        run: UiCategory.UI.Controllers.MyPage.Tools.headerPublic,
         widget: {
             prop_widgetHeight: "180px",
             prop_widgetStyles: {minHeight: "0"},
@@ -139,10 +160,263 @@ const CONTROLLER_REQUESTS: ControllerRequestDefinition[] = [
             placeholder: '[{"id":"settings","title":"Settings","action":"settings"}]',
         }],
     },
+    {
+        id: "static.v1.pageSettings",
+        categoryId: "tools",
+        name: "pageSettings",
+        method: RequestMethod.INTERNAL,
+        run: (params) => UiCategory.UI.Controllers.MyPage.Tools.pageSettings({
+            widget: params.widget as Record<string, unknown> | undefined,
+            workflowData: {
+                component: {name: "componentPage", id: "component_page"},
+                workflow: {
+                    root: String(params.rootName ?? "component_page"),
+                    steps: {
+                        setting: {name: Core.Dictionary.WorkflowNodeNames.setting, unique: "page-setting"},
+                        workflow: {name: "workflow", unique: "page-workflow"},
+                    },
+                    children: {},
+                },
+            },
+            workflowNodeEntries: Object.values(Core.Dictionary.WorkflowNodeDictionary).map((entry) => ({
+                name: entry.name,
+                title: entry.title,
+            })),
+            workflowNodeNames: {
+                tabs: Core.Dictionary.WorkflowNodeNames.tabs,
+                workflowEvent: Core.Dictionary.WorkflowNodeNames.workflowEvent,
+                dictionary: Core.Dictionary.WorkflowNodeNames.dictionary,
+            },
+        }),
+        widget: {
+            prop_widgetHeight: "480px",
+            prop_widgetStyles: {minHeight: "0"},
+            prop_componentBorderClass: ["shadow-sm", "position-relative"],
+        },
+        fields: [{
+            name: "rootName",
+            label: "Workflow root",
+            type: InputTypes.STRING,
+            value: "component_page",
+            placeholder: "Enter the workflow root name",
+        }],
+    },
+    {
+        id: "static.v1.myPage.tools.pageFormat",
+        categoryId: "tools",
+        name: "pageFormat",
+        method: RequestMethod.INTERNAL,
+        run: (params) => UiCategory.UI.Controllers.MyPage.Tools.pageFormat({
+            pageTitle: String(params.pageTitle ?? "Page format preview"),
+            hasIconBack: params.hasIconBack !== "false",
+            content: String(params.content ?? "Page-specific content goes here."),
+            widget: params.widget as Record<string, unknown> | undefined,
+        }),
+        widget: {
+            prop_widgetHeight: "480px",
+            prop_widgetStyles: {minHeight: "0"},
+            prop_componentBorderClass: ["shadow-sm", "position-relative"],
+        },
+        fields: [{
+            name: "pageTitle",
+            label: "Page title",
+            type: InputTypes.STRING,
+            value: "Page format preview",
+            placeholder: "Enter a page title",
+        }, {
+            name: "hasIconBack",
+            label: "Show back button",
+            type: "select",
+            value: "true",
+            options: [
+                {id: "true", name: "Show", prefix: ""},
+                {id: "false", name: "Hide", prefix: ""},
+            ],
+        }, {
+            name: "content",
+            label: "Page content slot",
+            type: InputTypes.STRING,
+            value: "Page-specific content goes here.",
+            placeholder: "Enter page content",
+        }],
+    },
+    {
+        id: "static.v1.myPage.tools.sideBarMenu",
+        categoryId: "tools",
+        name: "sideBarMenu",
+        method: RequestMethod.INTERNAL,
+        run: () => UiCategory.UI.Controllers.MyPage.Tools.sideBarMenu(),
+        widget: {
+            prop_widgetHeight: "480px",
+            prop_widgetStyles: {minHeight: "0"},
+            prop_componentBorderClass: ["shadow-sm", "position-relative"],
+        },
+        fields: [],
+    },
+    {
+        id: "static.v1.myPage.home.homePage",
+        categoryId: "home",
+        name: "homePage",
+        method: RequestMethod.INTERNAL,
+        run: () => formatPageControllerPreview(UiCategory.UI.Controllers.MyPage.Home.homePage({
+            run: executeHomeExample,
+            workflowNodeNames: Core.Dictionary.WorkflowNodeNames,
+        }), "Home"),
+        widget: {
+            prop_widgetHeight: "680px",
+            prop_widgetStyles: {minHeight: "0"},
+            prop_componentBorderClass: ["shadow-sm", "position-relative"],
+        },
+        fields: [],
+    },
+    {
+        id: "static.v1.myPage.home.reactiveElement",
+        categoryId: "home",
+        name: "ReactiveElement",
+        method: RequestMethod.INTERNAL,
+        run: () => UiCategory.UI.Controllers.MyPage.Home.reactiveElement({
+            run: executeHomeExample,
+        }),
+        widget: {
+            prop_widgetHeight: "480px",
+            prop_widgetStyles: {minHeight: "0"},
+            prop_componentBorderClass: ["shadow-sm", "position-relative"],
+        },
+        fields: [],
+    },
+    {
+        id: "static.v1.myPage.home.observable",
+        categoryId: "home",
+        name: "Observable",
+        method: RequestMethod.INTERNAL,
+        run: () => UiCategory.UI.Controllers.MyPage.Home.observable({
+            run: executeHomeExample,
+        }),
+        widget: {
+            prop_widgetHeight: "480px",
+            prop_widgetStyles: {minHeight: "0"},
+            prop_componentBorderClass: ["shadow-sm", "position-relative"],
+        },
+        fields: [],
+    },
+    {
+        id: "static.v1.myPage.home.workflowEvent",
+        categoryId: "home",
+        name: "workflowEvent",
+        method: RequestMethod.INTERNAL,
+        run: () => UiCategory.UI.Controllers.MyPage.Home.workflowEvent({
+            run: executeHomeExample,
+        }),
+        widget: {
+            prop_widgetHeight: "480px",
+            prop_widgetStyles: {minHeight: "0"},
+            prop_componentBorderClass: ["shadow-sm", "position-relative"],
+        },
+        fields: [],
+    },
+    {
+        id: "static.v1.myPage.components.componentsPage",
+        categoryId: "components",
+        name: "componentsPage",
+        method: RequestMethod.INTERNAL,
+        run: () => formatPageControllerPreview(UiCategory.UI.Controllers.MyPage.Components.componentsPage(), "Components"),
+        widget: {
+            prop_widgetHeight: "680px",
+            prop_widgetStyles: {minHeight: "0"},
+            prop_componentBorderClass: ["shadow-sm", "position-relative"],
+        },
+        fields: [],
+    },
+    {
+        id: "static.v1.myPage.icons.iconsPage",
+        categoryId: "icons",
+        name: "iconsPage",
+        method: RequestMethod.INTERNAL,
+        run: () => formatPageControllerPreview(UiCategory.UI.Controllers.MyPage.Icons.iconsPage(), "Icons"),
+        widget: {
+            prop_widgetHeight: "680px",
+            prop_widgetStyles: {minHeight: "0"},
+            prop_componentBorderClass: ["shadow-sm", "position-relative"],
+        },
+        fields: [],
+    },
+    {
+        id: "static.v1.myPage.controllers.controllerPage",
+        categoryId: "controllers",
+        name: "controllerPage",
+        method: RequestMethod.INTERNAL,
+        run: () => UiCategory.UI.Controllers.MyPage.Controllers.controllerPage(),
+        widget: {
+            prop_widgetHeight: "680px",
+            prop_widgetStyles: {minHeight: "0"},
+            prop_componentBorderClass: ["shadow-sm", "position-relative"],
+        },
+        fields: [],
+    },
+    {
+        id: "static.v1.myPage.componentInfo.componentInfoPage",
+        categoryId: "componentInfo",
+        name: "componentInfoPage",
+        method: RequestMethod.INTERNAL,
+        run: (params) => UiCategory.UI.Controllers.MyPage.ComponentInfo.componentInfoPage({
+            componentName: String(params.componentName ?? "Input"),
+        }),
+        widget: {
+            prop_widgetHeight: "680px",
+            prop_widgetStyles: {minHeight: "0"},
+            prop_componentBorderClass: ["shadow-sm", "position-relative"],
+        },
+        fields: [{
+            name: "componentName",
+            label: "Component name",
+            type: InputTypes.STRING,
+            value: CoreComponents.ComponentManager.list()[0]?.definition.name ?? "Input",
+            placeholder: "Enter a component name or id",
+        }],
+    },
+    {
+        id: "static.v1.myPage.workflow.workflowPage",
+        categoryId: "workflow",
+        name: "workflowPage",
+        method: RequestMethod.INTERNAL,
+        run: () => UiCategory.UI.Controllers.MyPage.Workflow.workflowPage(),
+        widget: {
+            prop_widgetHeight: "680px",
+            prop_widgetStyles: {minHeight: "0"},
+            prop_componentBorderClass: ["shadow-sm", "position-relative"],
+        },
+        fields: [],
+    },
 ];
 
 export class ClTestPage implements ITemplate {
     render(): HTMLElement {
+        const {content, sidebar} = this.createPageParts();
+        const header = UiCategory.UI.Pages.Header.PageHeader({
+            prop_pageTitle: "Request Test",
+            prop_hasIconBack: true,
+            prop_pageNav: [{name: "home", title: "Home"}],
+        }, {
+            BACK: () => { Navigate("/"); },
+            SELECT_NAV_ITEM: (_event: Event, args: any) => {
+                if (args?.NAME === "home") Navigate("/");
+            },
+        } as any).getElement();
+
+        return UiCategory.UI.Pages.Page({
+            prop_header: header,
+            prop_content: content.getElement(),
+            prop_aside: sidebar,
+            prop_asideWidth: UtilStyle.Css_SizeUnit(240, UtilConst.Units.PEXEL),
+            prop_isFullHeight: true,
+        } as any).getElement() as HTMLElement;
+    }
+
+    createControllerSlots() {
+        return this.createPageParts(false);
+    }
+
+    private createPageParts(includeTestSidebar = true) {
         const selectedTestType = new CoreObservable.App("All categories");
         const targetRequestId = new CoreObservable.App<string>("");
         const requestOptions = new CoreObservable.App<Array<{id: string; name: string; prefix: string}>>(
@@ -160,6 +434,7 @@ export class ClTestPage implements ITemplate {
             prop_selectOptions: requestOptions as any,
             prop_selectValue: targetRequestId as any,
             prop_selectDisable: CONTROLLER_REQUESTS.length === 0,
+            prop_prefixItemsWidth: "72px",
             prop_selectTypeShow: SelectTypeShow.BOTH,
             prop_selectPlaceholder: "Choose a controller request",
         } as any, {
@@ -167,41 +442,42 @@ export class ClTestPage implements ITemplate {
                 const selectedId = String(componentArgs?.VALUE ?? "");
                 const selectedRequest = CONTROLLER_REQUESTS.find((request) => request.id === selectedId);
                 if (selectedRequest) {
-                    requestForm?.set("prop_forms", this.renderRequestFields(selectedRequest));
+                    requestForm?.set("prop_customFormGroups", this.renderRequestGroups(selectedRequest));
                     targetRequestId.set(selectedRequest.id);
                 }
             },
         } as any);
-        requestForm = UiCategory.UI.Fetch.Form({
-            prop_forms: [],
-            prop_formClass: ["d-block", "w-100", "m-0"],
-            prop_borderClass: ["d-block", "position-relative", "p-2", "m-0"],
-            prop_componentBorderClass: ["shadow-sm", "position-relative"],
-            prop_btnSubmit: {prop_title: "Run internal request", prop_btnClass: []},
-            prop_controller: (context: {formData: FormData | null}) => {
-                const selectedRequest = CONTROLLER_REQUESTS.find((request) => request.id === targetRequestId.get());
-                if (!selectedRequest) throw new Error("Choose a controller request first.");
-                const params = context.formData
-                    ? Object.fromEntries(Array.from(context.formData.entries(), ([name, value]) => [name.replace(/\[value\]$/, ""), value]))
-                    : {};
-                const requestParams = {
-                    ...params,
-                    ...(selectedRequest.widget ? {widget: selectedRequest.widget} : {}),
-                };
-                statusText.set(`Running ${selectedRequest.method} ${selectedRequest.id} ...`);
-                const request = Promise.resolve().then(() => selectedRequest.run(requestParams));
-                responseWidget?.dispose?.();
-                responseWidget = UiCategory.UI.Fetch.Widget({
-                    prop_widgetWidth: "100%",
-                    prop_widgetHeight: "180px",
-                    prop_widgetStyles: {minHeight: "0"},
-                    prop_componentBorderClass: ["shadow-sm", "position-relative"],
-                    ...(requestParams.widget as Partial<ComponentWidgetProps> | undefined),
-                    prop_controller: request,
-                    prop_requestData: requestParams,
-                } as any);
-                responseWidgetElement.set(responseWidget.getElement() as HTMLElement);
-                return request;
+        requestForm = UiCategory.UI.Fetch.CustomForm({
+            prop_customFormMode: CustomFormMode.RUN,
+            prop_customFormGroups: [],
+            prop_customFormFormOptions: {
+                prop_formClass: ["d-block", "w-100", "m-0"],
+                prop_btnSubmit: {prop_title: "Run internal request", prop_btnClass: []},
+                prop_controller: (context: {formData: FormData | null}) => {
+                    const selectedRequest = CONTROLLER_REQUESTS.find((request) => request.id === targetRequestId.get());
+                    if (!selectedRequest) throw new Error("Choose a controller request first.");
+                    const params = context.formData
+                        ? Object.fromEntries(context.formData.entries())
+                        : {};
+                    const requestParams = {
+                        ...params,
+                        ...(selectedRequest.widget ? {widget: selectedRequest.widget} : {}),
+                    };
+                    statusText.set(`Running ${selectedRequest.method} ${selectedRequest.id} ...`);
+                    const request = Promise.resolve().then(() => selectedRequest.run(requestParams));
+                    responseWidget?.dispose?.();
+                    responseWidget = UiCategory.UI.Fetch.Widget({
+                        prop_widgetWidth: "100%",
+                        prop_widgetHeight: "180px",
+                        prop_widgetStyles: {minHeight: "0"},
+                        prop_componentBorderClass: ["shadow-sm", "position-relative"],
+                        ...(requestParams.widget as Partial<ComponentWidgetProps> | undefined),
+                        prop_controller: request,
+                        prop_requestData: requestParams,
+                    } as any);
+                    responseWidgetElement.set(responseWidget.getElement() as HTMLElement);
+                    return request;
+                },
             },
         } as any, {
             RESPONSE: (_event: Event, payload: {RESPONSE: RequestState}) => {
@@ -249,7 +525,7 @@ export class ClTestPage implements ITemplate {
                     className: ["col-12", "mb-3"],
                     children: [
                         CoreReactive.App.h1({className: ["h3"], children: ["Controller request test"]}),
-                        CoreReactive.App.p({children: ["Run an internal controller request through ComponentForm and inspect its response."]}),
+                        CoreReactive.App.p({children: ["Run an internal controller request through ComponentCustomForm and inspect its response."]}),
                     ],
                 }),
                 CoreReactive.App.section({
@@ -289,36 +565,40 @@ export class ClTestPage implements ITemplate {
             ],
         });
 
-        const testTypesMenu = UiCategory.UI.Menus.MenuMore({
+        const categoryMenuItems = [
+            {id: "all-categories", title: "All categories", action: "selectCategory"},
+            ...CONTROLLER_REQUEST_CATEGORIES.map(toControllerRequestMenuItem),
+        ];
+        const selectCategory = (selectedCategoryId: string): void => {
+            const category = findControllerRequestCategory(selectedCategoryId);
+            const isAllCategories = selectedCategoryId === "all-categories";
+            if (!category && !isAllCategories) return;
+
+            const categoryName = isAllCategories ? "All categories" : category!.name;
+            const requests = isAllCategories
+                ? CONTROLLER_REQUESTS
+                : CONTROLLER_REQUESTS.filter((request) => request.categoryId === category!.id);
+            selectedTestType.set(categoryName);
+            targetRequestId.set("");
+            requestForm?.set("prop_customFormGroups", []);
+            requestOptions.set(requests.map(({id, name, method}) => ({id, name, prefix: method})));
+            requestSelect.set("prop_selectDisable", requests.length === 0);
+            statusText.set(requests.length > 0 ? `Choose a request in ${categoryName}.` : `No requests are available in ${categoryName}.`);
+        };
+
+        const testTypesMenu = includeTestSidebar ? UiCategory.UI.Menus.MenuMore({
             styles: {width: "100%"},
             prop_orientation: MenuMoreOrientation.VERTICAL,
             prop_directionRtl: !CoreConfig.Settings.DirectionRtl.get(),
             prop_menuBackgroundColor: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_3),
-            prop_items: [
-                {id: "all-categories", title: "All categories", action: "selectCategory"},
-                ...CONTROLLER_REQUEST_CATEGORIES.map(toControllerRequestMenuItem),
-            ],
+            prop_items: categoryMenuItems,
         }, {
             SELECT_ITEM: (_event: Event, dataArgs: any) => {
-                const selectedCategoryId = String(dataArgs?.ITEM?.id ?? "");
-                const category = findControllerRequestCategory(selectedCategoryId);
-                const isAllCategories = selectedCategoryId === "all-categories";
-                if (!category && !isAllCategories) return;
-
-                const categoryName = isAllCategories ? "All categories" : category!.name;
-                const requests = isAllCategories
-                    ? CONTROLLER_REQUESTS
-                    : CONTROLLER_REQUESTS.filter((request) => request.categoryId === category!.id);
-                selectedTestType.set(categoryName);
-                targetRequestId.set("");
-                requestForm?.set("prop_forms", []);
-                requestOptions.set(requests.map(({id, name, method}) => ({id, name, prefix: method})));
-                requestSelect.set("prop_selectDisable", requests.length === 0);
-                statusText.set(requests.length > 0 ? `Choose a request in ${categoryName}.` : `No requests are available in ${categoryName}.`);
+                selectCategory(String(dataArgs?.ITEM?.id ?? ""));
             },
-        } as any);
+        } as any) : null;
 
-        const sidebar = CoreReactive.App.section({
+        const sidebar = includeTestSidebar ? CoreReactive.App.section({
             styles: {
                 display: "flex",
                 flexDirection: "column",
@@ -331,28 +611,11 @@ export class ClTestPage implements ITemplate {
                     styles: {margin: "0", color: "var(--shanColor1)"},
                     children: ["Categories"],
                 }),
-                testTypesMenu.getElement(),
+                testTypesMenu!.getElement(),
             ],
-        });
+        }) : null;
 
-        const header = UiCategory.UI.Pages.Header.PageHeader({
-            prop_pageTitle: "Request Test",
-            prop_hasIconBack: true,
-            prop_pageNav: [{name: "home", title: "Home"}],
-        }, {
-            BACK: () => { window.location.href = "/"; },
-            SELECT_NAV_ITEM: (_event: Event, args: any) => {
-                if (args?.NAME === "home") window.location.href = "/";
-            },
-        } as any).getElement();
-
-        return UiCategory.UI.Pages.Page({
-            prop_header: header,
-            prop_content: content.getElement(),
-            prop_aside: sidebar,
-            prop_asideWidth: UtilStyle.Css_SizeUnit(240, UtilConst.Units.PEXEL),
-            prop_isFullHeight: true,
-        } as any).getElement() as HTMLElement;
+        return {content, sidebar, categoryMenuItems, selectCategory};
     }
 
     private showResponse(response: unknown, statusText: CoreObservable.App<string>, responseData: CoreObservable.App<any>): void {
@@ -366,33 +629,31 @@ export class ClTestPage implements ITemplate {
         responseData.set(response);
     }
 
-    private renderRequestFields(request: ControllerRequestDefinition): any[] {
-        return request.fields.map((field) => {
-            if (field.type === "select") {
-                const select = UiCategory.UI.Simples.SelectCustomSimple({
-                    classList: ["w-100"],
-                    prop_selectName: field.name,
-                    prop_selectValue: field.value ?? null,
-                    prop_selectOptions: field.options,
-                    prop_selectTypeShow: SelectTypeShow.JUST_NAME,
-                    prop_selectPlaceholder: field.placeholder ?? null,
-                } as any);
-                return CoreReactive.App.section({
-                    className: ["col-12", "mb-3"],
-                    children: [
-                        CoreReactive.App.label({className: ["form-label"], children: [field.label]}),
-                        select.getReactiveElement(),
-                    ],
-                });
-            }
-            return UiCategory.UI.Inputs.Input({
-                prop_name: field.name,
-                prop_labelTitle: field.label,
-                prop_type: field.type,
-                prop_value: field.value ?? null,
-                prop_placeholder: field.placeholder ?? null,
-            } as any).getReactiveElement();
-        });
+    private renderRequestGroups(request: ControllerRequestDefinition): CustomFormGroup[] {
+        return [{
+            id: "controller-request-parameters",
+            title: "Request parameters",
+            columns: 1,
+            fields: request.fields.map((field) => field.type === "select"
+                ? {
+                    id: field.name,
+                    name: field.name,
+                    label: field.label,
+                    type: CustomFormFieldType.SELECT,
+                    value: field.value ?? null,
+                    placeholder: field.placeholder,
+                    options: field.options.map((option) => ({label: option.name, value: option.id})),
+                }
+                : {
+                    id: field.name,
+                    name: field.name,
+                    label: field.label,
+                    type: CustomFormFieldType.INPUT,
+                    value: field.value ?? null,
+                    placeholder: field.placeholder,
+                    props: {prop_type: field.type},
+                }),
+        }];
     }
 
     onLoad(_pageElement: HTMLElement): void {}

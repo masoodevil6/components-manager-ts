@@ -2,6 +2,8 @@ import * as CoreObservable from "@/core_observable";
 import * as CoreReactive from "@/core_reactive";
 import * as CoreConfig from "@/core_configs";
 import * as CoreEvent from "@/core_event";
+import * as Core from "@/core";
+import * as CoreComponents from "@/core_components";
 import * as UtilConst from "@/util_consts";
 import * as UtilStyle from "@/util_styles";
 import {PartAttrDefault} from "@/core_components";
@@ -29,6 +31,7 @@ export class ComponentPage extends ComponentPageBase<ReturnType<typeof createPag
     private readonly _PAGE_SETTING_WIDTH = new CoreObservable.App<number | string>(PageSettingProps.prop_sidebarWidth.default);
     private _PAGE_SETTING: InstanceType<typeof ComponentPageSettingClass> | null = null;
     private _WORKFLOW_TREE: InstanceType<typeof ComponentJsonTree.Component> | null = null;
+    private _WORKFLOW_TREE_UNSUBSCRIBE: (() => void) | null = null;
 
     constructor(
         config?: Partial<StructurePropsType & PropsConfigType>,
@@ -55,16 +58,28 @@ export class ComponentPage extends ComponentPageBase<ReturnType<typeof createPag
     }
 
     dispose(): void {
+        this._WORKFLOW_TREE_UNSUBSCRIBE?.();
+        this._WORKFLOW_TREE_UNSUBSCRIBE = null;
         this._WORKFLOW_TREE?.dispose();
         this._WORKFLOW_TREE = null;
         this._PAGE_SETTING?.dispose();
         this._PAGE_SETTING = null;
-        this.disposeStep();
         this.getScope().dispose();
+        this.disposeStep();
     }
 
     override getElement(): HTMLElement {
         return super.getElement() as HTMLElement;
+    }
+
+    /** Staggers a live aside-menu replacement while keeping the page column mounted. */
+    transitionAsideContent(): void {
+        if (!this._ASIDE_IS_OPEN.get()) return;
+
+        // The current menu starts closing immediately; the incoming menu opens
+        // after ComponentSidebar's configured 50ms delay.
+        this._ASIDE_IS_OPEN.set(false);
+        this._ASIDE_IS_OPEN.set(true);
     }
 
     override renderContentComponent(): CoreReactive.App {
@@ -89,20 +104,21 @@ export class ComponentPage extends ComponentPageBase<ReturnType<typeof createPag
             case Schemas.CURRENT.part:
                 return this.renderCurrentPage(attrsDefault);
             case Schemas.HEADER.part:
-                return this.renderSlot(attrsDefault, data?.prop_header ?? this._COMPONENT_PROPS_BIND.prop_header);
+                return this.renderSlot(attrsDefault, data?.prop_header ?? this._COMPONENT_PROPS_BIND.prop_header, false, false, Core.Dictionary.WorkflowNodeNames.header);
             case Schemas.NAVIGATION.part:
-                return this.renderSlot(attrsDefault, data?.prop_navigation ?? this._COMPONENT_PROPS_BIND.prop_navigation, false, true);
+                return this.renderSlot(attrsDefault, data?.prop_navigation ?? this._COMPONENT_PROPS_BIND.prop_navigation, false, true, Core.Dictionary.WorkflowNodeNames.navigation);
             case Schemas.BODY.part:
                 return this.renderBody(attrsDefault);
             case Schemas.CONTENT.part:
-                return this.renderSlot(attrsDefault, data?.prop_content ?? this._COMPONENT_PROPS_BIND.prop_content, true, true);
+                return this.renderSlot(attrsDefault, data?.prop_content ?? this._COMPONENT_PROPS_BIND.prop_content, true, true, Core.Dictionary.WorkflowNodeNames.layout);
             case Schemas.ASIDE.part:
                 return this.renderAside(
                     attrsDefault,
                     data?.prop_aside ?? this._COMPONENT_PROPS_BIND.prop_aside,
+                    Core.Dictionary.WorkflowNodeNames.aside,
                 );
             case Schemas.FOOTER.part:
-                return this.renderSlot(attrsDefault, data?.prop_footer ?? this._COMPONENT_PROPS_BIND.prop_footer);
+                return this.renderSlot(attrsDefault, data?.prop_footer ?? this._COMPONENT_PROPS_BIND.prop_footer, false, false, Core.Dictionary.WorkflowNodeNames.footer);
             default:
                 return super.renderManagerComponent(partName, attrsDefault, data, extra);
         }
@@ -179,6 +195,7 @@ export class ComponentPage extends ComponentPageBase<ReturnType<typeof createPag
     private renderSetting(attrs: PartAttrDefault, content: CoreObservable.App<any>): CoreReactive.App {
         if (!this._PAGE_SETTING) {
             this._PAGE_SETTING = new ComponentPageSettingClass({
+                prop_workflowChildName: Core.Dictionary.WorkflowNodeNames.setting,
                 prop_content: content,
                 prop_sidebarIsOpen: this._PAGE_SETTING_IS_OPEN,
                 prop_sidebarWidth: this._PAGE_SETTING_WIDTH,
@@ -199,7 +216,7 @@ export class ComponentPage extends ComponentPageBase<ReturnType<typeof createPag
                 minHeight: "0",
                 overflow: "visible",
             },
-            children: [this._PAGE_SETTING.getElement()],
+            children: [this.renderWorkflowSlot(this._PAGE_SETTING, Core.Dictionary.WorkflowNodeNames.setting)],
         });
     }
 
@@ -230,17 +247,10 @@ export class ComponentPage extends ComponentPageBase<ReturnType<typeof createPag
         CoreEvent.App.registerEmit(workflowStep, () => {
             if (!this._COMPONENT_STEP) return {opened: false};
 
-            const workflowRoot = this._COMPONENT_STEP.getParent() ?? this._COMPONENT_STEP;
-            const steps = Object.fromEntries(
-                workflowRoot.getChildEntries().map(([key, child]) => [key, this.serializeWorkflowStep(child, key)]),
-            );
-            const data = {
-                workflow: {
-                    root: workflowRoot.unique || "page",
-                    steps,
-                },
-            } as JsonValue;
+            const data = this.serializeWorkflowComponent(this._COMPONENT_STEP) as JsonValue;
 
+            this._WORKFLOW_TREE_UNSUBSCRIBE?.();
+            this._WORKFLOW_TREE_UNSUBSCRIBE = null;
             this._WORKFLOW_TREE?.dispose();
             this._WORKFLOW_TREE = new ComponentJsonTree.Component({
                 styles: {display: "flex", flexDirection: "column", width: "100%", height: "100vh", minHeight: "0", flex: "1 1 auto", boxSizing: "border-box"},
@@ -253,20 +263,55 @@ export class ComponentPage extends ComponentPageBase<ReturnType<typeof createPag
                 prop_componentBorderStructureStyles: {display: "flex", flexDirection: "column", width: "100%", height: "100%", minHeight: "0", flex: "1 1 auto"},
                 prop_componentBorderStyles: {display: "flex", flexDirection: "column", height: "100%", minHeight: "0", flex: "1 1 auto"},
             } as any);
+            this._WORKFLOW_TREE_UNSUBSCRIBE = CoreComponents.Tools.Workflow.Subscribe_ComponentWorkflow(
+                this._COMPONENT_STEP,
+                () => {
+                    if (!this._WORKFLOW_TREE || !this._COMPONENT_STEP) return;
+                    this._WORKFLOW_TREE.set(
+                        "prop_data",
+                        this.serializeWorkflowComponent(this._COMPONENT_STEP) as JsonValue,
+                    );
+                },
+            );
             this._COMPONENT_PROPS_BIND.prop_setting.set(this._WORKFLOW_TREE.getElement());
             this._PAGE_SETTING_IS_OPEN.set(true);
             return {opened: true};
         });
     }
 
-    private serializeWorkflowStep(step: CoreEvent.ClStep, key: string): JsonValue {
+    private serializeWorkflowComponent(step: CoreEvent.TStepRef): JsonValue {
+        const componentStep = step as CoreEvent.ClStep;
+        const metadata = CoreComponents.Tools.Workflow.Get_ComponentWorkflowMetadata(step);
+        const localSteps = Object.fromEntries(
+            componentStep.getChildEntries()
+                .filter(([key]) => key !== CoreComponents.Tools.Workflow.COMPONENT_WORKFLOW_CHILDREN_KEY)
+                .map(([key, child]) => [key, this.serializeWorkflowStep(child, key)]),
+        );
         const children = Object.fromEntries(
-            step.getChildEntries().map(([childKey, child]) => [childKey, this.serializeWorkflowStep(child, childKey)]),
+            CoreComponents.Tools.Workflow.Get_ComponentWorkflowChildren(step)
+                .map(([key, child]) => [key, this.serializeWorkflowComponent(child)]),
         );
         return {
-            name: key,
-            unique: step.unique,
-            ...(Object.keys(children).length > 0 ? {steps: children} : {}),
+            component: metadata?.component ?? {name: componentStep.unique, id: componentStep.unique},
+            workflow: {
+                root: componentStep.unique,
+                steps: localSteps,
+                children,
+            },
+        };
+    }
+
+    private serializeWorkflowStep(step: CoreEvent.TStepRef, name: string): JsonValue {
+        const stepInstance = step as CoreEvent.ClStep;
+        const steps = Object.fromEntries(
+            stepInstance.getChildEntries()
+                .filter(([key]) => key !== CoreComponents.Tools.Workflow.COMPONENT_WORKFLOW_CHILDREN_KEY)
+                .map(([key, child]) => [key, this.serializeWorkflowStep(child, key)]),
+        );
+        return {
+            name,
+            unique: stepInstance.unique,
+            ...(Object.keys(steps).length > 0 ? {steps} : {}),
         };
     }
 
@@ -304,6 +349,7 @@ export class ComponentPage extends ComponentPageBase<ReturnType<typeof createPag
         slot: any,
         alwaysRender = false,
         withSizePadding = false,
+        workflowChildName?: string,
     ): CoreReactive.App {
         const slotStyles = withSizePadding
             ? CoreObservable.App.computed(
@@ -327,9 +373,12 @@ export class ComponentPage extends ComponentPageBase<ReturnType<typeof createPag
                     overflow: "visible",
                 },
                 stylesBind: slotStyles as any,
-                children: [slot ?? ""],
+                children: [this.renderWorkflowSlot(this.resolveSlot(slot), workflowChildName) ?? ""],
             }),
-            () => null,
+            () => {
+                if (workflowChildName) this.clearWorkflowChildSlot(workflowChildName);
+                return null;
+            },
             this.getScope(),
         ) as any;
     }
@@ -337,6 +386,7 @@ export class ComponentPage extends ComponentPageBase<ReturnType<typeof createPag
     private renderAside(
         attrs: PartAttrDefault,
         content: any,
+        workflowChildName: string,
     ): CoreReactive.App {
         return CoreObservable.App.conditionWhen(
             [content],
@@ -349,23 +399,29 @@ export class ComponentPage extends ComponentPageBase<ReturnType<typeof createPag
                 );
                 const asideStyles = CoreObservable.App.computed(
                     (isOpen: boolean, directionRtl: boolean, asideWidth: string) => ({
-                        position: isOpen ? "relative" : "absolute",
-                        top: isOpen ? "auto" : "0px",
+                        position: isOpen ? "sticky" : "absolute",
+                        top: "0px",
                         left: !isOpen && directionRtl ? "0px" : "auto",
                         right: !isOpen && !directionRtl ? "0px" : "auto",
+                        alignSelf: isOpen ? "start" : "auto",
                         width: isOpen ? "auto" : asideWidth || UtilStyle.Css_SizeUnit(25, UtilConst.Units.PERCENT),
                         minWidth: "0",
                         height: "100%",
-                        minHeight: "240px",
+                        maxHeight: isOpen ? "100vh" : "none",
+                        minHeight: isOpen ? "0" : "240px",
+                        overflow: isOpen ? "visible" : "hidden",
                     }),
                     [this._ASIDE_IS_OPEN, CoreConfig.Settings.DirectionRtl.observable(), this._COMPONENT_PROPS_BIND.prop_asideWidth],
                     this.getScope(),
                 );
                 const sidebar = UiCategory.UI.Contents.Sidebar({
-                    prop_sidebarContent: content,
+                    prop_sidebarContent: this.renderWorkflowSlot(this.resolveSlot(content), workflowChildName),
                     prop_sidebarDirection: direction,
                     prop_sidebarWidth: UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
                     prop_sidebarIsOpen: this._ASIDE_IS_OPEN,
+                    prop_sidebarDuration: 150,
+                    prop_delayOpen: 50,
+                    prop_delayClose: 0,
                     prop_sidebarBtnOpenHas: true,
                     prop_blurHas: false,
                     styles: {height: "100%"},
@@ -385,13 +441,20 @@ export class ComponentPage extends ComponentPageBase<ReturnType<typeof createPag
                     children: [sidebarElement],
                 });
             },
-            () => null,
+            () => {
+                this.clearWorkflowChildSlot(workflowChildName);
+                return null;
+            },
             this.getScope(),
         ) as any;
     }
 
     private hasSlot(value: any): boolean {
-        const resolved = value instanceof CoreObservable.App ? value.get() : value;
+        const resolved = this.resolveSlot(value);
         return resolved != null && (typeof resolved !== "string" || resolved.trim().length > 0);
+    }
+
+    private resolveSlot(value: any): any {
+        return value instanceof CoreObservable.App ? value.get() : value;
     }
 }

@@ -25,7 +25,9 @@ describe("ComponentSelectCustomSimple", () => {
         const root = select.getElement() as HTMLElement;
         document.body.appendChild(root);
 
-        expect(root.querySelector('input[type="hidden"]')).not.toBeNull();
+        const submittedValue = root.querySelector('input[type="hidden"]') as HTMLInputElement;
+        expect(submittedValue).not.toBeNull();
+        expect(submittedValue.name).toBe("fruit");
         const header = root.querySelector('[data-part-name="part-select-custom-simple-header"]') as HTMLElement;
         const border = header.querySelector('[data-part-name="part-border"]') as HTMLElement;
         expect(border.style.transition).toBe("background-color 1000ms, color 1000ms, border-color 1000ms");

@@ -1,5 +1,6 @@
 import * as CoreReactive   from "@/core_reactive";
 import * as CoreObservable from "@/core_observable";
+import * as CoreConfig     from "@/core_configs";
 // --------------------------------
 import {ComponentTableBase}    from "./ComponentTableBase";
 import {Schemas}              from "./Schemas";
@@ -16,6 +17,8 @@ import type {ColumnItem}       from "../componentInputListSelector/Props";
 // --------------------------------
 import * as UiCategory  from "@/ui_categories";
 import * as UiIcons     from "@/ui_icons";
+import * as UtilConst   from "@/util_consts";
+import * as UtilStyle   from "@/util_styles";
 
 
 /**
@@ -107,10 +110,25 @@ export class ComponentTable extends ComponentTableBase<ReturnType<typeof createT
 
         const prop_tableClass      = data?.["prop_tableClass"]      ?? bind.prop_tableClass;
         const prop_tableStyles     = data?.["prop_tableStyles"]     ?? bind.prop_tableStyles;
+        const prop_header          = data?.["prop_header"]          ?? bind.prop_header;
+        const prop_headerIconSize  = data?.["prop_headerIconSize"]  ?? bind.prop_headerIconSize;
         const prop_tableBordered   = data?.["prop_tableBordered"]   ?? bind.prop_tableBordered;
         const prop_tableStriped    = data?.["prop_tableStriped"]    ?? bind.prop_tableStriped;
         const prop_tableHover      = data?.["prop_tableHover"]      ?? bind.prop_tableHover;
         const prop_tableBorderless = data?.["prop_tableBorderless"] ?? bind.prop_tableBorderless;
+
+        const tableStyles = CoreObservable.App.computed(
+            (styles: Record<string, string>, header: TableHeaderItem[], iconSize: number) => {
+                const hasHeaderIcon = Array.isArray(header) && header.some((item) => item?.icon != null);
+                const safeIconSize = Number.isFinite(Number(iconSize)) ? Math.max(0, Number(iconSize)) : 20;
+                return {
+                    ...(styles ?? {}),
+                    ...(hasHeaderIcon ? {marginTop: `${safeIconSize}px`} : {}),
+                };
+            },
+            [prop_tableStyles, prop_header, prop_headerIconSize],
+            this.getScope(),
+        );
 
         const tableClasses = CoreObservable.App.computed(
             (tc, bordered, striped, hover, borderless) => {
@@ -128,7 +146,7 @@ export class ComponentTable extends ComponentTableBase<ReturnType<typeof createT
         return CoreReactive.App.part("table", {
             attrs: { ...attrsDefault },
             classBind: [tableClasses],
-            stylesBind: prop_tableStyles,
+            stylesBind: tableStyles,
             children: [
                 this.executeSchemaPart(Schemas.TABLE_HEADER.part, {}),
                 this.executeSchemaPart(Schemas.TABLE_BODY.part, {}),
@@ -155,11 +173,15 @@ export class ComponentTable extends ComponentTableBase<ReturnType<typeof createT
         const prop_hasColNumber       = data?.["prop_hasColNumber"]       ?? bind.prop_hasColNumber;
         const prop_hasColSelector     = data?.["prop_hasColSelector"]     ?? bind.prop_hasColSelector;
         const prop_tableItemHeadClass = data?.["prop_tableItemHeadClass"] ?? bind.prop_tableItemHeadClass;
+        const prop_tableItemHeadStyles = data?.["prop_tableItemHeadStyles"] ?? bind.prop_tableItemHeadStyles;
         const prop_headerIconSize     = data?.["prop_headerIconSize"]     ?? bind.prop_headerIconSize;
         const prop_headerIconColor    = data?.["prop_headerIconColor"]    ?? bind.prop_headerIconColor;
+        const headerIconBackgroundColor = UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1);
+        const headerIconBorderColor = UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1);
+        const prop_rowOptions         = data?.["prop_rowOptions"]         ?? bind.prop_rowOptions;
 
         const headerCells = CoreObservable.App.computed(
-            (order, header, hasColNumber, hasColSelector, itemHeadClass, iconSize, iconColor) => {
+            (order, header, hasColNumber, hasColSelector, itemHeadClass, itemHeadStyles, iconSize, iconColor, rowOptions) => {
                 const cells: any[] = [];
                 if (hasColNumber || hasColSelector) {
                     cells.push(CoreReactive.App.part("th", {
@@ -174,20 +196,59 @@ export class ComponentTable extends ComponentTableBase<ReturnType<typeof createT
                 const orderedHeader = this.fn_getOrderedHeader(order, header);
                 for (const itemHeader of orderedHeader) {
                     const icon = itemHeader.icon;
-                    const iconHtml = icon != null ? (typeof icon === "function" ? icon(iconSize, iconColor) : icon) : null;
+                    const safeIconSize = Number.isFinite(Number(iconSize)) ? Math.max(0, Number(iconSize)) : 20;
+                    const iconHtml = icon == null
+                        ? null
+                        : typeof icon === "function"
+                            ? icon(iconSize, iconColor)
+                            : typeof icon === "object"
+                                ? UiIcons.CreateIcon(icon, {size: iconSize, primaryColor: (iconColor || undefined) as any})
+                                : icon;
                     cells.push(CoreReactive.App.part("th", {
-                        className: ["p-0", "text-center", "position-relative", ...(itemHeadClass || [])],
+                        className: [
+                            ...(itemHeadStyles?.padding != null ? [] : ["p-0"]),
+                            "text-center",
+                            "position-relative",
+                            ...(itemHeadClass || []),
+                        ],
                         attrs: { scope: "col" },
-                        styles: itemHeader.width != null ? { width: `${itemHeader.width}%` } : {},
+                        styles: {
+                            ...(itemHeadStyles ?? {}),
+                            ...(itemHeader.width != null ? {width: `${itemHeader.width}%`} : {}),
+                        },
                         children: [
                             itemHeader.content ?? "#",
-                            iconHtml != null ? CoreReactive.App.span({ className: ["position-absolute"], children: [iconHtml] }) : null,
+                            iconHtml != null ? CoreReactive.App.span({
+                                className: ["position-absolute", "d-flex", "align-items-center", "justify-content-center"],
+                                styles: {
+                                    left: "50%",
+                                    top: `${-safeIconSize / 2}px`,
+                                    transform: "translate(-50%, -50%)",
+                                    width: `${safeIconSize + 10}px`,
+                                    height: `${safeIconSize + 10}px`,
+                                    backgroundColor: headerIconBackgroundColor,
+                                    borderWidth: UtilStyle.Css_BorderWidth(UtilConst.Sizes.L),
+                                    borderStyle: "solid",
+                                    borderColor: headerIconBorderColor,
+                                    borderRadius: "100%",
+                                    boxSizing: "border-box",
+                                    zIndex: "1",
+                                },
+                                children: [iconHtml],
+                            }) : null,
                         ],
+                    }));
+                }
+                if (Array.isArray(rowOptions) && rowOptions.length > 0) {
+                    cells.push(CoreReactive.App.part("th", {
+                        className: ["p-0", "text-center", "position-relative"],
+                        attrs: {scope: "col", "aria-label": "Row actions"},
+                        styles: {width: "0", padding: "0", border: "0"},
                     }));
                 }
                 return cells;
             },
-            [prop_order, prop_header, prop_hasColNumber, prop_hasColSelector, prop_tableItemHeadClass, prop_headerIconSize, prop_headerIconColor],
+            [prop_order, prop_header, prop_hasColNumber, prop_hasColSelector, prop_tableItemHeadClass, prop_tableItemHeadStyles, prop_headerIconSize, prop_headerIconColor, prop_rowOptions],
             this.getScope(),
         );
 
@@ -222,13 +283,17 @@ export class ComponentTable extends ComponentTableBase<ReturnType<typeof createT
         const prop_valueRow           = data?.["prop_valueRow"]           ?? bind.prop_valueRow;
         const prop_valueCol           = data?.["prop_valueCol"]           ?? bind.prop_valueCol;
         const prop_tableItemBodyClass = data?.["prop_tableItemBodyClass"] ?? bind.prop_tableItemBodyClass;
+        const prop_tableItemBodyStyles = data?.["prop_tableItemBodyStyles"] ?? bind.prop_tableItemBodyStyles;
+        const prop_tableItemBodyHoverStyles = data?.["prop_tableItemBodyHoverStyles"] ?? bind.prop_tableItemBodyHoverStyles;
         const prop_hasColNumber       = data?.["prop_hasColNumber"]       ?? bind.prop_hasColNumber;
         const prop_rowOptions         = data?.["prop_rowOptions"]         ?? bind.prop_rowOptions;
         const prop_rowOptionsColor    = data?.["prop_rowOptionsColor"]    ?? bind.prop_rowOptionsColor;
         const prop_rowOptionsItemColor = data?.["prop_rowOptionsItemColor"] ?? bind.prop_rowOptionsItemColor;
+        const prop_size               = data?.["prop_size"]               ?? bind.prop_size;
+        const directionRtl            = CoreConfig.Settings.DirectionRtl.observable();
 
         const bodyRows = CoreObservable.App.computed(
-            (order, header, tableData, valueType, valueRow, valueCol, itemBodyClass, hasColNumber, rowOptions, rowOptionsColor, rowOptionsItemColor) => {
+            (order, header, tableData, valueType, valueRow, valueCol, itemBodyClass, itemBodyStyles, itemBodyHoverStyles, hasColNumber, rowOptions, rowOptionsColor, rowOptionsItemColor, size, isRtl) => {
                 if (!header || !Array.isArray(header)) return [];
                 const orderedHeader = this.fn_getOrderedHeader(order, header);
                 if (!tableData || !Array.isArray(tableData)) return [];
@@ -237,12 +302,23 @@ export class ComponentTable extends ComponentTableBase<ReturnType<typeof createT
                     const itemBody = tableData[bodyIndex];
                     const isRowSelected = valueRow === bodyIndex && (valueType === TableSelectedType.ROW || valueType === TableSelectedType.BOTH);
                     const cells: any[] = [];
+                    const isRowHovered = new CoreObservable.App(false);
                     if (hasColNumber) {
                         cells.push(CoreReactive.App.part("td", {
                             className: ["p-0", "text-center"],
                             children: [
                                 CoreReactive.App.span({
                                     className: ["p-0", "text-center", ...(itemBodyClass || [])],
+                                        stylesBind: CoreObservable.App.computed(
+                                            (baseStyles: Record<string, string>, hoverStyles: Record<string, string>, isHovered: boolean) => ({
+                                                display: "block",
+                                                width: "100%",
+                                                ...(baseStyles ?? {}),
+                                                ...(isHovered ? (hoverStyles ?? {}) : {}),
+                                            }),
+                                            [itemBodyStyles, itemBodyHoverStyles, isRowHovered],
+                                            this.getScope(),
+                                        ) as any,
                                     children: [`${bodyIndex + 1}`],
                                 }),
                             ],
@@ -254,13 +330,24 @@ export class ComponentTable extends ComponentTableBase<ReturnType<typeof createT
                         if (itemHeader && itemBody.hasOwnProperty(itemHeader.id)) {
                             hasRow = true;
                             const rawValue = itemBody[itemHeader.id];
-                            const content = typeof rawValue === "string" ? rawValue : (rawValue as any)?.content ?? "";
+                            const cellValue = typeof rawValue === "object" && rawValue !== null ? rawValue.content : rawValue;
+                            const content = cellValue == null ? "" : String(cellValue);
                             const isColSelected = valueRow === bodyIndex && valueCol === headerIndex && (valueType === TableSelectedType.COL || valueType === TableSelectedType.BOTH);
                             cells.push(CoreReactive.App.part("td", {
                                 className: ["p-0", "text-center"],
                                 children: [
                                     CoreReactive.App.span({
                                         className: ["p-0", "text-center", ...(itemBodyClass || []), isColSelected ? "selected_table_col" : ""],
+                                        stylesBind: CoreObservable.App.computed(
+                                            (baseStyles: Record<string, string>, hoverStyles: Record<string, string>, isHovered: boolean) => ({
+                                                display: "block",
+                                                width: "100%",
+                                                ...(baseStyles ?? {}),
+                                                ...(isHovered ? (hoverStyles ?? {}) : {}),
+                                            }),
+                                            [itemBodyStyles, itemBodyHoverStyles, isRowHovered],
+                                            this.getScope(),
+                                        ) as any,
                                         on: {
                                             click: (event: Event) => {
                                                 this.fn_onSelectCol(event, itemHeader.id, headerIndex, bodyIndex, content);
@@ -273,18 +360,22 @@ export class ComponentTable extends ComponentTableBase<ReturnType<typeof createT
                         }
                     }
                     if (hasRow) {
-                        if (hasColNumber && rowOptions && rowOptions.length > 0) {
-                            cells.push(this.fn_renderRowOptions(itemBody, rowOptions, rowOptionsColor, rowOptionsItemColor));
+                        if (Array.isArray(rowOptions) && rowOptions.length > 0) {
+                            cells.push(this.fn_renderRowOptions(itemBody, bodyIndex, rowOptions, rowOptionsColor, rowOptionsItemColor, size, isRowHovered, isRtl));
                         }
                         rows.push(CoreReactive.App.part("tr", {
                             className: ["position-relative", isRowSelected ? "selected_table_row" : ""],
+                            on: {
+                                mouseenter: () => isRowHovered.set(true),
+                                mouseleave: () => isRowHovered.set(false),
+                            },
                             children: cells,
                         }));
                     }
                 }
                 return rows;
             },
-            [prop_order, prop_header, prop_data, prop_valueType, prop_valueRow, prop_valueCol, prop_tableItemBodyClass, prop_hasColNumber, prop_rowOptions, prop_rowOptionsColor, prop_rowOptionsItemColor],
+            [prop_order, prop_header, prop_data, prop_valueType, prop_valueRow, prop_valueCol, prop_tableItemBodyClass, prop_tableItemBodyStyles, prop_tableItemBodyHoverStyles, prop_hasColNumber, prop_rowOptions, prop_rowOptionsColor, prop_rowOptionsItemColor, prop_size, directionRtl],
             this.getScope(),
         );
 
@@ -318,16 +409,113 @@ export class ComponentTable extends ComponentTableBase<ReturnType<typeof createT
     --------------------------------------------- */
     private fn_renderRowOptions(
         itemBody: TableDataRow,
+        rowIndex: number,
         rowOptions: TableRowOption[],
         rowOptionsColor: string,
         rowOptionsItemColor: string,
+        size: UtilConst.Sizes,
+        isRowHovered: CoreObservable.App<boolean>,
+        directionRtl: boolean,
     ): CoreReactive.App {
-        const optionElements = rowOptions.map(opt => {
-            const iconHtml = typeof opt.html === "function" ? (opt.html as any)("M", rowOptionsItemColor) : opt.html;
+        const panelBackground = UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1);
+        const panelColor = rowOptionsColor || UtilStyle.Css_Color(UtilConst.ColorMain.DARK, UtilConst.ColorGrad.GRADE_1);
+        const optionBackground = UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_3);
+        const optionHoverBackground = UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_2);
+        const optionColor = rowOptionsItemColor || UtilStyle.Css_Color(UtilConst.ColorMain.DARK, UtilConst.ColorGrad.GRADE_1);
+        const panelStyles = CoreObservable.App.computed(
+            (hovered: boolean, rtl: boolean, currentSize: UtilConst.Sizes) => ({
+                position: "absolute",
+                top: "50%",
+                left: rtl ? "100%" : "auto",
+                right: rtl ? "auto" : "100%",
+                transform: "translateY(-50%)",
+                display: "flex",
+                alignItems: "center",
+                gap: "var(--marginSmall)",
+                padding: UtilStyle.Css_Padding(currentSize),
+                borderRadius: UtilStyle.Css_BorderRadius(currentSize),
+                backgroundColor: panelBackground,
+                color: panelColor,
+                opacity: hovered ? "1" : "0.45",
+                transition: "opacity 180ms ease-in-out",
+                whiteSpace: "nowrap",
+                zIndex: "4",
+            }),
+            [isRowHovered, directionRtl, size],
+            this.getScope(),
+        );
+        const arrowStyles = CoreObservable.App.computed(
+            (hovered: boolean) => ({
+                display: hovered ? "none" : "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: UtilStyle.Css_Height(size),
+                height: UtilStyle.Css_Height(size),
+                color: optionColor,
+            }),
+            [isRowHovered],
+            this.getScope(),
+        );
+        const optionListStyles = CoreObservable.App.computed(
+            (hovered: boolean) => ({
+                display: hovered ? "flex" : "none",
+                alignItems: "center",
+                gap: "var(--marginSmall)",
+                width: "max-content",
+            }),
+            [isRowHovered],
+            this.getScope(),
+        );
+
+        const optionElements = rowOptions.map((opt) => {
+            const isOptionHovered = new CoreObservable.App(false);
+            const optionStyles = CoreObservable.App.computed(
+                (hovered: boolean, currentSize: UtilConst.Sizes) => ({
+                    width: `calc(${UtilStyle.Css_Height(currentSize)} + ${UtilStyle.Css_Padding(currentSize)} + ${UtilStyle.Css_Padding(currentSize)})`,
+                    height: `calc(${UtilStyle.Css_Height(currentSize)} + ${UtilStyle.Css_Padding(currentSize)} + ${UtilStyle.Css_Padding(currentSize)})`,
+                    flex: "0 0 auto",
+                    padding: UtilStyle.Css_Padding(currentSize),
+                    borderRadius: UtilStyle.Css_BorderRadius(currentSize),
+                    boxSizing: "border-box",
+                    backgroundColor: hovered ? optionHoverBackground : optionBackground,
+                    color: optionColor,
+                    transition: "background-color 180ms ease-in-out, color 180ms ease-in-out",
+                }),
+                [isOptionHovered, size],
+                this.getScope(),
+            );
+            if ("valueKey" in opt) {
+                const value = itemBody?.[opt.valueKey];
+                const icon = opt.icon
+                    ? UiIcons.CreateIcon(opt.icon, {size, primaryColor: optionColor as any})
+                    : null;
+                return CoreReactive.App.span({
+                    className: ["cursor-pointer", "d-inline-flex", "align-items-center", "justify-content-center"],
+                    attrs: {title: opt.title, "aria-label": opt.title, role: "button", tabindex: "0"},
+                    stylesBind: optionStyles as any,
+                    on: {
+                        mouseenter: () => isOptionHovered.set(true),
+                        mouseleave: () => isOptionHovered.set(false),
+                        click: (event: Event) => this.fn_onClickActionOption(event, opt, itemBody, rowIndex, value),
+                        keydown: (event: KeyboardEvent) => {
+                            if (event.key === "Enter" || event.key === " ") {
+                                event.preventDefault();
+                                this.fn_onClickActionOption(event, opt, itemBody, rowIndex, value);
+                            }
+                        },
+                    },
+                    children: [icon ?? opt.title],
+                });
+            }
+
+            const iconHtml = typeof opt.html === "function" ? (opt.html as any)(size, optionColor) : opt.html;
             return CoreReactive.App.span({
-                className: ["p-1", "cursor-pointer", "d-inline-block"],
-                attrs: { ...opt.attrs },
+                className: ["cursor-pointer", "d-inline-flex", "align-items-center", "justify-content-center"],
+                attrs: {...opt.attrs},
+                stylesBind: optionStyles as any,
                 on: {
+                    mouseenter: () => isOptionHovered.set(true),
+                    mouseleave: () => isOptionHovered.set(false),
                     click: (event: Event) => {
                         this.fn_onclickOptionCard(event, opt.attrs.name ?? opt.attrs.id, opt.attrs.id);
                     },
@@ -337,8 +525,32 @@ export class ComponentTable extends ComponentTableBase<ReturnType<typeof createT
         });
         return CoreReactive.App.part("td", {
             className: ["p-0", "text-center", "position-relative"],
-            styles: { color: rowOptionsColor || undefined },
-            children: optionElements,
+            styles: {width: "0", padding: "0", border: "0", zIndex: "4"},
+            children: [
+                CoreReactive.App.span({
+                    className: ["d-inline-flex", "align-items-center"],
+                    stylesBind: panelStyles as any,
+                    children: [
+                        CoreReactive.App.span({
+                            className: ["align-items-center", "justify-content-center"],
+                            stylesBind: arrowStyles as any,
+                            children: [CoreObservable.App.computed(
+                                (rtl: boolean) => UiIcons.CreateIcon(
+                                    rtl ? UiIcons.Src.ArrowRight.Definition : UiIcons.Src.ArrowLeft.Definition,
+                                    {size, primaryColor: optionColor as any},
+                                ),
+                                [directionRtl],
+                                this.getScope(),
+                            ) as any],
+                        }),
+                        CoreReactive.App.span({
+                            className: ["align-items-center"],
+                            stylesBind: optionListStyles as any,
+                            children: optionElements,
+                        }),
+                    ],
+                }),
+            ],
         });
     }
 
@@ -360,6 +572,23 @@ export class ComponentTable extends ComponentTableBase<ReturnType<typeof createT
         this.executeMethod("CLICK_OPTION_CARD", event, { optionName, optionId });
     }
 
+    private fn_onClickActionOption(
+        event: Event,
+        option: Extract<TableRowOption, {valueKey: string}>,
+        row: TableDataRow,
+        rowIndex: number,
+        value: unknown,
+    ) {
+        this.executeMethod("CLICK_OPTION_CARD", event, {
+            optionName: option.action,
+            optionId: value == null ? "" : String(value),
+            rowIndex,
+            row,
+            option,
+            value,
+        });
+    }
+
 
     /* ---------------------------------------------
        renderTableHeaderColSelector â€” Ø±Ù†Ø¯Ø± Part TABLE_HEADER_COL_SELECTOR
@@ -377,9 +606,11 @@ export class ComponentTable extends ComponentTableBase<ReturnType<typeof createT
         const prop_doColSelector  = data?.["prop_doColSelector"]  ?? bind.prop_doColSelector;
         const prop_header         = data?.["prop_header"]         ?? bind.prop_header;
         const prop_order          = data?.["prop_order"]          ?? bind.prop_order;
+        const prop_backgroundColorIconColumnSelector = data?.["prop_backgroundColorIconColumnSelector"] ?? bind.prop_backgroundColorIconColumnSelector;
+        const prop_colorIconColumnSelector = data?.["prop_colorIconColumnSelector"] ?? bind.prop_colorIconColumnSelector;
 
         return CoreObservable.App.conditionWhen(
-            [prop_hasColSelector, prop_order, prop_header],
+            [prop_hasColSelector, prop_order, prop_header, prop_backgroundColorIconColumnSelector, prop_colorIconColumnSelector],
             (hasColSelector) => hasColSelector === true,
             () => {
                 const columnsArr = CoreObservable.App.computed(
@@ -396,6 +627,8 @@ export class ComponentTable extends ComponentTableBase<ReturnType<typeof createT
                         prop_showListSelected: false,
                         prop_icon: UiIcons.Src.InputSelectColumn.Definition as any,
                         prop_inputBackgroundColor: null,
+                        prop_backgroundColorIcon: prop_backgroundColorIconColumnSelector,
+                        prop_colorIcon: prop_colorIconColumnSelector,
                     } as any,
                     {
                         CLICK_ICON: (event: Event, dataArgs: any, componentArgs: any) => {},

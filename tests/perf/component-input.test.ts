@@ -26,7 +26,9 @@ describe("ComponentInput", () => {
             prop_btnAddWidth: 96,
         }, {INPUT_CHANGE: change, INPUT_FOCUS: focus, INPUT_BLUR: blur});
         const root = inputComponent.getElement() as HTMLElement;
-        document.body.appendChild(root);
+        const form = document.createElement("form");
+        form.appendChild(root);
+        document.body.appendChild(form);
 
         expect(root.querySelector("component-label")).not.toBeNull();
         expect(root.querySelector("label")).toBeNull();
@@ -54,9 +56,10 @@ describe("ComponentInput", () => {
         expect(addButton.style.height).toContain("var(--heightMedium)");
         const input = root.querySelector("input") as HTMLInputElement;
         expect(input).not.toBeNull();
-        expect(input.name).toBe("email[value]");
+        expect(input.name).toBe("email");
         expect(input.type).toBe("email");
         expect(input.value).toBe("initial");
+        expect(new FormData(form).get("email")).toBe("initial");
         expect(root.querySelectorAll("input")).toHaveLength(1);
 
         (root.querySelector("label") as HTMLElement).click();

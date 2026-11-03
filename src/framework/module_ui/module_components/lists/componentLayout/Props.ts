@@ -1,6 +1,7 @@
 import * as CoreComponents from "@/core_components";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
 import * as UtilTools from "@/util_tools";
+import type {StandardStyles} from "@/util_options_std";
 import {Keys} from "../../../module_categories/languages";
 import * as ComponentInputSelectOption from "../componentInputSelectOption";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
@@ -48,8 +49,9 @@ const columnEditor = UtilTools.Render.ComponentRender.inputSelectOption(
 export type LayoutContentItem = {
     content: unknown;
     col?: LayoutColumn | null;
+    workflowChildName?: string;
     class?: string[] | string;
-    styles?: Record<string, string>;
+    styles?: StandardStyles;
 };
 
 export const Props = {

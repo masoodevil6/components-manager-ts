@@ -1,4 +1,5 @@
 import {Keys} from "../../../module_categories/languages";
+import type {LayoutCreatorItemState} from "./Props";
 import type {
     ExtractMethodsType,
     ExtractMethodsComponentArgs,
@@ -18,6 +19,12 @@ export const Methods = {
         description: Keys.category.components.basic.layoutCreator.methods.deleteColumn.description,
         args: {},
         dataArgs: {COLUMN_INDEX: 0 as number},
+    },
+    CONTENT_CHANGE: {
+        name: "fn_onContentChange",
+        description: Keys.category.components.basic.layoutCreator.methods.contentChange.description,
+        args: {},
+        dataArgs: {ITEMS: [] as LayoutCreatorItemState[]},
     },
 } as const;
 

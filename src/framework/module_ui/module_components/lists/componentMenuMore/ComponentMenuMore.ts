@@ -27,6 +27,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
 
     private _ROOT_BORDER: ComponentBorder.Component | null = null;
     private _FLOAT_MENUS: ComponentFloatMenu.Component[] = [];
+    private _FLOAT_MENU_LEVELS = new Map<ComponentFloatMenu.Component, number>();
     private _HOVER_FLOAT_MENUS: ComponentFloatMenu.Component[] = [];
     private _BUTTONS: ComponentButton.Component[] = [];
     private _ICONS: ComponentIcon.Component[] = [];
@@ -294,6 +295,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
         hasChildren: boolean,
         layout: {orientation: CoreObservable.App<MenuMoreOrientation>; fullWidth: CoreObservable.App<boolean>; direction: CoreObservable.App<MenuMoreDirection>; rtl: CoreObservable.App<boolean>},
     ): CoreReactive.App {
+        let itemFloatMenu: ComponentFloatMenu.Component | null = null;
         const sizeName = CoreConfig.Settings.SizeName.observable();
         const verticalItemLayout = CoreObservable.App.computed(
             (orientation: MenuMoreOrientation) => level > 1 || orientation === MenuMoreOrientation.VERTICAL,
@@ -380,7 +382,11 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
         } as any, {
             CLICK: (event: Event) => {
                 event.stopPropagation();
-                if (item.disabled || hasChildren) return;
+                if (item.disabled) return;
+                if (hasChildren) {
+                    this.closeFloatMenuSiblings(itemFloatMenu, level);
+                    return;
+                }
                 this.executeMethod("SELECT_ITEM", event, {ITEM: item});
                 this._FLOAT_MENUS.forEach((menu) => menu.setShow(false));
             },
@@ -390,6 +396,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
         const buttonRoot = button.getElement() as HTMLElement;
         const buttonElement = buttonRoot.querySelector('[data-part-name="part-button"]') as HTMLButtonElement | null;
         buttonElement?.setAttribute("role", "menuitem");
+        if (item.ariaLabel) buttonElement?.setAttribute("aria-label", item.ariaLabel);
         if (hasChildren) buttonElement?.setAttribute("aria-haspopup", "menu");
 
         const itemHovered = new CoreObservable.App<boolean>(false);
@@ -442,13 +449,13 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             this.getScope(),
         );
         const openOnClick = item.openOn === "click";
-        let itemFloatMenu: ComponentFloatMenu.Component | null = null;
         const trigger = CoreReactive.App.section({
             attrs: {role: "none"},
             stylesBind: rowStyles as any,
             on: {
                 mouseenter: () => {
                     clearItemHoverTimeout();
+                    this.closeFloatMenuSiblings(itemFloatMenu, level);
                     if (!item.disabled) {
                         itemHovered.set(true);
                         // Open from the actual menu row as well as FloatMenu's
@@ -481,6 +488,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             on: {
                 mouseenter: () => {
                     clearItemHoverTimeout();
+                    this.closeFloatMenuSiblings(itemFloatMenu, level);
                     if (!item.disabled) {
                         itemHovered.set(true);
                         if (!openOnClick) itemFloatMenu?.setShow(true);
@@ -550,6 +558,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
         } as any);
         itemFloatMenu = floatMenu;
         this._FLOAT_MENUS.push(floatMenu);
+        this._FLOAT_MENU_LEVELS.set(floatMenu, level);
         floatMenu.setRelatedTargetContains((target) => this.containsTarget(target));
         if (!openOnClick) this._HOVER_FLOAT_MENUS.push(floatMenu);
         return floatMenu.getReactiveElement();
@@ -669,12 +678,23 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
         this._ITEM_HOVER_TIMEOUTS.forEach((timeout) => clearTimeout(timeout));
         this._ITEM_HOVER_TIMEOUTS.clear();
         this._FLOAT_MENUS.forEach((menu) => menu.dispose());
+        this._FLOAT_MENU_LEVELS.clear();
         this._BUTTONS.forEach((button) => button.dispose());
         this._ICONS.forEach((icon) => {icon.disposeStep(); icon.getScope().dispose();});
         this._FLOAT_MENUS = [];
         this._HOVER_FLOAT_MENUS = [];
         this._BUTTONS = [];
         this._ICONS = [];
+    }
+
+    /** Close sibling and descendant submenus while keeping the active menu's ancestors open. */
+    private closeFloatMenuSiblings(activeMenu: ComponentFloatMenu.Component | null, level: number): void {
+        this._FLOAT_MENUS.forEach((menu) => {
+            const menuLevel = this._FLOAT_MENU_LEVELS.get(menu);
+            if (menu !== activeMenu && menuLevel !== undefined && menuLevel >= level) {
+                menu.setShow(false);
+            }
+        });
     }
 
     private clearHoverHideTimeout(): void {

@@ -231,6 +231,7 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase<R
                     this.getScope(),
                 ),
                 prop_structureClass: ["w-100", "h-100"],
+                prop_menuIsOpen: this.var_showPopup,
                 prop_menuBackgroundColor: prop_menuBackgroundColor as any,
                 prop_menuBorderColor: prop_menuBorderColor as any,
                 prop_menuSelector: this.executeSchemaPart(Schemas.MAIN_FORM_FLOAT_MENU_ICON_LIST.part, {}),
@@ -517,10 +518,7 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase<R
     --------------------------------------------- */
 
     private fn_onClickIcon(event: any) {
-        const currentShow = this.var_showPopup.get();
-        this.var_showPopup.set(!currentShow);
-
-        if (!currentShow) {
+        if (this.var_showPopup.get()) {
             const columns = this.var_columns.get();
             const selectedIds = columns.filter(c => c.selected).map(c => c.id);
             this.var_tempOrder.set([...selectedIds]);
@@ -566,11 +564,11 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase<R
         this.var_columns.set(newColumns);
         this.set("prop_columns", newColumns);
 
+        this.var_showPopup.set(false);
         this.executeMethod("CLICK_ACCEPT", event, {});
         this.executeMethod("CALLBACK_COL_SELECTOR", event, {});
 
         this.var_tempOrder.set([]);
-        this.var_showPopup.set(false);
     }
 
     private fn_onClickReject(event: any) {

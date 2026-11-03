@@ -1,5 +1,6 @@
 import * as CoreComponents from "@/core_components";
 import * as CoreEvent from "@/core_event";
+import * as Core from "@/core";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {Definition} from "./Definition";
 import {Props, type PropsType} from "./Props";
@@ -17,7 +18,7 @@ export class ComponentPageBase<TWorkflow extends CoreComponents.ComponentWorkflo
         this._COMPONENT_EMIT = identity?.emit ?? null;
         this._COMPONENT_STEP = step ?? null;
         if (step && identity?.unique && typeof (identity.unique as any).identity === "symbol") {
-            CoreEvent.SubEvent(identity.unique as CoreEvent.TStepRef, "page", step);
+            CoreEvent.SubEvent(identity.unique as CoreEvent.TStepRef, Core.Dictionary.WorkflowNodeNames.page, step);
         }
     }
 

@@ -158,9 +158,8 @@ export class ComponentInput extends ComponentInputBase<ReturnType<typeof createI
             }
             return UtilStyle.Css_SizeCalc(...widthParts);
         }, [sizeName, icon, buttonEnabled, buttonWidth, disabled], this.getScope());
-        // ComponentInputSimple owns the legacy [value] suffix for the rendered input name.
         const inputName = name;
-        const inputFor = CoreObservable.App.computed((fieldName, labelValue) => fieldName && labelValue ? `${fieldName}[value]` : null, [name, label], this.getScope());
+        const inputFor = CoreObservable.App.computed((fieldName, labelValue) => fieldName && labelValue ? fieldName : null, [name, label], this.getScope());
         this._INPUT_SIMPLE = new ComponentInputSimple.Component({
             prop_inputName: inputName as any,
             prop_inputFor: inputFor as any,

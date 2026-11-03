@@ -64,6 +64,7 @@ export class ComponentTabs extends ComponentTabsBase<ReturnType<typeof createTab
 
 
     dispose(): void {
+        this.getScope().dispose();
         this.disposeStep();
     }
 
@@ -499,16 +500,21 @@ export class ComponentTabs extends ComponentTabsBase<ReturnType<typeof createTab
         const childrenArr = CoreObservable.App.computed(
             (tabs: TabType[]) => {
                 if (!tabs || !Array.isArray(tabs)) return [];
-                return tabs.map((itemTab, i) => {
-                    return CoreReactive.App.section({
-                        children: [
-                            this.executeSchemaPart(
-                                Schemas.FORM_BODYS_BORDER.part,
-                                { itemTab, tabIndex: i, tabLength: tabs.length },
-                            ),
-                        ],
+                const activeChildren = this.beginWorkflowChildComposition();
+                try {
+                    return tabs.map((itemTab, i) => {
+                        return CoreReactive.App.section({
+                            children: [
+                                this.executeSchemaPart(
+                                    Schemas.FORM_BODYS_BORDER.part,
+                                    { itemTab, tabIndex: i, tabLength: tabs.length },
+                                ),
+                            ],
+                        });
                     });
-                });
+                } finally {
+                    this.endWorkflowChildComposition(activeChildren);
+                }
             },
             [tabsList],
             this.getScope(),
@@ -556,7 +562,7 @@ export class ComponentTabs extends ComponentTabsBase<ReturnType<typeof createTab
             {
                 prop_show: showBind as any,
                 prop_contentSize: UtilConst.Sizes.S,
-                prop_content: itemTab.body as any,
+                prop_content: this.renderWorkflowSlot(itemTab.body, String(itemTab.id)) as any,
                 prop_borderRadius: prop_bodyBorderRadius as any,
                 prop_borderWidth: prop_bodyBorderWidth as any,
                 prop_borderClass: ["px-2", "py-1", "position-relative"],
