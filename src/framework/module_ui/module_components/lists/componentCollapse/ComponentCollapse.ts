@@ -14,9 +14,9 @@ import {PartAttrDefault}       from "@/core_components";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
 // --------------------------------
-import * as ComponentBorder from "../componentBorder";
-import * as ComponentIcon   from "../componentIcon";
-import * as ComponentMenuMore from "../componentMenuMore";
+import * as ComponentBorder from "../componentBorder/runtime";
+import * as ComponentIcon   from "../componentIcon/runtime";
+import * as ComponentMenuMore from "../componentMenuMore/runtime";
 
 const COLLAPSE_ARROW_SECTION_WIDTH = "calc(var(--paddingMedium) + var(--heightMedium) + var(--paddingMedium))";
 const COLLAPSE_HEADER_CONTENT_WIDTH = "calc(100% - var(--paddingMedium) - var(--heightMedium) - var(--paddingMedium))";

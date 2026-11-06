@@ -12,8 +12,8 @@ import {MethodsConfigType} from "./Methods";
 import {createInputDescriptionSimpleStep} from "./Step";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
-import * as ComponentBorder from "../componentBorder";
-import * as ComponentIcon from "../componentIcon";
+import * as ComponentBorder from "../componentBorder/runtime";
+import * as ComponentIcon from "../componentIcon/runtime";
 
 export class ComponentInputDescriptionSimple extends ComponentInputDescriptionSimpleBase<ReturnType<typeof createInputDescriptionSimpleStep>>{
     private readonly _FOCUSED = new CoreObservable.App<boolean>(false);

@@ -13,13 +13,13 @@ import {MethodsConfigType} from "./Methods";
 import {createFormStep} from "./Step";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
-import * as ComponentBorder from "../componentBorder";
-import * as ComponentButton from "../componentButton";
+import * as ComponentBorder from "../componentBorder/runtime";
+import * as ComponentButton from "../componentButton/runtime";
 import {ButtonAction, ButtonSemantic} from "../componentButton/Props";
-import * as ComponentMessages from "../componentMessages";
+import * as ComponentMessages from "../componentMessages/runtime";
 import {MessageTypes} from "../componentMessages/Props";
-import * as ComponentLoading from "../componentLoading";
-import * as ComponentWebCode from "../componentWebCode";
+import * as ComponentLoading from "../componentLoading/runtime";
+import * as ComponentWebCode from "../componentWebCode/runtime";
 
 type Child = {dispose?: () => void; disposeStep?: () => void};
 type ResponsePayload = {resultExp: unknown; response: unknown};

@@ -15,7 +15,7 @@ import {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {PropsConfigType as LoadingPropsConfigType} from "./Props";
 import {createLoadingStep}               from "./Step";
 // --------------------------------
-import * as ComponentIcon from "../componentIcon";
+import * as ComponentIcon from "../componentIcon/runtime";
 
 
 /**

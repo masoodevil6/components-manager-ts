@@ -7,7 +7,7 @@ import {Schemas} from "./Schemas";
 import {MethodsConfigType} from "./Methods";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
-import * as ComponentBorder from "../componentBorder";
+import * as ComponentBorder from "../componentBorder/runtime";
 
 export class ComponentIframe extends ComponentIframeBase {
     private _BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;
@@ -183,8 +183,12 @@ export class ComponentIframe extends ComponentIframeBase {
         queueMicrotask(() => this.syncHeightMode());
 
         const styles = CoreObservable.App.computed(
-            (custom: Record<string, string>) => ({width: "100%", ...(custom ?? {})}),
-            [iframeStyles],
+            (custom: Record<string, string>, height: string | null) => ({
+                width: "100%",
+                ...(height ? {height: "100%"} : {}),
+                ...(custom ?? {}),
+            }),
+            [iframeStyles, widgetHeight],
             this.getScope(),
         );
         return CoreReactive.App.section({

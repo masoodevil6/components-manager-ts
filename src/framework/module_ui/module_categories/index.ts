@@ -1,3 +1,10 @@
+// Re-export the factory before evaluating category definitions. Those definitions
+// import this barrel to create their public category entries.
+export {
+    CreateCategoryIcon,
+    CreateCategoryComponent
+} from "./basic/methods"
+
 export {
 UI , Icons
 } from "./lists"
@@ -8,11 +15,6 @@ export type {
     CategoryComponentTotality   as TCategoryComponentTotality ,
     CategoryIconTotality        as TCategoryIconTotality
 } from "./basic/types"
-
-export {
-    CreateCategoryIcon,
-    CreateCategoryComponent
-} from "./basic/methods"
 
 export {
     Fa   as CategoriesLanguageFa ,

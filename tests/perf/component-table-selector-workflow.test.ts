@@ -6,6 +6,8 @@ import {ComponentFloatMenu} from "../../src/framework/module_ui/module_component
 import {ComponentButton} from "../../src/framework/module_ui/module_components/lists/componentButton/ComponentButton";
 import {ComponentBorder} from "../../src/framework/module_ui/module_components/lists/componentBorder/ComponentBorder";
 import {ComponentTable} from "../../src/framework/module_ui/module_components/lists/componentTable/ComponentTable";
+import * as CoreConfig from "@/core_configs";
+import * as UtilStyle from "@/util_styles";
 
 const categories = vi.hoisted(() => ({
     InputListSelector: null as any,
@@ -69,6 +71,12 @@ describe("ComponentTable column selector workflow", () => {
 
         expect(positionMenu).toBeDefined();
         expect(selectorIcon).not.toBeNull();
+        const iconSlot = root.querySelector<HTMLElement>('[data-part-name="part-main-form-float-menu"]');
+        expect(iconSlot?.style.flexShrink).toBe("0");
+        const menuElement = positionMenu.getElement() as HTMLElement;
+        const iconSize = UtilStyle.Css_IconSize(CoreConfig.Settings.SizeName.observable().get());
+        expect(menuElement.style.width).toBe(iconSize);
+        expect(menuElement.style.height).toBe(iconSize);
         selectorIcon!.click();
         expect((positionMenu as any).get("prop_menuIsOpen")).toBe(true);
 
@@ -83,6 +91,15 @@ describe("ComponentTable column selector workflow", () => {
         expect(popup!.parentElement).toBe(document.body);
         expect(popup!.style.overflowY).toBe("visible");
         expect(popup!.querySelector("[data-float-menu-scroll-content]")).not.toBeNull();
+        const scrollRegion = popup!.querySelector<HTMLElement>("[data-float-menu-scroll-region]")!;
+        const buttons = popup!.querySelector<HTMLElement>('[data-part-name="part-formFloatMenu-body-buttons"]')!;
+        expect(scrollRegion.style.overflowY).toBe("auto");
+        expect(scrollRegion.contains(buttons)).toBe(false);
+        vi.spyOn(popup!, "getBoundingClientRect").mockReturnValue({height: 400} as DOMRect);
+        vi.spyOn(scrollRegion, "getBoundingClientRect").mockReturnValue({height: 300} as DOMRect);
+        (floatMenu as any).constrainPortalContentHeight(popup, 250);
+        expect(scrollRegion.style.maxHeight).toBe("150px");
+        expect(popup!.querySelector<HTMLElement>("[data-float-menu-scroll-content]")!.style.overflowY).toBe("visible");
 
         popup!.dispatchEvent(new MouseEvent("click", {bubbles: true}));
         expect((positionMenu as any).get("prop_menuIsOpen")).toBe(true);

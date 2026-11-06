@@ -1,7 +1,31 @@
-import { defineConfig } from 'vite';
+import { defineConfig, type ProxyOptions } from 'vite';
 import path from 'path';
+import {readdirSync, readFileSync, existsSync} from 'fs';
+import {validateInternalProjects} from './inside-project/manifest';
+
+const internalProjectsDir = path.resolve(__dirname, './inside-project');
+const manifests = readdirSync(internalProjectsDir, {withFileTypes: true})
+  .filter((entry) => entry.isDirectory())
+  .map((entry) => path.join(internalProjectsDir, entry.name, 'inside-project.json'))
+  .filter(existsSync)
+  .map((file) => JSON.parse(readFileSync(file, 'utf8')));
+const internalProjects = validateInternalProjects(manifests);
+const disableInternalProjectCache: NonNullable<ProxyOptions['configure']> = (proxy) => {
+  proxy.on('proxyReq', (request) => {
+    request.removeHeader('if-none-match');
+    request.removeHeader('if-modified-since');
+  });
+  proxy.on('proxyRes', (response) => {
+    response.headers['cache-control'] = 'no-store';
+    response.headers.pragma = 'no-cache';
+    delete response.headers.etag;
+    delete response.headers['last-modified'];
+    delete response.headers.expires;
+  });
+};
 
 export default defineConfig({
+  server: {proxy: Object.fromEntries(internalProjects.map((project) => [project.previewBase, {target: `http://127.0.0.1:${project.devPort}`, ws: true, configure: disableInternalProjectCache}]))},
   resolve: {
     alias: [
       // ─── CORE ───────────────────────────────────────────────

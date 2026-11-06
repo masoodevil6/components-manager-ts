@@ -1,5 +1,7 @@
 // Core
 export { PerformanceRegistry } from "./core/PerformanceRegistry";
+export { MonitoringScenarios, runMonitoringScenario } from "./core/Monitoring";
+export type { MonitoringScenario, MonitoringResult } from "./core/Monitoring";
 export { measure } from "./core/PerformanceMeasurement";
 export { createMetric, toMetricValue, measured, unsupported, unavailable } from "./core/PerformanceMetric";
 export type { PerformanceMetric, MetricResult } from "./core/PerformanceMetric";

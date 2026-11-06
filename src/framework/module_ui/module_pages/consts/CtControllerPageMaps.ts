@@ -31,7 +31,7 @@ type V2PageDefinition = {
 };
 
 function createV2PageRoute(definition: V2PageDefinition) {
-    const getTitle = (path = window.location.pathname): string =>
+    const getTitle = (path = typeof window === "undefined" ? "/" : window.location.pathname): string =>
         typeof definition.title === "function" ? definition.title(path) : definition.title;
     const headerTitle = new CoreObservable.App(getTitle());
     const getPageData = () => definition.controller();
@@ -134,5 +134,10 @@ export const CtControllerPageMaps: TRouter = {
         title: "Workflow",
         source: "framework.ui.controller.requests.static.v1.myPage.workflow.workflowPage",
         controller: () => UiCategory.UI.Controllers.MyPage.Workflow.workflowPage(),
+    }),
+    "/v2/performance": createV2PageRoute({
+        title: "Performance",
+        source: "framework.ui.controller.requests.static.v1.myPage.performance.performancePage",
+        controller: () => UiCategory.UI.Controllers.MyPage.Performance.performancePage(),
     }),
 };

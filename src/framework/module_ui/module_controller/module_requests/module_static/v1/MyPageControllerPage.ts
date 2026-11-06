@@ -8,7 +8,7 @@ export const MY_PAGE_CONTROLLER_PAGE_SOURCE = "framework.ui.controller.requests.
 
 const CONTROLLER_PAGE_CONTENT_SOURCE = "return response?.content ?? null;";
 
-/** Reuses the /test request interface as the content and sidebar of the v2 page shell. */
+/** Reuses the controller request interface as the content and sidebar of the v2 page shell. */
 export const controllerPage = () => {
     const {content, categoryMenuItems, selectCategory} = new ClTestPage().createControllerSlots();
     const sidebar = UiCategory.UI.Controllers.MyPage.Tools.sideBarMenu({

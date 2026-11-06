@@ -15,8 +15,8 @@ import {ComponentStructureTrait}   from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {PropsConfigType as WindowConfirmPropsConfigType} from "./Props";
 // --------------------------------
-import * as ComponentWindow  from "../componentWindow";
-import * as ComponentIcon    from "../componentIcon";
+import * as ComponentWindow  from "../componentWindow/runtime";
+import * as ComponentIcon    from "../componentIcon/runtime";
 
 
 /**

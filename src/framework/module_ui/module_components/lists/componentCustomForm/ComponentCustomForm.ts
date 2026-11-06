@@ -7,20 +7,20 @@ import * as CoreLanguage from "@/core_languages";
 import {PartAttrDefault} from "@/core_components";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
-import * as ComponentLayout from "../componentLayout";
-import * as ComponentLayoutCreator from "../componentLayoutCreator";
-import * as ComponentForm from "../componentForm";
-import * as ComponentCollapse from "../componentCollapse";
-import * as ComponentCollapseLine from "../componentCollapseLine";
-import * as ComponentInput from "../componentInput";
-import * as ComponentWindow from "../componentWindow";
-import * as ComponentWindowConfirm from "../componentWindowConfirm";
+import * as ComponentLayout from "../componentLayout/runtime";
+import * as ComponentLayoutCreator from "../componentLayoutCreator/runtime";
+import * as ComponentForm from "../componentForm/runtime";
+import * as ComponentCollapse from "../componentCollapse/runtime";
+import * as ComponentCollapseLine from "../componentCollapseLine/runtime";
+import * as ComponentInput from "../componentInput/runtime";
+import * as ComponentWindow from "../componentWindow/runtime";
+import * as ComponentWindowConfirm from "../componentWindowConfirm/runtime";
 import * as ComponentInputDescription from "../componentInputDescription";
-import * as ComponentInputCheckBox from "../componentInputCheckBox";
-import * as ComponentInputRadioBox from "../componentInputRadioBox";
-import * as ComponentInputListSelector from "../componentInputListSelector";
-import * as ComponentBorder from "../componentBorder";
-import * as ComponentIcon from "../componentIcon";
+import * as ComponentInputCheckBox from "../componentInputCheckBox/runtime";
+import * as ComponentInputRadioBox from "../componentInputRadioBox/runtime";
+import * as ComponentInputListSelector from "../componentInputListSelector/runtime";
+import * as ComponentBorder from "../componentBorder/runtime";
+import * as ComponentIcon from "../componentIcon/runtime";
 import {InputSimpleTypes} from "../componentInputSimple/Props";
 import {Keys} from "../../../module_categories/languages";
 import * as UiIcons from "@/ui_icons";
@@ -815,6 +815,7 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
                 const hidden = includeAuxiliary ? this.hiddenValue(name, initialSelected.join(",")) : null;
                 const child = new ComponentInputListSelector.Component({
                     ...customProps,
+                    prop_icon: customProps.prop_icon === undefined ? UiIcons.Src.InputSelectColumn.Definition : customProps.prop_icon,
                     prop_workflowChildName: workflowChildName,
                     prop_columns: columns as any,
                     prop_labelTitle: field.label,

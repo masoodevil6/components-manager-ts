@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "id": "consumer",
+  "title": "Consumer test project",
+  "kind": "consumer",
+  "previewBase": "/internal-projects/consumer/",
+  "devPort": 5181,
+  "scenarios": [
+    {"id": "baseline", "title": "Empty application", "path": "baseline.html"},
+    {"id": "button-root", "title": "Button · Framework entry", "path": "button-root.html"},
+    {"id": "button", "title": "Button · focused entry", "path": "button.html"},
+    {"id": "progress-linear-root", "title": "ProgressLinear · Framework entry", "path": "progress-linear-root.html"},
+    {"id": "progress-linear-focused", "title": "ProgressLinear · focused entry", "path": "progress-linear-focused.html"},
+    {"id": "json-tree-root", "title": "JSON Tree · Framework entry", "path": "json-tree.html"},
+    {"id": "json-tree-focused", "title": "JSON Tree · focused entry", "path": "json-tree-focused.html"},
+    {"id": "table-root", "title": "Table · Framework entry", "path": "table-root.html"},
+    {"id": "table-focused", "title": "Table · focused entry", "path": "table-focused.html"},
+    {"id": "input-list-selector-root", "title": "InputListSelector · Framework entry", "path": "input-list-selector-root.html"},
+    {"id": "input-list-selector-focused", "title": "InputListSelector · focused entry", "path": "input-list-selector-focused.html"}
+  ]
+}

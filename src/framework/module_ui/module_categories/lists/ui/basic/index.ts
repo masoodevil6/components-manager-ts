@@ -1,5 +1,8 @@
 export {Definition, ComponentStructureTotality as ComponentStructure} from "./Definition"
+export * as Builder from "./builder"
+export * as Position from "./position"
 export {Layout} from "./layout"
+export {Icon} from "../simples/icon"
 export {LayoutCreator} from "./layoutCreator"
 export {Styles} from "./styles"
 export {ElementCreator} from "./elementCreator"

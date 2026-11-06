@@ -12,6 +12,7 @@ export default defineConfig({
             { find: "@/core_reactive",   replacement: path.resolve(__dirname, "./src/framework/module_core/module_reactive") },
             { find: "@/core_route",      replacement: path.resolve(__dirname, "./src/framework/module_core/module_route") },
             { find: "@/core",            replacement: path.resolve(__dirname, "./src/framework/module_core") },
+            { find: "@/ui_controller",   replacement: path.resolve(__dirname, "./src/framework/module_ui/module_controller") },
             { find: "@/ui_categories",   replacement: path.resolve(__dirname, "./src/framework/module_ui/module_categories") },
             { find: "@/ui_components",   replacement: path.resolve(__dirname, "./src/framework/module_ui/module_components") },
             { find: "@/ui_icons",        replacement: path.resolve(__dirname, "./src/framework/module_ui/module_icons") },

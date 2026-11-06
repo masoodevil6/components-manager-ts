@@ -2,6 +2,7 @@ import * as UICategories from "@/ui_categories"
 import {Keys}            from "../../../languages"
 import {Validate}        from "./validate"
 import {InputCheckBox}  from "./inputCheckBox"
+import {InputAgreementCheckBox} from "./inputAgreementCheckBox"
 import {InputRadioBox} from "./inputRadioBox"
 import {InputSelectOption} from "./inputSelectOption"
 import {InputOtp}       from "./inputOtp"
@@ -27,6 +28,7 @@ export const Definition : UICategories.TCategoryComponentDefinition = {
     components:  [
         Validate,
         InputCheckBox,
+        InputAgreementCheckBox,
         InputRadioBox,
         InputSelectOption,
         InputOtp,

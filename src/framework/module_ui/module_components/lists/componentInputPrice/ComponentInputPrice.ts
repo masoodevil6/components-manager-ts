@@ -11,8 +11,8 @@ import {createInputPriceStep} from "./Step";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {ComponentLabelTrait} from "../../traits/componentLabelTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
-import * as ComponentInput from "../componentInput";
-import * as ComponentValidate from "../componentValidate";
+import * as ComponentInput from "../componentInput/runtime";
+import * as ComponentValidate from "../componentValidate/runtime";
 
 type Disposable = {dispose?: () => void; disposeStep?: () => void};
 

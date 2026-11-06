@@ -10,7 +10,7 @@ import type {ValidatorRule} from "@/util_validators";
 // --------------------------------
 import {Props   as ValidateProps}   from "../../lists/componentValidate/Props";
 import {Schemas as ValidateSchemas} from "../../lists/componentValidate/Schemas";
-import * as ComponentIcon           from "../../lists/componentIcon";
+import {ComponentIcon} from "../../lists/componentIcon/ComponentIcon";
 
 
 /**
@@ -152,7 +152,7 @@ export const ComponentValidateTrait = {
                         ? UtilStyle.Css_Color(UtilConst.ColorMain.SUCCESS, UtilConst.ColorGrad.GRADE_1)
                         : UtilStyle.Css_Color(UtilConst.ColorMain.ERROR, UtilConst.ColorGrad.GRADE_1);
 
-                    const iconEl = new ComponentIcon.Component({
+                    const iconEl = new ComponentIcon({
                             prop_icon: UiIcons.CreateIcon(iconValue as any, {
                                 size: iconSize as any,
                                 primaryColor: color,
@@ -237,7 +237,7 @@ export const ComponentValidateTrait = {
                     ? UiIcons.Src.StatusIsTrue.Definition
                     : UiIcons.Src.StatusIsFalse.Definition);
 
-                return new ComponentIcon.Component(
+                return new ComponentIcon(
                     {
                         classList: ["mx-2"],
                         prop_iconClass: ["mx-2"],

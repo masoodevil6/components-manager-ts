@@ -12,9 +12,9 @@ import {CardRowInfoRow, PropsType, PropsConfigType} from "./Props";
 import {MethodsConfigType} from "./Methods";
 import {Schemas} from "./Schemas";
 import {createCardRowInfoStep} from "./Step";
-import * as ComponentBorder from "../componentBorder";
-import * as ComponentIcon from "../componentIcon";
-import * as ComponentMenuMore from "../componentMenuMore";
+import * as ComponentBorder from "../componentBorder/runtime";
+import * as ComponentIcon from "../componentIcon/runtime";
+import * as ComponentMenuMore from "../componentMenuMore/runtime";
 
 export class ComponentCardRowInfo extends ComponentCardRowInfoBase<ReturnType<typeof createCardRowInfoStep>> {
     private _BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;

@@ -17,8 +17,8 @@ import type {PropsType as StructurePropsType} from "../componentStructure/Props"
 // --------------------------------
 import type {MethodsConfigType}  from "./Methods";
 // --------------------------------
-import * as ComponentBorder from "../componentBorder";
-import * as ComponentIcon   from "../componentIcon";
+import * as ComponentBorder from "../componentBorder/runtime";
+import * as ComponentIcon   from "../componentIcon/runtime";
 
 
 /**

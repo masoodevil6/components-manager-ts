@@ -8,10 +8,11 @@ import * as UtilStyle from "@/util_styles";
 import {PartAttrDefault} from "@/core_components";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
-import * as ComponentBorder from "../componentBorder";
-import * as ComponentButton from "../componentButton";
-import * as ComponentFloatMenu from "../componentFloatMenu";
-import * as ComponentIcon from "../componentIcon";
+import {ComponentBorder} from "../componentBorder/ComponentBorder";
+import {ComponentButton} from "../componentButton/ComponentButton";
+import {ComponentFloatMenu} from "../componentFloatMenu/ComponentFloatMenu";
+import {DirectionTypes as FloatMenuDirectionTypes, ShowTypes as FloatMenuShowTypes} from "../componentFloatMenu/Props";
+import {ComponentIcon} from "../componentIcon/ComponentIcon";
 import {Definition} from "./Definition";
 import {MenuMoreDirection, MenuMoreOrientation, Props, type MenuMoreEntry, type MenuMoreGroup, type MenuMoreItem, type PropsType, type PropsConfigType} from "./Props";
 import {Schemas, type SchemasType} from "./Schemas";
@@ -25,12 +26,12 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
     protected _COMPONENT_SCHEMA = CoreComponents.DefineSchema<SchemasType, PropsType & Record<string, any>>({...ComponentStructureTrait.schemas, ...Schemas} as any);
     protected _COMPONENT_METHODS = CoreComponents.DefineMethod<MethodsType, PropsType & Record<string, any>>({...Methods} as any);
 
-    private _ROOT_BORDER: ComponentBorder.Component | null = null;
-    private _FLOAT_MENUS: ComponentFloatMenu.Component[] = [];
-    private _FLOAT_MENU_LEVELS = new Map<ComponentFloatMenu.Component, number>();
-    private _HOVER_FLOAT_MENUS: ComponentFloatMenu.Component[] = [];
-    private _BUTTONS: ComponentButton.Component[] = [];
-    private _ICONS: ComponentIcon.Component[] = [];
+    private _ROOT_BORDER: ComponentBorder | null = null;
+    private _FLOAT_MENUS: ComponentFloatMenu[] = [];
+    private _FLOAT_MENU_LEVELS = new Map<ComponentFloatMenu, number>();
+    private _HOVER_FLOAT_MENUS: ComponentFloatMenu[] = [];
+    private _BUTTONS: ComponentButton[] = [];
+    private _ICONS: ComponentIcon[] = [];
     private _HOVER_HIDE_TIMEOUT: ReturnType<typeof setTimeout> | null = null;
     private _ITEM_HOVER_TIMEOUTS = new Set<ReturnType<typeof setTimeout>>();
 
@@ -151,7 +152,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             });
         }, [items], this.getScope());
 
-        this._ROOT_BORDER = new ComponentBorder.Component({
+        this._ROOT_BORDER = new ComponentBorder({
             prop_content: rootContent,
             prop_width: menuWidth,
             prop_borderClass: [],
@@ -295,7 +296,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
         hasChildren: boolean,
         layout: {orientation: CoreObservable.App<MenuMoreOrientation>; fullWidth: CoreObservable.App<boolean>; direction: CoreObservable.App<MenuMoreDirection>; rtl: CoreObservable.App<boolean>},
     ): CoreReactive.App {
-        let itemFloatMenu: ComponentFloatMenu.Component | null = null;
+        let itemFloatMenu: ComponentFloatMenu | null = null;
         const sizeName = CoreConfig.Settings.SizeName.observable();
         const verticalItemLayout = CoreObservable.App.computed(
             (orientation: MenuMoreOrientation) => level > 1 || orientation === MenuMoreOrientation.VERTICAL,
@@ -364,7 +365,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
         }), [sizeName, verticalItemLayout, iconFrameSize], this.getScope());
-        const button = new ComponentButton.Component({
+        const button = new ComponentButton({
             prop_btnTitle: item.title ?? "",
             prop_btnIcon: item.icon ? this.createColoredIconDefinition(item.icon) : null,
             prop_btnVariant: "ghost" as any,
@@ -499,13 +500,13 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             children: this.renderMenuEntries(item.children!, level + 1, layout),
         });
         const floatDirection = CoreObservable.App.computed((orientation: MenuMoreOrientation, direction: MenuMoreDirection, isRtl: boolean) => {
-            if (level === 1 && orientation === MenuMoreOrientation.HORIZONTAL) return ComponentFloatMenu.DirectionTypes.BOTTOM;
+            if (level === 1 && orientation === MenuMoreOrientation.HORIZONTAL) return FloatMenuDirectionTypes.BOTTOM;
             // Submenus open toward the inline end, using the resolved layout direction for the side axis.
             const opensLeft = direction === MenuMoreDirection.RTL || ((direction === MenuMoreDirection.TOP_TO_BOTTOM || direction === MenuMoreDirection.BOTTOM_TO_TOP) && isRtl);
-            return opensLeft ? ComponentFloatMenu.DirectionTypes.LEFT : ComponentFloatMenu.DirectionTypes.RIGHT;
+            return opensLeft ? FloatMenuDirectionTypes.LEFT : FloatMenuDirectionTypes.RIGHT;
         }, [layout.orientation, layout.direction, layout.rtl], this.getScope());
         const floatStyles = CoreObservable.App.computed(
-            (direction: ComponentFloatMenu.DirectionTypes, isRtl: boolean) => direction === ComponentFloatMenu.DirectionTypes.BOTTOM
+            (direction: FloatMenuDirectionTypes, isRtl: boolean) => direction === FloatMenuDirectionTypes.BOTTOM
                 ? {
                     top: "100%",
                     bottom: "auto",
@@ -536,14 +537,14 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             ? {display: "inline-block", width: "auto", height: MENU_ITEM_HEIGHT}
             : {display: "block", width: "100%", height: MENU_ITEM_HEIGHT},
         [horizontalRootItem, layout.fullWidth], this.getScope());
-        const floatMenu = new ComponentFloatMenu.Component({
+        const floatMenu = new ComponentFloatMenu({
             classList: ["position-relative", "d-inline-block"],
             styles: floatComponentStyles as any,
             prop_structureStyles: floatStructureStyles as any,
             prop_selectorContent: trigger,
             prop_selectorClass: ["d-inline-block"],
             prop_selectorStyles: {height: MENU_ITEM_HEIGHT, position: "relative"},
-            prop_selectorShowType: openOnClick ? ComponentFloatMenu.ShowTypes.CLICK : ComponentFloatMenu.ShowTypes.HOVER,
+            prop_selectorShowType: openOnClick ? FloatMenuShowTypes.CLICK : FloatMenuShowTypes.HOVER,
             prop_floatContent: body,
             prop_floatBorderPadding: false,
             prop_floatDirectionType: floatDirection as any,
@@ -564,8 +565,8 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
         return floatMenu.getReactiveElement();
     }
 
-    private createIcon(icon: UiIcons.TIconInstance): ComponentIcon.Component {
-        const component = new ComponentIcon.Component({prop_icon: icon} as any);
+    private createIcon(icon: UiIcons.TIconInstance): ComponentIcon {
+        const component = new ComponentIcon({prop_icon: icon} as any);
         this._ICONS.push(component);
         return component;
     }
@@ -661,7 +662,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
                 opacity: visible ? "1" : "0",
             };
         }, [sizeName, verticalItemLayout], this.getScope());
-        const component = new ComponentIcon.Component({
+        const component = new ComponentIcon({
             prop_icon: icon,
             styles: iconBoxStyles as any,
             prop_structureStyles: {display: "flex", width: "100%", height: "100%", alignItems: "center", justifyContent: "center"},
@@ -688,7 +689,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
     }
 
     /** Close sibling and descendant submenus while keeping the active menu's ancestors open. */
-    private closeFloatMenuSiblings(activeMenu: ComponentFloatMenu.Component | null, level: number): void {
+    private closeFloatMenuSiblings(activeMenu: ComponentFloatMenu | null, level: number): void {
         this._FLOAT_MENUS.forEach((menu) => {
             const menuLevel = this._FLOAT_MENU_LEVELS.get(menu);
             if (menu !== activeMenu && menuLevel !== undefined && menuLevel >= level) {

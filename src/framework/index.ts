@@ -7,14 +7,18 @@ import "./bootstrap/Language";
 export * as Core           from "@/core";
 export * as Config         from "@/core_configs";
 export * as Language       from "@/core_languages";
+export * as Lang           from "./Lang";
 export * as Observable     from "@/core_observable";
 export * as Reactive       from "@/core_reactive";
 export * as ComponentBase  from "@/core_components";
 export * as Route          from "@/core_route";
+export * as Controller     from "./module_ui/module_controller";
+export * as Consumer       from "./Consumer";
 
 
 // UI
 export * as Pages          from "@/ui_pages";
+export {PageManager}       from "@/ui_pages";
 export * as UI              from "./module_ui";
 
 

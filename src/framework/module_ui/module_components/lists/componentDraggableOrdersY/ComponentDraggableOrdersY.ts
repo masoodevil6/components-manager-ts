@@ -8,14 +8,15 @@ import type {PropsType} from "./Props";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {createDraggableOrdersStep} from "./Step";
-import * as ComponentBorder from "../componentBorder";
-import * as ComponentIcon from "../componentIcon";
+import {ComponentBorder} from "../componentBorder/ComponentBorder";
+import {BorderTypes} from "../componentBorder/Props";
+import {ComponentIcon} from "../componentIcon/ComponentIcon";
 import * as UiIcons from "@/ui_icons";
 import * as UtilStyle from "@/util_styles";
 import * as UtilConst from "@/util_consts";
 import * as CoreLanguage from "@/core_languages";
 import {Keys} from "../../../module_categories/languages";
-import * as ComponentElementPosition from "../componentElementPosition";
+import {ComponentElementPosition} from "../componentElementPosition/ComponentElementPosition";
 
 export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase<ReturnType<typeof createDraggableOrdersStep>>{
 
@@ -96,14 +97,14 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase<Ret
                 const placeholderContent = CoreReactive.App.b({
                     children: [ placeholderText ],
                 });
-                const placeholder = new ComponentBorder.Component({
+                const placeholder = new ComponentBorder({
                     prop_borderClass: ["mb-2", "text-center", "w-100"],
                     prop_borderStyles: CoreObservable.App.computed((sizeName) => ({
                         paddingInlineStart: UtilStyle.Css_Padding(sizeName),
                         paddingInlineEnd: UtilStyle.Css_Padding(sizeName),
                     }), [CoreConfig.Settings.SizeName.observable()], this.getScope()) as any,
                     prop_content: placeholderContent as any,
-                    prop_borderType: ComponentBorder.BorderTypes.DASHED,
+                    prop_borderType: BorderTypes.DASHED,
                     prop_contentColor: UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
                     prop_contentBackgroundColor: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
                     prop_borderColor: UtilStyle.Css_Color(UtilConst.ColorMain.SECONDARY, UtilConst.ColorGrad.GRADE_1),
@@ -167,7 +168,7 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase<Ret
             this.getScope(),
         );
 
-        const pinIcon = new ComponentIcon.Component({
+        const pinIcon = new ComponentIcon({
             prop_structureStyles: {height: "100%"},
             prop_icon:       iconDef as any,
             prop_iconTitle:  "pin",
@@ -179,7 +180,7 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase<Ret
             },
         } as any).getReactiveElement();
 
-        const position = new ComponentElementPosition.Component({
+        const position = new ComponentElementPosition({
             prop_positionTop: UtilStyle.Css_SizeUnit(10, UtilConst.Units.PEXEL),
             prop_positionEnd: UtilStyle.Css_SizeUnit(10, UtilConst.Units.PEXEL),
             prop_positionTranslate: "translate(0, -50%)",
@@ -227,7 +228,7 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase<Ret
 
         const ordersStatus = (this._COMPONENT_PROPS_BIND as any).prop_draggableOrderStatus as CoreObservable.App<any>;
 
-        const border = new ComponentBorder.Component({
+        const border = new ComponentBorder({
             prop_borderClass: ["mb-2"],
             prop_borderStyles: CoreObservable.App.computed((sizeName) => ({
                 cursor: "pointer",
@@ -239,7 +240,7 @@ export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase<Ret
                 paddingInlineEnd: UtilStyle.Css_Padding(sizeName),
             }), [CoreConfig.Settings.SizeName.observable()], this.getScope()) as any,
             prop_content: content,
-            prop_borderType: ComponentBorder.BorderTypes.DASHED,
+            prop_borderType: BorderTypes.DASHED,
             prop_contentBackgroundColor: bgColor as any,
             prop_borderColor: borderColor as any,
         } as any, {} as any).getReactiveElement();

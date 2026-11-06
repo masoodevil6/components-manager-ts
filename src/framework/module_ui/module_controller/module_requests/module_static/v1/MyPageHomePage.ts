@@ -70,8 +70,7 @@ export const homePage = (params: HomePageControllerParams = {}) => {
             {id: "icons", title: "Icons", action: "/v2/icons"},
             {id: "controllers", title: "Controllers", action: "/v2/controllers"},
             {id: "workflow", title: "Workflow", action: "/v2/workflow"},
-            {id: "pager", title: "Pager", action: "/pager"},
-            {id: "request-test", title: "Request Test", action: "/test"},
+            {id: "performance", title: "Performance", action: "/v2/performance"},
         ],
         methods: {
             SELECT_ITEM: (_event: Event, dataArgs: {ITEM?: {action?: string}}) => {

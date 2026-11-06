@@ -15,7 +15,7 @@ import {ComponentStructureTrait}   from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {PropsConfigType as WindowPropsConfigType} from "./Props";
 // --------------------------------
-import * as ComponentButton  from "../componentButton";
+import * as ComponentButton  from "../componentButton/runtime";
 import {ButtonSemantic, ButtonVariants, ButtonAction} from "../componentButton/Props";
 
 

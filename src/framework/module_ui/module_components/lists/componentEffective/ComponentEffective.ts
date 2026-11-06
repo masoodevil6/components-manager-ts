@@ -3,7 +3,7 @@ import * as CoreReactive from "@/core_reactive";
 import {PartAttrDefault} from "@/core_components";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
-import * as ComponentBorder from "../componentBorder";
+import * as ComponentBorder from "../componentBorder/runtime";
 import {ComponentEffectiveBase} from "./ComponentEffectiveBase";
 import {Props as BorderProps} from "../componentBorder/Props";
 import type {PropsConfigType} from "./Props";

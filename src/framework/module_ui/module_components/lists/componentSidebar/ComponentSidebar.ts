@@ -13,7 +13,8 @@ import {PropsConfigType as SidebarPropsConfigType, SidebarDirection} from "./Pro
 import {PartAttrDefault}       from "@/core_components";
 import {ComponentStructureTrait}   from "../../traits/componentStructureTrait";
 // --------------------------------
-import * as UiCategory             from "@/ui_categories";
+import {ComponentButton} from "../componentButton/ComponentButton";
+import {ComponentIcon} from "../componentIcon/ComponentIcon";
 import {ButtonAction} from "../componentButton/Props";
 
 
@@ -547,7 +548,7 @@ export class ComponentSidebar extends ComponentSidebarBase<ReturnType<typeof cre
 
         const prop_sidebarBtnOpenSize = data?.["prop_sidebarBtnOpenSize"] ?? bind.prop_sidebarBtnOpenSize;
 
-        const buttonInstance = UiCategory.UI.Simples.Button(
+        const buttonInstance = new ComponentButton(
             {
                 classList: [],
                 prop_btnStyles: {
@@ -633,7 +634,7 @@ export class ComponentSidebar extends ComponentSidebarBase<ReturnType<typeof cre
             this.getScope(),
         );
 
-        const iconInstance = UiCategory.UI.Simples.Icon(
+        const iconInstance = new ComponentIcon(
             {
                 prop_iconStyles: {
                     textAlign: "center",

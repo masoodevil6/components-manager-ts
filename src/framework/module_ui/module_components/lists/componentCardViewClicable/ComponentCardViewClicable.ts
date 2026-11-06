@@ -11,9 +11,9 @@ import {PropsType, PropsConfigType} from "./Props";
 import {MethodsConfigType} from "./Methods";
 import {Schemas} from "./Schemas";
 import {createCardViewClicableStep} from "./Step";
-import * as ComponentBorder from "../componentBorder";
-import * as ComponentElementPosition from "../componentElementPosition";
-import * as ComponentButton from "../componentButton";
+import * as ComponentBorder from "../componentBorder/runtime";
+import * as ComponentElementPosition from "../componentElementPosition/runtime";
+import * as ComponentButton from "../componentButton/runtime";
 
 export class ComponentCardViewClicable extends ComponentCardViewBase<ReturnType<typeof createCardViewClicableStep>>{
     private _BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;

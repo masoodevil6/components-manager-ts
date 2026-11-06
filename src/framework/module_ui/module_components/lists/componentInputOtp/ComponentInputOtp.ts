@@ -3,7 +3,7 @@ import * as CoreObservable from "@/core_observable";
 import * as CoreConfig from "@/core_configs";
 import * as UtilConst from "@/util_consts";
 import * as UtilStyle from "@/util_styles";
-import * as UiCategory from "@/ui_categories";
+import {ComponentTimerDown} from "../componentTimerDown/ComponentTimerDown";
 import {PartAttrDefault} from "@/core_components";
 import {ComponentInputOtpBase} from "./ComponentInputOtpBase";
 import {createInputOtpStep} from "./Step";
@@ -176,7 +176,7 @@ export class ComponentInputOtp extends ComponentInputOtpBase<ReturnType<typeof c
         const bind = this._COMPONENT_PROPS_BIND;
         const langs = data?.["prop_langs"] ?? bind.prop_langs;
         const tooltipDescription = CoreObservable.App.computed((values) => values?._tooltip_otp_description ?? null, [langs], this.getScope());
-        const timer = UiCategory.UI.Contents.TimerDown(
+        const timer = new ComponentTimerDown(
             {prop_description: tooltipDescription} as any,
             {
                 CLICK_RETRY: (event) => { if (!this._DISPOSED) this.executeMethod("GET_NEW_TOKEN", event, {}); },

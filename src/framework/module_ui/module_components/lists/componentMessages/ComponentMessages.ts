@@ -18,8 +18,8 @@ import { PartAttrDefault } from "@/core_components";
 import { ComponentStructureTrait } from "../../traits/componentStructureTrait";
 import { PropsType as StructurePropsType } from "../componentStructure/Props";
 // --------------------------------
-import * as UiCategory from "@/ui_categories";
 import * as UiIcons from "@/ui_icons";
+import {ComponentIcon} from "../componentIcon/ComponentIcon";
 
 
 /**
@@ -457,7 +457,7 @@ class ComponentMessages extends ComponentMessagesBase<ReturnType<typeof createMe
         // Plan 8.2.8 — scope از extra (از renderMessages پاس داده شده)
         const scope = extra?.scope as MessageEventScope | undefined;
 
-        const iconElement = UiCategory.UI.Simples.Icon(
+        const iconElement = new ComponentIcon(
             {
                 prop_icon: UiIcons.CreateIcon(UiIcons.Src.FileWindowClose.Definition, {
                     primaryColor:  CoreObservable.App.computed(

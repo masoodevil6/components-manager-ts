@@ -22,4 +22,11 @@ export type {
     TControllerRouteData as ControllerRouteData,
     TControllerRouteRenderer as ControllerRouteRenderer,
 } from "./types/TRouteData";
+export type {
+    TRouteGuard as RouteGuard,
+    TRouteGuardResult as RouteGuardResult,
+    TRouteNavigationContext as RouteNavigationContext,
+    TRouteLifecycleOptions as RouteLifecycleOptions,
+    TRouterOptions as RouterOptions,
+} from "./types/TRouteData";
 export {RouteRenderMode} from "./types/RouteRenderMode";

@@ -4,8 +4,9 @@ import {Keys}                          from "../../../languages"
 import {Layout}                        from "./layout"
 import {ElementCreator}                from "./elementCreator"
 import {LayoutCreator}                  from "./layoutCreator"
-import {Styles}                         from "./styles"
-import {PageSetting}                    from "./pageSetting"
+import {Icon}                          from "../simples/icon"
+import {Definition as BuilderDefinition} from "./builder"
+import {Definition as PositionDefinition} from "./position"
 
 
 /**
@@ -57,12 +58,11 @@ export const Definition : UICategories.TCategoryComponentDefinition = {
     name:        Keys.category.components.basic.name,
     description: Keys.category.components.basic.description,
 
+    children: [BuilderDefinition, PositionDefinition],
+
     components: [
         ComponentStructureTotality,
         Layout,
-        LayoutCreator,
-        ElementCreator,
-        Styles,
-        PageSetting,
+        Icon as any,
     ]
 }

@@ -1,7 +1,7 @@
 import * as CoreComponents from "@/core_components";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
 import {Keys} from "../../../module_categories/languages";
-import * as ComponentInput from "../componentInput";
+import * as ComponentInput from "../componentInput/runtime";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
 
 const translation = Keys.category.components.basic.elementCreator;

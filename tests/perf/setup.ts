@@ -15,7 +15,10 @@ beforeAll(() => {
 
     globalThis.window    = dom.window as any;
     globalThis.document  = dom.window.document;
-    globalThis.navigator = dom.window.navigator as any;
+    Object.defineProperty(globalThis, "navigator", {
+        configurable: true,
+        value: dom.window.navigator,
+    });
     globalThis.HTMLElement  = dom.window.HTMLElement as any;
     globalThis.Element      = dom.window.Element as any;
     globalThis.Event        = dom.window.Event as any;

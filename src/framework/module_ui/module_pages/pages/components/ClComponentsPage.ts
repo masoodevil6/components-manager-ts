@@ -139,6 +139,7 @@ export class ClComponentsPage implements ITemplate {
         const categoryOptions = [
             {id: "", name: "All categories", prefix: ""},
             ...Array.from(usedCategoryIds)
+                .filter((id) => id !== "other")
                 .sort((left, right) => (categoryLabels.get(left) ?? left).localeCompare(categoryLabels.get(right) ?? right))
                 .map((id) => ({id, name: categoryLabels.get(id) ?? id, prefix: ""})),
         ];

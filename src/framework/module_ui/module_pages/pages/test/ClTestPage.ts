@@ -16,6 +16,7 @@ import type {CustomFormGroup} from "../../../module_components/lists/componentCu
 import {MenuMoreOrientation} from "../../../module_components/lists/componentMenuMore";
 import {SelectTypeShow} from "../../../module_components/lists/componentSelectCustomSimple/Props";
 import type {PropsType as ComponentWidgetProps} from "../../../module_components/lists/componentWidget/Props";
+import {testConnect} from "../../../module_controller/module_requests/module_static/v1/TestConnect";
 import {executeHomeExample} from "../home/ClHomePage";
 
 type RequestFieldDefinition = {
@@ -67,6 +68,7 @@ const CONTROLLER_REQUEST_CATEGORIES: ControllerRequestCategory[] = [
             {id: "controllers", name: "Controllers"},
             {id: "componentInfo", name: "Component Info"},
             {id: "workflow", name: "Workflow"},
+            {id: "performance", name: "Performance"},
         ],
     },
 ];
@@ -93,11 +95,19 @@ const toControllerRequestMenuItem = (category: ControllerRequestCategory) => ({
 
 const CONTROLLER_REQUESTS: ControllerRequestDefinition[] = [
     {
+        id: "static.v1.myPage.performance.performancePage",
+        categoryId: "performance",
+        name: "performancePage",
+        method: RequestMethod.INTERNAL,
+        run: () => UiCategory.UI.Controllers.MyPage.Performance.performancePage(),
+        fields: [],
+    },
+    {
         id: "static.v1.testConnect",
         categoryId: "tests",
         name: "Test Connect",
         method: RequestMethod.INTERNAL,
-        run: UiCategory.UI.Controllers.Tests.testConnect,
+        run: testConnect,
         widget: {
             prop_widgetHeight: "180px",
             prop_widgetStyles: {minHeight: "0"},
@@ -125,7 +135,7 @@ const CONTROLLER_REQUESTS: ControllerRequestDefinition[] = [
         categoryId: "tools",
         name: "headerPublic",
         method: RequestMethod.INTERNAL,
-        run: UiCategory.UI.Controllers.MyPage.Tools.headerPublic,
+        run: (params) => UiCategory.UI.Controllers.MyPage.Tools.headerPublic(params),
         widget: {
             prop_widgetHeight: "180px",
             prop_widgetStyles: {minHeight: "0"},
@@ -425,6 +435,10 @@ export class ClTestPage implements ITemplate {
         const statusText = new CoreObservable.App("No request sent yet.");
         const responseData = new CoreObservable.App<any>({info: "The response body will appear here."});
         const responseWidgetElement = new CoreObservable.App<HTMLElement | null>(null);
+        const requestFieldStyles = CoreObservable.App.computed(
+            (size: UtilConst.Sizes) => ({display: "block", marginBottom: UtilStyle.Css_Margin(size)}),
+            [CoreConfig.Settings.SizeName.observable()],
+        );
         let responseWidget: any = null;
         let requestForm: any;
 
@@ -442,7 +456,7 @@ export class ClTestPage implements ITemplate {
                 const selectedId = String(componentArgs?.VALUE ?? "");
                 const selectedRequest = CONTROLLER_REQUESTS.find((request) => request.id === selectedId);
                 if (selectedRequest) {
-                    requestForm?.set("prop_customFormGroups", this.renderRequestGroups(selectedRequest));
+                    requestForm?.set("prop_customFormGroups", this.renderRequestGroups(selectedRequest, requestFieldStyles));
                     targetRequestId.set(selectedRequest.id);
                 }
             },
@@ -450,9 +464,12 @@ export class ClTestPage implements ITemplate {
         requestForm = UiCategory.UI.Fetch.CustomForm({
             prop_customFormMode: CustomFormMode.RUN,
             prop_customFormGroups: [],
+            prop_customFormLayoutStyles: {width: "100%", minWidth: "0", margin: "0"},
             prop_customFormFormOptions: {
                 prop_formClass: ["d-block", "w-100", "m-0"],
-                prop_btnSubmit: {prop_title: "Run internal request", prop_btnClass: []},
+                prop_formStyles: {minWidth: "0"},
+                prop_btnformStyles: {display: "flex", justifyContent: "flex-end", flexWrap: "wrap", gap: "var(--marginMedium)"},
+                prop_btnSubmit: {prop_title: "Run internal request", prop_btnClass: [], prop_btnStyles: {width: "auto"}},
                 prop_controller: (context: {formData: FormData | null}) => {
                     const selectedRequest = CONTROLLER_REQUESTS.find((request) => request.id === targetRequestId.get());
                     if (!selectedRequest) throw new Error("Choose a controller request first.");
@@ -500,16 +517,16 @@ export class ClTestPage implements ITemplate {
         } as any);
         const responsePanel = CoreReactive.App.section({
             className: ["col-12", "col-xl-5"],
-            styles: {minHeight: "0"},
+            styles: {minHeight: "0", minWidth: "0", padding: "0.75rem"},
             children: [
-                CoreReactive.App.h2({className: ["h4"], children: ["Response"]}),
-                CoreReactive.App.p({className: ["mb-2"], children: [statusText]}),
+                CoreReactive.App.h2({className: ["h4"], styles: {margin: "0 0 0.75rem"}, children: ["Response"]}),
+                CoreReactive.App.p({styles: {margin: "0 0 0.75rem", overflowWrap: "anywhere"}, children: [statusText]}),
                 CoreReactive.App.section({
                     className: ["w-100"],
                     styles: {height: "420px", minHeight: "0", overflow: "hidden"},
                     children: [responseTree.getElement()],
                 }),
-                CoreReactive.App.h2({className: ["h5", "mt-3"], children: ["ComponentWidget"]}),
+                CoreReactive.App.h2({className: ["h5"], styles: {margin: "1rem 0 0.75rem"}, children: ["ComponentWidget"]}),
                 CoreReactive.App.section({
                     className: ["w-100"],
                     styles: {minHeight: "0"},
@@ -518,38 +535,40 @@ export class ClTestPage implements ITemplate {
             ],
         });
         const content = CoreReactive.App.section({
-            className: ["row", "p-2", "m-0"],
-            styles: {width: "100%", minWidth: "0"},
+            className: ["row", "m-0"],
+            styles: {width: "100%", minWidth: "0", padding: "0.75rem", rowGap: "0.75rem"},
             children: [
                 CoreReactive.App.section({
-                    className: ["col-12", "mb-3"],
+                    className: ["col-12"],
+                    styles: {padding: "0.75rem"},
                     children: [
-                        CoreReactive.App.h1({className: ["h3"], children: ["Controller request test"]}),
-                        CoreReactive.App.p({children: ["Run an internal controller request through ComponentCustomForm and inspect its response."]}),
+                        CoreReactive.App.h1({className: ["h3"], styles: {margin: "0 0 0.75rem"}, children: ["Controller request test"]}),
+                        CoreReactive.App.p({styles: {margin: "0"}, children: ["Run an internal controller request through ComponentCustomForm and inspect its response."]}),
                     ],
                 }),
                 CoreReactive.App.section({
                     className: ["col-12", "col-xl-7"],
-                    styles: {minHeight: "0"},
+                    styles: {minHeight: "0", minWidth: "0", padding: "0.75rem"},
                     children: [
-                        CoreReactive.App.h2({className: ["h4"], children: ["Request"]}),
+                        CoreReactive.App.h2({className: ["h4"], styles: {margin: "0 0 0.75rem"}, children: ["Request"]}),
                         CoreReactive.App.section({
-                            className: ["d-flex", "align-items-center", "gap-2", "mb-3"],
+                            className: ["d-flex", "align-items-center"],
+                            styles: {flexWrap: "wrap", gap: "0.5rem", marginBottom: "1rem"},
                             children: [
                                 CoreReactive.App.b({children: ["Category:"]}),
                                 CoreReactive.App.span({children: [selectedTestType]}),
                             ],
                         }),
                         CoreReactive.App.section({
-                            className: ["mb-3"],
+                            styles: {display: "flex", flexDirection: "column", gap: "0.5rem", marginBottom: "1rem", minWidth: "0"},
                             children: [
                                 CoreReactive.App.label({className: ["form-label"], children: ["Controller request"]}),
                                 requestSelect.getElement(),
                                 CoreObservable.App.conditionWhen(
                                     [targetRequestId],
                                     (requestId: string) => !!requestId,
-                                    () => CoreReactive.App.p({className: ["small", "text-muted", "mt-1"], children: ["Method: Internal · Handler: ", targetRequestId, ". Executed directly through the framework controller API."]}),
-                                    () => CoreReactive.App.p({className: ["small", "text-muted", "mt-1"], children: ["Choose a request from ", selectedTestType, "."]}),
+                                    () => CoreReactive.App.p({className: ["small", "text-muted"], styles: {margin: "0", overflowWrap: "anywhere"}, children: ["Method: Internal · Handler: ", targetRequestId, ". Executed directly through the framework controller API."]}),
+                                    () => CoreReactive.App.p({className: ["small", "text-muted"], styles: {margin: "0"}, children: ["Choose a request from ", selectedTestType, "."]}),
                                 ),
                             ],
                         }),
@@ -629,7 +648,7 @@ export class ClTestPage implements ITemplate {
         responseData.set(response);
     }
 
-    private renderRequestGroups(request: ControllerRequestDefinition): CustomFormGroup[] {
+    private renderRequestGroups(request: ControllerRequestDefinition, fieldStyles: CoreObservable.App<any>): CustomFormGroup[] {
         return [{
             id: "controller-request-parameters",
             title: "Request parameters",
@@ -642,6 +661,7 @@ export class ClTestPage implements ITemplate {
                     type: CustomFormFieldType.SELECT,
                     value: field.value ?? null,
                     placeholder: field.placeholder,
+                    props: {styles: fieldStyles},
                     options: field.options.map((option) => ({label: option.name, value: option.id})),
                 }
                 : {
@@ -651,7 +671,7 @@ export class ClTestPage implements ITemplate {
                     type: CustomFormFieldType.INPUT,
                     value: field.value ?? null,
                     placeholder: field.placeholder,
-                    props: {prop_type: field.type},
+                    props: {prop_type: field.type, styles: fieldStyles},
                 }),
         }];
     }

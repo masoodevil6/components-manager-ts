@@ -1,1 +1,1 @@
-export {Form, CustomForm, Definition} from "./Definition";
+export {Form, CustomForm, Widget, Iframe, Definition} from "./Definition";

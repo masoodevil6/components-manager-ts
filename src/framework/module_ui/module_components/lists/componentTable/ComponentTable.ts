@@ -15,7 +15,7 @@ import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
 import type {ColumnItem}       from "../componentInputListSelector/Props";
 // --------------------------------
-import * as UiCategory  from "@/ui_categories";
+import {ComponentInputListSelector} from "../componentInputListSelector/ComponentInputListSelector";
 import * as UiIcons     from "@/ui_icons";
 import * as UtilConst   from "@/util_consts";
 import * as UtilStyle   from "@/util_styles";
@@ -619,7 +619,7 @@ export class ComponentTable extends ComponentTableBase<ReturnType<typeof createT
                     this.getScope(),
                 );
 
-                const listSelector = UiCategory.UI.Inputs.InputListSelector(
+                const listSelector = new ComponentInputListSelector(
                     {
                         classList: [],
                         styles: {},

@@ -15,12 +15,12 @@ import type {PropsType as StructurePropsType} from "../componentStructure/Props"
 // --------------------------------
 import type {MethodsConfigType}             from "./Methods";
 // --------------------------------
-import * as ComponentBorder               from "../componentBorder";
-import * as ComponentIcon                  from "../componentIcon";
-import * as ComponentLabel                 from "../componentLabel";
-import * as ComponentPositionMenu          from "../componentPositionMenu";
-import * as ComponentInputAgreementCheckBox from "../componentInputAgreementCheckBox";
-import * as ComponentListSelectedScroller   from "../componentListSelectedScroller";
+import {ComponentBorder}                    from "../componentBorder/ComponentBorder";
+import {ComponentIcon}                      from "../componentIcon/ComponentIcon";
+import {ComponentLabel}                     from "../componentLabel/ComponentLabel";
+import {ComponentPositionMenu}              from "../componentPositionMenu/ComponentPositionMenu";
+import {ComponentInputAgreementCheckBox}    from "../componentInputAgreementCheckBox/ComponentInputAgreementCheckBox";
+import {ComponentListSelectedScroller}      from "../componentListSelectedScroller/ComponentListSelectedScroller";
 
 
 /**
@@ -43,7 +43,7 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase<R
     private var_columns: CoreObservable.App<ColumnItem[]>;
     private var_tempOrder: CoreObservable.App<(string | number)[]>;
     private var_showPopup: CoreObservable.App<boolean>;
-    private _checkBoxInstance: ComponentInputAgreementCheckBox.Component | null = null;
+    private _checkBoxInstance: ComponentInputAgreementCheckBox | null = null;
     private _columnsBackup: ColumnItem[] = [];
 
 
@@ -133,7 +133,7 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase<R
         const bind = this._COMPONENT_PROPS_BIND;
         const prop_inputBackgroundColor = data?.["prop_inputBackgroundColor"] ?? bind.prop_inputBackgroundColor;
 
-        const border = new ComponentBorder.Component(
+        const border = new ComponentBorder(
             {
                 prop_borderClass: [],
                 styles: {},
@@ -141,7 +141,7 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase<R
                     styles: {
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "center",
+                        minWidth: "0",
                     },
                     children: [
                         this.executeSchemaPart(Schemas.MAIN_FORM_FLOAT_MENU.part, {}),
@@ -182,7 +182,7 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase<R
             [prop_labelShow, prop_labelTooltipDescription],
             (show, desc) => !!show && desc != null,
             () => {
-                const label = new ComponentLabel.Component(
+                const label = new ComponentLabel(
                     {
                         classList: [],
                         styles: CoreObservable.App.computed((sizeName: any) => ({marginBlockEnd: UtilStyle.Css_Margin(sizeName)}), [CoreConfig.Settings.SizeName.observable()], this.getScope()),
@@ -216,18 +216,19 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase<R
         const prop_widthBody           = data?.["prop_widthBody"]           ?? bind.prop_widthBody;
         const prop_heightBody          = data?.["prop_heightBody"]          ?? bind.prop_heightBody;
 
-        const positionMenu = new ComponentPositionMenu.Component(
+        const positionMenu = new ComponentPositionMenu(
             {
                 classList: [],
                 styles: CoreObservable.App.computed(
-                    (sizeName: any, _dir: boolean) => {
-                        const iconSize = UtilStyle.Css_IconSize(sizeName) as any;
+                    (sizeName: any) => {
+                        const iconSize = UtilStyle.Css_IconSize(sizeName);
                         return {
-                            width:  UtilStyle.Css_SizeUnit(iconSize, UtilConst.Units.PEXEL),
-                            height: UtilStyle.Css_SizeUnit(iconSize, UtilConst.Units.PEXEL),
+                            display: "block",
+                            width: iconSize,
+                            height: iconSize,
                         };
                     },
-                    [CoreConfig.Settings.SizeName.observable(), CoreConfig.Settings.DirectionRtl.observable()],
+                    [CoreConfig.Settings.SizeName.observable()],
                     this.getScope(),
                 ),
                 prop_structureClass: ["w-100", "h-100"],
@@ -263,6 +264,7 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase<R
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                flex: "0 0 auto",
             },
             stylesBind: {
                 width: CoreObservable.App.computed(
@@ -315,26 +317,25 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase<R
         const prop_backgroundColorIcon = data?.["prop_backgroundColorIcon"] ?? bind.prop_backgroundColorIcon;
         const prop_colorIcon          = data?.["prop_colorIcon"]          ?? bind.prop_colorIcon;
 
-        const styles: Record<string, any> = {
-            cursor: "pointer",
-        };
-        if (prop_backgroundColorIcon) {
-            styles["background-color"] = String(prop_backgroundColorIcon);
-        }
-
-        const iconStyles: Record<string, any> = {};
-        if (prop_colorIcon) {
-            iconStyles["color"] = String(prop_colorIcon);
-        }
+        const styles = CoreObservable.App.computed(
+            (color: string | null) => ({cursor: "pointer", ...(color ? {backgroundColor: color} : {})}),
+            [prop_backgroundColorIcon],
+            this.getScope(),
+        );
+        const iconStyles = CoreObservable.App.computed(
+            (color: string | null) => ({display: "flex", alignItems: "center", justifyContent: "center", ...(color ? {color} : {})}),
+            [prop_colorIcon],
+            this.getScope(),
+        );
 
         const iconValue = CoreObservable.App.isObservable(prop_icon)
             ? (prop_icon as CoreObservable.App<UiIcons.IIconDefinition | null>).get()
             : prop_icon;
         const iconInstance = iconValue != null
-            ? UiIcons.CreateIcon(iconValue as any)
+            ? UiIcons.CreateIcon(iconValue as any, {size: CoreConfig.Settings.SizeName.observable()})
             : null;
 
-        const icon = new ComponentIcon.Component(
+        const icon = new ComponentIcon(
             {
                 classList: ["position-relative", "d-block", "w-100", "h-100"],
                 prop_structureClass: ["d-block", "w-100", "h-100"],
@@ -343,11 +344,7 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase<R
                 prop_iconStyles: iconStyles,
                 prop_icon: iconInstance as any,
             } as any,
-            {
-                CLICK: (event: Event) => {
-                    this.fn_onClickIcon(event);
-                },
-            } as any,
+            {} as any,
         );
 
         return icon.getReactiveElement() as CoreReactive.App;
@@ -365,8 +362,6 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase<R
 
         const bind = this._COMPONENT_PROPS_BIND;
         const prop_titleAll  = data?.["prop_titleAll"]  ?? bind.prop_titleAll;
-        const prop_heightItems = data?.["prop_heightItems"] ?? bind.prop_heightItems;
-        const prop_heightBody = data?.["prop_heightBody"] ?? bind.prop_heightBody;
         const prop_draggable = data?.["prop_draggable"] ?? bind.prop_draggable;
 
         return CoreReactive.App.part("div", {
@@ -385,15 +380,7 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase<R
                         .map((c: ColumnItem) => c.id);
                     const orderIds = selectedIds.slice();
 
-                    const heightItems = prop_heightItems?.get?.() ?? 45;
-                    const heightBody  = prop_heightBody?.get?.() ?? "300px";
-                    const maxHeight = UtilStyle.Css_SizeCalc(
-                        heightBody,
-                        UtilConst.Operation.MINUS,
-                        UtilStyle.Css_SizeUnit(heightItems + 20, UtilConst.Units.PEXEL) as any,
-                    );
-
-                    const checkBox = new ComponentInputAgreementCheckBox.Component(
+                    const checkBox = new ComponentInputAgreementCheckBox(
                         {
                             prop_name: "input-list-selector-checkboxes",
                             prop_labelShow: false,
@@ -402,7 +389,7 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase<R
                             prop_value: selectedIds,
                             prop_checkBoxOrder: orderIds,
                             prop_checkBoxAllTitle: prop_titleAll ?? "Select All",
-                            prop_maxHeightItems: maxHeight,
+                            prop_maxHeightItems: "none",
                         } as any,
                         {
                             CLICK_ALL: (event: Event, _dataArgs: any, componentArgs: any) => {
@@ -478,7 +465,7 @@ export class ComponentInputListSelector extends ComponentInputListSelectorBase<R
                             const directionRtl = CoreConfig.Settings.DirectionRtl.observable();
                             const directionLtr = directionRtl.map((isRtl: boolean) => !isRtl, this.getScope());
 
-                            const scroller = new ComponentListSelectedScroller.Component(
+                            const scroller = new ComponentListSelectedScroller(
                                 {
                                     classList: [],
                                     styles: {},

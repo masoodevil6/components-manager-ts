@@ -1,0 +1,11 @@
+// Internal entry point: excludes examples from component-to-component imports.
+export {ComponentBreadcrumbShadow as Component} from "./ComponentBreadcrumbShadow";
+export {ComponentBreadcrumbShadowBase} from "./ComponentBreadcrumbShadowBase";
+export {Definition} from "./Definition";
+export {Props} from "./Props";
+export type {PropsType, PropsConfigType, BreadcrumbShadowItem} from "./Props";
+export {Schemas} from "./Schemas";
+export type {SchemasType} from "./Schemas";
+export {Methods} from "./Methods";
+export type {MethodsType, MethodsConfigType} from "./Methods";
+

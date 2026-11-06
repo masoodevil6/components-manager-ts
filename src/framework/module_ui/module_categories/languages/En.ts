@@ -575,6 +575,11 @@ export const En =
             "A list of basic and structural components"
         ],
 
+        [Keys.category.components.basic.builder.name, "Builder"],
+        [Keys.category.components.basic.builder.description, "Components for creating and editing components and layouts"],
+        [Keys.category.components.basic.position.name, "Position"],
+        [Keys.category.components.basic.position.description, "Components for positioning and placement"],
+
         /// Components -> Basic -> Props -> selector
         [
             Keys.category.components.basic.props.selector.name,
@@ -887,6 +892,20 @@ export const En =
             "Structure with prop_show = false (hidden)"
         ],
 
+        /// Components -> Contents subcategories
+        [Keys.category.components.contents.cards.name, "Cards"],
+        [Keys.category.components.contents.cards.description, "Card display components"],
+        [Keys.category.components.contents.collapse.name, "Collapse"],
+        [Keys.category.components.contents.collapse.description, "Collapsible content components"],
+        [Keys.category.components.contents.windows.name, "Windows"],
+        [Keys.category.components.contents.windows.description, "Window and confirmation dialog components"],
+        [Keys.category.components.contents.table.name, "Table"],
+        [Keys.category.components.contents.table.description, "Table and responsive table components"],
+        [Keys.category.components.contents.messages.name, "Messages"],
+        [Keys.category.components.contents.messages.description, "Message and alert display components"],
+        [Keys.category.components.contents.breadcrumb.name, "Breadcrumb"],
+        [Keys.category.components.contents.breadcrumb.description, "Breadcrumb navigation components"],
+
         /// Components -> Contents
         [
             Keys.category.components.contents.name,
@@ -1017,7 +1036,7 @@ export const En =
         [Keys.category.components.breadcrumbShadow.examples.withoutBackButton.description, "Page heading with navigation items and no back button."],
 
         /// Components -> Pages -> Header -> PageHeader
-        [Keys.category.components.pages.name, "Pages"],
+        [Keys.category.components.pages.name, "Pages Components"],
         [Keys.category.components.pages.description, "Components used to compose page-level layouts."],
         [Keys.category.components.pages.header.name, "Header"],
         [Keys.category.components.pages.header.description, "Page header components."],
@@ -6588,12 +6607,16 @@ export const En =
         [Keys.category.components.page.examples.workflowComposition.description, "A nested input resolves its nearest layout node by dictionary name and sends it a CoreEvent request."],
 
         /// Components -> Effects -> Effective
-        [Keys.category.components.tools.name, "Tools"],
+        [Keys.category.components.tools.name, "Tools Components"],
         [Keys.category.components.tools.description, "Utility components for editing and working with source code."],
         [Keys.category.components.tools.code.name, "Code"],
         [Keys.category.components.tools.code.description, "Components for viewing and editing source code."],
         [Keys.category.components.tools.dataType.name, "Data Types"],
         [Keys.category.components.tools.dataType.description, "Components for displaying and inspecting structured data."],
+        [Keys.category.components.tools.draggable.name, "Draggable"],
+        [Keys.category.components.tools.draggable.description, "Components that support drag-and-drop ordering."],
+        [Keys.category.components.tools.effects.name, "Effects"],
+        [Keys.category.components.tools.effects.description, "Components that add visual transitions to interface elements."],
         [Keys.category.components.effects.name, "Effects"],
         [Keys.category.components.effects.description, "Components that add visual transitions to interface elements."],
         [Keys.category.components.effective.name, "Effective Border"],
@@ -7167,8 +7190,24 @@ export const En =
         [Keys.category.components.elementPosition.examples.logical.description, "Start and end follow configured text direction"],
         [Keys.category.components.elementPosition.examples.fixedOverlay.name, "Fixed overlay"],
         [Keys.category.components.elementPosition.examples.fixedOverlay.description, "Fixed positioning with z-index"],
-        [Keys.category.components.fetch.name, "Fetch"],
+        [Keys.category.components.charts.name, "Chart Components"],
+        [Keys.category.components.charts.description, "Components for visualizing data and progress"],
+        [Keys.category.components.charts.progress.name, "Progress"],
+        [Keys.category.components.charts.progress.description, "Components for showing operation progress"],
+        [Keys.category.components.charts.monitor.name, "Monitor"],
+        [Keys.category.components.charts.monitor.description, "Components for visualizing measured values"],
+        ...Object.entries({name: "Metric gauge", description: "Displays a measured value against configured ranges", value: "Value", title: "Title", unit: "Unit", min: "Minimum", max: "Maximum", bands: "Ranges", valueText: "Formatted value", unavailableText: "Unavailable message", chartClass: "Chart classes", chartStyles: "Chart styles", unavailable: "Unavailable", unclassified: "No assessment criteria", invalid: "Invalid chart configuration", outside: "Outside scale", legendStatus: "Status", legendRange: "Range", root: "Gauge", chart: "Chart", example: "Metric gauge examples"}).map(([key, text]) => [Keys.category.components.charts.monitor.gauge[key as keyof typeof Keys.category.components.charts.monitor.gauge], text] as [TranslationKey, string]),
+        ...Object.entries({name: "Linear progress", description: "Shows progress with a linear indicator", value: "Value", min: "Minimum", max: "Maximum", title: "Title", accessibleLabel: "Accessible label", statusText: "Status message", status: "Status", showValue: "Show percentage", trackColor: "Track color", fillColor: "Fill color", progressClass: "Progress classes", progressStyles: "Progress styles", root: "Progress", header: "Header", track: "Track", fill: "Fill", determinate: "Determinate", indeterminate: "Indeterminate", error: "Error", reactive: "Reactive", rtl: "Right to left"}).map(([key, text]) => [Keys.category.components.charts.progressLinear[key as keyof typeof Keys.category.components.charts.progressLinear], text] as [TranslationKey, string]),
+        [Keys.category.components.fetch.name, "Fetch Components"],
         [Keys.category.components.fetch.description, "Components for submitting forms and handling requests"],
+        [Keys.category.components.fetch.loading.name, "Loading"],
+        [Keys.category.components.fetch.loading.description, "Loading indicators and code display components"],
+        [Keys.category.components.fetch.inputs.name, "Inputs"],
+        [Keys.category.components.fetch.inputs.description, "Input controls for form and data entry"],
+        [Keys.category.components.fetch.inputs.v1.name, "V1"],
+        [Keys.category.components.fetch.inputs.v1.description, "Version 1 input components"],
+        [Keys.category.components.fetch.inputs.simple.name, "Simple"],
+        [Keys.category.components.fetch.inputs.simple.description, "Basic input, description, and select controls"],
         [Keys.category.components.fetch.form.name, "Form"],
         [Keys.category.components.fetch.form.description, "A bordered form with validation, request, and response handling"],
         [Keys.category.components.fetch.form.props.forms.name, "Form content"],

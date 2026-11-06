@@ -17,9 +17,9 @@ import {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {PropsConfigType as ErrorIsEmptyPropsConfigType} from "./Props";
 import {Keys}                         from "../../../module_categories/languages";
 // --------------------------------
-import * as ComponentBorder  from "../componentBorder";
-import * as ComponentIcon    from "../componentIcon";
-import * as ComponentButton  from "../componentButton";
+import * as ComponentBorder  from "../componentBorder/runtime";
+import * as ComponentIcon    from "../componentIcon/runtime";
+import * as ComponentButton  from "../componentButton/runtime";
 import {ButtonVariants, ButtonSemantic} from "../componentButton/Props";
 
 

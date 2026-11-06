@@ -11,9 +11,9 @@ import {PropsConfigType, TableResponsibleHeaderItem, TableResponsibleRowOption, 
 import {MethodsConfigType} from "./Methods";
 import {Schemas} from "./Schemas";
 import {createTableResponsibleStep} from "./Step";
-import * as ComponentTable from "../componentTable";
-import * as ComponentCardRowInfo from "../componentCardRowInfo";
-import * as ComponentRecyclerView from "../componentRecyclerView";
+import * as ComponentTable from "../componentTable/runtime";
+import * as ComponentCardRowInfo from "../componentCardRowInfo/runtime";
+import * as ComponentRecyclerView from "../componentRecyclerView/runtime";
 import type {CardRowInfoRow} from "../componentCardRowInfo/Props";
 import type {MenuMoreItem} from "../componentMenuMore/Props";
 import type {TableDataRow, TableHeaderItem} from "../componentTable/Props";

@@ -19,7 +19,7 @@ import {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {PropsConfigType as ButtonPropsConfigType} from "./Props";
 import {createButtonStep}                from "./Step";
 // --------------------------------
-import * as ComponentIcon from "../componentIcon";
+import {ComponentIcon} from "../componentIcon/ComponentIcon";
 
 
 /**
@@ -420,7 +420,7 @@ export class ComponentButton extends ComponentButtonBase<ReturnType<typeof creat
             (iconSource) => iconSource != null ,
             () => {
                // console.log(prop_btnIcon)
-                return new ComponentIcon.Component(
+                return new ComponentIcon(
                     {
                         prop_icon:        UiIcons.CreateIcon(
                             prop_btnIcon ,

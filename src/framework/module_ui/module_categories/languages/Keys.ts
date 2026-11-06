@@ -350,6 +350,14 @@ export const Keys = {
             basic: {
                 name:        CreateTranslationKey() ,
                 description: CreateTranslationKey() ,
+                builder: {
+                    name: CreateTranslationKey(),
+                    description: CreateTranslationKey(),
+                },
+                position: {
+                    name: CreateTranslationKey(),
+                    description: CreateTranslationKey(),
+                },
 
                 props: {
                     selector: {
@@ -682,10 +690,82 @@ export const Keys = {
                 },
             },
 
+            charts: {
+                name: CreateTranslationKey(),
+                description: CreateTranslationKey(),
+                progress: {
+                    name: CreateTranslationKey(),
+                    description: CreateTranslationKey(),
+                },
+                monitor: {
+                    name: CreateTranslationKey(),
+                    description: CreateTranslationKey(),
+                    gauge: {
+                        name: CreateTranslationKey(), description: CreateTranslationKey(),
+                        value: CreateTranslationKey(), title: CreateTranslationKey(), unit: CreateTranslationKey(),
+                        min: CreateTranslationKey(), max: CreateTranslationKey(), bands: CreateTranslationKey(),
+                        valueText: CreateTranslationKey(), unavailableText: CreateTranslationKey(),
+                        chartClass: CreateTranslationKey(), chartStyles: CreateTranslationKey(),
+                        unavailable: CreateTranslationKey(), unclassified: CreateTranslationKey(),
+                        invalid: CreateTranslationKey(), outside: CreateTranslationKey(), legendStatus: CreateTranslationKey(), legendRange: CreateTranslationKey(),
+                        root: CreateTranslationKey(), chart: CreateTranslationKey(), example: CreateTranslationKey(),
+                    },
+                },
+                progressLinear: {
+                    name: CreateTranslationKey(),
+                    description: CreateTranslationKey(),
+                    value: CreateTranslationKey(),
+                    min: CreateTranslationKey(),
+                    max: CreateTranslationKey(),
+                    title: CreateTranslationKey(),
+                    accessibleLabel: CreateTranslationKey(),
+                    statusText: CreateTranslationKey(),
+                    status: CreateTranslationKey(),
+                    showValue: CreateTranslationKey(),
+                    trackColor: CreateTranslationKey(),
+                    fillColor: CreateTranslationKey(),
+                    progressClass: CreateTranslationKey(),
+                    progressStyles: CreateTranslationKey(),
+                    root: CreateTranslationKey(),
+                    header: CreateTranslationKey(),
+                    track: CreateTranslationKey(),
+                    fill: CreateTranslationKey(),
+                    determinate: CreateTranslationKey(),
+                    indeterminate: CreateTranslationKey(),
+                    error: CreateTranslationKey(),
+                    reactive: CreateTranslationKey(),
+                    rtl: CreateTranslationKey(),
+                },
+            },
+
             /// Contents
             contents: {
                 name:        CreateTranslationKey() ,
                 description: CreateTranslationKey() ,
+                cards: {
+                    name: CreateTranslationKey(),
+                    description: CreateTranslationKey(),
+                },
+                collapse: {
+                    name: CreateTranslationKey(),
+                    description: CreateTranslationKey(),
+                },
+                windows: {
+                    name: CreateTranslationKey(),
+                    description: CreateTranslationKey(),
+                },
+                table: {
+                    name: CreateTranslationKey(),
+                    description: CreateTranslationKey(),
+                },
+                messages: {
+                    name: CreateTranslationKey(),
+                    description: CreateTranslationKey(),
+                },
+                breadcrumb: {
+                    name: CreateTranslationKey(),
+                    description: CreateTranslationKey(),
+                },
             },
 
             /// Menus
@@ -711,6 +791,14 @@ export const Keys = {
                     description: CreateTranslationKey(),
                 },
                 dataType: {
+                    name: CreateTranslationKey(),
+                    description: CreateTranslationKey(),
+                },
+                draggable: {
+                    name: CreateTranslationKey(),
+                    description: CreateTranslationKey(),
+                },
+                effects: {
                     name: CreateTranslationKey(),
                     description: CreateTranslationKey(),
                 },
@@ -2676,6 +2764,22 @@ export const Keys = {
             fetch: {
                 name: CreateTranslationKey(),
                 description: CreateTranslationKey(),
+                loading: {
+                    name: CreateTranslationKey(),
+                    description: CreateTranslationKey(),
+                },
+                inputs: {
+                    name: CreateTranslationKey(),
+                    description: CreateTranslationKey(),
+                    v1: {
+                        name: CreateTranslationKey(),
+                        description: CreateTranslationKey(),
+                    },
+                    simple: {
+                        name: CreateTranslationKey(),
+                        description: CreateTranslationKey(),
+                    },
+                },
                 form: {
                     name: CreateTranslationKey(),
                     description: CreateTranslationKey(),

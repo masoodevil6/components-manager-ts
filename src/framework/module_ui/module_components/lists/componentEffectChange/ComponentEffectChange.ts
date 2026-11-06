@@ -6,7 +6,7 @@ import * as CoreEvent from "@/core_event";
 import {PartAttrDefault} from "@/core_components";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
-import * as ComponentLoading from "../componentLoading";
+import * as ComponentLoading from "../componentLoading/runtime";
 import {ComponentEffectChangeBase} from "./ComponentEffectChangeBase";
 import {EffectChangeDirection, EffectChangeMode, type EffectChangeContent, type PropsConfigType} from "./Props";
 import {Schemas} from "./Schemas";

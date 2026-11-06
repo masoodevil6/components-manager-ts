@@ -1,6 +1,6 @@
 import * as CoreComponents from "@/core_components";
 import {Keys} from "../../../module_categories/languages";
-import * as ComponentBorder from "../componentBorder";
+import * as ComponentBorder from "../componentBorder/runtime";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {Props} from "./Props";
 import type {ExtractSchemasType} from "../../tools/type/TypeHelpers";

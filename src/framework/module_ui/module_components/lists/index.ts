@@ -1,4 +1,24 @@
 import * as CoreComponents from "@/core_components";
+import * as ChartMetricGauge from "./componentChartMetricGauge";
+export * as ComponentChartMetricGauge from "./componentChartMetricGauge";
+CoreComponents.ComponentManager.register({
+    definition: ChartMetricGauge.Definition,
+    props: ChartMetricGauge.Props,
+    schemas: ChartMetricGauge.Schemas,
+    methods: ChartMetricGauge.Methods,
+    examples: ChartMetricGauge.Examples,
+    constructor: ChartMetricGauge.Component as any,
+});
+import * as ProgressLinear from "./componentProgressLinear";
+export * as ComponentProgressLinear from "./componentProgressLinear";
+CoreComponents.ComponentManager.register({
+    definition: ProgressLinear.Definition,
+    props: ProgressLinear.Props,
+    schemas: ProgressLinear.Schemas,
+    methods: ProgressLinear.Methods,
+    examples: ProgressLinear.Examples,
+    constructor: ProgressLinear.Component as any,
+});
 // --------------------------------
 import {Component as ComponentIconClass}      from "./componentIcon";
 import {Definition as IconDefinition}        from "./componentIcon/Definition";

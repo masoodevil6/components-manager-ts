@@ -9,7 +9,7 @@ import {ComponentCardViewBase} from "./ComponentCardViewBase";
 import {PropsType, PropsConfigType} from "./Props";
 import {Schemas} from "./Schemas";
 import {createCardViewStep} from "./Step";
-import * as ComponentBorder from "../componentBorder";
+import * as ComponentBorder from "../componentBorder/runtime";
 
 export class ComponentCardViewInfo extends ComponentCardViewBase<ReturnType<typeof createCardViewStep>>{
     private _BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;

@@ -8,7 +8,7 @@ import {PartAttrDefault} from "@/core_components";
 import {Keys} from "../../../module_categories/languages";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
-import * as ComponentIcon from "../componentIcon";
+import * as ComponentIcon from "../componentIcon/runtime";
 import {ComponentCollapseLineBase} from "./ComponentCollapseLineBase";
 import {createCollapseLineStep} from "./Step";
 import {Schemas} from "./Schemas";

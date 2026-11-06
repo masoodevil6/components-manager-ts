@@ -1,7 +1,7 @@
 import * as CoreComponents from "@/core_components";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
 import {Keys} from "../../../module_categories/languages";
-import * as ComponentBorder from "../componentBorder";
+import * as ComponentBorder from "../componentBorder/runtime";
 import type {ExtractPropsConfigType, ExtractPropsType} from "../../tools/type/TypeHelpers";
 
 export enum EffectiveMode {

@@ -17,9 +17,8 @@ import {ComponentStructureTrait}                from "../../traits/componentStru
 import {PropsType as StructurePropsType}        from "../componentStructure/Props";
 import {Keys}                                   from "../../../module_categories/languages";
 // --------------------------------
-import * as ComponentInputCheckBox              from "../componentInputCheckBox";
-import * as ComponentLabel                      from "../componentLabel";
-import * as ComponentDraggableOrdersY           from "../componentDraggableOrdersY";
+import {ComponentInputCheckBox}                 from "../componentInputCheckBox/ComponentInputCheckBox";
+import {ComponentDraggableOrdersY}               from "../componentDraggableOrdersY/ComponentDraggableOrdersY";
 
 
 /**
@@ -39,7 +38,7 @@ import * as ComponentDraggableOrdersY           from "../componentDraggableOrder
  */
 export class ComponentInputAgreementCheckBox extends ComponentInputAgreementCheckBoxBase<ReturnType<typeof createInputAgreementCheckBoxStep>>{
 
-    private _CHECK_BOX_ALL: ComponentInputCheckBox.Component | null = null;
+    private _CHECK_BOX_ALL: ComponentInputCheckBox | null = null;
     private _dragJustFinished = false;
 
 
@@ -200,7 +199,7 @@ export class ComponentInputAgreementCheckBox extends ComponentInputAgreementChec
             this.getScope(),
         );
 
-        this._CHECK_BOX_ALL = new ComponentInputCheckBox.Component(
+        this._CHECK_BOX_ALL = new ComponentInputCheckBox(
             {
                 classList:                  ["d-flow-root", "mb-1"],
                 prop_isDisable:             prop_isDisable,
@@ -309,7 +308,7 @@ export class ComponentInputAgreementCheckBox extends ComponentInputAgreementChec
                                 }
                             }
                         }
-                        const draggable = new ComponentDraggableOrdersY.Component(
+                        const draggable = new ComponentDraggableOrdersY(
                             {
                                 prop_draggableOrders:      order ?? [],
                                 prop_draggableItems:       items,
@@ -372,7 +371,7 @@ export class ComponentInputAgreementCheckBox extends ComponentInputAgreementChec
                 return CoreReactive.App.part("section", {
                     attrs: { ...attrsDefault },
                     children: [
-                        new ComponentInputCheckBox.Component(
+                        new ComponentInputCheckBox(
                             {
                                 classList:      ["d-flow-root", "mb-1"],
                                 prop_value:     CoreObservable.App.computed(

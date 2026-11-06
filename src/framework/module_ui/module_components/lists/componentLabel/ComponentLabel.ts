@@ -14,8 +14,9 @@ import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {ComponentTooltipTrait}  from "../../traits/componentTooltipTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
 // --------------------------------
-import * as ComponentBorder from "../componentBorder";
-import * as ComponentMenuMore from "../componentMenuMore";
+import {ComponentBorder} from "../componentBorder/ComponentBorder";
+import {ComponentMenuMore} from "../componentMenuMore/ComponentMenuMore";
+import {MenuMoreOrientation, type MenuMoreItem} from "../componentMenuMore/Props";
 
 
 /**
@@ -50,7 +51,7 @@ import * as ComponentMenuMore from "../componentMenuMore";
  *   - fontSize ÙˆØ§Ú©Ù†Ø´â€ŒÚ¯Ø±Ø§ â†’ computed Ø±ÙˆÛŒ CoreConfig.Settings.SizeName
  */
 export class ComponentLabel extends ComponentLabelBase<ReturnType<typeof createLabelStep>>{
-    private _MENU_MORE: ComponentMenuMore.Component | null = null;
+    private _MENU_MORE: ComponentMenuMore | null = null;
 
 
     constructor(
@@ -255,7 +256,7 @@ export class ComponentLabel extends ComponentLabelBase<ReturnType<typeof createL
          // Ø¯Ø± runtimeØŒ #getReadyUserConfigAndDefaultConfig Ø®ÙˆØ¯Ø´ Observable Ø±Ø§
          // ØªØ´Ø®ÛŒØµ Ù…ÛŒâ€ŒØ¯Ù‡Ø¯ Ùˆ Ù…Ø³ØªÙ‚ÛŒÙ… Ø°Ø®ÛŒØ±Ù‡ Ù…ÛŒâ€ŒÚ©Ù†Ø¯ (Â«if Observable â†’ store directlyÂ»)
          // Ù…Ø³ØªÙ‚ÛŒÙ… Ø§Ø² ComponentBorder.Component â€” Ø¨Ø¯ÙˆÙ† ÙˆØ§Ø¨Ø³ØªÚ¯ÛŒ Ø¨Ù‡ UiCategory
-         return new ComponentBorder.Component(
+         return new ComponentBorder(
              {
                  prop_borderClass:            ["position-relative", "px-2"],
                  prop_borderStyles:           prop_borderStyles,
@@ -378,9 +379,9 @@ export class ComponentLabel extends ComponentLabelBase<ReturnType<typeof createL
             (groupList: LabelGroup[] | null) => Array.isArray(groupList) && groupList.length > 0,
             () => {
                 if (!this._MENU_MORE) {
-                    this._MENU_MORE = new ComponentMenuMore.Component(
+                    this._MENU_MORE = new ComponentMenuMore(
                         {
-                            prop_orientation: ComponentMenuMore.MenuMoreOrientation.HORIZONTAL,
+                            prop_orientation: MenuMoreOrientation.HORIZONTAL,
                             prop_isFullWidth: false,
                             prop_items: displayItems as any,
                             prop_menuBorder: false,
@@ -396,7 +397,7 @@ export class ComponentLabel extends ComponentLabelBase<ReturnType<typeof createL
                         {
                             SELECT_ITEM: (event, dataArgs) => {
                                 event.stopPropagation();
-                                const item = dataArgs?.ITEM as ComponentMenuMore.MenuMoreItem | undefined;
+                                const item = dataArgs?.ITEM as MenuMoreItem | undefined;
                                 if (!item) return;
                                 const availableGroups = groups.get() as LabelGroup[] | null;
                                 const selectedGroup = availableGroups?.find((group) => group.id === item.id);

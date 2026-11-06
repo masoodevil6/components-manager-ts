@@ -1,0 +1,12 @@
+export {ComponentChartMetricGauge as Component} from "./ComponentChartMetricGauge";
+export {ComponentChartMetricGaugeBase as Base} from "./ComponentChartMetricGaugeBase";
+export {Definition} from "./Definition";
+export {Props} from "./Props";
+export type {PropsType, PropsConfigType} from "./Props";
+export {Schemas} from "./Schemas";
+export type {SchemasType} from "./Schemas";
+export {Methods} from "./Methods";
+export type {MethodsType, MethodsConfigType} from "./Methods";
+export {calculateGauge} from "./Model";
+export type {MetricBand, GaugeModel} from "./Model";
+export {Examples} from "./examples";

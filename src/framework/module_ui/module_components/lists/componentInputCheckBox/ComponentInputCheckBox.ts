@@ -16,10 +16,9 @@ import {ComponentStructureTrait}   from "../../traits/componentStructureTrait";
 import {ComponentLabelTrait}      from "../../traits/componentLabelTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
 // --------------------------------
-import * as ComponentBorder  from "../componentBorder";
-import * as ComponentIcon    from "../componentIcon";
-import * as ComponentValidate from "../componentValidate";
-import * as ComponentElementPosition from "../componentElementPosition";
+import {ComponentIcon} from "../componentIcon/ComponentIcon";
+import {ComponentValidate} from "../componentValidate/ComponentValidate";
+import {ComponentElementPosition} from "../componentElementPosition/ComponentElementPosition";
 import {createCheckBoxControl} from "./Control";
 
 
@@ -227,7 +226,7 @@ export class ComponentInputCheckBox extends ComponentInputCheckBoxBase<ReturnTyp
         extra?:        any,
     ): CoreReactive.App {
 
-        const position = new ComponentElementPosition.Component({
+        const position = new ComponentElementPosition({
             prop_positionClass: ["d-block"],
             prop_positionStyles: {
                 width: UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
@@ -285,7 +284,7 @@ export class ComponentInputCheckBox extends ComponentInputCheckBoxBase<ReturnTyp
             this.getScope(),
         );
 
-        return new ComponentIcon.Component(
+        return new ComponentIcon(
             {
                 prop_structureClass:  ["position-absolute"],
                 prop_structureStyles: CoreObservable.App.computed(
@@ -487,7 +486,7 @@ export class ComponentInputCheckBox extends ComponentInputCheckBoxBase<ReturnTyp
             attrs: { ...attrsDefault },
             classBind: [hasRules.mapBoolean("", "d-none")],
             children: [
-                new ComponentValidate.Component(
+                new ComponentValidate(
                     {
                         prop_listRules:   prop_listRules,
                         prop_msgRules:    prop_msgRules,

@@ -13,9 +13,9 @@ import {createInputPasswordStep} from "./Step";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {ComponentLabelTrait} from "../../traits/componentLabelTrait";
-import * as ComponentInputSimple from "../componentInputSimple";
-import * as ComponentIcon from "../componentIcon";
-import * as ComponentValidate from "../componentValidate";
+import * as ComponentInputSimple from "../componentInputSimple/runtime";
+import * as ComponentIcon from "../componentIcon/runtime";
+import * as ComponentValidate from "../componentValidate/runtime";
 
 type Child = {dispose?: () => void; disposeStep?: () => void};
 

@@ -13,11 +13,11 @@ import {MethodsConfigType} from "./Methods";
 import {createInputAclStep} from "./Step";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {ComponentLabelTrait} from "../../traits/componentLabelTrait";
-import * as ComponentInputSimple from "../componentInputSimple";
-import * as ComponentListSelectedScroller from "../componentListSelectedScroller";
-import * as ComponentValidate from "../componentValidate";
-import * as ComponentFloatMenu from "../componentFloatMenu";
-import * as ComponentIcon from "../componentIcon";
+import * as ComponentInputSimple from "../componentInputSimple/runtime";
+import * as ComponentListSelectedScroller from "../componentListSelectedScroller/runtime";
+import * as ComponentValidate from "../componentValidate/runtime";
+import * as ComponentFloatMenu from "../componentFloatMenu/runtime";
+import * as ComponentIcon from "../componentIcon/runtime";
 import * as UiIcons from "@/ui_icons";
 
 type Child = {dispose?:()=>void; disposeStep?:()=>void};

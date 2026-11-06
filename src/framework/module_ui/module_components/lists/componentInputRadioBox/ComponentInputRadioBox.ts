@@ -13,11 +13,11 @@ import {createInputRadioBoxStep} from "./Step";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {ComponentLabelTrait} from "../../traits/componentLabelTrait";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
-import * as ComponentBorder from "../componentBorder";
-import * as ComponentIcon from "../componentIcon";
-import * as ComponentValidate from "../componentValidate";
-import * as ComponentElementPosition from "../componentElementPosition";
-import * as ComponentRecyclerView from "../componentRecyclerView";
+import * as ComponentBorder from "../componentBorder/runtime";
+import * as ComponentIcon from "../componentIcon/runtime";
+import * as ComponentValidate from "../componentValidate/runtime";
+import * as ComponentElementPosition from "../componentElementPosition/runtime";
+import * as ComponentRecyclerView from "../componentRecyclerView/runtime";
 
 type Child = {dispose?: () => void; disposeStep?: () => void};
 

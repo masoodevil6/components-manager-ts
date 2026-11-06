@@ -7,10 +7,12 @@ import * as UiIcons from "@/ui_icons";
 import {PartAttrDefault} from "@/core_components";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
-import * as ComponentBorder from "../componentBorder";
-import * as ComponentInputSimple from "../componentInputSimple";
-import * as ComponentIcon from "../componentIcon";
-import * as ComponentMenuMore from "../componentMenuMore";
+import {ComponentBorder} from "../componentBorder/ComponentBorder";
+import {ComponentInputSimple} from "../componentInputSimple/ComponentInputSimple";
+import {InputSimpleTypes} from "../componentInputSimple/Props";
+import {ComponentIcon} from "../componentIcon/ComponentIcon";
+import {ComponentMenuMore} from "../componentMenuMore/ComponentMenuMore";
+import {MenuMoreDirection, MenuMoreOrientation, type MenuMoreEntry} from "../componentMenuMore/Props";
 import {ComponentJsonTreeBase} from "./ComponentJsonTreeBase";
 import type {PropsConfigType} from "./Props";
 import {Schemas} from "./Schemas";
@@ -22,14 +24,14 @@ import {Keys} from "../../../module_categories/languages";
 type NodeMatch = {visible: Set<string>; forcedExpanded: Set<string>; direct: Set<string>};
 
 export class ComponentJsonTree extends ComponentJsonTreeBase<ReturnType<typeof createJsonTreeStep>>{
-    private _BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;
-    private _TOOLBAR_BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;
-    private _SEARCH: InstanceType<typeof ComponentInputSimple.Component> | null = null;
-    private _TOGGLE_ICON_COLLAPSE: InstanceType<typeof ComponentIcon.Component> | null = null;
-    private _TOGGLE_ICON_EXPAND: InstanceType<typeof ComponentIcon.Component> | null = null;
-    private _COPY_ICON: InstanceType<typeof ComponentIcon.Component> | null = null;
-    private _COPY_SUCCESS_ICON: InstanceType<typeof ComponentIcon.Component> | null = null;
-    private _TOOLBAR_MENU: InstanceType<typeof ComponentMenuMore.Component> | null = null;
+    private _BORDER: ComponentBorder | null = null;
+    private _TOOLBAR_BORDER: ComponentBorder | null = null;
+    private _SEARCH: ComponentInputSimple | null = null;
+    private _TOGGLE_ICON_COLLAPSE: ComponentIcon | null = null;
+    private _TOGGLE_ICON_EXPAND: ComponentIcon | null = null;
+    private _COPY_ICON: ComponentIcon | null = null;
+    private _COPY_SUCCESS_ICON: ComponentIcon | null = null;
+    private _TOOLBAR_MENU: ComponentMenuMore | null = null;
     private _TOOLBAR_ELEMENT: HTMLElement | null = null;
     private _TREE_ELEMENT: HTMLElement | null = null;
     private readonly _EXPANDED = new Set<string>();
@@ -144,7 +146,7 @@ export class ComponentJsonTree extends ComponentJsonTreeBase<ReturnType<typeof c
         config.prop_borderTopRightRadiusHas = false;
         config.prop_borderBottomLeftRadiusHas = false;
         config.prop_borderBottomRightRadiusHas = false;
-        this._BORDER = new ComponentBorder.Component(config as any);
+        this._BORDER = new ComponentBorder(config as any);
         return this._BORDER.getReactiveElement() as CoreReactive.App;
     }
 
@@ -157,7 +159,7 @@ export class ComponentJsonTree extends ComponentJsonTreeBase<ReturnType<typeof c
         this.renderToolbar();
 
         const bind = this._COMPONENT_PROPS_BIND;
-        this._TOOLBAR_BORDER = new ComponentBorder.Component({
+        this._TOOLBAR_BORDER = new ComponentBorder({
             styles: {display: "block", width: "100%", minWidth: "0"},
             prop_content: toolbar,
             prop_borderClass: [],
@@ -185,9 +187,9 @@ export class ComponentJsonTree extends ComponentJsonTreeBase<ReturnType<typeof c
         const bind = this._COMPONENT_PROPS_BIND;
 
         if (bind.prop_showSearch.get()) {
-            this._SEARCH = new ComponentInputSimple.Component({
+            this._SEARCH = new ComponentInputSimple({
                 styles: {display: "block", flex: "1 1 220px", minWidth: "160px", maxWidth: "420px", alignSelf: "center"},
-                prop_inputType: ComponentInputSimple.InputSimpleTypes.SEARCH,
+                prop_inputType: InputSimpleTypes.SEARCH,
                 prop_inputValue: this._QUERY,
                 prop_inputPlaceholder: bind.prop_searchPlaceholder as any,
             } as any, {
@@ -199,7 +201,7 @@ export class ComponentJsonTree extends ComponentJsonTreeBase<ReturnType<typeof c
             } as any);
             toolbar.append(this._SEARCH.getElement() as HTMLElement);
         }
-        const menuItems: ComponentMenuMore.MenuMoreEntry[] = [];
+        const menuItems: MenuMoreEntry[] = [];
         if (bind.prop_showExpandControls.get()) {
             menuItems.push(
                 {id: "json-tree-expand-all", icon: UiIcons.Src.TreeNodeExpand.Definition, action: "expand-all"},
@@ -210,7 +212,7 @@ export class ComponentJsonTree extends ComponentJsonTreeBase<ReturnType<typeof c
             menuItems.push({id: "json-tree-copy", icon: UiIcons.Src.FileCopy.Definition, action: "copy-json"});
         }
         if (menuItems.length > 0) {
-            this._TOOLBAR_MENU = new ComponentMenuMore.Component({
+            this._TOOLBAR_MENU = new ComponentMenuMore({
                 styles: {
                     display: "block",
                     width: "fit-content",
@@ -219,8 +221,8 @@ export class ComponentJsonTree extends ComponentJsonTreeBase<ReturnType<typeof c
                     flex: "0 0 auto",
                     marginInlineStart: "auto",
                 },
-                prop_orientation: ComponentMenuMore.MenuMoreOrientation.HORIZONTAL,
-                prop_direction: ComponentMenuMore.MenuMoreDirection.AUTO,
+                prop_orientation: MenuMoreOrientation.HORIZONTAL,
+                prop_direction: MenuMoreDirection.AUTO,
                 prop_isFullWidth: false,
                 prop_items: menuItems,
                 prop_menuBackgroundColor: bind.prop_headerBackgroundColor as any,
@@ -537,7 +539,7 @@ export class ComponentJsonTree extends ComponentJsonTreeBase<ReturnType<typeof c
         row.append(toggle);
     }
 
-    private getToggleIcon(expanded: boolean): InstanceType<typeof ComponentIcon.Component> {
+    private getToggleIcon(expanded: boolean): ComponentIcon {
         if (expanded) {
             this._TOGGLE_ICON_COLLAPSE ??= this.createIconComponent(UiIcons.Src.TreeNodeCollapse.Definition);
             return this._TOGGLE_ICON_COLLAPSE;
@@ -546,7 +548,7 @@ export class ComponentJsonTree extends ComponentJsonTreeBase<ReturnType<typeof c
         return this._TOGGLE_ICON_EXPAND;
     }
 
-    private getCopyIcon(success: boolean): InstanceType<typeof ComponentIcon.Component> {
+    private getCopyIcon(success: boolean): ComponentIcon {
         if (success) {
             this._COPY_SUCCESS_ICON ??= this.createIconComponent(UiIcons.Src.StatusIsTrue.Definition, "var(--successColor1)");
             return this._COPY_SUCCESS_ICON;
@@ -555,8 +557,8 @@ export class ComponentJsonTree extends ComponentJsonTreeBase<ReturnType<typeof c
         return this._COPY_ICON;
     }
 
-    private createIconComponent(definition: UiIcons.IIconDefinition, color = "var(--primaryColor1)"): InstanceType<typeof ComponentIcon.Component> {
-        return new ComponentIcon.Component({
+    private createIconComponent(definition: UiIcons.IIconDefinition, color = "var(--primaryColor1)"): ComponentIcon {
+        return new ComponentIcon({
             prop_icon: UiIcons.CreateIcon(definition, {size: 14, primaryColor: color}),
             prop_iconStyles: {display: "flex", width: "14px", height: "14px", pointerEvents: "none"},
             prop_structureStyles: {display: "flex", width: "14px", height: "14px", alignItems: "center", justifyContent: "center"},
@@ -564,7 +566,7 @@ export class ComponentJsonTree extends ComponentJsonTreeBase<ReturnType<typeof c
         } as any);
     }
 
-    private disposeIconComponent(icon: InstanceType<typeof ComponentIcon.Component> | null): void {
+    private disposeIconComponent(icon: ComponentIcon | null): void {
         if (!icon) return;
         icon.disposeStep();
         icon.getScope().dispose();

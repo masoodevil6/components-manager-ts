@@ -1,7 +1,6 @@
 import * as CoreReactive from "@/core_reactive";
 import * as CoreObservable from "@/core_observable";
 import * as CoreConfig from "@/core_configs";
-import * as UiCategory from "@/ui_categories";
 import * as UtilTools from "@/util_tools";
 import * as UiIcons from "@/ui_icons";
 import * as CoreComponents from "@/core_components";
@@ -14,12 +13,12 @@ import {MethodsConfigType} from "./Methods";
 import {createWidgetStep} from "./Step";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
-import * as ComponentBorder from "../componentBorder";
-import * as ComponentIcon from "../componentIcon";
-import * as ComponentLoading from "../componentLoading";
-import * as ComponentMessages from "../componentMessages";
+import * as ComponentBorder from "../componentBorder/runtime";
+import * as ComponentIcon from "../componentIcon/runtime";
+import * as ComponentLoading from "../componentLoading/runtime";
+import * as ComponentMessages from "../componentMessages/runtime";
 import {MessageTypes} from "../componentMessages/Props";
-import * as ComponentWebCode from "../componentWebCode";
+import * as ComponentWebCode from "../componentWebCode/runtime";
 
 type DisposableChild = {dispose?: () => void; disposeStep?: () => void};
 
@@ -331,7 +330,18 @@ export class ComponentWidget extends ComponentWidgetBase<ReturnType<typeof creat
                 if (!sourceResponse.ok) throw new Error(`Could not load response source (${sourceResponse.status}).`);
                 code = await sourceResponse.text();
             }
-            if (!code.trim() || requestId !== this._REQUEST_ID || this._DISPOSED) return;
+            if (requestId !== this._REQUEST_ID || this._DISPOSED) return;
+            if (!code.trim()) {
+                if (Object.prototype.hasOwnProperty.call(response.data ?? {}, "content")) {
+                    this._SOURCE_CONTENT.set(response.data.content);
+                }
+                return;
+            }
+
+            // Category factories are only needed by executable widget response code.
+            // Keep the full category registry out of the initial Widget component bundle.
+            const UiCategory = await import("@/ui_categories");
+            if (requestId !== this._REQUEST_ID || this._DISPOSED) return;
 
             const execute = new Function(
                 "request",

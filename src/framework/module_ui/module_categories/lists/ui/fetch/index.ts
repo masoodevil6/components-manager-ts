@@ -1,4 +1,4 @@
 export {Definition} from "./Definition";
-export {Form, CustomForm, Definition as FormDefinition} from "./form";
-export {Widget, Definition as WidgetDefinition} from "./widget";
-export {Iframe, Definition as IframeDefinition} from "./iframe";
+export {Form, CustomForm, Widget, Iframe, Definition as FormDefinition} from "./form";
+export {Loading, WebCode, Definition as LoadingDefinition} from "./loading";
+export * as Inputs from "./inputs";

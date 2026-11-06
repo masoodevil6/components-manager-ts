@@ -4,7 +4,7 @@ import baseConfig from "./vite.config";
 export default mergeConfig(baseConfig, defineConfig({
     build: {
         outDir: "dist/package",
-        emptyOutDir: true,
+        emptyOutDir: false,
         lib: {
             entry: "src/index.ts",
             formats: ["es"],

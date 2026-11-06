@@ -13,15 +13,15 @@ import {MethodsConfigType} from "./Methods";
 import {createInputSimpleStep} from "./Step";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
-import * as ComponentBorder from "../componentBorder";
-import * as ComponentIcon from "../componentIcon";
+import {ComponentBorder} from "../componentBorder/ComponentBorder";
+import {ComponentIcon} from "../componentIcon/ComponentIcon";
 
 export class ComponentInputSimple extends ComponentInputSimpleBase<ReturnType<typeof createInputSimpleStep>>{
     private readonly _FOCUSED = new CoreObservable.App(false);
     private _INPUT: HTMLInputElement | null = null;
-    private _CLEAR_ICON: (InstanceType<typeof ComponentIcon.Component> & {disposeStep?: () => void}) | null = null;
+    private _CLEAR_ICON: (ComponentIcon & {disposeStep?: () => void}) | null = null;
     private _ROOT_CLICK_LISTENER: ((event: Event) => void) | null = null;
-    private _BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;
+    private _BORDER: ComponentBorder | null = null;
     private _DISPOSED = false;
 
     constructor(config?: Partial<StructurePropsType & PropsConfigType>, methods?: MethodsConfigType<ComponentInputSimple>, identity?: {unique?: any; emit?: any; events?: Record<string, any> | null}) {
@@ -117,7 +117,7 @@ export class ComponentInputSimple extends ComponentInputSimpleBase<ReturnType<ty
             ["prop_inputBorderTopHas", "prop_borderTopHas"], ["prop_inputBorderRightHas", "prop_borderRightHas"], ["prop_inputBorderBottomHas", "prop_borderBottomHas"], ["prop_inputBorderLeftHas", "prop_borderLeftHas"],
         ];
         for (const [inputProp, borderProp] of mapping) borderProps[borderProp] = data?.[inputProp] ?? bind[inputProp];
-        this._BORDER = new ComponentBorder.Component(borderProps as any);
+        this._BORDER = new ComponentBorder(borderProps as any);
         return CoreReactive.App.section({attrs: {...attrsDefault}, className: ["d-block"], children: [this._BORDER.getReactiveElement()]});
     }
 
@@ -183,7 +183,7 @@ export class ComponentInputSimple extends ComponentInputSimpleBase<ReturnType<ty
         ), [sizeName], this.getScope());
         const clearSvg = UiIcons.CreateIcon(UiIcons.Src.CalcCross.Definition);
         clearSvg.getElement().style.height = "calc(var(--borderWidthMedium) + var(--paddingMedium) + var(--paddingMedium) + var(--heightMedium) + var(--borderWidthMedium))";
-        this._CLEAR_ICON = new ComponentIcon.Component({
+        this._CLEAR_ICON = new ComponentIcon({
             prop_structureStyles: {height: "100%"},
             prop_icon: clearSvg,
             prop_iconClass: ["d-block", "text-center", "h-100"],

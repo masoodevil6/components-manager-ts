@@ -79,7 +79,7 @@ type ComponentsCatalog = {
     menuItems: MenuMoreItem[];
 };
 
-function createComponentsCatalog(): ComponentsCatalog {
+export function createComponentsCatalog(): ComponentsCatalog {
     const entries = CoreComponents.ComponentManager.list().slice().sort((left, right) =>
         left.definition.name.localeCompare(right.definition.name),
     );
@@ -159,11 +159,12 @@ function createComponentsCatalog(): ComponentsCatalog {
     const menuItems: MenuMoreItem[] = [
         {id: "all", title: "All", action: "all"},
         ...Array.from(rootsById.values())
-            .sort((left, right) => getCategoryTitle(left).localeCompare(getCategoryTitle(right)))
+            .sort((left, right) =>
+                Number(right.id === "charts") - Number(left.id === "charts")
+                || getCategoryTitle(left).localeCompare(getCategoryTitle(right)),
+            )
             .map((category) => toMenuItem(category)),
     ];
-    if (usedCategoryIds.has("other")) menuItems.push({id: "category:other", title: "Other", action: "other"});
-
     return {entries, categoryLabels, categoryOf, menuItems};
 }
 

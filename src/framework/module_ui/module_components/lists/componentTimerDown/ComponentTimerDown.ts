@@ -4,7 +4,8 @@ import * as CoreConfig from "@/core_configs";
 import * as CoreLanguage from "@/core_languages";
 import * as UtilStyle from "@/util_styles";
 import * as UtilConst from "@/util_consts";
-import * as UiCategory from "@/ui_categories";
+import {ComponentTooltip} from "../componentTooltip/ComponentTooltip";
+import {ComponentButton} from "../componentButton/ComponentButton";
 import {PartAttrDefault} from "@/core_components";
 import {ComponentTimerDownBase} from "./ComponentTimerDownBase";
 import {createTimerDownStep} from "./Step";
@@ -100,7 +101,7 @@ export class ComponentTimerDown extends ComponentTimerDownBase<ReturnType<typeof
         const description = data?.["prop_description"] ?? bind.prop_description;
         const icon = data?.["prop_tooltipIcon"] ?? bind.prop_tooltipIcon;
         return CoreObservable.App.conditionWhen([description, icon], (value) => value != null && value !== "", () =>
-                this.attachChild(UiCategory.UI.Positions.Tooltip({
+                this.attachChild(new ComponentTooltip({
                     styles: { position: "absolute", top: "0", insetInlineEnd: "0", width: "100%", height: "100%", zIndex: "80" },
                     prop_structureStyles: { height: "100%" },
                     prop_tooltipDescription: description.get(),
@@ -224,7 +225,7 @@ export class ComponentTimerDown extends ComponentTimerDownBase<ReturnType<typeof
             [resendText, CoreConfig.Settings.Language.observable()], this.getScope());
         return CoreReactive.App.section({ attrs: { ...attrsDefault }, styles: { display: "flex", alignItems: "center", flex: "0 0 auto", width: "auto" }, children: [
             CoreObservable.App.conditionWhen([show, this._TIMER_DOWN_FINISH], (visible, finished) => visible && finished, () =>
-                this.attachChild(UiCategory.UI.Simples.Button({ prop_btnTitle: title, prop_btnSemantic: ButtonSemantic.BACK, prop_btnType: ButtonAction.BUTTON, prop_btnClass: [] } as any, { CLICK: (event) => this.executeMethod("CLICK_RETRY", event, {}) })),
+                this.attachChild(new ComponentButton({ prop_btnTitle: title, prop_btnSemantic: ButtonSemantic.BACK, prop_btnType: ButtonAction.BUTTON, prop_btnClass: [] } as any, { CLICK: (event) => this.executeMethod("CLICK_RETRY", event, {}) })),
                 () => null, this.getScope()),
         ] });
     }

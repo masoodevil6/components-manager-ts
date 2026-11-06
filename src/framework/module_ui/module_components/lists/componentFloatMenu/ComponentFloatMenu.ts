@@ -18,7 +18,7 @@ import {PartAttrDefault}           from "@/core_components";
 import {ComponentStructureTrait}   from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
 // --------------------------------
-import * as UiCategory             from "@/ui_categories";
+import {ComponentBorder}           from "../componentBorder/ComponentBorder";
 import {ArrowTypes}                from "../componentBorder/Props";
 
 
@@ -465,7 +465,7 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase<ReturnType<typeof
             ? (prop_floatIsShow?.get?.() ?? false)
             : false;
 
-        const borderInstance = UiCategory.UI.Contents.Border(
+        const borderInstance = new ComponentBorder(
             {
                 prop_borderClass:             ["shadow-sm", "position-relative"],
                 prop_borderStyles:            this.getStyleBorderPadding(prop_floatBorderWidth, prop_floatBorderRadius, prop_floatBorderPadding) as any,
@@ -635,6 +635,8 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase<ReturnType<typeof
                 scrollContent.style.maxHeight = "";
                 scrollContent.style.overflowY = "visible";
             }
+            const scrollRegion = popup.querySelector<HTMLElement>("[data-float-menu-scroll-region]");
+            if (scrollRegion) scrollRegion.style.maxHeight = "";
 
             let effectiveDirection = configuredDirection;
             let popupWidth = popup.getBoundingClientRect().width;
@@ -731,7 +733,8 @@ export class ComponentFloatMenu extends ComponentFloatMenuBase<ReturnType<typeof
 
     /** Constrain only the menu contents so the surrounding Border stays visible and stationary. */
     private constrainPortalContentHeight(popup: HTMLElement, maxHeight: number): number {
-        const content = popup.querySelector<HTMLElement>("[data-float-menu-scroll-content]");
+        const content = popup.querySelector<HTMLElement>("[data-float-menu-scroll-region]")
+            ?? popup.querySelector<HTMLElement>("[data-float-menu-scroll-content]");
         if (!content) {
             popup.style.maxHeight = `${maxHeight}px`;
             popup.style.overflowY = "auto";

@@ -4,12 +4,9 @@ import { App as LanguageApp }          from "@/core_languages";
 import {ClHomePage   as HomePage}      from "../pages/home/ClHomePage";
 import {ClIconPage   as IconPage}      from "../pages/icons/ClIconPage";
 import {ClTestsPage  as TestsPage}     from "../pages/tests/ClTestsPage";
-import {ClPerformancePage as PerformancePage} from "../pages/performance/ClPerformancePage";
 import {ClWorkflowPage as WorkflowPage} from "../pages/workflow/ClWorkflowPage";
 import {ClComponentsPage as ComponentsPage} from "../pages/components/ClComponentsPage";
 import {ClComponentDetailsPage as ComponentDetailsPage} from "../pages/components/ClComponentDetailsPage";
-import {ClPagerPage as PagerPage} from "../pages/pager/ClPagerPage";
-import {ClTestPage as TestPage} from "../pages/test/ClTestPage";
 import {ClPageV2 as PageV2} from "../v2/ClPageV2";
 import {PageV2Example} from "../v2/examples/PageV2Example";
 import * as CoreObservable from "@/core_observable";
@@ -37,27 +34,13 @@ export const CtPageMaps: TRouter = {
     },
 
     "/performance": {
-        template:      PerformancePage,
-        data:          { } ,
-        headerTitle:   LanguageApp.translate("pages.performance")
+        redirectTo: "/v2/performance",
     },
 
     "/workflow": {
         template:      WorkflowPage,
         data:          { },
         headerTitle:   new CoreObservable.App("Workflow"),
-    },
-
-    "/pager": {
-        template:      PagerPage,
-        data:          { },
-        headerTitle:   new CoreObservable.App("Pager"),
-    },
-
-    "/test": {
-        template:      TestPage,
-        data:          { },
-        headerTitle:   new CoreObservable.App("Request Test"),
     },
 
     "/components": {

@@ -4,9 +4,9 @@ import * as CoreConfig from "@/core_configs";
 import * as UtilStyle from "@/util_styles";
 import * as UtilConst from "@/util_consts";
 import * as UiIcons from "@/ui_icons";
-import * as ComponentBorder from "../componentBorder";
-import * as ComponentIcon from "../componentIcon";
-import * as ComponentElementPosition from "../componentElementPosition";
+import {ComponentBorder} from "../componentBorder/ComponentBorder";
+import {ComponentIcon} from "../componentIcon/ComponentIcon";
+import {ComponentElementPosition} from "../componentElementPosition/ComponentElementPosition";
 
 type ObservableValue = CoreObservable.App<any>;
 
@@ -80,7 +80,7 @@ export function createCheckBoxControl(options: CheckBoxControlOptions): CoreReac
         });
     }, [options.value, options.icon], scope);
 
-    const icon = new ComponentIcon.Component({
+    const icon = new ComponentIcon({
         prop_structureClass: ["position-absolute"],
         prop_structureStyles: CoreObservable.App.computed((padding: any) => ({
             top: UtilStyle.Css_SizeUnit(50, UtilConst.Units.PERCENT),
@@ -93,7 +93,7 @@ export function createCheckBoxControl(options: CheckBoxControlOptions): CoreReac
         prop_iconStyles: options.iconStyles,
     } as any);
 
-    const position = new ComponentElementPosition.Component({
+    const position = new ComponentElementPosition({
         prop_positionClass: ["d-block"],
         prop_positionStyles: {width: "100%", height: "100%"},
         prop_positionTop: UtilStyle.Css_SizeUnit(50, UtilConst.Units.PERCENT),
@@ -114,7 +114,7 @@ export function createCheckBoxControl(options: CheckBoxControlOptions): CoreReac
     }), [rtl, margin, CoreConfig.Settings.SizeName.observable()], scope);
     const structureStyles = options.structureStyles ?? CoreObservable.App.computed((size: any) => ({cursor: "pointer", display: "block", width: size, height: size}), [borderSize], scope);
 
-    return new ComponentBorder.Component({
+    return new ComponentBorder({
         styles: containerStyles as any,
         prop_structureClass: ["position-relative"],
         prop_structureStyles: structureStyles as any,

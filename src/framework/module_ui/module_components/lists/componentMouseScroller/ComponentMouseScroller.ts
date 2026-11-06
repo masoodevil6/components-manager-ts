@@ -15,7 +15,9 @@ import {SidebarDirection}                                          from "../comp
 import {PartAttrDefault}               from "@/core_components";
 import {ComponentStructureTrait}   from "../../traits/componentStructureTrait";
 // --------------------------------
-import * as UiCategory             from "@/ui_categories";
+import {ComponentBorder} from "../componentBorder/ComponentBorder";
+import {ComponentSidebar} from "../componentSidebar/ComponentSidebar";
+import {ComponentIcon} from "../componentIcon/ComponentIcon";
 import {ButtonAction} from "../componentButton/Props";
 
 
@@ -182,7 +184,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase<ReturnTyp
             this.getScope(),
         );
 
-        const borderInstance = UiCategory.UI.Contents.Border(
+        const borderInstance = new ComponentBorder(
             {
                 prop_contentSize:  UtilConst.Sizes.S as any,
                 classList:         [] as any,
@@ -367,7 +369,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase<ReturnTyp
         const prop_sideBarBottomHas  = data?.["prop_sideBarBottomHas"]  ?? bind.prop_sideBarBottomHas;
         const prop_sideBarBottomWidth = data?.["prop_sideBarBottomWidth"] ?? bind.prop_sideBarBottomWidth;
 
-        const sidebarInstance = UiCategory.UI.Contents.Sidebar(
+        const sidebarInstance = new ComponentSidebar(
             {
                 classList: [] as any,
                 styles: CoreObservable.App.computed(
@@ -463,7 +465,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase<ReturnTyp
         const prop_sideBarTopWidth  = data?.["prop_sideBarTopWidth"]  ?? bind.prop_sideBarTopWidth;
         const prop_sideBarTopContent = data?.["prop_sideBarTopContent"] ?? bind.prop_sideBarTopContent;
 
-        const sidebarInstance = UiCategory.UI.Contents.Sidebar(
+        const sidebarInstance = new ComponentSidebar(
             {
                 classList: [] as any,
                 styles: CoreObservable.App.computed(
@@ -525,7 +527,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase<ReturnTyp
         const prop_sideBarBottomWidth  = data?.["prop_sideBarBottomWidth"]  ?? bind.prop_sideBarBottomWidth;
         const prop_sideBarBottomContent = data?.["prop_sideBarBottomContent"] ?? bind.prop_sideBarBottomContent;
 
-        const sidebarInstance = UiCategory.UI.Contents.Sidebar(
+        const sidebarInstance = new ComponentSidebar(
             {
                 classList: [] as any,
                 styles: CoreObservable.App.computed(
@@ -629,7 +631,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase<ReturnTyp
         const bind = this._COMPONENT_PROPS_BIND;
         const prop_zoom = data?.["prop_zoom"] ?? bind.prop_zoom;
 
-        const borderInstance = UiCategory.UI.Contents.Border(
+        const borderInstance = new ComponentBorder(
             {
                 prop_borderClass: ["p-0"] as any,
                 prop_contentBackgroundColor: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1) as any,
@@ -676,7 +678,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase<ReturnTyp
         const prop_sideBarBottomHas  = data?.["prop_sideBarBottomHas"]  ?? bind.prop_sideBarBottomHas;
         const prop_sideBarBottomWidth = data?.["prop_sideBarBottomWidth"] ?? bind.prop_sideBarBottomWidth;
 
-        const sidebarInstance = UiCategory.UI.Contents.Sidebar(
+        const sidebarInstance = new ComponentSidebar(
             {
                 classList: [] as any,
                 styles: CoreObservable.App.computed(
@@ -816,7 +818,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase<ReturnTyp
         extra?:        any,
     ): CoreReactive.App {
 
-        const iconInstance = UiCategory.UI.Simples.Icon(
+        const iconInstance = new ComponentIcon(
             {
                 classList: ["mb-1", "d-block"] as any,
                 styles: { cursor: "pointer" } as any,
@@ -851,7 +853,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase<ReturnTyp
         extra?:        any,
     ): CoreReactive.App {
 
-        const iconInstance = UiCategory.UI.Simples.Icon(
+        const iconInstance = new ComponentIcon(
             {
                 classList: ["mb-1", "d-block"] as any,
                 styles: { cursor: "pointer" } as any,
@@ -884,7 +886,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase<ReturnTyp
         extra?:        any,
     ): CoreReactive.App {
 
-        const iconInstance = UiCategory.UI.Simples.Icon(
+        const iconInstance = new ComponentIcon(
             {
                 classList: ["mb-1", "d-block"] as any,
                 styles: { cursor: "pointer" } as any,
@@ -951,7 +953,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase<ReturnTyp
         extra?:        any,
     ): CoreReactive.App {
 
-        const iconInstance = UiCategory.UI.Simples.Icon(
+        const iconInstance = new ComponentIcon(
             {
                 classList: ["mb-1", "d-block"] as any,
                 styles: { cursor: "pointer" } as any,
@@ -984,7 +986,7 @@ export class ComponentMouseScroller extends ComponentMouseScrollerBase<ReturnTyp
         extra?:        any,
     ): CoreReactive.App {
 
-        const iconInstance = UiCategory.UI.Simples.Icon(
+        const iconInstance = new ComponentIcon(
             {
                 classList: ["mb-1", "d-block"] as any,
                 styles: { cursor: "pointer" } as any,

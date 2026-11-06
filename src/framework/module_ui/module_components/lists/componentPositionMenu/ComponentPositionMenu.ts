@@ -12,10 +12,11 @@ import {PropsType}                    from "./Props";
 import {ComponentStructureTrait}      from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
 // --------------------------------
-import * as UiCategory  from "@/ui_categories";
 import * as UiIcons     from "@/ui_icons";
 import * as CoreLanguage from "@/core_languages";
-import {ShowTypes, DirectionTypes} from "../componentFloatMenu";
+import {ComponentFloatMenu} from "../componentFloatMenu/ComponentFloatMenu";
+import {ShowTypes, DirectionTypes} from "../componentFloatMenu/Props";
+import {ComponentButton} from "../componentButton/ComponentButton";
 import {ButtonAction, ButtonSemantic} from "../componentButton/Props";
 import {Keys} from "../../../module_categories/languages";
 
@@ -150,7 +151,7 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase<ReturnType<
         const prop_menuBorderWidth      = data?.["prop_menuBorderWidth"]      ?? bind.prop_menuBorderWidth;
         const prop_menuBodyWidth        = data?.["prop_menuBodyWidth"]        ?? bind.prop_menuBodyWidth;
 
-        const floatMenu = UiCategory.UI.Positions.FloatMenu(
+        const floatMenu = new ComponentFloatMenu(
             {
                 classList: ["position-relative", "d-block", "w-100", "h-100"],
                 prop_selectorClass: [],
@@ -279,8 +280,10 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase<ReturnType<
         return CoreReactive.App.section({
             attrs: {
                 ...attrsDefault,
+                "data-float-menu-scroll-region": "",
             },
             className: [],
+            styles: {overflowY: "auto", minHeight: "0", boxSizing: "border-box"},
             stylesBind: {
                 height: this.getStyleBodyContentHeight(prop_menuBodyHeight),
                 borderBottomColor: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
@@ -378,7 +381,7 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase<ReturnType<
             this.getScope(),
         );
 
-        const acceptBtn = UiCategory.UI.Simples.Button(
+        const acceptBtn = new ComponentButton(
             {
                 styles: { flex: "0 1 auto", width: "auto" },
                 prop_btnTitle: resolvedAcceptTitle as any,
@@ -431,7 +434,7 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase<ReturnType<
             this.getScope(),
         );
 
-        const rejectBtn = UiCategory.UI.Simples.Button(
+        const rejectBtn = new ComponentButton(
             {
                 styles: { flex: "0 1 auto", width: "auto" },
                 prop_btnTitle: resolvedRejectTitle as any,

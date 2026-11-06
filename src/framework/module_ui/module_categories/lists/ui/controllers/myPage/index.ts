@@ -5,3 +5,4 @@ export * as ComponentInfo from "./componentInfo";
 export * as Icons from "./icons";
 export * as Controllers from "./controllers";
 export * as Workflow from "./workflow";
+export * as Performance from "./performance";

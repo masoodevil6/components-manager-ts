@@ -4,7 +4,7 @@ import * as CoreConfig from "@/core_configs";
 import * as UtilConst from "@/util_consts";
 import * as UtilStyle from "@/util_styles";
 import * as UiIcons from "@/ui_icons";
-import * as UiCategory from "@/ui_categories";
+import {ComponentFloatMenu} from "../componentFloatMenu/ComponentFloatMenu";
 import * as CoreLanguage from "@/core_languages";
 import {PartAttrDefault} from "@/core_components";
 import {ComponentSelectCustomSimpleBase} from "./ComponentSelectCustomSimpleBase";
@@ -15,11 +15,11 @@ import {createSelectCustomSimpleStep} from "./Step";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {Keys} from "../../../module_categories/languages";
-import * as ComponentBorder from "../componentBorder";
-import * as ComponentIcon from "../componentIcon";
-import * as ComponentInputSimple from "../componentInputSimple";
-import * as ComponentRecyclerView from "../componentRecyclerView";
-import {ShowTypes as FloatMenuShowTypes} from "../componentFloatMenu";
+import * as ComponentBorder from "../componentBorder/runtime";
+import * as ComponentIcon from "../componentIcon/runtime";
+import * as ComponentInputSimple from "../componentInputSimple/runtime";
+import * as ComponentRecyclerView from "../componentRecyclerView/runtime";
+import {ShowTypes as FloatMenuShowTypes} from "../componentFloatMenu/runtime";
 
 export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase<ReturnType<typeof createSelectCustomSimpleStep>>{
     private readonly _IS_OPEN = new CoreObservable.App(false);
@@ -96,7 +96,7 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
             () => CoreReactive.App.section({children: []}),
             this.getScope(),
         );
-        this._FLOAT_MENU = UiCategory.UI.Positions.FloatMenu({
+        this._FLOAT_MENU = new ComponentFloatMenu({
             classList: ["position-relative", "d-block", "w-100"],
             prop_selectorClass: ["d-block", "w-100"],
             prop_selectorContent: this.executeSchemaPart(Schemas.SELECT_HEADER.part, {}),
@@ -234,7 +234,7 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
     private renderSearch(attrsDefault: PartAttrDefault, data: Record<string, CoreObservable.App<any>>): CoreReactive.App {
         const disabled = data?.["prop_selectDisable"] ?? this._COMPONENT_PROPS_BIND.prop_selectDisable;
         const searchPlaceholder = CoreLanguage.App.translate(Keys.category.components.selectCustomSimple.texts.searchPlaceholder);
-        this._SEARCH_INPUT = UiCategory.UI.Simples.InputSimple({prop_inputDisable: disabled, prop_inputValue: this._SEARCH, prop_inputPlaceholder: searchPlaceholder as any, prop_inputClass: ["form-control"]} as any, {
+        this._SEARCH_INPUT = new ComponentInputSimple.Component({prop_inputDisable: disabled, prop_inputValue: this._SEARCH, prop_inputPlaceholder: searchPlaceholder as any, prop_inputClass: ["form-control"]} as any, {
             INPUT_CHANGE: (_event, _dataArgs, componentArgs) => {
                 const query = String(componentArgs?.VALUE ?? "");
                 this._SEARCH.set(query);
@@ -254,7 +254,7 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
             const matches = `${option.name ?? ""} ${option.prefix ?? ""}`.toLocaleLowerCase().includes(query);
             return matches ? this.executeSchemaPart(Schemas.SELECT_OPTION.part, {option}) : CoreReactive.App.section({children: []});
         }, {search: this._SEARCH}, {}, this.getScope());
-        this._OPTIONS_LIST = UiCategory.UI.Contents.RecyclerView({prop_formDirection: "vertical", prop_formComponents: components as any, prop_formStyles: {width: "100%"}});
+        this._OPTIONS_LIST = new ComponentRecyclerView.Component({prop_formDirection: "vertical", prop_formComponents: components as any, prop_formStyles: {width: "100%"}});
         return CoreReactive.App.section({attrs: {...attrsDefault}, className: ["d-block", "w-100", "overflow-y-auto"], styles: {maxHeight: "16rem"}, children: [this._OPTIONS_LIST.getReactiveElement()]});
     }
 

@@ -25,3 +25,7 @@ CoreLanguage.App.initialize(
     Directory,
     Core.Language.Definition.En
 );
+
+CoreLanguage.App.registerLocale(
+    Core.Language.Definition.Fa
+);

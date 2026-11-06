@@ -16,8 +16,8 @@ import {ComponentStructureTrait}   from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {PropsConfigType as WebCodePropsConfigType} from "./Props";
 // --------------------------------
-import * as ComponentIcon    from "../componentIcon";
-import * as ComponentButton  from "../componentButton";
+import * as ComponentIcon    from "../componentIcon/runtime";
+import * as ComponentButton  from "../componentButton/runtime";
 import {ButtonVariants, ButtonSemantic, ButtonAction} from "../componentButton/Props";
 import {Keys}                         from "../../../module_categories/languages";
 

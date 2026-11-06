@@ -582,6 +582,11 @@ export const Fa =
             "لیستی از کامپوننت‌های پایه و ساختاری"
         ],
 
+        [Keys.category.components.basic.builder.name, "سازنده"],
+        [Keys.category.components.basic.builder.description, "کامپوننت‌های ساخت و ویرایش کامپوننت و چیدمان"],
+        [Keys.category.components.basic.position.name, "موقعیت"],
+        [Keys.category.components.basic.position.description, "کامپوننت‌های موقعیت‌دهی و جانمایی"],
+
         /// Components -> Basic -> Props -> selector
         [
             Keys.category.components.basic.props.selector.name,
@@ -894,6 +899,21 @@ export const Fa =
             "ساختار با prop_show = false (مخفی)"
         ],
 
+        /// Components -> Contents subcategories
+        [Keys.category.components.contents.messages.name, "پیام‌ها"],
+        [Keys.category.components.contents.messages.description, "کامپوننت‌های نمایش پیام و هشدار"],
+        [Keys.category.components.contents.breadcrumb.name, "مسیر راهنما"],
+        [Keys.category.components.contents.breadcrumb.description, "کامپوننت‌های نمایش مسیر و مراحل ناوبری"],
+        [Keys.category.components.contents.table.name, "جدول"],
+        [Keys.category.components.contents.table.description, "کامپوننت‌های جدول و جدول واکنش‌گرا"],
+        [Keys.category.components.contents.cards.name, "\u06a9\u0627\u0631\u062a\u200c\u0647\u0627"],
+        [Keys.category.components.contents.cards.description, "\u06a9\u0627\u0645\u067e\u0648\u0646\u0646\u062a\u200c\u0647\u0627\u06cc \u0646\u0645\u0627\u06cc\u0634 \u06a9\u0627\u0631\u062a\u06cc"],
+        [Keys.category.components.contents.collapse.name, "\u06a9\u0627\u0645\u067e\u0648\u0646\u0646\u062a\u200c\u0647\u0627\u06cc \u0628\u0627\u0632\u0634\u0648\u0646\u062f\u0647"],
+        [Keys.category.components.contents.collapse.description, "\u06a9\u0627\u0645\u067e\u0648\u0646\u0646\u062a\u200c\u0647\u0627\u06cc \u0645\u062d\u062a\u0648\u0627\u06cc \u0628\u0627\u0632 \u0648 \u0628\u0633\u062a\u0647\u200c\u0634\u0648\u0646\u062f\u0647"],
+
+        [Keys.category.components.contents.windows.name, "\u067e\u0646\u062c\u0631\u0647\u200c\u0647\u0627"],
+        [Keys.category.components.contents.windows.description, "\u06a9\u0627\u0645\u067e\u0648\u0646\u0646\u062a\u200c\u0647\u0627\u06cc \u067e\u0646\u062c\u0631\u0647 \u0648 \u062f\u06cc\u0627\u0644\u0648\u06af \u062a\u0627\u06cc\u06cc\u062f"],
+
         /// Components -> Contents
         [
             Keys.category.components.contents.name,
@@ -1024,7 +1044,7 @@ export const Fa =
         [Keys.category.components.breadcrumbShadow.examples.withoutBackButton.description, "عنوان صفحه همراه آیتم‌های ناوبری و بدون دکمه بازگشت."],
 
         /// Components -> Pages -> Header -> PageHeader
-        [Keys.category.components.pages.name, "صفحات"],
+        [Keys.category.components.pages.name, "کامپوننت‌های صفحات"],
         [Keys.category.components.pages.description, "کامپوننت‌های مورد استفاده در چیدمان سطح صفحه."],
         [Keys.category.components.pages.header.name, "سربرگ"],
         [Keys.category.components.pages.header.description, "کامپوننت‌های سربرگ صفحه."],
@@ -6561,12 +6581,16 @@ export const Fa =
         [Keys.category.components.page.examples.workflowComposition.description, "یک ورودی تو در تو نزدیک‌ترین گره Layout را با نام دیکشنری پیدا می‌کند و برای آن CoreEvent می‌فرستد."],
 
         /// Components -> Effects -> Effective
-        [Keys.category.components.tools.name, "ابزارها"],
+        [Keys.category.components.tools.name, "کامپوننت‌های ابزار"],
         [Keys.category.components.tools.description, "کامپوننت‌های کمکی برای ویرایش و کار با کد منبع."],
         [Keys.category.components.tools.code.name, "کد"],
         [Keys.category.components.tools.code.description, "کامپوننت‌های نمایش و ویرایش کد منبع."],
         [Keys.category.components.tools.dataType.name, "نوع داده"],
         [Keys.category.components.tools.dataType.description, "کامپوننت‌هایی برای نمایش و بررسی داده‌های ساخت‌یافته."],
+        [Keys.category.components.tools.draggable.name, "کشیدن و جابه‌جایی"],
+        [Keys.category.components.tools.draggable.description, "کامپوننت‌هایی برای جابه‌جایی و مرتب‌سازی با کشیدن."],
+        [Keys.category.components.tools.effects.name, "افکت‌ها"],
+        [Keys.category.components.tools.effects.description, "کامپوننت‌هایی برای افزودن تغییرهای نمایشی به عناصر رابط کاربری."],
         [Keys.category.components.effects.name, "افکت‌ها"],
         [Keys.category.components.effects.description, "کامپوننت‌هایی برای افزودن تغییرهای نمایشی به عناصر رابط کاربری."],
         [Keys.category.components.effective.name, "افکت Border"],
@@ -7140,8 +7164,24 @@ export const Fa =
         [Keys.category.components.elementPosition.examples.logical.description, "مختصات ابتدا و انتها از جهت متن پیروی می‌کنند"],
         [Keys.category.components.elementPosition.examples.fixedOverlay.name, "لایهٔ ثابت"],
         [Keys.category.components.elementPosition.examples.fixedOverlay.description, "موقعیت ثابت همراه با z-index"],
-        [Keys.category.components.fetch.name, "ارسال درخواست"],
+        [Keys.category.components.charts.name, "کامپوننت‌های نمودار"],
+        [Keys.category.components.charts.description, "کامپوننت‌های نمایش داده و پیشرفت"],
+        [Keys.category.components.charts.progress.name, "پیشرفت"],
+        [Keys.category.components.charts.progress.description, "کامپوننت‌های نمایش پیشرفت عملیات"],
+        [Keys.category.components.charts.monitor.name, "مانیتور"],
+        [Keys.category.components.charts.monitor.description, "کامپوننت‌های نمایش مقادیر اندازه‌گیری‌شده"],
+        ...Object.entries({name: "نمودار سنجش", description: "نمایش مقدار اندازه‌گیری‌شده در محدوده‌های تنظیم‌شده", value: "مقدار", title: "عنوان", unit: "واحد", min: "حداقل", max: "حداکثر", bands: "محدوده‌ها", valueText: "مقدار قالب‌بندی‌شده", unavailableText: "پیام ناموجود", chartClass: "کلاس نمودار", chartStyles: "استایل نمودار", unavailable: "ناموجود", unclassified: "بدون معیار ارزیابی", invalid: "تنظیمات نمودار نامعتبر", outside: "خارج از مقیاس", legendStatus: "وضعیت", legendRange: "بازه", root: "نمودار سنجش", chart: "نمودار", example: "نمونه‌های نمودار سنجش"}).map(([key, text]) => [Keys.category.components.charts.monitor.gauge[key as keyof typeof Keys.category.components.charts.monitor.gauge], text] as [TranslationKey, string]),
+        ...Object.entries({name: "پیشرفت خطی", description: "نمایش خطی وضعیت پیشرفت", value: "مقدار", min: "حداقل", max: "حداکثر", title: "عنوان", accessibleLabel: "عنوان دسترس‌پذیر", statusText: "پیام وضعیت", status: "وضعیت", showValue: "نمایش درصد", trackColor: "رنگ زمینه", fillColor: "رنگ پیشرفت", progressClass: "کلاس‌های پیشرفت", progressStyles: "استایل پیشرفت", root: "پیشرفت", header: "عنوان", track: "مسیر", fill: "نوار", determinate: "مقدار مشخص", indeterminate: "مقدار نامشخص", error: "خطا", reactive: "واکنش‌پذیر", rtl: "راست به چپ"}).map(([key, text]) => [Keys.category.components.charts.progressLinear[key as keyof typeof Keys.category.components.charts.progressLinear], text] as [TranslationKey, string]),
+        [Keys.category.components.fetch.name, "کامپوننت‌های دریافت داده"],
         [Keys.category.components.fetch.description, "کامپوننت‌های ارسال فرم و مدیریت درخواست"],
+        [Keys.category.components.fetch.loading.name, "بارگذاری"],
+        [Keys.category.components.fetch.loading.description, "کامپوننت‌های نمایش وضعیت بارگذاری و کد"],
+        [Keys.category.components.fetch.inputs.name, "ورودی‌ها"],
+        [Keys.category.components.fetch.inputs.description, "کنترل‌های ورودی برای فرم و ثبت داده"],
+        [Keys.category.components.fetch.inputs.v1.name, "V1"],
+        [Keys.category.components.fetch.inputs.v1.description, "کامپوننت‌های ورودی نسخهٔ اول"],
+        [Keys.category.components.fetch.inputs.simple.name, "ساده"],
+        [Keys.category.components.fetch.inputs.simple.description, "کامپوننت‌های پایهٔ ورودی، توضیحات و انتخاب"],
         [Keys.category.components.fetch.form.name, "فرم"],
         [Keys.category.components.fetch.form.description, "فرم درون بردر با اعتبارسنجی و مدیریت پاسخ"],
         [Keys.category.components.fetch.form.props.forms.name, "محتوای فرم"],

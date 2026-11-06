@@ -3,7 +3,7 @@ import * as CoreObservable  from "@/core_observable";
 import * as CoreConfigs     from "@/core_configs";
 import * as CoreComponents  from "@/core_components";
 // --------------------------------
-import * as ComponentTooltip from "../../lists/componentTooltip";
+import {ComponentTooltip} from "../../lists/componentTooltip/ComponentTooltip";
 
 
 /**
@@ -120,7 +120,7 @@ export const ComponentTooltipTrait = {
             (desc, icon, bg, color, pos, dir) => {
                 if (desc == null || desc === "") return null;
 
-                return new ComponentTooltip.Component(
+                return new ComponentTooltip(
                     {
                         styles:                   { height: "100%" },
                         prop_structureStyles:     { height: "100%" },

@@ -21,11 +21,11 @@ import {createInputJsonStep} from "./Step";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {ComponentLabelTrait} from "../../traits/componentLabelTrait";
-import * as ComponentIcon from "../componentIcon";
-import * as ComponentJsonTree from "../componentJsonTree";
+import * as ComponentIcon from "../componentIcon/runtime";
+import * as ComponentJsonTree from "../componentJsonTree/runtime";
 import type {JsonValue} from "../componentJsonTree/Types";
-import * as ComponentErrorIsEmpty from "../componentErrorIsEmpty";
-import * as ComponentValidate from "../componentValidate";
+import * as ComponentErrorIsEmpty from "../componentErrorIsEmpty/runtime";
+import * as ComponentValidate from "../componentValidate/runtime";
 import {Keys} from "../../../module_categories/languages";
 
 type ParseResult = {valid: true; value: JsonValue; error: null} | {valid: false; value: undefined; error: string};

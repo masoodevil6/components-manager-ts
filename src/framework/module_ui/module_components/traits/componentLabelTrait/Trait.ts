@@ -1,7 +1,7 @@
 import * as CoreComponents from "@/core_components";
 import {Keys} from "../../../module_categories/languages";
 import {Props as LabelProps} from "../../lists/componentLabel/Props";
-import * as ComponentLabel from "../../lists/componentLabel";
+import {ComponentLabel} from "../../lists/componentLabel/ComponentLabel";
 
 /** Shared ComponentLabel capability for components that expose a label. */
 export const ComponentLabelTrait = {
@@ -15,8 +15,8 @@ export const ComponentLabelTrait = {
         },
     } as CoreComponents.ComponentSchemas,
 
-    createLabel(config: Record<string, any>, methods?: any, identity?: {unique?: any; emit?: any; events?: Record<string, any> | null}): InstanceType<typeof ComponentLabel.Component> {
-        return new ComponentLabel.Component(config as any, methods, identity);
+    createLabel(config: Record<string, any>, methods?: any, identity?: {unique?: any; emit?: any; events?: Record<string, any> | null}): ComponentLabel {
+        return new ComponentLabel(config as any, methods, identity);
     },
 };
 

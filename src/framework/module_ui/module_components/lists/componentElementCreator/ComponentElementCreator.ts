@@ -5,27 +5,26 @@ import * as CoreEvent from "@/core_event";
 import * as Core from "@/core";
 import * as CoreConfig from "@/core_configs";
 import * as CoreLanguage from "@/core_languages";
-import * as UiCategory from "@/ui_categories";
 import {PartAttrDefault} from "@/core_components";
 import * as UiIcons from "@/ui_icons";
 import * as UtilConst from "@/util_consts";
 import * as UtilStyle from "@/util_styles";
-import * as ComponentStructure from "../componentStructure";
-import * as ComponentBorder from "../componentBorder";
-import * as ComponentEffectChange from "../componentEffectChange";
-import * as ComponentWindow from "../componentWindow";
-import * as ComponentWindowConfirm from "../componentWindowConfirm";
-import * as ComponentMenuMore from "../componentMenuMore";
-import * as ComponentCollapse from "../componentCollapse";
-import * as ComponentButton from "../componentButton";
-import * as ComponentInput from "../componentInput";
-import * as ComponentInputCheckBox from "../componentInputCheckBox";
-import * as ComponentInputColor from "../componentInputColor";
-import * as ComponentInputSelectOption from "../componentInputSelectOption";
-import * as ComponentCodeMirror from "../componentCodeMirror";
-import * as ComponentTabs from "../componentTabs";
-import * as ComponentStyles from "../componentStyles";
-import * as ComponentPageSetting from "../componentPageSetting";
+import * as ComponentStructure from "../componentStructure/runtime";
+import * as ComponentBorder from "../componentBorder/runtime";
+import * as ComponentEffectChange from "../componentEffectChange/runtime";
+import * as ComponentWindow from "../componentWindow/runtime";
+import * as ComponentWindowConfirm from "../componentWindowConfirm/runtime";
+import * as ComponentMenuMore from "../componentMenuMore/runtime";
+import * as ComponentCollapse from "../componentCollapse/runtime";
+import * as ComponentButton from "../componentButton/runtime";
+import * as ComponentInput from "../componentInput/runtime";
+import * as ComponentInputCheckBox from "../componentInputCheckBox/runtime";
+import * as ComponentInputColor from "../componentInputColor/runtime";
+import * as ComponentInputSelectOption from "../componentInputSelectOption/runtime";
+import * as ComponentCodeMirror from "../componentCodeMirror/runtime";
+import * as ComponentTabs from "../componentTabs/runtime";
+import * as ComponentStyles from "../componentStyles/runtime";
+import * as ComponentPageSetting from "../componentPageSetting/runtime";
 import * as UtilOptionsStd from "@/util_options_std";
 import {LayoutColumn} from "../componentLayout/Props";
 import {ButtonSemantic, ButtonVariants} from "../componentButton/Props";
@@ -111,6 +110,7 @@ export class ComponentElementCreator extends ComponentStructure.Component<
     private _SETTINGS_PROP_CHILDREN: Array<{dispose?: () => void; getScope?: () => {dispose?: () => void}}> = [];
     private _SETTINGS_CATEGORIES: Array<{key: string; name: string}> = [];
     private _SETTINGS_REGISTERED_COMPONENTS: Array<{key: string; categoryKey: string; name: string; component: Function; componentId: string}> = [];
+    private _SETTINGS_REGISTRY_GENERATION = 0;
     private _SETTINGS_COMPONENT_TAB_BODY: CoreReactive.App | null = null;
     private _SETTINGS_TABS: ComponentTabs.Component | null = null;
     private _SETTINGS_CATEGORY_SELECT: ComponentInputSelectOption.Component | null = null;
@@ -483,14 +483,10 @@ export class ComponentElementCreator extends ComponentStructure.Component<
         this._SETTINGS_DRAFT = {...(properties ?? {})};
         this._SETTINGS_SELECTED_COMPONENT = mode === ElementCreatorMode.SETTING_CREATE ? null : componentReference;
         this._SETTINGS_ACCEPT_DISABLED.set(this._SETTINGS_SELECTED_COMPONENT == null);
-        this.readRegisteredComponents();
-        const matchingEntry = this._SETTINGS_SELECTED_COMPONENT
-            ? this.findRegisteredComponent(componentReference)
-            : null;
-        this._SETTINGS_SELECTED_COMPONENT_KEY = this._SETTINGS_SELECTED_COMPONENT
-            ? matchingEntry?.key ?? "__current__"
-            : null;
-        this._SETTINGS_SELECTED_CATEGORY = matchingEntry?.categoryKey ?? "__all__";
+        this._SETTINGS_CATEGORIES = [];
+        this._SETTINGS_REGISTERED_COMPONENTS = [];
+        this._SETTINGS_SELECTED_COMPONENT_KEY = this._SETTINGS_SELECTED_COMPONENT ? "__current__" : null;
+        this._SETTINGS_SELECTED_CATEGORY = "__all__";
         this._SETTINGS_COMPONENT_TAB_BODY = this.createSettingsComponentTab();
 
         const propertyBody = this._SETTINGS_SELECTED_COMPONENT
@@ -507,6 +503,7 @@ export class ComponentElementCreator extends ComponentStructure.Component<
             prop_structureStyles: {width: "100%"},
         } as any);
         this._SETTINGS_CHILDREN.push(this._SETTINGS_TABS as any);
+        this.loadRegisteredComponents();
         return this._SETTINGS_TABS.getReactiveElement() as CoreReactive.App;
     }
 
@@ -688,7 +685,29 @@ export class ComponentElementCreator extends ComponentStructure.Component<
         });
     }
 
-    private readRegisteredComponents(): void {
+    private loadRegisteredComponents(): void {
+        const generation = ++this._SETTINGS_REGISTRY_GENERATION;
+        void import("@/ui_categories").then(({UI}) => {
+            if (this._DISPOSED || generation !== this._SETTINGS_REGISTRY_GENERATION || !this._SETTINGS_MODE) return;
+
+            this.readRegisteredComponents(UI as any);
+            const matchingEntry = this._SETTINGS_SELECTED_COMPONENT
+                ? this.findRegisteredComponent(this._SETTINGS_SELECTED_COMPONENT)
+                : null;
+            this._SETTINGS_SELECTED_CATEGORY = matchingEntry?.categoryKey ?? "__all__";
+            this._SETTINGS_SELECTED_COMPONENT_KEY = this._SETTINGS_SELECTED_COMPONENT
+                ? matchingEntry?.key ?? "__current__"
+                : null;
+            this.refreshSettingsComponentOptions();
+            this.refreshSettingsTabs();
+        }).catch((error) => {
+            if (generation === this._SETTINGS_REGISTRY_GENERATION) {
+                console.error("ComponentElementCreator could not load the component registry", error);
+            }
+        });
+    }
+
+    private readRegisteredComponents(uiCategories: Record<string, any>): void {
         this._SETTINGS_CATEGORIES = [];
         this._SETTINGS_REGISTERED_COMPONENTS = [];
         const seenComponentKeys = new Set<string>();
@@ -715,9 +734,26 @@ export class ComponentElementCreator extends ComponentStructure.Component<
             for (const child of definition.children ?? []) visit(child, [...parentPath, String(definition.id)]);
         };
 
-        for (const categoryModule of Object.values(UiCategory.UI as any)) {
+        for (const categoryModule of Object.values(uiCategories)) {
             visit((categoryModule as any)?.Definition);
         }
+    }
+
+    private refreshSettingsComponentOptions(): void {
+        const allEntries = this.getFilteredComponentEntries("__all__");
+        const categoryOptions = [
+            {id: "__all__", name: "All"},
+            ...this._SETTINGS_CATEGORIES
+                .filter((category) => allEntries.some((entry) =>
+                    entry.categoryKey === category.key || entry.categoryKey.startsWith(`${category.key}/`),
+                ))
+                .map((category) => ({id: category.key, name: category.name})),
+        ];
+        const filteredEntries = this.getFilteredComponentEntries(this._SETTINGS_SELECTED_CATEGORY);
+        this._SETTINGS_CATEGORY_SELECT?.set("prop_options", categoryOptions);
+        this._SETTINGS_CATEGORY_SELECT?.set("prop_itemSelected", this._SETTINGS_SELECTED_CATEGORY);
+        this._SETTINGS_COMPONENT_SELECT?.set("prop_options", filteredEntries.map((entry) => ({id: entry.key, name: entry.name})));
+        this._SETTINGS_COMPONENT_SELECT?.set("prop_itemSelected", this._SETTINGS_SELECTED_COMPONENT_KEY);
     }
 
     private findRegisteredComponent(componentReference: Function | null): any | null {
@@ -1098,6 +1134,7 @@ export class ComponentElementCreator extends ComponentStructure.Component<
     }
 
     private closeSettingsPageSetting(): void {
+        this._SETTINGS_REGISTRY_GENERATION++;
         const source = this._SETTINGS_WORKFLOW_SOURCE;
         const endpoint = this._SETTINGS_PAGE_SETTING_ENDPOINT;
         this._SETTINGS_WORKFLOW_SOURCE = null;

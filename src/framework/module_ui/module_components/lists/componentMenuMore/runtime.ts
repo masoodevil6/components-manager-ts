@@ -1,0 +1,11 @@
+// Internal entry point: excludes examples from component-to-component imports.
+export {ComponentMenuMore as Component} from "./ComponentMenuMore";
+export {Definition} from "./Definition";
+export {Props} from "./Props";
+export {MenuMoreDirection, MenuMoreOrientation} from "./Props";
+export type {PropsType, PropsConfigType, MenuMoreEntry, MenuMoreGroup, MenuMoreItem} from "./Props";
+export {Schemas} from "./Schemas";
+export type {SchemasType} from "./Schemas";
+export {Methods} from "./Methods";
+export type {MethodsType, MethodsConfigType, MethodsDataArgs} from "./Methods";
+

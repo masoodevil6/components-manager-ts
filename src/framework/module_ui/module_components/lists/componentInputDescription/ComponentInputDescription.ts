@@ -11,8 +11,8 @@ import {createInputDescriptionStep} from "./Step";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {ComponentLabelTrait} from "../../traits/componentLabelTrait";
-import * as ComponentInputDescriptionSimple from "../componentInputDescriptionSimple";
-import * as ComponentValidate from "../componentValidate";
+import * as ComponentInputDescriptionSimple from "../componentInputDescriptionSimple/runtime";
+import * as ComponentValidate from "../componentValidate/runtime";
 
 type DisposableChild = {dispose?: () => void; disposeStep?: () => void};
 

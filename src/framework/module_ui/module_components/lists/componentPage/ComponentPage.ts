@@ -19,9 +19,9 @@ import {
     Component as ComponentPageSettingClass,
     PAGE_SETTING_TRANSITION_MS,
     Props as PageSettingProps,
-} from "../componentPageSetting";
-import * as UiCategory from "@/ui_categories";
-import * as ComponentJsonTree from "../componentJsonTree";
+} from "../componentPageSetting/runtime";
+import * as ComponentJsonTree from "../componentJsonTree/runtime";
+import * as ComponentSidebar from "../componentSidebar/runtime";
 import type {JsonValue} from "../componentJsonTree/Types";
 
 export class ComponentPage extends ComponentPageBase<ReturnType<typeof createPageStep>>{
@@ -414,7 +414,7 @@ export class ComponentPage extends ComponentPageBase<ReturnType<typeof createPag
                     [this._ASIDE_IS_OPEN, CoreConfig.Settings.DirectionRtl.observable(), this._COMPONENT_PROPS_BIND.prop_asideWidth],
                     this.getScope(),
                 );
-                const sidebar = UiCategory.UI.Contents.Sidebar({
+                const sidebar = new ComponentSidebar.Component({
                     prop_sidebarContent: this.renderWorkflowSlot(this.resolveSlot(content), workflowChildName),
                     prop_sidebarDirection: direction,
                     prop_sidebarWidth: UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),

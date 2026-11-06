@@ -2,6 +2,7 @@ import * as UICategories from "@/ui_categories";
 import {Keys} from "../../../languages";
 import * as Header from "./header";
 import * as Sections from "./sections";
+import {Definition as MenusDefinition} from "../menus/Definition";
 import {Page} from "./page/Definition";
 
 export const Definition: UICategories.TCategoryComponentDefinition = {
@@ -9,5 +10,5 @@ export const Definition: UICategories.TCategoryComponentDefinition = {
     name: Keys.category.components.pages.name,
     description: Keys.category.components.pages.description,
     components: [Page],
-    children: [Header.Definition, Sections.Definition],
+    children: [Header.Definition, Sections.Definition, MenusDefinition],
 };

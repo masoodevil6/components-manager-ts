@@ -17,8 +17,8 @@ import type {PropsType as StructurePropsType}    from "../componentStructure/Pro
 // --------------------------------
 import type {MethodsConfigType}                   from "./Methods";
 // --------------------------------
-import * as ComponentBorder from "../componentBorder";
-import * as ComponentIcon   from "../componentIcon";
+import {ComponentBorder} from "../componentBorder/ComponentBorder";
+import {ComponentIcon}   from "../componentIcon/ComponentIcon";
 
 
 /**
@@ -122,7 +122,7 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
         const prop_borderBottomLeftRadiusHas = data?.["prop_borderBottomLeftRadiusHas"] ?? bind.prop_borderBottomLeftRadiusHas;
         const prop_borderBottomRightRadiusHas = data?.["prop_borderBottomRightRadiusHas"] ?? bind.prop_borderBottomRightRadiusHas;
 
-        const border = new ComponentBorder.Component(
+        const border = new ComponentBorder(
             {
                 prop_content: this.executeSchemaPart(Schemas.BORDER_LIST.part, {}),
                 prop_borderType: ComponentBorder.BorderTypes.SOLID,
@@ -421,7 +421,7 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
             this.getScope(),
         );
 
-        const border = new ComponentBorder.Component(
+        const border = new ComponentBorder(
             {
                 styles: { width: "auto", flexShrink: "0" },
                 prop_borderType:              ComponentBorder.BorderTypes.SOLID,
@@ -551,7 +551,7 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
                         cursor: "pointer",
                         ...(iconStyles ?? {}),
                     };
-                    const icon = new ComponentIcon.Component(
+                    const icon = new ComponentIcon(
                         {
                             styles: { width: "auto", flexShrink: "0" },
                             prop_icon:       UiIcons.CreateIcon(UiIcons.Src.FileWindowClose.Definition, {

@@ -41,6 +41,8 @@ export {
     MY_PAGE_WORKFLOW_PAGE_SOURCE,
     workflowPage,
 } from "./MyPageWorkflowPage";
+export {MY_PAGE_PERFORMANCE_PAGE_SOURCE, performancePage} from "./MyPagePerformancePage";
+export type {PerformancePageControllerParams} from "./MyPagePerformancePage";
 export {
     MY_PAGE_SIDE_BAR_MENU_SOURCE,
     sideBarMenu,

@@ -1,0 +1,8 @@
+{
+  "name": "internal-consumer-test",
+  "private": true,
+  "type": "module",
+  "scripts": {"predev": "node ../../scripts/generate-focused-entries.mjs", "dev": "vite --host 127.0.0.1", "prebuild": "node ../../scripts/generate-focused-entries.mjs", "build": "vite build", "preview": "vite preview --host 127.0.0.1"},
+  "dependencies": {"component-manager": "file:../.."},
+  "devDependencies": {"vite": "^6.4.1"}
+}

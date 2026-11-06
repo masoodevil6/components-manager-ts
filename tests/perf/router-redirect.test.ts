@@ -186,4 +186,105 @@ describe("router navigation", () => {
             else delete (HTMLElement.prototype as any).animate;
         }
     });
+
+    it("runs route guards before changing history and follows guard redirects", () => {
+        const root = document.createElement("div");
+        document.body.appendChild(root);
+        const router = new ClRouter(root, {
+            "/home": {
+                controller: () => ({status: true}),
+                headerTitle: new CoreObservable.App("Home"),
+            },
+            "/private": {
+                controller: () => ({status: true}),
+                headerTitle: new CoreObservable.App("Private"),
+                beforeEnter: () => false,
+            },
+            "/old": {
+                controller: () => ({status: true}),
+                headerTitle: new CoreObservable.App("Old"),
+                beforeEnter: () => "/home",
+            },
+        }, (route) => {
+            const element = document.createElement("main");
+            element.textContent = route.headerTitle.get();
+            return element;
+        });
+        activeRouters.push(router);
+        history.replaceState({}, "", "/home");
+        router.resolve();
+
+        router.navigate("/private");
+        expect(location.pathname).toBe("/home");
+        expect(root.textContent).toBe("Home");
+
+        router.navigate("/old");
+        expect(location.pathname).toBe("/home");
+        expect(root.textContent).toBe("Home");
+    });
+
+    it("ignores an outdated async guard after a newer navigation commits", async () => {
+        const root = document.createElement("div");
+        document.body.appendChild(root);
+        let releaseSlowGuard!: (result: boolean) => void;
+        const slowGuard = new Promise<boolean>((resolve) => { releaseSlowGuard = resolve; });
+        const router = new ClRouter(root, {
+            "/home": {controller: () => ({}), headerTitle: new CoreObservable.App("Home")},
+            "/slow": {controller: () => ({}), headerTitle: new CoreObservable.App("Slow"), beforeEnter: () => slowGuard},
+            "/fast": {controller: () => ({}), headerTitle: new CoreObservable.App("Fast")},
+        }, (route) => {
+            const element = document.createElement("main");
+            element.textContent = route.headerTitle.get();
+            return element;
+        });
+        activeRouters.push(router);
+        history.replaceState({}, "", "/home");
+        router.resolve();
+
+        router.navigate("/slow");
+        router.navigate("/fast");
+        releaseSlowGuard(true);
+        await Promise.resolve();
+        await Promise.resolve();
+
+        expect(location.pathname).toBe("/fast");
+        expect(root.textContent).toBe("Fast");
+    });
+
+    it("keeps title subscriptions scoped to the active route and runs unload hooks", () => {
+        const root = document.createElement("div");
+        document.body.appendChild(root);
+        const homeTitle = new CoreObservable.App("Home");
+        let homeUnloads = 0;
+        let nextUnloads = 0;
+        const router = new ClRouter(root, {
+            "/home": {
+                controller: () => ({}),
+                headerTitle: homeTitle,
+                onUnload: () => { homeUnloads++; },
+            },
+            "/next": {
+                controller: () => ({}),
+                headerTitle: new CoreObservable.App("Next"),
+                onUnload: () => { nextUnloads++; },
+            },
+        }, (route) => {
+            const element = document.createElement("main");
+            element.textContent = route.headerTitle.get();
+            return element;
+        });
+        activeRouters.push(router);
+        history.replaceState({}, "", "/home");
+        router.resolve();
+        homeTitle.set("Start page");
+        expect(document.title).toBe("Start page");
+
+        router.navigate("/next");
+        homeTitle.set("Stale title");
+        expect(document.title).toBe("Next");
+        expect(homeUnloads).toBe(1);
+
+        router.destroy();
+        expect(nextUnloads).toBe(1);
+    });
 });

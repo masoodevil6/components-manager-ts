@@ -15,9 +15,9 @@ import {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {MethodsConfigType}        from "./Methods";
 // --------------------------------
 import * as UiIcons       from "@/ui_icons";
-import * as ComponentIcon from "../componentIcon";
-import * as ComponentFloatMenu from "../componentFloatMenu";
-import {DirectionTypes as FloatMenuDirectionTypes, ShowTypes as FloatMenuShowTypes} from "../componentFloatMenu";
+import {ComponentIcon} from "../componentIcon/ComponentIcon";
+import {ComponentFloatMenu} from "../componentFloatMenu/ComponentFloatMenu";
+import {DirectionTypes as FloatMenuDirectionTypes, ShowTypes as FloatMenuShowTypes} from "../componentFloatMenu/Props";
 
 
 /**
@@ -159,7 +159,7 @@ export class ComponentTooltip extends ComponentTooltipBase<ReturnType<typeof cre
         const arrowPosition = this.getStyleArrowPosition(prop_tooltipIconPosition);
 
         // Composition Ø¨Ø§ ComponentFloatMenu â€” popup Ú©Ø§Ù…Ù„ Ø¨Ø§ ComponentBorder
-        const floatMenu = new ComponentFloatMenu.Component(
+        const floatMenu = new ComponentFloatMenu(
             {
                 // height chain â€” propagate 100% through custom elements
                 styles:                    { height: "100%" },
@@ -220,7 +220,7 @@ export class ComponentTooltip extends ComponentTooltipBase<ReturnType<typeof cre
             this.getScope(),
         );
 
-        return new ComponentIcon.Component(
+        return new ComponentIcon(
             {
                 prop_icon:       UiIcons.CreateIcon(prop_tooltipIcon ?? UiIcons.Src.SymbolExclumationSquare.Definition),
                 prop_iconClass:  ["position-absolute"],

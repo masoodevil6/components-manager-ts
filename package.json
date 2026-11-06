@@ -9,17 +9,42 @@
       "types": "./dist/package/index.d.ts",
       "import": "./dist/package/index.mjs",
       "default": "./dist/package/index.mjs"
+    },
+    "./button": {
+      "types": "./dist/package/focused/button.d.ts",
+      "import": "./dist/package/focused/button.mjs",
+      "default": "./dist/package/focused/button.mjs"
+    },
+    "./progress-linear": {
+      "types": "./dist/package/focused/progress-linear.d.ts",
+      "import": "./dist/package/focused/progress-linear.mjs",
+      "default": "./dist/package/focused/progress-linear.mjs"
+    },
+    "./json-tree": {
+      "types": "./dist/package/focused/json-tree.d.ts",
+      "import": "./dist/package/focused/json-tree.mjs",
+      "default": "./dist/package/focused/json-tree.mjs"
+    },
+    "./components/*": {
+      "types": "./dist/package/focused/*.d.ts",
+      "import": "./dist/package/focused/*.mjs",
+      "default": "./dist/package/focused/*.mjs"
     }
   },
   "files": [
     "dist/package"
   ],
   "scripts": {
-    "dev": "vite",
-    "build": "vite build --config vite.package.config.ts && rollup --config rollup.dts.config.mjs",
+    "dev": "node scripts/generate-focused-entries.mjs && node inside-project/dev.mjs",
+    "build": "node scripts/generate-focused-entries.mjs && vite build --config vite.package.config.ts && vite build --config vite.focused.config.ts && rollup --config rollup.dts.config.mjs && rollup --config rollup.components.dts.config.mjs",
     "build:app": "vite build",
+    "perf:consumer": "node scripts/measure-consumer-bundles.mjs",
+    "audit:components": "node scripts/audit-components.mjs",
     "perf": "npx vitest run --config vitest.config.ts",
     "perf:update": "set PERF_UPDATE_BASELINE=1&& npx vitest run --config vitest.config.ts"
+  },
+  "internalProjects": {
+    "consumer": true
   },
   "keywords": [],
   "author": "",

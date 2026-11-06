@@ -9,14 +9,39 @@ export type TRouteRenderOptions = {
     renderDuration?: number;
 };
 
-export type TTemplateRouteData = TRouteRenderOptions & {
+export type TRouteGuardResult = void | boolean | string | {readonly redirectTo: string};
+
+export type TRouteNavigationContext = {
+    path: string;
+    pathParams: Record<string, string>;
+    query: Record<string, string>;
+    fromPath: string | null;
+    direction: "forward" | "backward";
+};
+
+export type TRouteGuard = (context: TRouteNavigationContext) => TRouteGuardResult | Promise<TRouteGuardResult>;
+
+export type TRouterOptions = {
+    notFound?: (path: string) => HTMLElement | null | void;
+    onError?: (error: unknown, context: TRouteNavigationContext) => void;
+    beforeEach?: TRouteGuard;
+    afterEach?: (context: TRouteNavigationContext) => void;
+};
+
+export type TRouteLifecycleOptions = {
+    beforeEnter?: TRouteGuard;
+    onUnload?: (pageElement: HTMLElement) => void;
+    onError?: (error: unknown, context: TRouteNavigationContext) => void;
+};
+
+export type TTemplateRouteData = TRouteRenderOptions & TRouteLifecycleOptions & {
     template: new () => Template;
     data?: any;
     headerTitle: Observable.App<string>;
 };
 
 /** A route rendered through a controller-backed UI host instead of a page class. */
-export type TControllerRouteData = TRouteRenderOptions & {
+export type TControllerRouteData = TRouteRenderOptions & TRouteLifecycleOptions & {
     controller: unknown;
     widgetProps?: Record<string, unknown>;
     data?: any;
@@ -24,11 +49,7 @@ export type TControllerRouteData = TRouteRenderOptions & {
     onLoad?: (pageElement: HTMLElement) => void;
     /** Reuse the mounted page shell across routes with the same key. */
     reuseKey?: string;
-    onReuse?: (pageElement: HTMLElement, context: {
-        path: string;
-        query: Record<string, string>;
-        direction: "forward" | "backward";
-    }) => void;
+    onReuse?: (pageElement: HTMLElement, context: TRouteNavigationContext) => void | Promise<void>;
 };
 
 export type TControllerRouteRenderer = (

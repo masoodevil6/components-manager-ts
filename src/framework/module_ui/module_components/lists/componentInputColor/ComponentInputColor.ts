@@ -17,11 +17,11 @@ import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {ComponentLabelTrait} from "../../traits/componentLabelTrait";
 import {RegisterLabelColorOptionEditor} from "../componentLabel/Props";
-import * as ComponentIcon from "../componentIcon";
-import * as ComponentFloatMenu from "../componentFloatMenu";
-import * as ComponentValidate from "../componentValidate";
-import * as ComponentSelectCustomSimple from "../componentSelectCustomSimple";
-import * as ComponentButton from "../componentButton";
+import * as ComponentIcon from "../componentIcon/runtime";
+import * as ComponentFloatMenu from "../componentFloatMenu/runtime";
+import * as ComponentValidate from "../componentValidate/runtime";
+import * as ComponentSelectCustomSimple from "../componentSelectCustomSimple/runtime";
+import * as ComponentButton from "../componentButton/runtime";
 import {ButtonAction, ButtonSemantic} from "../componentButton/Props";
 
 type Child = {dispose?: () => void; disposeStep?: () => void};

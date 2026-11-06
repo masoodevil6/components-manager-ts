@@ -1,51 +1,37 @@
 import * as UICategories from "@/ui_categories"
 import {Keys}            from "../../../languages"
+import {Cards}           from "./groups/cards"
+import {CollapseGroup}   from "./groups/collapse"
+import {Windows}         from "./groups/windows"
+import {Tables}          from "./groups/table"
+import {Messages}       from "./groups/messages"
+import {Definition as Breadcrumb} from "./groups/breadcrumb"
 import {Border}          from "./border"
-import {Collapse}        from "./collapse"
-import {CollapseLine}    from "./collapseLine"
 import {ErrorIsEmpty}    from "./errorIsEmpty"
-import {WebCode}        from "./webCode"
 import {RecyclerView}    from "./recyclerView"
 import {Tabs}            from "./tabs"
-import {Window}          from "./window"
-import {WindowConfirm}  from "./windowConfirm"
-import {Table}            from "./table"
-import {TableResponsible} from "./tableResponsible"
 import {ListSelectedScroller} from "./listSelectedScroller"
-import {Loading}           from "./loading"
 import {Sidebar}           from "./sidebar"
 import {MouseScroller}     from "./mouseScroller"
 import {Workflow}          from "./workflow"
 import {TimerDown}         from "./timerDown"
-import {CardViewInfo}      from "./cardViewInfo"
-import {CardRowInfo}       from "./cardRowInfo"
-import {CardViewClicable}  from "./cardViewClicable"
 
 export const Definition : UICategories.TCategoryComponentDefinition = {
     id:          "contents",
     name:        Keys.category.components.contents.name,
     description: Keys.category.components.contents.description,
 
+    children: [Cards, CollapseGroup, Windows, Tables, Messages, Breadcrumb],
+
     components:  [
         Border,
-        Collapse,
-        CollapseLine,
         ErrorIsEmpty,
-        WebCode,
         RecyclerView,
         Tabs,
-        Window,
-        WindowConfirm,
-        Table,
-        TableResponsible,
         ListSelectedScroller,
-        Loading,
         Sidebar,
         MouseScroller,
         Workflow,
         TimerDown,
-        CardViewInfo,
-        CardRowInfo,
-        CardViewClicable,
     ],
 }

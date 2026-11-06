@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "mode": "selected",
+  "components": [
+    "ComponentButton",
+    "ComponentProgressLinear",
+    "ComponentJsonTree",
+    "ComponentTable",
+    "ComponentInputListSelector"
+  ]
+}

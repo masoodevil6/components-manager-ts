@@ -10,7 +10,7 @@ import {Keys} from "../../../module_categories/languages";
 import {PartAttrDefault} from "@/core_components";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
-import * as ComponentButton from "../componentButton";
+import * as ComponentButton from "../componentButton/runtime";
 import {ButtonSemantic, ButtonVariants} from "../componentButton/Props";
 import {ComponentBreadcrumbBase} from "./ComponentBreadcrumbBase";
 import {Props, type BreadcrumbItem, type PropsType, type PropsConfigType} from "./Props";

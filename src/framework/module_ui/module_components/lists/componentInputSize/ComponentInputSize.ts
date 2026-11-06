@@ -13,10 +13,10 @@ import {createInputSizeStep} from "./Step";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {ComponentLabelTrait} from "../../traits/componentLabelTrait";
-import * as ComponentInputSimple from "../componentInputSimple";
-import * as ComponentIcon from "../componentIcon";
-import * as ComponentButton from "../componentButton";
-import * as ComponentValidate from "../componentValidate";
+import * as ComponentInputSimple from "../componentInputSimple/runtime";
+import * as ComponentIcon from "../componentIcon/runtime";
+import * as ComponentButton from "../componentButton/runtime";
+import * as ComponentValidate from "../componentValidate/runtime";
 import {ButtonAction, ButtonSemantic} from "../componentButton/Props";
 
 type Child = {dispose?: () => void; disposeStep?: () => void};
