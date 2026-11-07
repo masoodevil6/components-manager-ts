@@ -2,7 +2,7 @@ import * as CoreComponents from "@/core_components";
 import * as CoreObservable from "@/core_observable";
 import * as CoreReactive from "@/core_reactive";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/effectChange";
 import type {ExtractPropsConfigType, ExtractPropsType} from "../../tools/type/TypeHelpers";
 
 export enum EffectChangeMode {

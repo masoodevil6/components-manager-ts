@@ -2,7 +2,7 @@ import * as CoreComponents from "@/core_components";
 import * as CoreObservable from "@/core_observable";
 import * as CoreLanguage from "@/core_languages";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/timerDown";
 import * as UiIcons from "@/ui_icons";
 import * as UtilConst from "@/util_consts";
 import * as UtilStyle from "@/util_styles";

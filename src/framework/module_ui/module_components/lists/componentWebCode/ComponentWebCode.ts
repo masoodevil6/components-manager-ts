@@ -19,7 +19,7 @@ import {PropsConfigType as WebCodePropsConfigType} from "./Props";
 import * as ComponentIcon    from "../componentIcon/runtime";
 import * as ComponentButton  from "../componentButton/runtime";
 import {ButtonVariants, ButtonSemantic, ButtonAction} from "../componentButton/Props";
-import {Keys}                         from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/errorIsEmpty";
 
 
 /**

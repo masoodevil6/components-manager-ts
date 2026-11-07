@@ -1,6 +1,6 @@
 import * as CoreComponents   from "@/core_components";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
-import {Keys}                from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/inputAgreementCheckBox";
 import * as UtilConst        from "@/util_consts";
 import * as UtilStyle        from "@/util_styles";
 import * as CoreObservable    from "@/core_observable";

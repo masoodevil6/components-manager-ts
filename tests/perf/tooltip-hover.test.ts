@@ -9,7 +9,7 @@ afterEach(() => {
 });
 
 describe("ComponentTooltip hover", () => {
-    it("shows selector-position when hovering its ComponentIcon", () => {
+    it("shows selector-position on hover and hides it after leaving the icon", async () => {
         const tooltip = UiCategory.UI.Positions.Tooltip({prop_tooltipDescription: "Tooltip content"}, {});
         const root = tooltip.getElement() as HTMLElement;
         document.body.appendChild(root);
@@ -28,6 +28,8 @@ describe("ComponentTooltip hover", () => {
         expect(position.querySelector(".d-none")).toBeNull();
 
         icon?.dispatchEvent(new MouseEvent("mouseout", {bubbles: true, relatedTarget: document.body}));
+        expect(position.querySelector(".d-none")).toBeNull();
+        await new Promise((resolve) => setTimeout(resolve, 300));
         expect(position.querySelector(".d-none")).not.toBeNull();
 
         tooltip.dispose();

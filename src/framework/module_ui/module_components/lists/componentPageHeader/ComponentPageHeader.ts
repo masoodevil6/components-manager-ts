@@ -8,7 +8,7 @@ import {PartAttrDefault} from "@/core_components";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
 import * as ComponentBreadcrumbShadow from "../componentBreadcrumbShadow/runtime";
-import * as ComponentMenuMore from "../componentMenuMore/runtime";
+import type {MenuMoreEntry} from "../componentMenuMore/Props";
 import {ComponentPageHeaderBase} from "./ComponentPageHeaderBase";
 import {Props, type PropsConfigType, type PropsType} from "./Props";
 import {Schemas} from "./Schemas";
@@ -16,9 +16,14 @@ import {Methods, type MethodsConfigType} from "./Methods";
 import {createPageHeaderStep} from "./Step";
 
 type Child = {dispose?: () => void; disposeStep?: () => void};
+type ComponentMenuMoreRuntime = typeof import("../componentMenuMore/runtime");
 
 export class ComponentPageHeader extends ComponentPageHeaderBase<ReturnType<typeof createPageHeaderStep>>{
     private _CHILDREN: Child[] = [];
+    private _OPTIONS_MENU: InstanceType<ComponentMenuMoreRuntime["Component"]> | null = null;
+    private _MENU_MORE_RUNTIME: ComponentMenuMoreRuntime | null = null;
+    private _MENU_MORE_RUNTIME_PROMISE: Promise<ComponentMenuMoreRuntime | null> | null = null;
+    private readonly _MENU_MORE_RUNTIME_READY = new CoreObservable.App(0);
     private _DISPOSED = false;
 
     constructor(config?: Partial<StructurePropsType & PropsConfigType>, methods?: MethodsConfigType<ComponentPageHeader>, identity?: {unique?: any; emit?: any; events?: Record<string, any> | null}) {
@@ -31,6 +36,7 @@ export class ComponentPageHeader extends ComponentPageHeaderBase<ReturnType<type
         this._DISPOSED = true;
         this._CHILDREN.forEach((child) => child.dispose ? child.dispose() : child.disposeStep?.());
         this._CHILDREN = [];
+        this._OPTIONS_MENU = null;
         this.disposeStep();
         this.getScope().dispose();
     }
@@ -112,7 +118,7 @@ export class ComponentPageHeader extends ComponentPageHeaderBase<ReturnType<type
     private renderOptions(attrs: PartAttrDefault): CoreReactive.App {
         const bind = this._COMPONENT_PROPS_BIND;
         const menuItems = CoreObservable.App.computed(
-            (override: ComponentMenuMore.MenuMoreEntry[] | null, legacy: ComponentMenuMore.MenuMoreEntry[]) => override ?? legacy ?? [],
+            (override: MenuMoreEntry[] | null, legacy: MenuMoreEntry[]) => override ?? legacy ?? [],
             [bind.prop_menuItems, bind.prop_optionsList],
             this.getScope(),
         );
@@ -128,30 +134,93 @@ export class ComponentPageHeader extends ComponentPageHeaderBase<ReturnType<type
             [CoreConfig.Settings.SizeName.observable()],
             this.getScope(),
         );
-        const menu = new ComponentMenuMore.Component({
-            prop_orientation: bind.prop_menuOrientation,
-            prop_direction: bind.prop_menuDirection,
-            prop_items: menuItems,
-            prop_structureStyles: menuStructureStyles,
-            prop_menuBackgroundColor: menuBackground,
-            prop_itemBackgroundColorHover: hoverBackground,
-            prop_menuIconColor: menuIconColor,
-            prop_menuIconSecondaryColor: menuIconSecondaryColor,
-            prop_menuBorderRadius: bind.prop_menuBorderRadius,
-            prop_menuBorderWidth: bind.prop_menuBorderWidth,
-            prop_menuBorder: bind.prop_menuBorder,
-            styles: {width: "fit-content", maxWidth: "100%"},
-        } as any, {
-            SELECT_ITEM: (event, args) => {
-                const item = args.ITEM;
-                this.executeMethod("SELECT_OPTION", event, {NAME: item.action ?? item.id, ITEM: item});
+        const menu = CoreObservable.App.conditionWhen(
+            [menuItems, this._MENU_MORE_RUNTIME_READY],
+            (items: MenuMoreEntry[]) => Array.isArray(items) && items.length > 0,
+            () => {
+                if (!this._MENU_MORE_RUNTIME) {
+                    void this.loadMenuMoreRuntime();
+                    return null;
+                }
+                return this.renderOptionsMenu(menuItems, menuStructureStyles, menuBackground, hoverBackground, menuIconColor, menuIconSecondaryColor);
             },
-        } as any);
-        this._CHILDREN.push(menu as any);
+            () => {
+                this.disposeOptionsMenu();
+                return null;
+            },
+            this.getScope(),
+        ) as any;
         return CoreReactive.App.section({
             attrs: {...attrs},
             styles: {display: "flex", flex: "0 0 auto", alignItems: "stretch", width: "fit-content", maxWidth: "100%"},
-            children: [menu.getReactiveElement() as unknown as CoreReactive.App],
+            children: [menu],
         });
+    }
+
+    private renderOptionsMenu(
+        menuItems: CoreObservable.App<any>,
+        menuStructureStyles: CoreObservable.App<Record<string, string>>,
+        menuBackground: CoreObservable.App<any>,
+        hoverBackground: CoreObservable.App<any>,
+        menuIconColor: CoreObservable.App<any>,
+        menuIconSecondaryColor: CoreObservable.App<any>,
+    ): CoreReactive.App | null {
+        const ComponentMenuMore = this._MENU_MORE_RUNTIME;
+        if (!ComponentMenuMore) return null;
+
+        if (!this._OPTIONS_MENU) {
+            this._OPTIONS_MENU = new ComponentMenuMore.Component({
+                prop_orientation: this._COMPONENT_PROPS_BIND.prop_menuOrientation,
+                prop_direction: this._COMPONENT_PROPS_BIND.prop_menuDirection,
+                prop_items: menuItems,
+                prop_structureStyles: menuStructureStyles,
+                prop_menuBackgroundColor: menuBackground,
+                prop_itemBackgroundColorHover: hoverBackground,
+                prop_menuIconColor: menuIconColor,
+                prop_menuIconSecondaryColor: menuIconSecondaryColor,
+                prop_menuBorderRadius: this._COMPONENT_PROPS_BIND.prop_menuBorderRadius,
+                prop_menuBorderWidth: this._COMPONENT_PROPS_BIND.prop_menuBorderWidth,
+                prop_menuBorder: this._COMPONENT_PROPS_BIND.prop_menuBorder,
+                styles: {width: "fit-content", maxWidth: "100%"},
+            } as any, {
+                SELECT_ITEM: (event, args) => {
+                    const item = args.ITEM;
+                    this.executeMethod("SELECT_OPTION", event, {NAME: item.action ?? item.id, ITEM: item});
+                },
+            } as any);
+            this._CHILDREN.push(this._OPTIONS_MENU as any);
+        }
+
+        return this._OPTIONS_MENU.getReactiveElement() as unknown as CoreReactive.App;
+    }
+
+    private disposeOptionsMenu(): void {
+        const menu = this._OPTIONS_MENU;
+        if (!menu) return;
+        this._OPTIONS_MENU = null;
+        const childIndex = this._CHILDREN.indexOf(menu as any);
+        if (childIndex >= 0) this._CHILDREN.splice(childIndex, 1);
+        menu.dispose();
+    }
+
+    private loadMenuMoreRuntime(): Promise<ComponentMenuMoreRuntime | null> {
+        if (this._MENU_MORE_RUNTIME) return Promise.resolve(this._MENU_MORE_RUNTIME);
+        if (this._MENU_MORE_RUNTIME_PROMISE) return this._MENU_MORE_RUNTIME_PROMISE;
+
+        this._MENU_MORE_RUNTIME_PROMISE = import("../componentMenuMore/runtime")
+            .then((runtime) => {
+                this._MENU_MORE_RUNTIME_PROMISE = null;
+                if (this._DISPOSED) return null;
+                this._MENU_MORE_RUNTIME = runtime;
+                this._MENU_MORE_RUNTIME_READY.set(this._MENU_MORE_RUNTIME_READY.get() + 1);
+                return runtime;
+            })
+            .catch((error) => {
+                this._MENU_MORE_RUNTIME_PROMISE = null;
+                console.error("ComponentPageHeader could not load options menu support", error);
+                return null;
+            });
+
+        return this._MENU_MORE_RUNTIME_PROMISE;
     }
 }

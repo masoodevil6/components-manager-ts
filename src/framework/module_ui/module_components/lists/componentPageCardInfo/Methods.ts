@@ -1,4 +1,4 @@
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/pageCardInfo";
 import type {ExtractMethodsType, ExtractMethodsConfigType, ExtractMethodsDataArgs} from "../../tools/type/TypeHelpers";
 
 export const Methods = {

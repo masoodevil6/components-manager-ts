@@ -1,7 +1,7 @@
 import * as CoreComponents from "@/core_components";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {Props} from "./Props";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/fetch";
 import type {ExtractSchemasType} from "../../tools/type/TypeHelpers";
 
 export const Schemas = {

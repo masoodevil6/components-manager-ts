@@ -9,7 +9,7 @@ afterEach(() => {
 });
 
 describe("ComponentSelectCustomSimple", () => {
-    it("opens, searches, selects an option, and synchronizes the form value", () => {
+    it("opens, searches, selects an option, and synchronizes the form value", async () => {
         const change = vi.fn();
         const searchChange = vi.fn();
         const opened = vi.fn();
@@ -38,11 +38,14 @@ describe("ComponentSelectCustomSimple", () => {
         expect(border.style.getPropertyPriority("border-top-width")).toBe("important");
         expect(border.style.borderColor).toBe("var(--primaryColor1)");
         expect(border.style.backgroundColor).toBe("var(--shanColor1)");
-        const position = root.querySelector('[data-part-name="part-selector-position"]') as HTMLElement;
-        expect(position.querySelector(".d-none")).not.toBeNull();
+        expect(root.querySelector('[data-part-name="part-selector-position"]')).toBeNull();
         header.click();
+
+        for (let attempt = 0; attempt < 100 && !(select as any)._FLOAT_MENU?._IS_SHOW; attempt++) {
+            await new Promise((resolve) => setTimeout(resolve, 0));
+        }
+        const position = root.querySelector('[data-part-name="part-selector-position"]') as HTMLElement;
         expect(position.querySelector(".d-none")).toBeNull();
-        expect(getComputedStyle(position).top).toBe("auto");
 
         const search = root.querySelector('input[type="text"]') as HTMLInputElement;
         expect(search).not.toBeNull();
@@ -54,8 +57,11 @@ describe("ComponentSelectCustomSimple", () => {
         const option = Array.from(root.querySelectorAll('[data-part-name="part-select-custom-simple-option"]'))
             .find((element) => element.textContent?.includes("Banana")) as HTMLElement;
         expect(option).toBeDefined();
-        option.click();
-        expect(position.querySelector(".d-none")).not.toBeNull();
+        const optionBorder = option.querySelector('[data-part-name="part-border"]') as HTMLElement;
+        expect(optionBorder).not.toBeNull();
+        optionBorder.click();
+        expect((select as any)._IS_OPEN.get()).toBe(false);
+        expect((select as any)._FLOAT_MENU._IS_SHOW).toBe(false);
 
         expect(select.get("prop_selectValue")).toBe(2);
         expect((root.querySelector('input[type="hidden"]') as HTMLInputElement).value).toBe("2");
@@ -79,7 +85,7 @@ describe("ComponentSelectCustomSimple", () => {
         select.dispose();
     });
 
-    it("closes on Escape and outside click", () => {
+    it("closes on Escape and outside click", async () => {
         const closed = vi.fn();
         const select = UiCategory.UI.Simples.SelectCustomSimple({
             prop_selectOptions: [{id: 1, prefix: "A", name: "Apple"}],
@@ -89,6 +95,9 @@ describe("ComponentSelectCustomSimple", () => {
         const header = root.querySelector('[data-part-name="part-select-custom-simple-header"]') as HTMLElement;
 
         header.dispatchEvent(new KeyboardEvent("keydown", {key: "Enter", bubbles: true}));
+        for (let attempt = 0; attempt < 100 && !(select as any)._FLOAT_MENU?._IS_SHOW; attempt++) {
+            await new Promise((resolve) => setTimeout(resolve, 0));
+        }
         document.dispatchEvent(new KeyboardEvent("keydown", {key: "Escape", bubbles: true}));
         header.click();
         document.body.dispatchEvent(new MouseEvent("click", {bubbles: true}));

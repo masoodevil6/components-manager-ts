@@ -43,7 +43,7 @@ for (const match of registrySource.matchAll(/export\s+\*\s+as\s+(Component\w+)\s
     const [, definitionPath] = definitionMatch;
     const classFile = resolve(directory, `${classPath}.ts`);
     const definitionFile = resolve(directory, `${definitionPath}.ts`);
-    const factoryName = className.replace(/^Component/, "");
+    const factoryName = publicName.replace(/^Component/, "");
     if (!factoryName) throw new Error(`Invalid component class name for ${publicName}: ${className}`);
 
     const typeFiles = ["Props.ts", "Methods.ts", "Types.ts"]
@@ -76,9 +76,12 @@ mkdirSync(outputDir, {recursive: true});
 const components = selectedNames.map((publicName) => {
     const entry = moduleEntries.get(publicName);
     const entryFile = join(outputDir, `${entry.slug}.ts`);
+    const localClassName = entry.className === "default" ? `${entry.factoryName}ComponentClass` : entry.className;
     const imports = [
         `import {MtCreateFocusedComponent} from ${JSON.stringify(relativeImport(entryFile, join(root, "src/framework/module_ui/module_categories/basic/methods/MtCreateFocusedComponent.ts")))};`,
-        `import {${entry.className}} from ${JSON.stringify(relativeImport(entryFile, entry.classFile))};`,
+        entry.className === "default"
+            ? `import ${localClassName} from ${JSON.stringify(relativeImport(entryFile, entry.classFile))};`
+            : `import {${entry.className}} from ${JSON.stringify(relativeImport(entryFile, entry.classFile))};`,
         `import {Definition} from ${JSON.stringify(relativeImport(entryFile, entry.definitionFile))};`,
     ];
     const typeExports = entry.typeFiles.map((file) => `export type * from ${JSON.stringify(relativeImport(entryFile, file))};`);
@@ -86,7 +89,7 @@ const components = selectedNames.map((publicName) => {
         `/** Generated focused entry for ${entry.publicName}; edit config/focused-components.json to change the pilot set. */`,
         ...imports,
         "",
-        `export const ${entry.factoryName} = MtCreateFocusedComponent(Definition, ${entry.className});`,
+        `export const ${entry.factoryName} = MtCreateFocusedComponent(Definition, ${localClassName});`,
         ...typeExports,
         "",
     ].join("\n");
@@ -100,5 +103,60 @@ const components = selectedNames.map((publicName) => {
     };
 });
 
-writeFileSync(join(outputDir, "manifest.json"), `${JSON.stringify({version: 1, mode: config.mode, registryCount: moduleEntries.size, components}, null, 2)}\n`);
+const lazyOutputDir = join(root, "src/generated/lazy");
+mkdirSync(lazyOutputDir, {recursive: true});
+const lazyComponents = [...moduleEntries.values()].map((entry) => {
+    const entryFile = join(lazyOutputDir, `${entry.slug}.ts`);
+    const localClassName = entry.className === "default" ? `${entry.factoryName}ComponentClass` : entry.className;
+    const imports = [
+        `import {MtCreateFocusedComponent} from ${JSON.stringify(relativeImport(entryFile, join(root, "src/framework/module_ui/module_categories/basic/methods/MtCreateFocusedComponent.ts")))};`,
+        entry.className === "default"
+            ? `import ${localClassName} from ${JSON.stringify(relativeImport(entryFile, entry.classFile))};`
+            : `import {${entry.className}} from ${JSON.stringify(relativeImport(entryFile, entry.classFile))};`,
+        `import {Definition} from ${JSON.stringify(relativeImport(entryFile, entry.definitionFile))};`,
+    ];
+    const typeExports = entry.typeFiles.map((file) => `export type * from ${JSON.stringify(relativeImport(entryFile, file))};`);
+    const source = [
+        `/** Generated lazy entry for ${entry.publicName}; edit the component registry to change the available set. */`,
+        ...imports,
+        "",
+        `export const ${entry.factoryName} = MtCreateFocusedComponent(Definition, ${localClassName});`,
+        ...typeExports,
+        "",
+    ].join("\n");
+    writeFileSync(entryFile, source);
+    return entry;
+});
+
+const lazyIndexFile = join(lazyOutputDir, "index.ts");
+const loaderRows = lazyComponents.map((entry) =>
+    `    ${JSON.stringify(entry.slug)}: () => import(${JSON.stringify(`./${entry.slug}`)}).then((module) => module[${JSON.stringify(entry.factoryName)}]),`,
+);
+const loaderSource = [
+    "/** Dynamically load one component by its generated public slug. */",
+    "const componentLoaders = {",
+    ...loaderRows,
+    "} as const;",
+    "",
+    "export type LazyComponentSlug = keyof typeof componentLoaders;",
+    "export type LazyComponentFactory<TSlug extends LazyComponentSlug> = Awaited<ReturnType<(typeof componentLoaders)[TSlug]>>;",
+    "",
+    "export function loadComponent<TSlug extends LazyComponentSlug>(slug: TSlug): Promise<LazyComponentFactory<TSlug>> {",
+    "    const loader = (componentLoaders as Record<string, (() => Promise<unknown>) | undefined>)[slug];",
+    "    if (!loader) return Promise.reject(new Error(`Unknown component slug: ${String(slug)}`));",
+    "    return loader() as Promise<LazyComponentFactory<TSlug>>;",
+    "}",
+    "",
+].join("\n");
+writeFileSync(lazyIndexFile, loaderSource);
+
+writeFileSync(join(outputDir, "manifest.json"), `${JSON.stringify({
+    version: 1,
+    mode: config.mode,
+    registryCount: moduleEntries.size,
+    components,
+    lazyEntry: relative(root, lazyIndexFile).replaceAll("\\", "/"),
+    lazyComponentCount: lazyComponents.length,
+}, null, 2)}\n`);
 console.log(`[focused-entries] generated ${components.length} entries from ${moduleEntries.size} registry components (${config.mode} mode).`);
+console.log(`[focused-entries] generated lazy loaders for all ${lazyComponents.length} registry components.`);

@@ -16,7 +16,9 @@ import {PropsType as StructurePropsType} from "../componentStructure/Props";
 // --------------------------------
 import * as ComponentBorder from "../componentBorder/runtime";
 import * as ComponentIcon   from "../componentIcon/runtime";
-import * as ComponentMenuMore from "../componentMenuMore/runtime";
+import type {MenuMoreEntry} from "../componentMenuMore/Props";
+
+type ComponentMenuMoreRuntime = typeof import("../componentMenuMore/runtime");
 
 const COLLAPSE_ARROW_SECTION_WIDTH = "calc(var(--paddingMedium) + var(--heightMedium) + var(--paddingMedium))";
 const COLLAPSE_HEADER_CONTENT_WIDTH = "calc(100% - var(--paddingMedium) - var(--heightMedium) - var(--paddingMedium))";
@@ -47,7 +49,11 @@ const COLLAPSE_HEADER_CONTENT_WIDTH = "calc(100% - var(--paddingMedium) - var(--
  *   - fontSize ÙˆØ§Ú©Ù†Ø´â€ŒÚ¯Ø±Ø§ â†’ computed Ø±ÙˆÛŒ CoreConfig.Settings.SizeName
  */
 export class ComponentCollapse extends ComponentCollapseBase<ReturnType<typeof createCollapseStep>>{
-    private _HEADER_MENU: ComponentMenuMore.Component | null = null;
+    private _HEADER_MENU: InstanceType<ComponentMenuMoreRuntime["Component"]> | null = null;
+    private _MENU_MORE_RUNTIME: ComponentMenuMoreRuntime | null = null;
+    private _MENU_MORE_RUNTIME_PROMISE: Promise<ComponentMenuMoreRuntime | null> | null = null;
+    private readonly _MENU_MORE_RUNTIME_READY = new CoreObservable.App(0);
+    private _DISPOSED = false;
 
 
     constructor(
@@ -75,6 +81,8 @@ export class ComponentCollapse extends ComponentCollapseBase<ReturnType<typeof c
        Plan 9.1 â€” Component Disposal
     --------------------------------------------- */
     dispose(): void {
+        if (this._DISPOSED) return;
+        this._DISPOSED = true;
         this._HEADER_MENU?.dispose();
         this._HEADER_MENU = null;
         this.disposeStep();
@@ -347,6 +355,39 @@ export class ComponentCollapse extends ComponentCollapseBase<ReturnType<typeof c
             this.getScope(),
         );
 
+        const menu = CoreObservable.App.conditionWhen(
+            [menuItems, this._MENU_MORE_RUNTIME_READY],
+            (items: MenuMoreEntry[]) => Array.isArray(items) && items.length > 0,
+            () => {
+                if (!this._MENU_MORE_RUNTIME) {
+                    void this.loadMenuMoreRuntime();
+                    return null;
+                }
+                return this.renderHeaderMenu(menuItems);
+            },
+            () => {
+                this._HEADER_MENU?.dispose();
+                this._HEADER_MENU = null;
+                return null;
+            },
+            this.getScope(),
+        ) as any;
+
+        return CoreReactive.App.section({
+            attrs: {...attrsDefault},
+            className: ["min-w-0"],
+            stylesBind: menuWidthStyles as any,
+            on: {click: (event: Event) => event.stopPropagation()},
+            children: [menu],
+        });
+    }
+
+    private renderHeaderMenu(
+        menuItems: CoreObservable.App<any>,
+    ): CoreReactive.App | null {
+        const ComponentMenuMore = this._MENU_MORE_RUNTIME;
+        if (!ComponentMenuMore) return null;
+
         if (!this._HEADER_MENU) {
             this._HEADER_MENU = new ComponentMenuMore.Component({
                 styles: {
@@ -370,13 +411,28 @@ export class ComponentCollapse extends ComponentCollapseBase<ReturnType<typeof c
             } as any);
         }
 
-        return CoreReactive.App.section({
-            attrs: {...attrsDefault},
-            className: ["min-w-0"],
-            stylesBind: menuWidthStyles as any,
-            on: {click: (event: Event) => event.stopPropagation()},
-            children: [this._HEADER_MENU.getReactiveElement() as CoreReactive.App],
-        });
+        return this._HEADER_MENU.getReactiveElement() as CoreReactive.App;
+    }
+
+    private loadMenuMoreRuntime(): Promise<ComponentMenuMoreRuntime | null> {
+        if (this._MENU_MORE_RUNTIME) return Promise.resolve(this._MENU_MORE_RUNTIME);
+        if (this._MENU_MORE_RUNTIME_PROMISE) return this._MENU_MORE_RUNTIME_PROMISE;
+
+        this._MENU_MORE_RUNTIME_PROMISE = import("../componentMenuMore/runtime")
+            .then((runtime) => {
+                this._MENU_MORE_RUNTIME_PROMISE = null;
+                if (this._DISPOSED) return null;
+                this._MENU_MORE_RUNTIME = runtime;
+                this._MENU_MORE_RUNTIME_READY.set(this._MENU_MORE_RUNTIME_READY.get() + 1);
+                return runtime;
+            })
+            .catch((error) => {
+                this._MENU_MORE_RUNTIME_PROMISE = null;
+                console.error("ComponentCollapse could not load header menu support", error);
+                return null;
+            });
+
+        return this._MENU_MORE_RUNTIME_PROMISE;
     }
 
 

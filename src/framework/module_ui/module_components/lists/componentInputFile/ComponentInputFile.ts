@@ -6,7 +6,7 @@ import * as UtilStyle from "@/util_styles";
 import * as UtilConst from "@/util_consts";
 import * as UiIcons from "@/ui_icons";
 import {PartAttrDefault} from "@/core_components";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/inputFile";
 import {ComponentInputFileBase} from "./ComponentInputFileBase";
 import {PropsConfigType, FileItemError} from "./Props";
 import {Schemas} from "./Schemas";

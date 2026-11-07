@@ -1,0 +1,52 @@
+import {CreateTranslationKey} from "@/util_brands";
+
+export const Keys = {category: {components: {inputJson: {
+                name: CreateTranslationKey(), description: CreateTranslationKey(),
+                props: {
+                    name: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    value: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    isDisable: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    placeholder: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    title: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    hasHeader: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    headerTitle: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    numbersBackgroundColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    numbersColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    numberActiveBackgroundColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    lineActiveBackgroundColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    themeLightBackgroundColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    themeDarkBackgroundColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    isDarkTheme: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    editorHeight: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    backgroundColorForm: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    formBorderRadius: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    hasRules: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    isAbsoluteRule: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    listRules: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    msgRules: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+                schemas: {
+                    form: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    header: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    editor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    code: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    error: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    preview: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    validate: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+                methods: {
+                    inputChange: {description: CreateTranslationKey()},
+                    inputFocus: {description: CreateTranslationKey()},
+                    inputBlur: {description: CreateTranslationKey()},
+                },
+                examples: {
+                    default: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    nested: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    invalidJson: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+                texts: {
+                    editorTitle: CreateTranslationKey(),
+                    invalidJson: CreateTranslationKey(),
+                    emptyPreview: CreateTranslationKey(),
+                },
+            }}}};

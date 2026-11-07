@@ -5,6 +5,7 @@ const selector = Framework.UI.Category.UI.Inputs.InputListSelector({
     prop_labelTitle: "Choose columns",
     prop_labelShow: true,
     prop_showListSelected: true,
+    prop_icon: Framework.UI.Icon.Src.InputSelectColumn.Definition as any,
     prop_columns: [
         {id: "name", title: "Name", selected: true},
         {id: "state", title: "State", selected: true},

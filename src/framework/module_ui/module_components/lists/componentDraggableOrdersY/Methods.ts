@@ -1,5 +1,5 @@
 import {Props as DraggableProps} from "./Props";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/draggableOrdersY";
 import type {
     ExtractMethodsType,
     ExtractMethodsComponentArgs,

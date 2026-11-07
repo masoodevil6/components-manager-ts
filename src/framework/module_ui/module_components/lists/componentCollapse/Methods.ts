@@ -1,4 +1,4 @@
-import {Keys}                from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/collapse";
 // --------------------------------
 import {Props}                   from "./Props";
 import type {MenuMoreItem} from "../componentMenuMore/Props";

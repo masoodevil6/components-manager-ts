@@ -2,7 +2,7 @@ import * as CoreComponents from "@/core_components";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
 import * as UtilTools from "@/util_tools";
 import type {StandardStyles} from "@/util_options_std";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/layout";
 import * as ComponentInputSelectOption from "../componentInputSelectOption/runtime";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
 

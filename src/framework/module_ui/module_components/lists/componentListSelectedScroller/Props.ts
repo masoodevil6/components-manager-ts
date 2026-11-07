@@ -1,6 +1,7 @@
 import * as CoreComponents   from "@/core_components";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
-import {Keys}                from "../../../module_categories/languages";
+import {Keys as KeysBorder} from "../../../module_categories/languages/keys/components/border";
+import {Keys as KeysListSelectedScroller} from "../../../module_categories/languages/keys/components/listSelectedScroller";
 import * as UtilConst        from "@/util_consts";
 import * as UtilStyle        from "@/util_styles";
 import type {
@@ -48,192 +49,192 @@ export const Props = {
     prop_value: Define_ComponentProp<any>({
         prop:         "prop_value",
         default:      [],
-        name:         Keys.category.components.listSelectedScroller.props.value.name,
-        description:  Keys.category.components.listSelectedScroller.props.value.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.value.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.value.description,
     }),
 
     prop_name: Define_ComponentProp<string>({
         prop:         "prop_name",
         default:      "",
-        name:         Keys.category.components.listSelectedScroller.props.name.name,
-        description:  Keys.category.components.listSelectedScroller.props.name.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.name.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.name.description,
     }),
 
     /// --- Outer Border ---
     prop_borderBackgroundColor: Define_ComponentProp<string | null>({
         prop:         "prop_borderBackgroundColor",
         default:      UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
-        name:         Keys.category.components.listSelectedScroller.props.borderBackgroundColor.name,
-        description:  Keys.category.components.listSelectedScroller.props.borderBackgroundColor.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.borderBackgroundColor.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.borderBackgroundColor.description,
     }),
 
     prop_borderColor: Define_ComponentProp<string | null>({
         prop:         "prop_borderColor",
         default:      UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
-        name:         Keys.category.components.listSelectedScroller.props.borderColor.name,
-        description:  Keys.category.components.listSelectedScroller.props.borderColor.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.borderColor.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.borderColor.description,
     }),
 
     prop_borderClass: Define_ComponentProp<string[]>({
         prop:         "prop_borderClass",
         default:      ["px-1"],
-        name:         Keys.category.components.listSelectedScroller.props.borderClass.name,
-        description:  Keys.category.components.listSelectedScroller.props.borderClass.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.borderClass.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.borderClass.description,
     }),
 
     prop_borderStyles: Define_ComponentProp<Record<string, string>>({
         prop:         "prop_borderStyles",
         default:      { display: "flow-root" },
-        name:         Keys.category.components.listSelectedScroller.props.borderStyles.name,
-        description:  Keys.category.components.listSelectedScroller.props.borderStyles.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.borderStyles.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.borderStyles.description,
     }),
 
     prop_borderWidth: Define_ComponentProp<UtilConst.Sizes | number>({
         prop:         "prop_borderWidth",
         default:      UtilConst.Sizes.S,
-        name:         Keys.category.components.listSelectedScroller.props.borderWidth.name,
-        description:  Keys.category.components.listSelectedScroller.props.borderWidth.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.borderWidth.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.borderWidth.description,
     }),
 
     prop_borderRadius: Define_ComponentProp<UtilConst.Sizes | number>({
         prop:         "prop_borderRadius",
         default:      UtilConst.Sizes.M,
-        name:         Keys.category.components.listSelectedScroller.props.borderRadius.name,
-        description:  Keys.category.components.listSelectedScroller.props.borderRadius.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.borderRadius.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.borderRadius.description,
     }),
 
     prop_borderTopLeftRadiusHas: Define_ComponentProp<boolean>({
         prop: "prop_borderTopLeftRadiusHas",
         default: true,
-        name: Keys.category.components.border.props.borderTopLeftRadiusHas.name,
-        description: Keys.category.components.border.props.borderTopLeftRadiusHas.description,
+        name: KeysBorder.category.components.border.props.borderTopLeftRadiusHas.name,
+        description: KeysBorder.category.components.border.props.borderTopLeftRadiusHas.description,
     }),
     prop_borderTopRightRadiusHas: Define_ComponentProp<boolean>({
         prop: "prop_borderTopRightRadiusHas",
         default: true,
-        name: Keys.category.components.border.props.borderTopRightRadiusHas.name,
-        description: Keys.category.components.border.props.borderTopRightRadiusHas.description,
+        name: KeysBorder.category.components.border.props.borderTopRightRadiusHas.name,
+        description: KeysBorder.category.components.border.props.borderTopRightRadiusHas.description,
     }),
     prop_borderBottomLeftRadiusHas: Define_ComponentProp<boolean>({
         prop: "prop_borderBottomLeftRadiusHas",
         default: true,
-        name: Keys.category.components.border.props.borderBottomLeftRadiusHas.name,
-        description: Keys.category.components.border.props.borderBottomLeftRadiusHas.description,
+        name: KeysBorder.category.components.border.props.borderBottomLeftRadiusHas.name,
+        description: KeysBorder.category.components.border.props.borderBottomLeftRadiusHas.description,
     }),
     prop_borderBottomRightRadiusHas: Define_ComponentProp<boolean>({
         prop: "prop_borderBottomRightRadiusHas",
         default: true,
-        name: Keys.category.components.border.props.borderBottomRightRadiusHas.name,
-        description: Keys.category.components.border.props.borderBottomRightRadiusHas.description,
+        name: KeysBorder.category.components.border.props.borderBottomRightRadiusHas.name,
+        description: KeysBorder.category.components.border.props.borderBottomRightRadiusHas.description,
     }),
 
     /// --- List Props ---
     prop_list: Define_ComponentProp<ListItemType[]>({
         prop:         "prop_list",
         default:      [],
-        name:         Keys.category.components.listSelectedScroller.props.list.name,
-        description:  Keys.category.components.listSelectedScroller.props.list.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.list.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.list.description,
     }),
 
     prop_listMaxShow: Define_ComponentProp<number | null>({
         prop:         "prop_listMaxShow",
         default:      null,
-        name:         Keys.category.components.listSelectedScroller.props.listMaxShow.name,
-        description:  Keys.category.components.listSelectedScroller.props.listMaxShow.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.listMaxShow.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.listMaxShow.description,
     }),
 
     prop_listType: Define_ComponentProp<ListTypes>({
         prop:         "prop_listType",
         default:      ListTypes.ACTIVE,
-        name:         Keys.category.components.listSelectedScroller.props.listType.name,
-        description:  Keys.category.components.listSelectedScroller.props.listType.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.listType.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.listType.description,
     }),
 
     prop_listFreezeSeparator: Define_ComponentProp<string>({
         prop:         "prop_listFreezeSeparator",
         default:      "/",
-        name:         Keys.category.components.listSelectedScroller.props.listFreezeSeparator.name,
-        description:  Keys.category.components.listSelectedScroller.props.listFreezeSeparator.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.listFreezeSeparator.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.listFreezeSeparator.description,
     }),
 
     /// --- List Border ---
     prop_listBorderBackgroundColor: Define_ComponentProp<string | null>({
         prop:         "prop_listBorderBackgroundColor",
         default:      UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
-        name:         Keys.category.components.listSelectedScroller.props.listBorderBackgroundColor.name,
-        description:  Keys.category.components.listSelectedScroller.props.listBorderBackgroundColor.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.listBorderBackgroundColor.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.listBorderBackgroundColor.description,
     }),
 
     prop_listBorderColor: Define_ComponentProp<string | null>({
         prop:         "prop_listBorderColor",
         default:      UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
-        name:         Keys.category.components.listSelectedScroller.props.listBorderColor.name,
-        description:  Keys.category.components.listSelectedScroller.props.listBorderColor.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.listBorderColor.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.listBorderColor.description,
     }),
 
     prop_listBorderClass: Define_ComponentProp<string[]>({
         prop:         "prop_listBorderClass",
         default:      [],
-        name:         Keys.category.components.listSelectedScroller.props.listBorderClass.name,
-        description:  Keys.category.components.listSelectedScroller.props.listBorderClass.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.listBorderClass.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.listBorderClass.description,
     }),
 
     prop_listBorderStyles: Define_ComponentProp<Record<string, string>>({
         prop:         "prop_listBorderStyles",
         default:      {},
-        name:         Keys.category.components.listSelectedScroller.props.listBorderStyles.name,
-        description:  Keys.category.components.listSelectedScroller.props.listBorderStyles.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.listBorderStyles.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.listBorderStyles.description,
     }),
 
     prop_listBorderWidth: Define_ComponentProp<UtilConst.Sizes | number>({
         prop:         "prop_listBorderWidth",
         default:      UtilConst.Sizes.XS,
-        name:         Keys.category.components.listSelectedScroller.props.listBorderWidth.name,
-        description:  Keys.category.components.listSelectedScroller.props.listBorderWidth.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.listBorderWidth.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.listBorderWidth.description,
     }),
 
     prop_listBorderRadius: Define_ComponentProp<UtilConst.Sizes | number>({
         prop:         "prop_listBorderRadius",
         default:      UtilConst.Sizes.S,
-        name:         Keys.category.components.listSelectedScroller.props.listBorderRadius.name,
-        description:  Keys.category.components.listSelectedScroller.props.listBorderRadius.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.listBorderRadius.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.listBorderRadius.description,
     }),
 
     /// --- List Title ---
     prop_listTitleColor: Define_ComponentProp<string | null>({
         prop:         "prop_listTitleColor",
         default:      UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
-        name:         Keys.category.components.listSelectedScroller.props.listTitleColor.name,
-        description:  Keys.category.components.listSelectedScroller.props.listTitleColor.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.listTitleColor.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.listTitleColor.description,
     }),
 
     prop_listTitleClass: Define_ComponentProp<string[]>({
         prop:         "prop_listTitleClass",
         default:      [],
-        name:         Keys.category.components.listSelectedScroller.props.listTitleClass.name,
-        description:  Keys.category.components.listSelectedScroller.props.listTitleClass.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.listTitleClass.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.listTitleClass.description,
     }),
 
     prop_listTitleStyles: Define_ComponentProp<Record<string, string>>({
         prop:         "prop_listTitleStyles",
         default:      {},
-        name:         Keys.category.components.listSelectedScroller.props.listTitleStyles.name,
-        description:  Keys.category.components.listSelectedScroller.props.listTitleStyles.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.listTitleStyles.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.listTitleStyles.description,
     }),
 
     /// --- List Icon Close ---
     prop_listIconCloseClass: Define_ComponentProp<string[]>({
         prop:         "prop_listIconCloseClass",
         default:      [],
-        name:         Keys.category.components.listSelectedScroller.props.listIconCloseClass.name,
-        description:  Keys.category.components.listSelectedScroller.props.listIconCloseClass.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.listIconCloseClass.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.listIconCloseClass.description,
     }),
 
     prop_listIconCloseStyles: Define_ComponentProp<Record<string, string>>({
         prop:         "prop_listIconCloseStyles",
         default:      {},
-        name:         Keys.category.components.listSelectedScroller.props.listIconCloseStyles.name,
-        description:  Keys.category.components.listSelectedScroller.props.listIconCloseStyles.description,
+        name:         KeysListSelectedScroller.category.components.listSelectedScroller.props.listIconCloseStyles.name,
+        description:  KeysListSelectedScroller.category.components.listSelectedScroller.props.listIconCloseStyles.description,
     }),
 
 } satisfies CoreComponents.ComponentProps;

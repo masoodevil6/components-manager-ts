@@ -3,7 +3,7 @@ import {DefineProp as Define_ComponentProp} from "@/core_components";
 import * as UiIcons          from "@/ui_icons";
 import * as UtilStyle        from "@/util_styles";
 import * as UtilConst        from "@/util_consts";
-import {Keys}                from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/loading";
 import type {
     ExtractPropsType,
     ExtractPropsConfigType,

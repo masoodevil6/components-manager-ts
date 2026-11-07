@@ -16,7 +16,7 @@ import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {ButtonAction, ButtonSemantic} from "../componentButton/Props";
 import {TooltipDirectionTypes} from "../componentTooltip/Props";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/timerDown";
 
 export class ComponentTimerDown extends ComponentTimerDownBase<ReturnType<typeof createTimerDownStep>>{
     private _FINISH_TIMER_INTERVAL: ReturnType<typeof setInterval> | null = null;

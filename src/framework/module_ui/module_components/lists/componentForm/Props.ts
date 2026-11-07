@@ -2,7 +2,8 @@ import * as CoreComponents from "@/core_components";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
 import * as UtilConst from "@/util_consts";
 import {Props as BorderProps, BorderTypes, ArrowTypes} from "../componentBorder/Props";
-import {Keys} from "../../../module_categories/languages";
+import {Keys as KeysBasic} from "../../../module_categories/languages/keys/components/basic";
+import {Keys as KeysFetch} from "../../../module_categories/languages/keys/components/fetch";
 import type {RequestState} from "@/ui_controller/module_requests";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
 
@@ -36,8 +37,8 @@ const defineBorderAlias = <T,>(prop: string, source: any) => Define_ComponentPro
     description: source.description,
 });
 
-const formKeys = Keys.category.components.fetch.form.props;
-const basicKeys = Keys.category.components.basic.props;
+const formKeys = KeysFetch.category.components.fetch.form.props;
+const basicKeys = KeysBasic.category.components.basic.props;
 
 export const Props = {
     prop_forms: defineFormProp<any>("prop_forms", null, formKeys.forms.name, formKeys.forms.description),

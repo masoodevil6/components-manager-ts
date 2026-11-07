@@ -10,7 +10,16 @@ import type {MenuMoreItem} from "../../../../module_components/lists/componentMe
 import {createComponentsCatalog} from "./MyPageComponentsPage";
 import {runComponentScenario, type ComponentScenarioInstance} from "../../../../../module_performance/core/ComponentScenario";
 import {jsonTreePerformanceScenarios} from "../../../../module_components/lists/componentJsonTree/performance";
+import {customFormPerformanceScenarios} from "../../../../module_components/lists/componentCustomForm/performance";
+import {elementCreatorPerformanceScenarios} from "../../../../module_components/lists/componentElementCreator/performance";
 import {internalProjects} from "./InternalProjects";
+
+const componentPerformanceScenarios = [...jsonTreePerformanceScenarios, ...customFormPerformanceScenarios, ...elementCreatorPerformanceScenarios];
+const defaultDatasetSizes = [
+    {value: 100, title: "Small (100 items)"},
+    {value: 500, title: "Medium (500 items)"},
+    {value: 1000, title: "Large (1,000 items)"},
+];
 
 export const MY_PAGE_PERFORMANCE_PAGE_SOURCE = "framework.ui.controller.requests.static.v1.myPage.performance.performancePage";
 
@@ -36,6 +45,16 @@ const exampleProfiles = {
 };
 
 // Provisional project targets, not externally validated standards. Values are in milliseconds.
+// The ElementCreator guardrails leave headroom over the repeated 20-row local measurements.
+type ComponentScenarioBudgets = NonNullable<PerformancePageControllerParams["componentBudgets"]>[string];
+const createElementCreatorBudgets = (includeOperation = false): ComponentScenarioBudgets => Object.fromEntries(
+    [1, 5, 20].map((size) => [size, {
+        createP95: {good: 400, moderate: 800, max: 1600},
+        ...(includeOperation ? {operationP95: {good: 150, moderate: 300, max: 600}} : {}),
+        disposeMedian: {good: 60, moderate: 120, max: 240},
+    }]),
+) as ComponentScenarioBudgets;
+
 const exampleComponentBudgets: NonNullable<PerformancePageControllerParams["componentBudgets"]> = {
     "json-tree-initial": {
         100: {createP95: {good: 50, moderate: 100, max: 200}, disposeMedian: {good: 10, moderate: 25, max: 50}},
@@ -47,6 +66,9 @@ const exampleComponentBudgets: NonNullable<PerformancePageControllerParams["comp
         500: {createP95: {good: 150, moderate: 300, max: 600}, operationP95: {good: 80, moderate: 160, max: 320}, disposeMedian: {good: 25, moderate: 50, max: 100}},
         1000: {createP95: {good: 300, moderate: 600, max: 1200}, operationP95: {good: 150, moderate: 300, max: 600}, disposeMedian: {good: 50, moderate: 100, max: 200}},
     },
+    "element-creator-render": createElementCreatorBudgets(),
+    "element-creator-edit-render": createElementCreatorBudgets(),
+    "element-creator-edit-hover": createElementCreatorBudgets(true),
 };
 
 export const performancePage = (params: PerformancePageControllerParams = {}) => {
@@ -165,7 +187,7 @@ export const performancePage = (params: PerformancePageControllerParams = {}) =>
         resetResults();
         frame.src = selectElement.value;
         const project = projectScenarios.find((item) => item.path === selectElement.value);
-        feedbackElement.textContent = project ? `Start the ${project.project.title} development server before measuring this scenario.` : "Reloads the selected page for measurement.";
+        feedbackElement.textContent = project ? `Ensure the ${project.project.title} server is running before measuring this scenario.` : "Reloads the selected page for measurement.";
         if (project) persistSelection("project", project.project.id, project.scenario.id);
         else persistSelection("page", selectElement.value.replace(/^\/v2\//, ""));
     });
@@ -275,7 +297,7 @@ export const performancePage = (params: PerformancePageControllerParams = {}) =>
                     feedbackElement.textContent = `Transfer sizes reported for ${reportedCount} of ${transferEntries.length} entries; cached or cross-origin resources may report zero. SPA route changes are not measured.`;
                     finish();
                 } catch {
-                    finish(projectScenarios.some((item) => item.path === selectElement.value) ? "Could not load the internal project. Start its development server and try again." : "Could not read this page's timing data. Select a page from this project and try again.");
+                    finish(projectScenarios.some((item) => item.path === selectElement.value) ? "Could not load the internal project. Ensure its server is running and try again." : "Could not read this page's timing data. Select a page from this project and try again.");
                 }
             }, 0);
         };
@@ -290,12 +312,12 @@ export const performancePage = (params: PerformancePageControllerParams = {}) =>
     const componentSelectElement = componentSelect.getElement() as HTMLSelectElement;
     const selectedCategory = label("");
     const scenarioSelect = CoreReactive.App.create("select", {className: ["form-select", "mt-1", "mb-3"], attrs: {"aria-label": "Performance scenario"}});
-    const datasetSelect = CoreReactive.App.create("select", {className: ["form-select", "mt-1", "mb-3"], attrs: {"aria-label": "Dataset size"}, children: [["100", "Small (100 items)"], ["500", "Medium (500 items)"], ["1000", "Large (1,000 items)"]].map(([value, title]) => CoreReactive.App.create("option", {attrs: {value}, children: [title]}))});
+    const datasetSelect = CoreReactive.App.create("select", {className: ["form-select", "mt-1", "mb-3"], attrs: {"aria-label": "Dataset size"}, children: defaultDatasetSizes.map(({value, title}) => CoreReactive.App.create("option", {attrs: {value}, children: [title]}))});
     const iterationSelect = CoreReactive.App.create("select", {className: ["form-select", "mt-1", "mb-3"], attrs: {"aria-label": "Iterations"}, children: ["5", "10", "20"].map((value) => CoreReactive.App.create("option", {attrs: {value}, children: [value]}))});
     const componentRun = CoreReactive.App.create("button", {attrs: {type: "button", disabled: "disabled"}, className: ["btn", "btn-primary", "w-100"], children: ["Run component test"]});
     const componentRunElement = componentRun.getElement() as HTMLButtonElement;
     const scenarioSelectElement = scenarioSelect.getElement() as HTMLSelectElement;
-    const componentMessage = label("Choose JSON Tree to see available test scenarios.");
+    const componentMessage = label("Choose a component with registered scenarios.");
     const componentProgressValue = new CoreObservable.App<number | null>(0);
     const componentProgressShow = new CoreObservable.App(false);
     const componentProgress = UiCategory.UI.Charts.Progress.ProgressLinear({prop_show: componentProgressShow, prop_title: "Component measurement", prop_value: componentProgressValue, prop_min: 0, prop_max: 100});
@@ -310,7 +332,7 @@ export const performancePage = (params: PerformancePageControllerParams = {}) =>
         CoreReactive.App.p({className: ["small", "text-muted", "mb-4"], children: ["Measure a page loaded inside the preview."]}),
         label("PAGE"), pageSearch, pageSelect, label("TEST TYPE"),
         CoreReactive.App.div({className: ["fw-semibold", "mt-1", "mb-3"], children: ["Page load"]}), run, feedback,
-        CoreReactive.App.p({className: ["small", "text-muted", "mt-2"], children: ["Each measurement requests a fresh page. Internal project responses through the development proxy use no-store. Browser, service worker and other resource caches may still affect results; use DevTools Disable cache for a cold-cache measurement."]}),
+        CoreReactive.App.p({className: ["small", "text-muted", "mt-2"], children: ["Each measurement requests a fresh page. Internal project responses use no-store through the same-origin proxy. Browser, service worker and other resource caches may still affect results; use DevTools Disable cache for a cold-cache measurement."]}),
     ]});
     const panel = UiCategory.UI.Contents.Border({
         prop_width: "100%",
@@ -420,7 +442,7 @@ export const performancePage = (params: PerformancePageControllerParams = {}) =>
     let componentDetachObserver: MutationObserver | null = null;
     const clearComponentPreview = () => { previewInstance?.dispose(); previewInstance?.element.remove(); previewInstance = null; };
     componentRunElement.addEventListener("click", async () => {
-        const scenario = jsonTreePerformanceScenarios.find((item) => item.id === scenarioSelectElement.value && item.componentId === componentSelectElement.value);
+        const scenario = componentPerformanceScenarios.find((item) => item.id === scenarioSelectElement.value && item.componentId === componentSelectElement.value);
         if (!scenario || componentRunning) return;
         componentRunning = true;
         componentAbort = new AbortController();
@@ -476,9 +498,9 @@ export const performancePage = (params: PerformancePageControllerParams = {}) =>
             previewInstance.validate();
             const budgets = (params.componentBudgets ?? exampleComponentBudgets)[scenario.id]?.[size];
             const measurements = [
-                {key: "createP95" as const, title: "Creation · p95", value: result.createP95Ms, detail: "Time to create the tree."},
-                ...(scenario.id === "json-tree-initial" ? [] : [{key: "operationP95" as const, title: "Search · p95", value: result.operationP95Ms, detail: "Time to execute the search."}]),
-                {key: "disposeMedian" as const, title: "Cleanup · median", value: result.disposeMedianMs, detail: "Time to dispose and remove the tree."},
+                {key: "createP95" as const, title: "Creation · p95", value: result.createP95Ms, detail: "Time to create the component instance."},
+                ...(scenario.operationTitle ? [{key: "operationP95" as const, title: `${scenario.operationTitle} · p95`, value: result.operationP95Ms, detail: scenario.operationDetail ?? "Time to execute the measured operation."}] : []),
+                {key: "disposeMedian" as const, title: "Cleanup · median", value: result.disposeMedianMs, detail: "Time to dispose and remove the component."},
             ];
             for (const item of measurements) {
                 const budget = budgets?.[item.key];
@@ -498,19 +520,20 @@ export const performancePage = (params: PerformancePageControllerParams = {}) =>
                 componentGaugeHost.getElement().appendChild(card);
             }
             (componentGaugeInfo.getElement() as HTMLElement).style.display = "";
-            const operation = scenario.id === "json-tree-initial" ? "Not applicable" : `${result.operationMedianMs.toFixed(2)} / ${result.operationP95Ms.toFixed(2)} ms`;
+            const operation = scenario.operationTitle ? `${result.operationMedianMs.toFixed(2)} / ${result.operationP95Ms.toFixed(2)} ms` : "Not applicable";
+            const limits = scenario.limitsDescription ?? `${result.maxNodes} nodes, depth ${result.maxDepth}`;
             componentResultRows.set([
                 {metric: "Scenario", value: scenario.title},
-                {metric: "Dataset", value: `${size} items`},
+                {metric: "Dataset", value: `${size} ${scenario.sizeLabel ?? "items"}`},
                 {metric: "Runs", value: `${result.iterations} (2 warm-up)`},
                 {metric: "Create median / p95", value: `${result.createMedianMs.toFixed(2)} / ${result.createP95Ms.toFixed(2)} ms`},
                 {metric: "Operation median / p95", value: operation},
                 {metric: "Dispose median", value: `${result.disposeMedianMs.toFixed(2)} ms`},
-                {metric: "Input nodes", value: String(result.inputNodes)},
-                {metric: "Visible tree nodes", value: String(result.visibleNodes)},
+                {metric: scenario.inputNodesLabel ?? "Input nodes", value: String(result.inputNodes)},
+                {metric: scenario.visibleNodesLabel ?? "Visible tree nodes", value: String(result.visibleNodes)},
                 {metric: "DOM elements", value: String(result.domElements)},
-                {metric: "Limits", value: `${result.maxNodes} nodes, depth ${result.maxDepth}`},
-                {metric: "Truncated", value: result.truncated ? "Yes" : "No"},
+                {metric: "Limits", value: limits},
+                {metric: "Truncated", value: result.truncated === null ? "Not applicable" : result.truncated ? "Yes" : "No"},
                 {metric: "Measurement scope", value: "Synchronous JavaScript only; paint is not measured."},
             ]);
             (componentResultTableWrapper.getElement() as HTMLElement).style.display = "";
@@ -546,7 +569,7 @@ export const performancePage = (params: PerformancePageControllerParams = {}) =>
         (componentTitle.getElement() as HTMLElement).textContent = "Select a component";
         scenarioSelectElement.replaceChildren();
         componentRunElement.disabled = true;
-        (componentMessage.getElement() as HTMLElement).textContent = "Choose JSON Tree to see available test scenarios.";
+        (componentMessage.getElement() as HTMLElement).textContent = "Choose a component with registered scenarios.";
         (componentResultText.getElement() as HTMLElement).textContent = "";
         clearComponentResultTable();
         componentProgressShow.set(false);
@@ -560,14 +583,25 @@ export const performancePage = (params: PerformancePageControllerParams = {}) =>
         clearComponentPreview();
         const entry = catalog.entries.find((item) => item.definition.id === componentSelectElement.value);
         (componentTitle.getElement() as HTMLElement).textContent = entry?.definition.name ?? "Select a component";
-        const scenarios = jsonTreePerformanceScenarios.filter((scenario) => scenario.componentId === componentSelectElement.value);
+        const scenarios = componentPerformanceScenarios.filter((scenario) => scenario.componentId === componentSelectElement.value);
         scenarioSelectElement.replaceChildren(...scenarios.map((scenario) => new Option(scenario.title, scenario.id)));
         componentRunElement.disabled = scenarios.length === 0;
         (componentMessage.getElement() as HTMLElement).textContent = scenarios.length ? "Synchronous JavaScript timings; browser paint is not included." : "No test scenarios are registered for this component.";
+        const initialScenario = scenarios[0];
+        const initialSizes = initialScenario?.sizes ?? defaultDatasetSizes;
+        (datasetSelect.getElement() as HTMLSelectElement).replaceChildren(...initialSizes.map(({value, title}) => new Option(title, String(value))));
         (componentResultText.getElement() as HTMLElement).textContent = "";
         clearComponentResultTable();
         componentProgressShow.set(false);
         persistSelection("component", entry?.definition.id ?? "", activeCategory);
+    });
+    scenarioSelectElement.addEventListener("change", () => {
+        const scenario = componentPerformanceScenarios.find((item) => item.id === scenarioSelectElement.value);
+        const sizes = scenario?.sizes ?? defaultDatasetSizes;
+        const datasetElement = datasetSelect.getElement() as HTMLSelectElement;
+        const selectedSize = datasetElement.value;
+        datasetElement.replaceChildren(...sizes.map(({value, title}) => new Option(title, String(value))));
+        if (sizes.some(({value}) => String(value) === selectedSize)) datasetElement.value = selectedSize;
     });
     const componentCategoryMenu = (item: MenuMoreItem): MenuMoreItem => {
         const path = item.action ?? "";
@@ -624,11 +658,18 @@ export const performancePage = (params: PerformancePageControllerParams = {}) =>
                     selectElement.dispatchEvent(new Event("change"));
                 }
             } else if (type === "project") {
-                const item = projectScenarios.find(({project, scenario}) => project.id === selected && scenario.id === query.get("scenario"));
+                const projectItems = projectScenarios.filter(({project}) => project.id === selected);
+                const requestedScenario = query.get("scenario");
+                const item = projectItems.find(({scenario}) => scenario.id === requestedScenario) ?? projectItems[0];
                 if (item) {
                     setPageScope(item.path);
                     selectElement.value = item.path;
                     selectElement.dispatchEvent(new Event("change"));
+                    if (item.scenario.id !== requestedScenario) {
+                        const url = new URL(window.location.href);
+                        url.searchParams.set("scenario", item.scenario.id);
+                        window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}${url.hash}`);
+                    }
                 }
             } else if (type === "component") {
                 const entry = catalog.entries.find((item) => item.definition.id === selected);

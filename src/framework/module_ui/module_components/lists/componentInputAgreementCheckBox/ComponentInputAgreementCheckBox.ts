@@ -15,7 +15,7 @@ import {createInputAgreementCheckBoxStep}      from "./Step";
 import {PartAttrDefault}                        from "@/core_components";
 import {ComponentStructureTrait}                from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType}        from "../componentStructure/Props";
-import {Keys}                                   from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/inputAgreementCheckBox";
 // --------------------------------
 import {ComponentInputCheckBox}                 from "../componentInputCheckBox/ComponentInputCheckBox";
 import {ComponentDraggableOrdersY}               from "../componentDraggableOrdersY/ComponentDraggableOrdersY";

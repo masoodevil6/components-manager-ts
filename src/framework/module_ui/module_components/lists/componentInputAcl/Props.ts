@@ -1,7 +1,7 @@
 import * as CoreComponents from "@/core_components";
 import * as CoreObservable from "@/core_observable";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/inputAcl";
 import {ComponentLabelTrait, ComponentLabelPropsType} from "../../traits/componentLabelTrait";
 import type {ValidatorRule} from "@/util_validators";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";

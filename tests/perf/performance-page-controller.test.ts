@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import {beforeEach, describe, expect, it, vi} from "vitest";
 import {MY_PAGE_PERFORMANCE_PAGE_SOURCE, performancePage} from "../../src/framework/module_ui/module_controller/module_requests/module_static/v1/MyPagePerformancePage";
+import {internalProjects} from "../../src/framework/module_ui/module_controller/module_requests/module_static/v1/InternalProjects";
 
 describe("performance page controller", () => {
     beforeEach(() => history.replaceState(null, "", "/v2/performance"));
@@ -50,19 +51,21 @@ describe("performance page controller", () => {
         const root = response.data.content.getElement();
         const select = root.querySelector('[aria-label="Page to measure"]') as HTMLSelectElement;
         const search = root.querySelector('[aria-label="Search pages"]') as HTMLInputElement;
-        const scenario = response.data.sidebar.data.items[2].children[0].children[2];
+        const scenario = response.data.sidebar.data.items[2].children[0].children.find((item) => item.id === "project:consumer:json-tree-root");
+        expect(scenario).toBeDefined();
+        const expectedProjectOptions = internalProjects.find((project) => project.id === "consumer")!.scenarios.map((item) => item.title);
         response.data.sidebar.data.methods.SELECT_ITEM(new Event("click"), {ITEM: scenario});
         expect(root.querySelector("iframe")?.getAttribute("src")).toBe("/internal-projects/consumer/json-tree.html");
-        expect([...select.options].map((option) => option.text)).toEqual(["Empty application", "Button", "JSON Tree"]);
+        expect([...select.options].map((option) => option.text)).toEqual(expectedProjectOptions);
         search.value = "button";
         search.dispatchEvent(new Event("input"));
-        expect([...select.options].filter((option) => !option.hidden).map((option) => option.text)).toEqual(["Button"]);
+        expect([...select.options].filter((option) => !option.hidden).map((option) => option.text)).toEqual(expectedProjectOptions.filter((title) => title.toLowerCase().includes("button")));
         expect(select.value).toBe("/internal-projects/consumer/json-tree.html");
         expect(new URLSearchParams(location.search).get("type")).toBe("project");
         expect(new URLSearchParams(location.search).get("selected")).toBe("consumer");
         const restored = performancePage().data.content.getElement();
         expect(restored.querySelector("iframe")?.getAttribute("src")).toBe("/internal-projects/consumer/json-tree.html");
-        expect([...(restored.querySelector('[aria-label="Page to measure"]') as HTMLSelectElement).options].map((option) => option.text)).toEqual(["Empty application", "Button", "JSON Tree"]);
+        expect([...(restored.querySelector('[aria-label="Page to measure"]') as HTMLSelectElement).options].map((option) => option.text)).toEqual(expectedProjectOptions);
         response.data.sidebar.data.methods.SELECT_ITEM(new Event("click"), {ITEM: response.data.sidebar.data.items[0].children[0]});
         expect([...select.options].map((option) => option.text)).toEqual(["Home", "Components", "Icons", "Controllers", "Workflow", "Performance"]);
         expect(search.value).toBe("");
@@ -159,6 +162,84 @@ describe("performance page controller", () => {
         expect(button.disabled).toBe(false);
         root.remove();
     }, 20000);
+
+    it("runs a CustomForm input interaction and displays component metrics", async () => {
+        const response = performancePage();
+        const root = response.data.content.getElement();
+        document.body.appendChild(root);
+        response.data.sidebar.data.methods.SELECT_ITEM(new Event("click"), {ITEM: response.data.sidebar.data.items[1].children[0]});
+        const component = root.querySelector('[aria-label="Component to test"]') as HTMLSelectElement;
+        component.value = "component_custom_form";
+        component.dispatchEvent(new Event("change"));
+        const scenario = root.querySelector('[aria-label="Performance scenario"]') as HTMLSelectElement;
+        expect([...scenario.options].map((option) => option.value)).toEqual([
+            "custom-form-edit-render",
+            "custom-form-run-render",
+            "custom-form-input-change",
+            "custom-form-edit-to-run",
+        ]);
+        scenario.value = "custom-form-input-change";
+        scenario.dispatchEvent(new Event("change"));
+        const dataset = root.querySelector('[aria-label="Dataset size"]') as HTMLSelectElement;
+        expect([...dataset.options].map((option) => option.value)).toEqual(["5", "10", "20"]);
+        const button = [...root.querySelectorAll("button")].find((item) => item.textContent === "Run component test")!;
+        const frame = root.querySelector("iframe")!;
+        const previewDocument = document.implementation.createHTMLDocument("Preview");
+        Object.defineProperty(frame, "contentDocument", {value: previewDocument});
+        button.click();
+        frame.dispatchEvent(new Event("load"));
+        await vi.waitFor(() => expect(root.querySelector("[data-component-test-result]")?.textContent).toContain("Measurement complete."), {timeout: 20000, interval: 50});
+        const resultTable = root.querySelector("[data-component-test-table] component-table")!;
+        const rows = [...resultTable.querySelectorAll("tbody tr")].map((row) => [...row.querySelectorAll("td")].map((cell) => cell.textContent));
+        expect(rows).toContainEqual(["Dataset", "5 fields"]);
+        expect(rows).toContainEqual(["Configured fields", "5"]);
+        expect(rows).toContainEqual(["Rendered form controls", "5"]);
+        expect(rows.some(([name]) => name === "Operation median / p95")).toBe(true);
+        expect(rows).toContainEqual(["Truncated", "Not applicable"]);
+        expect(root.querySelectorAll("[data-component-result-gauges] component-chart-metric-gauge")).toHaveLength(3);
+        expect(button.disabled).toBe(false);
+        root.remove();
+    }, 30000);
+
+    it("runs an ElementCreator hover interaction and displays component metrics", async () => {
+        const response = performancePage();
+        const root = response.data.content.getElement();
+        document.body.appendChild(root);
+        response.data.sidebar.data.methods.SELECT_ITEM(new Event("click"), {ITEM: response.data.sidebar.data.items[1].children[0]});
+        const component = root.querySelector('[aria-label="Component to test"]') as HTMLSelectElement;
+        component.value = "component_element_creator";
+        component.dispatchEvent(new Event("change"));
+        const scenario = root.querySelector('[aria-label="Performance scenario"]') as HTMLSelectElement;
+        expect([...scenario.options].map((option) => option.value)).toEqual([
+            "element-creator-render",
+            "element-creator-edit-render",
+            "element-creator-edit-hover",
+        ]);
+        scenario.value = "element-creator-edit-hover";
+        scenario.dispatchEvent(new Event("change"));
+        const dataset = root.querySelector('[aria-label="Dataset size"]') as HTMLSelectElement;
+        expect([...dataset.options].map((option) => option.value)).toEqual(["1", "5", "20"]);
+        const button = [...root.querySelectorAll("button")].find((item) => item.textContent === "Run component test")!;
+        const frame = root.querySelector("iframe")!;
+        const previewDocument = document.implementation.createHTMLDocument("Preview");
+        Object.defineProperty(frame, "contentDocument", {value: previewDocument});
+        button.click();
+        frame.dispatchEvent(new Event("load"));
+        await vi.waitFor(() => expect(root.querySelector("[data-component-test-result]")?.textContent).toContain("Measurement complete."), {timeout: 20000, interval: 50});
+        const resultTable = root.querySelector("[data-component-test-table] component-table")!;
+        const rows = [...resultTable.querySelectorAll("tbody tr")].map((row) => [...row.querySelectorAll("td")].map((cell) => cell.textContent));
+        expect(rows).toContainEqual(["Dataset", "1 rows"]);
+        expect(rows).toContainEqual(["ElementCreator rows", "1"]);
+        expect(rows).toContainEqual(["Rendered input controls", "1"]);
+        expect(rows.some(([name]) => name === "Operation median / p95")).toBe(true);
+        expect(rows).toContainEqual(["Truncated", "Not applicable"]);
+        expect(root.querySelectorAll("[data-component-result-gauges] component-chart-metric-gauge")).toHaveLength(3);
+        expect(root.textContent).toContain("Good target: under 400 ms.");
+        expect(root.textContent).toContain("Good target: under 150 ms.");
+        expect(root.textContent).toContain("Good target: under 60 ms.");
+        expect(button.disabled).toBe(false);
+        root.remove();
+    }, 30000);
 
     it("shows four measured gauges with the page's example budgets", () => {
         vi.useFakeTimers();

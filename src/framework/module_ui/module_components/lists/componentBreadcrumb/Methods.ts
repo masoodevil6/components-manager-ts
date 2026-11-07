@@ -1,4 +1,4 @@
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/breadcrumb";
 import type {BreadcrumbItem} from "./Props";
 import type {
     ExtractMethodsType,

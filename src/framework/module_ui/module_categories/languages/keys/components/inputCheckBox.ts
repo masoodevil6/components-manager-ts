@@ -1,0 +1,70 @@
+import {CreateTranslationKey} from "@/util_brands";
+
+export const Keys = {category: {components: {inputCheckBox: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+
+                props: {
+                    value:                    { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    isDisable:                { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    name:                     { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelShow:                { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelBackground:          { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelRadius:              { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelMinWidth:            { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelTitle:               { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelFor:                 { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelStyle:               { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelClass:               { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelColor:               { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelTooltipIcon:         { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelTooltipDescription:  { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelTooltipBackground:   { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelTooltipColor:        { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelTooltipPosition:     { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    labelTooltipDirection:    { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderIconClass:          { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderIconStyles:         { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderIconColor_selected:    { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderIconColor_unSelected:  { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderIconColor_disable:      { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderIconWidth:          { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderIconRadius:         { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderIconOpacity:        { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderIconBackground_selected:    { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderIconBackground_unSelected:  { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderIconBackground_disable:      { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    icon:                     { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    iconClass:                { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    iconStyles:               { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    title:                    { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    titleShow:                { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    titleClass:               { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    titleStyles:              { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    titleColor_selected:      { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    titleColor_unSelected:    { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    titleColor_disable:       { name: CreateTranslationKey() , description: CreateTranslationKey() },
+
+                    listRules:                { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    msgRules:                 { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    validateSize:             { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    iconSuccess:              { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    iconError:                { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                },
+
+                schemas: {
+                    main:              { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    label:             { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    mainIcon:          { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    mainIconCheckbox:  { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    mainTitle:         { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                },
+
+                methods: {
+                    click: { description: CreateTranslationKey() },
+                },
+
+                examples: {
+                    default: { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                },
+            }}}};

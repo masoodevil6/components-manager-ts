@@ -18,7 +18,7 @@ import {Schemas} from "./Schemas";
 import {MethodsConfigType} from "./Methods";
 import {createConsoleStep} from "./Step";
 import {ConsoleEntry, ConsoleLevel, ConsoleValue, normalizeConsoleEntry} from "./Types";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/console";
 
 const LEVELS: Array<ConsoleLevel | "all"> = ["all", "log", "info", "warn", "error", "debug"];
 

@@ -1,4 +1,4 @@
-import {Keys}                from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/table";
 // --------------------------------
 import {Props}                   from "./Props";
 import type {

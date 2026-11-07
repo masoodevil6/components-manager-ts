@@ -10,6 +10,14 @@ const manifests = readdirSync(internalProjectsDir, {withFileTypes: true})
   .filter(existsSync)
   .map((file) => JSON.parse(readFileSync(file, 'utf8')));
 const internalProjects = validateInternalProjects(manifests);
+const internalProjectProxyPort = (project: (typeof internalProjects)[number]) => {
+  const envName = `INTERNAL_PROJECT_${project.id.replace(/[^a-z0-9]/gi, '_').toUpperCase()}_PROXY_PORT`;
+  const configuredPort = process.env[envName];
+  if (configuredPort === undefined) return project.devPort;
+  const port = Number(configuredPort);
+  if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error(`${envName} must be a valid port number.`);
+  return port;
+};
 const disableInternalProjectCache: NonNullable<ProxyOptions['configure']> = (proxy) => {
   proxy.on('proxyReq', (request) => {
     request.removeHeader('if-none-match');
@@ -25,7 +33,7 @@ const disableInternalProjectCache: NonNullable<ProxyOptions['configure']> = (pro
 };
 
 export default defineConfig({
-  server: {proxy: Object.fromEntries(internalProjects.map((project) => [project.previewBase, {target: `http://127.0.0.1:${project.devPort}`, ws: true, configure: disableInternalProjectCache}]))},
+  server: {proxy: Object.fromEntries(internalProjects.map((project) => [project.previewBase, {target: `http://127.0.0.1:${internalProjectProxyPort(project)}`, ws: true, configure: disableInternalProjectCache}]))},
   resolve: {
     alias: [
       // ─── CORE ───────────────────────────────────────────────

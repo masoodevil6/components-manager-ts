@@ -19,7 +19,7 @@ import {Schemas} from "./Schemas";
 import type {MethodsConfigType} from "./Methods";
 import {createJsonTreeStep} from "./Step";
 import {getJsonChildren, isIsoDateTimeString, isJsonBranch, stringifyJson, type JsonValue} from "./Types";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/jsonTree";
 
 type NodeMatch = {visible: Set<string>; forcedExpanded: Set<string>; direct: Set<string>};
 

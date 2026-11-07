@@ -3,7 +3,7 @@ import * as CoreReactive from "@/core_reactive";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
 import * as InputProps from "../componentInput/Props";
 import {LayoutColumn} from "../componentLayout/Props";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/inputGroup";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
 
 type InputGroupComponentInstance = {

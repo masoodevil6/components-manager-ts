@@ -1,6 +1,7 @@
 node_modules/*
 /dist/
 /src/generated/focused/
+/src/generated/lazy/
 
 # MindBase checkpoints
 .mindbase-checkpoints

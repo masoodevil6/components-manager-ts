@@ -22,7 +22,7 @@ afterEach(() => {
 });
 
 describe("ComponentCardRowInfo", () => {
-    it("renders ComponentMenuMore entries and forwards the selected item", () => {
+    it("renders ComponentMenuMore entries and forwards the selected item", async () => {
         const selectOption = vi.fn();
         const component = new ComponentCardRowInfo({
             prop_rows: [
@@ -35,6 +35,12 @@ describe("ComponentCardRowInfo", () => {
         mounted.push(component);
         const root = component.getElement();
         document.body.appendChild(root);
+        await vi.waitFor(() => {
+            expect((component as any)._MENU_MORE_RUNTIME).not.toBeNull();
+        });
+        await vi.waitFor(() => {
+            expect(root.querySelector('[data-part-name="part-menu-more"]')).not.toBeNull();
+        });
 
         expect(root.textContent).toContain("Card content");
         expect(root.querySelector('[data-part-name="part-card-row-info-rows-item"][data-row-id="card-content"]'))
@@ -159,13 +165,15 @@ describe("ComponentCardRowInfo", () => {
 
         expect(root.textContent).toContain("No actions");
         expect(root.querySelector('[data-part-name="part-menu-more"]')).toBeNull();
+        expect((component as any)._MENU_MORE_RUNTIME_PROMISE).toBeNull();
+        expect((component as any)._MENU_MORE_RUNTIME).toBeNull();
         const childNames = CoreComponents.Tools.Workflow
             .Get_ComponentWorkflowChildren(component.getComponentWorkflow())
             .map(([name]) => name);
         expect(childNames).not.toContain("optionsMenu");
     });
 
-    it("adds and removes the menu when options change", () => {
+    it("adds and removes the menu when options change", async () => {
         const component = new ComponentCardRowInfo({
             prop_rows: [{id: "dynamic", icon: UiIcons.Src.FileApplication.Definition, content: "Dynamic actions"}],
         });
@@ -175,7 +183,12 @@ describe("ComponentCardRowInfo", () => {
 
         expect(root.querySelector('[data-part-name="part-menu-more"]')).toBeNull();
         component.set("prop_options", [{id: "edit", title: "Edit", action: "edit"}]);
-        expect(root.querySelector('[data-part-name="part-menu-more"]')).not.toBeNull();
+        await vi.waitFor(() => {
+            expect((component as any)._MENU_MORE_RUNTIME).not.toBeNull();
+        });
+        await vi.waitFor(() => {
+            expect(root.querySelector('[data-part-name="part-menu-more"]')).not.toBeNull();
+        });
         expect(CoreComponents.Tools.Workflow
             .Get_ComponentWorkflowChildren(component.getComponentWorkflow())
             .map(([name]) => name)).toContain("optionsMenu");

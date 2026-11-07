@@ -14,7 +14,7 @@ import * as ComponentInputColor from "../componentInputColor/runtime";
 import * as ComponentBorder from "../componentBorder/runtime";
 import * as ComponentCollapse from "../componentCollapse/runtime";
 import {colorSelector} from "../componentInputColor/Props";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/basic";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {Props, PropsType, PropsConfigType} from "./Props";

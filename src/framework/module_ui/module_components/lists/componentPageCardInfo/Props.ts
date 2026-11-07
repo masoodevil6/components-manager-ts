@@ -4,7 +4,7 @@ import * as CoreLanguage from "@/core_languages";
 import * as UiIcons from "@/ui_icons";
 import * as UtilConst from "@/util_consts";
 import * as UtilStyle from "@/util_styles";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/pageCardInfo";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
 
 const labels = Keys.category.components.pageCardInfo.props;

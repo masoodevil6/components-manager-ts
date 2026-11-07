@@ -1,6 +1,6 @@
 # مصرف‌کنندهٔ آزمایشی
 
-این برنامه سناریوهای پایه، Button، ProgressLinear و JSON Tree را دارد. برای ProgressLinear و JSON Tree می‌توان خروجی اصلی `component-manager` را با ورودی مستقل `component-manager/progress-linear` یا `component-manager/json-tree` مقایسه کرد. هر مقایسه همان کامپوننت را با همان ظاهر و داده اجرا می‌کند؛ برای ساخت خروجی‌ها در ریشه `npm run build` را اجرا کنید.
+این برنامه سناریوهای پایه، Button، ElementCreator، ProgressLinear، JSON Tree، Table، InputListSelector و CustomForm را دارد. هر جفت سناریوی `Framework entry` و `focused entry` همان کامپوننت را با ظاهر، داده و کنش یکسان اجرا می‌کند. برای ساخت کتابخانه و گزارش اندازه‌ی JavaScript اولیه در ریشه به‌ترتیب `npm run build` و `npm run perf:consumer` را اجرا کنید. گزارش هر صفحه را در بیلد جدا می‌سنجد و برای ElementCreator قطعه‌ی تعویقی تنظیمات را هم گزارش می‌کند؛ HTML و CSS در اندازه‌ها شمرده نمی‌شوند.
 
 ```ts
 import {Button} from "component-manager/button";

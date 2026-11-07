@@ -4,7 +4,7 @@ import {DefineProp as Define_ComponentProp} from "@/core_components";
 import * as UtilConst from "@/util_consts";
 import * as UtilStyle from "@/util_styles";
 import type {MenuMoreEntry} from "../componentMenuMore/Props";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/cardRowInfo";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
 
 export type CardRowInfoRow = {

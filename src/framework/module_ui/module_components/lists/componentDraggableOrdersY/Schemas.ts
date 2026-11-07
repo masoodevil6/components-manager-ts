@@ -2,7 +2,7 @@ import * as CoreComponents from "@/core_components";
 import {Props} from "./Props";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import type {ExtractSchemasType} from "../../tools/type/TypeHelpers";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/draggableOrdersY";
 
 export const Schemas = {
     COMPONENT: ComponentStructureTrait.schemas.COMPONENT,

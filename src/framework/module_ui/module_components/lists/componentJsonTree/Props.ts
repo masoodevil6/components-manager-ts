@@ -4,7 +4,8 @@ import * as CoreLanguage from "@/core_languages";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
 import * as UtilConst from "@/util_consts";
 import * as UtilStyle from "@/util_styles";
-import {Keys} from "../../../module_categories/languages";
+import {Keys as KeysBasic} from "../../../module_categories/languages/keys/components/basic";
+import {Keys as KeysJsonTree} from "../../../module_categories/languages/keys/components/jsonTree";
 import {Props as BorderProps} from "../componentBorder/Props";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
 import type {JsonValue} from "./Types";
@@ -16,69 +17,69 @@ const defineBorderAlias = <T,>(prop: string, source: any) => Define_ComponentPro
     name: source.name,
     description: source.description,
 });
-const basicKeys = Keys.category.components.basic.props;
+const basicKeys = KeysBasic.category.components.basic.props;
 
 export const Props = {
     prop_data: Define_ComponentProp<JsonValue | undefined | CoreObservable.App<JsonValue | undefined>>({
         prop: "prop_data", default: undefined,
-        name: Keys.category.components.jsonTree.props.data.name,
-        description: Keys.category.components.jsonTree.props.data.description,
+        name: KeysJsonTree.category.components.jsonTree.props.data.name,
+        description: KeysJsonTree.category.components.jsonTree.props.data.description,
     }),
     prop_initialExpandDepth: Define_ComponentProp<number>({
         prop: "prop_initialExpandDepth", default: 1,
-        name: Keys.category.components.jsonTree.props.initialExpandDepth.name,
-        description: Keys.category.components.jsonTree.props.initialExpandDepth.description,
+        name: KeysJsonTree.category.components.jsonTree.props.initialExpandDepth.name,
+        description: KeysJsonTree.category.components.jsonTree.props.initialExpandDepth.description,
     }),
     prop_maxDepth: Define_ComponentProp<number>({
         prop: "prop_maxDepth", default: 32,
-        name: Keys.category.components.jsonTree.props.maxDepth.name,
-        description: Keys.category.components.jsonTree.props.maxDepth.description,
+        name: KeysJsonTree.category.components.jsonTree.props.maxDepth.name,
+        description: KeysJsonTree.category.components.jsonTree.props.maxDepth.description,
     }),
     prop_maxNodes: Define_ComponentProp<number>({
         prop: "prop_maxNodes", default: 2000,
-        name: Keys.category.components.jsonTree.props.maxNodes.name,
-        description: Keys.category.components.jsonTree.props.maxNodes.description,
+        name: KeysJsonTree.category.components.jsonTree.props.maxNodes.name,
+        description: KeysJsonTree.category.components.jsonTree.props.maxNodes.description,
     }),
     prop_showSearch: Define_ComponentProp<boolean>({
         prop: "prop_showSearch", default: true,
-        name: Keys.category.components.jsonTree.props.showSearch.name,
-        description: Keys.category.components.jsonTree.props.showSearch.description,
+        name: KeysJsonTree.category.components.jsonTree.props.showSearch.name,
+        description: KeysJsonTree.category.components.jsonTree.props.showSearch.description,
     }),
     prop_showExpandControls: Define_ComponentProp<boolean>({
         prop: "prop_showExpandControls", default: true,
-        name: Keys.category.components.jsonTree.props.showExpandControls.name,
-        description: Keys.category.components.jsonTree.props.showExpandControls.description,
+        name: KeysJsonTree.category.components.jsonTree.props.showExpandControls.name,
+        description: KeysJsonTree.category.components.jsonTree.props.showExpandControls.description,
     }),
     prop_showCopyButton: Define_ComponentProp<boolean>({
         prop: "prop_showCopyButton", default: true,
-        name: Keys.category.components.jsonTree.props.showCopyButton.name,
-        description: Keys.category.components.jsonTree.props.showCopyButton.description,
+        name: KeysJsonTree.category.components.jsonTree.props.showCopyButton.name,
+        description: KeysJsonTree.category.components.jsonTree.props.showCopyButton.description,
     }),
     prop_treeHorizontalScroll: Define_ComponentProp<boolean>({
         prop: "prop_treeHorizontalScroll", default: false,
-        name: Keys.category.components.jsonTree.props.treeHorizontalScroll.name,
-        description: Keys.category.components.jsonTree.props.treeHorizontalScroll.description,
+        name: KeysJsonTree.category.components.jsonTree.props.treeHorizontalScroll.name,
+        description: KeysJsonTree.category.components.jsonTree.props.treeHorizontalScroll.description,
     }),
     prop_treeFillHeight: Define_ComponentProp<boolean>({
         prop: "prop_treeFillHeight", default: false,
-        name: Keys.category.components.jsonTree.props.treeFillHeight.name,
-        description: Keys.category.components.jsonTree.props.treeFillHeight.description,
+        name: KeysJsonTree.category.components.jsonTree.props.treeFillHeight.name,
+        description: KeysJsonTree.category.components.jsonTree.props.treeFillHeight.description,
     }),
     prop_searchPlaceholder: Define_ComponentProp<string | CoreObservable.App<string>>({
-        prop: "prop_searchPlaceholder", default: CoreLanguage.App.translate(Keys.category.components.jsonTree.texts.search),
-        name: Keys.category.components.jsonTree.props.searchPlaceholder.name,
-        description: Keys.category.components.jsonTree.props.searchPlaceholder.description,
+        prop: "prop_searchPlaceholder", default: CoreLanguage.App.translate(KeysJsonTree.category.components.jsonTree.texts.search),
+        name: KeysJsonTree.category.components.jsonTree.props.searchPlaceholder.name,
+        description: KeysJsonTree.category.components.jsonTree.props.searchPlaceholder.description,
     }),
     prop_emptyText: Define_ComponentProp<string | CoreObservable.App<string>>({
-        prop: "prop_emptyText", default: CoreLanguage.App.translate(Keys.category.components.jsonTree.texts.empty),
-        name: Keys.category.components.jsonTree.props.emptyText.name,
-        description: Keys.category.components.jsonTree.props.emptyText.description,
+        prop: "prop_emptyText", default: CoreLanguage.App.translate(KeysJsonTree.category.components.jsonTree.texts.empty),
+        name: KeysJsonTree.category.components.jsonTree.props.emptyText.name,
+        description: KeysJsonTree.category.components.jsonTree.props.emptyText.description,
     }),
     prop_headerBackgroundColor: Define_ComponentProp<string | null>({
         prop: "prop_headerBackgroundColor",
         default: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
-        name: Keys.category.components.jsonTree.props.headerBackgroundColor.name,
-        description: Keys.category.components.jsonTree.props.headerBackgroundColor.description,
+        name: KeysJsonTree.category.components.jsonTree.props.headerBackgroundColor.name,
+        description: KeysJsonTree.category.components.jsonTree.props.headerBackgroundColor.description,
     }),
 
     prop_componentBorderSelector: Define_ComponentProp<string | null>({prop: "prop_componentBorderSelector", default: null, name: basicKeys.selector.name, description: basicKeys.selector.description}),

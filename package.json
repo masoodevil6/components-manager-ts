@@ -25,6 +25,16 @@
       "import": "./dist/package/focused/json-tree.mjs",
       "default": "./dist/package/focused/json-tree.mjs"
     },
+    "./icons/*": {
+      "types": "./dist/package/icons/*.d.ts",
+      "import": "./dist/package/icons/*.mjs",
+      "default": "./dist/package/icons/*.mjs"
+    },
+    "./lazy": {
+      "types": "./dist/package/lazy/index.d.ts",
+      "import": "./dist/package/lazy/index.mjs",
+      "default": "./dist/package/lazy/index.mjs"
+    },
     "./components/*": {
       "types": "./dist/package/focused/*.d.ts",
       "import": "./dist/package/focused/*.mjs",
@@ -36,9 +46,11 @@
   ],
   "scripts": {
     "dev": "node scripts/generate-focused-entries.mjs && node inside-project/dev.mjs",
-    "build": "node scripts/generate-focused-entries.mjs && vite build --config vite.package.config.ts && vite build --config vite.focused.config.ts && rollup --config rollup.dts.config.mjs && rollup --config rollup.components.dts.config.mjs",
+    "build": "node scripts/generate-focused-entries.mjs && vite build --config vite.package.config.ts && vite build --config vite.focused.config.ts && vite build --config vite.lazy.config.ts && vite build --config vite.icons.config.ts && rollup --config rollup.dts.config.mjs && rollup --config rollup.components.dts.config.mjs && rollup --config rollup.lazy.dts.config.mjs && rollup --config rollup.icons.dts.config.mjs",
     "build:app": "vite build",
     "perf:consumer": "node scripts/measure-consumer-bundles.mjs",
+    "check:consumer-bundle-budget": "node scripts/measure-consumer-bundles.mjs --check-budget",
+    "verify:custom-form-loading": "node scripts/measure-consumer-bundles.mjs --custom-form-loading && vitest run --config vitest.config.ts tests/perf/custom-form-performance-scenarios.test.ts --silent",
     "audit:components": "node scripts/audit-components.mjs",
     "perf": "npx vitest run --config vitest.config.ts",
     "perf:update": "set PERF_UPDATE_BASELINE=1&& npx vitest run --config vitest.config.ts"

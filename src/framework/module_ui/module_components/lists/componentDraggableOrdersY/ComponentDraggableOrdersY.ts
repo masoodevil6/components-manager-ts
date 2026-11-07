@@ -15,7 +15,7 @@ import * as UiIcons from "@/ui_icons";
 import * as UtilStyle from "@/util_styles";
 import * as UtilConst from "@/util_consts";
 import * as CoreLanguage from "@/core_languages";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/draggableOrdersY";
 import {ComponentElementPosition} from "../componentElementPosition/ComponentElementPosition";
 
 export class ComponentDraggableOrdersY extends ComponentDraggableOrdersYBase<ReturnType<typeof createDraggableOrdersStep>>{

@@ -2,7 +2,8 @@ import * as CoreComponents from "@/core_components";
 import * as CoreObservable from "@/core_observable";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
 import type {ValidatorRule} from "@/util_validators";
-import {Keys} from "../../../module_categories/languages";
+import {Keys as KeysInput} from "../../../module_categories/languages/keys/components/input";
+import {Keys as KeysInputPrice} from "../../../module_categories/languages/keys/components/inputPrice";
 import {Props as InputProps} from "../componentInput/Props";
 import {ComponentLabelTrait, ComponentLabelPropsType} from "../../traits/componentLabelTrait";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
@@ -42,23 +43,23 @@ export const Props = {
     }),
     prop_value: Define_ComponentProp<string | number | null | CoreObservable.App<string | number | null>>({
         prop: "prop_value", default: null,
-        name: Keys.category.components.input.props.value.name,
-        description: Keys.category.components.input.props.value.description,
+        name: KeysInput.category.components.input.props.value.name,
+        description: KeysInput.category.components.input.props.value.description,
     }),
     prop_calculator: Define_ComponentProp<CalculatorItem[] | null>({
         prop: "prop_calculator", default: null,
-        name: Keys.category.components.inputPrice.props.calculator.name,
-        description: Keys.category.components.inputPrice.props.calculator.description,
+        name: KeysInputPrice.category.components.inputPrice.props.calculator.name,
+        description: KeysInputPrice.category.components.inputPrice.props.calculator.description,
     }),
     prop_calculatorColor: Define_ComponentProp<string | null>({
         prop: "prop_calculatorColor", default: null,
-        name: Keys.category.components.inputPrice.props.calculatorColor.name,
-        description: Keys.category.components.inputPrice.props.calculatorColor.description,
+        name: KeysInputPrice.category.components.inputPrice.props.calculatorColor.name,
+        description: KeysInputPrice.category.components.inputPrice.props.calculatorColor.description,
     }),
     prop_information: Define_ComponentProp<InformationItem[] | null>({
         prop: "prop_information", default: null,
-        name: Keys.category.components.inputPrice.props.information.name,
-        description: Keys.category.components.inputPrice.props.information.description,
+        name: KeysInputPrice.category.components.inputPrice.props.information.name,
+        description: KeysInputPrice.category.components.inputPrice.props.information.description,
     }),
 } satisfies CoreComponents.ComponentProps;
 

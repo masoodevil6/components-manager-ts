@@ -1,0 +1,52 @@
+import {CreateTranslationKey} from "@/util_brands";
+
+export const Keys = {category: {components: {jsonTree: {
+                name: CreateTranslationKey(),
+                description: CreateTranslationKey(),
+                props: {
+                    data: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    initialExpandDepth: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    maxDepth: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    maxNodes: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    showSearch: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    showExpandControls: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    showCopyButton: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    treeHorizontalScroll: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    treeFillHeight: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    searchPlaceholder: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    emptyText: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    headerBackgroundColor: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+                schemas: {
+                    root: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    toolbar: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    tree: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+                methods: {
+                    nodeToggle: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    searchChange: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    expandAll: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    collapseAll: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    copy: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+                texts: {
+                    search: CreateTranslationKey(),
+                    expand: CreateTranslationKey(),
+                    collapse: CreateTranslationKey(),
+                    expandAll: CreateTranslationKey(),
+                    collapseAll: CreateTranslationKey(),
+                    copy: CreateTranslationKey(),
+                    empty: CreateTranslationKey(),
+                    noResults: CreateTranslationKey(),
+                    truncated: CreateTranslationKey(),
+                    keys: CreateTranslationKey(),
+                    items: CreateTranslationKey(),
+                    copySuccess: CreateTranslationKey(),
+                    copyFailure: CreateTranslationKey(),
+                },
+                examples: {
+                    default: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    nested: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    searchAndControls: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+            }}}};

@@ -2,7 +2,7 @@ import * as CoreComponents from "@/core_components";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
 import * as UtilConst from "@/util_consts";
 import * as UtilStyle from "@/util_styles";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/breadcrumb";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
 
 export type BreadcrumbItem = {

@@ -1,5 +1,6 @@
 import * as CoreComponents from "@/core_components";
-import {Keys}              from "../../../module_categories/languages";
+import {Keys as KeysInputListSelector} from "../../../module_categories/languages/keys/components/inputListSelector";
+import {Keys as KeysLabel} from "../../../module_categories/languages/keys/components/label";
 import {Props}             from "./Props";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import type {ExtractSchemasType} from "../../tools/type/TypeHelpers";
@@ -34,8 +35,8 @@ export const Schemas = {
             Props.prop_colorIcon,
             Props.prop_inputBackgroundColor,
         ],
-        name:         Keys.category.components.inputListSelector.schemas.main.name,
-        description:  Keys.category.components.inputListSelector.schemas.main.description,
+        name:         KeysInputListSelector.category.components.inputListSelector.schemas.main.name,
+        description:  KeysInputListSelector.category.components.inputListSelector.schemas.main.description,
     },
 
     MAIN_LABEL: {
@@ -45,8 +46,8 @@ export const Schemas = {
             Props.prop_labelTitle,
             Props.prop_labelTooltipDescription,
         ],
-        name:         Keys.category.components.label.schemas.border.name,
-        description:  Keys.category.components.label.schemas.border.description,
+        name:         KeysLabel.category.components.label.schemas.border.name,
+        description:  KeysLabel.category.components.label.schemas.border.description,
     },
 
     MAIN_FORM_FLOAT_MENU: {
@@ -57,8 +58,8 @@ export const Schemas = {
             Props.prop_widthBody,
             Props.prop_heightBody,
         ],
-        name:         Keys.category.components.inputListSelector.schemas.mainFormFloatMenu.name,
-        description:  Keys.category.components.inputListSelector.schemas.mainFormFloatMenu.description,
+        name:         KeysInputListSelector.category.components.inputListSelector.schemas.mainFormFloatMenu.name,
+        description:  KeysInputListSelector.category.components.inputListSelector.schemas.mainFormFloatMenu.description,
     },
 
     MAIN_FORM_FLOAT_MENU_ICON_LIST: {
@@ -68,8 +69,8 @@ export const Schemas = {
             Props.prop_backgroundColorIcon,
             Props.prop_colorIcon,
         ],
-        name:         Keys.category.components.inputListSelector.schemas.mainFormFloatMenuIconList.name,
-        description:  Keys.category.components.inputListSelector.schemas.mainFormFloatMenuIconList.description,
+        name:         KeysInputListSelector.category.components.inputListSelector.schemas.mainFormFloatMenuIconList.name,
+        description:  KeysInputListSelector.category.components.inputListSelector.schemas.mainFormFloatMenuIconList.description,
     },
 
     MAIN_FORM_FLOAT_MENU_CHECK_BOXES: {
@@ -81,8 +82,8 @@ export const Schemas = {
             Props.prop_heightBody,
             Props.prop_draggable,
         ],
-        name:         Keys.category.components.inputListSelector.schemas.mainFormFloatMenuCheckBoxes.name,
-        description:  Keys.category.components.inputListSelector.schemas.mainFormFloatMenuCheckBoxes.description,
+        name:         KeysInputListSelector.category.components.inputListSelector.schemas.mainFormFloatMenuCheckBoxes.name,
+        description:  KeysInputListSelector.category.components.inputListSelector.schemas.mainFormFloatMenuCheckBoxes.description,
     },
 
     MAIN_FORM_LIST_SELECTED: {
@@ -91,8 +92,8 @@ export const Schemas = {
             Props.prop_columns,
             Props.prop_showListSelected,
         ],
-        name:         Keys.category.components.inputListSelector.schemas.mainFormListSelected.name,
-        description:  Keys.category.components.inputListSelector.schemas.mainFormListSelected.description,
+        name:         KeysInputListSelector.category.components.inputListSelector.schemas.mainFormListSelected.name,
+        description:  KeysInputListSelector.category.components.inputListSelector.schemas.mainFormListSelected.description,
     },
 
 } satisfies CoreComponents.ComponentSchemas;

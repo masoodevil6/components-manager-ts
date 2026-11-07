@@ -18,6 +18,7 @@ import type {PropsType as StructurePropsType}    from "../componentStructure/Pro
 import type {MethodsConfigType}                   from "./Methods";
 // --------------------------------
 import {ComponentBorder} from "../componentBorder/ComponentBorder";
+import {BorderTypes}    from "../componentBorder/Props";
 import {ComponentIcon}   from "../componentIcon/ComponentIcon";
 
 
@@ -125,7 +126,7 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
         const border = new ComponentBorder(
             {
                 prop_content: this.executeSchemaPart(Schemas.BORDER_LIST.part, {}),
-                prop_borderType: ComponentBorder.BorderTypes.SOLID,
+                prop_borderType: BorderTypes.SOLID,
                 prop_borderWidth: prop_borderWidth as any,
                 prop_borderRadius: prop_borderRadius as any,
                 prop_borderTopLeftRadiusHas: prop_borderTopLeftRadiusHas as any,
@@ -424,7 +425,7 @@ export class ComponentListSelectedScroller extends ComponentListSelectedScroller
         const border = new ComponentBorder(
             {
                 styles: { width: "auto", flexShrink: "0" },
-                prop_borderType:              ComponentBorder.BorderTypes.SOLID,
+                prop_borderType:              BorderTypes.SOLID,
                 prop_borderWidth:             prop_listBorderWidth as any,
                 prop_borderRadius:            prop_listBorderRadius as any,
                 prop_borderColor:             prop_listBorderColor as any,

@@ -3,6 +3,7 @@ import type {ComponentScenario} from "../../../../../module_performance/core/Com
 
 const createScenario = (id: string, title: string, search: boolean): ComponentScenario => ({
     id, title, componentId: "component_json_tree",
+    ...(search ? {operationTitle: "Search", operationDetail: "Time to search the tree for item-42."} : {}),
     prepare(size) {
         if (!Number.isInteger(size) || size < 1 || size > 5000) throw new Error("Dataset size must be between 1 and 5000.");
         const data = {items: Array.from({length: size}, (_, i) => ({name: `item-${i}`, value: i}))};

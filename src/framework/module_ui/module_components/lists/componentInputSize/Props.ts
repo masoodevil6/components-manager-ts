@@ -3,7 +3,7 @@ import {DefineProp as Define_ComponentProp} from "@/core_components";
 import * as UiIcons from "@/ui_icons";
 import * as UtilConst from "@/util_consts";
 import type {ValidatorRule} from "@/util_validators";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/inputSize";
 import {ComponentLabelTrait, ComponentLabelPropsType} from "../../traits/componentLabelTrait";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
 

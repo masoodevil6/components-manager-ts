@@ -2,7 +2,8 @@ import * as CoreComponents from "@/core_components";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
 import * as UiIcons from "@/ui_icons";
 import * as UtilConst from "@/util_consts";
-import {Keys} from "../../../module_categories/languages";
+import {Keys as KeysBasic} from "../../../module_categories/languages/keys/components/basic";
+import {Keys as KeysFetch} from "../../../module_categories/languages/keys/components/fetch";
 import {Props as BorderProps, BorderTypes, ArrowTypes} from "../componentBorder/Props";
 import type {TFetchRequestData} from "@/util_tools";
 import type {RequestState} from "@/ui_controller/module_requests";
@@ -18,8 +19,8 @@ export type WidgetFetchConfig = {
     contentType?: TFetchRequestData["contentType"];
 };
 
-const widgetKeys = Keys.category.components.fetch.widget;
-const basicKeys = Keys.category.components.basic.props;
+const widgetKeys = KeysFetch.category.components.fetch.widget;
+const basicKeys = KeysBasic.category.components.basic.props;
 
 const defineWidgetProp = <T,>(prop: string, defaultValue: T, name: any, description: any) => Define_ComponentProp<T>({
     prop,

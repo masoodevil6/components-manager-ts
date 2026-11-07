@@ -6,7 +6,7 @@ import * as UtilConst from "@/util_consts";
 import * as UtilStyle from "@/util_styles";
 import * as UtilShape from "@/util_shapes";
 import * as UiIcons from "@/ui_icons";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/breadcrumb";
 import {PartAttrDefault} from "@/core_components";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";

@@ -1,10 +1,12 @@
 import * as CoreReactive from "@/core_reactive";
 import * as CoreObservable from "@/core_observable";
+import * as CoreComponents from "@/core_components";
 import * as CoreConfig from "@/core_configs";
 import * as UtilConst from "@/util_consts";
 import * as UtilStyle from "@/util_styles";
 import * as UiIcons from "@/ui_icons";
-import {ComponentFloatMenu} from "../componentFloatMenu/ComponentFloatMenu";
+import type {ComponentFloatMenu as ComponentFloatMenuType} from "../componentFloatMenu/ComponentFloatMenu";
+type SelectFloatMenuRuntime = typeof import("../componentFloatMenu/lazyRuntime");
 import * as CoreLanguage from "@/core_languages";
 import {PartAttrDefault} from "@/core_components";
 import {ComponentSelectCustomSimpleBase} from "./ComponentSelectCustomSimpleBase";
@@ -14,12 +16,11 @@ import {MethodsConfigType} from "./Methods";
 import {createSelectCustomSimpleStep} from "./Step";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/selectCustomSimple";
 import * as ComponentBorder from "../componentBorder/runtime";
 import * as ComponentIcon from "../componentIcon/runtime";
 import * as ComponentInputSimple from "../componentInputSimple/runtime";
 import * as ComponentRecyclerView from "../componentRecyclerView/runtime";
-import {ShowTypes as FloatMenuShowTypes} from "../componentFloatMenu/runtime";
 
 export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase<ReturnType<typeof createSelectCustomSimpleStep>>{
     private readonly _IS_OPEN = new CoreObservable.App(false);
@@ -28,19 +29,29 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
     private _ICON: InstanceType<typeof ComponentIcon.Component> | null = null;
     private _SEARCH_INPUT: InstanceType<typeof ComponentInputSimple.Component> | null = null;
     private _OPTIONS_LIST: InstanceType<typeof ComponentRecyclerView.Component> | null = null;
-    private _FLOAT_MENU: InstanceType<typeof import("../componentFloatMenu").Component> | null = null;
+    private _FLOAT_MENU: ComponentFloatMenuType | null = null;
+    private _FLOAT_MENU_RUNTIME: SelectFloatMenuRuntime | null = null;
+    private _FLOAT_MENU_RUNTIME_PROMISE: Promise<SelectFloatMenuRuntime | null> | null = null;
+    private readonly _FLOAT_MENU_RUNTIME_READY = new CoreObservable.App(0);
+    private _FLOAT_MENU_OPEN_REQUESTED = false;
+    private _LAZY_FLOAT_MENU_CLICK_HANDLER: ((event: MouseEvent) => void) | null = null;
     private _DOCUMENT_LISTENER: ((event: MouseEvent | KeyboardEvent) => void) | null = null;
     private _DISPOSED = false;
 
     constructor(config?: Partial<StructurePropsType & PropsConfigType>, methods?: MethodsConfigType<ComponentSelectCustomSimple>, identity?: {unique?: any; emit?: any; events?: Record<string, any> | null}) {
         super("select-custom-simple", identity, createSelectCustomSimpleStep());
         this.renderComponent(config as any, methods as any, identity?.events ?? null);
+        this.installLazyFloatMenuClickHandler();
     }
 
     dispose(): void {
         if (this._DISPOSED) return;
         this._DISPOSED = true;
         this._removeDocumentListener();
+        if (this._LAZY_FLOAT_MENU_CLICK_HANDLER) {
+            (this.getElement() as HTMLElement | null)?.removeEventListener("click", this._LAZY_FLOAT_MENU_CLICK_HANDLER, true);
+            this._LAZY_FLOAT_MENU_CLICK_HANDLER = null;
+        }
         this._OPTIONS_LIST?.dispose();
         this._SEARCH_INPUT?.dispose();
         this._FLOAT_MENU?.dispose();
@@ -89,6 +100,13 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
     private renderSelect(attrsDefault: PartAttrDefault, data: Record<string, CoreObservable.App<any>>): CoreReactive.App {
         const bind = this._COMPONENT_PROPS_BIND;
         const disabled = data?.["prop_selectDisable"] ?? bind.prop_selectDisable;
+        const workflowComposition = CoreComponents.Tools.Workflow.Capture_ComponentWorkflowComposition();
+        const selectorContent = this.executeSchemaPart(Schemas.SELECT_HEADER.part, {});
+        const placeholder = CoreReactive.App.section({
+            attrs: {...attrsDefault},
+            className: ["d-block", "w-100"],
+            children: [selectorContent],
+        });
         const body = CoreObservable.App.conditionWhen(
             [disabled],
             (isDisabled) => !isDisabled,
@@ -96,26 +114,42 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
             () => CoreReactive.App.section({children: []}),
             this.getScope(),
         );
-        this._FLOAT_MENU = new ComponentFloatMenu({
-            classList: ["position-relative", "d-block", "w-100"],
-            prop_selectorClass: ["d-block", "w-100"],
-            prop_selectorContent: this.executeSchemaPart(Schemas.SELECT_HEADER.part, {}),
-            prop_selectorShowType: FloatMenuShowTypes.CLICK,
-            prop_floatContent: body,
-            prop_floatDirectionType: "bottom" as any,
-            prop_floatWidth: UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
-            prop_floatMinWidth: UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
-            prop_floatArrowWidth: 0,
-            prop_floatDistance: 0,
-            prop_floatBorderWidth: UtilConst.Sizes.S,
-            prop_floatBorderColor: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
-            prop_floatBorderRadius: UtilConst.Sizes.S,
-            prop_floatBackground: UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
-            prop_floatShowControlWithSelf: false,
-            prop_floatIsShow: this._IS_OPEN,
-            prop_floatUsePortal: true,
-            prop_floatStyles: {display: "block"},
-        } as any, {});
+        const content = CoreObservable.App.computed((_runtimeVersion: number) => {
+            const runtime = this._FLOAT_MENU_RUNTIME;
+            if (!runtime) return placeholder;
+
+            const createFloatMenu = () => {
+                this._FLOAT_MENU = new runtime.ComponentFloatMenu({
+                    classList: ["position-relative", "d-block", "w-100"],
+                    prop_selectorClass: ["d-block", "w-100"],
+                    prop_selectorContent: selectorContent,
+                    prop_selectorShowType: runtime.ShowTypes.CLICK,
+                    prop_floatContent: body,
+                    prop_floatDirectionType: runtime.DirectionTypes.BOTTOM,
+                    prop_floatWidth: UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
+                    prop_floatMinWidth: UtilStyle.Css_SizeUnit(100, UtilConst.Units.PERCENT),
+                    prop_floatArrowWidth: 0,
+                    prop_floatDistance: 0,
+                    prop_floatBorderWidth: UtilConst.Sizes.S,
+                    prop_floatBorderColor: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
+                    prop_floatBorderRadius: UtilConst.Sizes.S,
+                    prop_floatBackground: UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
+                    prop_floatShowControlWithSelf: false,
+                    prop_floatIsShow: this._IS_OPEN,
+                    prop_floatUsePortal: true,
+                    prop_floatStyles: {display: "block"},
+                } as any, {});
+                return CoreReactive.App.section({
+                    attrs: {...attrsDefault},
+                    className: ["d-block", "w-100"],
+                    children: [this._FLOAT_MENU.getReactiveElement()],
+                });
+            };
+
+            return workflowComposition
+                ? CoreComponents.Tools.Workflow.With_ComponentWorkflowComposition(workflowComposition, createFloatMenu)
+                : createFloatMenu();
+        }, [this._FLOAT_MENU_RUNTIME_READY], this.getScope()) as any;
         this._IS_OPEN.subscribe((isOpen) => {
             const event = new MouseEvent("click", {bubbles: true});
             if (isOpen) {
@@ -127,8 +161,59 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
                 this.executeMethod("SELECT_CLOSE", event, {VALUE: this._COMPONENT_PROPS_BIND.prop_selectValue.get()} as any);
             }
         }, this.getScope());
-        const root = CoreReactive.App.section({attrs: {...attrsDefault}, className: ["d-block", "w-100"], children: [this._FLOAT_MENU.getReactiveElement()]});
-        return root;
+        return content;
+    }
+
+    private loadFloatMenuRuntime(): Promise<SelectFloatMenuRuntime | null> {
+        if (this._FLOAT_MENU_RUNTIME) return Promise.resolve(this._FLOAT_MENU_RUNTIME);
+        if (this._FLOAT_MENU_RUNTIME_PROMISE) return this._FLOAT_MENU_RUNTIME_PROMISE;
+
+        this._FLOAT_MENU_RUNTIME_PROMISE = import("../componentFloatMenu/lazyRuntime")
+            .then((runtime) => {
+                this._FLOAT_MENU_RUNTIME_PROMISE = null;
+                if (this._DISPOSED) return runtime;
+                this._FLOAT_MENU_RUNTIME = runtime;
+                this._FLOAT_MENU_RUNTIME_READY.set(this._FLOAT_MENU_RUNTIME_READY.get() + 1);
+                return runtime;
+            })
+            .catch((error) => {
+                this._FLOAT_MENU_RUNTIME_PROMISE = null;
+                console.error("ComponentSelectCustomSimple could not load FloatMenu support", error);
+                return null;
+            });
+
+        return this._FLOAT_MENU_RUNTIME_PROMISE;
+    }
+
+    private installLazyFloatMenuClickHandler(): void {
+        const root = this.getElement() as HTMLElement | null;
+        if (!root || this._LAZY_FLOAT_MENU_CLICK_HANDLER) return;
+
+        this._LAZY_FLOAT_MENU_CLICK_HANDLER = (event: MouseEvent) => {
+            if (this._FLOAT_MENU || this._DISPOSED || this._COMPONENT_PROPS_BIND.prop_selectDisable.get()) return;
+            const header = root.querySelector<HTMLElement>('[data-part-name="part-select-custom-simple-header"]');
+            if (header?.contains(event.target as Node)) this.requestOpenAfterFloatMenuLoad();
+        };
+        root.addEventListener("click", this._LAZY_FLOAT_MENU_CLICK_HANDLER, true);
+    }
+
+    private requestOpenAfterFloatMenuLoad(): void {
+        if (this._FLOAT_MENU_OPEN_REQUESTED || this._DISPOSED || this._COMPONENT_PROPS_BIND.prop_selectDisable.get()) return;
+        this._FLOAT_MENU_OPEN_REQUESTED = true;
+
+        void this.loadFloatMenuRuntime().then((runtime) => {
+            if (!runtime || this._DISPOSED || this._COMPONENT_PROPS_BIND.prop_selectDisable.get()) {
+                this._FLOAT_MENU_OPEN_REQUESTED = false;
+                return;
+            }
+
+            window.setTimeout(() => {
+                this._FLOAT_MENU_OPEN_REQUESTED = false;
+                if (this._DISPOSED || !this._FLOAT_MENU) return;
+                this._IS_OPEN.set(true);
+                this._FLOAT_MENU.setShow(true);
+            }, 0);
+        });
     }
 
     private renderHeader(attrsDefault: PartAttrDefault, data: Record<string, CoreObservable.App<any>>): CoreReactive.App {
@@ -357,8 +442,12 @@ export class ComponentSelectCustomSimple extends ComponentSelectCustomSimpleBase
             this.closeMenu(event);
         }
         else {
-            this._IS_OPEN.set(true);
-            this._FLOAT_MENU?.setShow(true);
+            if (this._FLOAT_MENU) {
+                this._IS_OPEN.set(true);
+                this._FLOAT_MENU.setShow(true);
+            } else {
+                this.requestOpenAfterFloatMenuLoad();
+            }
         }
     }
 }

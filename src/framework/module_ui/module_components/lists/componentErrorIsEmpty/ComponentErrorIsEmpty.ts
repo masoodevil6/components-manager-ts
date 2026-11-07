@@ -15,7 +15,7 @@ import {PartAttrDefault}           from "@/core_components";
 import {ComponentStructureTrait}   from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {PropsConfigType as ErrorIsEmptyPropsConfigType} from "./Props";
-import {Keys}                         from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/errorIsEmpty";
 // --------------------------------
 import * as ComponentBorder  from "../componentBorder/runtime";
 import * as ComponentIcon    from "../componentIcon/runtime";

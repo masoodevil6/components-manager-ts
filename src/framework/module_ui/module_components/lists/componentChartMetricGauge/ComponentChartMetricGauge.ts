@@ -6,7 +6,7 @@ import {ColorGrad, ColorMain} from "@/util_consts";
 import type {PartAttrDefault} from "@/core_components";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/charts";
 import {ComponentChartMetricGaugeBase} from "./ComponentChartMetricGaugeBase";
 import {ComponentTable} from "../componentTable/ComponentTable";
 import {calculateGauge, type GaugeModel, type MetricBand} from "./Model";

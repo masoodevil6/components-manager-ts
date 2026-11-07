@@ -5,7 +5,7 @@ import * as CoreLanguage from "@/core_languages";
 import * as UtilStyle from "@/util_styles";
 import * as UtilConst from "@/util_consts";
 import {PartAttrDefault} from "@/core_components";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/inputAcl";
 import {ComponentInputAclBase} from "./ComponentInputAclBase";
 import {PropsConfigType, PropsType, AclItem} from "./Props";
 import {Schemas} from "./Schemas";

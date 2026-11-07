@@ -8,25 +8,20 @@ import {PartAttrDefault} from "@/core_components";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
 import * as ComponentLayout from "../componentLayout/runtime";
-import * as ComponentLayoutCreator from "../componentLayoutCreator/runtime";
 import * as ComponentForm from "../componentForm/runtime";
 import * as ComponentCollapse from "../componentCollapse/runtime";
 import * as ComponentCollapseLine from "../componentCollapseLine/runtime";
 import * as ComponentInput from "../componentInput/runtime";
-import * as ComponentWindow from "../componentWindow/runtime";
-import * as ComponentWindowConfirm from "../componentWindowConfirm/runtime";
-import * as ComponentInputDescription from "../componentInputDescription";
-import * as ComponentInputCheckBox from "../componentInputCheckBox/runtime";
-import * as ComponentInputRadioBox from "../componentInputRadioBox/runtime";
-import * as ComponentInputListSelector from "../componentInputListSelector/runtime";
+import type * as ComponentWindowRuntime from "../componentWindow/runtime";
+import type * as ComponentWindowConfirmRuntime from "../componentWindowConfirm/runtime";
 import * as ComponentBorder from "../componentBorder/runtime";
 import * as ComponentIcon from "../componentIcon/runtime";
 import {InputSimpleTypes} from "../componentInputSimple/Props";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/fetch";
 import * as UiIcons from "@/ui_icons";
 import {LayoutColumn} from "../componentLayout/Props";
-import {LayoutCreatorMode} from "../componentLayoutCreator/Props";
-import type {LayoutCreatorContentItem, LayoutCreatorItemState} from "../componentLayoutCreator/Props";
+import type {LayoutContentItem} from "../componentLayout/Props";
+import type {LayoutCreatorComponentTemplate, LayoutCreatorContentItem, LayoutCreatorItemState} from "../componentLayoutCreator/Props";
 import {ComponentCustomFormBase} from "./ComponentCustomFormBase";
 import {
     CustomFormField,
@@ -46,22 +41,18 @@ type DisposableChild = {
 };
 
 type EditorEvent = (event: Event) => void;
-
-const CUSTOM_FORM_LAYOUT_ALLOWED_COMPONENTS = Object.freeze([
-    ComponentInput.Component,
-    ComponentInputDescription.Component,
-    ComponentInputCheckBox.Component,
-    ComponentInputRadioBox.Component,
-    ComponentInputListSelector.Component,
-] as const);
+type LayoutCreatorRuntime = typeof import("./EditRuntime");
+type FieldRuntime = typeof import("./FieldRuntime");
 
 export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<typeof createCustomFormStep>>{
     private static _ID = 0;
     private readonly _VIEW = new CoreObservable.App<ComponentLayout.LayoutContentItem[] | null>(null);
     private readonly _DYNAMIC_CHILDREN: DisposableChild[] = [];
     private readonly _GROUP_SETTINGS_WINDOWS = new Map<string, DisposableChild>();
+    private readonly _GROUP_SETTINGS_WINDOW_LOADS = new Map<string, symbol>();
     private _LAYOUT: ComponentLayout.Component | null = null;
-    private _DELETE_CONFIRM: ComponentWindowConfirm.Component | null = null;
+    private _DELETE_CONFIRM: ComponentWindowConfirmRuntime.Component | null = null;
+    private _DELETE_CONFIRM_LOADING: Promise<void> | null = null;
     private _DELETE_CONFIRM_ELEMENT: HTMLElement | null = null;
     private _PENDING_DELETE_GROUP_ID: string | null = null;
     private _GROUP_SETTINGS_WORKFLOW_SOURCE: CoreEvent.TStepRef | null = null;
@@ -69,6 +60,11 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
     private _LOCAL_VALUES: Record<string, unknown> = {};
     private _SKIP_GROUPS_REBUILD = false;
     private _DISPOSED = false;
+    private _EDIT_RENDER_GENERATION = 0;
+    private _LAYOUT_CREATOR_RUNTIME: LayoutCreatorRuntime | null = null;
+    private _LAYOUT_CREATOR_RUNTIME_PROMISE: Promise<LayoutCreatorRuntime> | null = null;
+    private _FIELD_RUNTIME: FieldRuntime | null = null;
+    private _FIELD_RUNTIME_PROMISE: Promise<FieldRuntime> | null = null;
 
     constructor(
         config?: Partial<StructurePropsType & PropsConfigType>,
@@ -89,6 +85,7 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
     dispose(): void {
         if (this._DISPOSED) return;
         this._DISPOSED = true;
+        this._EDIT_RENDER_GENERATION++;
         this.closeGroupSettingsPageSetting();
         this._VIEW.set(null);
         this.disposeDynamicChildren();
@@ -165,6 +162,7 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
 
     private rebuildView(): void {
         if (this._DISPOSED) return;
+        const generation = ++this._EDIT_RENDER_GENERATION;
         this.disposeDynamicChildren();
 
         const mode = this.get("prop_customFormMode") === CustomFormMode.RUN
@@ -173,15 +171,112 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
         const groups = this.getGroups();
 
         if (mode === CustomFormMode.RUN) {
-            this._VIEW.set([{content: this.renderRunMode(groups), col: null}]);
+            if (!this.hasDeferredRunFields(groups)) {
+                this._VIEW.set([{content: this.renderRunMode(groups), col: null}]);
+                return;
+            }
+
+            this._VIEW.set([{
+                content: CoreReactive.App.section({
+                    attrs: {"data-mode": CustomFormMode.RUN, "data-field-runtime-loading": "true"},
+                    styles: {width: "100%"},
+                }),
+                col: null,
+            }]);
+            void this.loadFieldRuntime()
+                .then((runtime) => {
+                    if (
+                        this._DISPOSED ||
+                        generation !== this._EDIT_RENDER_GENERATION ||
+                        this.get("prop_customFormMode") !== CustomFormMode.RUN
+                    ) return;
+                    this._VIEW.set([{content: this.renderRunMode(groups, runtime), col: null}]);
+                })
+                .catch((error) => {
+                    if (!this._DISPOSED && generation === this._EDIT_RENDER_GENERATION) {
+                        console.error("ComponentCustomForm could not load field controls", error);
+                    }
+                });
             return;
         }
 
-        this._VIEW.set([{content: this.renderEditMode(groups), col: null}]);
+        const workflowComposition = CoreComponents.Tools.Workflow.Capture_ComponentWorkflowComposition();
+        this._VIEW.set([{
+            content: CoreReactive.App.section({
+                attrs: {"data-mode": CustomFormMode.EDIT, "data-layout-creator-loading": "true"},
+                styles: {width: "100%"},
+            }),
+            col: null,
+        }]);
+
+        void this.loadLayoutCreatorRuntime()
+            .then((runtime) => {
+                if (
+                    this._DISPOSED ||
+                    generation !== this._EDIT_RENDER_GENERATION ||
+                    this.get("prop_customFormMode") === CustomFormMode.RUN
+                ) return;
+                const renderEditor = () => this._VIEW.set([{
+                    content: this.renderEditMode(groups, runtime),
+                    col: null,
+                }]);
+                if (workflowComposition) {
+                    CoreComponents.Tools.Workflow.With_ComponentWorkflowComposition(workflowComposition, renderEditor);
+                } else {
+                    renderEditor();
+                }
+            })
+            .catch((error) => {
+                if (!this._DISPOSED && generation === this._EDIT_RENDER_GENERATION) {
+                    console.error("ComponentCustomForm could not load edit layout support", error);
+                }
+            });
     }
 
-    private renderEditMode(groups: CustomFormGroup[]): CoreReactive.App {
-        const groupViews = groups.map((group) => this.renderEditGroup(group));
+    private loadLayoutCreatorRuntime(): Promise<LayoutCreatorRuntime> {
+        if (this._LAYOUT_CREATOR_RUNTIME) return Promise.resolve(this._LAYOUT_CREATOR_RUNTIME);
+        if (!this._LAYOUT_CREATOR_RUNTIME_PROMISE) {
+            this._LAYOUT_CREATOR_RUNTIME_PROMISE = import("./EditRuntime")
+                .then((runtime) => {
+                    this._LAYOUT_CREATOR_RUNTIME = runtime;
+                    return runtime;
+                })
+                .catch((error) => {
+                    this._LAYOUT_CREATOR_RUNTIME_PROMISE = null;
+                    throw error;
+                });
+        }
+        return this._LAYOUT_CREATOR_RUNTIME_PROMISE;
+    }
+
+    private loadFieldRuntime(): Promise<FieldRuntime> {
+        if (this._FIELD_RUNTIME) return Promise.resolve(this._FIELD_RUNTIME);
+        if (!this._FIELD_RUNTIME_PROMISE) {
+            this._FIELD_RUNTIME_PROMISE = import("./FieldRuntime")
+                .then((runtime) => {
+                    this._FIELD_RUNTIME = runtime;
+                    return runtime;
+                })
+                .catch((error) => {
+                    this._FIELD_RUNTIME_PROMISE = null;
+                    throw error;
+                });
+        }
+        return this._FIELD_RUNTIME_PROMISE;
+    }
+
+    private hasDeferredRunFields(groups: CustomFormGroup[]): boolean {
+        const deferredTypes = new Set([
+            CustomFormFieldType.TEXTAREA,
+            CustomFormFieldType.CHECKBOX,
+            CustomFormFieldType.RADIO,
+            CustomFormFieldType.SELECT,
+        ]);
+        return groups.some((group) => (group.fields ?? []).some((field) => deferredTypes.has(field.type)));
+    }
+
+    private renderEditMode(groups: CustomFormGroup[], runtime: LayoutCreatorRuntime): CoreReactive.App {
+        const groupViews = groups.map((group) => this.renderEditGroup(group, runtime));
         const addGroupLabel = this.translate(Keys.category.components.fetch.form.customForm.editor.addGroup);
         const addGroupIcon = new ComponentIcon.Component({
             styles: {
@@ -254,16 +349,16 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
         return form.getReactiveElement() as CoreReactive.App;
     }
 
-    private renderEditGroup(group: CustomFormGroup): CoreReactive.App {
-        const initialLayoutContent = this.createEditGroupLayoutContent(group);
-        const groupLayout = new ComponentLayoutCreator.Component({
+    private renderEditGroup(group: CustomFormGroup, runtime: LayoutCreatorRuntime): CoreReactive.App {
+        const initialLayoutContent = this.createEditGroupLayoutContent(group, runtime);
+        const groupLayout = new runtime.Component({
             prop_workflowChildName: `${Core.Dictionary.WorkflowNodeNames.customFormGroupLayout}_${group.id}`,
-            prop_mode: LayoutCreatorMode.EDIT,
-            prop_components: [...CUSTOM_FORM_LAYOUT_ALLOWED_COMPONENTS],
+            prop_mode: runtime.LayoutCreatorMode.EDIT,
+            prop_components: [...runtime.CUSTOM_FORM_LAYOUT_ALLOWED_COMPONENTS],
             prop_defaultColumn: this.getGroupLayoutColumn(group.columns),
             prop_initialLayoutContent: initialLayoutContent,
         } as any, {
-            CONTENT_CHANGE: (event, dataArgs) => this.updateGroupFieldsFromLayout(group.id, dataArgs?.ITEMS ?? [], event),
+            CONTENT_CHANGE: (event, dataArgs) => this.updateGroupFieldsFromLayout(group.id, dataArgs?.ITEMS ?? [], event, runtime),
         } as any);
         this._DYNAMIC_CHILDREN.push(groupLayout);
 
@@ -301,19 +396,65 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
         return collapse.getReactiveElement() as CoreReactive.App;
     }
 
-    private createEditGroupLayoutContent(group: CustomFormGroup): LayoutCreatorContentItem[] {
+    private createEditGroupLayoutContent(group: CustomFormGroup, runtime: LayoutCreatorRuntime): LayoutCreatorContentItem[] {
         return (Array.isArray(group.fields) ? group.fields : []).map((field) => {
-            const rendered = this.createRunField(field, group.id, false);
             return {
-                content: rendered.component as any,
+                content: this.createEditFieldTemplate(field, group.id, runtime),
                 col: field.col ?? this.getGroupLayoutColumn(group.columns),
                 workflowChildName: field.id,
             };
         });
     }
 
-    private renderRunMode(groups: CustomFormGroup[]): CoreReactive.App {
-        const groupViews = groups.map((group) => this.renderRunGroup(group));
+    private createEditFieldTemplate(field: CustomFormField, groupId: string, runtime: LayoutCreatorRuntime): LayoutCreatorComponentTemplate {
+        const name = field.name || field.id;
+        const currentValue = this.resolveFieldValue(field, name);
+        const customProps = field.props && typeof field.props === "object" ? {...field.props} : {};
+        const workflowChildName = this.getFieldWorkflowChildName(groupId, field);
+        const common = {prop_workflowChildName: workflowChildName, prop_name: name};
+
+        switch (field.type) {
+            case CustomFormFieldType.TEXTAREA:
+                return {componentType: runtime.FieldsRuntime.ComponentInputDescription.Component, properties: {
+                    ...customProps, ...common, prop_value: this.stringValue(currentValue),
+                    prop_labelTitle: field.label, prop_placeholder: field.placeholder ?? null,
+                }};
+            case CustomFormFieldType.CHECKBOX:
+                return {componentType: runtime.FieldsRuntime.ComponentInputCheckBox.Component, properties: {
+                    ...customProps, ...common, prop_value: currentValue ?? false, prop_labelTitle: field.label,
+                }};
+            case CustomFormFieldType.RADIO:
+                return {componentType: runtime.FieldsRuntime.ComponentInputRadioBox.Component, properties: {
+                    ...customProps, prop_workflowChildName: workflowChildName, prop_name: name,
+                    prop_title: field.label,
+                    prop_options: (field.options ?? []).map((option) => ({id: option.value, name: option.label})),
+                    prop_itemSelected: currentValue ?? null,
+                }};
+            case CustomFormFieldType.SELECT: {
+                const selectedValues = Array.isArray(currentValue) ? currentValue : currentValue == null ? [] : [currentValue];
+                return {componentType: runtime.FieldsRuntime.ComponentInputListSelector.Component, properties: {
+                    ...customProps,
+                    prop_icon: customProps.prop_icon === undefined ? UiIcons.Src.InputSelectColumn.Definition : customProps.prop_icon,
+                    prop_workflowChildName: workflowChildName,
+                    prop_columns: (field.options ?? []).map((option) => ({
+                        id: option.value, title: option.label, selected: selectedValues.includes(option.value),
+                    })),
+                    prop_labelTitle: field.label,
+                }};
+            }
+            case CustomFormFieldType.INPUT:
+            default:
+                return {componentType: ComponentInput.Component, properties: {
+                    ...customProps, ...common, prop_value: this.stringValue(currentValue),
+                    prop_labelTitle: field.label,
+                    prop_type: (customProps as any).prop_type ?? InputSimpleTypes.STRING,
+                    prop_placeholder: field.placeholder ?? null,
+                }};
+        }
+    }
+
+    private renderRunMode(groups: CustomFormGroup[], runtime?: FieldRuntime): CoreReactive.App {
+        const groupViews = groups.map((group) => this.renderRunGroup(group, runtime));
         const formContent = CoreReactive.App.section({
             className: ["d-flex", "flex-column", "gap-2"],
             children: groupViews,
@@ -332,13 +473,13 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
         return form.getReactiveElement() as CoreReactive.App;
     }
 
-    private renderRunGroup(group: CustomFormGroup): CoreReactive.App {
+    private renderRunGroup(group: CustomFormGroup, runtime?: FieldRuntime): CoreReactive.App {
         const column = this.getGroupLayoutColumn(group.columns);
         const fields = Array.isArray(group.fields) ? group.fields : [];
-        const layoutItems: LayoutCreatorContentItem[] = [];
+        const layoutItems: LayoutContentItem[] = [];
         const auxiliaryContent: CoreReactive.App[] = [];
         for (const field of fields) {
-            const rendered = this.createRunField(field, group.id);
+            const rendered = this.createRunField(field, group.id, runtime);
             layoutItems.push({
                 content: rendered.component as any,
                 col: field.col ?? column,
@@ -346,11 +487,11 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
             });
             auxiliaryContent.push(...rendered.auxiliary);
         }
-        const layout = new ComponentLayoutCreator.Component({
+        const layout = new ComponentLayout.Component({
             prop_workflowChildName: `${Core.Dictionary.WorkflowNodeNames.customFormGroupLayout}_${group.id}`,
-            prop_mode: LayoutCreatorMode.RENDER,
-            prop_components: [...CUSTOM_FORM_LAYOUT_ALLOWED_COMPONENTS],
-            prop_initialLayoutContent: layoutItems,
+            prop_col: LayoutColumn.CUSTOM,
+            prop_layoutStyles: {width: "100%"},
+            prop_layoutContent: layoutItems,
         } as any);
         this._DYNAMIC_CHILDREN.push(layout);
         const body = CoreReactive.App.section({
@@ -373,20 +514,39 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
         event.stopPropagation();
         this._PENDING_DELETE_GROUP_ID = groupId;
 
-        if (!this._DELETE_CONFIRM) {
+        if (this._DELETE_CONFIRM) {
+            this._DELETE_CONFIRM.call_open();
+            return;
+        }
+
+        if (this._DELETE_CONFIRM_LOADING) return;
+        this._DELETE_CONFIRM_LOADING = this.loadDeleteConfirm().finally(() => {
+            this._DELETE_CONFIRM_LOADING = null;
+        });
+    }
+
+    private async loadDeleteConfirm(): Promise<void> {
+        try {
+            const {Component: WindowConfirm} = await import("../componentWindowConfirm/runtime");
+            const pendingGroupId = this._PENDING_DELETE_GROUP_ID;
+            if (this._DISPOSED || !pendingGroupId || !this.getGroups().some((group) => group.id === pendingGroupId)) {
+                this._PENDING_DELETE_GROUP_ID = null;
+                return;
+            }
+
             const editorKeys = Keys.category.components.fetch.form.customForm.editor;
-            this._DELETE_CONFIRM = new ComponentWindowConfirm.Component({
+            this._DELETE_CONFIRM = new WindowConfirm({
                 prop_title: this.translate(editorKeys.deleteGroupTitle),
                 prop_message: this.translate(editorKeys.deleteGroupMessage),
                 prop_acceptText: this.translate(editorKeys.removeGroup),
                 prop_cancelText: this.translate(editorKeys.cancel),
             } as any, {
                 CONFIRM: (confirmEvent) => {
-                    const pendingGroupId = this._PENDING_DELETE_GROUP_ID;
+                    const confirmedGroupId = this._PENDING_DELETE_GROUP_ID;
                     this._PENDING_DELETE_GROUP_ID = null;
-                    if (!pendingGroupId) return;
+                    if (!confirmedGroupId) return;
                     this.updateTemplate(
-                        this.getGroups().filter((group) => group.id !== pendingGroupId),
+                        this.getGroups().filter((group) => group.id !== confirmedGroupId),
                         confirmEvent,
                     );
                 },
@@ -400,10 +560,10 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
             window.setTimeout(() => {
                 if (!this._DISPOSED && this._DELETE_CONFIRM) this._DELETE_CONFIRM.call_open();
             }, 0);
-            return;
+        } catch (error) {
+            this._PENDING_DELETE_GROUP_ID = null;
+            console.error("[ComponentCustomForm] Could not load the group-delete confirmation dialog.", error);
         }
-
-        this._DELETE_CONFIRM.call_open();
     }
 
     private openGroupSettings(groupId: string | null, event: Event): void {
@@ -582,6 +742,7 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
         if (source && endpoint && CoreEvent.App.hasEmit(endpoint)) {
             CoreEvent.App.request(CoreEvent.requestMap([[endpoint, {close: true}]]), source);
         }
+        this._GROUP_SETTINGS_WINDOW_LOADS.clear();
         for (const resource of [...this._GROUP_SETTINGS_WINDOWS.values()]) resource.dispose?.();
     }
 
@@ -593,6 +754,29 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
             return;
         }
 
+        if (this._GROUP_SETTINGS_WINDOW_LOADS.has(settingsKey)) return;
+        const requestToken = Symbol(settingsKey);
+        this._GROUP_SETTINGS_WINDOW_LOADS.set(settingsKey, requestToken);
+        void import("../componentWindow/runtime")
+            .then(({Component: WindowComponent}) => {
+                if (this._DISPOSED || this._GROUP_SETTINGS_WINDOW_LOADS.get(settingsKey) !== requestToken) return;
+                this._GROUP_SETTINGS_WINDOW_LOADS.delete(settingsKey);
+                this.createGroupSettingsWindow(groupId, event, WindowComponent);
+            })
+            .catch((error) => {
+                if (this._GROUP_SETTINGS_WINDOW_LOADS.get(settingsKey) === requestToken) {
+                    this._GROUP_SETTINGS_WINDOW_LOADS.delete(settingsKey);
+                }
+                console.error("[ComponentCustomForm] Could not load the group settings dialog.", error);
+            });
+    }
+
+    private createGroupSettingsWindow(
+        groupId: string | null,
+        event: Event,
+        WindowComponent: typeof ComponentWindowRuntime.Component,
+    ): void {
+        const settingsKey = groupId ?? "new-group";
         const group = groupId === null ? null : this.getGroups().find((item) => item.id === groupId) ?? null;
         if (groupId !== null && !group) return;
 
@@ -610,7 +794,7 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
             children: [titleInput.getReactiveElement() as CoreReactive.App],
         });
 
-        let windowComponent!: ComponentWindow.Component;
+        let windowComponent!: ComponentWindowRuntime.Component;
         let cleanupTimer: number | null = null;
         let applyTimer: number | null = null;
         let isDisposed = false;
@@ -628,7 +812,7 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
             if (childIndex >= 0) this._DYNAMIC_CHILDREN.splice(childIndex, 1);
         };
         const resource: DisposableChild & {call_open?: () => void} = {dispose: disposeSettings};
-        windowComponent = new ComponentWindow.Component({
+        windowComponent = new WindowComponent({
             prop_title: this.translate(groupId === null ? editorKeys.addGroup : editorKeys.groupSettings),
             prop_body: windowBody,
             prop_acceptText: this.translate(editorKeys.save),
@@ -680,9 +864,14 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
         }
     }
 
-    private updateGroupFieldsFromLayout(groupId: string, items: LayoutCreatorItemState[], event: Event): void {
+    private updateGroupFieldsFromLayout(
+        groupId: string,
+        items: LayoutCreatorItemState[],
+        event: Event,
+        runtime: LayoutCreatorRuntime,
+    ): void {
         const fields = items.flatMap((item, index) => {
-            const field = this.createFieldFromLayoutItem(item, index);
+            const field = this.createFieldFromLayoutItem(item, index, runtime);
             return field ? [field] : [];
         });
         const groups = this.getGroups().map((group) => group.id === groupId ? {...group, fields} : group);
@@ -696,16 +885,16 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
         this.updateTemplate(groups, event);
     }
 
-    private createFieldFromLayoutItem(item: LayoutCreatorItemState, index: number): CustomFormField | null {
+    private createFieldFromLayoutItem(item: LayoutCreatorItemState, index: number, runtime: LayoutCreatorRuntime): CustomFormField | null {
         const type = item.component === ComponentInput.Component
             ? CustomFormFieldType.INPUT
-            : item.component === ComponentInputDescription.Component
+            : item.component === runtime.FieldsRuntime.ComponentInputDescription.Component
                 ? CustomFormFieldType.TEXTAREA
-                : item.component === ComponentInputCheckBox.Component
+                : item.component === runtime.FieldsRuntime.ComponentInputCheckBox.Component
                     ? CustomFormFieldType.CHECKBOX
-                    : item.component === ComponentInputRadioBox.Component
+                    : item.component === runtime.FieldsRuntime.ComponentInputRadioBox.Component
                         ? CustomFormFieldType.RADIO
-                        : item.component === ComponentInputListSelector.Component
+                        : item.component === runtime.FieldsRuntime.ComponentInputListSelector.Component
                             ? CustomFormFieldType.SELECT
                             : null;
         if (!type) return null;
@@ -742,6 +931,7 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
     private createRunField(
         field: CustomFormField,
         groupId: string,
+        runtime?: FieldRuntime,
         includeAuxiliary: boolean = true,
     ): {component: DisposableChild; auxiliary: CoreReactive.App[]} {
         const name = field.name || field.id;
@@ -752,7 +942,7 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
 
         switch (field.type) {
             case CustomFormFieldType.TEXTAREA: {
-                const child = new ComponentInputDescription.Component({
+                const child = new runtime!.ComponentInputDescription.Component({
                     ...customProps,
                     prop_workflowChildName: workflowChildName,
                     prop_name: name,
@@ -767,7 +957,7 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
             }
             case CustomFormFieldType.CHECKBOX: {
                 const hidden = includeAuxiliary ? this.hiddenValue(name, currentValue) : null;
-                const child = new ComponentInputCheckBox.Component({
+                const child = new runtime!.ComponentInputCheckBox.Component({
                     ...customProps,
                     prop_workflowChildName: workflowChildName,
                     prop_name: name,
@@ -786,7 +976,7 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
             case CustomFormFieldType.RADIO: {
                 const selected = new CoreObservable.App<string | number | null>(currentValue as string | number | null ?? null);
                 const hidden = includeAuxiliary ? this.hiddenValue(name, currentValue) : null;
-                const child = new ComponentInputRadioBox.Component({
+                const child = new runtime!.ComponentInputRadioBox.Component({
                     ...customProps,
                     prop_workflowChildName: workflowChildName,
                     prop_name: name,
@@ -813,7 +1003,7 @@ export class ComponentCustomForm extends ComponentCustomFormBase<ReturnType<type
                 const initialSelected = (columns.get() as Array<{id: string | number; selected: boolean}>)
                     .filter((option) => option.selected).map((option) => option.id);
                 const hidden = includeAuxiliary ? this.hiddenValue(name, initialSelected.join(",")) : null;
-                const child = new ComponentInputListSelector.Component({
+                const child = new runtime!.ComponentInputListSelector.Component({
                     ...customProps,
                     prop_icon: customProps.prop_icon === undefined ? UiIcons.Src.InputSelectColumn.Definition : customProps.prop_icon,
                     prop_workflowChildName: workflowChildName,

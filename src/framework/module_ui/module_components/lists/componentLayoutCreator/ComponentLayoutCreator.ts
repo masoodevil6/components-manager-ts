@@ -15,7 +15,7 @@ import * as ComponentBorder from "../componentBorder/runtime";
 import * as ComponentIcon from "../componentIcon/runtime";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/basic";
 import {Props, LayoutCreatorMode} from "./Props";
 import type {LayoutCreatorContentItem, LayoutCreatorItemState} from "./Props";
 import type {PropsConfigType as LayoutCreatorPropsConfigType, PropsType as LayoutCreatorPropsType} from "./Props";
@@ -150,7 +150,7 @@ export class ComponentLayoutCreator extends ComponentStructure.Component {
 
         if (currentMode === LayoutCreatorMode.EDIT && !this._INITIAL_LAYOUT_CONTENT_SEEDED && configuredContent != null) {
             this.seedInitialLayoutContent(
-                this.validateInitialLayoutContent(configuredContent),
+                this.validateInitialLayoutContent(configuredContent, true),
                 components as CoreObservable.App<any>,
             );
             this._INITIAL_LAYOUT_CONTENT_SEEDED = true;
@@ -210,18 +210,23 @@ export class ComponentLayoutCreator extends ComponentStructure.Component {
         });
     }
 
-    private validateInitialLayoutContent(content: unknown): LayoutCreatorContentItem[] {
+    private validateInitialLayoutContent(content: unknown, allowTemplates = false): LayoutCreatorContentItem[] {
         if (!Array.isArray(content)) {
             throw new TypeError("[ComponentLayoutCreator] prop_initialLayoutContent must be an array of component items.");
         }
 
         return content.map((item: any, index: number) => {
             const component = item?.content;
+            const isTemplate = typeof component?.componentType === "function"
+                && component.properties
+                && typeof component.properties === "object"
+                && !Array.isArray(component.properties);
             if (
                 !item ||
                 typeof item !== "object" ||
-                typeof component?.getElement !== "function" ||
-                typeof component?.getComponentWorkflow !== "function"
+                (isTemplate
+                    ? !allowTemplates
+                    : typeof component?.getElement !== "function" || typeof component?.getComponentWorkflow !== "function")
             ) {
                 throw new TypeError(
                     `[ComponentLayoutCreator] prop_initialLayoutContent[${index}].content must be a component instance.`,
@@ -244,11 +249,14 @@ export class ComponentLayoutCreator extends ComponentStructure.Component {
     ): void {
         for (const item of items) {
             const componentInstance = item.content as any;
-            const componentClass = componentInstance.constructor as Function;
-            const componentProperties = Object.fromEntries(
-                Object.entries(componentInstance._COMPONENT_PROPS_BIND ?? {})
-                    .map(([name, value]: [string, any]) => [name, typeof value?.get === "function" ? value.get() : value]),
-            );
+            const isTemplate = typeof componentInstance.componentType === "function";
+            const componentClass = (isTemplate ? componentInstance.componentType : componentInstance.constructor) as Function;
+            const componentProperties = isTemplate
+                ? {...componentInstance.properties}
+                : Object.fromEntries(
+                    Object.entries(componentInstance._COMPONENT_PROPS_BIND ?? {})
+                        .map(([name, value]: [string, any]) => [name, typeof value?.get === "function" ? value.get() : value]),
+                );
             const creator = this.createColumnCreator(
                 componentClass,
                 componentProperties,

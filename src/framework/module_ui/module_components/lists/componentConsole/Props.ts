@@ -2,7 +2,8 @@ import * as CoreComponents from "@/core_components";
 import * as CoreObservable from "@/core_observable";
 import * as CoreLanguage from "@/core_languages";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
-import {Keys} from "../../../module_categories/languages";
+import {Keys as KeysBasic} from "../../../module_categories/languages/keys/components/basic";
+import {Keys as KeysConsole} from "../../../module_categories/languages/keys/components/console";
 import {Props as BorderProps} from "../componentBorder/Props";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
 import type {ConsoleEntry} from "./Types";
@@ -14,32 +15,32 @@ const defineBorderAlias = <T,>(prop: string, source: any) => Define_ComponentPro
     name: source.name,
     description: source.description,
 });
-const basicKeys = Keys.category.components.basic.props;
+const basicKeys = KeysBasic.category.components.basic.props;
 
 export const Props = {
     prop_entries: Define_ComponentProp<ConsoleEntry[] | CoreObservable.App<ConsoleEntry[]>>({
-        prop: "prop_entries", default: [], name: Keys.category.components.console.props.entries.name,
-        description: Keys.category.components.console.props.entries.description,
+        prop: "prop_entries", default: [], name: KeysConsole.category.components.console.props.entries.name,
+        description: KeysConsole.category.components.console.props.entries.description,
     }),
     prop_maxEntries: Define_ComponentProp<number>({
-        prop: "prop_maxEntries", default: 500, name: Keys.category.components.console.props.maxEntries.name,
-        description: Keys.category.components.console.props.maxEntries.description,
+        prop: "prop_maxEntries", default: 500, name: KeysConsole.category.components.console.props.maxEntries.name,
+        description: KeysConsole.category.components.console.props.maxEntries.description,
     }),
     prop_autoScroll: Define_ComponentProp<boolean>({
-        prop: "prop_autoScroll", default: true, name: Keys.category.components.console.props.autoScroll.name,
-        description: Keys.category.components.console.props.autoScroll.description,
+        prop: "prop_autoScroll", default: true, name: KeysConsole.category.components.console.props.autoScroll.name,
+        description: KeysConsole.category.components.console.props.autoScroll.description,
     }),
     prop_showLevelFilter: Define_ComponentProp<boolean>({
-        prop: "prop_showLevelFilter", default: true, name: Keys.category.components.console.props.showLevelFilter.name,
-        description: Keys.category.components.console.props.showLevelFilter.description,
+        prop: "prop_showLevelFilter", default: true, name: KeysConsole.category.components.console.props.showLevelFilter.name,
+        description: KeysConsole.category.components.console.props.showLevelFilter.description,
     }),
     prop_showClearButton: Define_ComponentProp<boolean>({
-        prop: "prop_showClearButton", default: true, name: Keys.category.components.console.props.showClearButton.name,
-        description: Keys.category.components.console.props.showClearButton.description,
+        prop: "prop_showClearButton", default: true, name: KeysConsole.category.components.console.props.showClearButton.name,
+        description: KeysConsole.category.components.console.props.showClearButton.description,
     }),
     prop_placeholder: Define_ComponentProp<string | CoreObservable.App<string>>({
-        prop: "prop_placeholder", default: CoreLanguage.App.translate(Keys.category.components.console.texts.empty), name: Keys.category.components.console.props.placeholder.name,
-        description: Keys.category.components.console.props.placeholder.description,
+        prop: "prop_placeholder", default: CoreLanguage.App.translate(KeysConsole.category.components.console.texts.empty), name: KeysConsole.category.components.console.props.placeholder.name,
+        description: KeysConsole.category.components.console.props.placeholder.description,
     }),
 
     prop_componentBorderSelector: Define_ComponentProp<string | null>({prop: "prop_componentBorderSelector", default: null, name: basicKeys.selector.name, description: basicKeys.selector.description}),

@@ -1,4 +1,4 @@
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/fetch";
 import type {CustomFormGroup} from "./Props";
 import type {
     ExtractMethodsType,

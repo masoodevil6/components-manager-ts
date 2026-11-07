@@ -1,4 +1,4 @@
-import {Keys}                from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/inputCheckBox";
 import {Props}               from "./Props";
 // --------------------------------
 import type {

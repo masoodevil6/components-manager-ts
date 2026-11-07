@@ -14,11 +14,16 @@ import {Schemas} from "./Schemas";
 import {createCardRowInfoStep} from "./Step";
 import * as ComponentBorder from "../componentBorder/runtime";
 import * as ComponentIcon from "../componentIcon/runtime";
-import * as ComponentMenuMore from "../componentMenuMore/runtime";
+import type {MenuMoreEntry} from "../componentMenuMore/Props";
+
+type ComponentMenuMoreRuntime = typeof import("../componentMenuMore/runtime");
 
 export class ComponentCardRowInfo extends ComponentCardRowInfoBase<ReturnType<typeof createCardRowInfoStep>> {
     private _BORDER: InstanceType<typeof ComponentBorder.Component> | null = null;
-    private _OPTIONS_MENU: InstanceType<typeof ComponentMenuMore.Component> | null = null;
+    private _OPTIONS_MENU: InstanceType<ComponentMenuMoreRuntime["Component"]> | null = null;
+    private _MENU_MORE_RUNTIME: ComponentMenuMoreRuntime | null = null;
+    private _MENU_MORE_RUNTIME_PROMISE: Promise<ComponentMenuMoreRuntime | null> | null = null;
+    private readonly _MENU_MORE_RUNTIME_READY = new CoreObservable.App(0);
     private readonly _HOVERED = new CoreObservable.App(false);
     private _DISPOSED = false;
     private _ROW_ICONS: InstanceType<typeof ComponentIcon.Component>[] = [];
@@ -98,7 +103,7 @@ export class ComponentCardRowInfo extends ComponentCardRowInfoBase<ReturnType<ty
             this.getScope(),
         );
         const contentPaddingTop = CoreObservable.App.computed(
-            (items: ComponentMenuMore.MenuMoreEntry[], size: UtilConst.Sizes) => {
+            (items: MenuMoreEntry[], size: UtilConst.Sizes) => {
                 if (!Array.isArray(items) || items.length === 0) return "0px";
                 return UtilStyle.Css_SizeCalc(
                     UtilStyle.Css_Padding(size) as any,
@@ -118,9 +123,15 @@ export class ComponentCardRowInfo extends ComponentCardRowInfoBase<ReturnType<ty
             this.getScope(),
         );
         const menu = CoreObservable.App.conditionWhen(
-            [options],
-            (items: ComponentMenuMore.MenuMoreEntry[]) => Array.isArray(items) && items.length > 0,
-            () => this.renderOptionsMenu(options, menuWrapperStyles),
+            [options, this._MENU_MORE_RUNTIME_READY],
+            (items: MenuMoreEntry[]) => Array.isArray(items) && items.length > 0,
+            () => {
+                if (!this._MENU_MORE_RUNTIME) {
+                    void this.loadMenuMoreRuntime();
+                    return null;
+                }
+                return this.renderOptionsMenu(options, menuWrapperStyles);
+            },
             () => {
                 this.clearWorkflowChildSlot("optionsMenu");
                 this._OPTIONS_MENU?.dispose();
@@ -176,7 +187,12 @@ export class ComponentCardRowInfo extends ComponentCardRowInfoBase<ReturnType<ty
     private renderOptionsMenu(
         options: CoreObservable.App<any>,
         wrapperStyles: CoreObservable.App<Record<string, string>>,
-    ): CoreReactive.App {
+    ): CoreReactive.App | null {
+        if (!this._MENU_MORE_RUNTIME) {
+            return null;
+        }
+
+        const ComponentMenuMore = this._MENU_MORE_RUNTIME;
         if (!this._OPTIONS_MENU) {
             this._OPTIONS_MENU = new ComponentMenuMore.Component({
                 prop_workflowChildName: "optionsMenu",
@@ -200,6 +216,27 @@ export class ComponentCardRowInfo extends ComponentCardRowInfoBase<ReturnType<ty
             stylesBind: wrapperStyles as any,
             children: [this.renderWorkflowSlot(this._OPTIONS_MENU, "optionsMenu") as any],
         });
+    }
+
+    private loadMenuMoreRuntime(): Promise<ComponentMenuMoreRuntime | null> {
+        if (this._MENU_MORE_RUNTIME) return Promise.resolve(this._MENU_MORE_RUNTIME);
+        if (this._MENU_MORE_RUNTIME_PROMISE) return this._MENU_MORE_RUNTIME_PROMISE;
+
+        this._MENU_MORE_RUNTIME_PROMISE = import("../componentMenuMore/runtime")
+            .then((runtime) => {
+                this._MENU_MORE_RUNTIME_PROMISE = null;
+                if (this._DISPOSED) return null;
+                this._MENU_MORE_RUNTIME = runtime;
+                this._MENU_MORE_RUNTIME_READY.set(this._MENU_MORE_RUNTIME_READY.get() + 1);
+                return runtime;
+            })
+            .catch((error) => {
+                this._MENU_MORE_RUNTIME_PROMISE = null;
+                console.error("ComponentCardRowInfo could not load menu support", error);
+                return null;
+            });
+
+        return this._MENU_MORE_RUNTIME_PROMISE;
     }
 
     private disposeRowIcons(): void {

@@ -1,6 +1,6 @@
 import * as CoreComponents from "@/core_components";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/basic";
 import {LayoutColumn} from "../componentLayout/Props";
 import type {LayoutContentItem} from "../componentLayout/Props";
 import type {StandardStyles} from "@/util_options_std";
@@ -13,8 +13,13 @@ export type LayoutCreatorComponentInstance = {
     getComponentWorkflow(): unknown;
 };
 
+export type LayoutCreatorComponentTemplate = {
+    componentType: Function;
+    properties: Record<string, any>;
+};
+
 export type LayoutCreatorContentItem = Omit<LayoutContentItem, "content" | "styles"> & {
-    content: LayoutCreatorComponentInstance;
+    content: LayoutCreatorComponentInstance | LayoutCreatorComponentTemplate;
     styles?: StandardStyles;
 };
 

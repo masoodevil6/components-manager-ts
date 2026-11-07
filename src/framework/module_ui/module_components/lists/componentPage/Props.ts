@@ -3,7 +3,7 @@ import * as CoreReactive from "@/core_reactive";
 import * as UtilConst from "@/util_consts";
 import * as UtilStyle from "@/util_styles";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/page";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
 import type {ComponentWorkflowChild} from "@/core_components";
 

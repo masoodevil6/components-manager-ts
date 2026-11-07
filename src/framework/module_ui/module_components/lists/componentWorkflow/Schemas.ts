@@ -1,5 +1,5 @@
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/mouseScroller";
 import {Props} from "./Props";
 import type {ExtractSchemasType} from "../../tools/type/TypeHelpers";
 

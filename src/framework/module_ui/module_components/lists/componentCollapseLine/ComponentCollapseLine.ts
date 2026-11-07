@@ -5,7 +5,7 @@ import * as CoreLanguage from "@/core_languages";
 import * as UiIcons from "@/ui_icons";
 import * as UtilStyle from "@/util_styles";
 import {PartAttrDefault} from "@/core_components";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/collapseLine";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";
 import * as ComponentIcon from "../componentIcon/runtime";

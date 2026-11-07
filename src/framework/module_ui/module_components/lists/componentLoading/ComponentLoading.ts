@@ -17,6 +17,9 @@ import {createLoadingStep}               from "./Step";
 // --------------------------------
 import * as ComponentIcon from "../componentIcon/runtime";
 
+const LOADING_STYLES_ID = "component-loading-styles";
+const LOADING_ANIMATION_NAME = "component-loading-ring";
+
 
 /**
  * ComponentLoading â€” Ú©Ù„Ø§Ø³ Ù†Ù‡Ø§ÛŒÛŒ
@@ -152,7 +155,7 @@ export class ComponentLoading extends ComponentLoadingBase<ReturnType<typeof cre
         if (typeValue === LoadingType.CIRCLE) {
             const ringSize = widthValue;
             const ringHeight = heightValue;
-            const animName = `lds-ring-${(this as any)._COMPONENT_RANDOM_ID ?? "default"}`;
+            const animName = LOADING_ANIMATION_NAME;
 
             const loadingChildren: any[] = [];
 
@@ -352,13 +355,12 @@ export class ComponentLoading extends ComponentLoadingBase<ReturnType<typeof cre
        fn_injectStyles â€” inject CSS keyframes for ring animation
     --------------------------------------------- */
     private fn_injectStyles(): void {
-        const styleId = `component-loading-styles-${(this as any)._COMPONENT_RANDOM_ID ?? "default"}`;
-        if (document.getElementById(styleId)) return;
+        if (document.getElementById(LOADING_STYLES_ID)) return;
 
         const style = document.createElement("style");
-        style.id = styleId;
+        style.id = LOADING_STYLES_ID;
         style.textContent = `
-            @keyframes lds-ring-${(this as any)._COMPONENT_RANDOM_ID ?? "default"} {
+            @keyframes ${LOADING_ANIMATION_NAME} {
                 0% {
                     transform: rotate(0deg);
                 }

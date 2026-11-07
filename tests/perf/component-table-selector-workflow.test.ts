@@ -77,7 +77,13 @@ describe("ComponentTable column selector workflow", () => {
         const iconSize = UtilStyle.Css_IconSize(CoreConfig.Settings.SizeName.observable().get());
         expect(menuElement.style.width).toBe(iconSize);
         expect(menuElement.style.height).toBe(iconSize);
+        expect((positionMenu as any)._FLOAT_MENU_RUNTIME).toBeNull();
+        expect((positionMenu as any)._FLOAT_MENU_INSTANCE).toBeNull();
         selectorIcon!.click();
+
+        for (let attempt = 0; attempt < 100 && !((positionMenu as any)._FLOAT_MENU_INSTANCE?._IS_SHOW); attempt++) {
+            await new Promise((resolve) => setTimeout(resolve, 0));
+        }
         expect((positionMenu as any).get("prop_menuIsOpen")).toBe(true);
 
         const floatMenu = (positionMenu as any)._FLOAT_MENU_INSTANCE as ComponentFloatMenu;

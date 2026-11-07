@@ -26,7 +26,7 @@ import * as ComponentJsonTree from "../componentJsonTree/runtime";
 import type {JsonValue} from "../componentJsonTree/Types";
 import * as ComponentErrorIsEmpty from "../componentErrorIsEmpty/runtime";
 import * as ComponentValidate from "../componentValidate/runtime";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/inputJson";
 
 type ParseResult = {valid: true; value: JsonValue; error: null} | {valid: false; value: undefined; error: string};
 type DisposableChild = {dispose?: () => void; disposeStep?: () => void};

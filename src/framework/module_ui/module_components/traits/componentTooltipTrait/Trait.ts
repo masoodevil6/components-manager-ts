@@ -3,7 +3,6 @@ import * as CoreObservable  from "@/core_observable";
 import * as CoreConfigs     from "@/core_configs";
 import * as CoreComponents  from "@/core_components";
 // --------------------------------
-import {ComponentTooltip} from "../../lists/componentTooltip/ComponentTooltip";
 
 
 /**
@@ -116,33 +115,53 @@ export const ComponentTooltipTrait = {
             tooltipDirection:    CoreObservable.App<any>;
         },
     ): CoreObservable.App<any> {
+        const workflowComposition = CoreComponents.Tools.Workflow.Capture_ComponentWorkflowComposition();
+        const scope = component.getScope();
+        let requestVersion = 0;
+        let isDisposed = false;
+        scope.track(() => {
+            isDisposed = true;
+            requestVersion += 1;
+        });
+
         return CoreObservable.App.computed(
-            (desc, icon, bg, color, pos, dir) => {
+            (desc) => {
+                const currentRequest = ++requestVersion;
                 if (desc == null || desc === "") return null;
 
-                return new ComponentTooltip(
-                    {
-                        styles:                   { height: "100%" },
-                        prop_structureStyles:     { height: "100%" },
-                        prop_tooltipIcon:          icon,
-                        prop_tooltipDescription:    desc,
-                        prop_tooltipBackground:     bg,
-                        prop_tooltipColor:          color,
-                        prop_tooltipIconPosition:   pos,
-                        prop_tooltipDirection:      dir,
-                    } as any,
-                    {},
-                ).getReactiveElement();
+                const content = new CoreObservable.App<any>(null);
+                const container = CoreReactive.App.section({children: [content]});
+                void import("../../lists/componentTooltip/ComponentTooltip")
+                    .then(({ComponentTooltip}) => {
+                        if (isDisposed || currentRequest !== requestVersion) return;
+                        const createTooltip = () => new ComponentTooltip(
+                            {
+                                styles: {height: "100%"},
+                                prop_structureStyles: {height: "100%"},
+                                prop_tooltipIcon: tooltipProps.tooltipIcon,
+                                prop_tooltipDescription: tooltipProps.tooltipDescription,
+                                prop_tooltipBackground: tooltipProps.tooltipBackground,
+                                prop_tooltipColor: tooltipProps.tooltipColor,
+                                prop_tooltipIconPosition: tooltipProps.tooltipIconPosition,
+                                prop_tooltipDirection: tooltipProps.tooltipDirection,
+                            } as any,
+                            {},
+                        ).getReactiveElement();
+                        const tooltip = workflowComposition
+                            ? CoreComponents.Tools.Workflow.With_ComponentWorkflowComposition(workflowComposition, createTooltip)
+                            : createTooltip();
+                        content.set(tooltip);
+                    })
+                    .catch((error) => {
+                        if (!isDisposed && currentRequest === requestVersion) {
+                            console.error("ComponentTooltipTrait could not load tooltip support", error);
+                        }
+                    });
+
+                return container;
             },
-            [
-                tooltipProps.tooltipDescription,
-                tooltipProps.tooltipIcon,
-                tooltipProps.tooltipBackground,
-                tooltipProps.tooltipColor,
-                tooltipProps.tooltipIconPosition,
-                tooltipProps.tooltipDirection,
-            ],
-            component.getScope(),
+            [tooltipProps.tooltipDescription],
+            scope,
         );
     },
 

@@ -1,4 +1,4 @@
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/pageHeader";
 import type {BreadcrumbShadowItem} from "../componentBreadcrumbShadow/Props";
 import type {MenuMoreItem} from "../componentMenuMore/Props";
 import type {ExtractMethodsType, ExtractMethodsDataArgs, ExtractMethodsConfigType} from "../../tools/type/TypeHelpers";

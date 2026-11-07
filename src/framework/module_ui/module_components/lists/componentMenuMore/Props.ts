@@ -3,7 +3,7 @@ import {DefineProp as Define_ComponentProp} from "@/core_components";
 import type * as UiIcons from "@/ui_icons";
 import * as UtilConst from "@/util_consts";
 import * as UtilStyle from "@/util_styles";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/menuMore";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
 
 export enum MenuMoreOrientation {

@@ -6,30 +6,28 @@ import * as Core from "@/core";
 import * as CoreConfig from "@/core_configs";
 import * as CoreLanguage from "@/core_languages";
 import {PartAttrDefault} from "@/core_components";
-import * as UiIcons from "@/ui_icons";
 import * as UtilConst from "@/util_consts";
 import * as UtilStyle from "@/util_styles";
 import * as ComponentStructure from "../componentStructure/runtime";
-import * as ComponentBorder from "../componentBorder/runtime";
-import * as ComponentEffectChange from "../componentEffectChange/runtime";
-import * as ComponentWindow from "../componentWindow/runtime";
-import * as ComponentWindowConfirm from "../componentWindowConfirm/runtime";
-import * as ComponentMenuMore from "../componentMenuMore/runtime";
-import * as ComponentCollapse from "../componentCollapse/runtime";
-import * as ComponentButton from "../componentButton/runtime";
-import * as ComponentInput from "../componentInput/runtime";
-import * as ComponentInputCheckBox from "../componentInputCheckBox/runtime";
-import * as ComponentInputColor from "../componentInputColor/runtime";
-import * as ComponentInputSelectOption from "../componentInputSelectOption/runtime";
-import * as ComponentCodeMirror from "../componentCodeMirror/runtime";
-import * as ComponentTabs from "../componentTabs/runtime";
-import * as ComponentStyles from "../componentStyles/runtime";
-import * as ComponentPageSetting from "../componentPageSetting/runtime";
-import * as UtilOptionsStd from "@/util_options_std";
 import {LayoutColumn} from "../componentLayout/Props";
-import {ButtonSemantic, ButtonVariants} from "../componentButton/Props";
+import type * as ComponentBorder from "../componentBorder/runtime";
+import type * as ComponentEffectChange from "../componentEffectChange/runtime";
+import type * as ComponentMenuMore from "../componentMenuMore/runtime";
+import * as ComponentInput from "../componentInput/runtime";
+import type * as ComponentWindow from "../componentWindow/runtime";
+import type * as ComponentWindowConfirm from "../componentWindowConfirm/runtime";
+import type * as ComponentCollapse from "../componentCollapse/runtime";
+import type * as ComponentButton from "../componentButton/runtime";
+import type * as ComponentInputCheckBox from "../componentInputCheckBox/runtime";
+import type * as ComponentInputColor from "../componentInputColor/runtime";
+import type * as ComponentInputSelectOption from "../componentInputSelectOption/runtime";
+import type * as ComponentCodeMirror from "../componentCodeMirror/runtime";
+import type * as ComponentTabs from "../componentTabs/runtime";
+import type * as ComponentStyles from "../componentStyles/runtime";
+import type * as ComponentPageSetting from "../componentPageSetting/runtime";
+import * as UtilOptionsStd from "@/util_options_std";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/basic";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {ElementCreatorMode, Props} from "./Props";
 import type {PropsConfigType as ElementCreatorPropsConfigType, PropsType as ElementCreatorPropsType} from "./Props";
@@ -37,6 +35,7 @@ import {Schemas} from "./Schemas";
 import type {SchemasType as ElementCreatorSchemasType} from "./Schemas";
 import {Definition} from "./Definition";
 import {createElementCreatorStep} from "./Step";
+import type {ElementCreatorSettingsComponentsType} from "./SettingsComponents";
 import {Methods, type MethodsConfigType, type MethodsType} from "./Methods";
 
 const CSS_STYLE_PROPERTIES = [
@@ -83,6 +82,12 @@ export class ComponentElementCreator extends ComponentStructure.Component<
         ...Methods,
     } as any);
     private readonly _STEP: ReturnType<typeof createElementCreatorStep>;
+    private _SETTINGS_COMPONENTS: ElementCreatorSettingsComponentsType | null = null;
+    private _SETTINGS_COMPONENTS_PROMISE: Promise<ElementCreatorSettingsComponentsType> | null = null;
+    private _EDIT_RUNTIME: typeof import("./EditRuntime") | null = null;
+    private _EDIT_RUNTIME_PROMISE: Promise<typeof import("./EditRuntime")> | null = null;
+    private _EDIT_RENDER_GENERATION = 0;
+    private readonly _EDIT_CONTENT = new CoreObservable.App<any>(null);
     private _RENDERED_COMPONENT: {getElement: () => HTMLElement; getReactiveElement?: () => any; dispose?: () => void; getScope?: () => {dispose?: () => void}} | null = null;
     private _ROOT_BORDER: ComponentBorder.Component | null = null;
     private _OPTIONS_BORDER: ComponentBorder.Component | null = null;
@@ -161,6 +166,36 @@ export class ComponentElementCreator extends ComponentStructure.Component<
         });
     }
 
+    private loadSettingsComponents(): Promise<ElementCreatorSettingsComponentsType> {
+        if (!this._SETTINGS_COMPONENTS_PROMISE) {
+            this._SETTINGS_COMPONENTS_PROMISE = import("./SettingsComponents")
+                .then(({ElementCreatorSettingsComponents}) => {
+                    this._SETTINGS_COMPONENTS = ElementCreatorSettingsComponents;
+                    return ElementCreatorSettingsComponents;
+                })
+                .catch((error) => {
+                    this._SETTINGS_COMPONENTS_PROMISE = null;
+                    throw error;
+                });
+        }
+        return this._SETTINGS_COMPONENTS_PROMISE;
+    }
+
+    private getSettingsComponents(): ElementCreatorSettingsComponentsType {
+        if (!this._SETTINGS_COMPONENTS) {
+            throw new Error("ElementCreator settings components have not been loaded.");
+        }
+        return this._SETTINGS_COMPONENTS;
+    }
+
+    private runAfterSettingsComponentsLoad(action: () => void): void {
+        void this.loadSettingsComponents()
+            .then(() => {
+                if (!this._DISPOSED) action();
+            })
+            .catch((error) => console.error("ComponentElementCreator could not load settings components", error));
+    }
+
     override getElement(): HTMLElement {
         return super.getElement() as HTMLElement;
     }
@@ -170,16 +205,9 @@ export class ComponentElementCreator extends ComponentStructure.Component<
         this._DISPOSED = true;
         this.closeSettingsPageSetting();
         this.closeCssPageSetting();
-        this.stopDocumentPointerTracking();
-        this.clearOptionsHideTimeout();
+        this.setEditModeActive(false);
         this.disposeRenderedComponent();
-        const optionsEffect = this._OPTIONS_EFFECT as any;
-        optionsEffect?.dispose?.();
-        optionsEffect?.getScope?.().dispose();
-        this._OPTIONS_EFFECT = null;
         this._OPTIONS_CONTENT.set(null);
-        this._OPTIONS_MENU?.dispose();
-        this._OPTIONS_MENU = null;
         this.disposeSettingsWindow();
         this.disposeSettingsPageSetting();
         this._DELETE_CONFIRM_ELEMENT?.remove();
@@ -188,11 +216,6 @@ export class ComponentElementCreator extends ComponentStructure.Component<
         this._DELETE_CONFIRM?.dispose();
         this._DELETE_CONFIRM = null;
         this.disposeCssPageSetting();
-        const optionsBorder = this._OPTIONS_BORDER as any;
-        optionsBorder?.dispose?.();
-        optionsBorder?.getScope?.().dispose();
-        this._OPTIONS_BORDER = null;
-        this._OPTIONS_BORDER_CONTENT = null;
         this.disposeRootBorder();
         this.getScope().dispose();
         if (CoreEvent.App.getRegistry().some((step) => step.identity === this._STEP.identity)) {
@@ -259,127 +282,30 @@ export class ComponentElementCreator extends ComponentStructure.Component<
     }
 
     private renderEditMode(renderedComponent: CoreReactive.App | HTMLElement | null): CoreReactive.App {
-        this.setEditModeActive(true);
-        this.disposeRootBorder();
-        this._OPTIONS_MENU_ITEMS ??= CoreObservable.App.computed(
-            (hasSetting: boolean, hasDelete: boolean, hasColumn: boolean, hasChildrenDisplayMode: boolean) => {
-                const items: ComponentMenuMore.MenuMoreEntry[] = [];
-                if (hasSetting) items.push({id: "settings", icon: UiIcons.Src.FileSetting.Definition, action: "CLICK_SETTINGS"});
-                if (hasDelete) items.push({id: "delete", icon: UiIcons.Src.FilesDelete.Definition, action: "CLICK_DELETE"});
-                items.push({id: "css", icon: UiIcons.Src.ProgrammingCss, action: "CLICK_CSS"});
-                if (hasColumn) items.push({
-                    id: "column-options",
-                    icon: UiIcons.Src.InputSelectColumn.Definition,
-                    children: [
-                        {id: "column-null", title: "null", action: "SET_COLUMN_NULL"},
-                        ...Object.values(LayoutColumn).map((column) => ({
-                            id: `column-${column.toLowerCase()}`,
-                            title: column === LayoutColumn.CUSTOM ? "Custom" : column.toLowerCase(),
-                            action: column,
-                        })),
-                    ],
-                });
-                if (hasChildrenDisplayMode) items.push({
-                    id: "children-display-mode",
-                    icon: UiIcons.Src.InputSelectOption.Definition,
-                    children: [
-                        {
-                            id: "children-display-editor",
-                            title: CoreLanguage.App.translate(Keys.category.components.basic.elementCreator.editor.childrenEditorMode).get(),
-                            icon: UiIcons.Src.FilesEdit.Definition,
-                            action: "SET_CHILDREN_DISPLAY_EDITOR",
-                        },
-                        {
-                            id: "children-display-rendered",
-                            title: CoreLanguage.App.translate(Keys.category.components.basic.elementCreator.editor.childrenRenderedMode).get(),
-                            icon: UiIcons.Src.FilesZoom.Definition,
-                            action: "SET_CHILDREN_DISPLAY_RENDERED",
-                        },
-                    ],
-                });
-                return items;
-            },
-            [
-                this._COMPONENT_PROPS_BIND.prop_hasHeaderSetting,
-                this._COMPONENT_PROPS_BIND.prop_hasHeaderDelete,
-                this._COMPONENT_PROPS_BIND.prop_hasHeaderColumn,
-                this._COMPONENT_PROPS_BIND.prop_hasHeaderChildrenMode,
-            ],
-            this.getScope(),
-        );
-        this._OPTIONS_MENU ??= new ComponentMenuMore.Component({
-            prop_items: this._OPTIONS_MENU_ITEMS,
-            prop_isFullWidth: false,
-            prop_menuBackgroundColor: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
-            prop_menuIconColor: UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_1),
-        } as any, {
-            SELECT_ITEM: (event, dataArgs) => this.handleOptionSelection(event, dataArgs?.ITEM?.action),
-        } as any);
-        this._OPTIONS_BORDER ??= new ComponentBorder.Component({
-            prop_borderType: ComponentBorder.BorderTypes.SOLID,
-            prop_borderClass: ["w-100"],
-            prop_borderColor: UtilStyle.Css_Color(UtilConst.ColorMain.SHAN, UtilConst.ColorGrad.GRADE_2),
-            prop_contentBackgroundColor: UtilStyle.Css_Color(UtilConst.ColorMain.PRIMARY, UtilConst.ColorGrad.GRADE_1),
-            prop_borderStyles: {
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-end",
-                minHeight: "calc(var(--heightMedium) + var(--paddingMedium) * 2)",
-                padding: "var(--paddingSmall) var(--paddingMedium)",
-                boxSizing: "border-box",
-            },
-            prop_content: this._OPTIONS_MENU.getReactiveElement(),
-        } as any);
-        this._OPTIONS_BORDER_CONTENT ??= {
-            getElement: () => this._OPTIONS_BORDER?.getElement() as HTMLElement,
-            // EffectChange disposes outgoing content after each transition. Keep this
-            // border alive so a later hover can reveal the same reactive controls.
-            dispose: () => {},
-        };
-        this._OPTIONS_EFFECT ??= new ComponentEffectChange.Component({
-            prop_content: this._OPTIONS_CONTENT,
-            prop_mode: ComponentEffectChange.EffectChangeMode.FADE,
-            prop_duration: 180,
-        } as any);
-
-        const content = CoreReactive.App.section({
-            attrs: {"data-part-name": "part-element-creator"},
-            styles: {
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-            },
-            children: [
-                CoreReactive.App.section({
-                    attrs: {"data-part-name": "part-element-creator-options"},
-                    styles: {
-                        position: "relative",
-                        zIndex: String(UtilStyle.Css_ZIndex(UtilConst.ZIndex.SELECTOR_POPUP) + 1),
-                    },
-                    children: [this._OPTIONS_EFFECT.getReactiveElement() as CoreReactive.App],
-                }),
-                CoreReactive.App.section({
-                    attrs: {"data-part-name": "part-element-creator-render"},
-                    styles: {
-                        display: "flex",
-                        flexDirection: "column",
-                        position: "relative",
-                        zIndex: String(UtilStyle.Css_ZIndex(UtilConst.ZIndex.basic)),
-                        boxSizing: "border-box",
-                    },
-                    children: [
-                        this.renderWithMargin(renderedComponent, "part-element-creator-render-content") as any,
-                    ],
-                }),
-            ],
-        });
-
-        this._ROOT_BORDER = new ComponentBorder.Component({
-            prop_borderType: ComponentBorder.BorderTypes.DASHED,
-            prop_borderClass: ["w-100"],
-            prop_borderStyles: {display: "block", width: "100%", boxSizing: "border-box"},
-            prop_content: content,
-        } as any);
+        const generation = ++this._EDIT_RENDER_GENERATION;
+        const workflowComposition = CoreComponents.Tools.Workflow.Capture_ComponentWorkflowComposition();
+        this._EDIT_CONTENT.set(null);
+        void this.loadEditRuntime()
+            .then((runtime) => {
+                if (this._DISPOSED || generation !== this._EDIT_RENDER_GENERATION) return;
+                if (this._COMPONENT_PROPS_BIND.prop_mode.get() !== ElementCreatorMode.EDIT) return;
+                const renderEditRuntime = () => {
+                    this._EDIT_RUNTIME = runtime;
+                    this._EDIT_CONTENT.set(runtime.renderEditMode(this, renderedComponent));
+                    runtime.updateOptionsVisibility(this);
+                };
+                if (workflowComposition) {
+                    CoreComponents.Tools.Workflow.With_ComponentWorkflowComposition(workflowComposition, renderEditRuntime);
+                } else {
+                    renderEditRuntime();
+                }
+            })
+            .catch((error) => {
+                this._EDIT_RUNTIME_PROMISE = null;
+                if (!this._DISPOSED && generation === this._EDIT_RENDER_GENERATION) {
+                    console.error("ComponentElementCreator could not load edit controls", error);
+                }
+            });
 
         return CoreReactive.App.section({
             attrs: {"data-part-name": "part-element-creator-host"},
@@ -391,11 +317,12 @@ export class ComponentElementCreator extends ComponentStructure.Component<
                     this.updateOptionsVisibility();
                 },
                 mouseleave: (event: MouseEvent) => {
-                    if (this._OPTIONS_MENU?.containsTarget(event.relatedTarget)) {
+                    if (this.containsOptionsMenuTarget(event.relatedTarget)) {
                         this.clearOptionsHideTimeout();
                         return;
                     }
-                    this.scheduleOptionsHide();
+                    if (this._EDIT_RUNTIME) this.scheduleOptionsHide();
+                    else this._ROOT_HOVER.set(false);
                 },
                 focusin: () => {
                     this._ROOT_FOCUS.set(true);
@@ -404,35 +331,35 @@ export class ComponentElementCreator extends ComponentStructure.Component<
                 focusout: (event: FocusEvent) => {
                     const host = event.currentTarget as HTMLElement;
                     if (event.relatedTarget instanceof Node && (
-                        host.contains(event.relatedTarget) || this._OPTIONS_MENU?.containsTarget(event.relatedTarget)
+                        host.contains(event.relatedTarget) || this.containsOptionsMenuTarget(event.relatedTarget)
                     )) return;
                     this._ROOT_FOCUS.set(false);
                     this.updateOptionsVisibility();
                 },
             },
-            children: [this._ROOT_BORDER.getReactiveElement() as CoreReactive.App],
+            children: [this._EDIT_CONTENT as any],
         });
     }
 
+    private loadEditRuntime(): Promise<typeof import("./EditRuntime")> {
+        if (!this._EDIT_RUNTIME_PROMISE) {
+            this._EDIT_RUNTIME_PROMISE = import("./EditRuntime")
+                .then((runtime) => {
+                    this._EDIT_RUNTIME = runtime;
+                    return runtime;
+                })
+                .catch((error) => {
+                    this._EDIT_RUNTIME_PROMISE = null;
+                    throw error;
+                });
+        }
+        return this._EDIT_RUNTIME_PROMISE;
+    }
+
     private disposeRootBorder(): void {
-        const rootBorder = this._ROOT_BORDER as any;
-        rootBorder?.dispose?.();
-        rootBorder?.getScope?.().dispose();
-        this._ROOT_BORDER = null;
-
-        const optionsEffect = this._OPTIONS_EFFECT as any;
-        optionsEffect?.dispose?.();
-        optionsEffect?.getScope?.().dispose?.();
-        this._OPTIONS_EFFECT = null;
-
-        const optionsBorder = this._OPTIONS_BORDER as any;
-        optionsBorder?.dispose?.();
-        optionsBorder?.getScope?.().dispose?.();
-        this._OPTIONS_BORDER = null;
-
-        this._OPTIONS_MENU?.dispose();
-        this._OPTIONS_MENU = null;
-        this._OPTIONS_BORDER_CONTENT = null;
+        this._EDIT_RENDER_GENERATION++;
+        this._EDIT_CONTENT.set(null);
+        this._EDIT_RUNTIME?.disposeRootBorder(this);
     }
 
     private renderSettingMode(): CoreReactive.App {
@@ -453,7 +380,7 @@ export class ComponentElementCreator extends ComponentStructure.Component<
         this._SETTINGS_COMPONENT_REFERENCE = componentReference;
         this._SETTINGS_PROPERTIES_SOURCE = properties;
         const body = this.createSettingsBody(mode, componentReference, properties);
-        this._SETTINGS_WINDOW = new ComponentWindow.Component({
+        this._SETTINGS_WINDOW = new (this.getSettingsComponents().ComponentWindow.Component)({
             prop_title: "Component settings",
             prop_body: body,
             prop_windowWidth: 560,
@@ -493,7 +420,7 @@ export class ComponentElementCreator extends ComponentStructure.Component<
             ? this.createSettingsPropsBody(this._SETTINGS_SELECTED_COMPONENT, this._SETTINGS_DRAFT)
             : null;
         const tabs = this.createSettingsTabs(propertyBody);
-        this._SETTINGS_TABS = new ComponentTabs.Component({
+        this._SETTINGS_TABS = new (this.getSettingsComponents().ComponentTabs.Component)({
             prop_tabSelected: tabs[0]?.id ?? null,
             prop_tabs: tabs,
             prop_bodyStyles: pageSetting
@@ -510,10 +437,11 @@ export class ComponentElementCreator extends ComponentStructure.Component<
     private createSettingsPageContent(tabs: CoreReactive.App): CoreReactive.App {
         const acceptTitle = CoreLanguage.App.translate(Keys.category.components.basic.elementCreator.editor.addComponent).get();
         const cancelTitle = CoreLanguage.App.translate(Keys.category.components.basic.elementCreator.editor.cancel).get();
-        const cancelButton = new ComponentButton.Component({
+        const settingsComponents = this.getSettingsComponents();
+        const cancelButton = new settingsComponents.ComponentButton.Component({
             prop_btnTitle: cancelTitle,
-            prop_btnVariant: ButtonVariants.SECONDARY,
-            prop_btnSemantic: ButtonSemantic.CANCEL,
+            prop_btnVariant: settingsComponents.ButtonVariants.SECONDARY,
+            prop_btnSemantic: settingsComponents.ButtonSemantic.CANCEL,
             prop_btnWidth: "100%",
         } as any, {
             CLICK: (event: Event) => {
@@ -521,10 +449,10 @@ export class ComponentElementCreator extends ComponentStructure.Component<
                 this.executeMethod("SETTINGS_CLOSE", event, {});
             },
         } as any);
-        const acceptButton = new ComponentButton.Component({
+        const acceptButton = new settingsComponents.ComponentButton.Component({
             prop_btnTitle: acceptTitle,
-            prop_btnVariant: ButtonVariants.PRIMARY,
-            prop_btnSemantic: ButtonSemantic.SUBMIT,
+            prop_btnVariant: settingsComponents.ButtonVariants.PRIMARY,
+            prop_btnSemantic: settingsComponents.ButtonSemantic.SUBMIT,
             prop_btnWidth: "100%",
             prop_btnDisabled: this._SETTINGS_ACCEPT_DISABLED,
         } as any, {
@@ -585,7 +513,7 @@ export class ComponentElementCreator extends ComponentStructure.Component<
         const selectedCategory = this._SETTINGS_SELECTED_CATEGORY;
         const filteredEntries = this.getFilteredComponentEntries(selectedCategory);
 
-        this._SETTINGS_CATEGORY_SELECT = new ComponentInputSelectOption.Component({
+        this._SETTINGS_CATEGORY_SELECT = new (this.getSettingsComponents().ComponentInputSelectOption.Component)({
             prop_name: "element-creator-component-category",
             prop_labelShow: true,
             prop_labelTitle: "Component category",
@@ -597,7 +525,7 @@ export class ComponentElementCreator extends ComponentStructure.Component<
         } as any);
         this._SETTINGS_COMPONENT_CHILDREN.push(this._SETTINGS_CATEGORY_SELECT as any);
 
-        this._SETTINGS_COMPONENT_SELECT = new ComponentInputSelectOption.Component({
+        this._SETTINGS_COMPONENT_SELECT = new (this.getSettingsComponents().ComponentInputSelectOption.Component)({
             prop_name: "element-creator-component",
             prop_labelShow: true,
             prop_labelTitle: "Component",
@@ -668,7 +596,7 @@ export class ComponentElementCreator extends ComponentStructure.Component<
                 },
                 children: editors,
             });
-            const collapse = new ComponentCollapse.Component({
+            const collapse = new (this.getSettingsComponents().ComponentCollapse.Component)({
                 prop_collapseTitle: this.resolveSettingsText(group.descriptor?.name, "Properties"),
                 prop_collapseBody: collapseBody,
                 prop_collapseBodyIsOpen: true,
@@ -699,7 +627,6 @@ export class ComponentElementCreator extends ComponentStructure.Component<
                 ? matchingEntry?.key ?? "__current__"
                 : null;
             this.refreshSettingsComponentOptions();
-            this.refreshSettingsTabs();
         }).catch((error) => {
             if (generation === this._SETTINGS_REGISTRY_GENERATION) {
                 console.error("ComponentElementCreator could not load the component registry", error);
@@ -940,20 +867,21 @@ export class ComponentElementCreator extends ComponentStructure.Component<
     }
 
     private createSettingsEditor(propDefinition: any, properties: Record<string, any>): CoreReactive.App {
+        const settingsComponents = this.getSettingsComponents();
         const propName = propDefinition.prop as string;
         const hasValue = Object.prototype.hasOwnProperty.call(properties ?? {}, propName);
         const initialValue = hasValue ? properties[propName] : propDefinition.default;
         const configuredEditor = propDefinition.OptionComponentSelector;
         const EditorComponent = configuredEditor ?? (typeof initialValue === "boolean"
-            ? ComponentInputCheckBox.Component
+            ? settingsComponents.ComponentInputCheckBox.Component
             : ComponentInput.Component);
-        const isJsonEditor = EditorComponent === ComponentCodeMirror.Component &&
-            propDefinition.OptionComponentOption?.prop_language === ComponentCodeMirror.CodeMirrorLanguage.JSON;
+        const isJsonEditor = EditorComponent === settingsComponents.ComponentCodeMirror.Component &&
+            propDefinition.OptionComponentOption?.prop_language === settingsComponents.ComponentCodeMirror.CodeMirrorLanguage.JSON;
         const label = this.resolveSettingsText(propDefinition.name, propName);
         const description = this.resolveSettingsText(propDefinition.description, "");
         const editorValue = isJsonEditor
             ? JSON.stringify(initialValue ?? null, null, 2) ?? "null"
-            : EditorComponent === ComponentInputColor.Component
+            : EditorComponent === settingsComponents.ComponentInputColor.Component
                 ? this.resolveColorEditorValue(initialValue)
                 : initialValue;
         const editorOptions: Record<string, any> = {
@@ -965,9 +893,9 @@ export class ComponentElementCreator extends ComponentStructure.Component<
             prop_structureStyles: {width: "100%", ...(propDefinition.OptionComponentOption?.prop_structureStyles ?? {})},
         };
 
-        if (EditorComponent === ComponentInputCheckBox.Component) editorOptions.prop_title = label;
-        if (EditorComponent === ComponentCodeMirror.Component) editorOptions.prop_title ??= label;
-        if (EditorComponent === ComponentInputSelectOption.Component) editorOptions.prop_itemSelected = initialValue;
+        if (EditorComponent === settingsComponents.ComponentInputCheckBox.Component) editorOptions.prop_title = label;
+        if (EditorComponent === settingsComponents.ComponentCodeMirror.Component) editorOptions.prop_title ??= label;
+        if (EditorComponent === settingsComponents.ComponentInputSelectOption.Component) editorOptions.prop_itemSelected = initialValue;
 
         let editorInstance: any = null;
         const onChange = (_event: Event, dataArgs: any, componentArgs: any) => {
@@ -1200,7 +1128,7 @@ export class ComponentElementCreator extends ComponentStructure.Component<
     private showSettingsPageSetting(content: CoreReactive.App, mountHost?: HTMLElement): void {
 
         if (!this._SETTINGS_PAGE_SETTING) {
-            this._SETTINGS_PAGE_SETTING = new ComponentPageSetting.Component({
+            this._SETTINGS_PAGE_SETTING = new (this.getSettingsComponents().ComponentPageSetting.Component)({
                 prop_content: content,
                 prop_contentScrollY: true,
                 prop_sidebarWidth: 480,
@@ -1244,7 +1172,7 @@ export class ComponentElementCreator extends ComponentStructure.Component<
     }
 
     call_showSettingsPageSetting(content: CoreReactive.App, mountHost?: HTMLElement): void {
-        this.showSettingsPageSetting(content, mountHost);
+        this.runAfterSettingsComponentsLoad(() => this.showSettingsPageSetting(content, mountHost));
     }
 
     private openCssPageSetting(workflowSource?: CoreEvent.TStepRef): void {
@@ -1277,7 +1205,7 @@ export class ComponentElementCreator extends ComponentStructure.Component<
             }
         }
         if (!this._CSS_PAGE_SETTING) {
-            this._CSS_PAGE_SETTING = new ComponentPageSetting.Component({
+            this._CSS_PAGE_SETTING = new (this.getSettingsComponents().ComponentPageSetting.Component)({
                 prop_content: content,
                 prop_contentScrollY: false,
                 prop_sidebarWidth: 480,
@@ -1295,7 +1223,7 @@ export class ComponentElementCreator extends ComponentStructure.Component<
 
     private createCssStylesContent(): CoreReactive.App {
         if (!this._CSS_STYLES_COMPONENT) {
-            this._CSS_STYLES_COMPONENT = new ComponentStyles.Component({
+            this._CSS_STYLES_COMPONENT = new (this.getSettingsComponents().ComponentStyles.Component)({
                 prop_workflowChildName: Core.Dictionary.WorkflowNodeNames.elementCreatorStyles,
                 prop_styleGroups: CSS_STYLE_PROPERTIES,
                 prop_value: this._CSS_STYLE_VALUES,
@@ -1480,104 +1408,32 @@ export class ComponentElementCreator extends ComponentStructure.Component<
     }
 
     private updateOptionsVisibility(): void {
-        const isVisible = this._ROOT_HOVER.get() || this._ROOT_FOCUS.get();
-        const content = isVisible ? this._OPTIONS_BORDER_CONTENT : null;
-        if (this._OPTIONS_CONTENT.get() !== content) this._OPTIONS_CONTENT.set(content);
-        if (this._EDIT_MODE_ACTIVE) this.startDocumentPointerTracking();
-        else this.stopDocumentPointerTracking();
+        this._EDIT_RUNTIME?.updateOptionsVisibility(this);
+    }
+
+    private containsOptionsMenuTarget(target: EventTarget | null): boolean {
+        return this._EDIT_RUNTIME?.containsMenuTarget(this, target) ?? false;
     }
 
     private setEditModeActive(isActive: boolean): void {
         this._EDIT_MODE_ACTIVE = isActive;
-        if (isActive) {
-            this.startDocumentPointerTracking();
+        if (this._EDIT_RUNTIME) {
+            this._EDIT_RUNTIME.setEditModeActive(this, isActive);
             return;
         }
-
-        this.clearOptionsHideTimeout();
+        if (isActive) return;
         this._ROOT_HOVER.set(false);
         this._ROOT_FOCUS.set(false);
         if (this._OPTIONS_CONTENT.get() !== null) this._OPTIONS_CONTENT.set(null);
-        this.stopDocumentPointerTracking();
-    }
-
-    private startDocumentPointerTracking(): void {
-        if (this._DOCUMENT_POINTER_MOVE_HANDLER) return;
-        this._DOCUMENT_POINTER_MOVE_HANDLER = (event: PointerEvent | MouseEvent) => {
-            const target = event.target;
-            const isInsideCreator = target instanceof Node && this.getElement().contains(target);
-            const isInsideMenu = this._OPTIONS_MENU?.containsTarget(target) ?? false;
-            if (isInsideCreator) {
-                this.clearOptionsHideTimeout();
-                if (!this._ROOT_HOVER.get()) {
-                    this._ROOT_HOVER.set(true);
-                    this.updateOptionsVisibility();
-                }
-                return;
-            }
-            if (isInsideMenu) {
-                this.clearOptionsHideTimeout();
-                return;
-            }
-            if (this._ROOT_FOCUS.get()) return;
-            this.scheduleOptionsHide();
-        };
-        document.addEventListener("pointermove", this._DOCUMENT_POINTER_MOVE_HANDLER, true);
-        document.addEventListener("mousemove", this._DOCUMENT_POINTER_MOVE_HANDLER as (event: MouseEvent) => void, true);
-        document.addEventListener("mouseover", this._DOCUMENT_POINTER_MOVE_HANDLER as (event: MouseEvent) => void, true);
-        this._DOCUMENT_FOCUS_IN_HANDLER = (event: FocusEvent) => {
-            const target = event.target;
-            const isInsideCreator = target instanceof Node && this.getElement().contains(target);
-            const isInsideMenu = this._OPTIONS_MENU?.containsTarget(target) ?? false;
-            const isFocusedInside = isInsideCreator || isInsideMenu;
-            this._ROOT_FOCUS.set(isFocusedInside);
-            if (isFocusedInside) this.clearOptionsHideTimeout();
-            this.updateOptionsVisibility();
-        };
-        document.addEventListener("focusin", this._DOCUMENT_FOCUS_IN_HANDLER, true);
-        this._DOCUMENT_FOCUS_OUT_HANDLER = (event: FocusEvent) => {
-            const relatedTarget = event.relatedTarget;
-            const focusRemainsInside = relatedTarget instanceof Node && (
-                this.getElement().contains(relatedTarget) || this._OPTIONS_MENU?.containsTarget(relatedTarget)
-            );
-            if (focusRemainsInside) return;
-            this._ROOT_FOCUS.set(false);
-            this.updateOptionsVisibility();
-        };
-        document.addEventListener("focusout", this._DOCUMENT_FOCUS_OUT_HANDLER, true);
     }
 
     private scheduleOptionsHide(): void {
-        if (!this._ROOT_HOVER.get() || this._ROOT_FOCUS.get() || this._OPTIONS_HIDE_TIMEOUT !== null) return;
-        this._OPTIONS_HIDE_TIMEOUT = window.setTimeout(() => {
-            this._OPTIONS_HIDE_TIMEOUT = null;
-            if (this._ROOT_FOCUS.get()) return;
-            this._ROOT_HOVER.set(false);
-            this.updateOptionsVisibility();
-        }, 250);
+        if (this._EDIT_RUNTIME) this._EDIT_RUNTIME.scheduleOptionsHide(this);
+        else this._ROOT_HOVER.set(false);
     }
 
     private clearOptionsHideTimeout(): void {
-        if (this._OPTIONS_HIDE_TIMEOUT === null) return;
-        window.clearTimeout(this._OPTIONS_HIDE_TIMEOUT);
-        this._OPTIONS_HIDE_TIMEOUT = null;
-    }
-
-    private stopDocumentPointerTracking(): void {
-        if (this._DOCUMENT_POINTER_MOVE_HANDLER) {
-            document.removeEventListener("pointermove", this._DOCUMENT_POINTER_MOVE_HANDLER, true);
-            document.removeEventListener("mousemove", this._DOCUMENT_POINTER_MOVE_HANDLER as (event: MouseEvent) => void, true);
-            document.removeEventListener("mouseover", this._DOCUMENT_POINTER_MOVE_HANDLER as (event: MouseEvent) => void, true);
-            this._DOCUMENT_POINTER_MOVE_HANDLER = null;
-        }
-        if (this._DOCUMENT_FOCUS_IN_HANDLER) {
-            document.removeEventListener("focusin", this._DOCUMENT_FOCUS_IN_HANDLER, true);
-            this._DOCUMENT_FOCUS_IN_HANDLER = null;
-        }
-        if (this._DOCUMENT_FOCUS_OUT_HANDLER) {
-            document.removeEventListener("focusout", this._DOCUMENT_FOCUS_OUT_HANDLER, true);
-            this._DOCUMENT_FOCUS_OUT_HANDLER = null;
-        }
+        this._EDIT_RUNTIME?.clearOptionsHideTimeout(this);
     }
 
     private handleOptionSelection(event: Event, action?: string): void {
@@ -1590,9 +1446,9 @@ export class ComponentElementCreator extends ComponentStructure.Component<
                 this.call_openSettings(event);
             }
         } else if (action === "CLICK_DELETE") {
-            this.openDeleteConfirm();
+            this.runAfterSettingsComponentsLoad(() => this.openDeleteConfirm());
         } else if (action === "CLICK_CSS") {
-            this.openCssPageSetting(this.getComponentWorkflow() as CoreEvent.TStepRef);
+            this.runAfterSettingsComponentsLoad(() => this.openCssPageSetting(this.getComponentWorkflow() as CoreEvent.TStepRef));
         } else if (action === "SET_COLUMN_NULL") {
             this.executeMethod("COLUMN_CHANGE", event, {COLUMN: null});
         } else if (action === "SET_CHILDREN_DISPLAY_EDITOR") {
@@ -1637,18 +1493,22 @@ export class ComponentElementCreator extends ComponentStructure.Component<
     }
 
     call_openSettings(event?: Event): void {
-        this.openSettingsWindow();
-        this.executeMethod("CLICK_SETTINGS", event);
+        this.runAfterSettingsComponentsLoad(() => {
+            this.openSettingsWindow();
+            this.executeMethod("CLICK_SETTINGS", event);
+        });
     }
 
     call_openSettingsPage(event?: Event, mountHost?: HTMLElement, workflowSource?: CoreEvent.TStepRef): void {
-        this.openSettingsPageSetting(mountHost, workflowSource);
-        this.executeMethod("CLICK_SETTINGS", event);
+        this.runAfterSettingsComponentsLoad(() => {
+            this.openSettingsPageSetting(mountHost, workflowSource);
+            this.executeMethod("CLICK_SETTINGS", event);
+        });
     }
 
     private openDeleteConfirm(): void {
         if (!this._DELETE_CONFIRM) {
-            this._DELETE_CONFIRM = new ComponentWindowConfirm.Component({
+            this._DELETE_CONFIRM = new (this.getSettingsComponents().ComponentWindowConfirm.Component)({
                 prop_title: "Confirm deletion",
                 prop_message: "Are you sure you want to delete this component?",
                 prop_acceptText: "Delete",

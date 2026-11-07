@@ -57,6 +57,8 @@ for (const match of registrySource.matchAll(/export\s+\*\s+as\s+(Component\w+)\s
 if (componentEntries.size === 0) throw new Error(`No components found in ${relative(root, registryFile)}.`);
 
 const componentSelector = process.argv.find((argument) => argument.startsWith("--component="))?.slice("--component=".length).trim().toLowerCase();
+const showDetails = process.argv.includes("--details");
+const showShared = process.argv.includes("--shared");
 const selectedEntries = componentSelector
     ? [...componentEntries.values()].filter((entry) =>
         entry.slug.toLowerCase() === componentSelector
@@ -153,7 +155,7 @@ function normalizePath(path) {
     return resolve(path).replaceAll("\\", "/").toLowerCase();
 }
 
-async function measureComponents(entries) {
+async function measureBundle(entries) {
     const bundle = await rollup({
         input: Object.fromEntries(entries.map((entry) => [entry.slug, `component-audit:${entry.slug}`])),
         plugins: [focusedEntryPlugin(entries)],
@@ -179,7 +181,7 @@ async function measureComponents(entries) {
         if (!entryChunk) throw new Error(`No entry chunk emitted for ${entry.publicName}.`);
 
         const initialChunks = new Set();
-        const renderedModuleIds = new Set();
+        const renderedModuleBytes = new Map();
         const dynamicImports = new Set();
         const queue = [entryChunk];
         while (queue.length) {
@@ -188,7 +190,9 @@ async function measureComponents(entries) {
             initialChunks.add(chunk.fileName);
             for (const dynamicImport of chunk.dynamicImports) dynamicImports.add(dynamicImport);
             for (const [moduleId, moduleInfo] of Object.entries(chunk.modules)) {
-                if (moduleInfo.renderedLength > 0) renderedModuleIds.add(moduleId);
+                if (moduleInfo.renderedLength > 0) {
+                    renderedModuleBytes.set(moduleId, (renderedModuleBytes.get(moduleId) ?? 0) + moduleInfo.renderedLength);
+                }
             }
             for (const importedFile of chunk.imports) {
                 const importedChunk = chunksByFile.get(importedFile);
@@ -196,8 +200,24 @@ async function measureComponents(entries) {
             }
         }
 
+        const deferredChunks = new Set();
+        const deferredQueue = [...dynamicImports]
+            .map((fileName) => chunksByFile.get(fileName))
+            .filter(Boolean);
+        while (deferredQueue.length) {
+            const chunk = deferredQueue.pop();
+            if (!chunk || initialChunks.has(chunk.fileName) || deferredChunks.has(chunk.fileName)) continue;
+            deferredChunks.add(chunk.fileName);
+            for (const importedFile of chunk.imports) {
+                const importedChunk = chunksByFile.get(importedFile);
+                if (importedChunk) deferredQueue.push(importedChunk);
+            }
+        }
+
         let rawBytes = 0;
         let gzipBytes = 0;
+        let deferredRawBytes = 0;
+        let deferredGzipBytes = 0;
         const externalPackages = new Set();
         for (const fileName of initialChunks) {
             const chunk = chunksByFile.get(fileName);
@@ -210,11 +230,17 @@ async function measureComponents(entries) {
                 externalPackages.add(packageName);
             }
         }
+        for (const fileName of deferredChunks) {
+            const code = Buffer.from(chunksByFile.get(fileName).code);
+            deferredRawBytes += code.length;
+            deferredGzipBytes += gzipSync(code, {level: 6}).length;
+        }
 
         const sourceRootPrefix = `${normalizePath(sourceRoot)}/`;
-        const renderedSourceInputs = [...renderedModuleIds]
-            .map((path) => resolve(path.split("?", 1)[0]))
-            .filter((path) => normalizePath(path).startsWith(sourceRootPrefix) && /\.(ts|tsx|js|jsx|mjs|cjs)$/i.test(path));
+        const renderedModules = [...renderedModuleBytes]
+            .map(([moduleId, renderedBytes]) => ({path: resolve(moduleId.split("?", 1)[0]), renderedBytes}))
+            .filter(({path}) => normalizePath(path).startsWith(sourceRootPrefix) && /\.(ts|tsx|js|jsx|mjs|cjs)$/i.test(path));
+        const renderedSourceInputs = renderedModules.map(({path}) => path);
         const ownInputs = renderedSourceInputs.filter((path) => {
             const relativePath = relative(entry.directory, path).replaceAll("\\", "/");
             return relativePath === "" || (!relativePath.startsWith("../") && relativePath !== "..");
@@ -225,6 +251,26 @@ async function measureComponents(entries) {
         const registryChunks = [...initialChunks].filter((fileName) => Object.entries(chunksByFile.get(fileName).modules)
             .some(([moduleId, moduleInfo]) => moduleInfo.renderedLength > 0 && normalizePath(moduleId) === normalizePath(registryFile)));
 
+        const dependencyModules = renderedModules
+            .filter(({path}) => !ownInputs.some((ownPath) => normalizePath(ownPath) === normalizePath(path)))
+            .map(({path, renderedBytes}) => ({
+                path,
+                relativePath: relative(sourceRoot, path).replaceAll("\\", "/"),
+                renderedBytes,
+            }))
+            .sort((a, b) => b.renderedBytes - a.renderedBytes);
+        const dependencyAreas = new Map();
+        for (const module of dependencyModules) {
+            const parts = module.relativePath.split("/");
+            const componentIndex = parts.indexOf("module_components");
+            const area = componentIndex >= 0 && parts[componentIndex + 1] === "lists" && parts[componentIndex + 2]
+                ? `component:${parts[componentIndex + 2]}`
+                : componentIndex >= 0
+                    ? `shared:${parts.slice(0, componentIndex + 2).join("/")}`
+                    : `shared:${parts.slice(0, Math.min(2, parts.length - 1)).join("/")}`;
+            dependencyAreas.set(area, (dependencyAreas.get(area) ?? 0) + module.renderedBytes);
+        }
+
         return {
             ...entry,
             moduleCount: renderedSourceInputs.length,
@@ -232,25 +278,60 @@ async function measureComponents(entries) {
             sourceBytes,
             rawBytes,
             gzipBytes,
+            deferredChunkCount: deferredChunks.size,
+            deferredRawBytes,
+            deferredGzipBytes,
             exampleCount,
             registryCount,
             dynamicImports: dynamicImports.size,
             externalPackages: externalPackages.size,
             registryChunks,
+            renderedSourceModules: renderedModules.map(({path, renderedBytes}) => ({
+                relativePath: relative(sourceRoot, path).replaceAll("\\", "/"),
+                renderedBytes,
+            })),
+            dependencyModules,
+            dependencyAreas: [...dependencyAreas]
+                .map(([area, renderedBytes]) => ({area, renderedBytes}))
+                .sort((a, b) => b.renderedBytes - a.renderedBytes),
         };
     });
 }
 
-process.stdout.write(`[component-audit] bundling ${selectedEntries.length} ${componentSelector ? "isolated component entry" : "entries in one in-memory Rollup build"}...\n`);
+const requestedMode = process.argv.find((argument) => argument.startsWith("--mode="))?.slice("--mode=".length).trim().toLowerCase();
+const mode = requestedMode ?? "isolated";
+if (mode !== "isolated" && mode !== "combined") {
+    throw new Error(`Unknown audit mode "${mode}". Use --mode=isolated or --mode=combined.`);
+}
+if (showShared && mode !== "isolated") {
+    throw new Error("--shared requires --mode=isolated so each entry's dependency graph is measured independently.");
+}
+
+async function measureComponents(entries) {
+    if (mode === "combined" || entries.length === 1) return measureBundle(entries);
+
+    const results = [];
+    for (let index = 0; index < entries.length; index++) {
+        const entry = entries[index];
+        results.push(...await measureBundle([entry]));
+        const completed = index + 1;
+        if (completed === entries.length || completed % 10 === 0) {
+            process.stdout.write(`[component-audit] isolated ${completed}/${entries.length} entries\n`);
+        }
+    }
+    return results;
+}
+
+process.stdout.write(`[component-audit] bundling ${selectedEntries.length} ${mode === "isolated" ? "isolated Rollup entries" : "entries in one combined in-memory Rollup build"}...\n`);
 const measured = await measureComponents(selectedEntries);
 const ranked = measured.sort((a, b) => b.rawBytes - a.rawBytes);
 const formatKiB = (bytes) => (bytes / 1024).toFixed(1);
 const nameWidth = Math.max(19, ...ranked.map(({publicName}) => publicName.length));
 const lines = [
     `[component-audit] ${ranked.length} component entries from ${relative(root, registryFile).replaceAll("\\", "/")}`,
-    componentSelector
-        ? "Method: one isolated Rollup build for this component with tree-shaking. npm packages are excluded from byte totals."
-        : "Method: combined multi-entry Rollup build with tree-shaking; shared chunks can make individual rows reflect cross-entry chunking. Use --component=<slug> for an isolated component measurement. npm packages are excluded from byte totals.",
+    mode === "isolated"
+        ? "Method: each entry is bundled separately with tree-shaking, so component rows do not share chunks. npm packages are excluded from byte totals."
+        : "Method: combined multi-entry Rollup build with tree-shaking; shared chunks can make individual rows reflect cross-entry chunking. Use --mode=isolated (default) for isolated measurements. npm packages are excluded from byte totals.",
     "CSS/assets and dynamic-import chunks are excluded from initial JS bytes. Gzip is calculated per JS chunk; sizes are estimates, not browser measurements.",
     "",
     `${"#".padStart(3)}  ${"Component".padEnd(nameWidth)}  ${"mods".padStart(5)}  ${"deps".padStart(5)}  ${"src KiB".padStart(8)}  ${"raw KiB".padStart(8)}  ${"gzip KiB".padStart(9)}  examples  registry  dynamic  packages`,
@@ -273,3 +354,58 @@ lines.push(
 const registryChunkNames = [...new Set(registryLeaks.flatMap((item) => item.registryChunks))];
 if (registryChunkNames.length) lines.push(`Initial chunk(s) containing registry code: ${registryChunkNames.join(", ")}.`);
 console.log(lines.join("\n"));
+
+if (showDetails) {
+    for (const item of ranked) {
+        const topAreas = item.dependencyAreas.slice(0, 12);
+        const topModules = item.dependencyModules.slice(0, 15);
+        console.log(`\nDependency breakdown: ${item.publicName}`);
+        console.log("Area totals and module sizes use Rollup renderedLength (pre-minification); they rank source contribution and do not sum to gzip output.");
+        console.log("Largest dependency areas:");
+        for (const area of topAreas) console.log(`  ${formatKiB(area.renderedBytes).padStart(8)} KiB  ${area.area}`);
+        console.log("Largest dependency modules:");
+        for (const module of topModules) console.log(`  ${formatKiB(module.renderedBytes).padStart(8)} KiB  ${module.relativePath}`);
+        if (item.deferredChunkCount > 0) {
+            console.log(`First-level deferred JS graph (static descendants only): ${item.deferredChunkCount} chunks, ${formatKiB(item.deferredRawBytes)} KiB raw / ${formatKiB(item.deferredGzipBytes)} KiB gzip.`);
+        }
+    }
+}
+
+if (showShared) {
+    const modulesByPath = new Map();
+    for (const item of measured) {
+        for (const module of item.renderedSourceModules) {
+            const moduleKey = module.relativePath.toLowerCase();
+            if (!modulesByPath.has(moduleKey)) {
+                modulesByPath.set(moduleKey, {relativePath: module.relativePath, entries: new Map()});
+            }
+            const entrySizes = modulesByPath.get(moduleKey).entries;
+            entrySizes.set(item.slug, Math.max(entrySizes.get(item.slug) ?? 0, module.renderedBytes));
+        }
+    }
+
+    const sharedModules = [...modulesByPath.values()]
+        .filter(({entries}) => entries.size > 1)
+        .map(({relativePath, entries}) => ({
+            relativePath,
+            entryCount: entries.size,
+            averageRenderedBytes: [...entries.values()].reduce((total, bytes) => total + bytes, 0) / entries.size,
+            maxRenderedBytes: Math.max(...entries.values()),
+        }));
+    const printSharedModules = (title, items) => {
+        console.log(`\n${title}:`);
+        console.log("Sizes use isolated Rollup renderedLength per entry (pre-minification); average and max rank source contribution, not final transfer or gzip size.");
+        console.log(`${"avg KiB".padStart(8)}  ${"max KiB".padStart(8)}  ${"entries".padStart(7)}  source module`);
+        for (const module of items.slice(0, 15)) {
+            console.log(`${formatKiB(module.averageRenderedBytes).padStart(8)}  ${formatKiB(module.maxRenderedBytes).padStart(8)}  ${String(module.entryCount).padStart(7)}  ${module.relativePath}`);
+        }
+    };
+    printSharedModules(
+        "Most widely retained shared source modules",
+        [...sharedModules].sort((a, b) => b.entryCount - a.entryCount || b.averageRenderedBytes - a.averageRenderedBytes),
+    );
+    printSharedModules(
+        "Largest average source contribution shared by focused entries",
+        [...sharedModules].sort((a, b) => b.averageRenderedBytes - a.averageRenderedBytes || b.entryCount - a.entryCount),
+    );
+}

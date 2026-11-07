@@ -1,5 +1,5 @@
 import {DefineProp} from "@/core_components";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/charts";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
 
 const k = Keys.category.components.charts.progressLinear;

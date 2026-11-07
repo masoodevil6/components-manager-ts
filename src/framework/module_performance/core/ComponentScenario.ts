@@ -1,6 +1,7 @@
 export interface ComponentScenarioInstance {
     element: HTMLElement;
     run(): void;
+    waitForReady?(): void | Promise<void>;
     validate(): void;
     dispose(): void;
     countVisibleNodes?(): number;
@@ -11,7 +12,14 @@ export interface ComponentScenario {
     id: string;
     componentId: string;
     title: string;
-    prepare(size: number): {create(): ComponentScenarioInstance; inputNodes: number; maxNodes: number; maxDepth: number};
+    sizeLabel?: string;
+    sizes?: readonly {value: number; title: string}[];
+    operationTitle?: string;
+    operationDetail?: string;
+    inputNodesLabel?: string;
+    visibleNodesLabel?: string;
+    limitsDescription?: string;
+    prepare(size: number): {create(): ComponentScenarioInstance; inputNodes: number; maxNodes: number | null; maxDepth: number | null};
 }
 
 export interface ComponentScenarioResult {
@@ -25,8 +33,8 @@ export interface ComponentScenarioResult {
     domElements: number;
     visibleNodes: number | null;
     inputNodes: number;
-    maxNodes: number;
-    maxDepth: number;
+    maxNodes: number | null;
+    maxDepth: number | null;
     truncated: boolean | null;
 }
 
@@ -51,6 +59,7 @@ export async function runComponentScenario(scenario: ComponentScenario, host: HT
             start = performance.now();
             instance.run();
             operationTime = performance.now() - start;
+            await instance.waitForReady?.();
             instance.validate();
             domElements = 1 + instance.element.querySelectorAll("*").length;
             visibleNodes = instance.countVisibleNodes?.() ?? null;

@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "description": "Production-consumer JavaScript gzip ceilings, set from the 2026-11-07 measurement with roughly 10-15% regression headroom.",
+  "initialGzipKiB": {
+    "button-root": 700,
+    "element-creator-root": 700,
+    "progress-linear-root": 700,
+    "json-tree-root": 700,
+    "table-root": 700,
+    "input-list-selector-root": 700,
+    "custom-form-root": 700,
+    "custom-form-run-root": 700,
+    "button": 26,
+    "button-lazy": 10,
+    "consumer-mixed-loading": 40,
+    "element-creator-focused": 73,
+    "element-creator-lazy": 9,
+    "progress-linear-focused": 19,
+    "json-tree-focused": 46,
+    "table-focused": 65,
+    "input-list-selector-focused": 60,
+    "input-list-selector-focused-icon-entry": 85,
+    "custom-form-focused": 90,
+    "custom-form-run-focused": 90
+  },
+  "deferredGzipKiB": {
+    "element-creator-focused:settings": 615,
+      "button-lazy:button": 34,
+    "consumer-mixed-loading:element-creator": 100,
+    "element-creator-lazy:on-demand": 95,
+    "custom-form-focused:on-demand": 65,
+    "custom-form-focused:layout-creator": 46,
+    "custom-form-run-focused:field-controls": 31
+  }
+}

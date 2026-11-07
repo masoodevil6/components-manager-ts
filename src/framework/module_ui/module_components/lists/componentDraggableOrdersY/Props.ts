@@ -1,7 +1,7 @@
 import * as CoreComponents from "@/core_components";
 import {DefineProp as Define_ComponentProp} from "@/core_components";
 import * as CoreReactive from "@/core_reactive";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/draggableOrdersY";
 import type {
     ExtractPropsType,
     ExtractPropsConfigType,

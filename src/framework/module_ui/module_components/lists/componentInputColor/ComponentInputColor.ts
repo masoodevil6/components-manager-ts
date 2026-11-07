@@ -11,7 +11,7 @@ import {PropsConfigType} from "./Props";
 import {colorSelector} from "./Props";
 import {Schemas} from "./Schemas";
 import {MethodsConfigType} from "./Methods";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/inputColor";
 import {createInputColorStep} from "./Step";
 import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import {PropsType as StructurePropsType} from "../componentStructure/Props";

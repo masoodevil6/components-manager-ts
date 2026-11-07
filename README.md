@@ -587,6 +587,22 @@ this.executeMethod(ComponentTabsConfigs.methods.CLICK_TAB.name, event, params);
 
 ---
 
+## بارگذاری تنبل کامپوننت‌ها
+
+برای اینکه کد یک کامپوننت فقط هنگام نیاز دریافت شود، از ورودی ناهم‌زمان کتابخانه استفاده کنید. شناسه‌ها از رجیستری کامپوننت‌ها تولید می‌شوند و type `LazyComponentSlug` فهرست شناسه‌های در دسترس را مشخص می‌کند.
+
+```typescript
+import {loadComponent} from "component-manager/lazy";
+
+async function mountButton() {
+    const Button = await loadComponent("button");
+    const button = Button({prop_btnTitle: "Save"});
+    document.body.appendChild(button.getElement());
+}
+```
+
+این ورودی async اختیاری است؛ API هم‌زمان `Framework` برای سازگاری حفظ شده و با واردکردن آن همچنان گراف کامل Framework بارگذاری می‌شود.
+
 ## منابع
 
 - `src/core/ComponentBase.ts` - کلاس پایه کامپوننت

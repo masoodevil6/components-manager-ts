@@ -3,12 +3,13 @@ import {DefineProp as Define_ComponentProp} from "@/core_components";
 import * as UtilConst from "@/util_consts";
 import * as UtilStyle from "@/util_styles";
 import type {ValidatorRule} from "@/util_validators";
-import {Keys} from "../../../module_categories/languages";
+import {Keys as KeysInput} from "../../../module_categories/languages/keys/components/input";
+import {Keys as KeysInputColor} from "../../../module_categories/languages/keys/components/inputColor";
 import {ComponentLabelTrait, ComponentLabelPropsType} from "../../traits/componentLabelTrait";
 import type {ExtractPropsType, ExtractPropsConfigType} from "../../tools/type/TypeHelpers";
 
-const inputProps = Keys.category.components.input.props;
-const colorProps = Keys.category.components.inputColor.props;
+const inputProps = KeysInput.category.components.input.props;
+const colorProps = KeysInputColor.category.components.inputColor.props;
 
 export enum colorSelector {
     Full = "full",

@@ -10,8 +10,7 @@ import {ComponentStructureTrait} from "../../traits/componentStructureTrait";
 import type {PropsType as StructurePropsType} from "../componentStructure/Props";
 import {ComponentBorder} from "../componentBorder/ComponentBorder";
 import {ComponentButton} from "../componentButton/ComponentButton";
-import {ComponentFloatMenu} from "../componentFloatMenu/ComponentFloatMenu";
-import {DirectionTypes as FloatMenuDirectionTypes, ShowTypes as FloatMenuShowTypes} from "../componentFloatMenu/Props";
+import type {ComponentFloatMenu as ComponentFloatMenuType} from "../componentFloatMenu/ComponentFloatMenu";
 import {ComponentIcon} from "../componentIcon/ComponentIcon";
 import {Definition} from "./Definition";
 import {MenuMoreDirection, MenuMoreOrientation, Props, type MenuMoreEntry, type MenuMoreGroup, type MenuMoreItem, type PropsType, type PropsConfigType} from "./Props";
@@ -19,6 +18,7 @@ import {Schemas, type SchemasType} from "./Schemas";
 import {Methods, type MethodsType, type MethodsConfigType} from "./Methods";
 
 const MENU_ITEM_HEIGHT = "calc(var(--paddingMedium) + var(--heightMedium) + var(--paddingMedium))";
+type MenuMoreSubmenuRuntime = typeof import("./SubmenuRuntime");
 
 export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<string, any>, SchemasType, any, MethodsType, CoreComponents.ComponentWorkflow> {
     protected _COMPONENT_DEFINITION = Definition;
@@ -27,13 +27,18 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
     protected _COMPONENT_METHODS = CoreComponents.DefineMethod<MethodsType, PropsType & Record<string, any>>({...Methods} as any);
 
     private _ROOT_BORDER: ComponentBorder | null = null;
-    private _FLOAT_MENUS: ComponentFloatMenu[] = [];
-    private _FLOAT_MENU_LEVELS = new Map<ComponentFloatMenu, number>();
-    private _HOVER_FLOAT_MENUS: ComponentFloatMenu[] = [];
+    private _FLOAT_MENUS: ComponentFloatMenuType[] = [];
+    private _FLOAT_MENU_LEVELS = new Map<ComponentFloatMenuType, number>();
+    private _HOVER_FLOAT_MENUS: ComponentFloatMenuType[] = [];
     private _BUTTONS: ComponentButton[] = [];
     private _ICONS: ComponentIcon[] = [];
     private _HOVER_HIDE_TIMEOUT: ReturnType<typeof setTimeout> | null = null;
     private _ITEM_HOVER_TIMEOUTS = new Set<ReturnType<typeof setTimeout>>();
+    private _SUBMENU_RUNTIME: MenuMoreSubmenuRuntime | null = null;
+    private _SUBMENU_RUNTIME_PROMISE: Promise<MenuMoreSubmenuRuntime | null> | null = null;
+    private readonly _SUBMENU_RUNTIME_READY = new CoreObservable.App(0);
+    private _PENDING_OPEN_SUBMENU_ID: string | null = null;
+    private _DISPOSED = false;
 
     constructor(
         config?: Partial<StructurePropsType & PropsConfigType>,
@@ -45,6 +50,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
     }
 
     dispose(): void {
+        this._DISPOSED = true;
         this.clearHoverHideTimeout();
         this.disposeTreeChildren();
         this._ROOT_BORDER?.dispose();
@@ -143,14 +149,14 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             maxWidth: "100%",
         }), [orientation, resolvedDirection, fullWidth, rtl], this.getScope());
 
-        const rootContent = CoreObservable.App.computed((list: MenuMoreItem[]) => {
+        const rootContent = CoreObservable.App.computed((list: MenuMoreItem[], _submenuRuntimeVersion: number) => {
             this.disposeTreeChildren();
             return CoreReactive.App.section({
                 attrs: {role: "menubar"},
                 stylesBind: layoutStyles as any,
                 children: this.renderMenuEntries(list ?? [], 1, {orientation, fullWidth, direction: resolvedDirection, rtl}),
             });
-        }, [items], this.getScope());
+        }, [items, this._SUBMENU_RUNTIME_READY], this.getScope());
 
         this._ROOT_BORDER = new ComponentBorder({
             prop_content: rootContent,
@@ -210,6 +216,23 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             const isLastGroup = this.isMenuGroup(entry) && !entries.slice(index + 1).some((next) => this.isMenuGroup(next));
             return this.renderTreeItem(entry, level, layout, isLastGroup);
         });
+    }
+
+    private ensureSubmenuRuntime(): void {
+        if (this._SUBMENU_RUNTIME || this._SUBMENU_RUNTIME_PROMISE || this._DISPOSED) return;
+        this._SUBMENU_RUNTIME_PROMISE = import("./SubmenuRuntime")
+            .then((runtime) => {
+                this._SUBMENU_RUNTIME_PROMISE = null;
+                if (this._DISPOSED) return runtime;
+                this._SUBMENU_RUNTIME = runtime;
+                this._SUBMENU_RUNTIME_READY.set(this._SUBMENU_RUNTIME_READY.get() + 1);
+                return runtime;
+            })
+            .catch((error) => {
+                this._SUBMENU_RUNTIME_PROMISE = null;
+                console.error("ComponentMenuMore could not load submenu support", error);
+                return null;
+            });
     }
 
     private renderTreeItem(
@@ -296,7 +319,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
         hasChildren: boolean,
         layout: {orientation: CoreObservable.App<MenuMoreOrientation>; fullWidth: CoreObservable.App<boolean>; direction: CoreObservable.App<MenuMoreDirection>; rtl: CoreObservable.App<boolean>},
     ): CoreReactive.App {
-        let itemFloatMenu: ComponentFloatMenu | null = null;
+        let itemFloatMenu: ComponentFloatMenuType | null = null;
         const sizeName = CoreConfig.Settings.SizeName.observable();
         const verticalItemLayout = CoreObservable.App.computed(
             (orientation: MenuMoreOrientation) => level > 1 || orientation === MenuMoreOrientation.VERTICAL,
@@ -386,6 +409,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
                 if (item.disabled) return;
                 if (hasChildren) {
                     this.closeFloatMenuSiblings(itemFloatMenu, level);
+                    if (!itemFloatMenu && item.openOn === "click") this._PENDING_OPEN_SUBMENU_ID = item.id;
                     return;
                 }
                 this.executeMethod("SELECT_ITEM", event, {ITEM: item});
@@ -462,12 +486,18 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
                         // Open from the actual menu row as well as FloatMenu's
                         // selector handler. This keeps hover submenus reliable
                         // when direction overrides change the trigger's layout.
-                        if (hasChildren && !openOnClick) itemFloatMenu?.setShow(true);
+                        if (hasChildren && !openOnClick) {
+                            if (itemFloatMenu) itemFloatMenu.setShow(true);
+                            else this._PENDING_OPEN_SUBMENU_ID = item.id;
+                        }
                     }
                 },
                 mouseleave: () => {
                     if (hasChildren) scheduleItemHoverReset();
                     else itemHovered.set(false);
+                    if (!openOnClick && this._PENDING_OPEN_SUBMENU_ID === item.id) {
+                        this._PENDING_OPEN_SUBMENU_ID = null;
+                    }
                 },
             },
             children: [
@@ -500,13 +530,13 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             children: this.renderMenuEntries(item.children!, level + 1, layout),
         });
         const floatDirection = CoreObservable.App.computed((orientation: MenuMoreOrientation, direction: MenuMoreDirection, isRtl: boolean) => {
-            if (level === 1 && orientation === MenuMoreOrientation.HORIZONTAL) return FloatMenuDirectionTypes.BOTTOM;
+            if (level === 1 && orientation === MenuMoreOrientation.HORIZONTAL) return "bottom";
             // Submenus open toward the inline end, using the resolved layout direction for the side axis.
             const opensLeft = direction === MenuMoreDirection.RTL || ((direction === MenuMoreDirection.TOP_TO_BOTTOM || direction === MenuMoreDirection.BOTTOM_TO_TOP) && isRtl);
-            return opensLeft ? FloatMenuDirectionTypes.LEFT : FloatMenuDirectionTypes.RIGHT;
+            return opensLeft ? "left" : "right";
         }, [layout.orientation, layout.direction, layout.rtl], this.getScope());
         const floatStyles = CoreObservable.App.computed(
-            (direction: FloatMenuDirectionTypes, isRtl: boolean) => direction === FloatMenuDirectionTypes.BOTTOM
+            (direction: "top" | "right" | "bottom" | "left", isRtl: boolean) => direction === "bottom"
                 ? {
                     top: "100%",
                     bottom: "auto",
@@ -537,14 +567,19 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
             ? {display: "inline-block", width: "auto", height: MENU_ITEM_HEIGHT}
             : {display: "block", width: "100%", height: MENU_ITEM_HEIGHT},
         [horizontalRootItem, layout.fullWidth], this.getScope());
-        const floatMenu = new ComponentFloatMenu({
+        if (!this._SUBMENU_RUNTIME) {
+            this.ensureSubmenuRuntime();
+            return trigger;
+        }
+
+        const floatMenu = new this._SUBMENU_RUNTIME.ComponentFloatMenu({
             classList: ["position-relative", "d-inline-block"],
             styles: floatComponentStyles as any,
             prop_structureStyles: floatStructureStyles as any,
             prop_selectorContent: trigger,
             prop_selectorClass: ["d-inline-block"],
             prop_selectorStyles: {height: MENU_ITEM_HEIGHT, position: "relative"},
-            prop_selectorShowType: openOnClick ? FloatMenuShowTypes.CLICK : FloatMenuShowTypes.HOVER,
+            prop_selectorShowType: openOnClick ? "click" : "hover",
             prop_floatContent: body,
             prop_floatBorderPadding: false,
             prop_floatDirectionType: floatDirection as any,
@@ -562,6 +597,12 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
         this._FLOAT_MENU_LEVELS.set(floatMenu, level);
         floatMenu.setRelatedTargetContains((target) => this.containsTarget(target));
         if (!openOnClick) this._HOVER_FLOAT_MENUS.push(floatMenu);
+        if (this._PENDING_OPEN_SUBMENU_ID === item.id) {
+            this._PENDING_OPEN_SUBMENU_ID = null;
+            setTimeout(() => {
+                if (!this._DISPOSED && this._FLOAT_MENUS.includes(floatMenu)) floatMenu.setShow(true);
+            }, 0);
+        }
         return floatMenu.getReactiveElement();
     }
 
@@ -689,7 +730,7 @@ export class ComponentMenuMore extends CoreComponents.App<PropsType & Record<str
     }
 
     /** Close sibling and descendant submenus while keeping the active menu's ancestors open. */
-    private closeFloatMenuSiblings(activeMenu: ComponentFloatMenu | null, level: number): void {
+    private closeFloatMenuSiblings(activeMenu: ComponentFloatMenuType | null, level: number): void {
         this._FLOAT_MENUS.forEach((menu) => {
             const menuLevel = this._FLOAT_MENU_LEVELS.get(menu);
             if (menu !== activeMenu && menuLevel !== undefined && menuLevel >= level) {

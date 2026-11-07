@@ -1,0 +1,46 @@
+import {CreateTranslationKey} from "@/util_brands";
+
+export const Keys = {category: {components: {inputSize: {
+                name: CreateTranslationKey(), description: CreateTranslationKey(),
+                props: {
+                    name: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    value: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    isDisable: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    title: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    backgroundColorForm: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    formBorderRadius: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    colorIcon: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    inputClass: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    inputStyles: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    placeholder: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    icon: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    buttonsWidth: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    iconIncrement: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    iconDecrement: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    min: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    max: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    hasRules: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    isAbsoluteRule: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    listRules: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    msgRules: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+                schemas: {
+                    form: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    icon: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    input: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    decrement: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    increment: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    validate: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+                methods: {
+                    inputChange: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    inputFocus: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    inputBlur: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+                examples: {
+                    default: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    withBounds: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    withIcon: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                    withValidation: {name: CreateTranslationKey(), description: CreateTranslationKey()},
+                },
+            }}}};

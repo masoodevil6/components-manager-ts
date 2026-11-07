@@ -1,0 +1,68 @@
+import {CreateTranslationKey} from "@/util_brands";
+
+export const Keys = {category: {components: {mouseScroller: {
+                name:        CreateTranslationKey() ,
+                description: CreateTranslationKey() ,
+
+                props: {
+                    borderBackgroundColor_light: { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderBackgroundColor_dark:  { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderWidth:                 { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderRadius:                { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderColor:                 { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    toolsZoomHas:                { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    toolsColorModeHas:           { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    toolsOpacity:                { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    colorMode:                   { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    sideBarsMargin:              { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    sideBarHas:                  { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    sideBarWidth:                { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    sideBarBtnOpenHas:           { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    sideBarContent:              { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    sideBarTopHas:               { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    sideBarTopWidth:             { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    sideBarTopContent:           { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    sideBarBottomHas:            { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    sideBarBottomWidth:          { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    sideBarBottomContent:        { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    zoom:                        { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    zoomMin:                     { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    zoomMax:                     { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    zoomStep:                    { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    scrollLeft:                  { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    scrollTop:                   { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    content:                     { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                },
+
+                schemas: {
+                    border:                              { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderContent:                       { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderContentView:                   { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderContentSidebar:                { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderContentSidebarTop:             { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderContentSidebarBottom:          { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderContentPositionZoom:           { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderContentPositionZoomBorder:     { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderContentTools:                  { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderContentToolsContent:           { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderContentToolsContentZooming:    { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderContentToolsContentZoomingIn:   { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderContentToolsContentZoomingRefresh: { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderContentToolsContentZoomingOut:  { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderContentToolsContentColoring:    { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderContentToolsContentColoringLight: { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    borderContentToolsContentColoringDark:  { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                },
+
+                methods: {
+                    zoomIn:          { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    zoomOut:          { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    zoomRefresh:      { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    colorModeLight:   { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                    colorModeDark:    { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                },
+
+                examples: {
+                    default: { name: CreateTranslationKey() , description: CreateTranslationKey() },
+                },
+            }}}};

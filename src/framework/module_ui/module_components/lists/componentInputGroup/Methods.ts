@@ -1,4 +1,5 @@
-import { Keys } from "../../../module_categories/languages";
+import {Keys as KeysInput} from "../../../module_categories/languages/keys/components/input";
+import {Keys as KeysInputGroup} from "../../../module_categories/languages/keys/components/inputGroup";
 import { Props } from "./Props";
 import type { InputGroupDefinition } from "./Props";
 import type {
@@ -11,31 +12,31 @@ import type {
 export const Methods = {
   INPUT_CHANGE: {
     name: "fn_onInputChange",
-    description: Keys.category.components.input.methods.inputChange.description,
+    description: KeysInput.category.components.input.methods.inputChange.description,
     args: { VALUE: Props.prop_value },
     dataArgs: {} as const,
   },
   INPUT_FOCUS: {
     name: "fn_onInputFocus",
-    description: Keys.category.components.input.methods.inputFocus.description,
+    description: KeysInput.category.components.input.methods.inputFocus.description,
     args: { VALUE: Props.prop_value },
     dataArgs: {} as const,
   },
   INPUT_BLUR: {
     name: "fn_onInputBlur",
-    description: Keys.category.components.input.methods.inputBlur.description,
+    description: KeysInput.category.components.input.methods.inputBlur.description,
     args: { VALUE: Props.prop_value },
     dataArgs: {} as const,
   },
   CHANGE_GROUP: {
     name: "fn_onChangeGroup",
-    description: Keys.category.components.inputGroup.methods.changeGroup.description,
+    description: KeysInputGroup.category.components.inputGroup.methods.changeGroup.description,
     args: { VALUE: Props.prop_groupSelected },
     dataArgs: {} as { GROUP: InputGroupDefinition },
   },
   CLICK_BUTTON: {
     name: "fn_onClickButton",
-    description: Keys.category.components.input.methods.clickButton.description,
+    description: KeysInput.category.components.input.methods.clickButton.description,
     args: { VALUE: Props.prop_value },
     dataArgs: {} as const,
   },

@@ -1,4 +1,4 @@
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/codeMirror";
 import {CodeMirrorLanguage, Props} from "./Props";
 import type {
     ExtractMethodsType,

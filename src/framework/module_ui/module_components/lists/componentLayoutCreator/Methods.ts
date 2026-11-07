@@ -1,4 +1,4 @@
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/basic";
 import type {LayoutCreatorItemState} from "./Props";
 import type {
     ExtractMethodsType,

@@ -1,5 +1,6 @@
 import * as CoreReactive   from "@/core_reactive";
 import * as CoreObservable from "@/core_observable";
+import * as CoreComponents from "@/core_components";
 import * as CoreConfig     from "@/core_configs";
 import * as UtilStyle      from "@/util_styles";
 import * as UtilConst      from "@/util_consts";
@@ -14,11 +15,11 @@ import {PropsType as StructurePropsType} from "../componentStructure/Props";
 // --------------------------------
 import * as UiIcons     from "@/ui_icons";
 import * as CoreLanguage from "@/core_languages";
-import {ComponentFloatMenu} from "../componentFloatMenu/ComponentFloatMenu";
-import {ShowTypes, DirectionTypes} from "../componentFloatMenu/Props";
+import type {ComponentFloatMenu as ComponentFloatMenuType} from "../componentFloatMenu/ComponentFloatMenu";
+type PositionMenuFloatRuntime = typeof import("../componentFloatMenu/lazyRuntime");
 import {ComponentButton} from "../componentButton/ComponentButton";
 import {ButtonAction, ButtonSemantic} from "../componentButton/Props";
-import {Keys} from "../../../module_categories/languages";
+import {Keys} from "../../../module_categories/languages/keys/components/positionMenu";
 
 
 /**
@@ -47,7 +48,13 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase<ReturnType<
        Internal State â€” document click listener Ø¨Ø±Ø§ÛŒ outside-click detection
     --------------------------------------------- */
     private _ON_MENU_OPEN: ((event: MouseEvent) => void) | null = null;
-    private _FLOAT_MENU_INSTANCE: {containsTarget?: (target: EventTarget | null) => boolean; setShow?: (show: boolean) => void} | null = null;
+    private _FLOAT_MENU_INSTANCE: ComponentFloatMenuType | null = null;
+    private _FLOAT_MENU_RUNTIME: PositionMenuFloatRuntime | null = null;
+    private _FLOAT_MENU_RUNTIME_PROMISE: Promise<PositionMenuFloatRuntime | null> | null = null;
+    private readonly _FLOAT_MENU_RUNTIME_READY = new CoreObservable.App(0);
+    private _FLOAT_MENU_OPEN_REQUESTED = false;
+    private _LAZY_FLOAT_MENU_CLICK_HANDLER: ((event: MouseEvent) => void) | null = null;
+    private _DISPOSED = false;
 
 
     constructor(
@@ -68,6 +75,7 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase<ReturnType<
             methods as any,
             identity?.events ?? null,
         );
+        this.installLazyFloatMenuClickHandler();
     }
 
 
@@ -75,7 +83,12 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase<ReturnType<
        Plan 8.2.7 â€” Component Disposal
     --------------------------------------------- */
     dispose(): void {
+        this._DISPOSED = true;
         this.pr_cleanupDocumentListener();
+        if (this._LAZY_FLOAT_MENU_CLICK_HANDLER) {
+            (this.getElement() as HTMLElement | null)?.removeEventListener("click", this._LAZY_FLOAT_MENU_CLICK_HANDLER, true);
+            this._LAZY_FLOAT_MENU_CLICK_HANDLER = null;
+        }
         this._FLOAT_MENU_INSTANCE = null;
         this.disposeStep();
     }
@@ -151,40 +164,116 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase<ReturnType<
         const prop_menuBorderWidth      = data?.["prop_menuBorderWidth"]      ?? bind.prop_menuBorderWidth;
         const prop_menuBodyWidth        = data?.["prop_menuBodyWidth"]        ?? bind.prop_menuBodyWidth;
 
-        const floatMenu = new ComponentFloatMenu(
-            {
-                classList: ["position-relative", "d-block", "w-100", "h-100"],
-                prop_selectorClass: [],
-                prop_selectorContent: this.executeSchemaPart(Schemas.FORM_FLOAT_MENU_SELECTOR.part, {}),
-                prop_floatContent:    this.executeSchemaPart(Schemas.FORM_FLOAT_MENU_BODY.part, {}),
-                prop_selectorShowType:         ShowTypes.CLICK,
-                prop_floatDirectionType:       DirectionTypes.BOTTOM,
-                prop_floatMinWidth:            UtilStyle.Css_SizeUnit(230, UtilConst.Units.PEXEL),
-                prop_floatArrowWidth:          0,
-                prop_floatShowControlWithSelf: true,
-                prop_floatIsShow:              prop_menuIsOpen,
-                prop_floatUsePortal:            true,
-                prop_floatStyles: {
-                    display: "block",
-                    marginTop: UtilStyle.Css_SizeUnit(10, UtilConst.Units.PEXEL),
-                },
-                prop_floatWidth:               prop_menuBodyWidth,
-                prop_floatBackground:          prop_menuBackgroundColor,
-                prop_floatBorderColor:         prop_menuBorderColor,
-                prop_floatBorderWidth:         prop_menuBorderWidth,
-            },
-            {},
-        );
-        this._FLOAT_MENU_INSTANCE = floatMenu as typeof this._FLOAT_MENU_INSTANCE;
-
-        // Preserve attrsDefault (id/class/...) on a wrapper so outside-click can detect by part id
-        return CoreReactive.App.part("section", {
-            attrs: { ...attrsDefault },
+        const workflowComposition = CoreComponents.Tools.Workflow.Capture_ComponentWorkflowComposition();
+        const selectorContent = this.executeSchemaPart(Schemas.FORM_FLOAT_MENU_SELECTOR.part, {});
+        const placeholder = CoreReactive.App.part("section", {
+            attrs: {...attrsDefault},
             className: ["position-relative", "d-block", "w-100", "h-100"],
-            children: [
-                floatMenu.getReactiveElement(),
-            ],
+            children: [selectorContent],
         });
+
+        return CoreObservable.App.computed((_runtimeVersion: number) => {
+            const runtime = this._FLOAT_MENU_RUNTIME;
+            if (!runtime) return placeholder;
+
+            const createFloatMenu = () => {
+                const floatMenu = new runtime.ComponentFloatMenu(
+                    {
+                        classList: ["position-relative", "d-block", "w-100", "h-100"],
+                        prop_selectorClass: [],
+                        prop_selectorContent: selectorContent,
+                        prop_floatContent: this.executeSchemaPart(Schemas.FORM_FLOAT_MENU_BODY.part, {}),
+                        prop_selectorShowType: runtime.ShowTypes.CLICK,
+                        prop_floatDirectionType: runtime.DirectionTypes.BOTTOM,
+                        prop_floatMinWidth: UtilStyle.Css_SizeUnit(230, UtilConst.Units.PEXEL),
+                        prop_floatArrowWidth: 0,
+                        prop_floatShowControlWithSelf: true,
+                        prop_floatIsShow: prop_menuIsOpen,
+                        prop_floatUsePortal: true,
+                        prop_floatStyles: {
+                            display: "block",
+                            marginTop: UtilStyle.Css_SizeUnit(10, UtilConst.Units.PEXEL),
+                        },
+                        prop_floatWidth: prop_menuBodyWidth,
+                        prop_floatBackground: prop_menuBackgroundColor,
+                        prop_floatBorderColor: prop_menuBorderColor,
+                        prop_floatBorderWidth: prop_menuBorderWidth,
+                    },
+                    {},
+                );
+                this._FLOAT_MENU_INSTANCE = floatMenu;
+
+                return CoreReactive.App.part("section", {
+                    attrs: {...attrsDefault},
+                    className: ["position-relative", "d-block", "w-100", "h-100"],
+                    children: [floatMenu.getReactiveElement()],
+                });
+            };
+
+            return workflowComposition
+                ? CoreComponents.Tools.Workflow.With_ComponentWorkflowComposition(workflowComposition, createFloatMenu)
+                : createFloatMenu();
+        }, [this._FLOAT_MENU_RUNTIME_READY], this.getScope()) as any;
+    }
+
+    private loadFloatMenuRuntime(): Promise<PositionMenuFloatRuntime | null> {
+        if (this._FLOAT_MENU_RUNTIME) return Promise.resolve(this._FLOAT_MENU_RUNTIME);
+        if (this._FLOAT_MENU_RUNTIME_PROMISE) return this._FLOAT_MENU_RUNTIME_PROMISE;
+
+        this._FLOAT_MENU_RUNTIME_PROMISE = import("../componentFloatMenu/lazyRuntime")
+            .then((runtime) => {
+                this._FLOAT_MENU_RUNTIME_PROMISE = null;
+                if (this._DISPOSED) return runtime;
+                this._FLOAT_MENU_RUNTIME = runtime;
+                this._FLOAT_MENU_RUNTIME_READY.set(this._FLOAT_MENU_RUNTIME_READY.get() + 1);
+                return runtime;
+            })
+            .catch((error) => {
+                this._FLOAT_MENU_RUNTIME_PROMISE = null;
+                console.error("ComponentPositionMenu could not load FloatMenu support", error);
+                return null;
+            });
+
+        return this._FLOAT_MENU_RUNTIME_PROMISE;
+    }
+
+    private installLazyFloatMenuClickHandler(): void {
+        const root = this.getElement() as HTMLElement | null;
+        if (!root || this._LAZY_FLOAT_MENU_CLICK_HANDLER) return;
+
+        this._LAZY_FLOAT_MENU_CLICK_HANDLER = (event: MouseEvent) => {
+            if (this._FLOAT_MENU_INSTANCE || this._DISPOSED) return;
+            const selector = root.querySelector<HTMLElement>('[data-part-name="part-formFloatMenu-selector"]');
+            if (selector?.contains(event.target as Node)) this.requestOpenAfterFloatMenuLoad(event);
+        };
+        root.addEventListener("click", this._LAZY_FLOAT_MENU_CLICK_HANDLER, true);
+    }
+
+    private requestOpenAfterFloatMenuLoad(event: Event): void {
+        if (this._FLOAT_MENU_OPEN_REQUESTED || this._DISPOSED) return;
+        this._FLOAT_MENU_OPEN_REQUESTED = true;
+
+        void this.loadFloatMenuRuntime().then((runtime) => {
+            if (!runtime || this._DISPOSED) {
+                this._FLOAT_MENU_OPEN_REQUESTED = false;
+                return;
+            }
+
+            window.setTimeout(() => {
+                this._FLOAT_MENU_OPEN_REQUESTED = false;
+                if (this._DISPOSED || !this._FLOAT_MENU_INSTANCE) return;
+                this.set("prop_menuIsOpen", true);
+                this._FLOAT_MENU_INSTANCE.setShow(true);
+                this.handleMenuOpened(event);
+            }, 0);
+        });
+    }
+
+    private handleMenuOpened(event: Event): void {
+        this.executeMethod("CLICK_OPEN", event, {});
+        this._ON_MENU_OPEN = this._ON_MENU_OPEN ?? this.pr_handleMenuClose.bind(this, true);
+        document.addEventListener("click", this._ON_MENU_OPEN as any);
+        requestAnimationFrame(() => this.pr_adjustFloatPosition());
     }
 
 
@@ -212,6 +301,11 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase<ReturnType<
             ],
             on: {
                 click: (event: Event) => {
+                    if (!this._FLOAT_MENU_INSTANCE) {
+                        this.requestOpenAfterFloatMenuLoad(event);
+                        return;
+                    }
+
                     // ComponentFloatMenu handles the trigger click in capture
                     // phase and updates this shared prop. Read its resulting
                     // state here; toggling it again would immediately close
@@ -220,15 +314,11 @@ export class ComponentPositionMenu extends ComponentPositionMenuBase<ReturnType<
 
                     // Notify only when opening
                     if (isOpen) {
-                        this.executeMethod("CLICK_OPEN", event, {});
+                        this.handleMenuOpened(event);
                     }
 
                     // Manage outside-click listener correctly
-                    if (isOpen) {
-                        this._ON_MENU_OPEN = this._ON_MENU_OPEN ?? this.pr_handleMenuClose.bind(this, true);
-                        document.addEventListener("click", this._ON_MENU_OPEN as any);
-                        requestAnimationFrame(() => this.pr_adjustFloatPosition());
-                    } else {
+                    if (!isOpen) {
                         this.pr_cleanupDocumentListener();
                     }
                 },

@@ -6,6 +6,8 @@
     "ComponentProgressLinear",
     "ComponentJsonTree",
     "ComponentTable",
-    "ComponentInputListSelector"
+    "ComponentInputListSelector",
+    "ComponentElementCreator",
+    "ComponentCustomForm"
   ]
 }
